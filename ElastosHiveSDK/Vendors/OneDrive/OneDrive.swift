@@ -3,7 +3,7 @@ import UIKit
 @objc(OneDrive)
 public class OneDrive: HiveDrive {
     
-    @objc public static var sharedInstance: OneDrive?
+    private static var oneDriveInsatance: OneDrive?
     override public func getDriveType() -> DriveType {
         return DriveType.oneDrive
     }
@@ -16,7 +16,15 @@ public class OneDrive: HiveDrive {
     @objc(createInstanceWithParam:)
     public static func createInstance(param: OneDriveParameters) {
         let oneDrive: OneDrive = OneDrive.init(param: param)
-        sharedInstance = oneDrive
+        oneDriveInsatance = oneDrive
+    }
+    
+    @objc(sharedInstance:)
+    public static func sharedInstance(param: OneDriveParameters) -> OneDrive? {
+        if(oneDriveInsatance == nil){
+            createInstance(param: param)
+        }
+        return oneDriveInsatance
     }
     
     public override func logIn(authenticator: Authenticator) throws -> Bool {

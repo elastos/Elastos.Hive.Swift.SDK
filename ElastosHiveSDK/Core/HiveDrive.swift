@@ -12,17 +12,17 @@ public class HiveDrive: NSObject {
      * @return An new drive instance.
      */
     @objc(sharedInstance:error:)
-    public static func sharedInstance(param: DriveParameters) throws {
+    public static func sharedInstance(param: DriveParameters) throws -> HiveDrive {
         
         switch param.driveType {
         case .oneDrive:
-            return OneDrive.createInstance(param: param as! OneDriveParameters)
+            return OneDrive.sharedInstance()!
         case .ownCloud:
-            return OwnCloudDrive.createInstance(param: param as! OwnCloudParameters)
+            return OwnCloudDrive.sharedInstance()!
         case .dropBox:
-            return DropBoxDrive.createInstance(param: param as! DropBoxParameters)
+            return DropBoxDrive.sharedInsatace()!
         case .hiveIpfs:
-            return HiveIpfsDrive.createInstance(param: param as! HiveIpfsParameters)
+            return HiveIpfsDrive.sharedInstance()!
         }
     }
     
