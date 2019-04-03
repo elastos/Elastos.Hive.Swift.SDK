@@ -3,7 +3,7 @@ import UIKit
 @objc(OwnCloudDrive)
 public class OwnCloudDrive: HiveDrive {
     
-    @objc public static var sharedInstance: OwnCloudDrive?
+    private static var ownCloudDriveInstance: OwnCloudDrive?
     override public func getDriveType() -> DriveType {
         return DriveType.ownCloud
     }
@@ -15,7 +15,15 @@ public class OwnCloudDrive: HiveDrive {
     @objc(createInstance:)
     public static func createInstance(param: OwnCloudParameters) {
         let ownCloudDrive: OwnCloudDrive = OwnCloudDrive.init(param: param)
-        sharedInstance = ownCloudDrive
+        ownCloudDriveInstance = ownCloudDrive
+    }
+    
+    @objc(sharedInstance:)
+    public static func sharedInstance(param: OwnCloudParameters) -> OwnCloudDrive? {
+        if(ownCloudDriveInstance == nil) {
+            createInstance(param: param)
+        }
+        return ownCloudDriveInstance
     }
     
     public override func logIn(authenticator: Authenticator) throws -> Bool {
