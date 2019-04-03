@@ -20,7 +20,7 @@ public class OneDrive: HiveDrive {
     }
     
     @objc(sharedInstance:)
-    public static func sharedInstance(param: OneDriveParameters) -> OneDrive? {
+    public static func sharedInstance(_ param: OneDriveParameters) -> OneDrive? {
         if(oneDriveInsatance == nil){
             createInstance(param: param)
         }
