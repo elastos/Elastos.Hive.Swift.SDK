@@ -20,7 +20,7 @@ public class DropBoxDrive: HiveDrive {
     }
     
     @objc(sharedInsatace:)
-    public static func sharedInsatace(param: DropBoxParameters) -> DropBoxDrive? {
+    public static func sharedInsatace(_ param: DropBoxParameters) -> DropBoxDrive? {
         if(dropBoxDriveInstance == nil) {
             createInstance(param: param)
         }

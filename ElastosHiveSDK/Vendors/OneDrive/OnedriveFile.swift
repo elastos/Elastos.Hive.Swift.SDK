@@ -4,15 +4,7 @@ import UIKit
 public class OnedriveFile: HiveFile {
     
     @objc public var pathname: String?
-    override public var path: String{
-        return pathname!
-    }
-    override public var parentPath: String{
-        return ""
-    }
-    override public var parent: HiveFile{
-        return HiveFile()
-    }
+    
     override public var createdTimeDate: String{
         return ""
     }
@@ -24,6 +16,18 @@ public class OnedriveFile: HiveFile {
     }
     override public var isDirectory: Bool{
         return false
+    }
+    
+    public override func getPath(response: (String?, Error?) -> Void) {
+        
+    }
+    
+    public override func parent(response: (String?, Error?) -> Void) {
+        
+    }
+    
+    public override func parentPath(response: (String?, Error?) -> Void) {
+        
     }
     
     override public func updateDateTime(newDateTime: String) throws {

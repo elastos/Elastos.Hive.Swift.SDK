@@ -3,16 +3,10 @@ import UIKit
 @objc(HiveFile)
 public class HiveFile: NSObject {
     
+    public typealias HiveGetPathResponseHandler = (_ pathItem: String?, _ error: Error?) -> Void  // todo impatment with ODItem
+    public typealias HiveGetParentPathResponseHandler = (_ parentPathItem: String?, _ error: Error?) -> Void // todo impatment with ODItem
+    public typealias HiveGetParentResponseHandler = (_ parentItem: String?, _ error: Error?) -> Void // todo impatment with ODItem
     @objc public var drive: HiveDrive?
-    @objc public var path: String{
-        return ""
-    }
-    @objc public var parentPath: String{
-        return ""
-    }
-    @objc public var parent: HiveFile{
-        return HiveFile()
-    }
     @objc public var createdTimeDate: String{
         return ""
     }
@@ -42,7 +36,22 @@ public class HiveFile: NSObject {
         return try drive.createFile(pathname: pathname)
     }
     
+    @objc(getPath:)
+    public func getPath(response: HiveGetPathResponseHandler) {
+        // request to path
+        
+    }
     
+    @objc(parentPath:)
+    public func parentPath(response: HiveGetParentPathResponseHandler) {
+        // request to parentPath
+        
+    }
+    
+    @objc(parent:)
+    public func parent(response: HiveGetParentResponseHandler) {
+        // request parent
+    }
     
     /**
      * Update date and time of this item.

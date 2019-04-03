@@ -20,7 +20,7 @@ public class HiveIpfsDrive: HiveDrive {
     }
     
     @objc(sharedInstance:)
-    public static func sharedInstance(param: HiveIpfsParameters) -> HiveIpfsDrive? {
+    public static func sharedInstance(_ param: HiveIpfsParameters) -> HiveIpfsDrive? {
         if(hiveIpfsDriveInstance == nil) {
             createInstance(param: param)
         }

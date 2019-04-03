@@ -9,6 +9,7 @@ public class DriveParameters: NSObject {
     
     public override init() {
         super.init()
+        
     }
     
     @objc(createForOneDrive:scopes:redirectUrl:)

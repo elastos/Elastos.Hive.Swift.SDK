@@ -19,7 +19,7 @@ public class OwnCloudDrive: HiveDrive {
     }
     
     @objc(sharedInstance:)
-    public static func sharedInstance(param: OwnCloudParameters) -> OwnCloudDrive? {
+    public static func sharedInstance(_ param: OwnCloudParameters) -> OwnCloudDrive? {
         if(ownCloudDriveInstance == nil) {
             createInstance(param: param)
         }
