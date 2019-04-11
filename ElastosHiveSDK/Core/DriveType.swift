@@ -1,4 +1,4 @@
-import UIKit
+import Foundation
 
 @objc(DriveType)
 public enum DriveType:Int {

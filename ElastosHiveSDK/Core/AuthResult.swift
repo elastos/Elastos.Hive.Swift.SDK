@@ -1,4 +1,4 @@
-import UIKit
+import Foundation
 
 @objc(AuthResult)
 public class AuthResult: NSObject {

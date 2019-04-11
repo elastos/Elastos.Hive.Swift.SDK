@@ -1,4 +1,4 @@
-import UIKit
+import Foundation
 
 @objc(AuthInfo)
 public class AuthInfo: NSObject {

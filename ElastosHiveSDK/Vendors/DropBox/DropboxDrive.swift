@@ -1,16 +1,15 @@
-import UIKit
+import Foundation
 
-@objc(DropBoxDrive)
-public class DropboxDrive: HiveDrive {
+@objc(DropboxDrive)
+class DropboxDrive: HiveDrive {
     private static var driveInstance: HiveDrive?
 
-    override public func getDriveType() -> DriveType {
-        return DriveType.dropBox
-    }
-    
+    private var authHelper: AuthHelper;
+
     private init(_ param: DriveParameters) {
         // TODO;
-        super.init()
+        //super.init()
+        authHelper = AuthHelper("clientId", "scopes", "redirect_url")
     }
     
     @objc(createInstance:)
@@ -21,7 +20,6 @@ public class DropboxDrive: HiveDrive {
         }
     }
     
-    @objc(sharedInstance:)
     static func sharedInstance(_ param: DropBoxParameters) -> HiveDrive {
         if driveInstance == nil {
             createInstance(param: param)
@@ -29,28 +27,37 @@ public class DropboxDrive: HiveDrive {
         return driveInstance!
     }
 
-    @objc(sharedInstance)
     static func sharedInstance() -> HiveDrive? {
         return driveInstance
     }
     
-    public override func logIn(authenticator: Authenticator) throws -> Bool {
-        // todo
-        return false
+    override func getAuthHelper() -> AuthHelper {
+        return authHelper
     }
-    
-    override public func getRootDir() throws -> HiveFile {
-        // todo
-        return HiveFile()
+
+    override func getDriveType() -> DriveType {
+        return DriveType.oneDrive
     }
-    
-    override public func getFile(pathname: String) throws {
-        // todo
+
+    override func login(authenticator: Authenticator) throws {
+        authHelper.login(authenticator: authenticator)
     }
-    
-    override public func createFile(pathname: String) throws -> HiveFile {
-        // todo
-        return HiveFile()
+
+    override func getRootDir() throws -> HiveFile {
+        try authHelper.checkExpired()
+        // TODO
+        return DropboxFile()
     }
-    
+
+    override func createFile(pathname: String) throws -> HiveFile {
+        try authHelper.checkExpired()
+        // TODO
+        return DropboxFile()
+    }
+
+    override func getFile(pathname: String) throws -> HiveFile {
+        try authHelper.checkExpired()
+        // TODO
+        return DropboxFile()
+    }
 }

@@ -1,6 +1,5 @@
-import UIKit
+import Foundation
 
 @objc(OwnCloudFile)
 class OwnCloudFile: HiveFile {
-    
 }
