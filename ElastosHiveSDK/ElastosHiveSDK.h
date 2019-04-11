@@ -1,4 +1,3 @@
-
 @import Foundation;
 
 //! Project version number for ElastosHiveSDK.

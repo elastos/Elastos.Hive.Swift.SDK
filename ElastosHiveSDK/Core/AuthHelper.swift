@@ -1,23 +1,26 @@
-import UIKit
+import Foundation
 
 @objc(AuthHelper)
-public class AuthHelper: NSObject {
+class AuthHelper: NSObject {
+    private var appId: String
+    private var scopes: String
+    private var redirectUrl: String
 
-    var appId: String = ""
-    var scopes: String = ""
-    var redirectUrl: String = ""
-    
-    public func login(authenticator: Authenticator) -> Bool{
-        return false
+    override init() {
+        self.appId = ""
+        self.scopes = ""
+        self.redirectUrl = ""
     }
-    
-    public init(appId: String, scopes: String, redirectUrl: String) {
 
+    init(_ appId: String, _ scopes: String, _ redirectUrl: String) {
         self.appId = appId
         self.scopes = scopes
         self.redirectUrl = redirectUrl
     }
+
+    func login(authenticator: Authenticator) {
+    }
     
-    public func checkExpired() throws{}
-    
+    func checkExpired() throws {
+    }
 }

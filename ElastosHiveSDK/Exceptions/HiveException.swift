@@ -1,4 +1,4 @@
-import UIKit
+import Foundation
 
 @objc(HiveException)
 public class HiveException: NSObject {

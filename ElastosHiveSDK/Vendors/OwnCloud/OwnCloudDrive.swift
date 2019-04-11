@@ -1,15 +1,14 @@
-import UIKit
+import Foundation
 
 @objc(OwnCloudDrive)
-public class OwnCloudDrive: HiveDrive {
+class OwnCloudDrive: HiveDrive {
     private static var driveInstance: HiveDrive?
 
-    override public func getDriveType() -> DriveType {
-        return DriveType.ownCloud
-    }
+    private var authHelper: AuthHelper
     
     private init(_ param: OwnCloudParameters) {
-        super.init()
+        //super.init()
+        authHelper = AuthHelper("clientId", "scopes", "redirect_url")
     }
     
     @objc(createInstance:)
@@ -20,7 +19,6 @@ public class OwnCloudDrive: HiveDrive {
         }
     }
     
-    @objc(sharedInstance:)
     static func sharedInstance(_ param: OwnCloudParameters) -> HiveDrive {
         if driveInstance == nil {
             createInstance(param: param)
@@ -28,28 +26,38 @@ public class OwnCloudDrive: HiveDrive {
         return driveInstance!
     }
 
-    @objc(sharedInstance)
     static func sharedInstance() -> HiveDrive? {
         return driveInstance
     }
-    
-    public override func logIn(authenticator: Authenticator) throws -> Bool {
-        // todo
-        return false
+
+    @objc(getAuthHelper)
+    override func getAuthHelper() -> AuthHelper {
+        return authHelper
     }
-    
-    public override func getRootDir() throws -> HiveFile {
-        // todo
-        return HiveFile()
+
+    override func getDriveType() -> DriveType {
+        return DriveType.oneDrive
     }
-    
-    public override func getFile(pathname: String) throws {
-        //
+
+    override func login(authenticator: Authenticator) throws {
+        authHelper.login(authenticator: authenticator)
     }
-    
-    public override func createFile(pathname: String) throws -> HiveFile {
-        return HiveFile()
+
+    override func getRootDir() throws -> HiveFile {
+        try authHelper.checkExpired()
+        // TODO
+        return OwnCloudFile()
     }
-    
-    
+
+    override func createFile(pathname: String) throws -> HiveFile {
+        try authHelper.checkExpired()
+        // TODO
+        return OwnCloudFile()
+    }
+
+    override func getFile(pathname: String) throws -> HiveFile {
+        try authHelper.checkExpired()
+        // TODO
+        return OwnCloudFile()
+    }
 }

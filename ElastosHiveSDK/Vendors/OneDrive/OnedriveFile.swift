@@ -1,4 +1,4 @@
-import UIKit
+import Foundation
 
 @objc(OnedriveFile)
 public class OnedriveFile: HiveFile {

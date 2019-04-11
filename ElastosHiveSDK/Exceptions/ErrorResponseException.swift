@@ -1,4 +1,4 @@
-import UIKit
+import Foundation
 
 @objc(ErrorResponseException)
 public class ErrorResponseException: NSObject {

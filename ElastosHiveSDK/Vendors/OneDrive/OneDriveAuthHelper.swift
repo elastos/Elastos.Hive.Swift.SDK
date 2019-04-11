@@ -1,29 +1,24 @@
-import UIKit
+import Foundation
 
 @objc(OneDriveAuthHelper)
-public class OneDriveAuthHelper: AuthHelper {
-    
+class OneDriveAuthHelper: AuthHelper {
     private var authInfo: AuthInfo?
-    public override init(appId: String, scopes: String, redirectUrl: String) {
-        super.init(appId: appId, scopes: scopes, redirectUrl: redirectUrl)
-        self.appId = appId
-        self.scopes = scopes
-        self.redirectUrl = redirectUrl
+    public override init(_ appId: String, _ scopes: String, _ redirectUrl: String) {
+        super.init(appId, scopes, redirectUrl)
     }
     
-    public override func login(authenticator: Authenticator) -> Bool {
+    override func login(authenticator: Authenticator) {
         if(!hasLogin()){
             let result: AuthResult = authenticator.requestAuthentication()
-            if(result.authorCode == "")
-            {
-                return false
+            if(result.authorCode == "") {
+                return
             }
             try? requestAccessToken(authorCode: result.authorCode!)
         }
+
         if(isExpired()){
             try? refreshAccessToken()
         }
-        return hasLogin()
     }
     
     private func requestAccessToken(authorCode: String) throws {
@@ -48,8 +43,4 @@ public class OneDriveAuthHelper: AuthHelper {
     override public func checkExpired() throws {
         // todo
     }
-    
-    
-    
 }
-

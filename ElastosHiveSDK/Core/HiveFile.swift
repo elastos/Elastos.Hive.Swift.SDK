@@ -1,4 +1,4 @@
-import UIKit
+import Foundation
 
 @objc(HiveFile)
 public class HiveFile: NSObject {
@@ -6,7 +6,7 @@ public class HiveFile: NSObject {
     public typealias HiveGetPathResponseHandler = (_ pathItem: String?, _ error: Error?) -> Void  // todo impatment with ODItem
     public typealias HiveGetParentPathResponseHandler = (_ parentPathItem: String?, _ error: Error?) -> Void // todo impatment with ODItem
     public typealias HiveGetParentResponseHandler = (_ parentItem: String?, _ error: Error?) -> Void // todo impatment with ODItem
-    @objc public var drive: HiveDrive?
+    public var drive: HiveDrive?
     @objc public var createdTimeDate: String{
         return ""
     }
@@ -19,9 +19,9 @@ public class HiveFile: NSObject {
     @objc public var isDirectory: Bool {
         return false
     }
-    @objc public func hiveFile(drive: HiveDrive) {
-        self.drive = drive
-    }
+    //@objc public func hiveFile(drive: HiveDrive) {
+    //    self.drive = drive
+    //}
     
     /**
      * Create an file with specific pathname.
@@ -31,7 +31,6 @@ public class HiveFile: NSObject {
      * @return An new hive file.
      * @throws Exception TODO
      */
-    @objc(createFileWithDrive:pathname:error:)
     public static func createFile(drive: HiveDrive, pathname: String) throws -> HiveFile{
         return try drive.createFile(pathname: pathname)
     }
