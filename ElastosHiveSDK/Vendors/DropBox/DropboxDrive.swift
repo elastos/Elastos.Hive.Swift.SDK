@@ -1,30 +1,37 @@
 import UIKit
 
 @objc(DropBoxDrive)
-public class DropBoxDrive: HiveDrive {
-    
-    private static var dropBoxDriveInstance: DropBoxDrive?
+public class DropboxDrive: HiveDrive {
+    private static var driveInstance: HiveDrive?
+
     override public func getDriveType() -> DriveType {
         return DriveType.dropBox
     }
     
-    private init(param: DriveParameters) {
+    private init(_ param: DriveParameters) {
         // TODO;
         super.init()
     }
     
     @objc(createInstance:)
     public static func createInstance(param: DriveParameters){
-        let dropBoxDrive: DropBoxDrive = DropBoxDrive.init(param: param)
-        dropBoxDriveInstance = dropBoxDrive
+        if driveInstance == nil {
+            let drive: DropboxDrive = DropboxDrive(param)
+            driveInstance = drive as HiveDrive
+        }
     }
     
-    @objc(sharedInsatace:)
-    public static func sharedInsatace(_ param: DropBoxParameters) -> DropBoxDrive? {
-        if(dropBoxDriveInstance == nil) {
+    @objc(sharedInstance:)
+    static func sharedInstance(_ param: DropBoxParameters) -> HiveDrive {
+        if driveInstance == nil {
             createInstance(param: param)
         }
-        return dropBoxDriveInstance
+        return driveInstance!
+    }
+
+    @objc(sharedInstance)
+    static func sharedInstance() -> HiveDrive? {
+        return driveInstance
     }
     
     public override func logIn(authenticator: Authenticator) throws -> Bool {
