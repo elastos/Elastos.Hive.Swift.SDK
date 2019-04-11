@@ -2,8 +2,8 @@ import UIKit
 
 @objc(HiveIpfsDrive)
 public class HiveIpfsDrive: HiveDrive {
-    
-    private static var hiveIpfsDriveInstance: HiveIpfsDrive?
+    private static var driveInstance: HiveDrive?
+
     override public func getDriveType() -> DriveType {
         return DriveType.hiveIpfs
     }
@@ -14,17 +14,25 @@ public class HiveIpfsDrive: HiveDrive {
     }
     
     @objc(createInstance:)
-    public static func createInstance(param: HiveIpfsParameters) {
-        let hiveIpfsDrive: HiveIpfsDrive = HiveIpfsDrive.init(param: param)
-        hiveIpfsDriveInstance = hiveIpfsDrive
+    private static func createInstance(param: HiveIpfsParameters) {
+        if driveInstance == nil {
+            let drive: HiveIpfsDrive = HiveIpfsDrive(param: param)
+            driveInstance = drive as HiveDrive;
+        }
     }
     
     @objc(sharedInstance:)
-    public static func sharedInstance(_ param: HiveIpfsParameters) -> HiveIpfsDrive? {
-        if(hiveIpfsDriveInstance == nil) {
+    static func sharedInstance(_ param: HiveIpfsParameters) -> HiveDrive {
+        if (driveInstance == nil) {
             createInstance(param: param)
         }
-        return hiveIpfsDriveInstance
+
+        return driveInstance!
+    }
+
+    @objc(sharedInstance)
+    static func sharedInstance() -> HiveDrive? {
+        return driveInstance
     }
     
     public override func logIn(authenticator: Authenticator) throws -> Bool {

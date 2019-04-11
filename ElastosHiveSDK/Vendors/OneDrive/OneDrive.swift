@@ -2,29 +2,36 @@ import UIKit
 
 @objc(OneDrive)
 public class OneDrive: HiveDrive {
-    
-    private static var oneDriveInsatance: OneDrive?
+    private static var driveInstance: HiveDrive?
+
     override public func getDriveType() -> DriveType {
         return DriveType.oneDrive
     }
     
-    private init(param: OneDriveParameters) {
+    private init(_ param: OneDriveParameters) {
         super.init()
         authHelper = OneDriveAuthHelper(appId: param.appId, scopes: param.scopes, redirectUrl: param.redirectUrl)
     }
     
     @objc(createInstanceWithParam:)
-    public static func createInstance(param: OneDriveParameters) {
-        let oneDrive: OneDrive = OneDrive.init(param: param)
-        oneDriveInsatance = oneDrive
+    private static func createInstance(param: OneDriveParameters) {
+        if driveInstance == nil {
+            let drive: OneDrive = OneDrive(param)
+            driveInstance = drive as HiveDrive
+        }
     }
     
     @objc(sharedInstance:)
-    public static func sharedInstance(_ param: OneDriveParameters) -> OneDrive? {
-        if(oneDriveInsatance == nil){
+    static func sharedInstance(_ param: OneDriveParameters) -> HiveDrive {
+        if driveInstance == nil {
             createInstance(param: param)
         }
-        return oneDriveInsatance
+        return driveInstance!
+    }
+
+    @objc(sharedInstance)
+    static func sharedInstance() -> HiveDrive? {
+        return driveInstance
     }
     
     public override func logIn(authenticator: Authenticator) throws -> Bool {
