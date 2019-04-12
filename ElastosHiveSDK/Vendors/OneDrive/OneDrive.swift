@@ -44,18 +44,18 @@ class OneDrive: HiveDrive {
     override func getRootDir() throws -> HiveFile {
         try authHelper.checkExpired()
         // TODO
-        return OnedriveFile()
+        return OneDriveFile()
     }
 
     override func createFile(pathname: String) throws -> HiveFile {
         try authHelper.checkExpired()
         // TODO
-        return OnedriveFile()
+        return OneDriveFile()
     }
 
     override func getFile(pathname: String) throws -> HiveFile {
         try authHelper.checkExpired()
         // TODO
-        return OnedriveFile()
+        return OneDriveFile()
     }
 }
