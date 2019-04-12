@@ -62,6 +62,24 @@ public class HiveFile: NSObject {
     public func updateDateTime(newDateTime: String) throws {}
     
     /**
+     * Delete this file object.
+     *
+     * @throws Exception TODO
+     */
+    @objc(delete:)
+    public func delete() throws {}
+
+    /**
+     * Close hive file object.
+     *
+     * @throws Exception TODO
+     */
+    @objc(close:)
+    public func close() throws {}
+}
+
+extension HiveFile {
+    /**
      * Copy the item to another address.
      *
      * @param newPath The copy-to pathname.
@@ -69,9 +87,8 @@ public class HiveFile: NSObject {
      */
     @objc(copyTo:error:)
     public func copyTo(newPath: String) throws {
-        
     }
-    
+
     /**
      * Copy the item to another item.
      *
@@ -80,9 +97,8 @@ public class HiveFile: NSObject {
      */
     @objc(copyToNewFile:error:)
     public func copyTo(newFile: HiveFile) throws {
-        
     }
-    
+
     /**
      * Rename the item name to another name.
      *
@@ -91,9 +107,9 @@ public class HiveFile: NSObject {
      */
     @objc(renameToNewPath:error:)
     public func renameTo(newPath: String) throws {
-        
+
     }
-    
+
     /**
      * Rename the item to new item.
      *
@@ -103,15 +119,9 @@ public class HiveFile: NSObject {
     @objc(renameToNewFile:error:)
     public func renameTo(newFile: HiveFile) throws {
     }
-    
-    /**
-     * Delete this file object.
-     *
-     * @throws Exception TODO
-     */
-    @objc(delete:)
-    public func delete() throws {}
-    
+}
+
+extension HiveFile {
     /**
      * List all file objects under this directory.
      *
@@ -122,9 +132,7 @@ public class HiveFile: NSObject {
     public func list() throws -> [HiveFile] {
         return [HiveFile] ()
     }
-    
-    //todo ----- 省略一个过滤方法
-    
+
     /**
      * List all file objects under this directory.
      *
@@ -136,9 +144,7 @@ public class HiveFile: NSObject {
         let files: [HiveFile] = try list()
         return files
     }
-    
-    //todo ----- 省略一个过滤方法
-    
+
     /**
      * Create a directory.
      *
@@ -146,8 +152,9 @@ public class HiveFile: NSObject {
      * @throws Exception TODO.
      */
     @objc(mkdir:error:)
-    public func mkdir(pathname: String) throws {}
-    
+    public func mkdir(pathname: String) throws {
+    }
+
     /**
      * Create a directory along with all necessary parent directories.
      *
@@ -155,16 +162,6 @@ public class HiveFile: NSObject {
      * @throws Exception TODO
      */
     @objc(mkdirs:error:)
-    public func mkdirs(pathname: String) throws {}
-    
-    /**
-     * Close hive file object.
-     *
-     * @throws Exception TODO
-     */
-    @objc(close:)
-    public func close() throws {}
-    
-    // todo
-    
+    public func mkdirs(pathname: String) throws {
+    }
 }

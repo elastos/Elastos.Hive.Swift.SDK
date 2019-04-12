@@ -1,7 +1,7 @@
 import Foundation
 
-@objc(OnedriveFile)
-public class OnedriveFile: HiveFile {
+@objc(OneDriveFile)
+public class OneDriveFile: HiveFile {
     
     @objc public var pathname: String?
     

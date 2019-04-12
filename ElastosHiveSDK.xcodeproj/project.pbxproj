@@ -25,7 +25,7 @@
 		A39C49AB22539CB90027BDF9 /* IOUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C49AA22539CB90027BDF9 /* IOUtil.swift */; };
 		A39C49B022539CD10027BDF9 /* OneDrive.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C49AD22539CD10027BDF9 /* OneDrive.swift */; };
 		A39C49B122539CD10027BDF9 /* OneDriveAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C49AE22539CD10027BDF9 /* OneDriveAuthHelper.swift */; };
-		A39C49B222539CD10027BDF9 /* OnedriveFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C49AF22539CD10027BDF9 /* OnedriveFile.swift */; };
+		A39C49B222539CD10027BDF9 /* OneDriveFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C49AF22539CD10027BDF9 /* OneDriveFile.swift */; };
 		A39C49B822539D040027BDF9 /* HiveIpfsFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C49B622539D030027BDF9 /* HiveIpfsFile.swift */; };
 		A39C49B922539D040027BDF9 /* HiveIpfsDrive.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C49B722539D040027BDF9 /* HiveIpfsDrive.swift */; };
 		A39C49BC22539D2E0027BDF9 /* OwnCloudFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C49BA22539D2E0027BDF9 /* OwnCloudFile.swift */; };
@@ -70,7 +70,7 @@
 		A39C49AA22539CB90027BDF9 /* IOUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IOUtil.swift; path = Utils/IOUtil.swift; sourceTree = "<group>"; };
 		A39C49AD22539CD10027BDF9 /* OneDrive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OneDrive.swift; path = Vendors/OneDrive/OneDrive.swift; sourceTree = "<group>"; };
 		A39C49AE22539CD10027BDF9 /* OneDriveAuthHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OneDriveAuthHelper.swift; path = Vendors/OneDrive/OneDriveAuthHelper.swift; sourceTree = "<group>"; };
-		A39C49AF22539CD10027BDF9 /* OnedriveFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OnedriveFile.swift; path = Vendors/OneDrive/OnedriveFile.swift; sourceTree = "<group>"; };
+		A39C49AF22539CD10027BDF9 /* OneDriveFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OneDriveFile.swift; path = Vendors/OneDrive/OneDriveFile.swift; sourceTree = "<group>"; };
 		A39C49B622539D030027BDF9 /* HiveIpfsFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HiveIpfsFile.swift; path = Vendors/HiveIpfs/HiveIpfsFile.swift; sourceTree = "<group>"; };
 		A39C49B722539D040027BDF9 /* HiveIpfsDrive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HiveIpfsDrive.swift; path = Vendors/HiveIpfs/HiveIpfsDrive.swift; sourceTree = "<group>"; };
 		A39C49BA22539D2E0027BDF9 /* OwnCloudFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OwnCloudFile.swift; path = Vendors/OwnCloud/OwnCloudFile.swift; sourceTree = "<group>"; };
@@ -196,7 +196,7 @@
 			children = (
 				A39C49AD22539CD10027BDF9 /* OneDrive.swift */,
 				A39C49AE22539CD10027BDF9 /* OneDriveAuthHelper.swift */,
-				A39C49AF22539CD10027BDF9 /* OnedriveFile.swift */,
+				A39C49AF22539CD10027BDF9 /* OneDriveFile.swift */,
 			);
 			name = OneDrive;
 			sourceTree = "<group>";
@@ -372,7 +372,7 @@
 				A39C49A022539C9C0027BDF9 /* HiveDrive.swift in Sources */,
 				A39C499C22539C9C0027BDF9 /* AuthInfo.swift in Sources */,
 				A39C49B922539D040027BDF9 /* HiveIpfsDrive.swift in Sources */,
-				A39C49B222539CD10027BDF9 /* OnedriveFile.swift in Sources */,
+				A39C49B222539CD10027BDF9 /* OneDriveFile.swift in Sources */,
 				A39C49A922539CA70027BDF9 /* HiveException.swift in Sources */,
 				A39C49C022539D3B0027BDF9 /* DropboxFile.swift in Sources */,
 				A39C49AB22539CB90027BDF9 /* IOUtil.swift in Sources */,
