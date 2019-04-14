@@ -4,12 +4,12 @@ import Foundation
 class DropboxDrive: HiveDrive {
     private static var driveInstance: HiveDrive?
 
-    private var authHelper: AuthHelper;
+    private var authHelper: AuthHelper?
 
     private init(_ param: DriveParameters) {
         // TODO;
         //super.init()
-        authHelper = AuthHelper("clientId", "scopes", "redirect_url")
+        
     }
     
     @objc(createInstance:)
@@ -32,7 +32,7 @@ class DropboxDrive: HiveDrive {
     }
     
     override func getAuthHelper() -> AuthHelper {
-        return authHelper
+        return authHelper!
     }
 
     override func getDriveType() -> DriveType {
@@ -40,23 +40,23 @@ class DropboxDrive: HiveDrive {
     }
 
     override func login(authenticator: Authenticator) throws {
-        authHelper.login(authenticator: authenticator)
+        
     }
 
     override func getRootDir() throws -> HiveFile {
-        try authHelper.checkExpired()
+        try authHelper!.checkExpired()
         // TODO
         return DropboxFile()
     }
 
     override func createFile(pathname: String) throws -> HiveFile {
-        try authHelper.checkExpired()
+        try authHelper!.checkExpired()
         // TODO
         return DropboxFile()
     }
 
     override func getFile(pathname: String) throws -> HiveFile {
-        try authHelper.checkExpired()
+        try authHelper!.checkExpired()
         // TODO
         return DropboxFile()
     }

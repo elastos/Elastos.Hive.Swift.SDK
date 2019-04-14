@@ -8,10 +8,11 @@ public class HiveDrive: NSObject {
      * @param options TODO
      * @return An new drive instance.
      */
-    public static func sharedInstance(param: DriveParameters) throws -> HiveDrive {
-        switch param.driveType {
+    public static func createInstance(_ param: DriveParameters) throws -> HiveDrive {
+        let type: DriveType = param.getDriveType() // DriveParamers?
+        switch type {
         case .oneDrive:
-            return OneDrive.sharedInstance(param as! OneDriveParameters)
+            return try OneDrive.createInstance(param as! OneDriveParameters)
         case .ownCloud:
             return OwnCloudDrive.sharedInstance(param as! OwnCloudParameters)
         case .dropBox:
@@ -47,7 +48,7 @@ extension HiveDrive {
     }
 
     @objc(login::)
-    func login(authenticator: Authenticator) throws  {
+    public func login(authenticator: Authenticator) throws  {
     }
 
     @objc(getRootDir:)

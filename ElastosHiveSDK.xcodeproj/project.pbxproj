@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		113CA6522262E99A00074437 /* AuthWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113CA6512262E99A00074437 /* AuthWebViewController.swift */; };
+		113CA6542262FCBD00074437 /* HiveAuthConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113CA6532262FCBD00074437 /* HiveAuthConstants.swift */; };
 		A39C4979225399860027BDF9 /* ElastosHiveSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A39C496F225399860027BDF9 /* ElastosHiveSDK.framework */; };
 		A39C497E225399860027BDF9 /* ElastosHiveSDKTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C497D225399860027BDF9 /* ElastosHiveSDKTests.swift */; };
 		A39C4980225399860027BDF9 /* ElastosHiveSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = A39C4972225399860027BDF9 /* ElastosHiveSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -49,6 +51,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		113CA6512262E99A00074437 /* AuthWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthWebViewController.swift; sourceTree = "<group>"; };
+		113CA6532262FCBD00074437 /* HiveAuthConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiveAuthConstants.swift; sourceTree = "<group>"; };
 		A39C496F225399860027BDF9 /* ElastosHiveSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ElastosHiveSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A39C4972225399860027BDF9 /* ElastosHiveSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ElastosHiveSDK.h; sourceTree = "<group>"; };
 		A39C4973225399860027BDF9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -149,6 +153,7 @@
 		A39C498D22539C560027BDF9 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				113CA6512262E99A00074437 /* AuthWebViewController.swift */,
 				A39C499922539C9C0027BDF9 /* Authenticator.swift */,
 				A39C499A22539C9C0027BDF9 /* AuthHelper.swift */,
 				A39C499222539C9C0027BDF9 /* AuthInfo.swift */,
@@ -158,6 +163,7 @@
 				A39C499622539C9C0027BDF9 /* HiveDrive.swift */,
 				A39C499422539C9C0027BDF9 /* HiveError.swift */,
 				A39C499522539C9C0027BDF9 /* HiveFile.swift */,
+				113CA6532262FCBD00074437 /* HiveAuthConstants.swift */,
 				A39C499722539C9C0027BDF9 /* SdkVersion.swift */,
 			);
 			name = Core;
@@ -365,6 +371,7 @@
 				A39C49A522539C9C0027BDF9 /* DriveType.swift in Sources */,
 				A39C49A122539C9C0027BDF9 /* SdkVersion.swift in Sources */,
 				A39C49CA22539D550027BDF9 /* HiveIpfsParameters.swift in Sources */,
+				113CA6522262E99A00074437 /* AuthWebViewController.swift in Sources */,
 				A39C49A222539C9C0027BDF9 /* DriveParameters.swift in Sources */,
 				A39C49C122539D3B0027BDF9 /* DropboxDrive.swift in Sources */,
 				A39C49A822539CA70027BDF9 /* ErrorResponseException.swift in Sources */,
@@ -381,6 +388,7 @@
 				A39C49A422539C9C0027BDF9 /* AuthHelper.swift in Sources */,
 				A39C49B122539CD10027BDF9 /* OneDriveAuthHelper.swift in Sources */,
 				A39C49C722539D550027BDF9 /* DropBoxParameters.swift in Sources */,
+				113CA6542262FCBD00074437 /* HiveAuthConstants.swift in Sources */,
 				A39C49BC22539D2E0027BDF9 /* OwnCloudFile.swift in Sources */,
 				A39C49B022539CD10027BDF9 /* OneDrive.swift in Sources */,
 			);

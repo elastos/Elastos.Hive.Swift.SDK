@@ -1,13 +1,19 @@
 import Foundation
 
-@objc(AuthResult)
+
 public class AuthResult: NSObject {
     
-    @objc public var authorCode: String?
+    private var authorCode: String?
+    private var errorCode: String?
     
-    @objc(init:)
-    public init(authorCode: String){
+    public init(authorCode: String?, errorCode: String?){
         super.init()
         self.authorCode = authorCode
+        self.errorCode = errorCode
     }
+    
+    public func isAuthorized() -> Bool? {
+        return authorCode!.count > 0
+    }
+    
 }
