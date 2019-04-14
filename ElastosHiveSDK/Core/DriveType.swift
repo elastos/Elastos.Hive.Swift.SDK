@@ -1,7 +1,7 @@
 import Foundation
 
 @objc(DriveType)
-public enum DriveType:Int {
+public enum DriveType: Int {
     case oneDrive = 0x01
     case dropBox = 0x02
     case ownCloud = 0x31

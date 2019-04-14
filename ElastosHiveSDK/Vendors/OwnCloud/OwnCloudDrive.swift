@@ -4,11 +4,11 @@ import Foundation
 class OwnCloudDrive: HiveDrive {
     private static var driveInstance: HiveDrive?
 
-    private var authHelper: AuthHelper
+    private var authHelper: AuthHelper?
     
     private init(_ param: OwnCloudParameters) {
-        //super.init()
-        authHelper = AuthHelper("clientId", "scopes", "redirect_url")
+        
+        
     }
     
     @objc(createInstance:)
@@ -32,7 +32,7 @@ class OwnCloudDrive: HiveDrive {
 
     @objc(getAuthHelper)
     override func getAuthHelper() -> AuthHelper {
-        return authHelper
+        return authHelper!
     }
 
     override func getDriveType() -> DriveType {
@@ -40,23 +40,23 @@ class OwnCloudDrive: HiveDrive {
     }
 
     override func login(authenticator: Authenticator) throws {
-        authHelper.login(authenticator: authenticator)
+        
     }
 
     override func getRootDir() throws -> HiveFile {
-        try authHelper.checkExpired()
+        try authHelper!.checkExpired()
         // TODO
         return OwnCloudFile()
     }
 
     override func createFile(pathname: String) throws -> HiveFile {
-        try authHelper.checkExpired()
+        try authHelper!.checkExpired()
         // TODO
         return OwnCloudFile()
     }
 
     override func getFile(pathname: String) throws -> HiveFile {
-        try authHelper.checkExpired()
+        try authHelper!.checkExpired()
         // TODO
         return OwnCloudFile()
     }

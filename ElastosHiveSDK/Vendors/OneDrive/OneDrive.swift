@@ -1,60 +1,47 @@
 import Foundation
 
-@objc(OneDrive)
-class OneDrive: HiveDrive {
-    private static var driveInstance: HiveDrive?
-
-    private var authHelper: AuthHelper
+public class OneDrive: HiveDrive {
+    private static var oneDriveInstance: OneDrive?
+    private var oneDriveAuthHelper: OneDriveAuthHelper
+    private var driveId: String?
     
     private init(_ param: OneDriveParameters) {
-        authHelper = OneDriveAuthHelper(param.appId, param.scopes, param.redirectUrl)
+        oneDriveAuthHelper = OneDriveAuthHelper(param.appId!, param.scopes!, param.redirectUrl!)
     }
-
-    @objc(createInstanceWithParam:)
-    private static func createInstance(param: OneDriveParameters) {
-        if driveInstance == nil {
+    
+    public static func createInstance(_ param: OneDriveParameters) {
+        if oneDriveInstance == nil {
             let drive: OneDrive = OneDrive(param)
-            driveInstance = drive as HiveDrive
+            oneDriveInstance = drive as OneDrive
         }
     }
-
-    static func sharedInstance(_ param: OneDriveParameters) -> HiveDrive {
-        if driveInstance == nil {
-            createInstance(param: param)
-        }
-        return driveInstance!
+    
+    public static func sharedInstance() -> HiveDrive? {
+        return oneDriveInstance
     }
-
-    static func sharedInstance() -> HiveDrive? {
-        return driveInstance
-    }
-
-    override func getAuthHelper() -> AuthHelper {
-        return authHelper
-    }
-
+    
     override func getDriveType() -> DriveType {
         return DriveType.oneDrive
     }
-
-    override func login(authenticator: Authenticator) throws {
-        authHelper.login(authenticator: authenticator)
+    
+    public func login() throws {
+        try oneDriveAuthHelper.login()
     }
-
+    
     override func getRootDir() throws -> HiveFile {
-        try authHelper.checkExpired()
+        try oneDriveAuthHelper.checkExpired()
         // TODO
         return OneDriveFile()
     }
-
+    
     override func createFile(pathname: String) throws -> HiveFile {
-        try authHelper.checkExpired()
+        try oneDriveAuthHelper.checkExpired()
         // TODO
         return OneDriveFile()
     }
-
+    
     override func getFile(pathname: String) throws -> HiveFile {
-        try authHelper.checkExpired()
+        try oneDriveAuthHelper.checkExpired()
         // TODO
         return OneDriveFile()
     }
