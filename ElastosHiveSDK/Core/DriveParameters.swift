@@ -2,7 +2,6 @@ import Foundation
 
 @objc(DriveParameters)
 public class DriveParameters: NSObject {
-
     public func getDriveType() -> DriveType {
         return DriveType.oneDrive
     }

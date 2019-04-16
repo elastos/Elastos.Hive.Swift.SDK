@@ -7,8 +7,6 @@ class OwnCloudDrive: HiveDrive {
     private var authHelper: AuthHelper?
     
     private init(_ param: OwnCloudParameters) {
-        
-        
     }
     
     @objc(createInstance:)
@@ -40,7 +38,6 @@ class OwnCloudDrive: HiveDrive {
     }
 
     override func login(authenticator: Authenticator) throws {
-        
     }
 
     override func getRootDir() throws -> HiveFile {

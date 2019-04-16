@@ -2,7 +2,6 @@ import Foundation
 
 @objc(AuthHelper)
 class AuthHelper: NSObject {
-
     func login(authenticator: Authenticator) throws {
     }
     
@@ -12,5 +11,4 @@ class AuthHelper: NSObject {
     func getAuthInfo() -> AuthInfo? {
         return nil
     }
-    
 }
