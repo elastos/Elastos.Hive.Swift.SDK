@@ -1,6 +1,5 @@
 import Foundation
 
-
 public class AuthResult: NSObject {
     
     private var authorCode: String?
@@ -15,5 +14,4 @@ public class AuthResult: NSObject {
     public func isAuthorized() -> Bool? {
         return authorCode!.count > 0
     }
-    
 }

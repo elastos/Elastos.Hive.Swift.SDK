@@ -9,7 +9,6 @@ class HiveIpfsDrive: HiveDrive {
     private init(param: HiveIpfsParameters){
         // todo
         // super.init()
-
     }
     
     @objc(createInstance:)

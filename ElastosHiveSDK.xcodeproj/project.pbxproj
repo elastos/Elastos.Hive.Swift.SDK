@@ -8,7 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		113CA6522262E99A00074437 /* AuthWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113CA6512262E99A00074437 /* AuthWebViewController.swift */; };
-		113CA6542262FCBD00074437 /* HiveAuthConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113CA6532262FCBD00074437 /* HiveAuthConstants.swift */; };
+		A3743AD5226570B200C9493E /* OneDriveParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3743AD4226570B200C9493E /* OneDriveParameters.swift */; };
+		A3743AD72265710000C9493E /* HiveIpfsParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3743AD6226570FF00C9493E /* HiveIpfsParameters.swift */; };
+		A3743AD92265710B00C9493E /* OwnCloudParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3743AD82265710B00C9493E /* OwnCloudParameters.swift */; };
+		A3743ADB2265711A00C9493E /* DropBoxParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3743ADA2265711A00C9493E /* DropBoxParameters.swift */; };
+		A3743ADD2265743400C9493E /* OneDriveConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3743ADC2265743400C9493E /* OneDriveConstants.swift */; };
 		A39C4979225399860027BDF9 /* ElastosHiveSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A39C496F225399860027BDF9 /* ElastosHiveSDK.framework */; };
 		A39C497E225399860027BDF9 /* ElastosHiveSDKTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C497D225399860027BDF9 /* ElastosHiveSDKTests.swift */; };
 		A39C4980225399860027BDF9 /* ElastosHiveSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = A39C4972225399860027BDF9 /* ElastosHiveSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -34,10 +38,6 @@
 		A39C49BD22539D2E0027BDF9 /* OwnCloudDrive.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C49BB22539D2E0027BDF9 /* OwnCloudDrive.swift */; };
 		A39C49C022539D3B0027BDF9 /* DropboxFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C49BE22539D3B0027BDF9 /* DropboxFile.swift */; };
 		A39C49C122539D3B0027BDF9 /* DropboxDrive.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C49BF22539D3B0027BDF9 /* DropboxDrive.swift */; };
-		A39C49C722539D550027BDF9 /* DropBoxParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C49C322539D550027BDF9 /* DropBoxParameters.swift */; };
-		A39C49C822539D550027BDF9 /* OneDriveParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C49C422539D550027BDF9 /* OneDriveParameters.swift */; };
-		A39C49C922539D550027BDF9 /* OwnCloudParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C49C522539D550027BDF9 /* OwnCloudParameters.swift */; };
-		A39C49CA22539D550027BDF9 /* HiveIpfsParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C49C622539D550027BDF9 /* HiveIpfsParameters.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,7 +52,11 @@
 
 /* Begin PBXFileReference section */
 		113CA6512262E99A00074437 /* AuthWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthWebViewController.swift; sourceTree = "<group>"; };
-		113CA6532262FCBD00074437 /* HiveAuthConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiveAuthConstants.swift; sourceTree = "<group>"; };
+		A3743AD4226570B200C9493E /* OneDriveParameters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OneDriveParameters.swift; path = Vendors/OneDrive/OneDriveParameters.swift; sourceTree = "<group>"; };
+		A3743AD6226570FF00C9493E /* HiveIpfsParameters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HiveIpfsParameters.swift; path = Vendors/HiveIpfs/HiveIpfsParameters.swift; sourceTree = "<group>"; };
+		A3743AD82265710B00C9493E /* OwnCloudParameters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OwnCloudParameters.swift; path = Vendors/OwnCloud/OwnCloudParameters.swift; sourceTree = "<group>"; };
+		A3743ADA2265711A00C9493E /* DropBoxParameters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DropBoxParameters.swift; path = Vendors/DropBox/DropBoxParameters.swift; sourceTree = "<group>"; };
+		A3743ADC2265743400C9493E /* OneDriveConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OneDriveConstants.swift; path = Vendors/OneDrive/OneDriveConstants.swift; sourceTree = "<group>"; };
 		A39C496F225399860027BDF9 /* ElastosHiveSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ElastosHiveSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A39C4972225399860027BDF9 /* ElastosHiveSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ElastosHiveSDK.h; sourceTree = "<group>"; };
 		A39C4973225399860027BDF9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -81,10 +85,6 @@
 		A39C49BB22539D2E0027BDF9 /* OwnCloudDrive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OwnCloudDrive.swift; path = Vendors/OwnCloud/OwnCloudDrive.swift; sourceTree = "<group>"; };
 		A39C49BE22539D3B0027BDF9 /* DropboxFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DropboxFile.swift; path = Vendors/DropBox/DropboxFile.swift; sourceTree = "<group>"; };
 		A39C49BF22539D3B0027BDF9 /* DropboxDrive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DropboxDrive.swift; path = Vendors/DropBox/DropboxDrive.swift; sourceTree = "<group>"; };
-		A39C49C322539D550027BDF9 /* DropBoxParameters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DropBoxParameters.swift; path = Parameters/DropBoxParameters.swift; sourceTree = "<group>"; };
-		A39C49C422539D550027BDF9 /* OneDriveParameters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OneDriveParameters.swift; path = Parameters/OneDriveParameters.swift; sourceTree = "<group>"; };
-		A39C49C522539D550027BDF9 /* OwnCloudParameters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OwnCloudParameters.swift; path = Parameters/OwnCloudParameters.swift; sourceTree = "<group>"; };
-		A39C49C622539D550027BDF9 /* HiveIpfsParameters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HiveIpfsParameters.swift; path = Parameters/HiveIpfsParameters.swift; sourceTree = "<group>"; };
 		A39C49D222539DCB0027BDF9 /* ElastosHiveSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ElastosHiveSDK.h; sourceTree = "<group>"; };
 		A39C49D322539DCB0027BDF9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -130,7 +130,6 @@
 		A39C4971225399860027BDF9 /* ElastosHiveSDK */ = {
 			isa = PBXGroup;
 			children = (
-				A39C49C222539D460027BDF9 /* Parameters */,
 				A39C499122539C880027BDF9 /* Vendors */,
 				A39C498F22539C6D0027BDF9 /* Utils */,
 				A39C498E22539C5E0027BDF9 /* Exceptions */,
@@ -163,7 +162,6 @@
 				A39C499622539C9C0027BDF9 /* HiveDrive.swift */,
 				A39C499422539C9C0027BDF9 /* HiveError.swift */,
 				A39C499522539C9C0027BDF9 /* HiveFile.swift */,
-				113CA6532262FCBD00074437 /* HiveAuthConstants.swift */,
 				A39C499722539C9C0027BDF9 /* SdkVersion.swift */,
 			);
 			name = Core;
@@ -200,6 +198,8 @@
 		A39C49AC22539CBE0027BDF9 /* OneDrive */ = {
 			isa = PBXGroup;
 			children = (
+				A3743ADC2265743400C9493E /* OneDriveConstants.swift */,
+				A3743AD4226570B200C9493E /* OneDriveParameters.swift */,
 				A39C49AD22539CD10027BDF9 /* OneDrive.swift */,
 				A39C49AE22539CD10027BDF9 /* OneDriveAuthHelper.swift */,
 				A39C49AF22539CD10027BDF9 /* OneDriveFile.swift */,
@@ -210,6 +210,7 @@
 		A39C49B322539CD70027BDF9 /* Dropbox */ = {
 			isa = PBXGroup;
 			children = (
+				A3743ADA2265711A00C9493E /* DropBoxParameters.swift */,
 				A39C49BF22539D3B0027BDF9 /* DropboxDrive.swift */,
 				A39C49BE22539D3B0027BDF9 /* DropboxFile.swift */,
 			);
@@ -219,6 +220,7 @@
 		A39C49B422539CDD0027BDF9 /* OwnCloud */ = {
 			isa = PBXGroup;
 			children = (
+				A3743AD82265710B00C9493E /* OwnCloudParameters.swift */,
 				A39C49BB22539D2E0027BDF9 /* OwnCloudDrive.swift */,
 				A39C49BA22539D2E0027BDF9 /* OwnCloudFile.swift */,
 			);
@@ -228,21 +230,11 @@
 		A39C49B522539CE70027BDF9 /* HiveIPFS */ = {
 			isa = PBXGroup;
 			children = (
+				A3743AD6226570FF00C9493E /* HiveIpfsParameters.swift */,
 				A39C49B722539D040027BDF9 /* HiveIpfsDrive.swift */,
 				A39C49B622539D030027BDF9 /* HiveIpfsFile.swift */,
 			);
 			name = HiveIPFS;
-			sourceTree = "<group>";
-		};
-		A39C49C222539D460027BDF9 /* Parameters */ = {
-			isa = PBXGroup;
-			children = (
-				A39C49C322539D550027BDF9 /* DropBoxParameters.swift */,
-				A39C49C622539D550027BDF9 /* HiveIpfsParameters.swift */,
-				A39C49C422539D550027BDF9 /* OneDriveParameters.swift */,
-				A39C49C522539D550027BDF9 /* OwnCloudParameters.swift */,
-			);
-			name = Parameters;
 			sourceTree = "<group>";
 		};
 		A39C49D122539DCB0027BDF9 /* ElastosHiveSDK */ = {
@@ -366,12 +358,13 @@
 				A39C49B822539D040027BDF9 /* HiveIpfsFile.swift in Sources */,
 				A39C499D22539C9C0027BDF9 /* AuthResult.swift in Sources */,
 				A39C49A322539C9C0027BDF9 /* Authenticator.swift in Sources */,
-				A39C49C822539D550027BDF9 /* OneDriveParameters.swift in Sources */,
 				A39C49BD22539D2E0027BDF9 /* OwnCloudDrive.swift in Sources */,
+				A3743ADB2265711A00C9493E /* DropBoxParameters.swift in Sources */,
 				A39C49A522539C9C0027BDF9 /* DriveType.swift in Sources */,
 				A39C49A122539C9C0027BDF9 /* SdkVersion.swift in Sources */,
-				A39C49CA22539D550027BDF9 /* HiveIpfsParameters.swift in Sources */,
+				A3743ADD2265743400C9493E /* OneDriveConstants.swift in Sources */,
 				113CA6522262E99A00074437 /* AuthWebViewController.swift in Sources */,
+				A3743AD72265710000C9493E /* HiveIpfsParameters.swift in Sources */,
 				A39C49A222539C9C0027BDF9 /* DriveParameters.swift in Sources */,
 				A39C49C122539D3B0027BDF9 /* DropboxDrive.swift in Sources */,
 				A39C49A822539CA70027BDF9 /* ErrorResponseException.swift in Sources */,
@@ -384,13 +377,12 @@
 				A39C49C022539D3B0027BDF9 /* DropboxFile.swift in Sources */,
 				A39C49AB22539CB90027BDF9 /* IOUtil.swift in Sources */,
 				A39C499E22539C9C0027BDF9 /* HiveError.swift in Sources */,
-				A39C49C922539D550027BDF9 /* OwnCloudParameters.swift in Sources */,
 				A39C49A422539C9C0027BDF9 /* AuthHelper.swift in Sources */,
 				A39C49B122539CD10027BDF9 /* OneDriveAuthHelper.swift in Sources */,
-				A39C49C722539D550027BDF9 /* DropBoxParameters.swift in Sources */,
-				113CA6542262FCBD00074437 /* HiveAuthConstants.swift in Sources */,
 				A39C49BC22539D2E0027BDF9 /* OwnCloudFile.swift in Sources */,
 				A39C49B022539CD10027BDF9 /* OneDrive.swift in Sources */,
+				A3743AD5226570B200C9493E /* OneDriveParameters.swift in Sources */,
+				A3743AD92265710B00C9493E /* OwnCloudParameters.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

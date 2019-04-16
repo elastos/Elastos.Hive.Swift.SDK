@@ -2,7 +2,6 @@ import UIKit
 
 @objc(OneDriveParameters)
 public class OneDriveParameters: DriveParameters {
-    
     @objc public var appId: String?
     @objc public var scopes: Array<String>?
     @objc public var redirectUrl: String?
@@ -24,7 +23,4 @@ public class OneDriveParameters: DriveParameters {
     public override func getDriveType() -> DriveType {
         return DriveType.oneDrive
     }
-
-    
-    
 }

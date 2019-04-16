@@ -11,5 +11,4 @@ class AuthInfo: NSObject {
         // TODO
         return false
     }
-    
 }
