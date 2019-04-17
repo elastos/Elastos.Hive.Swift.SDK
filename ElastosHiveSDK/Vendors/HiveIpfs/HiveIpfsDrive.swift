@@ -18,15 +18,7 @@ class HiveIpfsDrive: HiveDrive {
             driveInstance = drive as HiveDrive;
         }
     }
-
-    static func sharedInstance(_ param: HiveIpfsParameters) -> HiveDrive {
-        if (driveInstance == nil) {
-            createInstance(param: param)
-        }
-
-        return driveInstance!
-    }
-
+    
     static func sharedInstance() -> HiveDrive? {
         return driveInstance
     }
@@ -36,13 +28,12 @@ class HiveIpfsDrive: HiveDrive {
     }
 
     override func getDriveType() -> DriveType {
-        return DriveType.hiveIpfs
+        return .hiveIpfs
     }
 
-    override func login(authenticator: Authenticator) throws {
+    override func login(_ hiveError: @escaping (HiveDrive.loginResponse)) {
         
     }
-
     override func getRootDir() throws -> HiveFile {
         try authHelper!.checkExpired()
         // TODO

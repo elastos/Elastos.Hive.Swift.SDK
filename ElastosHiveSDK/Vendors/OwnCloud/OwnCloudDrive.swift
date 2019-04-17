@@ -17,13 +17,6 @@ class OwnCloudDrive: HiveDrive {
         }
     }
     
-    static func sharedInstance(_ param: OwnCloudParameters) -> HiveDrive {
-        if driveInstance == nil {
-            createInstance(param: param)
-        }
-        return driveInstance!
-    }
-
     static func sharedInstance() -> HiveDrive? {
         return driveInstance
     }
@@ -34,10 +27,11 @@ class OwnCloudDrive: HiveDrive {
     }
 
     override func getDriveType() -> DriveType {
-        return DriveType.oneDrive
+        return .oneDrive
     }
 
-    override func login(authenticator: Authenticator) throws {
+    override func login(_ hiveError: @escaping (HiveDrive.loginResponse)) {
+
     }
 
     override func getRootDir() throws -> HiveFile {

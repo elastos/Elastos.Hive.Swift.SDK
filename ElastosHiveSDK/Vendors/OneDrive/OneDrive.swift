@@ -1,10 +1,11 @@
 import Foundation
 
+
 public class OneDrive: HiveDrive {
     private static var oneDriveInstance: OneDrive?
     private var oneDriveAuthHelper: OneDriveAuthHelper
     private var driveId: String?
-    
+
     private init(_ param: OneDriveParameters) {
         oneDriveAuthHelper = OneDriveAuthHelper(param.appId!, param.scopes!, param.redirectUrl!)
     }
@@ -21,13 +22,16 @@ public class OneDrive: HiveDrive {
     }
     
     override func getDriveType() -> DriveType {
-        return DriveType.oneDrive
+        return .oneDrive
     }
-    
-    public func login() throws {
-        try oneDriveAuthHelper.login()
+
+    public override func login(_ hiveError: @escaping (HiveDrive.loginResponse)) {
+        oneDriveAuthHelper.login({ (error) in
+            // todo handle error
+            hiveError(error)
+        })
     }
-    
+
     override func getRootDir() throws -> HiveFile {
         try oneDriveAuthHelper.checkExpired()
         // TODO

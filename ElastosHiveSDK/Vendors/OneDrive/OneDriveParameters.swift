@@ -1,4 +1,6 @@
-import UIKit
+
+import Foundation
+
 
 @objc(OneDriveParameters)
 public class OneDriveParameters: DriveParameters {
@@ -21,6 +23,6 @@ public class OneDriveParameters: DriveParameters {
     }
     
     public override func getDriveType() -> DriveType {
-        return DriveType.oneDrive
+        return .oneDrive
     }
 }
