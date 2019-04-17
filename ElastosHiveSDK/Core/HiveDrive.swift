@@ -2,23 +2,26 @@ import Foundation
 
 @objc(HiveDrive)
 public class HiveDrive: NSObject {
+
+   public typealias loginResponse = (_ error: HiveError?) -> Void
+
     /**
      * Create an instance with specific options.
      *
      * @param options TODO
      * @return An new drive instance.
      */
-    public static func createInstance(_ param: DriveParameters) throws -> HiveDrive {
+    public static func createInstance(_ param: DriveParameters) {
         let type: DriveType = param.getDriveType() // DriveParamers?
         switch type {
         case .oneDrive:
-            return try OneDrive.createInstance(param as! OneDriveParameters)
+             OneDrive.createInstance(param as! OneDriveParameters)
         case .ownCloud:
-            return OwnCloudDrive.sharedInstance(param as! OwnCloudParameters)
+             OwnCloudDrive.createInstance(param as! OwnCloudParameters)
         case .dropBox:
-            return DropboxDrive.sharedInstance(param as! DropBoxParameters)
+             DropboxDrive.createInstance(param as! DropBoxParameters)
         case .hiveIpfs:
-            return HiveIpfsDrive.sharedInstance(param as! HiveIpfsParameters)
+             HiveIpfsDrive.createInstance(param as! HiveIpfsParameters)
         }
     }
 
@@ -34,9 +37,6 @@ public class HiveDrive: NSObject {
             return HiveIpfsDrive.sharedInstance()
         }
     }
-}
-
-extension HiveDrive {
     @objc(getAuthHelper)
     func getAuthHelper() -> AuthHelper {
         return AuthHelper()
@@ -47,8 +47,8 @@ extension HiveDrive {
         return DriveType.oneDrive
     }
 
-    @objc(login::)
-    public func login(authenticator: Authenticator) throws  {
+    public func login(_ hiveError: @escaping (loginResponse))  {
+
     }
 
     @objc(getRootDir:)

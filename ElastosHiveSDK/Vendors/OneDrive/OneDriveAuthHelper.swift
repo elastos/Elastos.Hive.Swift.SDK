@@ -1,4 +1,6 @@
+
 import Foundation
+import Swifter
 
 @objc(OneDriveAuthHelper)
 class OneDriveAuthHelper: AuthHelper {
@@ -7,36 +9,50 @@ class OneDriveAuthHelper: AuthHelper {
     private var scopes: String
     private var redirectUrl: String
     private var authCode: String?
+    let server = HttpServer()
+
     
     public init(_ appId: String, _ scopes: Array<String>, _ redirectUrl: String) {
         self.appId = appId
         self.scopes = scopes.joined(separator: " ")
         self.redirectUrl = redirectUrl
     }
-    
-    public func login() throws {
-        if(!hasLogin()){
-            let authViewController:AuthWebViewController = AuthWebViewController()
-            let rootViewController = UIApplication.shared.keyWindow?.rootViewController
-            rootViewController?.present(authViewController, animated: true, completion: nil)
-            authViewController.loadRequest(appId, redirectUrl, "code", scopes)
-            authViewController.responseHandle = { ( response, error ) -> Void in
-                let json: Dictionary = (response?.queryDictionary)!
-                let code = json["code"]
-                guard code?.count ?? 0 > 0 else {
+
+    public func login(_ hiveError: @escaping (_ error: HiveError?) -> Void) {
+        if (!hasLogin()) {
+            getAuthCode { (authCode, error) in
+                guard error == nil else {
+                    hiveError(error)
                     return
                 }
-                self.authCode = code
-                self.requestAccessToken(authorCode: self.authCode!)
+                self.authCode = authCode
+                self.requestAccessToken(authorCode: authCode!)
+                self.authCode = nil
+                self.server.stop()
             }
         }
-        if(isExpired()){
-            try? refreshAccessToken()
+    }
+
+    private func getAuthCode(_ authCode: @escaping (_ authCode: String?, _ error: HiveError?) -> Void) {
+        do {
+            server[""] = { request in
+                guard request.queryParams.count > 0 || request.queryParams[0].0 != "code" else {
+                     authCode(nil, .failue(des: "authCode获取失败"))
+                    return HttpResponse.ok(.json("nil" as AnyObject))
+                }
+                let authJson = request.queryParams[0]
+                authCode(authJson.1,nil)
+                return HttpResponse.ok(.json("nil" as AnyObject))
+            }
+            try server.start(44316)
+        } catch {
+            authCode(nil,(error as! HiveError))
         }
     }
-    
+
     private func requestAccessToken(authorCode: String) {
-        
+
+
         let params: Dictionary = ["client_id" : appId,
                                   "code" : authorCode,
                                   "grant_type" : "authorization_code",
