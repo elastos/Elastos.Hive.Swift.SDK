@@ -2,26 +2,12 @@ import Foundation
 
 @objc(HiveFile)
 public class HiveFile: NSObject {
-    
-    public typealias HiveGetPathResponseHandler = (_ pathItem: String?, _ error: Error?) -> Void  // todo impatment with ODItem
-    public typealias HiveGetParentPathResponseHandler = (_ parentPathItem: String?, _ error: Error?) -> Void // todo impatment with ODItem
-    public typealias HiveGetParentResponseHandler = (_ parentItem: String?, _ error: Error?) -> Void // todo impatment with ODItem
+    public typealias hiveFileResponse = (_ hiveFile: HiveFile?, _ error: Error?) -> Void
     public var drive: HiveDrive?
-    @objc public var createdTimeDate: String{
-        return ""
-    }
-    @objc public var lastModifiedTimeDateTime: String{
-        return ""
-    }
-    @objc public var isFile: Bool{
-        return false
-    }
-    @objc public var isDirectory: Bool {
-        return false
-    }
-    //@objc public func hiveFile(drive: HiveDrive) {
-    //    self.drive = drive
-    //}
+    public var createdDateTime: String?
+    public var lastModifiedDateTime: String?
+    public var isFile: Bool?
+    public var isDirectory: Bool?
     
     /**
      * Create an file with specific pathname.
@@ -31,25 +17,20 @@ public class HiveFile: NSObject {
      * @return An new hive file.
      * @throws Exception TODO
      */
-    public static func createFile(drive: HiveDrive, pathname: String) throws -> HiveFile{
-        return try drive.createFile(pathname: pathname)
+    public static func createFile(_ pathname: String, _ responseHandle: @escaping (hiveFileResponse)) {
+//        return try drive.createFile(pathname: pathname)
     }
-    
-    @objc(getPath:)
-    public func getPath(response: HiveGetPathResponseHandler) {
-        // request to path
+
+    public func getPath() -> String? {
+        return nil
+    }
+
+    public func parentPath() -> String? {
+        return nil
+    }
+
+    public func parent(_ responseHandle: @escaping (hiveFileResponse)) {
         
-    }
-    
-    @objc(parentPath:)
-    public func parentPath(response: HiveGetParentPathResponseHandler) {
-        // request to parentPath
-        
-    }
-    
-    @objc(parent:)
-    public func parent(response: HiveGetParentResponseHandler) {
-        // request parent
     }
     
     /**

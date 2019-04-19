@@ -34,21 +34,17 @@ class OwnCloudDrive: HiveDrive {
 
     }
 
-    override func getRootDir() throws -> HiveFile {
-        try authHelper!.checkExpired()
-        // TODO
-        return OwnCloudFile()
+    override func getRootDir(_ result: @escaping (HiveDrive.hiveFileResponse)) {
+        
     }
 
-    override func createFile(pathname: String) throws -> HiveFile {
-        try authHelper!.checkExpired()
-        // TODO
-        return OwnCloudFile()
+    override func createFile(_ pathname: String, _ responseHandle: @escaping (HiveDrive.hiveFileResponse)) {
+        //        try authHelper!.checkExpired()
+        //        // TODO
     }
 
-    override func getFile(pathname: String) throws -> HiveFile {
-        try authHelper!.checkExpired()
-        // TODO
-        return OwnCloudFile()
+    override func getFile(_ pathname: String, _ responseHandle: @escaping (HiveDrive.hiveFileResponse)) {
+        //        try authHelper!.checkExpired()
+        //        // TODO
     }
 }

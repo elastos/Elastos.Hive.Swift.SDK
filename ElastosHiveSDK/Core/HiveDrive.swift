@@ -3,7 +3,8 @@ import Foundation
 @objc(HiveDrive)
 public class HiveDrive: NSObject {
 
-   public typealias loginResponse = (_ error: HiveError?) -> Void
+    public typealias loginResponse = (_ error: HiveError?) -> Void
+    public typealias hiveFileResponse = (_ hiveFile: HiveFile?, _ error: HiveError?) -> Void
 
     /**
      * Create an instance with specific options.
@@ -51,18 +52,14 @@ public class HiveDrive: NSObject {
 
     }
 
-    @objc(getRootDir:)
-    func getRootDir() throws -> HiveFile {
-        return HiveFile()
+   public func getRootDir(_ result: @escaping (hiveFileResponse)){
     }
 
-    @objc(createFile::)
-    func createFile(pathname: String) throws -> HiveFile {
-        return HiveFile()
+    func createFile(_ pathname: String, _ responseHandle: @escaping (hiveFileResponse)) {
+
     }
 
-    @objc(getFile::)
-    func getFile(pathname: String) throws -> HiveFile {
-        return HiveFile()
+    func getFile(_ pathname: String, _ responseHandle: @escaping (hiveFileResponse)){
+
     }
 }

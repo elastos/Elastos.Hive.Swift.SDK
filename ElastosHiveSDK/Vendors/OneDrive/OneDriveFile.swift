@@ -4,32 +4,22 @@ import Foundation
 public class OneDriveFile: HiveFile {
     
     @objc public var pathname: String?
-    
-    override public var createdTimeDate: String{
-        return ""
+
+    public override func getPath() -> String? {
+        return pathname
     }
-    override public var lastModifiedTimeDateTime: String{
-        return ""
+
+    public override func parentPath() -> String? {
+        return pathname
     }
-    override public var isFile: Bool{
-        return false
+
+    public override func parent(_ responseHandle: @escaping (HiveFile.hiveFileResponse)) {
+        let pathName: String = parentPath()!
+        super.drive?.getFile(pathName, { (hiveFile, error) in
+            responseHandle(hiveFile, error)
+        })
     }
-    override public var isDirectory: Bool{
-        return false
-    }
-    
-    public override func getPath(response: (String?, Error?) -> Void) {
-        
-    }
-    
-    public override func parent(response: (String?, Error?) -> Void) {
-        
-    }
-    
-    public override func parentPath(response: (String?, Error?) -> Void) {
-        
-    }
-    
+
     override public func updateDateTime(newDateTime: String) throws {
         
     }

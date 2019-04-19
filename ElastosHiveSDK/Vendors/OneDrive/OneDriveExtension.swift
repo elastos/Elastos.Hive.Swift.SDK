@@ -28,3 +28,4 @@ extension URL {
         return queryStrings
     }
 }
+

@@ -35,21 +35,22 @@ class DropboxDrive: HiveDrive {
     override func login(_ hiveError: @escaping (HiveDrive.loginResponse)) {
     }
 
-    override func getRootDir() throws -> HiveFile {
-        try authHelper!.checkExpired()
-        // TODO
-        return DropboxFile()
+    override func getRootDir(_ result: @escaping (HiveDrive.hiveFileResponse)) {
+        
     }
 
-    override func createFile(pathname: String) throws -> HiveFile {
-        try authHelper!.checkExpired()
-        // TODO
-        return DropboxFile()
+//    override func createFile(pathname: String) throws -> HiveFile {
+////        try authHelper!.checkExpired()
+//        // TODO
+//        return DropboxFile()
+//    }
+//    override func createFile(pathname: String) throws -> HiveFile {
+//
+//    }
+
+    override func getFile(_ pathname: String, _ responseHandle: @escaping (HiveDrive.hiveFileResponse)) {
+        //        try authHelper!.checkExpired()
+        //        // TODO
     }
 
-    override func getFile(pathname: String) throws -> HiveFile {
-        try authHelper!.checkExpired()
-        // TODO
-        return DropboxFile()
-    }
 }

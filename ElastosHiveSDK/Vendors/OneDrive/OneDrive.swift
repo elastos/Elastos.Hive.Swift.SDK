@@ -27,26 +27,45 @@ public class OneDrive: HiveDrive {
 
     public override func login(_ hiveError: @escaping (HiveDrive.loginResponse)) {
         oneDriveAuthHelper.login({ (error) in
-            // todo handle error
             hiveError(error)
         })
     }
 
-    override func getRootDir() throws -> HiveFile {
-        try oneDriveAuthHelper.checkExpired()
-        // TODO
-        return OneDriveFile()
+   public override func getRootDir(_ result: @escaping (HiveDrive.hiveFileResponse)) {
+        oneDriveAuthHelper.checkExpired { (error) in
+            OneDriveHttpServer.get(RESTAPI_URL + ROOT_DIR, { (response, error) in
+                let oneDriveFile: OneDriveFile = OneDriveFile()
+                oneDriveFile.drive = self
+                oneDriveFile.isFile = false // todo  according to the @property
+                oneDriveFile.isDirectory = true // todo  according to the @property
+                oneDriveFile.createdDateTime = (response!["createdDateTime"] as! String)
+                oneDriveFile.lastModifiedDateTime = (response!["lastModifiedDateTime"] as! String)
+                oneDriveFile.pathname =  "/"
+                result(oneDriveFile, error)
+            })
+        }
     }
-    
-    override func createFile(pathname: String) throws -> HiveFile {
-        try oneDriveAuthHelper.checkExpired()
-        // TODO
-        return OneDriveFile()
+
+    override func createFile(_ pathname: String, _ responseHandle: @escaping (HiveDrive.hiveFileResponse)) {
+        //        try oneDriveAuthHelper.checkExpired()
+        //        // TODO
     }
-    
-    override func getFile(pathname: String) throws -> HiveFile {
-        try oneDriveAuthHelper.checkExpired()
-        // TODO
-        return OneDriveFile()
+
+    override func getFile(_ pathname: String, _ responseHandle: @escaping (HiveDrive.hiveFileResponse)) {
+        oneDriveAuthHelper.checkExpired { (error) in
+            OneDriveHttpServer.get(RESTAPI_URL + ROOT_DIR + pathname, { (response, error) in
+                print(response)
+                let oneDriveFile: OneDriveFile = OneDriveFile()
+                oneDriveFile.drive = self
+                oneDriveFile.isFile = false // todo  according to the @property
+                oneDriveFile.isDirectory = true // todo  according to the @property
+                oneDriveFile.createdDateTime = (response!["createdDateTime"] as! String)
+                oneDriveFile.lastModifiedDateTime = (response!["lastModifiedDateTime"] as! String)
+                oneDriveFile.pathname =  pathname
+                responseHandle(oneDriveFile, error)
+            })
+        }
     }
+
+
 }
