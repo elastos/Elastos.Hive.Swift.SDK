@@ -1,5 +1,4 @@
-
-import UIKit
+import Foundation
 
 class OneDriveHttpServer: NSObject {
 
@@ -44,7 +43,7 @@ class OneDriveHttpServer: NSObject {
         let keychain: KeychainSwift = KeychainSwift() // todo  take frome keychain
         let accesstoken: String = keychain.get("access_token")!
 
-        request.setValue("bearer \(accesstoken)", forHTTPHeaderField: HIVE_API_HEADER_AUTHORIZATION)
+        request.setValue("bearer \(accesstoken)", forHTTPHeaderField: HEADER_AUTHORIZATION)
         let config = URLSessionConfiguration.default
         let session = URLSession(configuration: config)
         let task = session.dataTask(with: request) { (data, response, error) in

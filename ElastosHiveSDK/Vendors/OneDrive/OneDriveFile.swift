@@ -1,61 +1,61 @@
 import Foundation
 
 @objc(OneDriveFile)
-public class OneDriveFile: HiveFile {
-    
-    @objc public var pathname: String?
+class OneDriveFile: HiveFileHandle {
+    @objc var _pathname: String?
 
-    public override func getPath() -> String? {
-        return pathname
-    }
-
-    public override func parentPath() -> String? {
-        return pathname
+    override func pathName() -> String? {
+        return _pathname
     }
 
-    public override func parent(_ responseHandle: @escaping (HiveFile.hiveFileResponse)) {
-        let pathName: String = parentPath()!
-        super.drive?.getFile(pathName, { (hiveFile, error) in
-            responseHandle(hiveFile, error)
-        })
+    public override func parentPathName() -> String? {
+        return _pathname
     }
 
-    override public func updateDateTime(newDateTime: String) throws {
-        
+    override func parentHandle(withResult resultHandler: @escaping (HiveFileObjectCreationResponseHandler)) {
+        //let path: String = parentPathName()!
+        //super.drive?.getFileHandle(atPath path) { (file, error) in
+        //    resultHandler(file, error)
+        //}
+    }
+
+    override func updateDateTime(withValue newValue: String) throws {
+        // TODO
+    }
+
+    override func copyFileTo(newPath: String) throws {
+        // TODO
+    }
+
+    override func copyFileTo(newFile: HiveFileHandle) throws {
+        // TODO
     }
     
-    override public func copyTo(newPath: String) throws {
+    override func renameFileTo(newPath: String) throws {
+        // TODO
     }
     
-    override public func copyTo(newFile: HiveFile) throws {
-        
+    override func renameFileTo(newFile: HiveFileHandle) throws {
+        // TODO
     }
     
-    override public func renameTo(newPath: String) throws {
-        
+    override func deleteItem() throws {
+        // TODO
+    }
+
+    override func closeItem() throws {
+        // TODO
     }
     
-    override public func renameTo(newFile: HiveFile) throws {
-        
+    override func list() throws -> [HiveFileHandle] {
+        return [HiveFileHandle]()
     }
     
-    override public func delete() throws {
-        
+    override func mkdir(pathname: String) throws {
+        // TODO
     }
     
-    override public func list() throws -> [HiveFile] {
-        return [HiveFile]()
-    }
-    
-    override public func mkdir(pathname: String) throws {
-        
-    }
-    
-    override public func mkdirs(pathname: String) throws {
-        
-    }
-    
-    override public func close() throws {
-        
+    override func mkdirs(pathname: String) throws {
+        // TODO
     }
 }

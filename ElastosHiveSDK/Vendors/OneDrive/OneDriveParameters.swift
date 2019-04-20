@@ -1,12 +1,14 @@
-
 import Foundation
-
 
 @objc(OneDriveParameters)
 public class OneDriveParameters: DriveParameters {
     @objc public var appId: String?
     @objc public var scopes: Array<String>?
     @objc public var redirectUrl: String?
+
+    public override func driveType() -> DriveType {
+        return DriveType.oneDrive
+    }
 
     /**
      * Class constructor
@@ -20,9 +22,5 @@ public class OneDriveParameters: DriveParameters {
         self.scopes = scopes
         self.redirectUrl = redirectUrl
         super.init()
-    }
-    
-    public override func getDriveType() -> DriveType {
-        return .oneDrive
     }
 }

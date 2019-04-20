@@ -1,9 +1,8 @@
 import Foundation
 
 @objc(HiveFile)
-public class HiveFile: NSObject {
-    public typealias hiveFileResponse = (_ hiveFile: HiveFile?, _ error: Error?) -> Void
-    public var drive: HiveDrive?
+public class HiveFileHandle: NSObject {
+    public var drive: HiveDriveHandle?
     public var createdDateTime: String?
     public var lastModifiedDateTime: String?
     public var isFile: Bool?
@@ -17,20 +16,23 @@ public class HiveFile: NSObject {
      * @return An new hive file.
      * @throws Exception TODO
      */
-    public static func createFile(_ pathname: String, _ responseHandle: @escaping (hiveFileResponse)) {
-//        return try drive.createFile(pathname: pathname)
+    public static func createFile(atPath: String, _ withResult: @escaping (HiveFileObjectCreationResponseHandler)) {
+        // return try drive.createFile(pathname: pathname)
     }
 
-    public func getPath() -> String? {
+    public static func createFile(atPath: String, _ contents: Data, _ withResult: @escaping (HiveFileObjectCreationResponseHandler)) {
+        // TODO;
+    }
+
+    public func pathName() -> String? {
         return nil
     }
 
-    public func parentPath() -> String? {
+    public func parentPathName() -> String? {
         return nil
     }
 
-    public func parent(_ responseHandle: @escaping (hiveFileResponse)) {
-        
+    public func parentHandle(withResult result: @escaping (HiveFileObjectCreationResponseHandler)) {
     }
     
     /**
@@ -40,26 +42,26 @@ public class HiveFile: NSObject {
      * @throws Exception TODO
      */
     @objc(updateDateTime:error:)
-    public func updateDateTime(newDateTime: String) throws {}
+    public func updateDateTime(withValue newValue: String) throws {}
     
     /**
      * Delete this file object.
      *
      * @throws Exception TODO
      */
-    @objc(delete:)
-    public func delete() throws {}
+    @objc(deleteItem:)
+    public func deleteItem() throws {}
 
     /**
      * Close hive file object.
      *
      * @throws Exception TODO
      */
-    @objc(close:)
-    public func close() throws {}
+    @objc(closeItem:)
+    public func closeItem() throws {}
 }
 
-extension HiveFile {
+extension HiveFileHandle {
     /**
      * Copy the item to another address.
      *
@@ -67,7 +69,7 @@ extension HiveFile {
      * @throws Exception TODO
      */
     @objc(copyTo:error:)
-    public func copyTo(newPath: String) throws {
+    public func copyFileTo(newPath: String) throws {
     }
 
     /**
@@ -77,7 +79,7 @@ extension HiveFile {
      * @throws Exception TODO
      */
     @objc(copyToNewFile:error:)
-    public func copyTo(newFile: HiveFile) throws {
+    public func copyFileTo(newFile: HiveFileHandle) throws {
     }
 
     /**
@@ -87,7 +89,7 @@ extension HiveFile {
      * @throws Exception TODO
      */
     @objc(renameToNewPath:error:)
-    public func renameTo(newPath: String) throws {
+    public func renameFileTo(newPath: String) throws {
 
     }
 
@@ -98,11 +100,11 @@ extension HiveFile {
      * @throws Exception TODO
      */
     @objc(renameToNewFile:error:)
-    public func renameTo(newFile: HiveFile) throws {
+    public func renameFileTo(newFile: HiveFileHandle) throws {
     }
 }
 
-extension HiveFile {
+extension HiveFileHandle {
     /**
      * List all file objects under this directory.
      *
@@ -110,8 +112,8 @@ extension HiveFile {
      * @throws Exception TODO
      */
     @objc(list:)
-    public func list() throws -> [HiveFile] {
-        return [HiveFile] ()
+    public func list() throws -> [HiveFileHandle] {
+        return [HiveFileHandle] ()
     }
 
     /**
@@ -121,8 +123,8 @@ extension HiveFile {
      * @throws Exception TODO
      */
     @objc(listFiles:)
-    public func listFiles() throws -> [HiveFile] {
-        let files: [HiveFile] = try list()
+    public func listFiles() throws -> [HiveFileHandle] {
+        let files: [HiveFileHandle] = try list()
         return files
     }
 

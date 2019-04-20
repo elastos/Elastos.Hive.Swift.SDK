@@ -1,56 +1,53 @@
 import Foundation
 
 @objc(DropboxDrive)
-class DropboxDrive: HiveDrive {
-    private static var driveInstance: HiveDrive?
+class DropboxDrive: HiveDriveHandle {
+    private static var driveInstance: HiveDriveHandle?
 
-    private var authHelper: AuthHelper?
+    private var authHelperHandle: AuthHelper?
 
     private init(_ param: DriveParameters) {
         // TODO;
         //super.init()
-        
     }
     
     @objc(createInstance:)
     public static func createInstance(param: DriveParameters){
         if driveInstance == nil {
             let drive: DropboxDrive = DropboxDrive(param)
-            driveInstance = drive as HiveDrive
+            driveInstance = drive as HiveDriveHandle
         }
     }
 
-    static func sharedInstance() -> HiveDrive? {
+    static func sharedInstance() -> HiveDriveHandle? {
         return driveInstance
     }
     
-    override func getAuthHelper() -> AuthHelper {
-        return authHelper!
+    override func authHelper() -> AuthHelper {
+        return AuthHelper()
     }
 
-    override func getDriveType() -> DriveType {
-        return .oneDrive
+    override func driveType() -> DriveType {
+        return .ownCloud
     }
 
-    override func login(_ hiveError: @escaping (HiveDrive.loginResponse)) {
+    override func login() throws {
+        // TODO
     }
 
-    override func getRootDir(_ result: @escaping (HiveDrive.hiveFileResponse)) {
-        
+    override func rootDirectoryHandle(withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
+        // TODO
     }
 
-//    override func createFile(pathname: String) throws -> HiveFile {
-////        try authHelper!.checkExpired()
-//        // TODO
-//        return DropboxFile()
-//    }
-//    override func createFile(pathname: String) throws -> HiveFile {
-//
-//    }
-
-    override func getFile(_ pathname: String, _ responseHandle: @escaping (HiveDrive.hiveFileResponse)) {
-        //        try authHelper!.checkExpired()
-        //        // TODO
+    override func createDirectory(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
+        // TODO
     }
 
+    override func createFile(atPath: String, contents: Data?, withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
+        // TODO
+    }
+
+    override func getFileHandle(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
+        // TODO
+    }
 }

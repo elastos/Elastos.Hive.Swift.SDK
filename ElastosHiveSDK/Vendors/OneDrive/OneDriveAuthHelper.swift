@@ -1,4 +1,3 @@
-
 import Foundation
 import Swifter
 
@@ -11,13 +10,13 @@ class OneDriveAuthHelper: AuthHelper {
     private var authCode: String?
     let server = HttpServer()
 
-    public init(_ appId: String, _ scopes: Array<String>, _ redirectUrl: String) {
+    init(_ appId: String, _ scopes: Array<String>, _ redirectUrl: String) {
         self.appId = appId
         self.scopes = scopes.joined(separator: " ")
         self.redirectUrl = redirectUrl
     }
 
-    public func login(_ hiveError: @escaping (_ error: HiveError?) -> Void) {
+    func login(_ hiveError: @escaping (_ error: HiveError?) -> Void) {
         if (!hasLogin()) {
             getAuthCode { (authCode, error) in
                 guard error == nil else {
@@ -109,17 +108,14 @@ class OneDriveAuthHelper: AuthHelper {
     }
     
     private func hasLogin() -> Bool {
-        if(authInfo != nil){
-            return true
-        }
-        return false
+        return authInfo != nil;
     }
     
     private func isExpired() -> Bool {
         return (authInfo?.isExpired())!
     }
     
-    override public func checkExpired(_ hiveError: @escaping (_ error: HiveError?) -> Void) {
+    override func checkExpired(_ hiveError: @escaping (_ error: HiveError?) -> Void) {
         if (isExpired()) {
             refreshAccessToken { (error) in
                 hiveError(error)

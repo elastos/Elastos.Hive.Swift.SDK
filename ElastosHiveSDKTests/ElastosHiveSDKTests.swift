@@ -1,11 +1,3 @@
-//
-//  ElastosHiveSDKTests.swift
-//  ElastosHiveSDKTests
-//
-//  Created by tang zhilong on 2/4/2019.
-//  Copyright © 2019 org.elastos. All rights reserved.
-//
-
 import XCTest
 @testable import ElastosHiveSDK
 
@@ -30,5 +22,4 @@ class ElastosHiveSDKTests: XCTestCase {
             // Put the code you want to measure the time of here.
         }
     }
-
 }

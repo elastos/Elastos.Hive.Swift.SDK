@@ -1,9 +1,6 @@
+import Foundation
 
-
-import UIKit
-
-public class HelperMethods {
-
+class HelperMethods {
    class func getCurrentTime() -> String {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium

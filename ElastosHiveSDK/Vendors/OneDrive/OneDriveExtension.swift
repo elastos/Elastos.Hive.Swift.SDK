@@ -1,4 +1,3 @@
-
 import Foundation
 
 extension Dictionary {
@@ -28,4 +27,3 @@ extension URL {
         return queryStrings
     }
 }
-

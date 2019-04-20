@@ -1,11 +1,9 @@
 import Foundation
 
+public typealias HiveFileObjectCreationResponseHandler = (_ file: HiveFileHandle?, _ error: HiveError?) -> Void
+
 @objc(HiveDrive)
-public class HiveDrive: NSObject {
-
-    public typealias loginResponse = (_ error: HiveError?) -> Void
-    public typealias hiveFileResponse = (_ hiveFile: HiveFile?, _ error: HiveError?) -> Void
-
+public class HiveDriveHandle: NSObject {
     /**
      * Create an instance with specific options.
      *
@@ -13,7 +11,7 @@ public class HiveDrive: NSObject {
      * @return An new drive instance.
      */
     public static func createInstance(_ param: DriveParameters) {
-        let type: DriveType = param.getDriveType() // DriveParamers?
+        let type: DriveType = param.driveType()
         switch type {
         case .oneDrive:
              OneDrive.createInstance(param as! OneDriveParameters)
@@ -26,7 +24,7 @@ public class HiveDrive: NSObject {
         }
     }
 
-    public static func sharedInstance(type: DriveType) -> HiveDrive? {
+    public static func sharedInstance(type: DriveType) -> HiveDriveHandle? {
         switch type {
         case .oneDrive:
             return OneDrive.sharedInstance()
@@ -38,28 +36,27 @@ public class HiveDrive: NSObject {
             return HiveIpfsDrive.sharedInstance()
         }
     }
-    @objc(getAuthHelper)
-    func getAuthHelper() -> AuthHelper {
+
+    func authHelper() -> AuthHelper {
         return AuthHelper()
     }
 
-    @objc(getDriveType)
-    func getDriveType() -> DriveType {
+    func driveType() -> DriveType {
         return DriveType.oneDrive
     }
 
-    public func login(_ hiveError: @escaping (loginResponse))  {
-
+    public func login() throws {
     }
 
-   public func getRootDir(_ result: @escaping (hiveFileResponse)){
+    public func rootDirectoryHandle(withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
     }
 
-    func createFile(_ pathname: String, _ responseHandle: @escaping (hiveFileResponse)) {
-
+    public func createDirectory(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
     }
 
-    func getFile(_ pathname: String, _ responseHandle: @escaping (hiveFileResponse)){
+    public func createFile(atPath: String, contents: Data?, withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
+    }
 
+    public func getFileHandle(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
     }
 }
