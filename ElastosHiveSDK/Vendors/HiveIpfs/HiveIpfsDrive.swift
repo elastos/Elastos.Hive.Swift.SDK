@@ -1,10 +1,10 @@
 import Foundation
 
 @objc(HiveIpfsDrive)
-class HiveIpfsDrive: HiveDrive {
-    private static var driveInstance: HiveDrive?
+class HiveIpfsDrive: HiveDriveHandle {
+    private static var driveInstance: HiveDriveHandle?
 
-    private var authHelper: AuthHelper?
+    private var authHelperHandle: AuthHelper?
     
     private init(param: HiveIpfsParameters){
         // todo
@@ -15,40 +15,39 @@ class HiveIpfsDrive: HiveDrive {
     private static func createInstance(param: HiveIpfsParameters) {
         if driveInstance == nil {
             let drive: HiveIpfsDrive = HiveIpfsDrive(param: param)
-            driveInstance = drive as HiveDrive;
+            driveInstance = drive as HiveDriveHandle;
         }
     }
     
-    static func sharedInstance() -> HiveDrive? {
+    static func sharedInstance() -> HiveDriveHandle? {
         return driveInstance
     }
     
-    override func getAuthHelper() -> AuthHelper {
-        return authHelper!
+    override func authHelper() -> AuthHelper {
+        return AuthHelper()
     }
 
-    override func getDriveType() -> DriveType {
-        return .hiveIpfs
+    override func driveType() -> DriveType {
+        return .ownCloud
     }
 
-    override func login(_ hiveError: @escaping (HiveDrive.loginResponse)) {
-        
-    }
-    override func getRootDir() throws -> HiveFile {
-        try authHelper!.checkExpired()
+    override func login() throws {
         // TODO
-        return HiveIpfsFile()
     }
 
-    override func createFile(pathname: String) throws -> HiveFile {
-        try authHelper!.checkExpired()
+    override func rootDirectoryHandle(withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
         // TODO
-        return HiveIpfsFile()
     }
 
-    override func getFile(pathname: String) throws -> HiveFile {
-        try authHelper!.checkExpired()
+    override func createDirectory(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
         // TODO
-        return HiveIpfsFile()
+    }
+
+    override func createFile(atPath: String, contents: Data?, withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
+        // TODO
+    }
+
+    override func getFileHandle(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
+        // TODO
     }
 }

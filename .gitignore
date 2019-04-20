@@ -2,7 +2,8 @@
 /DerivedData
 /Build
 xcuserdata
-/NativeDistributions/libs
 /Docs
+/Pods
 
 /Products
+/ElastosHiveSDK.xcworkspace

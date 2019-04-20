@@ -6,9 +6,9 @@ class AuthInfo: NSObject {
     var accessToken: String!
     var refreshToken: String!
     var scopes: String!
+    var expiredTime: String?
 
     public func isExpired() -> Bool {
-        // TODO
-        return false
+        return HelperMethods.checkIsExpired(self.expiredTime!)
     }
 }
