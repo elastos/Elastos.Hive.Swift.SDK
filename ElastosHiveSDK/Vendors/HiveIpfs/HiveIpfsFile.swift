@@ -1,5 +1,5 @@
 import Foundation
 
 @objc(HiveIpfsFile)
-class HiveIpfsFile: HiveFileHandle {
+internal class HiveIpfsFile: HiveFileHandle {
 }

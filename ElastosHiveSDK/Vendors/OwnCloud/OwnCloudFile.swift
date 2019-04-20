@@ -1,5 +1,5 @@
 import Foundation
 
 @objc(OwnCloudFile)
-class OwnCloudFile: HiveFileHandle {
+internal class OwnCloudFile: HiveFileHandle {
 }

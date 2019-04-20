@@ -7,7 +7,7 @@ public class HiveFileHandle: NSObject {
     public var lastModifiedDateTime: String?
     public var isFile: Bool?
     public var isDirectory: Bool?
-    
+
     /**
      * Create an file with specific pathname.
      *

@@ -1,112 +1,101 @@
 import Foundation
-import Swifter
+import Unirest
+
+@inline(__always) private func TAG() -> String { return "OneDriveAuthHelper" }
 
 @objc(OneDriveAuthHelper)
-class OneDriveAuthHelper: AuthHelper {
+internal class OneDriveAuthHelper: AuthHelper {
     private var authInfo: AuthInfo?
-    private var appId: String
+    private var clientId: String
     private var scopes: String
     private var redirectUrl: String
     private var authCode: String?
-    let server = HttpServer()
 
-    init(_ appId: String, _ scopes: Array<String>, _ redirectUrl: String) {
-        self.appId = appId
+    init(_ clientId: String, _ scopes: Array<String>, _ redirectUrl: String) {
+        self.clientId = clientId
         self.scopes = scopes.joined(separator: " ")
         self.redirectUrl = redirectUrl
     }
 
-    func login(_ hiveError: @escaping (_ error: HiveError?) -> Void) {
-        if (!hasLogin()) {
-            getAuthCode { (authCode, error) in
-                guard error == nil else {
-                    hiveError(error)
-                    return
-                }
-                self.authCode = authCode
-                self.requestAccessToken(authCode!, { (error) in
-                    hiveError(error)
-                })
-                self.authCode = nil
-                self.server.stop()
+    override func login(_ authenticator: Authenticator) throws {
+        if !hasLogin() {
+            do {
+                let authorCode: String = try acquireAuthorizationCode(authenticator)
+                try requestAccessToken(authorCode)
+                authCode = nil
+            } catch {
+                // TODO
             }
         }
     }
 
-    private func getAuthCode(_ authCode: @escaping (_ authCode: String?, _ error: HiveError?) -> Void) {
-        do {
-            server[""] = { request in
-                guard request.queryParams.count > 0 || request.queryParams[0].0 != "code" else {
-                     authCode(nil, .failue(des: "authCode获取失败"))
-                    return HttpResponse.ok(.json("nil" as AnyObject))
-                }
-                let authJson = request.queryParams[0]
-                authCode(authJson.1,nil)
-                return HttpResponse.ok(.json("nil" as AnyObject))
-            }
-            try server.start(44316)
-        } catch {
-            authCode(nil,(error as! HiveError))
-        }
+    private func acquireAuthorizationCode(_ authenticator: Authenticator) throws -> String {
+        let requestUrl = String(format: "%s/authorize?client_id=%s&scope=%s&response_type=code&redirect_uri=%s", BASE_REQURL, clientId, redirectUrl)
+        let semaphore: DispatchSemaphore = DispatchSemaphore(value: 1)
+        let server: SimpleAuthServer = SimpleAuthServer(semaphore)
+
+        //requestUrl.replacingCharacters(in: RangeExpression(""), with: "%20")
+        server.startRun(44316)
+
+        authenticator.requestAuthentication(requestUrl)
+        semaphore.wait()
+
+        let authCode: String = server.getAuthorizationCode()
+        Log.d(TAG(), "Acquired authorization Code: %s", authCode)
+
+        server.stop()
+
+        return authCode
     }
 
-    private func requestAccessToken(_ authorCode: String, _ hiveError: @escaping (_ error: HiveError?) -> Void) {
-        let params: Dictionary<String, Any> = ["client_id" : appId,
-                                               "code" : authorCode,
-                                               "grant_type" : GRANT_TYPE.authorization_code,
-                                               "redirect_uri" : redirectUrl]
-        OneDriveHttpServer.post(TOKEN_URL, params) { (response, error) in
-            guard error == nil else {
-                hiveError(error)
+    private func requestAccessToken(_ authorCode: String) throws {
+        let requestBody = String(format:"client_id=%s&redirect_url=%s&code=%s&grant_type=authorization_code", clientId, redirectUrl, authorCode)
+        let response: UNIHTTPJsonResponse? = UNIRest.postEntity { (request) in
+            request?.url = String(format: "%s/token", BASE_REQURL)
+            request?.headers["Content-Type"] = "application/x-www-form-urlencoded"
+            request?.body = Data(base64Encoded: requestBody)
+        }?.asJson()
+
+        guard response != nil else {
+            // TODO
+            // throw HiveError()
+            return
+        }
+
+        let jsonObject: [String: Any] = response!.body.object as! [String: Any]
+        let authInfo = AuthInfo()
+        authInfo.accessToken = jsonObject["access_token"] as! String?
+        authInfo.refreshToken = jsonObject["refresh_token"] as! String?
+        authInfo.expiredIn = jsonObject["expired_in"] as! Int64?
+        authInfo.scopes = jsonObject["scopes"] as! String?
+        authInfo.expiredTime = HelperMethods.getExpireTime(time: authInfo.expiredIn!)
+
+        let keychain = KeychainSwift()
+        keychain.set(authInfo.accessToken!, forKey:"access_token")
+    }
+
+    private func redeemAccessToken(_ errorHandler: @escaping (_ error: HiveError?) -> Void) throws {
+        let requestBody = String(format:"client_id=%s&redirect_url=%s&refresh_token=%s&grant_type=refresh_token", clientId, redirectUrl, authInfo!.refreshToken!)
+
+        UNIRest.postEntity { (request) in
+            request?.url = String(format: "%s/token", BASE_REQURL)
+            request?.headers["Content-Type"] = "application/x-www-form-urlencoded"
+            request?.body = Data(base64Encoded: requestBody)
+        }?.asJsonAsync({ (response, error) in
+            guard response != nil else {
+                //TODO
+                //errorHandler(HiveError())
                 return
             }
-            self.authInfo = AuthInfo()
-            self.authInfo?.accessToken = (response!["access_token"] as! String)
-            self.authInfo?.refreshToken = (response!["refresh_token"] as! String)
-            self.authInfo?.expiredIn = (response!["expires_in"] as! Int64)
-            self.authInfo?.scopes = (response!["scope"] as! String)
-            let expireTime = HelperMethods.getExpireTime(time: self.authInfo!.expiredIn)
-            self.authInfo?.expiredTime = expireTime
 
-            // todo  save to keychain: access_token & refresh_token & expire_time
-            let accesstoken: String = self.authInfo!.accessToken // todo  save to keychain
+            let jsonObject: [String: Any] = response!.body.object as! [String: Any]
+            self.authInfo!.accessToken = jsonObject["access_token"] as! String?
             let keychain = KeychainSwift()
-            keychain.set(accesstoken, forKey: "access_token")
-            hiveError(nil)
-        }
+            keychain.set(self.authInfo!.accessToken!, forKey:"access_token")
+            errorHandler(nil)
+        })
     }
-    
-    private func refreshAccessToken(_ hiveError: @escaping (_ error: HiveError?) -> Void) {
 
-        let scops = ["Files.ReadWrite","offline_access"]
-        let scopStr = scops.joined(separator: " ")
-        let refreshToken: String = authInfo!.refreshToken
-        let params: Dictionary<String, Any> = ["client_id": appId,
-                                               "refresh_token": refreshToken,
-                                               "grant_type": GRANT_TYPE.refresh_token,
-                                               "redirect_uri": redirectUrl,
-                                               "scope": scopStr
-                                ]
-        OneDriveHttpServer.post(TOKEN_URL, params) { (response, error) in
-            guard error == nil else {
-                hiveError(error)
-                return
-            }
-            self.authInfo?.accessToken = (response!["access_token"] as! String)
-            self.authInfo?.refreshToken = (response!["refresh_token"] as! String)
-            self.authInfo?.expiredIn = (response!["expires_in"] as! Int64)
-            self.authInfo?.scopes = (response!["scope"] as! String)
-            let expireTime = HelperMethods.getExpireTime(time: self.authInfo!.expiredIn)
-            self.authInfo?.expiredTime = expireTime
-
-            // todo  save to keychain: access_token & refresh_token & expire_time
-            let keychain = KeychainSwift()
-            keychain.set(self.authInfo!.accessToken, forKey: "access_token")
-            hiveError(nil)
-        }
-
-    }
-    
     private func hasLogin() -> Bool {
         return authInfo != nil;
     }
@@ -114,12 +103,18 @@ class OneDriveAuthHelper: AuthHelper {
     private func isExpired() -> Bool {
         return (authInfo?.isExpired())!
     }
-    
-    override func checkExpired(_ hiveError: @escaping (_ error: HiveError?) -> Void) {
-        if (isExpired()) {
-            refreshAccessToken { (error) in
-                hiveError(error)
+
+    override func checkExpired(_ errorHandler: @escaping (_ error: HiveError?) -> Void) throws {
+        guard !isExpired() else {
+            try redeemAccessToken() { (_internalError) in
+                errorHandler(_internalError)
             }
+
+            return
         }
+    }
+
+    override func getAuthInfo() -> AuthInfo? {
+        return authInfo
     }
 }

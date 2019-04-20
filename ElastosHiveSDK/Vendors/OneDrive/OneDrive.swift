@@ -1,12 +1,13 @@
 import Foundation
+import Unirest
 
-class OneDrive: HiveDriveHandle {
+internal class OneDrive: HiveDriveHandle {
     private static var oneDriveInstance: OneDrive?
-    private var oneDriveAuthHelper: OneDriveAuthHelper
+    private var authHeperHandle: OneDriveAuthHelper
     private var driveId: String?
 
     private init(_ param: OneDriveParameters) {
-        oneDriveAuthHelper = OneDriveAuthHelper(param.appId!, param.scopes!, param.redirectUrl!)
+        authHeperHandle = OneDriveAuthHelper(param.appId!, param.scopes!, param.redirectUrl!)
     }
     
     public static func createInstance(_ param: OneDriveParameters) {
@@ -24,28 +25,31 @@ class OneDrive: HiveDriveHandle {
         return .oneDrive
     }
 
-    /*public override func login(_ hiveError: @escaping (HiveDriveHandle.loginResponse)) {
-        oneDriveAuthHelper.login({ (error) in
-            hiveError(error)
-        })
-    }*/
-
-    override func login() throws {
-        // TODO;
+    override func login(_ authenticator: Authenticator) throws {
+        try authHeperHandle.login(authenticator)
     }
 
     override func rootDirectoryHandle(withResult resultHandler: @escaping HiveFileObjectCreationResponseHandler) throws {
-        oneDriveAuthHelper.checkExpired { (error) in
-            OneDriveHttpServer.get(RESTAPI_URL + ROOT_DIR, { (response, error) in
-                let driveFile: OneDriveFile = OneDriveFile()
-                driveFile.drive = self
-                driveFile.isFile = false // todo  according to the @property
-                driveFile.isDirectory = true // todo  according to the @property
-                driveFile.createdDateTime = (response!["createdDateTime"] as! String)
-                driveFile.lastModifiedDateTime = (response!["lastModifiedDateTime"] as! String)
-                driveFile._pathname =  "/"
-                resultHandler(driveFile, error)
-            })
+        UNIRest.get{ (request) in
+            request?.url = String(format: "%s/root", RESTAPI_URL)
+            request?.headers["Authorization"] = String(format: "bearer %s", self.authHeperHandle.getAuthInfo()!.accessToken!)
+        }?.asJsonAsync{ (response, error) in
+            guard error != nil else {
+                // TODO
+                return
+            }
+
+            let jsonObject: [String: Any] = response?.body.object as! [String: Any]
+
+            let file: OneDriveFile = OneDriveFile()
+            file.drive = self
+            file.isFile = false
+            file.isDirectory = true
+
+            file.createdDateTime = jsonObject["createdDateTime"] as! String?
+            file.lastModifiedDateTime = jsonObject["lastModifiedDateTime"] as! String?
+            file._pathname = "/"
+            resultHandler(file, nil)
         }
     }
 
@@ -58,18 +62,26 @@ class OneDrive: HiveDriveHandle {
     }
 
     override func getFileHandle(atPath: String, withResult resultHandler: @escaping HiveFileObjectCreationResponseHandler) throws {
-        oneDriveAuthHelper.checkExpired { (error) in
-            OneDriveHttpServer.get(RESTAPI_URL + ROOT_DIR + atPath, { (jsonResponse, error) in
-                //print(jsonResponse)
-                let driveFile: OneDriveFile = OneDriveFile()
-                driveFile.drive = self
-                driveFile.isFile = false // todo  according to the @property
-                driveFile.isDirectory = true // todo  according to the @property
-                driveFile.createdDateTime = (jsonResponse!["createdDateTime"] as! String)
-                driveFile.lastModifiedDateTime = (jsonResponse!["lastModifiedDateTime"] as! String)
-                driveFile._pathname =  atPath
-                resultHandler(driveFile, error)
-            })
+        UNIRest.get{ (request) in
+            request?.url = String(format: "%s/root/%s", RESTAPI_URL, atPath)
+            request?.headers["Authorization"] = String(format: "bearer %s", self.authHeperHandle.getAuthInfo()!.accessToken!)
+        }?.asJsonAsync{ (response, error) in
+            guard error != nil else {
+                // TODO
+                return
+            }
+
+            let jsonObject: [String: Any] = response?.body.object as! [String: Any]
+
+            let file: OneDriveFile = OneDriveFile()
+            file.drive = self
+            file.isFile = false
+            file.isDirectory = true
+
+            file.createdDateTime = jsonObject["createdDateTime"] as! String?
+            file.lastModifiedDateTime = jsonObject["lastModifiedDateTime"] as! String?
+            file._pathname = atPath
+            resultHandler(file, nil)
         }
     }
 }

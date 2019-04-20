@@ -1,7 +1,7 @@
 import Foundation
 
 @objc(OneDriveFile)
-class OneDriveFile: HiveFileHandle {
+internal class OneDriveFile: HiveFileHandle {
     @objc var _pathname: String?
 
     override func pathName() -> String? {

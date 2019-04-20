@@ -8,6 +8,7 @@ target 'ElastosHiveSDK' do
   # Pods for ElastosHiveSDK
 	# pod 'Embassy', '~> 4.0'
 	pod 'Swifter', '~> 1.4.6'
+        pod 'Unirest', '~> 1.1.4'
   
   target 'ElastosHiveSDKTests' do
     inherit! :search_paths
