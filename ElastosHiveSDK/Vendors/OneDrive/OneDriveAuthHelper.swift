@@ -1,5 +1,6 @@
 import Foundation
 import Swifter
+import Unirest
 
 @objc(OneDriveAuthHelper)
 class OneDriveAuthHelper: AuthHelper {
@@ -37,7 +38,7 @@ class OneDriveAuthHelper: AuthHelper {
         do {
             server[""] = { request in
                 guard request.queryParams.count > 0 || request.queryParams[0].0 != "code" else {
-                     authCode(nil, .failue(des: "authCode获取失败"))
+                     authCode(nil, .failue(des: "authCode obtain failed"))
                     return HttpResponse.ok(.json("nil" as AnyObject))
                 }
                 let authJson = request.queryParams[0]
@@ -53,25 +54,25 @@ class OneDriveAuthHelper: AuthHelper {
     private func requestAccessToken(_ authorCode: String, _ hiveError: @escaping (_ error: HiveError?) -> Void) {
         let params: Dictionary<String, Any> = ["client_id" : appId,
                                                "code" : authorCode,
-                                               "grant_type" : GRANT_TYPE.authorization_code,
+                                               "grant_type" : AUTHORIZATION_CODE,
                                                "redirect_uri" : redirectUrl]
-        OneDriveHttpServer.post(TOKEN_URL, params) { (response, error) in
+        OneDriveHttpServer.post(TOKEN_URL, params, nil) { (response, error) in
             guard error == nil else {
                 hiveError(error)
                 return
             }
             self.authInfo = AuthInfo()
-            self.authInfo?.accessToken = (response!["access_token"] as! String)
-            self.authInfo?.refreshToken = (response!["refresh_token"] as! String)
-            self.authInfo?.expiredIn = (response!["expires_in"] as! Int64)
-            self.authInfo?.scopes = (response!["scope"] as! String)
+            self.authInfo?.accessToken = (response![ACCESS_TOKEN] as! String)
+            self.authInfo?.refreshToken = (response![REFRESH_TOKEN] as! String)
+            self.authInfo?.expiredIn = (response![EXPIRES_IN] as! Int64)
+            self.authInfo?.scopes = (response![SCOPE] as! String)
             let expireTime = HelperMethods.getExpireTime(time: self.authInfo!.expiredIn)
             self.authInfo?.expiredTime = expireTime
 
             // todo  save to keychain: access_token & refresh_token & expire_time
             let accesstoken: String = self.authInfo!.accessToken // todo  save to keychain
             let keychain = KeychainSwift()
-            keychain.set(accesstoken, forKey: "access_token")
+            keychain.set(accesstoken, forKey: ACCESS_TOKEN)
             hiveError(nil)
         }
     }
@@ -83,25 +84,25 @@ class OneDriveAuthHelper: AuthHelper {
         let refreshToken: String = authInfo!.refreshToken
         let params: Dictionary<String, Any> = ["client_id": appId,
                                                "refresh_token": refreshToken,
-                                               "grant_type": GRANT_TYPE.refresh_token,
+                                               "grant_type": REFRESH_TOKEN,
                                                "redirect_uri": redirectUrl,
                                                "scope": scopStr
                                 ]
-        OneDriveHttpServer.post(TOKEN_URL, params) { (response, error) in
+        OneDriveHttpServer.post(TOKEN_URL, params, nil) { (response, error) in
             guard error == nil else {
                 hiveError(error)
                 return
             }
-            self.authInfo?.accessToken = (response!["access_token"] as! String)
-            self.authInfo?.refreshToken = (response!["refresh_token"] as! String)
-            self.authInfo?.expiredIn = (response!["expires_in"] as! Int64)
-            self.authInfo?.scopes = (response!["scope"] as! String)
+            self.authInfo?.accessToken = (response![ACCESS_TOKEN] as! String)
+            self.authInfo?.refreshToken = (response![REFRESH_TOKEN] as! String)
+            self.authInfo?.expiredIn = (response![EXPIRES_IN] as! Int64)
+            self.authInfo?.scopes = (response![SCOPE] as! String)
             let expireTime = HelperMethods.getExpireTime(time: self.authInfo!.expiredIn)
             self.authInfo?.expiredTime = expireTime
 
             // todo  save to keychain: access_token & refresh_token & expire_time
             let keychain = KeychainSwift()
-            keychain.set(self.authInfo!.accessToken, forKey: "access_token")
+            keychain.set(self.authInfo!.accessToken, forKey: ACCESS_TOKEN)
             hiveError(nil)
         }
 

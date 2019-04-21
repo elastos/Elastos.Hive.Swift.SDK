@@ -2,14 +2,14 @@ import Foundation
 
 @objc(OneDriveFile)
 class OneDriveFile: HiveFileHandle {
-    @objc var _pathname: String?
 
+    var pathname: String?
     override func pathName() -> String? {
-        return _pathname
+        return pathname
     }
 
     public override func parentPathName() -> String? {
-        return _pathname
+        return pathname
     }
 
     override func parentHandle(withResult resultHandler: @escaping (HiveFileObjectCreationResponseHandler)) {

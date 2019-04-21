@@ -31,23 +31,23 @@ class HiveIpfsDrive: HiveDriveHandle {
         return .ownCloud
     }
 
-    override func login() throws {
+    override func login(_ hiveError: @escaping (LoginHandle)) {
         // TODO
     }
 
-    override func rootDirectoryHandle(withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
+    override func rootDirectoryHandle(withResult: @escaping HiveFileObjectCreationResponseHandler) {
         // TODO
     }
 
-    override func createDirectory(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
+    override func createDirectory(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) {
         // TODO
     }
 
-    override func createFile(atPath: String, contents: Data?, withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
+    override func createFile(atPath: String, contents: Data?, withResult: @escaping HiveFileObjectCreationResponseHandler) {
         // TODO
     }
 
-    override func getFileHandle(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
+    override func getFileHandle(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) {
         // TODO
     }
 }
