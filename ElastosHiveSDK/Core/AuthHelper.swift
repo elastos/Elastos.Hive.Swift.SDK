@@ -1,11 +1,11 @@
 import Foundation
 
 @objc(AuthHelper)
-class AuthHelper: NSObject {
-    func login(authenticator: Authenticator) throws {
+internal class AuthHelper: NSObject {
+    func login(_ authenticator: Authenticator) throws {
     }
-    
-    func checkExpired(_ hiveError: @escaping (_ error: HiveError?) -> Void) {
+
+    func checkExpired(_ errorHandler: @escaping (_ error: HiveError?) -> Void) {
         
     }
     

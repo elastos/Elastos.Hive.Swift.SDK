@@ -1,5 +1,5 @@
 import Foundation
 
 @objc(IOUtil)
-class IOUtil: NSObject {
+internal class IOUtil: NSObject {
 }
