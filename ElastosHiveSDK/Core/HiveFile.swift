@@ -34,7 +34,7 @@ public class HiveFileHandle: NSObject {
 
     public func parentHandle(withResult result: @escaping (HiveFileObjectCreationResponseHandler)) {
     }
-    
+
     /**
      * Update date and time of this item.
      *
@@ -43,7 +43,7 @@ public class HiveFileHandle: NSObject {
      */
     @objc(updateDateTime:error:)
     public func updateDateTime(withValue newValue: String) throws {}
-    
+
     /**
      * Delete this file object.
      *

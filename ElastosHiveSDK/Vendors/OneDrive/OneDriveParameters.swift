@@ -2,7 +2,7 @@ import Foundation
 
 @objc(OneDriveParameters)
 public class OneDriveParameters: DriveParameters {
-    @objc public var appId: String?
+    @objc public var clientId: String?
     @objc public var scopes: Array<String>?
     @objc public var redirectUrl: String?
 
@@ -17,8 +17,8 @@ public class OneDriveParameters: DriveParameters {
      * @param scopes        TODO
      * @param redirectUrl   The built-in redirect URL
      */
-    @objc public init(_ appId: String, _ scopes: Array<String>?, _ redirectUrl: String) {
-        self.appId = appId
+    @objc public init(_ clientId: String, _ scopes: Array<String>?, _ redirectUrl: String) {
+        self.clientId = clientId
         self.scopes = scopes
         self.redirectUrl = redirectUrl
         super.init()
