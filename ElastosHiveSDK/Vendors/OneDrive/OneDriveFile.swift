@@ -2,14 +2,20 @@ import Foundation
 
 @objc(OneDriveFile)
 internal class OneDriveFile: HiveFileHandle {
-    @objc var _pathname: String?
 
+    var pathname: String?
     override func pathName() -> String? {
-        return _pathname
+        return pathname
     }
 
     public override func parentPathName() -> String? {
-        return _pathname
+
+        if pathname == nil {
+            return nil
+        }
+        let index = pathname!.range(of: "/", options: .backwards)?.lowerBound
+        let parentPathname = index.map(pathname!.substring(to:))
+        return parentPathname! + "/"
     }
 
     override func parentHandle(withResult resultHandler: @escaping (HiveFileObjectCreationResponseHandler)) {
@@ -30,15 +36,15 @@ internal class OneDriveFile: HiveFileHandle {
     override func copyFileTo(newFile: HiveFileHandle) throws {
         // TODO
     }
-    
+
     override func renameFileTo(newPath: String) throws {
         // TODO
     }
-    
+
     override func renameFileTo(newFile: HiveFileHandle) throws {
         // TODO
     }
-    
+
     override func deleteItem() throws {
         // TODO
     }
@@ -46,15 +52,15 @@ internal class OneDriveFile: HiveFileHandle {
     override func closeItem() throws {
         // TODO
     }
-    
+
     override func list() throws -> [HiveFileHandle] {
         return [HiveFileHandle]()
     }
-    
+
     override func mkdir(pathname: String) throws {
         // TODO
     }
-    
+
     override func mkdirs(pathname: String) throws {
         // TODO
     }

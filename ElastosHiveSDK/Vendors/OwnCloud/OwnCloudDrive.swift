@@ -5,10 +5,10 @@ internal class OwnCloudDrive: HiveDriveHandle {
     private static var driveInstance: HiveDriveHandle?
 
     private var authHelperHandle: AuthHelper?
-    
+
     private init(_ param: OwnCloudParameters) {
     }
-    
+
     @objc(createInstance:)
     private static func createInstance(param: OwnCloudParameters) {
         if driveInstance == nil {
@@ -16,7 +16,7 @@ internal class OwnCloudDrive: HiveDriveHandle {
             driveInstance = drive as HiveDriveHandle
         }
     }
-    
+
     static func sharedInstance() -> HiveDriveHandle? {
         return driveInstance
     }
@@ -29,23 +29,23 @@ internal class OwnCloudDrive: HiveDriveHandle {
         return .ownCloud
     }
 
-    override func login(_ athenticator: Authenticator) throws {
+    override func login(_ hiveError: @escaping (LoginHandle)) {
         // TODO
     }
 
-    override func rootDirectoryHandle(withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
+    override func rootDirectoryHandle(withResult: @escaping HiveFileObjectCreationResponseHandler) {
         // TODO
     }
 
-    override func createDirectory(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
+    override func createDirectory(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) {
         // TODO
     }
 
-    override func createFile(atPath: String, contents: Data?, withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
+    override func createFile(atPath: String, contents: Data?, withResult: @escaping HiveFileObjectCreationResponseHandler) {
         // TODO
     }
 
-    override func getFileHandle(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
+    override func getFileHandle(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) {
         // TODO
     }
 }
