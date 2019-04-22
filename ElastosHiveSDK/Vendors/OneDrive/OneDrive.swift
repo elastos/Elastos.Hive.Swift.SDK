@@ -34,11 +34,11 @@ class OneDrive: HiveDriveHandle {
     override func rootDirectoryHandle(withResult resultHandler: @escaping HiveFileObjectCreationResponseHandler) {
         oneDriveAuthHelper.checkExpired { (error) in
             var error: NSError?
-            let keychain: KeychainSwift = KeychainSwift() // todo  take frome keychain
+            let keychain: KeychainSwift = KeychainSwift() // todo  take from keychain
             let accesstoken: String = keychain.get("access_token")!
             let response: UNIHTTPJsonResponse? = UNIRest.get({ (request) in
                 request?.url = RESTAPI_URL + ROOT_DIR
-                request?.headers = ["Content-Type": "application/json;charset=UTF-8", "access_token": "bearer \(accesstoken)"]
+                request?.headers = ["Content-Type": "application/json;charset=UTF-8", HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
             })?.asJson(&error)
 
             guard error == nil else {
@@ -71,7 +71,7 @@ class OneDrive: HiveDriveHandle {
 
         let response: UNIHTTPJsonResponse? = UNIRest.postEntity { (request) in
             request?.url = RESTAPI_URL + ROOT_DIR + atPath
-            request?.headers = ["Content-Type": "application/json;charset=UTF-8", "access_token": "bearer \(accesstoken)"]
+            request?.headers = ["Content-Type": "application/json;charset=UTF-8", HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
             request?.body = try? JSONSerialization.data(withJSONObject: requestBody, options: .prettyPrinted)
             }?.asJson(&error)
 
@@ -83,6 +83,8 @@ class OneDrive: HiveDriveHandle {
             resultHandler(nil, .jsonFailue(des: (response?.body.jsonObject())!))
             return
         }
+
+
 // TODO
     }
 

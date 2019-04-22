@@ -9,7 +9,13 @@ class OneDriveFile: HiveFileHandle {
     }
 
     public override func parentPathName() -> String? {
-        return pathname
+
+        if pathname == nil {
+            return nil
+        }
+        let index = pathname!.range(of: "/", options: .backwards)?.lowerBound
+        let parentPathname = index.map(pathname!.substring(to:))
+        return parentPathname! + "/"
     }
 
     override func parentHandle(withResult resultHandler: @escaping (HiveFileObjectCreationResponseHandler)) {

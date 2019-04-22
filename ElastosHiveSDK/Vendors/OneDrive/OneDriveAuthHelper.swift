@@ -45,11 +45,14 @@ class OneDriveAuthHelper: AuthHelper {
     private func requestAccessToken(_ authorCode: String, _ hiveError: @escaping (_ error: HiveError?) -> Void) {
 
         var error: NSError?
-        let requestBody = String(format:"client_id=\(appId)&redirect_url=\(redirectUrl)&code=\(authorCode)&grant_type=\(AUTHORIZATION_CODE)")
+        let params: Dictionary<String, Any> = ["client_id" : appId,
+                                               "code" : authorCode,
+                                               "grant_type" : AUTHORIZATION_CODE,
+                                               "redirect_uri" : redirectUrl]
         let response: UNIHTTPJsonResponse? = UNIRest.postEntity { (request) in
             request?.url = String(format: BASE_REQURL + "/token")
             request?.headers = ["Content-Type": "application/x-www-form-urlencoded"]
-            request?.body = requestBody.data(using: String.Encoding.utf8)
+            request?.body = params.queryString.data(using: String.Encoding.utf8)
             }?.asJson(&error)
 
         guard error == nil else {
@@ -81,11 +84,16 @@ class OneDriveAuthHelper: AuthHelper {
         let scops = ["Files.ReadWrite","offline_access"]
         let scopStr = scops.joined(separator: " ")
         let refreshToken: String = authInfo!.refreshToken!
-        let requestBody = String(format:"client_id=\(appId)&redirect_url=\(redirectUrl)&refresh_token=\(refreshToken)&grant_type=\(AUTHORIZATION_CODE)&scope=\(scopStr)")
+        let params: Dictionary<String, Any> = ["client_id": appId,
+                                               "refresh_token": refreshToken,
+                                               "grant_type": REFRESH_TOKEN,
+                                               "redirect_uri": redirectUrl,
+                                               "scope": scopStr
+        ]
         let response: UNIHTTPJsonResponse? = UNIRest.postEntity { (request) in
             request?.url = String(format: BASE_REQURL + "/token")
             request?.headers = ["Content-Type": "application/x-www-form-urlencoded"]
-            request?.body = requestBody.data(using: String.Encoding.utf8)
+            request?.body = params.queryString.data(using: String.Encoding.utf8)
             }?.asJson(&error)
 
         guard error == nil else {
@@ -96,6 +104,7 @@ class OneDriveAuthHelper: AuthHelper {
             hiveError(.jsonFailue(des: (response?.body.jsonObject())!))
             return
         }
+            self.authInfo = AuthInfo()
             self.authInfo?.accessToken = (response?.body.jsonObject()[ACCESS_TOKEN] as! String)
             self.authInfo?.refreshToken = (response?.body.jsonObject()[REFRESH_TOKEN] as! String)
             self.authInfo?.expiredIn = (response?.body.jsonObject()[EXPIRES_IN] as! Int64)
@@ -114,6 +123,9 @@ class OneDriveAuthHelper: AuthHelper {
     }
     
     private func isExpired() -> Bool {
+        if authInfo == nil {
+            return true
+        }
         return (authInfo?.isExpired())!
     }
     
