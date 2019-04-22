@@ -42,7 +42,7 @@ class OneDrive: HiveDriveHandle {
             })?.asJson(&error)
 
             guard error == nil else {
-                resultHandler(nil, .systemError(error: error))
+                resultHandler(nil, .systemError(error: error, jsonDes: response?.body.jsonObject()))
                 return
             }
             guard response?.code == 200 else {
@@ -76,7 +76,7 @@ class OneDrive: HiveDriveHandle {
             }?.asJson(&error)
 
         guard error == nil else {
-            resultHandler(nil, .systemError(error: error))
+            resultHandler(nil, .systemError(error: error, jsonDes: response?.body.jsonObject()))
             return
         }
         guard response?.code == 200 else {
@@ -100,7 +100,7 @@ class OneDrive: HiveDriveHandle {
             })?.asJson(&error)
 
             guard error == nil else {
-                resultHandler(nil, .systemError(error: error))
+                resultHandler(nil, .systemError(error: error, jsonDes: response?.body.jsonObject()))
                 return
             }
             guard response?.code == 200 else {

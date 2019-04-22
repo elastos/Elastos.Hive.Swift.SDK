@@ -56,7 +56,7 @@ class OneDriveAuthHelper: AuthHelper {
             }?.asJson(&error)
 
         guard error == nil else {
-            hiveError(.systemError(error: error))
+            hiveError(.systemError(error: error, jsonDes: response?.body.jsonObject()))
             return
         }
         guard response?.code == 200 else {
@@ -97,7 +97,7 @@ class OneDriveAuthHelper: AuthHelper {
             }?.asJson(&error)
 
         guard error == nil else {
-            hiveError(.systemError(error: error))
+            hiveError(.systemError(error: error, jsonDes: response?.body.jsonObject()))
             return
         }
         guard response?.code == 200 else {
