@@ -1,7 +1,7 @@
 import Foundation
 
 @objc(DropboxDrive)
-class DropboxDrive: HiveDriveHandle {
+internal class DropboxDrive: HiveDriveHandle {
     private static var driveInstance: HiveDriveHandle?
 
     private var authHelperHandle: AuthHelper?
@@ -31,7 +31,7 @@ class DropboxDrive: HiveDriveHandle {
         return .ownCloud
     }
 
-    override func login() throws {
+    override func login(_ authenticator: Authenticator) throws {
         // TODO
     }
 

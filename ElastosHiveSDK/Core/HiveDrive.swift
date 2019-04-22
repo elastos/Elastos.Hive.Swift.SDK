@@ -45,7 +45,7 @@ public class HiveDriveHandle: NSObject {
         return DriveType.oneDrive
     }
 
-    public func login() throws {
+    public func login(_ authenticator: Authenticator) throws {
     }
 
     public func rootDirectoryHandle(withResult: @escaping HiveFileObjectCreationResponseHandler) throws {

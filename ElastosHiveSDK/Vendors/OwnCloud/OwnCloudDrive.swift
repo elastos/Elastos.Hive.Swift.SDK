@@ -1,7 +1,7 @@
 import Foundation
 
 @objc(OwnCloudDrive)
-class OwnCloudDrive: HiveDriveHandle {
+internal class OwnCloudDrive: HiveDriveHandle {
     private static var driveInstance: HiveDriveHandle?
 
     private var authHelperHandle: AuthHelper?
@@ -29,7 +29,7 @@ class OwnCloudDrive: HiveDriveHandle {
         return .ownCloud
     }
 
-    override func login() throws {
+    override func login(_ athenticator: Authenticator) throws {
         // TODO
     }
 

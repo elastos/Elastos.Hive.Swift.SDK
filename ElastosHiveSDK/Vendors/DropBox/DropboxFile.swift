@@ -1,6 +1,6 @@
 import Foundation
 
 @objc(DropboxFile)
-class DropboxFile: HiveFileHandle {
+internal class DropboxFile: HiveFileHandle {
     // todo
 }
