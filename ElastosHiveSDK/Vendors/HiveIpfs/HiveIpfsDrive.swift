@@ -42,9 +42,9 @@ internal class HiveIpfsDrive: HiveDriveHandle {
     override func createDirectory(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) {
         // TODO
     }
+    
+    override func createFile(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) {
 
-    override func createFile(atPath: String, contents: Data?, withResult: @escaping HiveFileObjectCreationResponseHandler) {
-        // TODO
     }
 
     override func getFileHandle(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) {

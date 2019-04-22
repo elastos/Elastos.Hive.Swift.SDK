@@ -43,8 +43,8 @@ internal class DropboxDrive: HiveDriveHandle {
         // TODO
     }
 
-    override func createFile(atPath: String, contents: Data?, withResult: @escaping HiveFileObjectCreationResponseHandler) {
-        // TODO
+    override func createFile(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) {
+
     }
 
     override func getFileHandle(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) {

@@ -1,7 +1,7 @@
 import Foundation
 
 public typealias LoginHandle = (_ error: HiveError?) -> Void
-public typealias HiveFileObjectCreationResponseHandler = (_ file: HiveFileHandle?, _ error: HiveError?) -> Void
+public typealias HiveFileObjectCreationResponseHandler = (_ files: HiveFileHandle?, _ error: HiveError?) -> Void
 
 @objc(HiveDrive)
 public class HiveDriveHandle: NSObject {
@@ -55,7 +55,7 @@ public class HiveDriveHandle: NSObject {
     public func createDirectory(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) {
     }
 
-    public func createFile(atPath: String, contents: Data?, withResult: @escaping HiveFileObjectCreationResponseHandler) {
+    public func createFile(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) {
     }
 
     public func getFileHandle(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) {
