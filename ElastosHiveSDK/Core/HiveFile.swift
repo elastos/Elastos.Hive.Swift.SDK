@@ -7,7 +7,8 @@ public class HiveFileHandle: NSObject {
     public var lastModifiedDateTime: String?
     public var isFile: Bool?
     public var isDirectory: Bool?
-
+    public var id: String?
+    public typealias HandleResulr = (_ result: Bool?, _ error: HiveError?) -> Void
     /**
      * Create an file with specific pathname.
      *
@@ -41,7 +42,6 @@ public class HiveFileHandle: NSObject {
      * @param newDateTime The updated date and time.
      * @throws Exception TODO
      */
-    @objc(updateDateTime:error:)
     public func updateDateTime(withValue newValue: String) throws {}
 
     /**
@@ -49,7 +49,6 @@ public class HiveFileHandle: NSObject {
      *
      * @throws Exception TODO
      */
-    @objc(deleteItem:)
     public func deleteItem() throws {}
 
     /**
@@ -57,19 +56,15 @@ public class HiveFileHandle: NSObject {
      *
      * @throws Exception TODO
      */
-    @objc(closeItem:)
     public func closeItem() throws {}
-}
 
-extension HiveFileHandle {
     /**
      * Copy the item to another address.
      *
      * @param newPath The copy-to pathname.
      * @throws Exception TODO
      */
-    @objc(copyTo:error:)
-    public func copyFileTo(newPath: String) throws {
+    public func copyFileTo(newPath: String, result: @escaping HandleResulr) throws {
     }
 
     /**
@@ -78,7 +73,6 @@ extension HiveFileHandle {
      * @param newFile The new Hive File object.
      * @throws Exception TODO
      */
-    @objc(copyToNewFile:error:)
     public func copyFileTo(newFile: HiveFileHandle) throws {
     }
 
@@ -88,7 +82,6 @@ extension HiveFileHandle {
      * @param newPath The new file path to rename with.
      * @throws Exception TODO
      */
-    @objc(renameToNewPath:error:)
     public func renameFileTo(newPath: String) throws {
 
     }
@@ -99,19 +92,15 @@ extension HiveFileHandle {
      * @param newFile The new Hive File to rename with.
      * @throws Exception TODO
      */
-    @objc(renameToNewFile:error:)
     public func renameFileTo(newFile: HiveFileHandle) throws {
     }
-}
 
-extension HiveFileHandle {
     /**
      * List all file objects under this directory.
      *
      * @return The array of hive file objects.
      * @throws Exception TODO
      */
-    @objc(list:)
     public func list() throws -> [HiveFileHandle] {
         return [HiveFileHandle] ()
     }
@@ -122,7 +111,6 @@ extension HiveFileHandle {
      * @return The array of hive file objects.
      * @throws Exception TODO
      */
-    @objc(listFiles:)
     public func listFiles() throws -> [HiveFileHandle] {
         let files: [HiveFileHandle] = try list()
         return files
@@ -134,7 +122,6 @@ extension HiveFileHandle {
      * @param pathname The new pathname to create
      * @throws Exception TODO.
      */
-    @objc(mkdir:error:)
     public func mkdir(pathname: String) throws {
     }
 
@@ -144,7 +131,6 @@ extension HiveFileHandle {
      * @param pathname The full pathname to create
      * @throws Exception TODO
      */
-    @objc(mkdirs:error:)
     public func mkdirs(pathname: String) throws {
     }
 }
