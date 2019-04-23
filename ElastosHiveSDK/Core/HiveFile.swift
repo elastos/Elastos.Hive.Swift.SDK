@@ -42,21 +42,21 @@ public class HiveFileHandle: NSObject {
      * @param newDateTime The updated date and time.
      * @throws Exception TODO
      */
-    public func updateDateTime(withValue newValue: String) {}
+    public func updateDateTime(withValue newValue: String) throws {}
 
     /**
      * Delete this file object.
      *
      * @throws Exception TODO
      */
-    public func deleteItem() {}
+    public func deleteItem() throws {}
 
     /**
      * Close hive file object.
      *
      * @throws Exception TODO
      */
-    public func closeItem() {}
+    public func closeItem() throws {}
 
     /**
      * Copy the item to another address.
@@ -64,7 +64,7 @@ public class HiveFileHandle: NSObject {
      * @param newPath The copy-to pathname.
      * @throws Exception TODO
      */
-    public func copyFileTo(newPath: String, result: @escaping HandleResulr) {
+    public func copyFileTo(newPath: String, result: @escaping HandleResulr) throws {
     }
 
     /**
@@ -73,7 +73,7 @@ public class HiveFileHandle: NSObject {
      * @param newFile The new Hive File object.
      * @throws Exception TODO
      */
-    public func copyFileTo(newFile: HiveFileHandle) {
+    public func copyFileTo(newFile: HiveFileHandle) throws {
     }
 
     /**
@@ -82,7 +82,7 @@ public class HiveFileHandle: NSObject {
      * @param newPath The new file path to rename with.
      * @throws Exception TODO
      */
-    public func renameFileTo(newPath: String) {
+    public func renameFileTo(newPath: String) throws {
 
     }
 
@@ -92,7 +92,7 @@ public class HiveFileHandle: NSObject {
      * @param newFile The new Hive File to rename with.
      * @throws Exception TODO
      */
-    public func renameFileTo(newFile: HiveFileHandle) {
+    public func renameFileTo(newFile: HiveFileHandle) throws {
     }
 
     /**
