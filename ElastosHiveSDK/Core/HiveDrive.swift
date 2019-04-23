@@ -49,15 +49,15 @@ public class HiveDriveHandle: NSObject {
     public func login(_ hiveError: @escaping (LoginHandle))  {
     }
 
-    public func rootDirectoryHandle(withResult: @escaping HiveFileObjectCreationResponseHandler) {
+    public func rootDirectoryHandle(withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
     }
 
-    public func createDirectory(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) {
+    public func createDirectory(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
     }
 
-    public func createFile(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) {
+    public func createFile(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
     }
 
-    public func getFileHandle(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) {
+    public func getFileHandle(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
     }
 }

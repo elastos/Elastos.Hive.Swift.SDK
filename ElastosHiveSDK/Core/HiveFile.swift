@@ -8,7 +8,13 @@ public class HiveFileHandle: NSObject {
     public var isFile: Bool?
     public var isDirectory: Bool?
     public var id: String?
+    public var pathName: String?
+    public var driveId: String?
+    public var fileSystemInfo: Dictionary<AnyHashable, Any>?
     public typealias HandleResulr = (_ result: Bool?, _ error: HiveError?) -> Void
+    public typealias HandleResulrWithFile = (_ file: HiveFileHandle?, _ error: HiveError?) -> Void
+    public typealias HandleResulrWithFiles = (_ files: [HiveFileHandle]?, _ error: HiveError?) -> Void
+
     /**
      * Create an file with specific pathname.
      *
@@ -23,10 +29,6 @@ public class HiveFileHandle: NSObject {
 
     public static func createFile(atPath: String, _ contents: Data, _ withResult: @escaping (HiveFileObjectCreationResponseHandler)) {
         // TODO;
-    }
-
-    public func pathName() -> String? {
-        return nil
     }
 
     public func parentPathName() -> String? {
@@ -49,7 +51,7 @@ public class HiveFileHandle: NSObject {
      *
      * @throws Exception TODO
      */
-    public func deleteItem() throws {}
+    public func deleteItem(result: @escaping HandleResulr) throws {}
 
     /**
      * Close hive file object.
@@ -73,7 +75,7 @@ public class HiveFileHandle: NSObject {
      * @param newFile The new Hive File object.
      * @throws Exception TODO
      */
-    public func copyFileTo(newFile: HiveFileHandle) throws {
+    public func copyFileTo(newFile: HiveFileHandle, result: @escaping HandleResulr) throws {
     }
 
     /**
@@ -82,7 +84,7 @@ public class HiveFileHandle: NSObject {
      * @param newPath The new file path to rename with.
      * @throws Exception TODO
      */
-    public func renameFileTo(newPath: String) throws {
+    public func renameFileTo(newPath: String, result: @escaping HandleResulr) throws {
 
     }
 
@@ -101,8 +103,7 @@ public class HiveFileHandle: NSObject {
      * @return The array of hive file objects.
      * @throws Exception TODO
      */
-    public func list() throws -> [HiveFileHandle] {
-        return [HiveFileHandle] ()
+    public func list(result: @escaping HandleResulrWithFiles) throws {
     }
 
     /**
@@ -111,9 +112,8 @@ public class HiveFileHandle: NSObject {
      * @return The array of hive file objects.
      * @throws Exception TODO
      */
-    public func listFiles() throws -> [HiveFileHandle] {
-        let files: [HiveFileHandle] = try list()
-        return files
+    public func listFiles() throws -> [HiveFileHandle]? {
+        return nil
     }
 
     /**
@@ -122,7 +122,7 @@ public class HiveFileHandle: NSObject {
      * @param pathname The new pathname to create
      * @throws Exception TODO.
      */
-    public func mkdir(pathname: String) throws {
+    public func mkdir(pathname: String, result: @escaping HandleResulrWithFile) throws {
     }
 
     /**
