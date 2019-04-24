@@ -54,24 +54,27 @@ internal class OneDriveFile: HiveFileHandle {
         let index = pathName!.range(of: "/", options: .backwards)?.lowerBound
         let parentPathname = index.map(pathName!.substring(to:)) ?? ""
         let name = parentPathname
+        var error: NSError?
         let driveId = oneDrive?.driveId
         let keychain: KeychainSwift = KeychainSwift() // todo  take from keychain
         let accesstoken: String = keychain.get("access_token")!
         let params: Dictionary<String, Any> = ["parentReference" : ["driveId": driveId!, "id": driveId],
                                                "name" : name]
-        UNIRest.postEntity { (request) in
-            request?.url = url
-            request?.headers = ["Content-Type": "application/json;charset=UTF-8", HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
-            request?.body = try? JSONSerialization.data(withJSONObject: params)
-            }?.asJsonAsync({ (response, error) in
-                if error == nil || response?.code == 202 {
-                    result(true, nil)
-                }else {
-                    result(false,.failue(des: "Invoking the copyTo has error."))
-                }
-            })
+        let globalQueue = DispatchQueue.global()
+        globalQueue.async {
+            let response = UNIRest.postEntity { (request) in
+                request?.url = url
+                request?.headers = ["Content-Type": "application/json;charset=UTF-8", HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
+                request?.body = try? JSONSerialization.data(withJSONObject: params)
+                }?.asJson(&error)
+            if response?.code == 202 {
+                result(true, nil)
+            }else {
+                result(false, .failue(des: "Invoking the copyTo has error."))
+            }
+        }
     }
-
+    
     override func copyFileTo(newFile: HiveFileHandle, result: @escaping HiveFileHandle.HandleResulr) throws {
         // todo checkout expired
         if pathName == nil {
@@ -92,6 +95,7 @@ internal class OneDriveFile: HiveFileHandle {
         if newFile.isEqual("/") {
             url = RESTAPI_URL + "/copy"
         }
+        var error: NSError?
         let index = pathName!.range(of: "/", options: .backwards)?.lowerBound
         let parentPathname = index.map(pathName!.substring(to:)) ?? ""
         let name = parentPathname
@@ -100,17 +104,19 @@ internal class OneDriveFile: HiveFileHandle {
         let accesstoken: String = keychain.get("access_token")!
         let params: Dictionary<String, Any> = ["parentReference" : ["driveId": driveId!, "id": driveId],
                                                "name" : name]
-        UNIRest.postEntity { (request) in
-            request?.url = url
-            request?.headers = ["Content-Type": "application/json;charset=UTF-8", HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
-            request?.body = try? JSONSerialization.data(withJSONObject: params)
-            }?.asJsonAsync({ (response, error) in
-                if error == nil || response?.code == 202 {
-                    result(true, nil)
-                }else {
-                    result(false,.failue(des: "Invoking the copyTo has error."))
-                }
-            })
+        let globalQueue = DispatchQueue.global()
+        globalQueue.async {
+            let response = UNIRest.postEntity { (request) in
+                request?.url = url
+                request?.headers = ["Content-Type": "application/json;charset=UTF-8", HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
+                request?.body = try? JSONSerialization.data(withJSONObject: params)
+                }?.asJson(&error)
+            if response?.code == 202 {
+                result(true, nil)
+            }else {
+                result(false, .failue(des: "Invoking the copyTo has error."))
+            }
+        }
     }
 
     override func renameFileTo(newPath: String, result: @escaping HiveFileHandle.HandleResulr) throws {
@@ -125,19 +131,22 @@ internal class OneDriveFile: HiveFileHandle {
         guard id != nil else {
             throw HiveError.failue(des: "Illegal Argument.")
         }
-        let url: String = RESTAPI_URL + "/items/\(id!)"
-        let keychain: KeychainSwift = KeychainSwift() // todo  take from keychain
-        let accesstoken: String = keychain.get("access_token")!
-        UNIRest.deleteEntity { (request) in
-            request?.url = url
-            request?.headers = ["Content-Type": "application/json;charset=UTF-8", HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
-            }?.asJsonAsync({ (response, error) in
-                if error == nil || response?.code == 204 {
-                    result(true, nil)
-                }else {
-                    result(false, .failue(des: "Invoking the copyTo has error."))
-                }
-            })
+        let globalQueue = DispatchQueue.global()
+        globalQueue.async {
+            var error: NSError?
+            let url: String = RESTAPI_URL + "/items/\(self.id!)"
+            let keychain: KeychainSwift = KeychainSwift() // todo  take from keychain
+            let accesstoken: String = keychain.get("access_token")!
+            let response = UNIRest.delete { (request) in
+                request?.url = url
+                request?.headers = ["Content-Type": "application/json;charset=UTF-8", HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
+                }?.asJson(&error)
+            if response?.code == 204 {
+                result(true, nil)
+            }else {
+                result(false, .failue(des: "Invoking the delete has error."))
+            }
+        }
     }
 
     override func closeItem() throws {
@@ -150,10 +159,10 @@ internal class OneDriveFile: HiveFileHandle {
             result(nil, nil)
             return
         }
-        guard driveId != nil else {
+        guard id != nil else {
             throw HiveError.failue(des: "Illegal Argument.")
         }
-        let url = RESTAPI_URL + "/items/\(driveId!)"
+        let url = RESTAPI_URL + "/items/\(id!)/children"
         let keychain: KeychainSwift = KeychainSwift() // todo  take from keychain
         let accesstoken: String = keychain.get("access_token")!
         UNIRest.get { (request) in
@@ -165,8 +174,34 @@ internal class OneDriveFile: HiveFileHandle {
                     return
                 }
                 let jsonData = response?.body.jsonObject()
-                let value = jsonData!["value"]
-                // todo
+                if jsonData == nil || jsonData!.isEmpty {
+                    result(nil,nil)
+                    return
+                }
+                let value = jsonData!["value"] as? NSArray
+                if value == nil {
+                    result(nil, nil)
+                    return
+                }
+                var files: Array<HiveFileHandle>? = []
+                for va in value! {
+                    let valueJson = va as? Dictionary<String, Any>
+                    let driveFile: HiveFileHandle = OneDriveFile()
+                    let folder = valueJson!["folder"]
+                    if folder != nil {
+                        driveFile.isDirectory = true
+                        driveFile.isFile = false
+                    }
+                    driveFile.createdDateTime = (valueJson!["createdDateTime"] as! String)
+                    driveFile.lastModifiedDateTime = (valueJson!["lastModifiedDateTime"] as! String)
+                    driveFile.fileSystemInfo = (valueJson!["fileSystemInfo"] as! Dictionary)
+                    driveFile.id = (valueJson!["id"] as! String)
+                    let sub = valueJson!["parentReference"] as? Dictionary<String, Any>
+                    driveFile.driveId = (sub!["driveId"] as! String)
+                    driveFile.pathName =  "/"
+                    files?.append(driveFile)
+                }
+                result(files, nil)
             })
     }
 
