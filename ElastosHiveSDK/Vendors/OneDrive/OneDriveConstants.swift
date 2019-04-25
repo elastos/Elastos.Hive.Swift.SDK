@@ -14,4 +14,6 @@ let REFRESH_TOKEN = "refresh_token"
 let EXPIRES_IN = "expires_in"
 let SCOPE = "scope"
 let AUTHORIZATION_CODE = "authorization_code"
+let ONEDRIVE_ACCOUNT = "onedrive_account"
+
 

@@ -64,18 +64,20 @@ internal class OneDriveAuthHelper: AuthHelper {
                     hiveError(.jsonFailue(des: (response?.body.jsonObject())!))
                     return
                 }
+                let jsonData = response?.body.jsonObject()
+                if jsonData == nil || jsonData!.isEmpty {
+                    hiveError(.failue(des: "response is nil"))
+                    return
+                }
                 self.authInfo = AuthInfo()
-                self.authInfo?.accessToken = (response?.body.jsonObject()[ACCESS_TOKEN] as! String)
-                self.authInfo?.refreshToken = (response?.body.jsonObject()[REFRESH_TOKEN] as! String)
-                self.authInfo?.expiredIn = (response?.body.jsonObject()[EXPIRES_IN] as! Int64)
-                self.authInfo?.scopes = (response?.body.jsonObject()[SCOPE] as! String)
-                let expireTime = HelperMethods.getExpireTime(time: self.authInfo!.expiredIn!)
+                self.authInfo?.accessToken = (jsonData![ACCESS_TOKEN] as? String)
+                self.authInfo?.refreshToken = (jsonData![REFRESH_TOKEN] as? String)
+                self.authInfo?.expiredIn = (jsonData![EXPIRES_IN] as? Int64)
+                self.authInfo?.scopes = (jsonData![SCOPE] as? String)
+                let expireTime = HelperMethods.getExpireTime(time: (self.authInfo?.expiredIn!)!)
                 self.authInfo?.expiredTime = expireTime
-
-                // todo  save to keychain: access_token & refresh_token & expire_time
-                let accesstoken: String = self.authInfo!.accessToken! // todo  save to keychain
-                let keychain = KeychainSwift()
-                keychain.set(accesstoken, forKey: ACCESS_TOKEN)
+                let onedriveAccountJson = [ACCESS_TOKEN: (jsonData![ACCESS_TOKEN] as! String) as Any, REFRESH_TOKEN: (jsonData![REFRESH_TOKEN] as! String), EXPIRES_IN: expireTime] as [String : Any]
+                HelperMethods.savekeychain(ONEDRIVE_ACCOUNT, onedriveAccountJson)
                 hiveError(nil)
             })
     }
@@ -84,7 +86,7 @@ internal class OneDriveAuthHelper: AuthHelper {
 
         let scops = ["Files.ReadWrite","offline_access"]
         let scopStr = scops.joined(separator: " ")
-        let refreshToken: String = authInfo!.refreshToken!
+        let refreshToken = HelperMethods.getkeychain(REFRESH_TOKEN, ONEDRIVE_ACCOUNT) ?? ""
         let params: Dictionary<String, Any> = ["client_id": clientId ?? "",
                                                "refresh_token": refreshToken,
                                                "grant_type": REFRESH_TOKEN,
@@ -105,17 +107,21 @@ internal class OneDriveAuthHelper: AuthHelper {
                     hiveError(.jsonFailue(des: (response?.body.jsonObject())!))
                     return
                 }
+                let jsonData = response?.body.jsonObject()
+                if jsonData == nil || jsonData!.isEmpty {
+                    hiveError(.failue(des: "response is nil"))
+                    return
+                }
                 self.authInfo = AuthInfo()
-                self.authInfo?.accessToken = (response?.body.jsonObject()[ACCESS_TOKEN] as! String)
-                self.authInfo?.refreshToken = (response?.body.jsonObject()[REFRESH_TOKEN] as! String)
-                self.authInfo?.expiredIn = (response?.body.jsonObject()[EXPIRES_IN] as! Int64)
-                self.authInfo?.scopes = (response?.body.jsonObject()[SCOPE] as! String)
+                self.authInfo?.accessToken = (jsonData![ACCESS_TOKEN] as? String)
+                self.authInfo?.refreshToken = (jsonData![REFRESH_TOKEN] as? String)
+                self.authInfo?.expiredIn = (jsonData![EXPIRES_IN] as? Int64)
+                self.authInfo?.scopes = (jsonData![SCOPE] as? String)
                 let expireTime = HelperMethods.getExpireTime(time: self.authInfo!.expiredIn!)
                 self.authInfo?.expiredTime = expireTime
-
-                // todo  save to keychain: access_token & refresh_token & expire_time
-                let keychain = KeychainSwift()
-                keychain.set(self.authInfo!.accessToken!, forKey: ACCESS_TOKEN)
+                let onedriveAccountJson = [ACCESS_TOKEN: (jsonData![ACCESS_TOKEN] as! String), REFRESH_TOKEN: (jsonData![REFRESH_TOKEN] as! String), EXPIRES_IN: expireTime] as [String : Any]
+                //save to keychain: access_token & refresh_token & expire_time
+                HelperMethods.savekeychain(ONEDRIVE_ACCOUNT, onedriveAccountJson)
                 hiveError(nil)
             })
     }
