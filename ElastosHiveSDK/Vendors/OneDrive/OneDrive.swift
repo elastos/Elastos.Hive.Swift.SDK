@@ -44,6 +44,10 @@ internal class OneDrive: HiveDriveHandle {
                     resultHandler(nil, .jsonFailue(des: (response?.body.jsonObject())!))
                     return
                 }
+                let jsonData = response?.body.jsonObject() as? Dictionary<String, Any>
+                if jsonData == nil || jsonData!.isEmpty {
+                    resultHandler(nil, nil)
+                }
                 let driveFile: OneDriveFile = OneDriveFile()
                 driveFile.drive = self
                 let folder = response?.body.jsonObject()["folder"]
@@ -51,13 +55,16 @@ internal class OneDrive: HiveDriveHandle {
                     driveFile.isDirectory = true
                     driveFile.isFile = false
                 }
-                driveFile.createdDateTime = (response?.body.jsonObject()["createdDateTime"] as! String)
-                driveFile.lastModifiedDateTime = (response?.body.jsonObject()["lastModifiedDateTime"] as! String)
-                driveFile.fileSystemInfo = (response?.body.jsonObject()["fileSystemInfo"] as! Dictionary)
-                driveFile.id = (response?.body.jsonObject()["id"] as! String)
-                let t = response?.body.jsonObject() as! NSDictionary
-                let sub = t["parentReference"] as! NSDictionary
+                driveFile.createdDateTime = (jsonData!["createdDateTime"] as! String)
+                driveFile.lastModifiedDateTime = (jsonData!["lastModifiedDateTime"] as! String)
+                driveFile.fileSystemInfo = (jsonData!["fileSystemInfo"] as! Dictionary)
+                driveFile.id = (jsonData!["id"] as! String)
+                let sub = jsonData!["parentReference"] as! NSDictionary
                 driveFile.driveId = (sub["driveId"] as! String)
+                driveFile.parentId = (sub["id"] as! String)
+                let fullPath = (sub["path"] as! String)
+                let end = fullPath.index(fullPath.endIndex, offsetBy: -1)
+                driveFile.parentPath = String(fullPath[..<end])
                 driveFile.pathName =  "/"
                 driveFile.oneDrive = self
                 resultHandler(driveFile, nil)
@@ -81,23 +88,30 @@ internal class OneDrive: HiveDriveHandle {
                     return
                 }
                 // TODO  judje
-                let oneDriveFile: OneDriveFile = OneDriveFile()
-                oneDriveFile.drive = self
-                oneDriveFile.oneDrive = self
-                oneDriveFile.pathName =  atPath
-                let folder = response?.body.jsonObject()["folder"]
-                if folder != nil {
-                    oneDriveFile.isDirectory = true
-                    oneDriveFile.isFile = false
+                let jsonData = response?.body.jsonObject() as? Dictionary<String, Any>
+                if jsonData == nil || jsonData!.isEmpty {
+                    withResult(nil, nil)
                 }
-                oneDriveFile.createdDateTime = (response?.body.jsonObject()["createdDateTime"] as! String)
-                oneDriveFile.lastModifiedDateTime = (response?.body.jsonObject()["lastModifiedDateTime"] as! String)
-                oneDriveFile.fileSystemInfo = (response?.body.jsonObject()["fileSystemInfo"] as! Dictionary)
-                oneDriveFile.id = (response?.body.jsonObject()["id"] as! String)
-                let t = response?.body.jsonObject() as! NSDictionary
-                let sub = t["parentReference"] as! NSDictionary
-                oneDriveFile.driveId = (sub["driveId"] as! String)
-                withResult(oneDriveFile, nil)
+                let driveFile: OneDriveFile = OneDriveFile()
+                driveFile.drive = self
+                driveFile.oneDrive = self
+                driveFile.pathName =  atPath
+                let folder = jsonData!["folder"]
+                if folder != nil {
+                    driveFile.isDirectory = true
+                    driveFile.isFile = false
+                }
+                driveFile.createdDateTime = (jsonData!["createdDateTime"] as! String)
+                driveFile.lastModifiedDateTime = (jsonData!["lastModifiedDateTime"] as! String)
+                driveFile.fileSystemInfo = (jsonData!["fileSystemInfo"] as! Dictionary)
+                driveFile.id = (jsonData!["id"] as! String)
+                let sub = jsonData!["parentReference"] as! NSDictionary
+                driveFile.driveId = (sub["driveId"] as! String)
+                driveFile.parentId = (sub["id"] as! String)
+                let fullPath = (sub["path"] as! String)
+                let end = fullPath.index(fullPath.endIndex, offsetBy: -1)
+                driveFile.parentPath = String(fullPath[..<end])
+                withResult(driveFile, nil)
             })
     }
 
@@ -142,6 +156,10 @@ internal class OneDrive: HiveDriveHandle {
                 //            if id == nil {
                 //                resultHandler(nil, .failue(des: "pathname is invalid path"))
                 //            }
+                let jsonData = response?.body.jsonObject() as? Dictionary<String, Any>
+                if jsonData == nil || jsonData!.isEmpty {
+                    resultHandler(nil, nil)
+                }
                 let oneDriveFile: OneDriveFile = OneDriveFile()
                 oneDriveFile.drive = self
                 oneDriveFile.oneDrive = self
@@ -151,13 +169,16 @@ internal class OneDrive: HiveDriveHandle {
                     oneDriveFile.isDirectory = true
                     oneDriveFile.isFile = false
                 }
-                oneDriveFile.createdDateTime = (response?.body.jsonObject()["createdDateTime"] as! String)
-                oneDriveFile.lastModifiedDateTime = (response?.body.jsonObject()["lastModifiedDateTime"] as! String)
-                oneDriveFile.fileSystemInfo = (response?.body.jsonObject()["fileSystemInfo"] as! Dictionary)
-                oneDriveFile.id = (response?.body.jsonObject()["id"] as! String)
-                let t = response?.body.jsonObject() as! NSDictionary
-                let sub = t["parentReference"] as! NSDictionary
+                oneDriveFile.createdDateTime = (jsonData!["createdDateTime"] as! String)
+                oneDriveFile.lastModifiedDateTime = (jsonData!["lastModifiedDateTime"] as! String)
+                oneDriveFile.fileSystemInfo = (jsonData!["fileSystemInfo"] as! Dictionary)
+                oneDriveFile.id = (jsonData!["id"] as! String)
+                let sub = jsonData!["parentReference"] as! NSDictionary
                 oneDriveFile.driveId = (sub["driveId"] as! String)
+                oneDriveFile.parentId = (sub["id"] as! String)
+                let fullPath = (sub["path"] as! String)
+                let end = fullPath.index(fullPath.endIndex, offsetBy: -1)
+                oneDriveFile.parentPath = String(fullPath[..<end])
                 resultHandler(oneDriveFile, nil)
             })
         }

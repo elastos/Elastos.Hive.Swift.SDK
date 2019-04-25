@@ -120,7 +120,28 @@ internal class OneDriveFile: HiveFileHandle {
     }
 
     override func renameFileTo(newPath: String, result: @escaping HiveFileHandle.HandleResulr) throws {
-
+        // todo check expire
+        if id == nil {
+            throw HiveError.failue(des: "Illegal Argument.")
+        }
+        if pathName == "/" {
+            throw HiveError.failue(des: "This is root file")
+        }
+        let url = "\(RESTAPI_URL)/items/\(self.id!)"
+        let keychain: KeychainSwift = KeychainSwift() // todo  take from keychain
+        let accesstoken: String = keychain.get("access_token")!
+        let params: Dictionary<String, Any> = ["name": newPath]
+        UNIRest.patchEntity { (request) in
+            request?.url = url
+            request?.headers = ["Content-Type": "application/json;charset=UTF-8", HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
+            request?.body = try? JSONSerialization.data(withJSONObject: params, options: .prettyPrinted)
+            }?.asJsonAsync({ (response, error) in
+                if response?.code == 200 {
+                    result(true, nil)
+                }else {
+                    result(false, .failue(des: "Invoking the rename has error."))
+                }
+            })
     }
     override func renameFileTo(newFile: HiveFileHandle) throws {
         // TODO
@@ -195,10 +216,18 @@ internal class OneDriveFile: HiveFileHandle {
                     driveFile.createdDateTime = (valueJson!["createdDateTime"] as! String)
                     driveFile.lastModifiedDateTime = (valueJson!["lastModifiedDateTime"] as! String)
                     driveFile.fileSystemInfo = (valueJson!["fileSystemInfo"] as! Dictionary)
-                    driveFile.id = (valueJson!["id"] as! String)
+                    let ID: String = (valueJson!["id"] as! String)
+                    driveFile.id = ID
                     let sub = valueJson!["parentReference"] as? Dictionary<String, Any>
                     driveFile.driveId = (sub!["driveId"] as! String)
-                    driveFile.pathName =  "/"
+                    driveFile.parentId = (sub!["id"] as! String)
+                    let fullPath = (sub!["path"] as! String)
+                    let end = fullPath.index(fullPath.endIndex, offsetBy: -1)
+                    driveFile.parentPath = String(fullPath[..<end])
+                    driveFile.pathName = "items/\(ID)"
+                    if driveFile.parentId == nil {
+                        driveFile.pathName = "/"
+                    }
                     files?.append(driveFile)
                 }
                 result(files, nil)
@@ -229,20 +258,31 @@ internal class OneDriveFile: HiveFileHandle {
                     let jsonerror = response?.body.jsonObject()
                     result(nil, .jsonFailue(des: jsonerror))
                 }
+                let jsonData = response?.body.jsonObject() as? Dictionary<String, Any>
+                if jsonData == nil || jsonData!.isEmpty {
+                    result(nil, nil)
+                }
                 let driveFile: HiveFileHandle = OneDriveFile()
-                let folder = response?.body.jsonObject()["folder"]
+                let folder = jsonData!["folder"]
                 if folder != nil {
                     driveFile.isDirectory = true
                     driveFile.isFile = false
                 }
-                driveFile.createdDateTime = (response?.body.jsonObject()["createdDateTime"] as! String)
-                driveFile.lastModifiedDateTime = (response?.body.jsonObject()["lastModifiedDateTime"] as! String)
-                driveFile.fileSystemInfo = (response?.body.jsonObject()["fileSystemInfo"] as! Dictionary)
-                driveFile.id = (response?.body.jsonObject()["id"] as! String)
-                let t = response?.body.jsonObject() as! NSDictionary
-                let sub = t["parentReference"] as! NSDictionary
+                driveFile.createdDateTime = (jsonData!["createdDateTime"] as! String)
+                driveFile.lastModifiedDateTime = (jsonData!["lastModifiedDateTime"] as! String)
+                driveFile.fileSystemInfo = (jsonData!["fileSystemInfo"] as! Dictionary)
+                let ID: String = (jsonData!["id"] as! String)
+                driveFile.id = ID
+                let sub = jsonData!["parentReference"] as! NSDictionary
                 driveFile.driveId = (sub["driveId"] as! String)
-                driveFile.pathName =  "/"
+                driveFile.parentId = (sub["id"] as! String)
+                let fullPath = (sub["path"] as! String)
+                let end = fullPath.index(fullPath.endIndex, offsetBy: -1)
+                driveFile.parentPath = String(fullPath[..<end])
+                driveFile.pathName = "items/\(ID)"
+                if driveFile.parentId == nil {
+                    driveFile.pathName = "/"
+                }
                 result(driveFile, nil)
             })
     }
