@@ -124,9 +124,9 @@ internal class OneDriveFile: HiveFileHandle {
         if id == nil {
             throw HiveError.failue(des: "Illegal Argument.")
         }
-//        if pathName == "/" {
-//            throw HiveError.failue(des: "This is root file")
-//        }
+        if pathName == "/" {
+            throw HiveError.failue(des: "This is root file")
+        }
         let url = "\(RESTAPI_URL)/items/\(self.id!)"
         let keychain: KeychainSwift = KeychainSwift() // todo  take from keychain
         let accesstoken: String = keychain.get("access_token")!
@@ -142,7 +142,6 @@ internal class OneDriveFile: HiveFileHandle {
                     result(false, .failue(des: "Invoking the rename has error."))
                 }
             })
-
     }
     override func renameFileTo(newFile: HiveFileHandle) throws {
         // TODO
