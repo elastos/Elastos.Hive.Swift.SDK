@@ -9,6 +9,8 @@ public class HiveFileHandle: NSObject {
     public var isDirectory: Bool?
     public var id: String?
     public var pathName: String?
+    public var parentId: String?
+    public var parentPath: String?
     public var driveId: String?
     public var fileSystemInfo: Dictionary<AnyHashable, Any>?
     public typealias HandleResulr = (_ result: Bool?, _ error: HiveError?) -> Void
