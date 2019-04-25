@@ -40,7 +40,7 @@ internal class OneDrive: HiveDriveHandle {
                 request?.url = RESTAPI_URL + ROOT_DIR
                 request?.headers = ["Content-Type": "application/json;charset=UTF-8", HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
             })?.asJsonAsync({ (response, error) in
-                if error != nil || response?.code != 200 {
+                if response?.code != 200 {
                     resultHandler(nil, .jsonFailue(des: (response?.body.jsonObject())!))
                     return
                 }
@@ -65,14 +65,50 @@ internal class OneDrive: HiveDriveHandle {
         }
     }
 
+    override func createDirectory(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
+        let keychain: KeychainSwift = KeychainSwift() // todo  take frome keychain
+        let accesstoken: String = keychain.get("access_token") ?? ""
+        let params: Dictionary<String, Any> = ["name": "New Folder",
+                                               "folder": [: ],
+                                               "@microsoft.graph.conflictBehavior": "rename"]
+        UNIRest.postEntity { (request) in
+            request?.url = "\(RESTAPI_URL)/items/\(atPath)/children"
+            request?.headers = ["Content-Type": "application/json;charset=UTF-8", HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
+            request?.body = try? JSONSerialization.data(withJSONObject: params)
+            }?.asJsonAsync({ (response, error) in
+                if response?.code != 201 {
+                    withResult(nil, .jsonFailue(des: (response?.body.jsonObject())!))
+                    return
+                }
+                // TODO  judje
+                let oneDriveFile: OneDriveFile = OneDriveFile()
+                oneDriveFile.drive = self
+                oneDriveFile.oneDrive = self
+                oneDriveFile.pathName =  atPath
+                let folder = response?.body.jsonObject()["folder"]
+                if folder != nil {
+                    oneDriveFile.isDirectory = true
+                    oneDriveFile.isFile = false
+                }
+                oneDriveFile.createdDateTime = (response?.body.jsonObject()["createdDateTime"] as! String)
+                oneDriveFile.lastModifiedDateTime = (response?.body.jsonObject()["lastModifiedDateTime"] as! String)
+                oneDriveFile.fileSystemInfo = (response?.body.jsonObject()["fileSystemInfo"] as! Dictionary)
+                oneDriveFile.id = (response?.body.jsonObject()["id"] as! String)
+                let t = response?.body.jsonObject() as! NSDictionary
+                let sub = t["parentReference"] as! NSDictionary
+                oneDriveFile.driveId = (sub["driveId"] as! String)
+                withResult(oneDriveFile, nil)
+            })
+    }
+
     override func createFile(atPath: String, withResult resultHandler: @escaping HiveFileObjectCreationResponseHandler) throws {
         let keychain: KeychainSwift = KeychainSwift() // todo  take frome keychain
         let accesstoken: String = keychain.get("access_token") ?? ""
         UNIRest.putEntity { (request) in
-            request?.url = RESTAPI_URL + ROOT_DIR + ":/" + atPath + ":/content"
+            request?.url = "\(RESTAPI_URL)\(ROOT_DIR):/\(atPath):/content"
             request?.headers = ["Content-Type": "application/json;charset=UTF-8", HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
             }?.asJsonAsync({ (response, error) in
-                if error != nil || response?.code != 200 {
+                if response?.code != 200 {
                     resultHandler(nil, .jsonFailue(des: (response?.body.jsonObject())!))
                     return
                 }
@@ -89,7 +125,7 @@ internal class OneDrive: HiveDriveHandle {
         authHeperHandle.checkExpired { (error) in
             let keychain: KeychainSwift = KeychainSwift() // todo  take frome keychain
             let accesstoken: String = keychain.get("access_token") ?? ""
-            var url = RESTAPI_URL + ROOT_DIR + ":/" + atPath
+            var url = "\(RESTAPI_URL)\(ROOT_DIR):/\(atPath)"
             if atPath == "/" {
                 url = RESTAPI_URL + ROOT_DIR
             }
@@ -97,7 +133,7 @@ internal class OneDrive: HiveDriveHandle {
                 request?.url = url
                 request?.headers = ["Content-Type": "application/json;charset=UTF-8", HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
             })?.asJsonAsync({ (response, error) in
-                if error != nil || response?.code != 200 {
+                if response?.code != 200 {
                     resultHandler(nil, .jsonFailue(des: (response?.body.jsonObject())!))
                     return
                 }
