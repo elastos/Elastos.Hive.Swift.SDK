@@ -31,7 +31,7 @@ internal class HiveIpfsDrive: HiveDriveHandle {
         return .ownCloud
     }
 
-    override func login(_ hiveError: @escaping (LoginHandle)) {
+    override func login(_ result: @escaping (HandleResult)) {
         // TODO
     }
 

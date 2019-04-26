@@ -25,15 +25,29 @@ internal class OneDrive: HiveDriveHandle {
         return .oneDrive
     }
 
-    override func login(_ hiveError: @escaping (LoginHandle)) {
-        authHeperHandle.login({ (error) in
+    override func login(_ result: @escaping (HandleResult)) {
+        authHeperHandle.login { (re, error) in
             try? self.validateDrive()
-            hiveError(error)
-        })
+            result(re, error)
+        }
+    }
+    override func logout(_ result: @escaping (HandleResult)) {
+        authHeperHandle.logout { (re, error) in
+            result(re, error)
+        }
     }
 
     override func rootDirectoryHandle(withResult resultHandler: @escaping HiveFileObjectCreationResponseHandler) throws {
+        if authHeperHandle.authInfo == nil {
+            print("Please login first")
+            resultHandler(nil, .failue(des: "Please login first"))
+            return
+        }
         authHeperHandle.checkExpired { (error) in
+            if (error != nil) {
+                resultHandler(nil, error)
+                return
+            }
             let accesstoken = HelperMethods.getkeychain(ACCESS_TOKEN, ONEDRIVE_ACCOUNT) ?? ""
             UNIRest.get({ (request) in
                 request?.url = RESTAPI_URL + ROOT_DIR
@@ -58,6 +72,7 @@ internal class OneDrive: HiveDriveHandle {
                 driveFile.lastModifiedDateTime = (jsonData!["lastModifiedDateTime"] as! String)
                 driveFile.fileSystemInfo = (jsonData!["fileSystemInfo"] as? Dictionary)
                 driveFile.id = (jsonData!["id"] as? String)
+                driveFile.rootPath = RESTAPI_URL + "/root"
                 let sub = jsonData!["parentReference"] as? NSDictionary
                 if (sub != nil) {
                     driveFile.driveId = (sub!["driveId"] as? String)
@@ -77,73 +92,75 @@ internal class OneDrive: HiveDriveHandle {
     }
 
     override func createDirectory(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
-        let accesstoken = HelperMethods.getkeychain(ACCESS_TOKEN, ONEDRIVE_ACCOUNT) ?? ""
-        let params: Dictionary<String, Any> = ["name": "New Folder",
-                                               "folder": [: ],
-                                               "@microsoft.graph.conflictBehavior": "rename"]
-        UNIRest.postEntity { (request) in
-            request?.url = "\(RESTAPI_URL)/items/\(atPath)/children"
-            request?.headers = ["Content-Type": "application/json;charset=UTF-8", HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
-            request?.body = try? JSONSerialization.data(withJSONObject: params)
-            }?.asJsonAsync({ (response, error) in
-                if response?.code != 201 {
-                    withResult(nil, .jsonFailue(des: (response?.body.jsonObject())!))
-                    return
-                }
-                // TODO  judje
-                let jsonData = response?.body.jsonObject() as? Dictionary<String, Any>
-                if jsonData == nil || jsonData!.isEmpty {
-                    withResult(nil, nil)
-                }
-                let driveFile: OneDriveFile = OneDriveFile()
-                driveFile.drive = self
-                driveFile.oneDrive = self
-                driveFile.pathName =  atPath
-                let folder = jsonData!["folder"]
-                if folder != nil {
-                    driveFile.isDirectory = true
-                    driveFile.isFile = false
-                }
-                driveFile.createdDateTime = (jsonData!["createdDateTime"] as? String)
-                driveFile.lastModifiedDateTime = (jsonData!["lastModifiedDateTime"] as? String)
-                driveFile.fileSystemInfo = (jsonData!["fileSystemInfo"] as? Dictionary)
-                driveFile.id = (jsonData!["id"] as? String)
-                let sub = jsonData!["parentReference"] as? NSDictionary
-                if (sub != nil) {
-                    driveFile.driveId = (sub!["driveId"] as? String)
-                    driveFile.parentId = (sub!["id"] as? String)
-                }
-                let fullPath = sub!["path"]
-                if (fullPath != nil) {
-                    let full = fullPath as!String
-                    let end = full.index(full.endIndex, offsetBy: -1)
-                    driveFile.parentPath = String(full[..<end])
-                }
-                withResult(driveFile, nil)
-            })
-    }
-
-    override func createFile(atPath: String, withResult resultHandler: @escaping HiveFileObjectCreationResponseHandler) throws {
-        let accesstoken = HelperMethods.getkeychain(ACCESS_TOKEN, ONEDRIVE_ACCOUNT) ?? ""
-        UNIRest.putEntity { (request) in
-            request?.url = "\(RESTAPI_URL)\(ROOT_DIR):/\(atPath):/content"
-            request?.headers = ["Content-Type": "application/json;charset=UTF-8", HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
-            }?.asJsonAsync({ (response, error) in
-                if response?.code != 200 {
-                    resultHandler(nil, .jsonFailue(des: (response?.body.jsonObject())!))
-                    return
-                }
-                // TODO  judje
-                let oneDriveFile: OneDriveFile = OneDriveFile()
-                oneDriveFile.drive = self
-                oneDriveFile.oneDrive = self
-                oneDriveFile.pathName =  atPath
-                resultHandler(oneDriveFile, nil)
-            })
+        if authHeperHandle.authInfo == nil {
+            print("Please login first")
+            withResult(nil, .failue(des: "Please login first"))
+            return
+        }
+        authHeperHandle.checkExpired { (error) in
+            if (error != nil) {
+                withResult(nil, error)
+                return
+            }
+            let accesstoken = HelperMethods.getkeychain(ACCESS_TOKEN, ONEDRIVE_ACCOUNT) ?? ""
+            let params: Dictionary<String, Any> = ["name": "New Folder",
+                                                   "folder": [: ],
+                                                   "@microsoft.graph.conflictBehavior": "rename"]
+            UNIRest.postEntity { (request) in
+                request?.url = "\(RESTAPI_URL)/items/\(atPath)/children"
+                request?.headers = ["Content-Type": "application/json;charset=UTF-8", HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
+                request?.body = try? JSONSerialization.data(withJSONObject: params)
+                }?.asJsonAsync({ (response, error) in
+                    if response?.code != 201 {
+                        withResult(nil, .jsonFailue(des: (response?.body.jsonObject())!))
+                        return
+                    }
+                    // TODO  judje
+                    let jsonData = response?.body.jsonObject() as? Dictionary<String, Any>
+                    if jsonData == nil || jsonData!.isEmpty {
+                        withResult(nil, nil)
+                    }
+                    let driveFile: OneDriveFile = OneDriveFile()
+                    driveFile.drive = self
+                    driveFile.oneDrive = self
+                    driveFile.pathName =  atPath
+                    let folder = jsonData!["folder"]
+                    if folder != nil {
+                        driveFile.isDirectory = true
+                        driveFile.isFile = false
+                    }
+                    driveFile.createdDateTime = (jsonData!["createdDateTime"] as? String)
+                    driveFile.lastModifiedDateTime = (jsonData!["lastModifiedDateTime"] as? String)
+                    driveFile.fileSystemInfo = (jsonData!["fileSystemInfo"] as? Dictionary)
+                    driveFile.id = (jsonData!["id"] as? String)
+                    driveFile.rootPath = RESTAPI_URL + "/root"
+                    let sub = jsonData!["parentReference"] as? NSDictionary
+                    if (sub != nil) {
+                        driveFile.driveId = (sub!["driveId"] as? String)
+                        driveFile.parentId = (sub!["id"] as? String)
+                    }
+                    let fullPath = sub!["path"]
+                    if (fullPath != nil) {
+                        let full = fullPath as!String
+                        let end = full.index(full.endIndex, offsetBy: -1)
+                        driveFile.parentPath = String(full[..<end])
+                    }
+                    withResult(driveFile, nil)
+                })
+        }
     }
 
     override func getFileHandle(atPath: String, withResult resultHandler: @escaping HiveFileObjectCreationResponseHandler) throws {
+        if authHeperHandle.authInfo == nil {
+            print("Please login first")
+            resultHandler(nil, .failue(des: "Please login first"))
+            return
+        }
         authHeperHandle.checkExpired { (error) in
+            if (error != nil) {
+                resultHandler(nil, error)
+                return
+            }
             let accesstoken = HelperMethods.getkeychain(ACCESS_TOKEN, ONEDRIVE_ACCOUNT) ?? ""
             var url = "\(RESTAPI_URL)\(ROOT_DIR):/\(atPath)"
             if atPath == "/" {
@@ -179,6 +196,7 @@ internal class OneDrive: HiveDriveHandle {
                 driveFile.lastModifiedDateTime = (jsonData!["lastModifiedDateTime"] as? String)
                 driveFile.fileSystemInfo = (jsonData!["fileSystemInfo"] as? Dictionary)
                 driveFile.id = (jsonData!["id"] as? String)
+                driveFile.rootPath = RESTAPI_URL + "/root"
                 let sub = jsonData!["parentReference"] as? NSDictionary
                 if (sub != nil) {
                     driveFile.driveId = (sub!["driveId"] as? String)
@@ -196,7 +214,6 @@ internal class OneDrive: HiveDriveHandle {
     }
 
     private func validateDrive() throws {
-
         var error: NSError?
         let accesstoken = HelperMethods.getkeychain(ACCESS_TOKEN, ONEDRIVE_ACCOUNT) ?? ""
         let response: UNIHTTPJsonResponse? = UNIRest.get({ (request) in

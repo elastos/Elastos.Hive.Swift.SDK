@@ -27,12 +27,37 @@ internal class OneDriveFile: HiveFileHandle {
     }
 
     override func updateDateTime(withValue newValue: String) {
+        oneDrive?.authHeperHandle.checkExpired({ (error) in
+            if (error != nil) {
+//                resultHandler(nil, error)
+                return
+            }
+            let url = "\(RESTAPI_URL)/items/\(self.id!)"
+            let accesstoken = HelperMethods.getkeychain(ACCESS_TOKEN, ONEDRIVE_ACCOUNT) ?? ""
+            let params: Dictionary<String, Any> = ["lastModifiedDateTime": newValue]
+
+            UNIRest.patchEntity { (request) in
+                request?.url = url
+                request?.headers = ["Content-Type": "application/json;charset=UTF-8", HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
+                request?.body = try? JSONSerialization.data(withJSONObject: params, options: .prettyPrinted)
+                }?.asJsonAsync({ (response, error) in
+                    if response?.code == 200 {
+                        print(response?.body.jsonObject())
+                    }else {
+                        print(response?.body.jsonObject())
+                    }
+                })
+
+        })
     }
 
     override func copyFileTo(newPath: String, result: @escaping HiveFileHandle.HandleResulr) throws {
 
         oneDrive?.authHeperHandle.checkExpired({ (error) in
-            // TODO  back copy result
+            if (error != nil) {
+                result(nil, error)
+                return
+            }
             if self.pathName == nil {
                 result(false, .failue(des: "Illegal Argument."))
             }
@@ -77,7 +102,10 @@ internal class OneDriveFile: HiveFileHandle {
     
     override func copyFileTo(newFile: HiveFileHandle, result: @escaping HiveFileHandle.HandleResulr) throws {
         oneDrive?.authHeperHandle.checkExpired({ (error) in
-
+            if (error != nil) {
+                result(nil, error)
+                return
+            }
             if self.pathName == nil {
                 result(false, .failue(des: "Illegal Argument."))
             }
@@ -123,7 +151,10 @@ internal class OneDriveFile: HiveFileHandle {
 
     override func renameFileTo(newPath: String, result: @escaping HiveFileHandle.HandleResulr) throws {
         oneDrive?.authHeperHandle.checkExpired({ (error) in
-
+            if (error != nil) {
+                result(nil, error)
+                return
+            }
             if self.id == nil {
                 result(false, .failue(des: "Illegal Argument."))
                 return
@@ -134,7 +165,6 @@ internal class OneDriveFile: HiveFileHandle {
             let url = "\(RESTAPI_URL)/items/\(self.id!)"
             let accesstoken = HelperMethods.getkeychain(ACCESS_TOKEN, ONEDRIVE_ACCOUNT) ?? ""
             let params: Dictionary<String, Any> = ["name": newPath]
-            self.oneDrive?.authHeperHandle.checkExpired({ (error) in
 
                 UNIRest.patchEntity { (request) in
                     request?.url = url
@@ -147,7 +177,6 @@ internal class OneDriveFile: HiveFileHandle {
                             result(false, .failue(des: "Invoking the rename has error."))
                         }
                     })
-            })
         })
     }
 
@@ -157,7 +186,10 @@ internal class OneDriveFile: HiveFileHandle {
 
     override func deleteItem(result: @escaping HiveFileHandle.HandleResulr) throws {
         oneDrive?.authHeperHandle.checkExpired({ (error) in
-
+            if (error != nil) {
+                result(nil, error)
+                return
+            }
             guard self.id != nil else {
                 result(false, .failue(des: "Illegal Argument."))
                 return
@@ -186,7 +218,10 @@ internal class OneDriveFile: HiveFileHandle {
 
     override func list(result: @escaping HiveFileHandle.HandleResulrWithFiles) throws {
         oneDrive?.authHeperHandle.checkExpired({ (error) in
-
+            if (error != nil) {
+                result(nil, error)
+                return
+            }
             if self.isDirectory == false {
                 result(nil, nil)
                 return
@@ -232,6 +267,7 @@ internal class OneDriveFile: HiveFileHandle {
                         let sub = valueJson!["parentReference"] as? Dictionary<String, Any>
                         driveFile.driveId = (sub!["driveId"] as! String)
                         driveFile.parentId = (sub!["id"] as! String)
+                        driveFile.rootPath = RESTAPI_URL + "/root"
                         let fullPath = (sub!["path"] as! String)
                         let end = fullPath.index(fullPath.endIndex, offsetBy: -1)
                         driveFile.parentPath = String(fullPath[..<end])
@@ -248,7 +284,10 @@ internal class OneDriveFile: HiveFileHandle {
 
     override func mkdir(pathname: String, result: @escaping HiveFileHandle.HandleResulrWithFile) throws {
         oneDrive?.authHeperHandle.checkExpired({ (error) in
-            
+            if (error != nil) {
+                result(nil, error)
+                return
+            }
             if self.isDirectory == false {
                 result(nil, .failue(des: "This is a file, can't create a child folder."))
             }
@@ -288,6 +327,7 @@ internal class OneDriveFile: HiveFileHandle {
                     let sub = jsonData!["parentReference"] as! NSDictionary
                     driveFile.driveId = (sub["driveId"] as! String)
                     driveFile.parentId = (sub["id"] as! String)
+                    driveFile.rootPath = RESTAPI_URL + "/root"
                     let fullPath = (sub["path"] as! String)
                     let end = fullPath.index(fullPath.endIndex, offsetBy: -1)
                     driveFile.parentPath = String(fullPath[..<end])

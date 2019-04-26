@@ -7,7 +7,8 @@ import Unirest
 @objc(OneDriveAuthHelper)
 internal class OneDriveAuthHelper: AuthHelper {
     typealias ResponseHandle = (_ respondeJson: Dictionary<String, Any>?, _ error: HiveError?) -> Void
-    private var authInfo: AuthInfo?
+    typealias HandleResulr = (_ result: Bool?, _ error: HiveError?) -> Void
+    var authInfo: AuthInfo?
     private var clientId: String?
     private var scopes: String?
     private var redirectUrl: String?
@@ -20,23 +21,38 @@ internal class OneDriveAuthHelper: AuthHelper {
         self.redirectUrl = redirectUrl
     }
     
-    func login(_ hiveError: @escaping (_ error: HiveError?) -> Void) {
+    func login(_ result: @escaping HandleResulr) {
         if (!hasLogin()) {
             acquireAuthorizationCode { (authCode, error) in
                 guard error == nil else {
-                    hiveError(error)
+                    result(false, error)
                     return
                 }
                 self.authCode = authCode
                 self.requestAccessToken(authCode!, { (error) in
-                    hiveError(error)
+                    if error != nil {
+                        result(false, error)
+                    }
+                    result(true, nil)
                 })
                 self.authCode = nil
                 self.server.stop()
             }
         }
     }
-    
+
+    func logout(_ result: @escaping HandleResulr) {
+        UNIRest.get({ (request) in
+            request?.url = BASE_REQURL + "/logout?post_logout_redirect_uri=\(self.redirectUrl!)"
+        })?.asJsonAsync({ (response, error) in
+            if response?.code != 200 {
+                result(false, .jsonFailue(des: response?.body.jsonObject()))
+            }
+            result(true, nil)
+        })
+    }
+
+
     private func acquireAuthorizationCode(_ authHandle: @escaping (_ authCode: String?, _ error: HiveError?) -> Void) {
         server.startRun(44316)
         server.getAuthorizationCode { (authCode, error) in
@@ -143,5 +159,6 @@ internal class OneDriveAuthHelper: AuthHelper {
                 hiveError(error)
             }
         }
+        hiveError(nil)
     }
 }
