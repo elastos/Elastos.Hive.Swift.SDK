@@ -29,10 +29,9 @@ internal class OwnCloudDrive: HiveDriveHandle {
         return .ownCloud
     }
 
-    override func login(_ hiveError: @escaping (LoginHandle)) {
+    override func login(_ result: @escaping (HandleResult)) {
         // TODO
     }
-
     override func rootDirectoryHandle(withResult: @escaping HiveFileObjectCreationResponseHandler) {
         // TODO
     }
