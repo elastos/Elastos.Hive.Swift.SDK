@@ -1,19 +1,15 @@
 import Foundation
 
-let BASE_REQURL: String = "https://login.microsoftonline.com/common/oauth2/v2.0"
-let AUTH_URL: String = BASE_REQURL + "/authorize"
-let TOKEN_URL: String = BASE_REQURL + "/token"
-let RESTAPI_URL: String = "https://graph.microsoft.com/v1.0/me/drive"
-let REDIRECT_URI: String = "http://localhost:44316"
-let ROOT_DIR: String = "/root"
+let ONEDRIVE_OAUTH2_BASE_REQUEST_URL  = "https://login.microsoftonline.com/common/oauth2/v2.0"
+let ONEDRIVE_RESTFUL_URL = "https://graph.microsoft.com/v1.0/me/drive"
+let ONEDRIVE_ROOTDIR     = "/root"
 
-// mark - string constant
-let HEADER_AUTHORIZATION: String = "Authorization"
-let ACCESS_TOKEN = "access_token"
-let REFRESH_TOKEN = "refresh_token"
-let EXPIRES_IN = "expires_in"
-let SCOPE = "scope"
-let AUTHORIZATION_CODE = "authorization_code"
-let ONEDRIVE_ACCOUNT = "onedrive_account"
+let HTTP_HEADER_AUTHORIZATION = "Authorization"
 
+let KEYCHAIN_ACCESS_TOKEN   = "access_token"
+let KEYCHAIN_REFRESH_TOKEN  = "refresh_token"
+let KEYCHAIN_EXPIRES_IN     = "expires_in"
+let KEYCHAIN_SCOPE          = "scope"
+let KEYCHAIN_DRIVE_ACCOUNT  = "onedrive"
 
+let AUTHORIZATION_TYPE_CODE = "authorization_code"

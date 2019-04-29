@@ -31,7 +31,11 @@ internal class DropboxDrive: HiveDriveHandle {
         return .ownCloud
     }
 
-    override func login(_ result: @escaping (HandleResult)) {
+    override func login(withResult: @escaping (HiveResultHandler)) {
+        // TODO
+    }
+
+    override func logout(withResult: @escaping (HiveResultHandler)) {
         // TODO
     }
 

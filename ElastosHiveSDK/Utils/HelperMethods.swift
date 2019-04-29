@@ -1,76 +1,68 @@
 import Foundation
 
+@inline(__always) private func TAG() -> String { return "HelperMethods" }
+
 class HelperMethods {
    class func getCurrentTime() -> String {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         formatter.timeStyle = .short
         formatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
-        let timeZone = TimeZone.init(identifier: "Asia/Shanghai")
-        formatter.timeZone = timeZone
-        let dateNow = Date()
-        let timeStamp = String.init(format: "%ld", Int(dateNow.timeIntervalSince1970))
-        return timeStamp
+        formatter.timeZone = TimeZone.init(identifier: "Asia/Shanghai")
+
+        return String.init(format: "%ld", Int(Date().timeIntervalSince1970))
     }
 
     class func getExpireTime(time: Int64) -> String {
-
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         formatter.timeStyle = .short
         formatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
-        let timeZone = TimeZone.init(identifier: "Asia/Shanghai")
-        formatter.timeZone = timeZone
+        formatter.timeZone = TimeZone.init(identifier: "Asia/Shanghai")
+
         let dateNow = Date.init(timeIntervalSinceNow: TimeInterval(time))
-        let timeStamp = String.init(format: "%ld", Int(dateNow.timeIntervalSince1970))
-        return timeStamp
+        return String.init(format: "%ld", Int(dateNow.timeIntervalSince1970))
     }
 
     class func checkIsExpired(_ timeStemp: String) -> Bool {
-        let currentTime: String = getCurrentTime()
-        if currentTime < timeStemp {
-            //            return true // test todo close
-            return false
-        }
-        return true
+        let currentTime = getCurrentTime()
+        return currentTime < timeStemp;
     }
 
-    class func getkeychain(_ key: String, _ account: String) -> String? {
+    class func getKeychain(_ key: String, _ account: String) -> String? {
         let keychain: KeychainSwift = KeychainSwift()
-        let acc = keychain.get(account)
-        if acc == nil {
+        let account = keychain.get(account)
+        guard account != nil else {
             return nil
         }
-        let jsonData:Data = acc!.data(using: .utf8)!
+        let jsonData:Data = account!.data(using: .utf8)!
         let dict = try? JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers)
-        if dict == nil {
+        guard dict != nil else {
             return nil
         }
         let json = dict as? Dictionary<String, Any>
-        if json == nil {
+        guard json != nil else {
             return nil
         }
         let value = json![key]
-        if value == nil {
+        guard value != nil else {
             return nil
         }
         return (value as! String)
     }
 
-    class func savekeychain(_ account: String, _ value: Dictionary<String, Any>) {
-
+    class func saveKeychain(_ account: String, _ value: Dictionary<String, Any>) {
         if !JSONSerialization.isValidJSONObject(value) {
-            print("save failed")
+            Log.e(TAG(), "Key-Value is not valid json object")
             return
         }
         let data = try? JSONSerialization.data(withJSONObject: value, options: [])
         let jsonstring = String(data: data!, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))
-        if jsonstring == nil {
-            print("save failed")
+        guard jsonstring != nil else {
+            Log.e(TAG(), "Save Key-Value for account :%s", account)
             return
         }
-        let jsonString: String = jsonstring!
         let keychain = KeychainSwift()
-        keychain.set(jsonString, forKey: account)
+        keychain.set(jsonstring!, forKey: account)
     }
 }

@@ -6,8 +6,6 @@ import Unirest
 
 @objc(OneDriveAuthHelper)
 internal class OneDriveAuthHelper: AuthHelper {
-    typealias ResponseHandle = (_ respondeJson: Dictionary<String, Any>?, _ error: HiveError?) -> Void
-    typealias HandleResulr = (_ result: Bool?, _ error: HiveError?) -> Void
     var authInfo: AuthInfo?
     private var clientId: String?
     private var scopes: String?
@@ -21,19 +19,20 @@ internal class OneDriveAuthHelper: AuthHelper {
         self.redirectUrl = redirectUrl
     }
     
-    func login(_ result: @escaping HandleResulr) {
+    func login(_ resultHandler: @escaping HiveResultHandler) {
         if (!hasLogin()) {
             acquireAuthorizationCode { (authCode, error) in
                 guard error == nil else {
-                    result(false, error)
+                    resultHandler(false, error)
                     return
                 }
                 self.authCode = authCode
                 self.requestAccessToken(authCode!, { (error) in
-                    if error != nil {
-                        result(false, error)
+                    guard error == nil else {
+                        resultHandler(false, error)
+                        return
                     }
-                    result(true, nil)
+                    resultHandler(true, nil)
                 })
                 self.authCode = nil
                 self.server.stop()
@@ -41,105 +40,104 @@ internal class OneDriveAuthHelper: AuthHelper {
         }
     }
 
-    func logout(_ result: @escaping HandleResulr) {
+    func logout(_ resultHandler: @escaping HiveResultHandler) {
         UNIRest.get({ (request) in
-            request?.url = BASE_REQURL + "/logout?post_logout_redirect_uri=\(self.redirectUrl!)"
+            request?.url = ONEDRIVE_OAUTH2_BASE_REQUEST_URL + "/logout?post_logout_redirect_uri=\(self.redirectUrl!)"
         })?.asJsonAsync({ (response, error) in
-            if response?.code != 200 {
-                result(false, .jsonFailue(des: response?.body.jsonObject()))
+            guard response?.code == 200 else {
+                resultHandler(false, .jsonFailue(des: response?.body.jsonObject()))
+                return
             }
-            result(true, nil)
+            resultHandler(true, nil)
         })
     }
 
 
-    private func acquireAuthorizationCode(_ authHandle: @escaping (_ authCode: String?, _ error: HiveError?) -> Void) {
+    private func acquireAuthorizationCode(_ authHandler: @escaping (_ authCode: String?, _ error: HiveError?) -> Void) {
         server.startRun(44316)
         server.getAuthorizationCode { (authCode, error) in
-            authHandle(authCode, error)
+            authHandler(authCode, error)
         }
     }
     
     private func requestAccessToken(_ authorCode: String, _ hiveError: @escaping (_ error: HiveError?) -> Void) {
-
         let params: Dictionary<String, Any> = ["client_id" : clientId ?? "",
                                                "code" : authorCode,
-                                               "grant_type" : AUTHORIZATION_CODE,
+                                               "grant_type" : AUTHORIZATION_TYPE_CODE,
                                                "redirect_uri" : redirectUrl ?? ""]
         UNIRest.postEntity { (request) in
-            request?.url = String(format: BASE_REQURL + "/token")
+            request?.url = String(format: ONEDRIVE_OAUTH2_BASE_REQUEST_URL + "/token")
             request?.headers = ["Content-Type": "application/x-www-form-urlencoded"]
             request?.body = params.queryString.data(using: String.Encoding.utf8)
-            }?.asJsonAsync({ (response, error) in
-
-                guard error == nil else {
-                    hiveError(.systemError(error: error, jsonDes: response?.body.jsonObject()))
-                    return
-                }
-                guard response?.code == 200 else {
-                    hiveError(.jsonFailue(des: (response?.body.jsonObject())!))
-                    return
-                }
-                let jsonData = response?.body.jsonObject()
-                if jsonData == nil || jsonData!.isEmpty {
-                    hiveError(.failue(des: "response is nil"))
-                    return
-                }
-                self.authInfo = AuthInfo()
-                self.authInfo?.accessToken = (jsonData![ACCESS_TOKEN] as? String)
-                self.authInfo?.refreshToken = (jsonData![REFRESH_TOKEN] as? String)
-                self.authInfo?.expiredIn = (jsonData![EXPIRES_IN] as? Int64)
-                self.authInfo?.scopes = (jsonData![SCOPE] as? String)
-                let expireTime = HelperMethods.getExpireTime(time: (self.authInfo?.expiredIn!)!)
-                self.authInfo?.expiredTime = expireTime
-                let onedriveAccountJson = [ACCESS_TOKEN: (jsonData![ACCESS_TOKEN] as! String) as Any, REFRESH_TOKEN: (jsonData![REFRESH_TOKEN] as! String), EXPIRES_IN: expireTime] as [String : Any]
-                HelperMethods.savekeychain(ONEDRIVE_ACCOUNT, onedriveAccountJson)
-                hiveError(nil)
-            })
+        }?.asJsonAsync({ (response, error) in
+            guard error == nil else {
+                hiveError(.systemError(error: error, jsonDes: response?.body.jsonObject()))
+                return
+            }
+            guard response?.code == 200 else {
+                hiveError(.jsonFailue(des: (response?.body.jsonObject())!))
+                return
+            }
+            let jsonData = response?.body.jsonObject()
+            guard jsonData != nil && !jsonData!.isEmpty else {
+                hiveError(.failue(des: "response is nil"))
+                return
+            }
+            self.authInfo = AuthInfo()
+            self.authInfo?.accessToken = (jsonData![KEYCHAIN_ACCESS_TOKEN] as? String)
+            self.authInfo?.refreshToken = (jsonData![KEYCHAIN_REFRESH_TOKEN] as? String)
+            self.authInfo?.expiredIn = (jsonData![KEYCHAIN_EXPIRES_IN] as? Int64)
+            self.authInfo?.scopes = (jsonData![KEYCHAIN_SCOPE] as? String)
+            let expireTime = HelperMethods.getExpireTime(time: (self.authInfo?.expiredIn!)!)
+            self.authInfo?.expiredTime = expireTime
+            let onedriveAccountJson = [KEYCHAIN_ACCESS_TOKEN: (jsonData![KEYCHAIN_ACCESS_TOKEN] as! String) as Any,
+                                       KEYCHAIN_REFRESH_TOKEN: (jsonData![KEYCHAIN_REFRESH_TOKEN] as! String),
+                                       KEYCHAIN_EXPIRES_IN: expireTime] as [String : Any]
+            HelperMethods.saveKeychain(KEYCHAIN_DRIVE_ACCOUNT, onedriveAccountJson)
+            hiveError(nil)
+        })
     }
     
     private func refreshAccessToken(_ hiveError: @escaping (_ error: HiveError?) -> Void) {
-
-        let scops = ["Files.ReadWrite","offline_access"]
-        let scopStr = scops.joined(separator: " ")
-        let refreshToken = HelperMethods.getkeychain(REFRESH_TOKEN, ONEDRIVE_ACCOUNT) ?? ""
+        let scope = ["Files.ReadWrite.All","offline_access"].joined(separator: " ")
+        let refreshToken = HelperMethods.getKeychain(KEYCHAIN_REFRESH_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
         let params: Dictionary<String, Any> = ["client_id": clientId ?? "",
                                                "refresh_token": refreshToken,
-                                               "grant_type": REFRESH_TOKEN,
+                                               "grant_type": KEYCHAIN_REFRESH_TOKEN,
                                                "redirect_uri": redirectUrl ?? "",
-                                               "scope": scopStr
-        ]
+                                               "scope": scope]
         UNIRest.postEntity { (request) in
-            request?.url = String(format: BASE_REQURL + "/token")
+            request?.url = String(format: ONEDRIVE_OAUTH2_BASE_REQUEST_URL + "/token")
             request?.headers = ["Content-Type": "application/x-www-form-urlencoded"]
             request?.body = params.queryString.data(using: String.Encoding.utf8)
-            }?.asJsonAsync({ (response, error) in
+        }?.asJsonAsync({ (response, error) in
+            guard error == nil else {
+                hiveError(.systemError(error: error, jsonDes: response?.body.jsonObject()))
+                return
+            }
+            guard response?.code == 200 else {
+                hiveError(.jsonFailue(des: (response?.body.jsonObject())!))
+                return
+            }
+            let jsonData = response?.body.jsonObject()
+            guard jsonData != nil && !jsonData!.isEmpty else {
+                hiveError(.failue(des: "response is nil"))
+                return
+            }
+            self.authInfo = AuthInfo()
+            self.authInfo?.accessToken = (jsonData![KEYCHAIN_ACCESS_TOKEN] as? String)
+            self.authInfo?.refreshToken = (jsonData![KEYCHAIN_REFRESH_TOKEN] as? String)
+            self.authInfo?.expiredIn = (jsonData![KEYCHAIN_EXPIRES_IN] as? Int64)
+            self.authInfo?.scopes = (jsonData![KEYCHAIN_SCOPE] as? String)
+            let expiredTime = HelperMethods.getExpireTime(time: self.authInfo!.expiredIn!)
+            self.authInfo?.expiredTime = expiredTime
 
-                guard error == nil else {
-                    hiveError(.systemError(error: error, jsonDes: response?.body.jsonObject()))
-                    return
-                }
-                guard response?.code == 200 else {
-                    hiveError(.jsonFailue(des: (response?.body.jsonObject())!))
-                    return
-                }
-                let jsonData = response?.body.jsonObject()
-                if jsonData == nil || jsonData!.isEmpty {
-                    hiveError(.failue(des: "response is nil"))
-                    return
-                }
-                self.authInfo = AuthInfo()
-                self.authInfo?.accessToken = (jsonData![ACCESS_TOKEN] as? String)
-                self.authInfo?.refreshToken = (jsonData![REFRESH_TOKEN] as? String)
-                self.authInfo?.expiredIn = (jsonData![EXPIRES_IN] as? Int64)
-                self.authInfo?.scopes = (jsonData![SCOPE] as? String)
-                let expireTime = HelperMethods.getExpireTime(time: self.authInfo!.expiredIn!)
-                self.authInfo?.expiredTime = expireTime
-                let onedriveAccountJson = [ACCESS_TOKEN: (jsonData![ACCESS_TOKEN] as! String), REFRESH_TOKEN: (jsonData![REFRESH_TOKEN] as! String), EXPIRES_IN: expireTime] as [String : Any]
-                //save to keychain: access_token & refresh_token & expire_time
-                HelperMethods.savekeychain(ONEDRIVE_ACCOUNT, onedriveAccountJson)
-                hiveError(nil)
-            })
+            let onedriveAccountJson = [KEYCHAIN_ACCESS_TOKEN: (jsonData![KEYCHAIN_ACCESS_TOKEN] as! String),
+                                       KEYCHAIN_REFRESH_TOKEN: (jsonData![KEYCHAIN_REFRESH_TOKEN] as! String),
+                                       KEYCHAIN_EXPIRES_IN: expiredTime] as [String : Any]
+            HelperMethods.saveKeychain(KEYCHAIN_DRIVE_ACCOUNT, onedriveAccountJson)
+            hiveError(nil)
+        })
     }
     
     private func hasLogin() -> Bool {
@@ -147,18 +145,23 @@ internal class OneDriveAuthHelper: AuthHelper {
     }
     
     private func isExpired() -> Bool {
-        if authInfo == nil {
-            return true
+        guard authInfo != nil else {
+            return true;
         }
         return (authInfo?.isExpired())!
     }
     
-    override func checkExpired(_ hiveError: @escaping (_ error: HiveError?) -> Void) {
+    override func checkExpired(_ errorHandler: @escaping (_ error: HiveError?) -> Void) {
+        guard authInfo != nil else {
+            errorHandler(.failue(des: "Have to login first"))
+            return
+        }
+
         if (isExpired()) {
             refreshAccessToken { (error) in
-                hiveError(error)
+                errorHandler(error)
             }
         }
-        hiveError(nil)
+        errorHandler(nil)
     }
 }
