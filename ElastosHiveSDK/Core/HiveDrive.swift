@@ -1,8 +1,7 @@
 import Foundation
 
-//public typealias LogIOHandle = (_ error: HiveError?) -> Void
-public typealias HandleResult = (_ result: Bool?, _ error: HiveError?) -> Void
-public typealias HiveFileObjectCreationResponseHandler = (_ files: HiveFileHandle?, _ error: HiveError?) -> Void
+public typealias HiveResultHandler = ( _ result: Bool?, _ error: HiveError?) -> Void
+public typealias HiveFileObjectCreationResponseHandler = (_ file: HiveFileHandle?, _ error: HiveError?) -> Void
 
 @objc(HiveDrive)
 public class HiveDriveHandle: NSObject {
@@ -47,7 +46,10 @@ public class HiveDriveHandle: NSObject {
         return .oneDrive
     }
 
-    public func login(_ result: @escaping (HandleResult))  {
+    public func login(withResult: @escaping (HiveResultHandler))  {
+    }
+
+    public func logout(withResult: @escaping (HiveResultHandler)) {
     }
 
     public func rootDirectoryHandle(withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
@@ -61,6 +63,4 @@ public class HiveDriveHandle: NSObject {
 
     public func getFileHandle(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
     }
-
-    public func logout(_ result: @escaping (HandleResult)) {}
 }

@@ -3,14 +3,13 @@ import Unirest
 
 @objc(OneDriveFile)
 internal class OneDriveFile: HiveFileHandle {
-
     var oneDrive: OneDrive?
 
     public override func parentPathName() -> String? {
-
-        if pathName == nil {
-            return nil
+        guard pathName != nil else {
+            return pathName
         }
+
         let index = pathName!.range(of: "/", options: .backwards)?.lowerBound
         let parentPathname = index.map(pathName!.substring(to:))
         return parentPathname! + "/"
@@ -23,6 +22,7 @@ internal class OneDriveFile: HiveFileHandle {
                 resultHandler(hiveFiel, error)
             })
         } catch {
+            // TODO
         }
     }
 
@@ -32,13 +32,13 @@ internal class OneDriveFile: HiveFileHandle {
 //                resultHandler(nil, error)
                 return
             }
-            let url = "\(RESTAPI_URL)/items/\(self.id!)"
-            let accesstoken = HelperMethods.getkeychain(ACCESS_TOKEN, ONEDRIVE_ACCOUNT) ?? ""
+            let url = "\(ONEDRIVE_RESTFUL_URL)/items/\(self.id!)"
+            let accesstoken = HelperMethods.getKeychain(KEYCHAIN_ACCESS_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
             let params: Dictionary<String, Any> = ["lastModifiedDateTime": newValue]
 
             UNIRest.patchEntity { (request) in
                 request?.url = url
-                request?.headers = ["Content-Type": "application/json;charset=UTF-8", HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
+                request?.headers = ["Content-Type": "application/json;charset=UTF-8", HTTP_HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
                 request?.body = try? JSONSerialization.data(withJSONObject: params, options: .prettyPrinted)
                 }?.asJsonAsync({ (response, error) in
                     if response?.code == 200 {
@@ -72,23 +72,23 @@ internal class OneDriveFile: HiveFileHandle {
                 result(false, .failue(des: "This file has been existed at the folder: \(newPath)"))
             }
 
-            var url = RESTAPI_URL + ROOT_DIR + ":/" + newPath + ":/copy"
+            var url = ONEDRIVE_RESTFUL_URL + ONEDRIVE_ROOTDIR + ":/" + newPath + ":/copy"
             if newPath == "/" {
-                url = RESTAPI_URL + ROOT_DIR + "/copy"
+                url = ONEDRIVE_RESTFUL_URL + ONEDRIVE_ROOTDIR + "/copy"
             }
             let index = self.pathName!.range(of: "/", options: .backwards)?.lowerBound
             let parentPathname = index.map(self.pathName!.substring(to:)) ?? ""
             let name = parentPathname
             var error: NSError?
             let driveId = self.oneDrive?.driveId
-            let accesstoken = HelperMethods.getkeychain(ACCESS_TOKEN, ONEDRIVE_ACCOUNT) ?? ""
+            let accesstoken = HelperMethods.getKeychain(KEYCHAIN_ACCESS_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
             let params: Dictionary<String, Any> = ["parentReference" : ["driveId": driveId!, "id": driveId],
                                                    "name" : name]
             let globalQueue = DispatchQueue.global()
             globalQueue.async {
                 let response = UNIRest.postEntity { (request) in
                     request?.url = url
-                    request?.headers = ["Content-Type": "application/json;charset=UTF-8", HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
+                    request?.headers = ["Content-Type": "application/json;charset=UTF-8", HTTP_HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
                     request?.body = try? JSONSerialization.data(withJSONObject: params)
                     }?.asJson(&error)
                 if response?.code == 202 {
@@ -121,23 +121,23 @@ internal class OneDriveFile: HiveFileHandle {
                 result(false, .failue(des: "Illegal Argument."))
                 return
             }
-            var url = RESTAPI_URL + "/items/\(self.driveId!)/copy"
+            var url = ONEDRIVE_RESTFUL_URL + "/items/\(self.driveId!)/copy"
             if newFile.isEqual("/") {
-                url = RESTAPI_URL + "/copy"
+                url = ONEDRIVE_RESTFUL_URL + "/copy"
             }
             var error: NSError?
             let index = self.pathName!.range(of: "/", options: .backwards)?.lowerBound
             let parentPathname = index.map(self.pathName!.substring(to:)) ?? ""
             let name = parentPathname
             let driveId = self.oneDrive?.driveId
-            let accesstoken = HelperMethods.getkeychain(ACCESS_TOKEN, ONEDRIVE_ACCOUNT) ?? ""
+            let accesstoken = HelperMethods.getKeychain(KEYCHAIN_ACCESS_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
             let params: Dictionary<String, Any> = ["parentReference" : ["driveId": driveId!, "id": driveId],
                                                    "name" : name]
             let globalQueue = DispatchQueue.global()
             globalQueue.async {
                 let response = UNIRest.postEntity { (request) in
                     request?.url = url
-                    request?.headers = ["Content-Type": "application/json;charset=UTF-8", HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
+                    request?.headers = ["Content-Type": "application/json;charset=UTF-8", HTTP_HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
                     request?.body = try? JSONSerialization.data(withJSONObject: params)
                     }?.asJson(&error)
                 if response?.code == 202 {
@@ -162,13 +162,13 @@ internal class OneDriveFile: HiveFileHandle {
             if self.pathName == "/" {
                 result(false, .failue(des: "This is root file"))
             }
-            let url = "\(RESTAPI_URL)/items/\(self.id!)"
-            let accesstoken = HelperMethods.getkeychain(ACCESS_TOKEN, ONEDRIVE_ACCOUNT) ?? ""
+            let url = "\(ONEDRIVE_RESTFUL_URL)/items/\(self.id!)"
+            let accesstoken = HelperMethods.getKeychain(KEYCHAIN_ACCESS_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
             let params: Dictionary<String, Any> = ["name": newPath]
 
                 UNIRest.patchEntity { (request) in
                     request?.url = url
-                    request?.headers = ["Content-Type": "application/json;charset=UTF-8", HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
+                    request?.headers = ["Content-Type": "application/json;charset=UTF-8", HTTP_HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
                     request?.body = try? JSONSerialization.data(withJSONObject: params, options: .prettyPrinted)
                     }?.asJsonAsync({ (response, error) in
                         if response?.code == 200 {
@@ -197,11 +197,11 @@ internal class OneDriveFile: HiveFileHandle {
             let globalQueue = DispatchQueue.global()
             globalQueue.async {
                 var error: NSError?
-                let url: String = RESTAPI_URL + "/items/\(self.id!)"
-                let accesstoken = HelperMethods.getkeychain(ACCESS_TOKEN, ONEDRIVE_ACCOUNT) ?? ""
+                let url: String = ONEDRIVE_RESTFUL_URL + "/items/\(self.id!)"
+                let accesstoken = HelperMethods.getKeychain(KEYCHAIN_ACCESS_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
                 let response = UNIRest.delete { (request) in
                     request?.url = url
-                    request?.headers = ["Content-Type": "application/json;charset=UTF-8", HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
+                    request?.headers = ["Content-Type": "application/json;charset=UTF-8", HTTP_HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
                     }?.asJson(&error)
                 if response?.code == 204 {
                     result(true, nil)
@@ -230,11 +230,11 @@ internal class OneDriveFile: HiveFileHandle {
                 result(nil, .failue(des: "Illegal Argument."))
                 return
             }
-            let url = RESTAPI_URL + "/items/\(self.id!)/children"
-            let accesstoken = HelperMethods.getkeychain(ACCESS_TOKEN, ONEDRIVE_ACCOUNT) ?? ""
+            let url = ONEDRIVE_RESTFUL_URL + "/items/\(self.id!)/children"
+            let accesstoken = HelperMethods.getKeychain(KEYCHAIN_ACCESS_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
             UNIRest.get { (request) in
                 request?.url = url
-                request?.headers = ["Content-Type": "application/json;charset=UTF-8", HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
+                request?.headers = ["Content-Type": "application/json;charset=UTF-8", HTTP_HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
                 }?.asJsonAsync({ (response, error) in
                     if error != nil || response?.code != 200 {
                         result(nil, .jsonFailue(des: (response?.body.jsonObject())!))
@@ -267,7 +267,7 @@ internal class OneDriveFile: HiveFileHandle {
                         let sub = valueJson!["parentReference"] as? Dictionary<String, Any>
                         driveFile.driveId = (sub!["driveId"] as! String)
                         driveFile.parentId = (sub!["id"] as! String)
-                        driveFile.rootPath = RESTAPI_URL + "/root"
+                        driveFile.rootPath = ONEDRIVE_RESTFUL_URL + "/root"
                         let fullPath = (sub!["path"] as! String)
                         let end = fullPath.index(fullPath.endIndex, offsetBy: -1)
                         driveFile.parentPath = String(fullPath[..<end])
@@ -295,14 +295,14 @@ internal class OneDriveFile: HiveFileHandle {
                 result(nil, .failue(des: "Illegal Argument."))
             }
             let ID: String = self.id!
-            let url: String = "\(RESTAPI_URL)/items/\(ID)/children"
-            let accesstoken = HelperMethods.getkeychain(ACCESS_TOKEN, ONEDRIVE_ACCOUNT) ?? ""
+            let url: String = "\(ONEDRIVE_RESTFUL_URL)/items/\(ID)/children"
+            let accesstoken = HelperMethods.getKeychain(KEYCHAIN_ACCESS_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
             let params: Dictionary<String, Any> = ["name": pathname,
                                                    "folder": [: ],
                                                    "@microsoft.graph.conflictBehavior": "rename"]
             UNIRest.postEntity { (request) in
                 request?.url = url
-                request?.headers = ["Content-Type": "application/json;charset=UTF-8", HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
+                request?.headers = ["Content-Type": "application/json;charset=UTF-8", HTTP_HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
                 request?.body = try? JSONSerialization.data(withJSONObject: params)
                 }?.asJsonAsync({ (response, error) in
                     if response?.code != 201 {
@@ -327,7 +327,7 @@ internal class OneDriveFile: HiveFileHandle {
                     let sub = jsonData!["parentReference"] as! NSDictionary
                     driveFile.driveId = (sub["driveId"] as! String)
                     driveFile.parentId = (sub["id"] as! String)
-                    driveFile.rootPath = RESTAPI_URL + "/root"
+                    driveFile.rootPath = ONEDRIVE_RESTFUL_URL + "/root"
                     let fullPath = (sub["path"] as! String)
                     let end = fullPath.index(fullPath.endIndex, offsetBy: -1)
                     driveFile.parentPath = String(fullPath[..<end])

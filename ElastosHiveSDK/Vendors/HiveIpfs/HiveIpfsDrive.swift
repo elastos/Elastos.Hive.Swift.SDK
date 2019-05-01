@@ -31,7 +31,11 @@ internal class HiveIpfsDrive: HiveDriveHandle {
         return .ownCloud
     }
 
-    override func login(_ result: @escaping (HandleResult)) {
+    override func login(withResult: @escaping (HiveResultHandler)) {
+        // TODO
+    }
+
+    override func logout(withResult: @escaping (HiveResultHandler)) {
         // TODO
     }
 
@@ -44,7 +48,7 @@ internal class HiveIpfsDrive: HiveDriveHandle {
     }
     
     override func createFile(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) {
-
+        // TODO
     }
 
     override func getFileHandle(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) {
