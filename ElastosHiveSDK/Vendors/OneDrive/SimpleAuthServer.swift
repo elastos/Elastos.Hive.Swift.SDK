@@ -1,5 +1,4 @@
 import Foundation
-import Swifter
 
 internal class SimpleAuthServer: NSObject {
     private var httpServer: HttpServer = HttpServer()

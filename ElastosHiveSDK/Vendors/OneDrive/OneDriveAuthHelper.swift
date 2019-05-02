@@ -1,6 +1,5 @@
 import Foundation
-import Swifter
-import Unirest
+import UNIRest
 
 @inline(__always) private func TAG() -> String { return "OneDriveAuthHelper" }
 

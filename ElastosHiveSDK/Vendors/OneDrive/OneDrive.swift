@@ -1,5 +1,5 @@
 import Foundation
-import Unirest
+import UNIRest
 
 @inline(__always) private func TAG() -> String { return "OneDrive" }
 

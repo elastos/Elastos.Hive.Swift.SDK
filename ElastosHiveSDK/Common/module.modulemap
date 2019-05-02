@@ -1,0 +1,4 @@
+module UNIRest {
+  header "Unirest/UNIRest.h"
+  export *
+}

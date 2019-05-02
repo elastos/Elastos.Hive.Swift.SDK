@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		115139002265DCDC00472FBE /* ElastosHiveSDK_macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 115138FE2265DCDC00472FBE /* ElastosHiveSDK_macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		115139042265DDB200472FBE /* OneDriveParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3743AD4226570B200C9493E /* OneDriveParameters.swift */; };
 		115139052265DDB800472FBE /* OneDriveConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3743ADC2265743400C9493E /* OneDriveConstants.swift */; };
 		115139062265DDC400472FBE /* OneDrive.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C49AD22539CD10027BDF9 /* OneDrive.swift */; };
@@ -43,6 +42,108 @@
 		1160625622696E9500BDCB9F /* KeychainSwiftAccessOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1160625022696E9500BDCB9F /* KeychainSwiftAccessOptions.swift */; };
 		1160625822696EA500BDCB9F /* HelperMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1160625722696EA500BDCB9F /* HelperMethods.swift */; };
 		1160625922696EA500BDCB9F /* HelperMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1160625722696EA500BDCB9F /* HelperMethods.swift */; };
+		1193BE05227B53FA0019F77D /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34724DB226B4A750049DBD4 /* Log.swift */; };
+		1193BE06227B53FD0019F77D /* LogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34724DD226B4ABE0049DBD4 /* LogLevel.swift */; };
+		1193BE07227B541F0019F77D /* SimpleAuthServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CC8DAA226D99FB00EE80D0 /* SimpleAuthServer.swift */; };
+		11FDFB10227B4C12005B26AA /* DemoServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFADD227B4C12005B26AA /* DemoServer.swift */; };
+		11FDFB11227B4C12005B26AA /* DemoServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFADD227B4C12005B26AA /* DemoServer.swift */; };
+		11FDFB12227B4C12005B26AA /* Scopes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFADE227B4C12005B26AA /* Scopes.swift */; };
+		11FDFB13227B4C12005B26AA /* Scopes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFADE227B4C12005B26AA /* Scopes.swift */; };
+		11FDFB14227B4C12005B26AA /* WebSockets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFADF227B4C12005B26AA /* WebSockets.swift */; };
+		11FDFB15227B4C12005B26AA /* WebSockets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFADF227B4C12005B26AA /* WebSockets.swift */; };
+		11FDFB16227B4C12005B26AA /* HttpServerIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAE0227B4C12005B26AA /* HttpServerIO.swift */; };
+		11FDFB17227B4C12005B26AA /* HttpServerIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAE0227B4C12005B26AA /* HttpServerIO.swift */; };
+		11FDFB18227B4C12005B26AA /* Process.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAE1227B4C12005B26AA /* Process.swift */; };
+		11FDFB19227B4C12005B26AA /* Process.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAE1227B4C12005B26AA /* Process.swift */; };
+		11FDFB1A227B4C12005B26AA /* Socket+Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAE2227B4C12005B26AA /* Socket+Server.swift */; };
+		11FDFB1B227B4C12005B26AA /* Socket+Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAE2227B4C12005B26AA /* Socket+Server.swift */; };
+		11FDFB1C227B4C12005B26AA /* String+SHA1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAE3227B4C12005B26AA /* String+SHA1.swift */; };
+		11FDFB1D227B4C12005B26AA /* String+SHA1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAE3227B4C12005B26AA /* String+SHA1.swift */; };
+		11FDFB1E227B4C12005B26AA /* String+File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAE4227B4C12005B26AA /* String+File.swift */; };
+		11FDFB1F227B4C12005B26AA /* String+File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAE4227B4C12005B26AA /* String+File.swift */; };
+		11FDFB20227B4C12005B26AA /* Files.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAE5227B4C12005B26AA /* Files.swift */; };
+		11FDFB21227B4C12005B26AA /* Files.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAE5227B4C12005B26AA /* Files.swift */; };
+		11FDFB22227B4C12005B26AA /* HttpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAE6227B4C12005B26AA /* HttpRequest.swift */; };
+		11FDFB23227B4C12005B26AA /* HttpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAE6227B4C12005B26AA /* HttpRequest.swift */; };
+		11FDFB24227B4C12005B26AA /* HttpResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAE7227B4C12005B26AA /* HttpResponse.swift */; };
+		11FDFB25227B4C12005B26AA /* HttpResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAE7227B4C12005B26AA /* HttpResponse.swift */; };
+		11FDFB26227B4C12005B26AA /* HttpServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAE8227B4C12005B26AA /* HttpServer.swift */; };
+		11FDFB27227B4C12005B26AA /* HttpServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAE8227B4C12005B26AA /* HttpServer.swift */; };
+		11FDFB28227B4C12005B26AA /* Errno.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAE9227B4C12005B26AA /* Errno.swift */; };
+		11FDFB29227B4C12005B26AA /* Errno.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAE9227B4C12005B26AA /* Errno.swift */; };
+		11FDFB2A227B4C12005B26AA /* Socket+File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAEA227B4C12005B26AA /* Socket+File.swift */; };
+		11FDFB2B227B4C12005B26AA /* Socket+File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAEA227B4C12005B26AA /* Socket+File.swift */; };
+		11FDFB2C227B4C12005B26AA /* String+BASE64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAEB227B4C12005B26AA /* String+BASE64.swift */; };
+		11FDFB2D227B4C12005B26AA /* String+BASE64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAEB227B4C12005B26AA /* String+BASE64.swift */; };
+		11FDFB2E227B4C12005B26AA /* String+Misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAEC227B4C12005B26AA /* String+Misc.swift */; };
+		11FDFB2F227B4C12005B26AA /* String+Misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAEC227B4C12005B26AA /* String+Misc.swift */; };
+		11FDFB30227B4C12005B26AA /* HttpRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAED227B4C12005B26AA /* HttpRouter.swift */; };
+		11FDFB31227B4C12005B26AA /* HttpRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAED227B4C12005B26AA /* HttpRouter.swift */; };
+		11FDFB32227B4C12005B26AA /* HttpParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAEE227B4C12005B26AA /* HttpParser.swift */; };
+		11FDFB33227B4C12005B26AA /* HttpParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAEE227B4C12005B26AA /* HttpParser.swift */; };
+		11FDFB34227B4C12005B26AA /* MimeTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAEF227B4C12005B26AA /* MimeTypes.swift */; };
+		11FDFB35227B4C12005B26AA /* MimeTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAEF227B4C12005B26AA /* MimeTypes.swift */; };
+		11FDFB36227B4C12005B26AA /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAF0227B4C12005B26AA /* Socket.swift */; };
+		11FDFB37227B4C12005B26AA /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAF0227B4C12005B26AA /* Socket.swift */; };
+		11FDFB38227B4C12005B26AA /* UNIHTTPJsonResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 11FDFAF2227B4C12005B26AA /* UNIHTTPJsonResponse.h */; };
+		11FDFB39227B4C12005B26AA /* UNIHTTPJsonResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 11FDFAF2227B4C12005B26AA /* UNIHTTPJsonResponse.h */; };
+		11FDFB3A227B4C12005B26AA /* UNIHTTPBinaryResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 11FDFAF3227B4C12005B26AA /* UNIHTTPBinaryResponse.h */; };
+		11FDFB3B227B4C12005B26AA /* UNIHTTPBinaryResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 11FDFAF3227B4C12005B26AA /* UNIHTTPBinaryResponse.h */; };
+		11FDFB3C227B4C12005B26AA /* UNIBaseRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 11FDFAF4227B4C12005B26AA /* UNIBaseRequest.h */; };
+		11FDFB3D227B4C12005B26AA /* UNIBaseRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 11FDFAF4227B4C12005B26AA /* UNIBaseRequest.h */; };
+		11FDFB3E227B4C12005B26AA /* UNIUrlConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 11FDFAF5227B4C12005B26AA /* UNIUrlConnection.h */; };
+		11FDFB3F227B4C12005B26AA /* UNIUrlConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 11FDFAF5227B4C12005B26AA /* UNIUrlConnection.h */; };
+		11FDFB40227B4C12005B26AA /* Base64.h in Headers */ = {isa = PBXBuildFile; fileRef = 11FDFAF6227B4C12005B26AA /* Base64.h */; };
+		11FDFB41227B4C12005B26AA /* Base64.h in Headers */ = {isa = PBXBuildFile; fileRef = 11FDFAF6227B4C12005B26AA /* Base64.h */; };
+		11FDFB42227B4C12005B26AA /* UNIHTTPRequestWithBody.h in Headers */ = {isa = PBXBuildFile; fileRef = 11FDFAF7227B4C12005B26AA /* UNIHTTPRequestWithBody.h */; };
+		11FDFB43227B4C12005B26AA /* UNIHTTPRequestWithBody.h in Headers */ = {isa = PBXBuildFile; fileRef = 11FDFAF7227B4C12005B26AA /* UNIHTTPRequestWithBody.h */; };
+		11FDFB44227B4C12005B26AA /* UNISimpleRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAF8227B4C12005B26AA /* UNISimpleRequest.m */; };
+		11FDFB45227B4C12005B26AA /* UNISimpleRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAF8227B4C12005B26AA /* UNISimpleRequest.m */; };
+		11FDFB46227B4C12005B26AA /* UNIHTTPStringResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 11FDFAF9227B4C12005B26AA /* UNIHTTPStringResponse.h */; };
+		11FDFB47227B4C12005B26AA /* UNIHTTPStringResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 11FDFAF9227B4C12005B26AA /* UNIHTTPStringResponse.h */; };
+		11FDFB48227B4C12005B26AA /* UNIJsonNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAFA227B4C12005B26AA /* UNIJsonNode.m */; };
+		11FDFB49227B4C12005B26AA /* UNIJsonNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAFA227B4C12005B26AA /* UNIJsonNode.m */; };
+		11FDFB4A227B4C12005B26AA /* UNIBodyRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAFB227B4C12005B26AA /* UNIBodyRequest.m */; };
+		11FDFB4B227B4C12005B26AA /* UNIBodyRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAFB227B4C12005B26AA /* UNIBodyRequest.m */; };
+		11FDFB4C227B4C12005B26AA /* Unirest-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 11FDFAFC227B4C12005B26AA /* Unirest-Prefix.pch */; };
+		11FDFB4D227B4C12005B26AA /* Unirest-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 11FDFAFC227B4C12005B26AA /* Unirest-Prefix.pch */; };
+		11FDFB4E227B4C12005B26AA /* UNIHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAFD227B4C12005B26AA /* UNIHTTPRequest.m */; };
+		11FDFB4F227B4C12005B26AA /* UNIHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAFD227B4C12005B26AA /* UNIHTTPRequest.m */; };
+		11FDFB50227B4C12005B26AA /* UNIHTTPClientHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAFE227B4C12005B26AA /* UNIHTTPClientHelper.m */; };
+		11FDFB51227B4C12005B26AA /* UNIHTTPClientHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAFE227B4C12005B26AA /* UNIHTTPClientHelper.m */; };
+		11FDFB52227B4C12005B26AA /* UNIRest.m in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAFF227B4C12005B26AA /* UNIRest.m */; };
+		11FDFB53227B4C12005B26AA /* UNIRest.m in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFAFF227B4C12005B26AA /* UNIRest.m */; };
+		11FDFB54227B4C12005B26AA /* UNIHTTPResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 11FDFB00227B4C12005B26AA /* UNIHTTPResponse.h */; };
+		11FDFB55227B4C12005B26AA /* UNIHTTPResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 11FDFB00227B4C12005B26AA /* UNIHTTPResponse.h */; };
+		11FDFB56227B4C12005B26AA /* UNIHTTPBinaryResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFB01227B4C12005B26AA /* UNIHTTPBinaryResponse.m */; };
+		11FDFB57227B4C12005B26AA /* UNIHTTPBinaryResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFB01227B4C12005B26AA /* UNIHTTPBinaryResponse.m */; };
+		11FDFB58227B4C12005B26AA /* UNIHTTPJsonResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFB02227B4C12005B26AA /* UNIHTTPJsonResponse.m */; };
+		11FDFB59227B4C12005B26AA /* UNIHTTPJsonResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFB02227B4C12005B26AA /* UNIHTTPJsonResponse.m */; };
+		11FDFB5A227B4C12005B26AA /* UNIHTTPStringResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFB03227B4C12005B26AA /* UNIHTTPStringResponse.m */; };
+		11FDFB5B227B4C12005B26AA /* UNIHTTPStringResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFB03227B4C12005B26AA /* UNIHTTPStringResponse.m */; };
+		11FDFB5C227B4C12005B26AA /* UNISimpleRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 11FDFB04227B4C12005B26AA /* UNISimpleRequest.h */; };
+		11FDFB5D227B4C12005B26AA /* UNISimpleRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 11FDFB04227B4C12005B26AA /* UNISimpleRequest.h */; };
+		11FDFB5E227B4C12005B26AA /* UNIHTTPRequestWithBody.m in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFB05227B4C12005B26AA /* UNIHTTPRequestWithBody.m */; };
+		11FDFB5F227B4C12005B26AA /* UNIHTTPRequestWithBody.m in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFB05227B4C12005B26AA /* UNIHTTPRequestWithBody.m */; };
+		11FDFB60227B4C12005B26AA /* Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFB06227B4C12005B26AA /* Base64.m */; };
+		11FDFB61227B4C12005B26AA /* Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFB06227B4C12005B26AA /* Base64.m */; };
+		11FDFB62227B4C12005B26AA /* UNIBaseRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFB07227B4C12005B26AA /* UNIBaseRequest.m */; };
+		11FDFB63227B4C12005B26AA /* UNIBaseRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFB07227B4C12005B26AA /* UNIBaseRequest.m */; };
+		11FDFB64227B4C12005B26AA /* UNIUrlConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFB08227B4C12005B26AA /* UNIUrlConnection.m */; };
+		11FDFB65227B4C12005B26AA /* UNIUrlConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFB08227B4C12005B26AA /* UNIUrlConnection.m */; };
+		11FDFB66227B4C12005B26AA /* UNIRest.h in Headers */ = {isa = PBXBuildFile; fileRef = 11FDFB09227B4C12005B26AA /* UNIRest.h */; };
+		11FDFB67227B4C12005B26AA /* UNIRest.h in Headers */ = {isa = PBXBuildFile; fileRef = 11FDFB09227B4C12005B26AA /* UNIRest.h */; };
+		11FDFB68227B4C12005B26AA /* UNIHTTPClientHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 11FDFB0A227B4C12005B26AA /* UNIHTTPClientHelper.h */; };
+		11FDFB69227B4C12005B26AA /* UNIHTTPClientHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 11FDFB0A227B4C12005B26AA /* UNIHTTPClientHelper.h */; };
+		11FDFB6A227B4C12005B26AA /* UNIHTTPRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 11FDFB0B227B4C12005B26AA /* UNIHTTPRequest.h */; };
+		11FDFB6B227B4C12005B26AA /* UNIHTTPRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 11FDFB0B227B4C12005B26AA /* UNIHTTPRequest.h */; };
+		11FDFB6C227B4C12005B26AA /* UNIBodyRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 11FDFB0C227B4C12005B26AA /* UNIBodyRequest.h */; };
+		11FDFB6D227B4C12005B26AA /* UNIBodyRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 11FDFB0C227B4C12005B26AA /* UNIBodyRequest.h */; };
+		11FDFB6E227B4C12005B26AA /* UNIJsonNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 11FDFB0D227B4C12005B26AA /* UNIJsonNode.h */; };
+		11FDFB6F227B4C12005B26AA /* UNIJsonNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 11FDFB0D227B4C12005B26AA /* UNIJsonNode.h */; };
+		11FDFB70227B4C12005B26AA /* UNIHTTPResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFB0E227B4C12005B26AA /* UNIHTTPResponse.m */; };
+		11FDFB71227B4C12005B26AA /* UNIHTTPResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 11FDFB0E227B4C12005B26AA /* UNIHTTPResponse.m */; };
+		11FDFB75227B4C79005B26AA /* ElastosHiveSDK_macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 11FDFB73227B4C79005B26AA /* ElastosHiveSDK_macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5DC22C2DD37A99005316F5C6 /* Pods_ElastosHiveSDKTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DB068EABA0DB13AB595055A /* Pods_ElastosHiveSDKTests.framework */; };
 		A34724DC226B4A750049DBD4 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34724DB226B4A750049DBD4 /* Log.swift */; };
 		A34724DE226B4ABE0049DBD4 /* LogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34724DD226B4ABE0049DBD4 /* LogLevel.swift */; };
@@ -89,17 +190,63 @@
 /* Begin PBXFileReference section */
 		0DB068EABA0DB13AB595055A /* Pods_ElastosHiveSDKTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ElastosHiveSDKTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		115138FC2265DCDC00472FBE /* ElastosHiveSDK_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ElastosHiveSDK_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		115138FE2265DCDC00472FBE /* ElastosHiveSDK_macOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ElastosHiveSDK_macOS.h; sourceTree = "<group>"; };
-		115138FF2265DCDC00472FBE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1160624722696E3200BDCB9F /* OneDriveExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OneDriveExtension.swift; path = Vendors/OneDrive/OneDriveExtension.swift; sourceTree = "<group>"; };
 		1160624E22696E9500BDCB9F /* KeychainSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainSwift.swift; sourceTree = "<group>"; };
 		1160624F22696E9500BDCB9F /* TegKeychainConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TegKeychainConstants.swift; sourceTree = "<group>"; };
 		1160625022696E9500BDCB9F /* KeychainSwiftAccessOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainSwiftAccessOptions.swift; sourceTree = "<group>"; };
 		1160625722696EA500BDCB9F /* HelperMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HelperMethods.swift; path = Utils/HelperMethods.swift; sourceTree = "<group>"; };
-		13C6D592C180032E4F31BEF6 /* Pods-ElastosHiveSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDK.debug.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDK/Pods-ElastosHiveSDK.debug.xcconfig"; sourceTree = "<group>"; };
-		2368C8CBAE94193EAF7DB87D /* Pods-ElastosHiveSDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDKTests.debug.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDKTests/Pods-ElastosHiveSDKTests.debug.xcconfig"; sourceTree = "<group>"; };
-		6081910F0FC211291C05B08B /* Pods-ElastosHiveSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDK.release.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDK/Pods-ElastosHiveSDK.release.xcconfig"; sourceTree = "<group>"; };
-		A34724D8226B366A0049DBD4 /* ElastosHiveSDK-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ElastosHiveSDK-Bridging-Header.h"; sourceTree = "<group>"; };
+		11FDFADD227B4C12005B26AA /* DemoServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoServer.swift; sourceTree = "<group>"; };
+		11FDFADE227B4C12005B26AA /* Scopes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scopes.swift; sourceTree = "<group>"; };
+		11FDFADF227B4C12005B26AA /* WebSockets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebSockets.swift; sourceTree = "<group>"; };
+		11FDFAE0227B4C12005B26AA /* HttpServerIO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpServerIO.swift; sourceTree = "<group>"; };
+		11FDFAE1227B4C12005B26AA /* Process.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Process.swift; sourceTree = "<group>"; };
+		11FDFAE2227B4C12005B26AA /* Socket+Server.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Socket+Server.swift"; sourceTree = "<group>"; };
+		11FDFAE3227B4C12005B26AA /* String+SHA1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+SHA1.swift"; sourceTree = "<group>"; };
+		11FDFAE4227B4C12005B26AA /* String+File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+File.swift"; sourceTree = "<group>"; };
+		11FDFAE5227B4C12005B26AA /* Files.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Files.swift; sourceTree = "<group>"; };
+		11FDFAE6227B4C12005B26AA /* HttpRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpRequest.swift; sourceTree = "<group>"; };
+		11FDFAE7227B4C12005B26AA /* HttpResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpResponse.swift; sourceTree = "<group>"; };
+		11FDFAE8227B4C12005B26AA /* HttpServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpServer.swift; sourceTree = "<group>"; };
+		11FDFAE9227B4C12005B26AA /* Errno.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errno.swift; sourceTree = "<group>"; };
+		11FDFAEA227B4C12005B26AA /* Socket+File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Socket+File.swift"; sourceTree = "<group>"; };
+		11FDFAEB227B4C12005B26AA /* String+BASE64.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+BASE64.swift"; sourceTree = "<group>"; };
+		11FDFAEC227B4C12005B26AA /* String+Misc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Misc.swift"; sourceTree = "<group>"; };
+		11FDFAED227B4C12005B26AA /* HttpRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpRouter.swift; sourceTree = "<group>"; };
+		11FDFAEE227B4C12005B26AA /* HttpParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpParser.swift; sourceTree = "<group>"; };
+		11FDFAEF227B4C12005B26AA /* MimeTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MimeTypes.swift; sourceTree = "<group>"; };
+		11FDFAF0227B4C12005B26AA /* Socket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Socket.swift; sourceTree = "<group>"; };
+		11FDFAF2227B4C12005B26AA /* UNIHTTPJsonResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UNIHTTPJsonResponse.h; sourceTree = "<group>"; };
+		11FDFAF3227B4C12005B26AA /* UNIHTTPBinaryResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UNIHTTPBinaryResponse.h; sourceTree = "<group>"; };
+		11FDFAF4227B4C12005B26AA /* UNIBaseRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UNIBaseRequest.h; sourceTree = "<group>"; };
+		11FDFAF5227B4C12005B26AA /* UNIUrlConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UNIUrlConnection.h; sourceTree = "<group>"; };
+		11FDFAF6227B4C12005B26AA /* Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base64.h; sourceTree = "<group>"; };
+		11FDFAF7227B4C12005B26AA /* UNIHTTPRequestWithBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UNIHTTPRequestWithBody.h; sourceTree = "<group>"; };
+		11FDFAF8227B4C12005B26AA /* UNISimpleRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UNISimpleRequest.m; sourceTree = "<group>"; };
+		11FDFAF9227B4C12005B26AA /* UNIHTTPStringResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UNIHTTPStringResponse.h; sourceTree = "<group>"; };
+		11FDFAFA227B4C12005B26AA /* UNIJsonNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UNIJsonNode.m; sourceTree = "<group>"; };
+		11FDFAFB227B4C12005B26AA /* UNIBodyRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UNIBodyRequest.m; sourceTree = "<group>"; };
+		11FDFAFC227B4C12005B26AA /* Unirest-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Unirest-Prefix.pch"; sourceTree = "<group>"; };
+		11FDFAFD227B4C12005B26AA /* UNIHTTPRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UNIHTTPRequest.m; sourceTree = "<group>"; };
+		11FDFAFE227B4C12005B26AA /* UNIHTTPClientHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UNIHTTPClientHelper.m; sourceTree = "<group>"; };
+		11FDFAFF227B4C12005B26AA /* UNIRest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UNIRest.m; sourceTree = "<group>"; };
+		11FDFB00227B4C12005B26AA /* UNIHTTPResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UNIHTTPResponse.h; sourceTree = "<group>"; };
+		11FDFB01227B4C12005B26AA /* UNIHTTPBinaryResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UNIHTTPBinaryResponse.m; sourceTree = "<group>"; };
+		11FDFB02227B4C12005B26AA /* UNIHTTPJsonResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UNIHTTPJsonResponse.m; sourceTree = "<group>"; };
+		11FDFB03227B4C12005B26AA /* UNIHTTPStringResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UNIHTTPStringResponse.m; sourceTree = "<group>"; };
+		11FDFB04227B4C12005B26AA /* UNISimpleRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UNISimpleRequest.h; sourceTree = "<group>"; };
+		11FDFB05227B4C12005B26AA /* UNIHTTPRequestWithBody.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UNIHTTPRequestWithBody.m; sourceTree = "<group>"; };
+		11FDFB06227B4C12005B26AA /* Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Base64.m; sourceTree = "<group>"; };
+		11FDFB07227B4C12005B26AA /* UNIBaseRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UNIBaseRequest.m; sourceTree = "<group>"; };
+		11FDFB08227B4C12005B26AA /* UNIUrlConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UNIUrlConnection.m; sourceTree = "<group>"; };
+		11FDFB09227B4C12005B26AA /* UNIRest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UNIRest.h; sourceTree = "<group>"; };
+		11FDFB0A227B4C12005B26AA /* UNIHTTPClientHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UNIHTTPClientHelper.h; sourceTree = "<group>"; };
+		11FDFB0B227B4C12005B26AA /* UNIHTTPRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UNIHTTPRequest.h; sourceTree = "<group>"; };
+		11FDFB0C227B4C12005B26AA /* UNIBodyRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UNIBodyRequest.h; sourceTree = "<group>"; };
+		11FDFB0D227B4C12005B26AA /* UNIJsonNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UNIJsonNode.h; sourceTree = "<group>"; };
+		11FDFB0E227B4C12005B26AA /* UNIHTTPResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UNIHTTPResponse.m; sourceTree = "<group>"; };
+		11FDFB0F227B4C12005B26AA /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
+		11FDFB73227B4C79005B26AA /* ElastosHiveSDK_macOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ElastosHiveSDK_macOS.h; sourceTree = "<group>"; };
+		11FDFB74227B4C79005B26AA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A34724DB226B4A750049DBD4 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Log.swift; path = Utils/Log.swift; sourceTree = "<group>"; };
 		A34724DD226B4ABE0049DBD4 /* LogLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LogLevel.swift; path = Utils/LogLevel.swift; sourceTree = "<group>"; };
 		A3743AD4226570B200C9493E /* OneDriveParameters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OneDriveParameters.swift; path = Vendors/OneDrive/OneDriveParameters.swift; sourceTree = "<group>"; };
@@ -133,7 +280,6 @@
 		A39C49BE22539D3B0027BDF9 /* DropboxFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DropboxFile.swift; path = Vendors/DropBox/DropboxFile.swift; sourceTree = "<group>"; };
 		A39C49BF22539D3B0027BDF9 /* DropboxDrive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DropboxDrive.swift; path = Vendors/DropBox/DropboxDrive.swift; sourceTree = "<group>"; };
 		A3CC8DAA226D99FB00EE80D0 /* SimpleAuthServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SimpleAuthServer.swift; path = Vendors/OneDrive/SimpleAuthServer.swift; sourceTree = "<group>"; };
-		C228C56325B65D63A60C99C8 /* Pods-ElastosHiveSDKTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDKTests.release.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDKTests/Pods-ElastosHiveSDKTests.release.xcconfig"; sourceTree = "<group>"; };
 		D17AD36AC88E073FD2B2D930 /* Pods_ElastosHiveSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ElastosHiveSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -164,15 +310,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		115138FD2265DCDC00472FBE /* ElastosHiveSDK_macOS */ = {
-			isa = PBXGroup;
-			children = (
-				115138FE2265DCDC00472FBE /* ElastosHiveSDK_macOS.h */,
-				115138FF2265DCDC00472FBE /* Info.plist */,
-			);
-			path = ElastosHiveSDK_macOS;
-			sourceTree = "<group>";
-		};
 		1160624D22696E9500BDCB9F /* Keychain */ = {
 			isa = PBXGroup;
 			children = (
@@ -184,6 +321,88 @@
 			path = Utils/Keychain;
 			sourceTree = "<group>";
 		};
+		11FDFADB227B4C12005B26AA /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				11FDFADC227B4C12005B26AA /* Swifter */,
+				11FDFAF1227B4C12005B26AA /* Unirest */,
+				11FDFB0F227B4C12005B26AA /* module.modulemap */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		11FDFADC227B4C12005B26AA /* Swifter */ = {
+			isa = PBXGroup;
+			children = (
+				11FDFADD227B4C12005B26AA /* DemoServer.swift */,
+				11FDFADE227B4C12005B26AA /* Scopes.swift */,
+				11FDFADF227B4C12005B26AA /* WebSockets.swift */,
+				11FDFAE0227B4C12005B26AA /* HttpServerIO.swift */,
+				11FDFAE1227B4C12005B26AA /* Process.swift */,
+				11FDFAE2227B4C12005B26AA /* Socket+Server.swift */,
+				11FDFAE3227B4C12005B26AA /* String+SHA1.swift */,
+				11FDFAE4227B4C12005B26AA /* String+File.swift */,
+				11FDFAE5227B4C12005B26AA /* Files.swift */,
+				11FDFAE6227B4C12005B26AA /* HttpRequest.swift */,
+				11FDFAE7227B4C12005B26AA /* HttpResponse.swift */,
+				11FDFAE8227B4C12005B26AA /* HttpServer.swift */,
+				11FDFAE9227B4C12005B26AA /* Errno.swift */,
+				11FDFAEA227B4C12005B26AA /* Socket+File.swift */,
+				11FDFAEB227B4C12005B26AA /* String+BASE64.swift */,
+				11FDFAEC227B4C12005B26AA /* String+Misc.swift */,
+				11FDFAED227B4C12005B26AA /* HttpRouter.swift */,
+				11FDFAEE227B4C12005B26AA /* HttpParser.swift */,
+				11FDFAEF227B4C12005B26AA /* MimeTypes.swift */,
+				11FDFAF0227B4C12005B26AA /* Socket.swift */,
+			);
+			path = Swifter;
+			sourceTree = "<group>";
+		};
+		11FDFAF1227B4C12005B26AA /* Unirest */ = {
+			isa = PBXGroup;
+			children = (
+				11FDFAF2227B4C12005B26AA /* UNIHTTPJsonResponse.h */,
+				11FDFAF3227B4C12005B26AA /* UNIHTTPBinaryResponse.h */,
+				11FDFAF4227B4C12005B26AA /* UNIBaseRequest.h */,
+				11FDFAF5227B4C12005B26AA /* UNIUrlConnection.h */,
+				11FDFAF6227B4C12005B26AA /* Base64.h */,
+				11FDFAF7227B4C12005B26AA /* UNIHTTPRequestWithBody.h */,
+				11FDFAF8227B4C12005B26AA /* UNISimpleRequest.m */,
+				11FDFAF9227B4C12005B26AA /* UNIHTTPStringResponse.h */,
+				11FDFAFA227B4C12005B26AA /* UNIJsonNode.m */,
+				11FDFAFB227B4C12005B26AA /* UNIBodyRequest.m */,
+				11FDFAFC227B4C12005B26AA /* Unirest-Prefix.pch */,
+				11FDFAFD227B4C12005B26AA /* UNIHTTPRequest.m */,
+				11FDFAFE227B4C12005B26AA /* UNIHTTPClientHelper.m */,
+				11FDFAFF227B4C12005B26AA /* UNIRest.m */,
+				11FDFB00227B4C12005B26AA /* UNIHTTPResponse.h */,
+				11FDFB01227B4C12005B26AA /* UNIHTTPBinaryResponse.m */,
+				11FDFB02227B4C12005B26AA /* UNIHTTPJsonResponse.m */,
+				11FDFB03227B4C12005B26AA /* UNIHTTPStringResponse.m */,
+				11FDFB04227B4C12005B26AA /* UNISimpleRequest.h */,
+				11FDFB05227B4C12005B26AA /* UNIHTTPRequestWithBody.m */,
+				11FDFB06227B4C12005B26AA /* Base64.m */,
+				11FDFB07227B4C12005B26AA /* UNIBaseRequest.m */,
+				11FDFB08227B4C12005B26AA /* UNIUrlConnection.m */,
+				11FDFB09227B4C12005B26AA /* UNIRest.h */,
+				11FDFB0A227B4C12005B26AA /* UNIHTTPClientHelper.h */,
+				11FDFB0B227B4C12005B26AA /* UNIHTTPRequest.h */,
+				11FDFB0C227B4C12005B26AA /* UNIBodyRequest.h */,
+				11FDFB0D227B4C12005B26AA /* UNIJsonNode.h */,
+				11FDFB0E227B4C12005B26AA /* UNIHTTPResponse.m */,
+			);
+			path = Unirest;
+			sourceTree = "<group>";
+		};
+		11FDFB72227B4C79005B26AA /* ElastosHiveSDK_macOS */ = {
+			isa = PBXGroup;
+			children = (
+				11FDFB73227B4C79005B26AA /* ElastosHiveSDK_macOS.h */,
+				11FDFB74227B4C79005B26AA /* Info.plist */,
+			);
+			path = ElastosHiveSDK_macOS;
+			sourceTree = "<group>";
+		};
 		54606D10E83E614A3F17056C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -193,25 +412,13 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		873FCFD648761A208C564AD4 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				13C6D592C180032E4F31BEF6 /* Pods-ElastosHiveSDK.debug.xcconfig */,
-				6081910F0FC211291C05B08B /* Pods-ElastosHiveSDK.release.xcconfig */,
-				2368C8CBAE94193EAF7DB87D /* Pods-ElastosHiveSDKTests.debug.xcconfig */,
-				C228C56325B65D63A60C99C8 /* Pods-ElastosHiveSDKTests.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		A39C4965225399860027BDF9 = {
 			isa = PBXGroup;
 			children = (
 				A39C4971225399860027BDF9 /* ElastosHiveSDK */,
 				A39C497C225399860027BDF9 /* ElastosHiveSDKTests */,
-				115138FD2265DCDC00472FBE /* ElastosHiveSDK_macOS */,
 				A39C4970225399860027BDF9 /* Products */,
-				873FCFD648761A208C564AD4 /* Pods */,
+				11FDFB72227B4C79005B26AA /* ElastosHiveSDK_macOS */,
 				54606D10E83E614A3F17056C /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -229,13 +436,13 @@
 		A39C4971225399860027BDF9 /* ElastosHiveSDK */ = {
 			isa = PBXGroup;
 			children = (
+				11FDFADB227B4C12005B26AA /* Common */,
 				A39C499122539C880027BDF9 /* Vendors */,
 				A39C498F22539C6D0027BDF9 /* Utils */,
 				A39C498E22539C5E0027BDF9 /* Errors */,
 				A39C498D22539C560027BDF9 /* Core */,
 				A39C4972225399860027BDF9 /* ElastosHiveSDK.h */,
 				A39C4973225399860027BDF9 /* Info.plist */,
-				A34724D8226B366A0049DBD4 /* ElastosHiveSDK-Bridging-Header.h */,
 			);
 			path = ElastosHiveSDK;
 			sourceTree = "<group>";
@@ -346,8 +553,23 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				115139002265DCDC00472FBE /* ElastosHiveSDK_macOS.h in Headers */,
+				11FDFB75227B4C79005B26AA /* ElastosHiveSDK_macOS.h in Headers */,
+				11FDFB4D227B4C12005B26AA /* Unirest-Prefix.pch in Headers */,
+				11FDFB3B227B4C12005B26AA /* UNIHTTPBinaryResponse.h in Headers */,
+				11FDFB39227B4C12005B26AA /* UNIHTTPJsonResponse.h in Headers */,
+				11FDFB67227B4C12005B26AA /* UNIRest.h in Headers */,
+				11FDFB55227B4C12005B26AA /* UNIHTTPResponse.h in Headers */,
+				11FDFB47227B4C12005B26AA /* UNIHTTPStringResponse.h in Headers */,
+				11FDFB41227B4C12005B26AA /* Base64.h in Headers */,
+				11FDFB6B227B4C12005B26AA /* UNIHTTPRequest.h in Headers */,
+				11FDFB6D227B4C12005B26AA /* UNIBodyRequest.h in Headers */,
+				11FDFB3F227B4C12005B26AA /* UNIUrlConnection.h in Headers */,
+				11FDFB43227B4C12005B26AA /* UNIHTTPRequestWithBody.h in Headers */,
+				11FDFB69227B4C12005B26AA /* UNIHTTPClientHelper.h in Headers */,
+				11FDFB6F227B4C12005B26AA /* UNIJsonNode.h in Headers */,
 				115139212265DE2400472FBE /* ElastosHiveSDK.h in Headers */,
+				11FDFB3D227B4C12005B26AA /* UNIBaseRequest.h in Headers */,
+				11FDFB5D227B4C12005B26AA /* UNISimpleRequest.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -355,7 +577,22 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				11FDFB38227B4C12005B26AA /* UNIHTTPJsonResponse.h in Headers */,
+				11FDFB3A227B4C12005B26AA /* UNIHTTPBinaryResponse.h in Headers */,
+				11FDFB68227B4C12005B26AA /* UNIHTTPClientHelper.h in Headers */,
+				11FDFB54227B4C12005B26AA /* UNIHTTPResponse.h in Headers */,
+				11FDFB3C227B4C12005B26AA /* UNIBaseRequest.h in Headers */,
+				11FDFB40227B4C12005B26AA /* Base64.h in Headers */,
+				11FDFB66227B4C12005B26AA /* UNIRest.h in Headers */,
+				11FDFB5C227B4C12005B26AA /* UNISimpleRequest.h in Headers */,
 				A39C4980225399860027BDF9 /* ElastosHiveSDK.h in Headers */,
+				11FDFB6A227B4C12005B26AA /* UNIHTTPRequest.h in Headers */,
+				11FDFB4C227B4C12005B26AA /* Unirest-Prefix.pch in Headers */,
+				11FDFB42227B4C12005B26AA /* UNIHTTPRequestWithBody.h in Headers */,
+				11FDFB3E227B4C12005B26AA /* UNIUrlConnection.h in Headers */,
+				11FDFB6C227B4C12005B26AA /* UNIBodyRequest.h in Headers */,
+				11FDFB46227B4C12005B26AA /* UNIHTTPStringResponse.h in Headers */,
+				11FDFB6E227B4C12005B26AA /* UNIJsonNode.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -384,7 +621,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A39C4983225399860027BDF9 /* Build configuration list for PBXNativeTarget "ElastosHiveSDK" */;
 			buildPhases = (
-				73827CA57F0DF5767CA9E536 /* [CP] Check Pods Manifest.lock */,
 				A39C496A225399860027BDF9 /* Headers */,
 				A39C496B225399860027BDF9 /* Sources */,
 				A39C496C225399860027BDF9 /* Frameworks */,
@@ -484,28 +720,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		73827CA57F0DF5767CA9E536 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ElastosHiveSDK-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 		B9F278DFA5ED5E1135FEC240 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -535,20 +749,51 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				11FDFB33227B4C12005B26AA /* HttpParser.swift in Sources */,
 				1151390F2265DDE000472FBE /* OwnCloudFile.swift in Sources */,
 				1151391C2265DE1300472FBE /* DriveType.swift in Sources */,
+				11FDFB27227B4C12005B26AA /* HttpServer.swift in Sources */,
+				11FDFB1F227B4C12005B26AA /* String+File.swift in Sources */,
+				11FDFB2B227B4C12005B26AA /* Socket+File.swift in Sources */,
+				1193BE05227B53FA0019F77D /* Log.swift in Sources */,
 				115139122265DDEA00472FBE /* HiveIpfsFile.swift in Sources */,
+				11FDFB35227B4C12005B26AA /* MimeTypes.swift in Sources */,
+				11FDFB37227B4C12005B26AA /* Socket.swift in Sources */,
 				1160625622696E9500BDCB9F /* KeychainSwiftAccessOptions.swift in Sources */,
+				11FDFB23227B4C12005B26AA /* HttpRequest.swift in Sources */,
 				1160625922696EA500BDCB9F /* HelperMethods.swift in Sources */,
+				11FDFB15227B4C12005B26AA /* WebSockets.swift in Sources */,
 				1151390E2265DDDD00472FBE /* OwnCloudDrive.swift in Sources */,
+				11FDFB5B227B4C12005B26AA /* UNIHTTPStringResponse.m in Sources */,
+				11FDFB5F227B4C12005B26AA /* UNIHTTPRequestWithBody.m in Sources */,
+				11FDFB65227B4C12005B26AA /* UNIUrlConnection.m in Sources */,
+				11FDFB61227B4C12005B26AA /* Base64.m in Sources */,
+				11FDFB19227B4C12005B26AA /* Process.swift in Sources */,
+				11FDFB21227B4C12005B26AA /* Files.swift in Sources */,
 				1160625222696E9500BDCB9F /* KeychainSwift.swift in Sources */,
 				115139202265DE2100472FBE /* SdkVersion.swift in Sources */,
 				115139062265DDC400472FBE /* OneDrive.swift in Sources */,
+				11FDFB31227B4C12005B26AA /* HttpRouter.swift in Sources */,
 				115139182265DE0800472FBE /* AuthHelper.swift in Sources */,
 				115139172265DE0500472FBE /* Authenticator.swift in Sources */,
 				115139192265DE0B00472FBE /* AuthInfo.swift in Sources */,
+				11FDFB4F227B4C12005B26AA /* UNIHTTPRequest.m in Sources */,
+				11FDFB63227B4C12005B26AA /* UNIBaseRequest.m in Sources */,
 				1151391F2265DE1E00472FBE /* HiveFile.swift in Sources */,
+				11FDFB13227B4C12005B26AA /* Scopes.swift in Sources */,
+				11FDFB11227B4C12005B26AA /* DemoServer.swift in Sources */,
+				11FDFB53227B4C12005B26AA /* UNIRest.m in Sources */,
+				11FDFB45227B4C12005B26AA /* UNISimpleRequest.m in Sources */,
+				11FDFB25227B4C12005B26AA /* HttpResponse.swift in Sources */,
+				1193BE07227B541F0019F77D /* SimpleAuthServer.swift in Sources */,
+				11FDFB29227B4C12005B26AA /* Errno.swift in Sources */,
+				11FDFB59227B4C12005B26AA /* UNIHTTPJsonResponse.m in Sources */,
 				115139072265DDC700472FBE /* OneDriveAuthHelper.swift in Sources */,
+				11FDFB2F227B4C12005B26AA /* String+Misc.swift in Sources */,
+				11FDFB2D227B4C12005B26AA /* String+BASE64.swift in Sources */,
+				11FDFB57227B4C12005B26AA /* UNIHTTPBinaryResponse.m in Sources */,
+				11FDFB1B227B4C12005B26AA /* Socket+Server.swift in Sources */,
+				11FDFB1D227B4C12005B26AA /* String+SHA1.swift in Sources */,
 				115139042265DDB200472FBE /* OneDriveParameters.swift in Sources */,
 				115139052265DDB800472FBE /* OneDriveConstants.swift in Sources */,
 				1160625422696E9500BDCB9F /* TegKeychainConstants.swift in Sources */,
@@ -557,12 +802,18 @@
 				115139102265DDE400472FBE /* HiveIpfsParameters.swift in Sources */,
 				1151391E2265DE1B00472FBE /* HiveError.swift in Sources */,
 				1151390A2265DDD100472FBE /* DropBoxParameters.swift in Sources */,
+				11FDFB49227B4C12005B26AA /* UNIJsonNode.m in Sources */,
 				1160624922696E3200BDCB9F /* OneDriveExtension.swift in Sources */,
 				1151390B2265DDD400472FBE /* DropboxDrive.swift in Sources */,
 				115139112265DDE700472FBE /* HiveIpfsDrive.swift in Sources */,
 				115139132265DDF500472FBE /* IOUtil.swift in Sources */,
+				11FDFB71227B4C12005B26AA /* UNIHTTPResponse.m in Sources */,
+				1193BE06227B53FD0019F77D /* LogLevel.swift in Sources */,
 				1151391D2265DE1800472FBE /* HiveDrive.swift in Sources */,
+				11FDFB51227B4C12005B26AA /* UNIHTTPClientHelper.m in Sources */,
+				11FDFB17227B4C12005B26AA /* HttpServerIO.swift in Sources */,
 				1151390C2265DDD700472FBE /* DropboxFile.swift in Sources */,
+				11FDFB4B227B4C12005B26AA /* UNIBodyRequest.m in Sources */,
 				115139082265DDCA00472FBE /* OneDriveFile.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -572,35 +823,69 @@
 			buildActionMask = 2147483647;
 			files = (
 				A39C49B822539D040027BDF9 /* HiveIpfsFile.swift in Sources */,
+				11FDFB56227B4C12005B26AA /* UNIHTTPBinaryResponse.m in Sources */,
 				A34724DE226B4ABE0049DBD4 /* LogLevel.swift in Sources */,
 				A34724DC226B4A750049DBD4 /* Log.swift in Sources */,
 				A39C49A322539C9C0027BDF9 /* Authenticator.swift in Sources */,
+				11FDFB34227B4C12005B26AA /* MimeTypes.swift in Sources */,
 				A3CC8DAB226D99FC00EE80D0 /* SimpleAuthServer.swift in Sources */,
+				11FDFB60227B4C12005B26AA /* Base64.m in Sources */,
+				11FDFB48227B4C12005B26AA /* UNIJsonNode.m in Sources */,
+				11FDFB22227B4C12005B26AA /* HttpRequest.swift in Sources */,
+				11FDFB26227B4C12005B26AA /* HttpServer.swift in Sources */,
+				11FDFB70227B4C12005B26AA /* UNIHTTPResponse.m in Sources */,
 				1160625122696E9500BDCB9F /* KeychainSwift.swift in Sources */,
+				11FDFB32227B4C12005B26AA /* HttpParser.swift in Sources */,
 				A39C49BD22539D2E0027BDF9 /* OwnCloudDrive.swift in Sources */,
 				1160625822696EA500BDCB9F /* HelperMethods.swift in Sources */,
+				11FDFB2E227B4C12005B26AA /* String+Misc.swift in Sources */,
 				A3743ADB2265711A00C9493E /* DropBoxParameters.swift in Sources */,
 				1160624822696E3200BDCB9F /* OneDriveExtension.swift in Sources */,
+				11FDFB18227B4C12005B26AA /* Process.swift in Sources */,
+				11FDFB5A227B4C12005B26AA /* UNIHTTPStringResponse.m in Sources */,
+				11FDFB14227B4C12005B26AA /* WebSockets.swift in Sources */,
+				11FDFB52227B4C12005B26AA /* UNIRest.m in Sources */,
+				11FDFB4A227B4C12005B26AA /* UNIBodyRequest.m in Sources */,
 				A39C49A522539C9C0027BDF9 /* DriveType.swift in Sources */,
 				A39C49A122539C9C0027BDF9 /* SdkVersion.swift in Sources */,
+				11FDFB2C227B4C12005B26AA /* String+BASE64.swift in Sources */,
+				11FDFB50227B4C12005B26AA /* UNIHTTPClientHelper.m in Sources */,
+				11FDFB36227B4C12005B26AA /* Socket.swift in Sources */,
+				11FDFB1E227B4C12005B26AA /* String+File.swift in Sources */,
+				11FDFB4E227B4C12005B26AA /* UNIHTTPRequest.m in Sources */,
 				A3743ADD2265743400C9493E /* OneDriveConstants.swift in Sources */,
 				A3743AD72265710000C9493E /* HiveIpfsParameters.swift in Sources */,
 				A39C49A222539C9C0027BDF9 /* DriveParameters.swift in Sources */,
 				A39C49C122539D3B0027BDF9 /* DropboxDrive.swift in Sources */,
+				11FDFB24227B4C12005B26AA /* HttpResponse.swift in Sources */,
 				A39C499F22539C9C0027BDF9 /* HiveFile.swift in Sources */,
 				A39C49A022539C9C0027BDF9 /* HiveDrive.swift in Sources */,
+				11FDFB12227B4C12005B26AA /* Scopes.swift in Sources */,
+				11FDFB30227B4C12005B26AA /* HttpRouter.swift in Sources */,
+				11FDFB28227B4C12005B26AA /* Errno.swift in Sources */,
 				A39C499C22539C9C0027BDF9 /* AuthInfo.swift in Sources */,
 				A39C49B922539D040027BDF9 /* HiveIpfsDrive.swift in Sources */,
 				A39C49B222539CD10027BDF9 /* OneDriveFile.swift in Sources */,
 				A39C49C022539D3B0027BDF9 /* DropboxFile.swift in Sources */,
+				11FDFB1C227B4C12005B26AA /* String+SHA1.swift in Sources */,
+				11FDFB16227B4C12005B26AA /* HttpServerIO.swift in Sources */,
 				1160625522696E9500BDCB9F /* KeychainSwiftAccessOptions.swift in Sources */,
+				11FDFB5E227B4C12005B26AA /* UNIHTTPRequestWithBody.m in Sources */,
 				A39C49AB22539CB90027BDF9 /* IOUtil.swift in Sources */,
 				A39C499E22539C9C0027BDF9 /* HiveError.swift in Sources */,
 				A39C49A422539C9C0027BDF9 /* AuthHelper.swift in Sources */,
 				A39C49B122539CD10027BDF9 /* OneDriveAuthHelper.swift in Sources */,
+				11FDFB58227B4C12005B26AA /* UNIHTTPJsonResponse.m in Sources */,
+				11FDFB20227B4C12005B26AA /* Files.swift in Sources */,
+				11FDFB64227B4C12005B26AA /* UNIUrlConnection.m in Sources */,
+				11FDFB44227B4C12005B26AA /* UNISimpleRequest.m in Sources */,
+				11FDFB2A227B4C12005B26AA /* Socket+File.swift in Sources */,
 				A39C49BC22539D2E0027BDF9 /* OwnCloudFile.swift in Sources */,
+				11FDFB10227B4C12005B26AA /* DemoServer.swift in Sources */,
 				A39C49B022539CD10027BDF9 /* OneDrive.swift in Sources */,
+				11FDFB62227B4C12005B26AA /* UNIBaseRequest.m in Sources */,
 				A3743AD5226570B200C9493E /* OneDriveParameters.swift in Sources */,
+				11FDFB1A227B4C12005B26AA /* Socket+Server.swift in Sources */,
 				1160625322696E9500BDCB9F /* TegKeychainConstants.swift in Sources */,
 				A3743AD92265710B00C9493E /* OwnCloudParameters.swift in Sources */,
 			);
@@ -628,6 +913,7 @@
 		115139022265DCDC00472FBE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -644,11 +930,12 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = org.elastos.hivesdk;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/ElastosHiveSDK/Common";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -656,6 +943,7 @@
 		115139032265DCDC00472FBE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -672,11 +960,12 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = org.elastos.hivesdk;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/ElastosHiveSDK/Common";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -805,7 +1094,6 @@
 		};
 		A39C4984225399860027BDF9 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 13C6D592C180032E4F31BEF6 /* Pods-ElastosHiveSDK.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;
@@ -826,6 +1114,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.elastos.hivesdk;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/ElastosHiveSDK/Common";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -835,7 +1124,6 @@
 		};
 		A39C4985225399860027BDF9 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6081910F0FC211291C05B08B /* Pods-ElastosHiveSDK.release.xcconfig */;
 			buildSettings = {
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;
@@ -856,6 +1144,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.elastos.hivesdk;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/ElastosHiveSDK/Common";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -864,7 +1153,6 @@
 		};
 		A39C4987225399860027BDF9 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2368C8CBAE94193EAF7DB87D /* Pods-ElastosHiveSDKTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -883,7 +1171,6 @@
 		};
 		A39C4988225399860027BDF9 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C228C56325B65D63A60C99C8 /* Pods-ElastosHiveSDKTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;

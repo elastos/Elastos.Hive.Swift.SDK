@@ -1,5 +1,5 @@
 import Foundation
-import Unirest
+import UNIRest
 
 @objc(OneDriveFile)
 internal class OneDriveFile: HiveFileHandle {
