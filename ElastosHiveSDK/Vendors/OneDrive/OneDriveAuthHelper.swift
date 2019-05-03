@@ -99,7 +99,7 @@ internal class OneDriveAuthHelper: AuthHelper {
     }
     
     private func refreshAccessToken(_ hiveError: @escaping (_ error: HiveError?) -> Void) {
-        let scope = ["Files.ReadWrite.All","offline_access"].joined(separator: " ")
+        let scope = ["Files.ReadWrite","offline_access"].joined(separator: " ")
         let refreshToken = HelperMethods.getKeychain(KEYCHAIN_REFRESH_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
         let params: Dictionary<String, Any> = ["client_id": clientId ?? "",
                                                "refresh_token": refreshToken,
@@ -162,6 +162,8 @@ internal class OneDriveAuthHelper: AuthHelper {
                 errorHandler(error)
             }
         }
-        errorHandler(nil)
+        else {
+               errorHandler(nil)
+        }
     }
 }
