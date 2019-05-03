@@ -29,10 +29,13 @@ internal class OneDriveFile: HiveFileHandle {
     override func updateDateTime(withValue newValue: String) {
         oneDrive?.authHeperHandle.checkExpired({ (error) in
             if (error != nil) {
-//                resultHandler(nil, error)
                 return
             }
-            let url = "\(ONEDRIVE_RESTFUL_URL)/items/\(self.id!)"
+            if self.pathName == nil {
+                return
+            }
+            let path = self.pathName!.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+            let url = "\(ONEDRIVE_RESTFUL_URL)\(ONEDRIVE_ROOTDIR):/\(path)"
             let accesstoken = HelperMethods.getKeychain(KEYCHAIN_ACCESS_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
             let params: Dictionary<String, Any> = ["lastModifiedDateTime": newValue]
 
@@ -42,9 +45,7 @@ internal class OneDriveFile: HiveFileHandle {
                 request?.body = try? JSONSerialization.data(withJSONObject: params, options: .prettyPrinted)
                 }?.asJsonAsync({ (response, error) in
                     if response?.code == 200 {
-                        print(response?.body.jsonObject())
                     }else {
-                        print(response?.body.jsonObject())
                     }
                 })
 
@@ -98,56 +99,7 @@ internal class OneDriveFile: HiveFileHandle {
     }
 
     override func copyFileTo(newFile: HiveFileHandle, withResult: @escaping HiveResultHandler) throws {
-        oneDrive?.authHeperHandle.checkExpired({ (error) in
-            if (error != nil) {
-                withResult(nil, error)
-                return
-            }
-            if self.pathName == nil {
-                withResult(false, .failue(des: "Illegal Argument."))
-            }
-            if self.pathName == "/" {
-                withResult(false, .failue(des: "This is root file"))
-            }
-            let parPath = self.parentPathName()
-            if newFile.isEqual(parPath) {
-                withResult(false, .failue(des: "This file has been existed at the folder: \(newFile)"))
-            }
-            // todo judge throw
-            guard self.driveId != nil else {
-                withResult(false, .failue(des: "Illegal Argument."))
-                return
-            }
-            var url = ONEDRIVE_RESTFUL_URL + "/items/\(self.driveId!)/copy"
-            if newFile.isEqual("/") {
-                url = ONEDRIVE_RESTFUL_URL + "/copy"
-            }
-
-            let components: [String] = (newFile.pathName?.components(separatedBy: "/"))!
-            let name = components.last
-            var error: NSError?
-            let index = self.pathName!.range(of: "/", options: .backwards)?.lowerBound
-            let parentPathname = index.map(self.pathName!.substring(to:)) ?? ""
-            let name = parentPathname
-            let driveId = self.oneDrive?.driveId
-            let accesstoken = HelperMethods.getKeychain(KEYCHAIN_ACCESS_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
-            let params: Dictionary<String, Any> = ["parentReference" : ["driveId": driveId!, "id": driveId],
-                                                   "name" : name]
-            let globalQueue = DispatchQueue.global()
-            globalQueue.async {
-                let response = UNIRest.postEntity { (request) in
-                    request?.url = url
-                    request?.headers = ["Content-Type": "application/json;charset=UTF-8", HTTP_HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
-                    request?.body = try? JSONSerialization.data(withJSONObject: params)
-                    request?.url = url
-                    }?.asJson(&error)
-                if response?.code == 202 {
-                    withResult(true, nil)
-                }else {
-                    withResult(false, .failue(des: "Invoking the copyTo has error."))
-                }
-            }
-        })
+        // todo
     }
 
     override func renameFileTo(newPath: String, withResult: @escaping HiveResultHandler) throws {
@@ -156,28 +108,31 @@ internal class OneDriveFile: HiveFileHandle {
                 withResult(nil, error)
                 return
             }
-            if self.id == nil {
+            if self.pathName == nil {
                 withResult(false, .failue(des: "Illegal Argument."))
                 return
             }
             if self.pathName == "/" {
                 withResult(false, .failue(des: "This is root file"))
             }
-            let url = "\(ONEDRIVE_RESTFUL_URL)/items/\(self.id!)"
+            let path = self.pathName!.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+            let components: [String] = (newPath.components(separatedBy: "/"))
+            let name = components.last
+            let url = "\(ONEDRIVE_RESTFUL_URL)\(ONEDRIVE_ROOTDIR):/\(path)"
             let accesstoken = HelperMethods.getKeychain(KEYCHAIN_ACCESS_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
-            let params: Dictionary<String, Any> = ["name": newPath]
+            let params: Dictionary<String, Any> = ["name": name as Any]
 
-                UNIRest.patchEntity { (request) in
-                    request?.url = url
-                    request?.headers = ["Content-Type": "application/json;charset=UTF-8", HTTP_HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
-                    request?.body = try? JSONSerialization.data(withJSONObject: params, options: .prettyPrinted)
-                    }?.asJsonAsync({ (response, error) in
-                        if response?.code == 200 {
-                            withResult(true, nil)
-                        }else {
-                            withResult(false, .failue(des: "Invoking the rename has error."))
-                        }
-                    })
+            UNIRest.patchEntity { (request) in
+                request?.url = url
+                request?.headers = ["Content-Type": "application/json;charset=UTF-8", HTTP_HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
+                request?.body = try? JSONSerialization.data(withJSONObject: params, options: .prettyPrinted)
+                }?.asJsonAsync({ (response, error) in
+                    if response?.code == 200 {
+                        withResult(true, nil)
+                    }else {
+                        withResult(false, .failue(des: "Invoking the rename has error."))
+                    }
+                })
         })
     }
 
@@ -191,14 +146,15 @@ internal class OneDriveFile: HiveFileHandle {
                 withResult(nil, error)
                 return
             }
-            guard self.id != nil else {
+            guard self.pathName != nil else {
                 withResult(false, .failue(des: "Illegal Argument."))
                 return
             }
             let globalQueue = DispatchQueue.global()
             globalQueue.async {
                 var error: NSError?
-                let url: String = ONEDRIVE_RESTFUL_URL + "/items/\(self.id!)"
+                let path = self.pathName!.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+                let url: String = "\(ONEDRIVE_RESTFUL_URL)\(ONEDRIVE_ROOTDIR):/\(path)"
                 let accesstoken = HelperMethods.getKeychain(KEYCHAIN_ACCESS_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
                 let response = UNIRest.delete { (request) in
                     request?.url = url
@@ -231,7 +187,8 @@ internal class OneDriveFile: HiveFileHandle {
                 withResult(nil, .failue(des: "Illegal Argument."))
                 return
             }
-            let url = ONEDRIVE_RESTFUL_URL + "/items/\(self.id!)/children"
+            let path = self.pathName!.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+            let url = "\(ONEDRIVE_RESTFUL_URL)\(ONEDRIVE_ROOTDIR):/\(path):/children"
             let accesstoken = HelperMethods.getKeychain(KEYCHAIN_ACCESS_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
             UNIRest.get { (request) in
                 request?.url = url
@@ -274,6 +231,7 @@ internal class OneDriveFile: HiveFileHandle {
                         let end = fullPath.index(fullPath.endIndex, offsetBy: -1)
                         driveFile.parentPath = String(fullPath[..<end])
                         driveFile.pathName = "items/\(ID)"
+                        driveFile.name = (jsonData!["name"] as? String)
                         if driveFile.parentId == nil {
                             driveFile.pathName = "/"
                         }
@@ -293,13 +251,14 @@ internal class OneDriveFile: HiveFileHandle {
             if self.isDirectory == false {
                 withResult(nil, .failue(des: "This is a file, can't create a child folder."))
             }
-            if self.id == nil {
-                withResult(nil, .failue(des: "Illegal Argument."))
-            }
-            let ID: String = self.id!
-            let url: String = "\(ONEDRIVE_RESTFUL_URL)/items/\(ID)/children"
+            let components: [String] = (pathname.components(separatedBy: "/"))
+            let name = components.last
+            let index = pathname.range(of: "/", options: .backwards)?.lowerBound
+            let path_0 = index.map(pathname.substring(to:)) ?? ""
+            let path = path_0.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+            let url = "\(ONEDRIVE_RESTFUL_URL)\(ONEDRIVE_ROOTDIR):/\(path):/children"
             let accesstoken = HelperMethods.getKeychain(KEYCHAIN_ACCESS_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
-            let params: Dictionary<String, Any> = ["name": pathname,
+            let params: Dictionary<String, Any> = ["name": name as Any,
                                                    "folder": [: ],
                                                    "@microsoft.graph.conflictBehavior": "rename"]
             UNIRest.postEntity { (request) in
@@ -334,6 +293,7 @@ internal class OneDriveFile: HiveFileHandle {
                     let end = fullPath.index(fullPath.endIndex, offsetBy: -1)
                     driveFile.parentPath = String(fullPath[..<end])
                     driveFile.pathName = "items/\(ID)"
+                    driveFile.name = (jsonData!["name"] as? String)
                     if driveFile.parentId == nil {
                         driveFile.pathName = "/"
                     }

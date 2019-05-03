@@ -92,6 +92,7 @@ internal class OneDrive: HiveDriveHandle {
                     driveFile.parentPath = String(full[..<end])
                 }
                 driveFile.pathName =  "/"
+                driveFile.name = (jsonData!["name"] as? String)
                 driveFile.oneDrive = self
                 resultHandler(driveFile, nil)
             })
@@ -109,12 +110,17 @@ internal class OneDrive: HiveDriveHandle {
                 withResult(nil, error)
                 return
             }
+            let components: [String] = (atPath.components(separatedBy: "/"))
+            let name = components.last
+            let index = atPath.range(of: "/", options: .backwards)?.lowerBound
+            let path_0 = index.map(atPath.substring(to:)) ?? ""
+            let path = path_0.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let accesstoken = HelperMethods.getKeychain(KEYCHAIN_ACCESS_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
-            let params: Dictionary<String, Any> = ["name": "New Folder",
+            let params: Dictionary<String, Any> = ["name": name as Any,
                                                    "folder": [: ],
                                                    "@microsoft.graph.conflictBehavior": "rename"]
             UNIRest.postEntity { (request) in
-                request?.url = "\(ONEDRIVE_RESTFUL_URL)/items/\(atPath)/children"
+                request?.url = "\(ONEDRIVE_RESTFUL_URL)\(ONEDRIVE_ROOTDIR):/\(path):/children"
                 request?.headers = ["Content-Type": "application/json;charset=UTF-8", HTTP_HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
                 request?.body = try? JSONSerialization.data(withJSONObject: params)
                 }?.asJsonAsync({ (response, error) in
@@ -122,7 +128,6 @@ internal class OneDrive: HiveDriveHandle {
                         withResult(nil, .jsonFailue(des: (response?.body.jsonObject())!))
                         return
                     }
-                    // TODO  judje
                     let jsonData = response?.body.jsonObject() as? Dictionary<String, Any>
                     if jsonData == nil || jsonData!.isEmpty {
                         withResult(nil, nil)
@@ -131,6 +136,7 @@ internal class OneDrive: HiveDriveHandle {
                     driveFile.drive = self
                     driveFile.oneDrive = self
                     driveFile.pathName =  atPath
+                    driveFile.name = (jsonData!["name"] as? String)
                     let folder = jsonData!["folder"]
                     if folder != nil {
                         driveFile.isDirectory = true
@@ -182,7 +188,6 @@ internal class OneDrive: HiveDriveHandle {
                     if jsonData == nil || jsonData!.isEmpty {
                         withResult(nil, nil)
                     }
-                    print("response===\(response?.body.jsonObject())")
                     let oneDriveFile: OneDriveFile = OneDriveFile()
                     oneDriveFile.drive = self
                     oneDriveFile.oneDrive = self
@@ -235,11 +240,6 @@ internal class OneDrive: HiveDriveHandle {
                     resultHandler(nil, .jsonFailue(des: (response?.body.jsonObject())!))
                     return
                 }
-                // todo jude
-                //            let id = response?.body.jsonObject()["id"]
-                //            if id == nil {
-                //                resultHandler(nil, .failue(des: "pathname is invalid path"))
-                //            }
                 let jsonData = response?.body.jsonObject() as? Dictionary<String, Any>
                 if jsonData == nil || jsonData!.isEmpty {
                     resultHandler(nil, nil)
@@ -248,6 +248,7 @@ internal class OneDrive: HiveDriveHandle {
                 driveFile.drive = self
                 driveFile.oneDrive = self
                 driveFile.pathName =  atPath
+                driveFile.name = (jsonData!["name"] as? String)
                 let folder = jsonData!["folder"]
                 if folder != nil {
                     driveFile.isDirectory = true

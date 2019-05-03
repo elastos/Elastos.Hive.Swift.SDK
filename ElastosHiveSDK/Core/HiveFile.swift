@@ -11,6 +11,7 @@ public class HiveFileHandle: NSObject {
     public var isDirectory: Bool?
     public var id: String?
     public var pathName: String?
+    public var name: String?
     public var rootPath: String?
     public var parentId: String?
     public var parentPath: String?
