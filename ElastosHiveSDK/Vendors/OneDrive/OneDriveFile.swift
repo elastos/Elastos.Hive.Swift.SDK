@@ -118,9 +118,7 @@ internal class OneDriveFile: HiveFileHandle {
                 withResult(false, .failue(des: "Illegal Argument."))
                 return
             }
-//            var url = ONEDRIVE_RESTFUL_URL + "/items/\(newFile.id!)/copy"
-            let path = self.pathName!.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-            var url = "\(ONEDRIVE_RESTFUL_URL)\(ONEDRIVE_ROOTDIR):/\(path):/copy"
+            var url = ONEDRIVE_RESTFUL_URL + "/items/\(self.driveId!)/copy"
             if newFile.isEqual("/") {
                 url = ONEDRIVE_RESTFUL_URL + "/copy"
             }
@@ -128,12 +126,17 @@ internal class OneDriveFile: HiveFileHandle {
             let components: [String] = (newFile.pathName?.components(separatedBy: "/"))!
             let name = components.last
             var error: NSError?
+            let index = self.pathName!.range(of: "/", options: .backwards)?.lowerBound
+            let parentPathname = index.map(self.pathName!.substring(to:)) ?? ""
+            let name = parentPathname
+            let driveId = self.oneDrive?.driveId
             let accesstoken = HelperMethods.getKeychain(KEYCHAIN_ACCESS_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
-            let params: Dictionary<String, Any> = ["parentReference": ["path": newFile.parentReference!["path"]! as Any],
-                                                   "name": name! as Any]
+            let params: Dictionary<String, Any> = ["parentReference" : ["driveId": driveId!, "id": driveId],
+                                                   "name" : name]
             let globalQueue = DispatchQueue.global()
             globalQueue.async {
                 let response = UNIRest.postEntity { (request) in
+                    request?.url = url
                     request?.headers = ["Content-Type": "application/json;charset=UTF-8", HTTP_HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
                     request?.body = try? JSONSerialization.data(withJSONObject: params)
                     request?.url = url
