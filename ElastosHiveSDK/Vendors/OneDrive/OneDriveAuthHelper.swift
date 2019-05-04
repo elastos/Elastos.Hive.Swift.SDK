@@ -38,6 +38,9 @@ internal class OneDriveAuthHelper: AuthHelper {
                 self.server.stop()
             }
         }
+        else{
+            resultHandler(true, nil)
+        }
     }
 
     func logout(_ resultHandler: @escaping HiveResultHandler) {
@@ -51,7 +54,6 @@ internal class OneDriveAuthHelper: AuthHelper {
             resultHandler(true, nil)
         })
     }
-
 
     private func acquireAuthorizationCode(_ authHandler: @escaping (_ authCode: String?, _ error: HiveError?) -> Void) {
         server.startRun(44316)
