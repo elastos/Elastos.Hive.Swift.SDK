@@ -180,7 +180,7 @@ internal class OneDrive: HiveDriveHandle {
                 request?.url = "\(ONEDRIVE_RESTFUL_URL)\(ONEDRIVE_ROOTDIR):/\(atPath):/content"
                 request?.headers = ["Content-Type": "application/json;charset=UTF-8", HTTP_HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
                 }?.asJsonAsync({ (response, error) in
-                    if response?.code != 200 {
+                    if response?.code != 201 {
                         withResult(nil, .jsonFailue(des: (response?.body.jsonObject())!))
                         return
                     }
@@ -189,9 +189,13 @@ internal class OneDrive: HiveDriveHandle {
                         withResult(nil, nil)
                     }
                     let oneDriveFile: OneDriveFile = OneDriveFile()
-                    oneDriveFile.drive = self
-                    oneDriveFile.oneDrive = self
+                    let folder = (jsonData!["folder"] as? String)
+                    if folder != nil {
+                        oneDriveFile.isDirectory = true
+                        oneDriveFile.isFile = false
+                    }
                     oneDriveFile.pathName =  atPath
+                    oneDriveFile.name = (jsonData!["name"] as? String)
                     oneDriveFile.isDirectory = true
                     oneDriveFile.isFile = false
                     oneDriveFile.createdDateTime = (jsonData!["createdDateTime"] as? String)
