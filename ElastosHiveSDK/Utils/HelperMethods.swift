@@ -26,7 +26,7 @@ class HelperMethods {
 
     class func checkIsExpired(_ timeStemp: String) -> Bool {
         let currentTime = getCurrentTime()
-        return currentTime < timeStemp;
+        return currentTime > timeStemp;
     }
 
     class func getKeychain(_ key: String, _ account: String) -> String? {

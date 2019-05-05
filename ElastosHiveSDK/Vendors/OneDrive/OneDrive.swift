@@ -80,6 +80,7 @@ internal class OneDrive: HiveDriveHandle {
                 driveFile.id = (jsonData!["id"] as? String)
                 driveFile.rootPath = "/root"
                 let sub = jsonData!["parentReference"] as? NSDictionary
+                driveFile.parentReference = (sub as! Dictionary<AnyHashable, Any>)
                 if (sub != nil) {
                     driveFile.driveId = (sub!["driveId"] as? String)
                     driveFile.parentId = (sub!["id"] as? String)
@@ -91,6 +92,7 @@ internal class OneDrive: HiveDriveHandle {
                     driveFile.parentPath = String(full[..<end])
                 }
                 driveFile.pathName =  "/"
+                driveFile.name = (jsonData!["name"] as? String)
                 driveFile.oneDrive = self
                 resultHandler(driveFile, nil)
             })
@@ -108,12 +110,17 @@ internal class OneDrive: HiveDriveHandle {
                 withResult(nil, error)
                 return
             }
+            let components: [String] = (atPath.components(separatedBy: "/"))
+            let name = components.last
+            let index = atPath.range(of: "/", options: .backwards)?.lowerBound
+            let path_0 = index.map(atPath.substring(to:)) ?? ""
+            let path = path_0.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let accesstoken = HelperMethods.getKeychain(KEYCHAIN_ACCESS_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
-            let params: Dictionary<String, Any> = ["name": "New Folder",
+            let params: Dictionary<String, Any> = ["name": name as Any,
                                                    "folder": [: ],
                                                    "@microsoft.graph.conflictBehavior": "rename"]
             UNIRest.postEntity { (request) in
-                request?.url = "\(ONEDRIVE_RESTFUL_URL)/items/\(atPath)/children"
+                request?.url = "\(ONEDRIVE_RESTFUL_URL)\(ONEDRIVE_ROOTDIR):/\(path):/children"
                 request?.headers = ["Content-Type": "application/json;charset=UTF-8", HTTP_HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
                 request?.body = try? JSONSerialization.data(withJSONObject: params)
                 }?.asJsonAsync({ (response, error) in
@@ -121,7 +128,6 @@ internal class OneDrive: HiveDriveHandle {
                         withResult(nil, .jsonFailue(des: (response?.body.jsonObject())!))
                         return
                     }
-                    // TODO  judje
                     let jsonData = response?.body.jsonObject() as? Dictionary<String, Any>
                     if jsonData == nil || jsonData!.isEmpty {
                         withResult(nil, nil)
@@ -130,6 +136,7 @@ internal class OneDrive: HiveDriveHandle {
                     driveFile.drive = self
                     driveFile.oneDrive = self
                     driveFile.pathName =  atPath
+                    driveFile.name = (jsonData!["name"] as? String)
                     let folder = jsonData!["folder"]
                     if folder != nil {
                         driveFile.isDirectory = true
@@ -141,6 +148,7 @@ internal class OneDrive: HiveDriveHandle {
                     driveFile.id = (jsonData!["id"] as? String)
                     driveFile.rootPath = ONEDRIVE_RESTFUL_URL + "/root"
                     let sub = jsonData!["parentReference"] as? NSDictionary
+                    driveFile.parentReference = (sub as! Dictionary<AnyHashable, Any>)
                     if (sub != nil) {
                         driveFile.driveId = (sub!["driveId"] as? String)
                         driveFile.parentId = (sub!["id"] as? String)
@@ -152,6 +160,58 @@ internal class OneDrive: HiveDriveHandle {
                         driveFile.parentPath = String(full[..<end])
                     }
                     withResult(driveFile, nil)
+                })
+        }
+    }
+
+    override func createFile(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
+        if authHeperHandle.authInfo == nil {
+            print("Please login first")
+            withResult(nil, .failue(des: "Please login first"))
+            return
+        }
+        authHeperHandle.checkExpired { (error) in
+            if (error != nil) {
+                withResult(nil, error)
+                return
+            }
+            let accesstoken = HelperMethods.getKeychain(KEYCHAIN_ACCESS_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
+            UNIRest.putEntity { (request) in
+                request?.url = "\(ONEDRIVE_RESTFUL_URL)\(ONEDRIVE_ROOTDIR):/\(atPath):/content"
+                request?.headers = ["Content-Type": "application/json;charset=UTF-8", HTTP_HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
+                }?.asJsonAsync({ (response, error) in
+                    if response?.code != 200 {
+                        withResult(nil, .jsonFailue(des: (response?.body.jsonObject())!))
+                        return
+                    }
+                    let jsonData = response?.body.jsonObject() as? Dictionary<String, Any>
+                    if jsonData == nil || jsonData!.isEmpty {
+                        withResult(nil, nil)
+                    }
+                    let oneDriveFile: OneDriveFile = OneDriveFile()
+                    oneDriveFile.drive = self
+                    oneDriveFile.oneDrive = self
+                    oneDriveFile.pathName =  atPath
+                    oneDriveFile.isDirectory = true
+                    oneDriveFile.isFile = false
+                    oneDriveFile.createdDateTime = (jsonData!["createdDateTime"] as? String)
+                    oneDriveFile.lastModifiedDateTime = (jsonData!["lastModifiedDateTime"] as? String)
+                    oneDriveFile.fileSystemInfo = (jsonData!["fileSystemInfo"] as? Dictionary)
+                    oneDriveFile.id = (jsonData!["id"] as? String)
+                    oneDriveFile.rootPath = ONEDRIVE_RESTFUL_URL + ONEDRIVE_ROOTDIR
+                    let sub = jsonData!["parentReference"] as? NSDictionary
+                    oneDriveFile.parentReference = (sub as! Dictionary<AnyHashable, Any>)
+                    if (sub != nil) {
+                        oneDriveFile.driveId = (sub!["driveId"] as? String)
+                        oneDriveFile.parentId = (sub!["id"] as? String)
+                    }
+                    let fullPath = sub!["path"]
+                    if (fullPath != nil) {
+                        let full = fullPath as!String
+                        let end = full.index(full.endIndex, offsetBy: -1)
+                        oneDriveFile.parentPath = String(full[..<end])
+                    }
+                    withResult(oneDriveFile, nil)
                 })
         }
     }
@@ -180,11 +240,6 @@ internal class OneDrive: HiveDriveHandle {
                     resultHandler(nil, .jsonFailue(des: (response?.body.jsonObject())!))
                     return
                 }
-                // todo jude
-                //            let id = response?.body.jsonObject()["id"]
-                //            if id == nil {
-                //                resultHandler(nil, .failue(des: "pathname is invalid path"))
-                //            }
                 let jsonData = response?.body.jsonObject() as? Dictionary<String, Any>
                 if jsonData == nil || jsonData!.isEmpty {
                     resultHandler(nil, nil)
@@ -193,6 +248,7 @@ internal class OneDrive: HiveDriveHandle {
                 driveFile.drive = self
                 driveFile.oneDrive = self
                 driveFile.pathName =  atPath
+                driveFile.name = (jsonData!["name"] as? String)
                 let folder = jsonData!["folder"]
                 if folder != nil {
                     driveFile.isDirectory = true
@@ -204,6 +260,7 @@ internal class OneDrive: HiveDriveHandle {
                 driveFile.id = (jsonData!["id"] as? String)
                 driveFile.rootPath = ONEDRIVE_RESTFUL_URL + ONEDRIVE_ROOTDIR
                 let sub = jsonData!["parentReference"] as? NSDictionary
+                driveFile.parentReference = (sub as! Dictionary<AnyHashable, Any>)
                 if (sub != nil) {
                     driveFile.driveId = (sub!["driveId"] as? String)
                     driveFile.parentId = (sub!["id"] as? String)
