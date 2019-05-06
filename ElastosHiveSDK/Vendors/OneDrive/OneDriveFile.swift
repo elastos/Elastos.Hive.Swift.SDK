@@ -11,7 +11,7 @@ internal class OneDriveFile: HiveFileHandle {
         }
 
         let index = pathName!.range(of: "/", options: .backwards)?.lowerBound
-        let parentPathname = index.map(pathName!.substring(to:))
+        let parentPathname = index.map(pathName!.prefix(upTo:))
         return parentPathname! + "/"
     }
 
@@ -221,8 +221,8 @@ internal class OneDriveFile: HiveFileHandle {
                         driveFile.fileSystemInfo = (valueJson!["fileSystemInfo"] as! Dictionary)
                         let ID: String = (valueJson!["id"] as! String)
                         driveFile.id = ID
-                        let sub = valueJson!["parentReference"] as? Dictionary<String, Any>
-                        driveFile.parentReference = (sub as! Dictionary<AnyHashable, Any>)
+                        let sub = valueJson!["parentReference"] as? Dictionary<AnyHashable, Any>
+                        driveFile.parentReference = sub
                         driveFile.driveId = (sub!["driveId"] as! String)
                         driveFile.parentId = (sub!["id"] as! String)
                         driveFile.rootPath = ONEDRIVE_RESTFUL_URL + "/root"
@@ -253,7 +253,7 @@ internal class OneDriveFile: HiveFileHandle {
             let components: [String] = (pathname.components(separatedBy: "/"))
             let name = components.last
             let index = pathname.range(of: "/", options: .backwards)?.lowerBound
-            let path_0 = index.map(pathname.substring(to:)) ?? ""
+            let path_0 = index.map(pathname.prefix(upTo:)) ?? ""
             let path = path_0.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let url = "\(ONEDRIVE_RESTFUL_URL)\(ONEDRIVE_ROOTDIR):/\(path):/children"
             let accesstoken = HelperMethods.getKeychain(KEYCHAIN_ACCESS_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
