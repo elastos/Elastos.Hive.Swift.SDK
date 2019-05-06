@@ -22,7 +22,7 @@ internal class OneDriveFile: HiveFileHandle {
                 resultHandler(hiveFiel, error)
             })
         } catch {
-            // TODO
+            resultHandler(nil, HiveError.systemError(error: error, jsonDes: nil))
         }
     }
 
@@ -48,7 +48,6 @@ internal class OneDriveFile: HiveFileHandle {
                     }else {
                     }
                 })
-
         })
     }
 
@@ -183,7 +182,7 @@ internal class OneDriveFile: HiveFileHandle {
                 withResult(nil, nil)
                 return
             }
-            guard self.id != nil else {
+            guard self.pathName != nil else {
                 withResult(nil, .failue(des: "Illegal Argument."))
                 return
             }
