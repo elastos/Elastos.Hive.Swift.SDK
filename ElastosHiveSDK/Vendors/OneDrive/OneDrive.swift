@@ -113,7 +113,7 @@ internal class OneDrive: HiveDriveHandle {
             let components: [String] = (atPath.components(separatedBy: "/"))
             let name = components.last
             let index = atPath.range(of: "/", options: .backwards)?.lowerBound
-            let path_0 = index.map(atPath.substring(to:)) ?? ""
+            let path_0 = index.map(atPath.prefix(upTo:)) ?? ""
             let path = path_0.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let accesstoken = HelperMethods.getKeychain(KEYCHAIN_ACCESS_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
             let params: Dictionary<String, Any> = ["name": name as Any,

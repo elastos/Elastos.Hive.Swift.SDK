@@ -1,10 +1,4 @@
-//
-//  HiveOneDriveFileTests.swift
-//  ElastosHiveSDKTests
-//
-//  Created by 李爱红 on 2019/5/4.
-//  Copyright © 2019 org.elastos. All rights reserved.
-//
+
 
 import XCTest
 @testable import ElastosHiveSDK
