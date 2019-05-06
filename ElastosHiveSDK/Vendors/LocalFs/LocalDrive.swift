@@ -1,9 +1,9 @@
 import Foundation
 
-@objc(DropboxDrive)
-internal class DropboxDrive: HiveDriveHandle {
+@objc(LocalDrive)
+internal class LocalDrive: HiveDriveHandle {
     override func driveType() -> DriveType {
-        return .ownCloud
+        return .local
     }
 
     override func rootDirectoryHandle(withResult: @escaping HiveFileObjectCreationResponseHandler) {

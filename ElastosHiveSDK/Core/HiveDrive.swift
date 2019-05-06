@@ -1,55 +1,11 @@
 import Foundation
 
-public typealias HiveResultHandler = ( _ result: Bool?, _ error: HiveError?) -> Void
 public typealias HiveFileObjectCreationResponseHandler = (_ file: HiveFileHandle?, _ error: HiveError?) -> Void
 
 @objc(HiveDrive)
 public class HiveDriveHandle: NSObject {
-    /**
-     * Create an instance with specific options.
-     *
-     * @param options TODO
-     * @return An new drive instance.
-     */
-    public static func createInstance(_ param: DriveParameters) {
-        let type: DriveType = param.driveType()
-        switch type {
-        case .oneDrive:
-            OneDrive.createInstance(param as! OneDriveParameters)
-        case .ownCloud:
-            OwnCloudDrive.createInstance(param as! OwnCloudParameters)
-        case .dropBox:
-            DropboxDrive.createInstance(param as! DropBoxParameters)
-        case .hiveIpfs:
-            HiveIpfsDrive.createInstance(param as! HiveIpfsParameters)
-        }
-    }
-
-    public static func sharedInstance(type: DriveType) -> HiveDriveHandle? {
-        switch type {
-        case .oneDrive:
-            return OneDrive.sharedInstance()
-        case .ownCloud:
-            return OwnCloudDrive.sharedInstance()
-        case .dropBox:
-            return DropboxDrive.sharedInstance()
-        case .hiveIpfs:
-            return HiveIpfsDrive.sharedInstance()
-        }
-    }
-
-    func authHelper() -> AuthHelper {
-        return AuthHelper()
-    }
-
     func driveType() -> DriveType {
-        return .oneDrive
-    }
-
-    public func login(withResult: @escaping (HiveResultHandler))  {
-    }
-
-    public func logout(withResult: @escaping (HiveResultHandler)) {
+        return .local
     }
 
     public func rootDirectoryHandle(withResult: @escaping HiveFileObjectCreationResponseHandler) throws {

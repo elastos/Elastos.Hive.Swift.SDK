@@ -5,7 +5,7 @@ import Unirest
 internal class OneDriveFile: HiveFileHandle {
     var oneDrive: OneDrive?
 
-    public override func parentPathName() -> String? {
+    override func parentPathName() -> String? {
         guard pathName != nil else {
             return pathName
         }
@@ -27,7 +27,7 @@ internal class OneDriveFile: HiveFileHandle {
     }
 
     override func updateDateTime(withValue newValue: String) {
-        oneDrive?.authHeperHandle.checkExpired({ (error) in
+        oneDrive?.authHelperHandle.checkExpired({ (error) in
             if (error != nil) {
                 return
             }
@@ -52,7 +52,7 @@ internal class OneDriveFile: HiveFileHandle {
     }
 
     override func copyFileTo(newPath: String, withResult: @escaping HiveResultHandler) throws {
-        oneDrive?.authHeperHandle.checkExpired({ (error) in
+        oneDrive?.authHelperHandle.checkExpired({ (error) in
             if (error != nil) {
                 withResult(nil, error)
                 return
@@ -102,7 +102,7 @@ internal class OneDriveFile: HiveFileHandle {
     }
 
     override func renameFileTo(newPath: String, withResult: @escaping HiveResultHandler) throws {
-        oneDrive?.authHeperHandle.checkExpired({ (error) in
+        oneDrive?.authHelperHandle.checkExpired({ (error) in
             if (error != nil) {
                 withResult(nil, error)
                 return
@@ -140,7 +140,7 @@ internal class OneDriveFile: HiveFileHandle {
     }
 
     override func deleteItem(withResult: @escaping HiveResultHandler) throws {
-        oneDrive?.authHeperHandle.checkExpired({ (error) in
+        oneDrive?.authHelperHandle.checkExpired({ (error) in
             if (error != nil) {
                 withResult(nil, error)
                 return
@@ -173,7 +173,7 @@ internal class OneDriveFile: HiveFileHandle {
     }
 
     override func list(withResult: @escaping HiveFileObjectsListResponseHandler) throws {
-        oneDrive?.authHeperHandle.checkExpired({ (error) in
+        oneDrive?.authHelperHandle.checkExpired({ (error) in
             if (error != nil) {
                 withResult(nil, error)
                 return
@@ -242,7 +242,7 @@ internal class OneDriveFile: HiveFileHandle {
     }
 
     override func mkdir(pathname: String, withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
-        oneDrive?.authHeperHandle.checkExpired({ (error) in
+        oneDrive?.authHelperHandle.checkExpired({ (error) in
             if (error != nil) {
                 withResult(nil, error)
                 return
