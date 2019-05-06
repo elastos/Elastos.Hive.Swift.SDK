@@ -182,7 +182,7 @@ internal class OneDriveFile: HiveFileHandle {
                 withResult(nil, nil)
                 return
             }
-            guard self.id != nil else {
+            guard self.pathName != nil else {
                 withResult(nil, .failue(des: "Illegal Argument."))
                 return
             }

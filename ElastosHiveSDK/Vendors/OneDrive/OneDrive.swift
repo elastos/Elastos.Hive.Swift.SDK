@@ -189,6 +189,8 @@ internal class OneDrive: HiveDriveHandle {
                         withResult(nil, nil)
                     }
                     let oneDriveFile: OneDriveFile = OneDriveFile()
+                    oneDriveFile.drive = self
+                    oneDriveFile.oneDrive = self
                     let folder = (jsonData!["folder"] as? String)
                     if folder != nil {
                         oneDriveFile.isDirectory = true
