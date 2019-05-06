@@ -4,49 +4,27 @@ import Unirest
 @inline(__always) private func TAG() -> String { return "OneDrive" }
 
 internal class OneDrive: HiveDriveHandle {
-    private static var oneDriveInstance: OneDrive?
-    var authHeperHandle: OneDriveAuthHelper
+    var client: OneDriveClient
+    var authHelperHandle: OneDriveAuthHelper
     var driveId: String?
 
-    private init(_ param: OneDriveParameters) {
-        authHeperHandle = OneDriveAuthHelper(param.clientId!, param.scopes!, param.redirectUrl!)
-    }
-
-    public static func createInstance(_ param: OneDriveParameters) {
-        if oneDriveInstance == nil {
-            let drive: OneDrive = OneDrive(param)
-            oneDriveInstance = drive as OneDrive
-        }
-    }
-
-    public static func sharedInstance() -> HiveDriveHandle? {
-        return oneDriveInstance
+    init(_ client: OneDriveClient) {
+        self.client = client
+        self.authHelperHandle = client.authHeperHandle
     }
 
     override func driveType() -> DriveType {
         return .oneDrive
     }
 
-    override func login(withResult: @escaping (HiveResultHandler)) {
-        authHeperHandle.login { (re, error) in
-            try? self.validateDrive()
-            withResult(re, error)
-        }
-    }
-    override func logout(withResult: @escaping (HiveResultHandler)) {
-        authHeperHandle.logout { (re, error) in
-            withResult(re, error)
-        }
-    }
-
     override func rootDirectoryHandle(withResult resultHandler: @escaping HiveFileObjectCreationResponseHandler) throws {
-        if authHeperHandle.authInfo == nil {
+        if authHelperHandle.authInfo == nil {
             Log.e(TAG(), "Have to login first.")
             resultHandler(nil, .failue(des: "Please login first"))
             return
         }
 
-        authHeperHandle.checkExpired { (error) in
+        authHelperHandle.checkExpired { (error) in
             guard error == nil else {
                 resultHandler(nil, error)
                 return
@@ -100,12 +78,12 @@ internal class OneDrive: HiveDriveHandle {
     }
 
     override func createDirectory(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
-        if authHeperHandle.authInfo == nil {
+        if authHelperHandle.authInfo == nil {
             print("Please login first")
             withResult(nil, .failue(des: "Please login first"))
             return
         }
-        authHeperHandle.checkExpired { (error) in
+        authHelperHandle.checkExpired { (error) in
             if (error != nil) {
                 withResult(nil, error)
                 return
@@ -165,12 +143,12 @@ internal class OneDrive: HiveDriveHandle {
     }
 
     override func createFile(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
-        if authHeperHandle.authInfo == nil {
+        if authHelperHandle.authInfo == nil {
             print("Please login first")
             withResult(nil, .failue(des: "Please login first"))
             return
         }
-        authHeperHandle.checkExpired { (error) in
+        authHelperHandle.checkExpired { (error) in
             if (error != nil) {
                 withResult(nil, error)
                 return
@@ -223,12 +201,12 @@ internal class OneDrive: HiveDriveHandle {
     }
 
     override func getFileHandle(atPath: String, withResult resultHandler: @escaping HiveFileObjectCreationResponseHandler) throws {
-        if authHeperHandle.authInfo == nil {
+        if authHelperHandle.authInfo == nil {
             print("Please login first")
             resultHandler(nil, .failue(des: "Please login first"))
             return
         }
-        authHeperHandle.checkExpired { (error) in
+        authHelperHandle.checkExpired { (error) in
             if (error != nil) {
                 resultHandler(nil, error)
                 return
