@@ -4,6 +4,7 @@ public typealias HiveResultHandler = ( _ result: Bool?, _ error: HiveError?) -> 
 
 @objc(HiveClientHandle)
 public class HiveClientHandle: NSObject {
+
     /**
      * Create an instance with specific options.
      *
@@ -41,21 +42,19 @@ public class HiveClientHandle: NSObject {
         }
     }
 
-    func authHelper() -> AuthHelper {
-        return AuthHelper()
-    }
-
     func driveType() -> DriveType {
         return .local
     }
 
-    public func login(withResult: @escaping (HiveResultHandler))  {
+    public func login() -> CallbackFuture<Bool>? {
+        return nil
     }
 
-    public func logout(withResult: @escaping (HiveResultHandler)) {
+    public func logout() -> CallbackFuture<Bool>? {
+        return nil
     }
 
-    public func GetDefaultDrive() throws -> HiveDriveHandle? {
+    public func defaultDriveHandle() -> HiveDriveHandle? {
         return nil
     }
 }
