@@ -21,19 +21,25 @@ internal class OwnCloudClient: HiveClientHandle {
         return clientInstance
     }
 
-    override func authHelper() -> AuthHelper {
-        return AuthHelper()
-    }
-
     override func driveType() -> DriveType {
+        // TODO
         return .ownCloud
     }
 
-    override func login(withResult: @escaping (HiveResultHandler)) {
-        // TODO
+    override func login() -> CallbackFuture<Bool>? {
+        return nil
     }
 
-    override func logout(withResult: @escaping (HiveResultHandler)) {
+    override func logout() -> CallbackFuture<Bool>? {
         // TODO
+        return nil
     }
+
+//    override func login(withResult: @escaping (HiveResultHandler)) {
+//        // TODO
+//    }
+//
+//    override func logout(withResult: @escaping (HiveResultHandler)) {
+//        // TODO
+//    }
 }

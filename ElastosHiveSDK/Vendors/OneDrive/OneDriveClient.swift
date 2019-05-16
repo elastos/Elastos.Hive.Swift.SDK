@@ -7,6 +7,7 @@ internal class OneDriveClient: HiveClientHandle {
     private static var clientInstance: HiveClientHandle?
     var authHeperHandle: OneDriveAuthHelper
     var driveId: String?
+    public static var oneDrive: OneDrive?
 
     private init(_ param: OneDriveParameters) {
         authHeperHandle = OneDriveAuthHelper(param.clientId!, param.scopes!, param.redirectUrl!)
@@ -16,6 +17,7 @@ internal class OneDriveClient: HiveClientHandle {
         if clientInstance == nil {
             let client: OneDriveClient = OneDriveClient(param)
             clientInstance = client as HiveClientHandle
+            oneDrive = OneDrive(client)
         }
     }
 
@@ -27,12 +29,29 @@ internal class OneDriveClient: HiveClientHandle {
         return .oneDrive
     }
 
+    override func login() -> CallbackFuture<Bool> {
+        return authHeperHandle.login()
+    }
+
+    override func logout() -> CallbackFuture<Bool>? {
+        // TODO
+        return nil
+    }
+
+    override func defaultDriveHandle() -> HiveDriveHandle? {
+        // TODO
+        return OneDriveClient.oneDrive
+    }
+
+    /*
     override func login(withResult: @escaping (HiveResultHandler)) {
         authHeperHandle.login { (re, error) in
             try? self.getClientInfo()
             withResult(re, error)
         }
     }
+
+
     override func logout(withResult: @escaping (HiveResultHandler)) {
         authHeperHandle.logout { (re, error) in
             withResult(re, error)
@@ -47,6 +66,7 @@ internal class OneDriveClient: HiveClientHandle {
         let drive: OneDrive = OneDrive(self)
         return drive as HiveDriveHandle
     }
+*/
 
 /*
     private func validateDrive() throws {

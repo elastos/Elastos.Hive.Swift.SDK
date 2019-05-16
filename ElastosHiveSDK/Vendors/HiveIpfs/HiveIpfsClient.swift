@@ -22,19 +22,16 @@ internal class HiveIpfsClient: HiveClientHandle {
         return clientInstance
     }
 
-    override func authHelper() -> AuthHelper {
-        return AuthHelper()
-    }
-
     override func driveType() -> DriveType {
         return .ownCloud
     }
 
-    override func login(withResult: @escaping (HiveResultHandler)) {
-        // TODO
+    override func login() -> CallbackFuture<Bool>? {
+        return nil
     }
 
-    override func logout(withResult: @escaping (HiveResultHandler)) {
-        // TODO
+    override func logout() -> CallbackFuture<Bool>? {
+        return nil
     }
+
 }

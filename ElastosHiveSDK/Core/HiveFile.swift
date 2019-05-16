@@ -18,7 +18,7 @@ public class HiveFileHandle: NSObject {
     public var driveId: String?
     public var fileSystemInfo: Dictionary<AnyHashable, Any>?
     public var parentReference: Dictionary<AnyHashable, Any>?
-    
+
     /**
      * Create an file with specific pathname.
      *
@@ -35,13 +35,17 @@ public class HiveFileHandle: NSObject {
         // TODO;
     }
 
-    public func parentPathName() -> String? {
+    public func createDateTime() -> String? {
         return nil
     }
 
-    public func parentHandle(withResult result: @escaping (HiveFileObjectCreationResponseHandler)) {
+    public func parentHandle() -> CallbackFuture<HiveResult<HiveDirectoryHandle>>? {
+        return nil
     }
 
+   public func moveTo(atPath: String) -> CallbackFuture<HiveResult<HiveFileHandle>>? {
+        return nil
+    }
     /**
      * Update date and time of this item.
      *
@@ -55,14 +59,25 @@ public class HiveFileHandle: NSObject {
      *
      * @throws Exception TODO
      */
-    public func deleteItem(withResult: @escaping HiveResultHandler) throws {}
+
+    public func deleteItem() -> CallbackFuture<Bool>? {
+        return nil
+    }
 
     /**
      * Close hive file object.
      *
-     * @throws Exception TODO
      */
-    public func closeItem() throws {}
+    func close() {
+    }
+
+    public func readData() -> CallbackFuture<HiveResult<Data>>? {
+        return nil
+    }
+
+    public func writeData(withData: Data) -> CallbackFuture<HiveResult<Bool>>? {
+        return nil
+    }
 
     /**
      * Copy the item to another address.
@@ -70,16 +85,8 @@ public class HiveFileHandle: NSObject {
      * @param newPath The copy-to pathname.
      * @throws Exception TODO
      */
-    public func copyFileTo(newPath: String, withResult: @escaping HiveResultHandler) throws {
-    }
-
-    /**
-     * Copy the item to another item.
-     *
-     * @param newFile The new Hive File object.
-     * @throws Exception TODO
-     */
-    public func copyFileTo(newFile: HiveFileHandle, withResult: @escaping HiveResultHandler) throws {
+    public func copyTo(atPath: String) -> CallbackFuture<HiveResult<HiveFileHandle>>? {
+        return nil
     }
 
     /**
@@ -88,8 +95,8 @@ public class HiveFileHandle: NSObject {
      * @param newPath The new file path to rename with.
      * @throws Exception TODO
      */
-    public func renameFileTo(newPath: String, withResult: @escaping HiveResultHandler) throws {
-
+    public func renameFileTo(_ atPath: String) -> CallbackFuture<HiveResult<HiveFileHandle>>? {
+        return nil
     }
 
     /**
@@ -107,34 +114,8 @@ public class HiveFileHandle: NSObject {
      * @return The array of hive file objects.
      * @throws Exception TODO
      */
-    public func list(withResult: @escaping HiveFileObjectsListResponseHandler) throws {
-    }
-
-    /**
-     * List all file objects under this directory.
-     *
-     * @return The array of hive file objects.
-     * @throws Exception TODO
-     */
-    public func listFiles() throws -> [HiveFileHandle]? {
+    public func list() -> CallbackFuture<HiveResult<[HiveFileHandle]>>? {
         return nil
     }
 
-    /**
-     * Create a directory.
-     *
-     * @param pathname The new pathname to create
-     * @throws Exception TODO.
-     */
-    public func mkdir(pathname: String, withResult: @escaping HiveFileObjectCreationResponseHandler) throws {
-    }
-
-    /**
-     * Create a directory along with all necessary parent directories.
-     *
-     * @param pathname The full pathname to create
-     * @throws Exception TODO
-     */
-    public func mkdirs(pathname: String) throws {
-    }
 }

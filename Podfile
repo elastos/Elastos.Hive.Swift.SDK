@@ -6,11 +6,13 @@ target 'ElastosHiveSDK' do
   use_frameworks!
    pod 'Swifter', '~> 1.4.6'
    pod 'Unirest', '~> 1.1.4'
+   pod 'PromiseKit'
   
   target 'ElastosHiveSDKTests' do
     inherit! :search_paths
     pod 'Swifter', '~> 1.4.6'
     pod 'Unirest', '~> 1.1.4'
+    pod 'PromiseKit'
 
   end
 
@@ -18,6 +20,7 @@ target 'ElastosHiveSDK' do
     inherit! :search_paths
     pod 'Swifter', '~> 1.4.6'
     pod 'Unirest', '~> 1.1.4'
+    pod 'PromiseKit'
 
   end
 
