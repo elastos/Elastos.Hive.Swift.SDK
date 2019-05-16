@@ -6,19 +6,20 @@ internal class HiveIpfsDrive: HiveDriveHandle {
         return .ownCloud
     }
 
-    override func rootDirectoryHandle(withResult: @escaping HiveFileObjectCreationResponseHandler) {
-        // TODO
+    override func rootDirectoryHandle() -> CallbackFuture<HiveResult<HiveDirectoryHandle>>? {
+        return nil
     }
 
-    override func createDirectory(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) {
+    override func createDirectory(atPath: String) -> CallbackFuture<HiveResult<HiveDirectoryHandle>>? {
         // TODO
-    }
-    
-    override func createFile(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) {
-        // TODO
+        return nil
     }
 
-    override func getFileHandle(atPath: String, withResult: @escaping HiveFileObjectCreationResponseHandler) {
-        // TODO
+    override func createFile(atPath: String) -> CallbackFuture<HiveResult<HiveFileHandle>>? {
+        return nil
+    }
+
+    override func directoryHandle(atPath: String) -> CallbackFuture<HiveResult<HiveDirectoryHandle>>? {
+        return nil
     }
 }

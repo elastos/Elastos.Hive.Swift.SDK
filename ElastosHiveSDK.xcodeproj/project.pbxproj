@@ -3,11 +3,16 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		0D94ED2D06BBCAE410D0273C /* Pods_ElastosHiveSDKTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DB068EABA0DB13AB595055A /* Pods_ElastosHiveSDKTests.framework */; };
+		111970C1228D52A700BA38E0 /* HiveDriveInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111970C0228D52A700BA38E0 /* HiveDriveInfo.swift */; };
+		111970C3228D52DD00BA38E0 /* HiveClientInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111970C2228D52DD00BA38E0 /* HiveClientInfo.swift */; };
+		111970C5228D702D00BA38E0 /* HiveDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111970C4228D702D00BA38E0 /* HiveDirectory.swift */; };
+		111970C7228DA75900BA38E0 /* HiveDirectoryInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111970C6228DA75900BA38E0 /* HiveDirectoryInfo.swift */; };
+		111970C9228DABD900BA38E0 /* HiveFileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111970C8228DABD900BA38E0 /* HiveFileInfo.swift */; };
 		1137942E227ED9AD004A1F65 /* ElastosHiveSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A39C496F225399860027BDF9 /* ElastosHiveSDK.framework */; };
 		1137943B227EDA66004A1F65 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1137943A227EDA66004A1F65 /* AppDelegate.swift */; };
 		11379442227EDA6A004A1F65 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11379441227EDA6A004A1F65 /* Assets.xcassets */; };
@@ -18,7 +23,6 @@
 		1160625322696E9500BDCB9F /* TegKeychainConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1160624F22696E9500BDCB9F /* TegKeychainConstants.swift */; };
 		1160625522696E9500BDCB9F /* KeychainSwiftAccessOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1160625022696E9500BDCB9F /* KeychainSwiftAccessOptions.swift */; };
 		1160625822696EA500BDCB9F /* HelperMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1160625722696EA500BDCB9F /* HelperMethods.swift */; };
-		156294F62D08FA1933B92381 /* Pods_ElastosHiveSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D17AD36AC88E073FD2B2D930 /* Pods_ElastosHiveSDK.framework */; };
 		7857CCBA4BDBCCE9499A1338 /* Pods_TestHost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F09DA7DC9D47111E630261C /* Pods_TestHost.framework */; };
 		A34724DC226B4A750049DBD4 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34724DB226B4A750049DBD4 /* Log.swift */; };
 		A34724DE226B4ABE0049DBD4 /* LogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34724DD226B4ABE0049DBD4 /* LogLevel.swift */; };
@@ -33,10 +37,10 @@
 		A39C499F22539C9C0027BDF9 /* HiveFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C499522539C9C0027BDF9 /* HiveFile.swift */; };
 		A39C49A022539C9C0027BDF9 /* HiveDrive.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C499622539C9C0027BDF9 /* HiveDrive.swift */; };
 		A39C49A122539C9C0027BDF9 /* SdkVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C499722539C9C0027BDF9 /* SdkVersion.swift */; };
-		A39C49A222539C9C0027BDF9 /* DriveParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C499822539C9C0027BDF9 /* DriveParameters.swift */; };
+		A39C49A222539C9C0027BDF9 /* HiveDriveParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C499822539C9C0027BDF9 /* HiveDriveParameters.swift */; };
 		A39C49A322539C9C0027BDF9 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C499922539C9C0027BDF9 /* Authenticator.swift */; };
 		A39C49A422539C9C0027BDF9 /* AuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C499A22539C9C0027BDF9 /* AuthHelper.swift */; };
-		A39C49A522539C9C0027BDF9 /* DriveType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C499B22539C9C0027BDF9 /* DriveType.swift */; };
+		A39C49A522539C9C0027BDF9 /* HiveDriveType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C499B22539C9C0027BDF9 /* HiveDriveType.swift */; };
 		A39C49AB22539CB90027BDF9 /* IOUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C49AA22539CB90027BDF9 /* IOUtil.swift */; };
 		A39C49B022539CD10027BDF9 /* OneDrive.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C49AD22539CD10027BDF9 /* OneDrive.swift */; };
 		A39C49B122539CD10027BDF9 /* OneDriveAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C49AE22539CD10027BDF9 /* OneDriveAuthHelper.swift */; };
@@ -71,6 +75,11 @@
 
 /* Begin PBXFileReference section */
 		0DB068EABA0DB13AB595055A /* Pods_ElastosHiveSDKTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ElastosHiveSDKTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		111970C0228D52A700BA38E0 /* HiveDriveInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiveDriveInfo.swift; sourceTree = "<group>"; };
+		111970C2228D52DD00BA38E0 /* HiveClientInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiveClientInfo.swift; sourceTree = "<group>"; };
+		111970C4228D702D00BA38E0 /* HiveDirectory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiveDirectory.swift; sourceTree = "<group>"; };
+		111970C6228DA75900BA38E0 /* HiveDirectoryInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiveDirectoryInfo.swift; sourceTree = "<group>"; };
+		111970C8228DABD900BA38E0 /* HiveFileInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiveFileInfo.swift; sourceTree = "<group>"; };
 		11379429227ED9AD004A1F65 /* ElastosHiveSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ElastosHiveSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1137942D227ED9AD004A1F65 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		11379438227EDA66004A1F65 /* TestHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -106,10 +115,10 @@
 		A39C499522539C9C0027BDF9 /* HiveFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HiveFile.swift; path = Core/HiveFile.swift; sourceTree = "<group>"; };
 		A39C499622539C9C0027BDF9 /* HiveDrive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HiveDrive.swift; path = Core/HiveDrive.swift; sourceTree = "<group>"; };
 		A39C499722539C9C0027BDF9 /* SdkVersion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SdkVersion.swift; path = Core/SdkVersion.swift; sourceTree = "<group>"; };
-		A39C499822539C9C0027BDF9 /* DriveParameters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DriveParameters.swift; path = Core/DriveParameters.swift; sourceTree = "<group>"; };
+		A39C499822539C9C0027BDF9 /* HiveDriveParameters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HiveDriveParameters.swift; path = Core/HiveDriveParameters.swift; sourceTree = "<group>"; };
 		A39C499922539C9C0027BDF9 /* Authenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Authenticator.swift; path = Core/Authenticator.swift; sourceTree = "<group>"; };
 		A39C499A22539C9C0027BDF9 /* AuthHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuthHelper.swift; path = Core/AuthHelper.swift; sourceTree = "<group>"; };
-		A39C499B22539C9C0027BDF9 /* DriveType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DriveType.swift; path = Core/DriveType.swift; sourceTree = "<group>"; };
+		A39C499B22539C9C0027BDF9 /* HiveDriveType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HiveDriveType.swift; path = Core/HiveDriveType.swift; sourceTree = "<group>"; };
 		A39C49AA22539CB90027BDF9 /* IOUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IOUtil.swift; path = Utils/IOUtil.swift; sourceTree = "<group>"; };
 		A39C49AD22539CD10027BDF9 /* OneDrive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OneDrive.swift; path = Vendors/OneDrive/OneDrive.swift; sourceTree = "<group>"; };
 		A39C49AE22539CD10027BDF9 /* OneDriveAuthHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OneDriveAuthHelper.swift; path = Vendors/OneDrive/OneDriveAuthHelper.swift; sourceTree = "<group>"; };
@@ -157,7 +166,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				156294F62D08FA1933B92381 /* Pods_ElastosHiveSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,11 +269,16 @@
 				A39C499922539C9C0027BDF9 /* Authenticator.swift */,
 				A39C499A22539C9C0027BDF9 /* AuthHelper.swift */,
 				A39C499222539C9C0027BDF9 /* AuthInfo.swift */,
-				A39C499822539C9C0027BDF9 /* DriveParameters.swift */,
-				A39C499B22539C9C0027BDF9 /* DriveType.swift */,
+				A39C499822539C9C0027BDF9 /* HiveDriveParameters.swift */,
+				A39C499B22539C9C0027BDF9 /* HiveDriveType.swift */,
 				A39C499622539C9C0027BDF9 /* HiveDrive.swift */,
+				111970C0228D52A700BA38E0 /* HiveDriveInfo.swift */,
+				111970C4228D702D00BA38E0 /* HiveDirectory.swift */,
+				111970C6228DA75900BA38E0 /* HiveDirectoryInfo.swift */,
 				A39C499522539C9C0027BDF9 /* HiveFile.swift */,
+				111970C8228DABD900BA38E0 /* HiveFileInfo.swift */,
 				A3FD3C80228000EE0031413A /* HiveClient.swift */,
+				111970C2228D52DD00BA38E0 /* HiveClientInfo.swift */,
 				A39C499722539C9C0027BDF9 /* SdkVersion.swift */,
 			);
 			name = Core;
@@ -513,18 +526,11 @@
 			files = (
 			);
 			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ElastosHiveSDKTests/Pods-ElastosHiveSDKTests-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Swifter/Swifter.framework",
-				"${BUILT_PRODUCTS_DIR}/Unirest/Unirest.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-ElastosHiveSDKTests/Pods-ElastosHiveSDKTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-			);
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Swifter.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Unirest.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-ElastosHiveSDKTests/Pods-ElastosHiveSDKTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -559,18 +565,11 @@
 			files = (
 			);
 			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TestHost/Pods-TestHost-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Swifter/Swifter.framework",
-				"${BUILT_PRODUCTS_DIR}/Unirest/Unirest.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-TestHost/Pods-TestHost-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-			);
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Swifter.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Unirest.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-TestHost/Pods-TestHost-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -654,16 +653,18 @@
 				1160625122696E9500BDCB9F /* KeychainSwift.swift in Sources */,
 				A39C49BD22539D2E0027BDF9 /* OwnCloudDrive.swift in Sources */,
 				A3FD3C8C228004A10031413A /* LocalDrive.swift in Sources */,
+				111970C7228DA75900BA38E0 /* HiveDirectoryInfo.swift in Sources */,
 				1160625822696EA500BDCB9F /* HelperMethods.swift in Sources */,
 				A3FD3C83228001EB0031413A /* OneDriveClient.swift in Sources */,
 				A3743ADB2265711A00C9493E /* DropBoxParameters.swift in Sources */,
 				1160624822696E3200BDCB9F /* OneDriveExtension.swift in Sources */,
 				A3FD3C9222800A840031413A /* OwnCloudClient.swift in Sources */,
-				A39C49A522539C9C0027BDF9 /* DriveType.swift in Sources */,
+				111970C1228D52A700BA38E0 /* HiveDriveInfo.swift in Sources */,
+				A39C49A522539C9C0027BDF9 /* HiveDriveType.swift in Sources */,
 				A39C49A122539C9C0027BDF9 /* SdkVersion.swift in Sources */,
 				A3743ADD2265743400C9493E /* OneDriveConstants.swift in Sources */,
 				A3743AD72265710000C9493E /* HiveIpfsParameters.swift in Sources */,
-				A39C49A222539C9C0027BDF9 /* DriveParameters.swift in Sources */,
+				A39C49A222539C9C0027BDF9 /* HiveDriveParameters.swift in Sources */,
 				A39C49C122539D3B0027BDF9 /* DropboxDrive.swift in Sources */,
 				A39C499F22539C9C0027BDF9 /* HiveFile.swift in Sources */,
 				A39C49A022539C9C0027BDF9 /* HiveDrive.swift in Sources */,
@@ -679,9 +680,12 @@
 				A39C49AB22539CB90027BDF9 /* IOUtil.swift in Sources */,
 				A39C499E22539C9C0027BDF9 /* HiveError.swift in Sources */,
 				A39C49A422539C9C0027BDF9 /* AuthHelper.swift in Sources */,
+				111970C3228D52DD00BA38E0 /* HiveClientInfo.swift in Sources */,
+				111970C9228DABD900BA38E0 /* HiveFileInfo.swift in Sources */,
 				A39C49B122539CD10027BDF9 /* OneDriveAuthHelper.swift in Sources */,
 				A39C49BC22539D2E0027BDF9 /* OwnCloudFile.swift in Sources */,
 				A39C49B022539CD10027BDF9 /* OneDrive.swift in Sources */,
+				111970C5228D702D00BA38E0 /* HiveDirectory.swift in Sources */,
 				A3743AD5226570B200C9493E /* OneDriveParameters.swift in Sources */,
 				1160625322696E9500BDCB9F /* TegKeychainConstants.swift in Sources */,
 				A3743AD92265710B00C9493E /* OwnCloudParameters.swift in Sources */,
@@ -715,7 +719,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = elastos.ElastosHiveSDKTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestHost.app/TestHost";
 			};
@@ -736,7 +740,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = elastos.ElastosHiveSDKTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestHost.app/TestHost";
 			};
@@ -758,7 +762,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = elastos.TestHost;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -779,7 +783,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = elastos.TestHost;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -932,7 +936,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -962,7 +966,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

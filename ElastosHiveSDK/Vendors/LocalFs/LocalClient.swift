@@ -21,19 +21,16 @@ internal class LocalClient: HiveClientHandle {
         return clientInstance
     }
 
-    override func authHelper() -> AuthHelper {
-        return AuthHelper()
-    }
-
     override func driveType() -> DriveType {
         return .local
     }
 
-    override func login(withResult: @escaping (HiveResultHandler)) {
-        // TODO
+    override func login() -> CallbackFuture<Bool>? {
+        return nil
+    }
+    override func logout() -> CallbackFuture<Bool>? {
+        //TODO
+        return nil
     }
 
-    override func logout(withResult: @escaping (HiveResultHandler)) {
-        // TODO
-    }
 }

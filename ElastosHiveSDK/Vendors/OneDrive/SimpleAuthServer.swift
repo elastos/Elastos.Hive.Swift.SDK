@@ -8,16 +8,19 @@ internal class SimpleAuthServer: NSObject {
         try? httpServer.start(port as in_port_t)
     }
 
-    func getAuthorizationCode(_ authHandler: @escaping (_ authCode: String?, _ error: HiveError?) -> Void) {
-        httpServer[""] = { request in
-            guard request.queryParams.count > 0 || request.queryParams[0].0 != "code" else {
-                authHandler(nil, .failue(des: "authCode obtain failed"))
+    func getAuthorizationCode() -> CallbackFuture<String> {
+        let future = CallbackFuture<String> { resolver in
+            httpServer[""] = { request in
+                guard request.queryParams.count > 0 || request.queryParams[0].0 != "code" else {
+                    resolver.reject(HiveError.failue(des: "authCode obtain failed"))
+                    return HttpResponse.ok(.json("nil" as AnyObject))
+                }
+                let authJson = request.queryParams[0]
+                resolver.fulfill(authJson.1)
                 return HttpResponse.ok(.json("nil" as AnyObject))
             }
-            let authJson = request.queryParams[0]
-            authHandler(authJson.1, nil)
-            return HttpResponse.ok(.json("nil" as AnyObject))
         }
+        return future
     }
 
     func stop() {
