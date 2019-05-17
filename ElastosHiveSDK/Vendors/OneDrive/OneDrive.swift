@@ -17,6 +17,11 @@ internal class OneDrive: HiveDriveHandle {
         return .oneDrive
     }
 
+    override func driveInfo() -> HiveDriveInfo? {
+        // TODO
+        return nil
+    }
+
     override func rootDirectoryHandle() -> CallbackFuture<HiveResult<HiveDirectoryHandle>>? {
         let future = CallbackFuture<HiveResult<HiveDirectoryHandle>> { resolver in
             if authHelperHandle.authInfo == nil {
@@ -89,7 +94,7 @@ internal class OneDrive: HiveDriveHandle {
         }
         return future
     }
-
+    
     override func createFile(atPath: String) -> CallbackFuture<HiveResult<HiveFileHandle>>? {
         let fulture = CallbackFuture<HiveResult<HiveFileHandle>>{ resolver in
             if authHelperHandle.authInfo == nil {
@@ -118,6 +123,11 @@ internal class OneDrive: HiveDriveHandle {
             })
         }
         return fulture
+    }
+
+    override func fileHandle(atPath: String) -> CallbackFuture<HiveResult<HiveFileHandle>>? {
+        // TODO
+        return nil
     }
 
     override func directoryHandle(atPath: String) -> CallbackFuture<HiveResult<HiveDirectoryHandle>>? {
@@ -153,7 +163,7 @@ internal class OneDrive: HiveDriveHandle {
         return fulture
     }
 
-    private func handleResult(_ atPath: String, _ jsonData: Dictionary<String, Any>) -> HiveDirectoryHandle {
+    internal func handleResult(_ atPath: String, _ jsonData: Dictionary<String, Any>) -> HiveDirectoryHandle {
 
         let hiveDirectoryHandle = HiveDirectoryHandle()
         let driveFile: OneDriveFile = OneDriveFile()

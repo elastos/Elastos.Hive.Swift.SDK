@@ -1,13 +1,13 @@
-//
-//  HiveClientInfo.swift
-//  ElastosHiveSDK
-//
-//  Created by 李爱红 on 2019/5/16.
-//  Copyright © 2019 org.elastos. All rights reserved.
-//
+
 
 import UIKit
 
-class HiveClientInfo: NSObject {
+public class HiveClientInfo: NSObject {
+
+    public var userId: String?
+    public var displayName: String?
+    public var email: String?
+    public var phone: String?
+    public var region: String?
 
 }

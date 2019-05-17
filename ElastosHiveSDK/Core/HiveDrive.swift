@@ -15,22 +15,36 @@ public class HiveDriveHandle: NSObject {
         return .local
     }
 
+    public func driveInfo() -> HiveDriveInfo? {
+        //TODO
+        return nil
+    }
+
     public func rootDirectoryHandle() -> CallbackFuture<HiveResult<HiveDirectoryHandle>>? {
         return nil
     }
 
-    public func createDirectory(atPath: String) -> CallbackFuture<HiveResult<HiveDirectoryHandle>>? {
-        return nil
-    }
+    // TODO
+//    public func rootDirectoryHandle(resultHandler: @escaping Callback<HiveResult<HiveDirectoryHandle>>) -> CallbackFuture<HiveResult<HiveDirectoryHandle>>
 
-    public func createFile(atPath: String) -> CallbackFuture<HiveResult<HiveFileHandle>>? {
+    public func createDirectory(atPath: String) -> CallbackFuture<HiveResult<HiveDirectoryHandle>>? {
         return nil
     }
 
     public func directoryHandle(atPath: String) -> CallbackFuture<HiveResult<HiveDirectoryHandle>>? {
         return nil
     }
-    
+
+    // TODO
+//    func createDirectory(atPath: String, resultHandler: @escaping Callback<HiveResult<HiveDirectoryHandle>>) -> CallbackFuture<HiveResult<HiveDirectoryHandle>>
+
+    public func createFile(atPath: String) -> CallbackFuture<HiveResult<HiveFileHandle>>? {
+        return nil
+    }
+
+    // TODO
+//    func directoryHandle(atPath: String, resultHanler: @escaping Callback<HiveResult<HiveDirectoryHandle>>) -> CallbackFuture<HiveResult<HiveDirectoryHandle>>
+
     public func fileHandle(atPath: String) -> CallbackFuture<HiveResult<HiveFileHandle>>? {
         return nil
     }
