@@ -57,4 +57,8 @@ public class HiveClientHandle: NSObject {
     public func defaultDriveHandle() -> HiveDriveHandle? {
         return nil
     }
+
+    public func clientInfo() -> HiveClientInfo? {
+        return nil
+    }
 }

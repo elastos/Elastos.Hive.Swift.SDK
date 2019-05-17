@@ -14,10 +14,6 @@ internal class LocalDrive: HiveDriveHandle {
         //TODO
         return nil
     }
-    
-    override func createFile(atPath: String) -> CallbackFuture<HiveResult<HiveFileHandle>>? {
-        return nil
-    }
 
     override func directoryHandle(atPath: String) -> CallbackFuture<HiveResult<HiveDirectoryHandle>>? {
         return nil

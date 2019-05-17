@@ -15,6 +15,36 @@ internal class OneDriveFile: HiveFileHandle {
         return future
     }
 
+    override func createFile(atPath: String) -> CallbackFuture<HiveResult<HiveFileHandle>>? {
+        let fulture = CallbackFuture<HiveResult<HiveFileHandle>>{ resolver in
+            if oneDrive!.authHelperHandle.authInfo == nil {
+                resolver.reject(HiveError.failue(des: "Please login first"))
+                return
+            }
+            _ = oneDrive!.authHelperHandle.checkExpired()?.done({ (result) in
+                if result {
+                    let accesstoken = HelperMethods.getKeychain(KEYCHAIN_ACCESS_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
+                    UNIRest.putEntity { (request) in
+                        request?.url = "\(ONEDRIVE_RESTFUL_URL)\(ONEDRIVE_ROOTDIR):/\(atPath):/content"
+                        request?.headers = ["Content-Type": "application/json;charset=UTF-8", HTTP_HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
+                        }?.asJsonAsync({ (response, error) in
+                            if response?.code != 201 {
+                                resolver.reject(HiveError.jsonFailue(des: response?.body.jsonObject()))
+                                return
+                            }
+                            let jsonData = response?.body.jsonObject() as? Dictionary<String, Any>
+                            if jsonData == nil || jsonData!.isEmpty {
+                                resolver.reject(HiveError.systemError(error: error, jsonDes: response?.body.jsonObject()))
+                            }
+                            let hiveDirectoryHandle = self.oneDrive!.handleResult(atPath, jsonData!)
+                            resolver.fulfill(HiveResult(handle: hiveDirectoryHandle.hiveFile!))
+                        })
+                }
+            })
+        }
+        return fulture
+    }
+
     override func copyTo(atPath: String) -> CallbackFuture<HiveResult<HiveFileHandle>>? {
         let future = CallbackFuture<HiveResult<HiveFileHandle>>{ resolver in
             _ = oneDrive?.authHelperHandle.checkExpired()?.done({ (result) in
@@ -23,7 +53,6 @@ internal class OneDriveFile: HiveFileHandle {
                 }
                 if atPath == "" || atPath.isEmpty {
                     resolver.reject(HiveError.failue(des: "Illegal Argument:\(atPath)"))
-
                 }
                 if self.pathName == "/" {
                     resolver.reject(HiveError.failue(des: "This is root file"))
@@ -146,15 +175,9 @@ internal class OneDriveFile: HiveFileHandle {
     }
 
     // todo
-
     override func list() -> CallbackFuture<HiveResult<[HiveFileHandle]>>? {
         let future = CallbackFuture<HiveResult<[HiveFileHandle]>>{ resulover in
             _ = oneDrive?.authHelperHandle.checkExpired()?.done({ (result) in
-                //            if self.isDirectory == false {
-                //                withResult(nil, nil)
-                //                resulover.reject(HiveError.failue(des: <#T##String?#>))
-                //                return
-                //            }
                 guard self.pathName != nil else {
                     resulover.reject(HiveError.failue(des: "Illegal Argument."))
                     return
@@ -183,6 +206,8 @@ internal class OneDriveFile: HiveFileHandle {
                         let lists = self.handleResult(jsonData! as! Dictionary<String, Any>)
                         resulover.fulfill(HiveResult(handle: lists))
                     })
+            }).catch({ (error) in
+                resulover.reject(error)
             })
         }
         return future

@@ -42,16 +42,19 @@ internal class OneDriveAuthHelper: AuthHelper {
         return future
     }
 
-    func logout(_ resultHandler: @escaping HiveResultHandler) {
-        UNIRest.get({ (request) in
-            request?.url = ONEDRIVE_OAUTH2_BASE_REQUEST_URL + "/logout?post_logout_redirect_uri=\(self.redirectUrl!)"
-        })?.asJsonAsync({ (response, error) in
-            guard response?.code == 200 else {
-                resultHandler(false, .jsonFailue(des: response?.body.jsonObject()))
-                return
-            }
-            resultHandler(true, nil)
-        })
+    func logout() -> CallbackFuture<Bool> {
+        let future = CallbackFuture<Bool>{ resolver in
+            UNIRest.get({ (request) in
+                request?.url = "\(ONEDRIVE_OAUTH2_BASE_REQUEST_URL)/logout?post_logout_redirect_uri=\(self.redirectUrl!)"
+            })?.asJsonAsync({ (response, error) in
+                guard response?.code == 200 else {
+                    resolver.reject(HiveError.failue(des: "logout failed"))
+                    return
+                }
+                resolver.fulfill(true)
+            })
+        }
+        return  future
     }
 
     private func acquireAuthorizationCode() -> CallbackFuture<String> {
@@ -60,6 +63,8 @@ internal class OneDriveAuthHelper: AuthHelper {
             server.startRun(44316)
             _ = server.getAuthorizationCode().done({ (authCode) in
                 resolver.fulfill(authCode)
+            }).catch({ (error) in
+                resolver.reject(error)
             })
         }
         return future
@@ -90,17 +95,7 @@ internal class OneDriveAuthHelper: AuthHelper {
                         resolver.reject(HiveError.failue(des: "response is nil"))
                         return
                     }
-                    self.authInfo = AuthInfo()
-                    self.authInfo?.accessToken = (jsonData![KEYCHAIN_ACCESS_TOKEN] as? String)
-                    self.authInfo?.refreshToken = (jsonData![KEYCHAIN_REFRESH_TOKEN] as? String)
-                    self.authInfo?.expiredIn = (jsonData![KEYCHAIN_EXPIRES_IN] as? Int64)
-                    self.authInfo?.scopes = (jsonData![KEYCHAIN_SCOPE] as? String)
-                    let expireTime = HelperMethods.getExpireTime(time: (self.authInfo?.expiredIn!)!)
-                    self.authInfo?.expiredTime = expireTime
-                    let onedriveAccountJson = [KEYCHAIN_ACCESS_TOKEN: (jsonData![KEYCHAIN_ACCESS_TOKEN] as! String) as Any,
-                                               KEYCHAIN_REFRESH_TOKEN: (jsonData![KEYCHAIN_REFRESH_TOKEN] as! String),
-                                               KEYCHAIN_EXPIRES_IN: expireTime] as [String : Any]
-                    HelperMethods.saveKeychain(KEYCHAIN_DRIVE_ACCOUNT, onedriveAccountJson)
+                    self.saveOnedriveAcount(jsonData as! Dictionary<String, Any>)
                     resolver.fulfill(true)
                 })
         }
@@ -134,18 +129,7 @@ internal class OneDriveAuthHelper: AuthHelper {
                         resolver.reject(HiveError.failue(des: "response is nil"))
                         return
                     }
-                    self.authInfo = AuthInfo()
-                    self.authInfo?.accessToken = (jsonData![KEYCHAIN_ACCESS_TOKEN] as? String)
-                    self.authInfo?.refreshToken = (jsonData![KEYCHAIN_REFRESH_TOKEN] as? String)
-                    self.authInfo?.expiredIn = (jsonData![KEYCHAIN_EXPIRES_IN] as? Int64)
-                    self.authInfo?.scopes = (jsonData![KEYCHAIN_SCOPE] as? String)
-                    let expiredTime = HelperMethods.getExpireTime(time: self.authInfo!.expiredIn!)
-                    self.authInfo?.expiredTime = expiredTime
-
-                    let onedriveAccountJson = [KEYCHAIN_ACCESS_TOKEN: (jsonData![KEYCHAIN_ACCESS_TOKEN] as! String),
-                                               KEYCHAIN_REFRESH_TOKEN: (jsonData![KEYCHAIN_REFRESH_TOKEN] as! String),
-                                               KEYCHAIN_EXPIRES_IN: expiredTime] as [String : Any]
-                    HelperMethods.saveKeychain(KEYCHAIN_DRIVE_ACCOUNT, onedriveAccountJson)
+                    self.saveOnedriveAcount(jsonData as! Dictionary<String, Any>)
                     resolver.fulfill(true)
                 })
         }
@@ -173,6 +157,8 @@ internal class OneDriveAuthHelper: AuthHelper {
             if isExpired() {
                 _ = self.refreshAccessToken().done({ (result) in
                     resolver.fulfill(result)
+                }).catch({ (error) in
+                    resolver.reject(error)
                 })
             }
             else {
@@ -180,5 +166,19 @@ internal class OneDriveAuthHelper: AuthHelper {
             }
         }
         return future
+    }
+
+    private func saveOnedriveAcount(_ jsonData: Dictionary<String, Any>){
+        self.authInfo = AuthInfo()
+        self.authInfo?.accessToken = (jsonData[KEYCHAIN_ACCESS_TOKEN] as? String)
+        self.authInfo?.refreshToken = (jsonData[KEYCHAIN_REFRESH_TOKEN] as? String)
+        self.authInfo?.expiredIn = (jsonData[KEYCHAIN_EXPIRES_IN] as? Int64)
+        self.authInfo?.scopes = (jsonData[KEYCHAIN_SCOPE] as? String)
+        let expiredTime = HelperMethods.getExpireTime(time: self.authInfo!.expiredIn!)
+        self.authInfo?.expiredTime = expiredTime
+        let onedriveAccountJson = [KEYCHAIN_ACCESS_TOKEN: (jsonData[KEYCHAIN_ACCESS_TOKEN] as! String),
+                                   KEYCHAIN_REFRESH_TOKEN: (jsonData[KEYCHAIN_REFRESH_TOKEN] as! String),
+                                   KEYCHAIN_EXPIRES_IN: expiredTime] as [String : Any]
+        HelperMethods.saveKeychain(KEYCHAIN_DRIVE_ACCOUNT, onedriveAccountJson)
     }
 }
