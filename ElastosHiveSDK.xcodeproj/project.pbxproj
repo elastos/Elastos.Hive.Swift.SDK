@@ -18,6 +18,7 @@
 		11379442227EDA6A004A1F65 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11379441227EDA6A004A1F65 /* Assets.xcassets */; };
 		1137944D227EDE4B004A1F65 /* HiveOneDriveFileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1137944B227EDE4B004A1F65 /* HiveOneDriveFileTests.swift */; };
 		1137944E227EDE4B004A1F65 /* HiveOneDriveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1137944C227EDE4B004A1F65 /* HiveOneDriveTests.swift */; };
+		114C306C228EAB1500767C4E /* OneDriveDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114C306B228EAB1500767C4E /* OneDriveDirectory.swift */; };
 		1160624822696E3200BDCB9F /* OneDriveExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1160624722696E3200BDCB9F /* OneDriveExtension.swift */; };
 		1160625122696E9500BDCB9F /* KeychainSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1160624E22696E9500BDCB9F /* KeychainSwift.swift */; };
 		1160625322696E9500BDCB9F /* TegKeychainConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1160624F22696E9500BDCB9F /* TegKeychainConstants.swift */; };
@@ -89,6 +90,7 @@
 		1137944A227EDAE9004A1F65 /* TestHost.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TestHost.entitlements; sourceTree = "<group>"; };
 		1137944B227EDE4B004A1F65 /* HiveOneDriveFileTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HiveOneDriveFileTests.swift; sourceTree = "<group>"; };
 		1137944C227EDE4B004A1F65 /* HiveOneDriveTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HiveOneDriveTests.swift; sourceTree = "<group>"; };
+		114C306B228EAB1500767C4E /* OneDriveDirectory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneDriveDirectory.swift; sourceTree = "<group>"; };
 		1160624722696E3200BDCB9F /* OneDriveExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OneDriveExtension.swift; path = Vendors/OneDrive/OneDriveExtension.swift; sourceTree = "<group>"; };
 		1160624E22696E9500BDCB9F /* KeychainSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainSwift.swift; sourceTree = "<group>"; };
 		1160624F22696E9500BDCB9F /* TegKeychainConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TegKeychainConstants.swift; sourceTree = "<group>"; };
@@ -324,6 +326,7 @@
 				A3743ADC2265743400C9493E /* OneDriveConstants.swift */,
 				A3743AD4226570B200C9493E /* OneDriveParameters.swift */,
 				A39C49AD22539CD10027BDF9 /* OneDrive.swift */,
+				114C306B228EAB1500767C4E /* OneDriveDirectory.swift */,
 				A39C49AE22539CD10027BDF9 /* OneDriveAuthHelper.swift */,
 				A39C49AF22539CD10027BDF9 /* OneDriveFile.swift */,
 				A3FD3C82228001EB0031413A /* OneDriveClient.swift */,
@@ -682,6 +685,7 @@
 				A39C49A422539C9C0027BDF9 /* AuthHelper.swift in Sources */,
 				111970C3228D52DD00BA38E0 /* HiveClientInfo.swift in Sources */,
 				111970C9228DABD900BA38E0 /* HiveFileInfo.swift in Sources */,
+				114C306C228EAB1500767C4E /* OneDriveDirectory.swift in Sources */,
 				A39C49B122539CD10027BDF9 /* OneDriveAuthHelper.swift in Sources */,
 				A39C49BC22539D2E0027BDF9 /* OwnCloudFile.swift in Sources */,
 				A39C49B022539CD10027BDF9 /* OneDrive.swift in Sources */,
