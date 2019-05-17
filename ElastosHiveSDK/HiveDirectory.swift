@@ -1,41 +1,46 @@
-//
-//  HiveDirectory.swift
-//  ElastosHiveSDK
-//
-//  Created by 李爱红 on 2019/5/16.
-//  Copyright © 2019 org.elastos. All rights reserved.
-//
+
 
 import UIKit
 
 public class HiveDirectoryHandle: NSObject {
-    var hiveFile: HiveFileHandle?
+    public var drive: HiveDriveHandle?
+    public var pathName: String?
+    public var parentPath: String?
+    public var createDateTime: String?
+    public var lastModifiedDateTime: String?
+    public var parentReference: Dictionary<AnyHashable, Any>?
 
-    func createDirectory(atName: String) -> CallbackFuture<HiveResult<HiveDirectoryHandle>>? {
+
+    public func parentHandle() -> CallbackFuture<HiveResult<HiveDirectoryHandle>>? {
+        // TODO
         return nil
     }
 
-    func getDirectory(atName: String) -> CallbackFuture<HiveResult<HiveDirectoryHandle>>? {
+    public func createDirectory(atName: String) -> CallbackFuture<HiveResult<HiveDirectoryHandle>>? {
         return nil
     }
 
-    func createFile(atName: String) -> CallbackFuture<HiveResult<HiveFileHandle>>? {
+    public func getDirectory(atName: String) -> CallbackFuture<HiveResult<HiveDirectoryHandle>>? {
         return nil
     }
 
-    func fileHandle(atName: String) -> CallbackFuture<HiveResult<HiveFileHandle>>? {
+    public func createFile(atName: String) -> CallbackFuture<HiveResult<HiveFileHandle>>? {
         return nil
     }
 
-    func moveTo(atPath: String) -> CallbackFuture<HiveResult<HiveDirectoryHandle>>? {
+    public func fileHandle(atName: String) -> CallbackFuture<HiveResult<HiveFileHandle>>? {
         return nil
     }
 
-    func copyTo(atPath: String) -> CallbackFuture<HiveResult<HiveDirectoryHandle>>? {
+    public func moveTo(atPath: String) -> CallbackFuture<Bool>? {
         return nil
     }
 
-    func deleteItem() -> CallbackFuture<Bool>? {
+    public func copyTo(atPath: String) -> CallbackFuture<Bool>? {
+        return nil
+    }
+
+    public func deleteItem() -> CallbackFuture<Bool>? {
         return nil
     }
 }
