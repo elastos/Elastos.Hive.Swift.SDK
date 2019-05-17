@@ -44,7 +44,7 @@ public class HiveFileHandle: NSObject {
         return nil
     }
 
-   public func moveTo(atPath: String) -> CallbackFuture<HiveResult<HiveFileHandle>>? {
+   public func moveTo(atPath: String) -> CallbackFuture<Bool>? {
         return nil
     }
 
@@ -79,7 +79,7 @@ public class HiveFileHandle: NSObject {
      * @param newPath The copy-to pathname.
      * @throws Exception TODO
      */
-    public func copyTo(atPath: String) -> CallbackFuture<HiveResult<HiveFileHandle>>? {
+    public func copyTo(atPath: String) -> CallbackFuture<Bool>? {
         return nil
     }
 

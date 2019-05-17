@@ -3,11 +3,12 @@
 import UIKit
 
 public class HiveDirectoryHandle: NSObject {
-    public var hiveFile: HiveFileHandle?
+    public var drive: HiveDriveHandle?
     public var pathName: String?
     public var parentPath: String?
     public var createDateTime: String?
     public var lastModifiedDateTime: String?
+    public var parentReference: Dictionary<AnyHashable, Any>?
 
 
     public func parentHandle() -> CallbackFuture<HiveResult<HiveDirectoryHandle>>? {
@@ -31,11 +32,11 @@ public class HiveDirectoryHandle: NSObject {
         return nil
     }
 
-    public func moveTo(atPath: String) -> CallbackFuture<HiveResult<HiveDirectoryHandle>>? {
+    public func moveTo(atPath: String) -> CallbackFuture<Bool>? {
         return nil
     }
 
-    public func copyTo(atPath: String) -> CallbackFuture<HiveResult<HiveDirectoryHandle>>? {
+    public func copyTo(atPath: String) -> CallbackFuture<Bool>? {
         return nil
     }
 

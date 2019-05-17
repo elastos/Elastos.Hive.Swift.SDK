@@ -36,8 +36,8 @@ internal class OneDriveFile: HiveFileHandle {
                                 resolver.reject(HiveError.systemError(error: error, jsonDes: response?.body.jsonObject()))
                                 return
                             }
-                            let hiveDirectoryHandle = self.oneDrive!.handleResult(atPath, jsonData!)
-                            resolver.fulfill(HiveResult(handle: hiveDirectoryHandle.hiveFile!))
+                            let hiveFileHandle = self.handleResult(atPath, jsonData!)
+                            resolver.fulfill(HiveResult(handle: hiveFileHandle))
                         })
                 }
             })
@@ -45,8 +45,8 @@ internal class OneDriveFile: HiveFileHandle {
         return fulture
     }
 
-    override func copyTo(atPath: String) -> CallbackFuture<HiveResult<HiveFileHandle>>? {
-        let future = CallbackFuture<HiveResult<HiveFileHandle>>{ resolver in
+    override func copyTo(atPath: String) -> CallbackFuture<Bool>? {
+        let future = CallbackFuture<Bool>{ resolver in
             _ = oneDrive?.authHelperHandle.checkExpired()?.done({ (result) in
                 if self.validatePath(atPath).0 == false {
                     resolver.reject(HiveError.failue(des: self.validatePath(atPath).1))
@@ -69,7 +69,7 @@ internal class OneDriveFile: HiveFileHandle {
                         request?.body = try? JSONSerialization.data(withJSONObject: params)
                         }?.asJson(&error)
                     if response?.code == 202 {
-                        resolver.fulfill(HiveResult(handle: HiveFileHandle())) // todo
+                        resolver.fulfill(true) // todo
                     }else {
                         resolver.reject(HiveError.failue(des: "Invoking the copyTo has error."))
                     }
@@ -79,8 +79,8 @@ internal class OneDriveFile: HiveFileHandle {
         return future
     }
 
-    override func moveTo(atPath: String) -> CallbackFuture<HiveResult<HiveFileHandle>>? {
-        let future = CallbackFuture<HiveResult<HiveFileHandle>>{ resolver in
+    override func moveTo(atPath: String) -> CallbackFuture<Bool>? {
+        let future = CallbackFuture<Bool>{ resolver in
             _ = oneDrive?.authHelperHandle.checkExpired()?.done({ (result) in
                 if self.validatePath(atPath).0 == false {
                     resolver.reject(HiveError.failue(des: self.validatePath(atPath).1))
@@ -98,7 +98,7 @@ internal class OneDriveFile: HiveFileHandle {
                     request?.body = try? JSONSerialization.data(withJSONObject: params, options: .prettyPrinted)
                     }?.asJsonAsync({ (response, error) in
                         if response?.code == 200 {
-                            resolver.fulfill(HiveResult(handle: HiveFileHandle()))
+                            resolver.fulfill(true)
                         }else {
                             resolver.reject(HiveError.failue(des: "Invoking the rename has error."))
                         }
@@ -241,10 +241,39 @@ internal class OneDriveFile: HiveFileHandle {
     }
 
     private func validateJsonData(_ jsonData: Dictionary<String, Any>?) -> Bool{
-
         if jsonData == nil || jsonData!.isEmpty {
             return false
         }
         return true
     }
+
+    internal func handleResult(_ atPath: String, _ jsonData: Dictionary<String, Any>) -> HiveFileHandle {
+        let driveFile: OneDriveFile = OneDriveFile()
+        driveFile.pathName =  atPath
+        driveFile.name = (jsonData["name"] as? String)
+        let folder = jsonData["folder"]
+        if folder != nil {
+            driveFile.isDirectory = true
+            driveFile.isFile = false
+        }
+        driveFile.createdDateTime = (jsonData["createdDateTime"] as? String)
+        driveFile.lastModifiedDateTime = (jsonData["lastModifiedDateTime"] as? String)
+        driveFile.fileSystemInfo = (jsonData["fileSystemInfo"] as? Dictionary)
+        driveFile.id = (jsonData["id"] as? String)
+        driveFile.rootPath = ONEDRIVE_RESTFUL_URL + "/root"
+        let sub = jsonData["parentReference"] as? NSDictionary
+        driveFile.parentReference = (sub as! Dictionary<AnyHashable, Any>)
+        if (sub != nil) {
+            driveFile.driveId = (sub!["driveId"] as? String)
+            driveFile.parentId = (sub!["id"] as? String)
+        }
+        let fullPath = sub!["path"]
+        if (fullPath != nil) {
+            let full = fullPath as!String
+            let end = full.index(full.endIndex, offsetBy: -1)
+            driveFile.parentPath = String(full[..<end])
+        }
+        return driveFile
+    }
+
 }
