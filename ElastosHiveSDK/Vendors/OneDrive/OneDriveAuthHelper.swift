@@ -32,7 +32,11 @@ internal class OneDriveAuthHelper: AuthHelper {
                         self.authCode = nil
                         self.server.stop()
                         resolver.fulfill(result)
+                    }).catch({ (error) in
+                    resolver.reject(error)
                     })
+                }).catch({ (error) in
+                    resolver.reject(error)
                 })
             }
             else{

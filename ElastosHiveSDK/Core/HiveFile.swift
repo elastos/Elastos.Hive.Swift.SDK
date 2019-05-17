@@ -84,25 +84,6 @@ public class HiveFileHandle: NSObject {
     }
 
     /**
-     * Rename the item name to another name.
-     *
-     * @param newPath The new file path to rename with.
-     * @throws Exception TODO
-     */
-    public func renameFileTo(_ atPath: String) -> CallbackFuture<HiveResult<HiveFileHandle>>? {
-        return nil
-    }
-
-    /**
-     * Rename the item to new item.
-     *
-     * @param newFile The new Hive File to rename with.
-     * @throws Exception TODO
-     */
-    public func renameFileTo(newFile: HiveFileHandle) throws {
-    }
-
-    /**
      * List all file objects under this directory.
      *
      * @return The array of hive file objects.

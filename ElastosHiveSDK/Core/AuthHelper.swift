@@ -10,4 +10,9 @@ internal class AuthHelper: NSObject {
     func getAuthInfo() -> AuthInfo? {
         return nil
     }
+    
+    func headers() -> [String: Any] {
+        let accesstoken = HelperMethods.getKeychain(KEYCHAIN_ACCESS_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
+        return ["Content-Type": "application/json;charset=UTF-8", HTTP_HEADER_AUTHORIZATION: "bearer \(accesstoken)"]
+    }
 }
