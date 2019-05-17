@@ -18,6 +18,7 @@ public class HiveFileHandle: NSObject {
     public var driveId: String?
     public var fileSystemInfo: Dictionary<AnyHashable, Any>?
     public var parentReference: Dictionary<AnyHashable, Any>?
+    public var createDateTime: String?
 
     /**
      * Create an file with specific pathname.
@@ -27,32 +28,25 @@ public class HiveFileHandle: NSObject {
      * @return An new hive file.
      * @throws Exception TODO
      */
-    public static func createFile(atPath: String, _ withResult: @escaping (HiveFileObjectCreationResponseHandler)) {
-        // return try drive.createFile(pathname: pathname)
+    public func createFile(atPath: String) -> CallbackFuture<HiveResult<HiveFileHandle>>? {
+        return nil
+    }
+
+    public func fileHandle(atPath: String) -> CallbackFuture<HiveResult<HiveFileHandle>>? {
+        return nil
     }
 
     public static func createFile(atPath: String, _ contents: Data, _ withResult: @escaping (HiveFileObjectCreationResponseHandler)) {
         // TODO;
     }
 
-    public func createDateTime() -> String? {
-        return nil
-    }
-
     public func parentHandle() -> CallbackFuture<HiveResult<HiveDirectoryHandle>>? {
         return nil
     }
 
-   public func moveTo(atPath: String) -> CallbackFuture<HiveResult<HiveFileHandle>>? {
+   public func moveTo(atPath: String) -> CallbackFuture<Bool>? {
         return nil
     }
-    /**
-     * Update date and time of this item.
-     *
-     * @param newDateTime The updated date and time.
-     * @throws Exception TODO
-     */
-    public func updateDateTime(withValue newValue: String) throws {}
 
     /**
      * Delete this file object.
@@ -85,27 +79,8 @@ public class HiveFileHandle: NSObject {
      * @param newPath The copy-to pathname.
      * @throws Exception TODO
      */
-    public func copyTo(atPath: String) -> CallbackFuture<HiveResult<HiveFileHandle>>? {
+    public func copyTo(atPath: String) -> CallbackFuture<Bool>? {
         return nil
-    }
-
-    /**
-     * Rename the item name to another name.
-     *
-     * @param newPath The new file path to rename with.
-     * @throws Exception TODO
-     */
-    public func renameFileTo(_ atPath: String) -> CallbackFuture<HiveResult<HiveFileHandle>>? {
-        return nil
-    }
-
-    /**
-     * Rename the item to new item.
-     *
-     * @param newFile The new Hive File to rename with.
-     * @throws Exception TODO
-     */
-    public func renameFileTo(newFile: HiveFileHandle) throws {
     }
 
     /**
