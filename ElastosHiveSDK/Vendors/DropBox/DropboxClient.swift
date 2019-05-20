@@ -1,18 +1,17 @@
 import Foundation
+import PromiseKit
 
 @objc(DropboxClient)
 internal class DropboxClient: HiveClientHandle {
     private static var clientInstance: HiveClientHandle?
 
-    private var authHelperHandle: AuthHelper?
-
-    private init(_ param: DriveParameters) {
-        // TODO;
-        //super.init()
+    private init(_ param: DriveParameter) {
+        super.init(DriveType.dropBox)
+        self._clientId = "TODO"
     }
 
     @objc(createInstance:)
-    public static func createInstance(param: DriveParameters){
+    public static func createInstance(param: DriveParameter){
         if clientInstance == nil {
             let client: DropboxClient = DropboxClient(param)
             clientInstance = client as HiveClientHandle
@@ -23,17 +22,21 @@ internal class DropboxClient: HiveClientHandle {
         return clientInstance
     }
 
-    override func driveType() -> DriveType {
-        return .ownCloud
+    override func lastUpdatedInfo() -> Promise<HiveClientInfo>? {
+        return lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>())
     }
 
-    override func login() -> CallbackFuture<Bool>? {
-        return nil
+    override func lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>) -> Promise<HiveClientInfo>? {
+        let error = HiveError.failue(des: "TODO")
+        return Promise<HiveClientInfo>(error: error)
     }
 
-    override func logout() -> CallbackFuture<Bool>? {
-        // TODO
-        return nil
+    override func defaultDriveHandle() -> Promise<HiveDriveHandle>? {
+        return defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>())
     }
 
+    override func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> Promise<HiveDriveHandle>? {
+        let error = HiveError.failue(des: "TODO")
+        return Promise<HiveDriveHandle>(error: error)
+    }
 }

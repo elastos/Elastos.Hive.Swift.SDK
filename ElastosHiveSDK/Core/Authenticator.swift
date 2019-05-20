@@ -1,6 +1,5 @@
 import Foundation
 
-open class Authenticator: NSObject {
-    public func requestAuthentication(_ requestUrl: String){
-    }
+public protocol Authenticator {
+    func requestAuthentication(_ requestURL: String) -> Bool
 }

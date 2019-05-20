@@ -1,6 +1,5 @@
 import Foundation
-
-public typealias HiveFileObjectsListResponseHandler = (_ files: [HiveFileHandle]?, _ error: HiveError?) -> Void
+import PromiseKit
 
 @objc(HiveFile)
 public class HiveFileHandle: NSObject {
@@ -10,7 +9,7 @@ public class HiveFileHandle: NSObject {
     public var isFile: Bool?
     public var isDirectory: Bool?
     public var id: String?
-    public var pathName: String?
+    //public var pathName: String?
     public var name: String?
     public var rootPath: String?
     public var parentId: String?
@@ -19,78 +18,82 @@ public class HiveFileHandle: NSObject {
     public var fileSystemInfo: Dictionary<AnyHashable, Any>?
     public var parentReference: Dictionary<AnyHashable, Any>?
     public var createDateTime: String?
+}
 
-    /**
-     * Create an file with specific pathname.
-     *
-     * @param drive The target drive to create a hive file.
-     * @param pathname  The pathname.
-     * @return An new hive file.
-     * @throws Exception TODO
-     */
-    public func createFile(atPath: String) -> CallbackFuture<HiveResult<HiveFileHandle>>? {
-        return nil
+extension HiveFileHandle: HiveResourceItem {
+    internal typealias resourceType = HiveFileInfo
+
+    @objc
+    var lastInfo: resourceType  {
+        get {
+            return self.lastInfo
+        }
+        set (newInfo) {
+            self.lastInfo = newInfo
+        }
     }
 
-    public func fileHandle(atPath: String) -> CallbackFuture<HiveResult<HiveFileHandle>>? {
-        return nil
+    @objc
+    var uniqueId: String {
+        get {
+            return self.uniqueId;
+        }
     }
 
-    public static func createFile(atPath: String, _ contents: Data, _ withResult: @escaping (HiveFileObjectCreationResponseHandler)) {
+    func lastUpdatedInfo() -> Promise<resourceType>? {
+        return lastUpdatedInfo(handleBy: HiveCallback<HiveFileHandle.resourceType>())
+    }
+
+    func lastUpdatedInfo(handleBy: HiveCallback<resourceType>) -> Promise<resourceType>? {
+        // TODO
+        return nil
+    }
+}
+
+extension HiveFileHandle: HiveFileItem {
+    @objc
+    public var pathName: String {
+        get {
+            return self.pathName
+        }
+    }
+
+    @objc
+    public var parentPathName: String {
+        get {
+            // TODO
+            return self.pathName
+        }
+    }
+
+    public func moveTo(newPath: String) -> Promise<HiveStatus>? {
+        return moveTo(newPath: newPath, handleBy: HiveCallback<HiveStatus>())
+    }
+
+    public func moveTo(newPath: String, handleBy: HiveCallback<HiveStatus>) -> Promise<HiveStatus>? {
         // TODO;
+        return nil;
     }
 
-    public func parentHandle() -> CallbackFuture<HiveResult<HiveDirectoryHandle>>? {
-        return nil
+    public func copyTo(newPath: String) -> Promise<HiveStatus>? {
+        return copyTo(newPath: newPath, handleBy: HiveCallback<HiveStatus>())
     }
 
-   public func moveTo(atPath: String) -> CallbackFuture<Bool>? {
-        return nil
+    public func copyTo(newPath: String, handleBy: HiveCallback<HiveStatus>) -> Promise<HiveStatus>? {
+        // TODO;
+        return nil;
     }
 
-    /**
-     * Delete this file object.
-     *
-     * @throws Exception TODO
-     */
-
-    public func deleteItem() -> CallbackFuture<Bool>? {
-        return nil
+    public func deleteItem() -> Promise<HiveStatus>? {
+        return deleteItem(handleBy: HiveCallback<HiveStatus>())
     }
 
-    /**
-     * Close hive file object.
-     *
-     */
-    func close() {
+    public func deleteItem(handleBy: HiveCallback<HiveStatus>) -> Promise<HiveStatus>? {
+        // TODO;
+        return nil;
     }
 
-    public func readData() -> CallbackFuture<HiveResult<Data>>? {
-        return nil
+    public func close() {
+        // TODO
     }
-
-    public func writeData(withData: Data) -> CallbackFuture<HiveResult<Bool>>? {
-        return nil
-    }
-
-    /**
-     * Copy the item to another address.
-     *
-     * @param newPath The copy-to pathname.
-     * @throws Exception TODO
-     */
-    public func copyTo(atPath: String) -> CallbackFuture<Bool>? {
-        return nil
-    }
-
-    /**
-     * List all file objects under this directory.
-     *
-     * @return The array of hive file objects.
-     * @throws Exception TODO
-     */
-    public func list() -> CallbackFuture<HiveResult<[HiveFileHandle]>>? {
-        return nil
-    }
-
 }
