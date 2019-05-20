@@ -15,163 +15,168 @@ internal class OneDriveAuthHelper: AuthHelper {
     let server = SimpleAuthServer()
     internal typealias CallbackFuture = Promise
 
-    
-    init(_ clientId: String, _ scopes: Array<String>, _ redirectUrl: String) {
-        self.clientId = clientId
-        self.scopes = scopes.joined(separator: " ")
-        self.redirectUrl = redirectUrl
+    private let authEntry: OAuthEntry
+    private var token: AuthToken?
+
+    init(_ authEntry: OAuthEntry) {
+        self.authEntry = authEntry
     }
 
-    func login() -> CallbackFuture<Bool> {
-
-        let future = CallbackFuture<Bool> { resolver in
-            if (!hasLogin()) {
-                _ = acquireAuthorizationCode().done({ (authCode) in
-                    self.authCode = authCode
-                    _ = self.requestAccessToken(authCode).done({ (result) in
-                        self.authCode = nil
-                        self.server.stop()
-                        resolver.fulfill(result)
-                    }).catch({ (error) in
-                    resolver.reject(error)
-                    })
-                }).catch({ (error) in
-                    resolver.reject(error)
-                })
-            }
-            else{
-                resolver.fulfill(true)
+    override func login(_ authenticator: Authenticator) -> Promise<AuthToken> {
+        let promise = Promise<AuthToken> { resolver in
+            acquireAuthCode().then { authCode in
+                acquireAccessToken(authCode)
+                authCode = nil
+            }.done { authToken in
+                resolver.fulfill(authToken)
+                self.token = authToken
+                authToken = nil
+            }.catch { error in
+                resolver.reject(error)
             }
         }
-        return future
+        return promise
     }
 
-    func logout() -> CallbackFuture<Bool> {
-        let future = CallbackFuture<Bool>{ resolver in
-            UNIRest.get({ (request) in
-                request?.url = "\(ONEDRIVE_OAUTH2_BASE_REQUEST_URL)/logout?post_logout_redirect_uri=\(self.redirectUrl!)"
-            })?.asJsonAsync({ (response, error) in
+    override func logout() -> Promise<Bool> {
+        let promise = Promise<Bool> { resolver in
+            UNIRest.get { (request) in
+                request?.url = OneDriveURL.AUTH + "/logout" +
+                    "post_logout_redirect_uri=\(self.redirectUrl!)"
+            }?.asJsonAsync{ (response, error) in
                 guard response?.code == 200 else {
                     resolver.reject(HiveError.failue(des: "logout failed"))
                     return
                 }
                 resolver.fulfill(true)
-            })
+            }
         }
-        return  future
+        return promise
     }
 
-    private func acquireAuthorizationCode() -> CallbackFuture<String> {
-
-        let future = CallbackFuture<String> { resolver in
+    private func acquireAuthCode() -> Promise<String> {
+        let promise = Promise<String> { resolver in
             server.startRun(44316)
-            _ = server.getAuthorizationCode().done({ (authCode) in
+            firstly {
+                server.getCode()
+            }.done { authCode in
                 resolver.fulfill(authCode)
-            }).catch({ (error) in
+            }.catch{ error in
                 resolver.reject(error)
-            })
+            }
         }
-        return future
+        return promise
     }
-    
-    private func requestAccessToken(_ authorCode: String) -> CallbackFuture<Bool> {
-        let future = CallbackFuture<Bool> { resolver in
 
-            let params: Dictionary<String, Any> = ["client_id" : clientId ?? "",
-                                                   "code" : authorCode,
-                                                   "grant_type" : AUTHORIZATION_TYPE_CODE,
-                                                   "redirect_uri" : redirectUrl ?? ""]
-            UNIRest.postEntity { (request) in
-                request?.url = String(format: ONEDRIVE_OAUTH2_BASE_REQUEST_URL + "/token")
-                request?.headers = ["Content-Type": "application/x-www-form-urlencoded"]
+    private func acquireAccessToken(_ authCode: String) -> Promise<AuthToken> {
+        let promise = Promise<AuthToken> {  resolver in
+            UNIRest.postEntity{ request in
+                let params: Dictionary<String, Any> = [
+                    "client_id" : self.authEntry.clientId,
+                    "code" : authCode,
+                    "grant_type" : AUTHORIZATION_TYPE_CODE,
+                    "redirect_uri" : self.authEntry.redirectURL
+                ]
+                request?.url = OneDriveURL.AUTH + OneDriveMethod.TOKEN
+                request?.headers = [OneDriveHttpHeader.ContentType: OneDriveHttpHeader.ContentTypeValue]
                 request?.body = params.queryString.data(using: String.Encoding.utf8)
-                }?.asJsonAsync({ (response, error) in
-                    guard error == nil else {
-                        resolver.reject(HiveError.systemError(error: error, jsonDes: response?.body.jsonObject()))
-                        return
-                    }
-                    guard response?.code == 200 else {
-                        resolver.reject(HiveError.jsonFailue(des: response?.body.jsonObject()))
-                        return
-                    }
-                    let jsonData = response?.body.jsonObject()
-                    guard jsonData != nil && !jsonData!.isEmpty else {
-                        resolver.reject(HiveError.failue(des: "response is nil"))
-                        return
-                    }
-                    self.saveOnedriveAcount(jsonData as! Dictionary<String, Any>)
-                    resolver.fulfill(true)
-                })
+
+            }?.asJsonAsync{ (response, error) in
+                guard error != nil else {
+                    let _error = HiveError.failue(des: error.debugDescription)
+                    resolver.reject(_error)
+                    return
+                }
+
+                guard response?.code == 200 else {
+                    let _error = HiveError.failue(des: response?.description)
+                    resolver.reject(_error)
+                    return
+                }
+
+                let jsonObject = response?.body.jsonObject() as? [String: String]
+                guard jsonObject != nil &&  !jsonObject!.isEmpty else {
+                    resolver.reject(HiveError.failue(des: "Empty response body"))
+                    return
+                }
+
+                let token = AuthToken(jsonObject!["scope"]!,
+                                      jsonObject!["access_token"]!,
+                                      jsonObject!["refresh_token"]!,
+                                      jsonObject!["expires_in"]!)
+                resolver.fulfill(token)
+            }
         }
-        return future
+
+        return promise
     }
-    
-    private func refreshAccessToken() -> CallbackFuture<Bool> {
-        let future = CallbackFuture<Bool>{ resolver in
-            let scope = ["Files.ReadWrite","offline_access"].joined(separator: " ")
-            let refreshToken = HelperMethods.getKeychain(KEYCHAIN_REFRESH_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
-            let params: Dictionary<String, Any> = ["client_id": clientId ?? "",
-                                                   "refresh_token": refreshToken,
-                                                   "grant_type": KEYCHAIN_REFRESH_TOKEN,
-                                                   "redirect_uri": redirectUrl ?? "",
-                                                   "scope": scope]
-            UNIRest.postEntity { (request) in
-                request?.url = String(format: ONEDRIVE_OAUTH2_BASE_REQUEST_URL + "/token")
-                request?.headers = ["Content-Type": "application/x-www-form-urlencoded"]
+
+    private func refreshAccessToken() -> Promise<AuthToken> {
+        let promise = Promise<AuthToken> {  resolver in
+            UNIRest.postEntity{ request in
+                let params: Dictionary<String, Any> = [
+                    "client_id" : self.authEntry.clientId,
+                    "scope" : self.authEntry.scope,
+                    "redirect_uri" : self.authEntry.redirectURL,
+                    "refresh_token": self.token!.refreshToken,
+                    "grant_type": KEYCHAIN_REFRESH_TOKEN
+                ]
+                request?.url = OneDriveURL.AUTH + OneDriveMethod.TOKEN
+                request?.headers = [OneDriveHttpHeader.ContentType: OneDriveHttpHeader.ContentTypeValue]
                 request?.body = params.queryString.data(using: String.Encoding.utf8)
-                }?.asJsonAsync({ (response, error) in
-                    guard error == nil else {
-                        resolver.reject(HiveError.systemError(error: error, jsonDes: response?.body.jsonObject()))
-                        return
-                    }
-                    guard response?.code == 200 else {
-                        resolver.reject(HiveError.jsonFailue(des: response?.body.jsonObject()))
-                        return
-                    }
-                    let jsonData = response?.body.jsonObject()
-                    guard jsonData != nil && !jsonData!.isEmpty else {
-                        resolver.reject(HiveError.failue(des: "response is nil"))
-                        return
-                    }
-                    self.saveOnedriveAcount(jsonData as! Dictionary<String, Any>)
-                    resolver.fulfill(true)
-                })
+
+            }?.asJsonAsync{ (response, error) in
+                guard error != nil else {
+                    let _error = HiveError.failue(des: error.debugDescription)
+                    resolver.reject(_error)
+                    return
+                }
+
+                guard response?.code == 200 else {
+                    let _error = HiveError.failue(des: response?.description)
+                    resolver.reject(_error)
+                    return
+                }
+
+                let jsonObject = response?.body.jsonObject() as? [String: String]
+                guard jsonObject != nil &&  !jsonObject!.isEmpty else {
+                    resolver.reject(HiveError.failue(des: "Empty response body"))
+                    return
+                }
+
+                let token = AuthToken(jsonObject!["scope"]!,
+                                      jsonObject!["access_token"]!,
+                                      jsonObject!["refresh_token"]!,
+                                      jsonObject!["expires_in"]!)
+                resolver.fulfill(token)
+            }
         }
-        return future
-    }
-    
-    private func hasLogin() -> Bool {
-        return authInfo != nil;
+
+        return promise
     }
     
     private func isExpired() -> Bool {
-        guard authInfo != nil else {
-            return true;
-        }
-        return (authInfo?.isExpired())!
+        return token == nil || token!.isExpired()
     }
-    
-    override func checkExpired() -> CallbackFuture<Bool>? {
-        let future = CallbackFuture<Bool>{ resolver in
 
-            guard authInfo != nil else {
-                resolver.reject(HiveError.failue(des: "Have to login first"))
+    override func checkExpired() -> Promise<Bool> {
+        let promise = Promise<Bool> { resolver in
+            guard !isExpired() else {
+                _ = refreshAccessToken().done{ authToken in
+                    resolver.fulfill(true)
+                }.catch{ error in
+                    resolver.reject(error)
+                }
                 return
             }
-            if isExpired() {
-                _ = self.refreshAccessToken().done({ (result) in
-                    resolver.fulfill(result)
-                }).catch({ (error) in
-                    resolver.reject(error)
-                })
-            }
-            else {
-                resolver.fulfill(true)
-            }
+
+            resolver.fulfill(true)
         }
-        return future
+
+        return promise
     }
 
+    /*
     private func saveOnedriveAcount(_ jsonData: Dictionary<String, Any>){
         self.authInfo = AuthInfo()
         self.authInfo?.accessToken = (jsonData[KEYCHAIN_ACCESS_TOKEN] as? String)
@@ -185,4 +190,5 @@ internal class OneDriveAuthHelper: AuthHelper {
                                    KEYCHAIN_EXPIRES_IN: expiredTime] as [String : Any]
         HelperMethods.saveKeychain(KEYCHAIN_DRIVE_ACCOUNT, onedriveAccountJson)
     }
+    */
 }
