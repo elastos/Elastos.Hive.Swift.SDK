@@ -1,50 +1,27 @@
 import Foundation
+import PromiseKit
 
 @inline(__always) private func TAG() -> String { return "OneDrive" }
 
 @objc(OneDriveClient)
 internal class OneDriveClient: HiveClientHandle {
     private static var clientInstance: HiveClientHandle?
-    var authHeperHandle: OneDriveAuthHelper
-    var driveId: String?
-    public static var oneDrive: OneDrive?
 
-    private init(_ param: OneDriveParameters) {
-        authHeperHandle = OneDriveAuthHelper(param.clientId!, param.scopes!, param.redirectUrl!)
+    private init(_ param: OneDriveParameter) {
+        super.init(DriveType.oneDrive)
+        self._clientId = "TODO"
+        self.authHelper = OneDriveAuthHelper(param.getAuthEntry())
     }
 
-    public static func createInstance(_ param: OneDriveParameters) {
+    public static func createInstance(_ param: OneDriveParameter) {
         if clientInstance == nil {
             let client: OneDriveClient = OneDriveClient(param)
             clientInstance = client as HiveClientHandle
-            oneDrive = OneDrive(client)
         }
     }
 
     public static func sharedInstance() -> HiveClientHandle? {
         return clientInstance
-    }
-
-    override func driveType() -> DriveType {
-        return .oneDrive
-    }
-
-    override func login() -> CallbackFuture<Bool> {
-        return authHeperHandle.login()
-    }
-
-    override func logout() -> CallbackFuture<Bool>? {
-        return authHeperHandle.logout()
-    }
-
-    override func defaultDriveHandle() -> HiveDriveHandle? {
-        // TODO
-        return OneDriveClient.oneDrive
-    }
-
-    override func clientInfo() -> HiveClientInfo? {
-        // todo
-        return nil
     }
 
 /*
@@ -64,4 +41,21 @@ internal class OneDriveClient: HiveClientHandle {
         driveId = (response?.body.jsonObject()["id"] as! String)
     }
 */
+    override func lastUpdatedInfo() -> Promise<HiveClientInfo>? {
+        return lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>())
+    }
+
+    override func lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>) -> Promise<HiveClientInfo>? {
+        let error = HiveError.failue(des: "TODO")
+        return Promise<HiveClientInfo>(error: error)
+    }
+
+    override func defaultDriveHandle() -> Promise<HiveDriveHandle>? {
+        return defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>())
+    }
+
+    override func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> Promise<HiveDriveHandle>? {
+        let error = HiveError.failue(des: "TODO")
+        return Promise<HiveDriveHandle>(error: error)
+    }
 }

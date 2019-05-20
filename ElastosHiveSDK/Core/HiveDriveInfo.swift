@@ -1,5 +1,4 @@
-
-import UIKit
+import Foundation
 
 public enum DriveState {
     case normal
@@ -19,5 +18,4 @@ public class HiveDriveInfo: NSObject {
     public var ddescription: String?
     public var driveState: DriveState?
     public var currentWorkingPath: String?
-
 }

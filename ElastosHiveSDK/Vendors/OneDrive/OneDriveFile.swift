@@ -5,6 +5,11 @@ import Unirest
 internal class OneDriveFile: HiveFileHandle {
     var oneDrive: OneDrive?
 
+    init(_ info: HiveFileInfo) {
+        super.lastInfo = info
+    }
+
+    /*
     override func parentHandle() -> CallbackFuture<HiveResult<HiveDirectoryHandle>>? {
         let future = CallbackFuture<HiveResult<HiveDirectoryHandle>> { resolver in
             let path = parentPath
@@ -14,6 +19,7 @@ internal class OneDriveFile: HiveFileHandle {
         }
         return future
     }
+    */
 
     override func createFile(atPath: String) -> CallbackFuture<HiveResult<HiveFileHandle>>? {
         let fulture = CallbackFuture<HiveResult<HiveFileHandle>>{ resolver in

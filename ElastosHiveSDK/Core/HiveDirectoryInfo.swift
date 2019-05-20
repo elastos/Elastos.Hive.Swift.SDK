@@ -1,13 +1,10 @@
+import Foundation
 
-import UIKit
-
-class HiveDirectoryInfo: NSObject {
-
-    public var dirId: String?
+public class HiveDirectoryInfo: NSObject {
+    public final var dirId: String
 
     init(_ dirId: String) {
         self.dirId = dirId
         super.init()
     }
-
 }
