@@ -1,26 +1,27 @@
 import Foundation
+import PromiseKit
 import Swifter
 
 internal class SimpleAuthServer: NSObject {
-    private var httpServer: HttpServer = HttpServer()
+    private let httpServer: HttpServer = HttpServer()
 
     func startRun(_ port: UInt16) {
         try? httpServer.start(port as in_port_t)
     }
 
-    func getAuthorizationCode() -> CallbackFuture<String> {
-        let future = CallbackFuture<String> { resolver in
+    func getCode() -> Promise<String> {
+        let promise = Promise<String> { resolver in
             httpServer[""] = { request in
                 guard request.queryParams.count > 0 || request.queryParams[0].0 != "code" else {
-                    resolver.reject(HiveError.failue(des: "authCode obtain failed"))
+                    resolver.reject(HiveError.failue(des: "Abtain authorization code error"))
                     return HttpResponse.ok(.json("nil" as AnyObject))
                 }
-                let authJson = request.queryParams[0]
-                resolver.fulfill(authJson.1)
+                let json = request.queryParams[0]
+                resolver.fulfill(json.1)
                 return HttpResponse.ok(.json("nil" as AnyObject))
             }
         }
-        return future
+        return promise
     }
 
     func stop() {

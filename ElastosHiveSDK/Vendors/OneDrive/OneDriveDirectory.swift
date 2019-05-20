@@ -6,6 +6,10 @@ import Unirest
 class OneDriveDirectory: HiveDirectoryHandle {
     var oneDrive: OneDrive?
 
+    init(_ info: HiveDirectoryInfo) {
+        super.lastInfo = info
+    }
+
     override func parentHandle() -> CallbackFuture<HiveResult<HiveDirectoryHandle>>? {
         let future = CallbackFuture<HiveResult<HiveDirectoryHandle>> { resolver in
             let path = parentPath
