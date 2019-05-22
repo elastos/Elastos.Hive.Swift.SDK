@@ -13,7 +13,7 @@ internal class LocalClient: HiveClientHandle {
     @objc(createInstance:)
     private static func createInstance(param: DriveParameter) {
         if clientInstance == nil {
-            let client: LocalClient = LocalClient(param)
+            let client: LocalClient = LocalClient(param as! LocalParameter)
             clientInstance = client as HiveClientHandle
         }
     }

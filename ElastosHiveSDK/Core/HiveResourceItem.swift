@@ -1,7 +1,7 @@
 import Foundation
 import PromiseKit
 
-protocol HiveResourceItem {
+public protocol HiveResourceItem {
     associatedtype resourceType
 
     var handleId: String?       { get }

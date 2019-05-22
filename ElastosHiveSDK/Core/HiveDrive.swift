@@ -4,25 +4,30 @@ import PromiseKit
 @objc(HiveDrive)
 public class HiveDriveHandle: NSObject, HiveResourceItem, HiveDirectoryItem {
     public let driveType: DriveType
+    private let _driverId: String?
+    private var _lastInfo: HiveDriveInfo?
 
-    internal init(_ driveType: DriveType) {
+    internal init(_ driveType: DriveType, _ info: HiveDriveInfo) {
         self.driveType = driveType
+        self._driverId = "TODO"
+        self._lastInfo = info
     }
 
     @objc
-    var handleId: String? {
+    public var handleId: String? {
         get {
-            return nil
+            return self._driverId
         }
     }
 
-    internal typealias resourceType = HiveDriveInfo
+    public typealias resourceType = HiveDriveInfo
     @objc
-    var lastInfo: resourceType? {
+    public var lastInfo: resourceType? {
         get {
-            return nil
+            return self._lastInfo
         }
         set (newInfo) {
+            self._lastInfo = newInfo
         }
     }
 
@@ -31,16 +36,16 @@ public class HiveDriveHandle: NSObject, HiveResourceItem, HiveDirectoryItem {
     }
 
     public func rootDirectoryHandle(handleBy: HiveCallback<HiveDirectoryHandle>) -> Promise<HiveDirectoryHandle>? {
-        let error = HiveError.failue(des: "HiveDriveHandle::rootDirectoryHandle")
+        let error = HiveError.failue(des: "Dummy")
         return Promise<HiveDirectoryHandle>(error: error)
     }
 
-    func lastUpdatedInfo() -> Promise<resourceType>? {
+    public func lastUpdatedInfo() -> Promise<HiveDriveInfo>? {
         return lastUpdatedInfo(handleBy: HiveCallback<HiveDriveHandle.resourceType>())
     }
 
-    func lastUpdatedInfo(handleBy: HiveCallback<resourceType>) -> Promise<resourceType>? {
-        let error = HiveError.failue(des: "HiveDriveHandle::lastUpdatedInfo")
+    public func lastUpdatedInfo(handleBy: HiveCallback<HiveDriveInfo>) -> Promise<HiveDriveInfo>? {
+        let error = HiveError.failue(des: "Dummy")
         return Promise<resourceType>(error: error)
     }
 
@@ -49,7 +54,7 @@ public class HiveDriveHandle: NSObject, HiveResourceItem, HiveDirectoryItem {
     }
 
     public func createDirectory(withPath: String, handleBy: HiveCallback<HiveDirectoryHandle>) -> Promise<HiveDirectoryHandle>? {
-        let error = HiveError.failue(des: "HiveDriveHandle::createDirectory")
+        let error = HiveError.failue(des: "Dummy")
         return Promise<HiveDirectoryHandle>(error: error)
     }
 
@@ -58,7 +63,7 @@ public class HiveDriveHandle: NSObject, HiveResourceItem, HiveDirectoryItem {
     }
 
     public func directoryHandle(atPath: String, handleBy: HiveCallback<HiveDirectoryHandle>) -> Promise<HiveDirectoryHandle>? {
-        let error = HiveError.failue(des: "HiveDriveHandle::directoryHandle")
+        let error = HiveError.failue(des: "Dummy")
         return Promise<HiveDirectoryHandle>(error: error)
     }
 
@@ -67,7 +72,7 @@ public class HiveDriveHandle: NSObject, HiveResourceItem, HiveDirectoryItem {
     }
 
     public func createFile(withPath: String, handleBy: HiveCallback<HiveFileHandle>) -> Promise<HiveFileHandle>? {
-        let error = HiveError.failue(des: "HiveDriveHandle::createFile")
+        let error = HiveError.failue(des: "Dummy")
         return Promise<HiveFileHandle>(error: error)
     }
 
@@ -76,7 +81,7 @@ public class HiveDriveHandle: NSObject, HiveResourceItem, HiveDirectoryItem {
     }
 
     public func fileHandle(atPath: String, handleBy: HiveCallback<HiveFileHandle>) -> Promise<HiveFileHandle>? {
-        let error = HiveError.failue(des: "HiveDriveHandle::createFile")
+        let error = HiveError.failue(des: "Dummy")
         return Promise<HiveFileHandle>(error: error)
     }
 }
