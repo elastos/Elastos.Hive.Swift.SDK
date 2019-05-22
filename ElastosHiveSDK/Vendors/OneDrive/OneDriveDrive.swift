@@ -5,51 +5,20 @@ import PromiseKit
 @inline(__always) private func TAG() -> String { return "OneDrive" }
 
 internal class OneDriveDrive: HiveDriveHandle {
-    private let deviceId: String
-    private var authHelper: AuthHelper;
-    var client: OneDriveClient
-    //var authHelperHandle: OneDriveAuthHelper
-    var deviceId: String
-
-    init(_ client: OneDriveClient, _ authHelper: AuthHelper) {
-        self.client = client
-    }
+    private var authHelper: AuthHelper
 
     init(_ info: HiveDriveInfo, _ authHelper: AuthHelper) {
-        super.lastInfo = info
+        super.init(DriveType.oneDrive, info)
         self.authHelper = authHelper
-        self.deviceId = "TODO"
-    }
-
-    override func driveType() -> DriveType {
-        return .oneDrive
-    }
-
-    @objc
-    override var lastInfo: HiveDriveInfo  {
-        get {
-            return super.lastInfo
-        }
-        set (newInfo) {
-            super.lastInfo = newInfo
-        }
-    }
-
-    @objc
-    override var uniqueId: String {
-        get {
-            return self.deviceId
-        }
     }
 
     override func lastUpdatedInfo() -> Promise<HiveDriveInfo>? {
         return lastUpdatedInfo(handleBy: HiveCallback<HiveDriveInfo>())
     }
 
-    override func lastUpdatedInfo(handleBy: HiveCallback<HiveDriveInfo>) ->
-        Promise<HiveDriveInfo>? {
-        // TODO
-        return nil
+    override func lastUpdatedInfo(handleBy: HiveCallback<HiveDriveInfo>) -> Promise<HiveDriveInfo>? {
+        let error = HiveError.failue(des: "TODO")
+        return Promise<HiveDriveInfo>(error: error)
     }
 
     override func rootDirectoryHandle() -> Promise<HiveDirectoryHandle>? {
@@ -89,7 +58,8 @@ internal class OneDriveDrive: HiveDriveHandle {
     }
 
     override func createDirectory(withPath: String) -> Promise<HiveDirectoryHandle>? {
-        return createDirectory(withPath: withPath, handleBy: HiveCallback<HiveDirectoryHandle>())
+        return createDirectory(withPath: withPath,
+                               handleBy: HiveCallback<HiveDirectoryHandle>())
     }
 
     override func createDirectory(withPath: String, handleBy: HiveCallback<HiveDirectoryHandle>)
@@ -102,7 +72,7 @@ internal class OneDriveDrive: HiveDriveHandle {
 
             UNIRest.postEntity({ (request) in
                 request?.url = OneDriveURL.API + "/root:\(withPath):/chilldren"
-                request?.headers = self.authHelperHandle.headers()
+                //request?.headers = self.authHelperHandle.headers()
                 request?.body = try? JSONSerialization.data(withJSONObject: params)
             })?.asJsonAsync({ (response, error) in
                 let jsonObject = response?.body.jsonObject()
@@ -131,7 +101,8 @@ internal class OneDriveDrive: HiveDriveHandle {
     }
 
     override func directoryHandle(atPath: String) -> Promise<HiveDirectoryHandle>? {
-        return directoryHandle(atPath: atPath, handleBy: HiveCallback<HiveDirectoryHandle>())
+        return directoryHandle(atPath: atPath,
+                             handleBy: HiveCallback<HiveDirectoryHandle>())
     }
 
     override func directoryHandle(atPath: String, handleBy: HiveCallback<HiveDirectoryHandle>)
@@ -139,7 +110,7 @@ internal class OneDriveDrive: HiveDriveHandle {
         let future = Promise<HiveDirectoryHandle> { resolver in
             UNIRest.get({ request in
                 request?.url = OneDriveURL.API + "/root:/\(atPath)"
-                request?.headers = self.authHelperHandle.headers()
+                //request?.headers = self.authHelperHandle.headers()
             })?.asJsonAsync({ (response, error) in
                 let jsonObject = response?.body.jsonObject()
                 guard response?.code == 200 else {
@@ -167,7 +138,8 @@ internal class OneDriveDrive: HiveDriveHandle {
     }
 
     override func createFile(withPath: String) -> Promise<HiveFileHandle>? {
-        return createFile(withPath: withPath, handleBy: HiveCallback<HiveFileHandle>())
+        return createFile(withPath: withPath,
+                          handleBy: HiveCallback<HiveFileHandle>())
     }
 
     override func createFile(withPath: String, handleBy: HiveCallback<HiveFileHandle>)
@@ -175,7 +147,7 @@ internal class OneDriveDrive: HiveDriveHandle {
         let future = Promise<HiveFileHandle> { resolver in
             UNIRest.putEntity({ request in
                 request?.url = OneDriveURL.API + "/root:/\(withPath):/content"
-                request?.headers = self.authHelperHandle.headers()
+                //request?.headers = self.authHelperHandle.headers()
             })?.asJsonAsync({ (response, error) in
                 let jsonObject = response?.body.jsonObject()
                 guard response?.code == 201 else {
@@ -207,12 +179,13 @@ internal class OneDriveDrive: HiveDriveHandle {
         return fileHandle(atPath: atPath, handleBy: HiveCallback<HiveFileHandle>())
     }
 
-    override func fileHandle(atPath: String, handleBy: HiveCallback<HiveFileHandle>)
-        -> Promise<HiveFileHandle>? {
-        // TODO
-        return nil
+    override func fileHandle(atPath: String, handleBy: HiveCallback<HiveFileHandle>) ->
+        Promise<HiveFileHandle>? {
+        let error = HiveError.failue(des: "TODO")
+        return Promise<HiveFileHandle>(error: error)
     }
 
+    /*
     private func hiveDirectoryHandleResult(_ atPath: String, _ jsonData: Dictionary<String, Any>) -> HiveDirectoryHandle {
 
         let hiveDirectory = OneDriveDirectory()
@@ -279,4 +252,5 @@ internal class OneDriveDrive: HiveDriveHandle {
         }
         driveId = (response?.body.jsonObject()["id"] as! String)
     }
+    */
 }
