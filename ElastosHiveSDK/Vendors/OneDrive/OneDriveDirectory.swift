@@ -1,16 +1,96 @@
-
-
-import UIKit
+import Foundation
+import PromiseKit
 import Unirest
 
 class OneDriveDirectory: HiveDirectoryHandle {
-    var oneDrive: OneDrive?
+    //var oneDrive: OneDrive?
 
-    init(_ info: HiveDirectoryInfo) {
-        super.lastInfo = info
+    override init(_ info: HiveDirectoryInfo, _ authHelper: AuthHelper) {
+        super.init(info, authHelper)
     }
 
-    override func parentHandle() -> CallbackFuture<HiveResult<HiveDirectoryHandle>>? {
+    override func lastUpdatedInfo() -> Promise<HiveDirectoryInfo>? {
+        return lastUpdatedInfo(handleBy: HiveCallback<HiveDirectoryInfo>())
+    }
+
+    override func lastUpdatedInfo(handleBy: HiveCallback<HiveDirectoryInfo>) -> Promise<HiveDirectoryInfo>? {
+        let error = HiveError.failue(des: "TODO")
+        return Promise<HiveDirectoryInfo>(error: error)
+    }
+
+    override func createDirectory(withPath: String) -> Promise<HiveDirectoryHandle>? {
+        return createDirectory(withPath: withPath, handleBy: HiveCallback<HiveDirectoryHandle>())
+    }
+
+    override func createDirectory(withPath: String, handleBy: HiveCallback<HiveDirectoryHandle>) ->
+        Promise<HiveDirectoryHandle>? {
+        let error = HiveError.failue(des: "Dummy")
+        return Promise<HiveDirectoryHandle>(error: error)
+    }
+
+    override func directoryHandle(atPath: String) -> Promise<HiveDirectoryHandle>? {
+        return directoryHandle(atPath: atPath, handleBy: HiveCallback<HiveDirectoryHandle>())
+    }
+
+    override func directoryHandle(atPath: String, handleBy: HiveCallback<HiveDirectoryHandle>) ->
+        Promise<HiveDirectoryHandle>? {
+        let error = HiveError.failue(des: "Dummy")
+        return Promise<HiveDirectoryHandle>(error: error)
+    }
+
+    override func createFile(withPath: String) -> Promise<HiveFileHandle>? {
+        return createFile(withPath: withPath, handleBy: HiveCallback<HiveFileHandle>())
+    }
+
+    override func createFile(withPath: String, handleBy: HiveCallback<HiveFileHandle>) ->
+        Promise<HiveFileHandle>? {
+        let error = HiveError.failue(des: "Dummy")
+        return Promise<HiveFileHandle>(error: error)
+    }
+
+    override func fileHandle(atPath: String) -> Promise<HiveFileHandle>? {
+        return fileHandle(atPath: atPath, handleBy: HiveCallback<HiveFileHandle>())
+    }
+
+    override func fileHandle(atPath: String, handleBy: HiveCallback<HiveFileHandle>) ->
+        Promise<HiveFileHandle>? {
+        let error = HiveError.failue(des: "Dummy")
+        return Promise<HiveFileHandle>(error: error)
+    }
+    // Get children.
+
+    override func moveTo(newPath: String) -> Promise<HiveStatus>? {
+        return moveTo(newPath: newPath, handleBy: HiveCallback<HiveStatus>())
+    }
+
+    override func moveTo(newPath: String, handleBy: HiveCallback<HiveStatus>) -> Promise<HiveStatus>? {
+        let error = HiveError.failue(des: "Dummy")
+        return Promise<HiveStatus>(error: error)
+    }
+
+    override func copyTo(newPath: String) -> Promise<HiveStatus>? {
+        return copyTo(newPath: newPath, handleBy: HiveCallback<HiveStatus>())
+    }
+
+    override func copyTo(newPath: String, handleBy: HiveCallback<HiveStatus>) -> Promise<HiveStatus>? {
+        let error = HiveError.failue(des: "Dummy")
+        return Promise<HiveStatus>(error: error)
+    }
+
+    override func deleteItem() -> Promise<HiveStatus>? {
+        return deleteItem(handleBy: HiveCallback<HiveStatus>())
+    }
+
+    override func deleteItem(handleBy: HiveCallback<HiveStatus>) -> Promise<HiveStatus>? {
+        let error = HiveError.failue(des: "Dummy")
+        return Promise<HiveStatus>(error: error)
+    }
+
+    override func close() {
+        // TODO
+    }
+
+    /*override func parentHandle() -> CallbackFuture<HiveResult<HiveDirectoryHandle>>? {
         let future = CallbackFuture<HiveResult<HiveDirectoryHandle>> { resolver in
             let path = parentPath
             _ = self.drive?.directoryHandle(atPath: path!)?.done({ (hiveDirectoryHandle) in
@@ -315,4 +395,6 @@ class OneDriveDirectory: HiveDirectoryHandle {
         }
         return driveFile
     }
+
+    */
 }

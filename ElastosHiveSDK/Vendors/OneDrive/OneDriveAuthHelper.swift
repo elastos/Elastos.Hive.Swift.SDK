@@ -23,7 +23,7 @@ internal class OneDriveAuthHelper: AuthHelper {
     }
 
     override func login(_ authenticator: Authenticator) -> Promise<AuthToken> {
-        let promise = Promise<AuthToken> { resolver in
+        /*let promise = Promise<AuthToken> { resolver in
             acquireAuthCode().then { authCode in
                 acquireAccessToken(authCode)
                 authCode = nil
@@ -34,7 +34,10 @@ internal class OneDriveAuthHelper: AuthHelper {
             }.catch { error in
                 resolver.reject(error)
             }
-        }
+        }*/
+
+        let error = HiveError.failue(des: "TODO")
+        let promise = Promise<AuthToken>(error: error)
         return promise
     }
 

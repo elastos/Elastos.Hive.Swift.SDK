@@ -1,12 +1,54 @@
 import Foundation
+import PromiseKit
 import Unirest
 
 @objc(OneDriveFile)
 internal class OneDriveFile: HiveFileHandle {
-    var oneDrive: OneDrive?
+    //var oneDrive: OneDrive?
 
-    init(_ info: HiveFileInfo) {
-        super.lastInfo = info
+    override init(_ info: HiveFileInfo, _ authHelper: AuthHelper) {
+        //super.lastInfo = info
+        super.init(info, authHelper)
+    }
+
+    override func lastUpdatedInfo() -> Promise<HiveFileInfo>? {
+        return lastUpdatedInfo(handleBy: HiveCallback<HiveFileInfo>())
+    }
+
+    override func lastUpdatedInfo(handleBy: HiveCallback<HiveFileInfo>) -> Promise<HiveFileInfo>? {
+        let error = HiveError.failue(des: "Dummy")
+        return Promise<HiveFileInfo>(error: error)
+    }
+
+    override func moveTo(newPath: String) -> Promise<HiveStatus>? {
+        return moveTo(newPath: newPath, handleBy: HiveCallback<HiveStatus>())
+    }
+
+    override func moveTo(newPath: String, handleBy: HiveCallback<HiveStatus>) -> Promise<HiveStatus>? {
+        let error = HiveError.failue(des: "Dummy")
+        return Promise<HiveStatus>(error: error)
+    }
+
+    override func copyTo(newPath: String) -> Promise<HiveStatus>? {
+        return copyTo(newPath: newPath, handleBy: HiveCallback<HiveStatus>())
+    }
+
+    override func copyTo(newPath: String, handleBy: HiveCallback<HiveStatus>) -> Promise<HiveStatus>? {
+        let error = HiveError.failue(des: "Dummy")
+        return Promise<HiveStatus>(error: error)
+    }
+
+    override func deleteItem() -> Promise<HiveStatus>? {
+        return deleteItem(handleBy: HiveCallback<HiveStatus>())
+    }
+
+    override func deleteItem(handleBy: HiveCallback<HiveStatus>) -> Promise<HiveStatus>? {
+        let error = HiveError.failue(des: "Dummy")
+        return Promise<HiveStatus>(error: error)
+    }
+
+    override func close() {
+        // TODO
     }
 
     /*
@@ -19,7 +61,7 @@ internal class OneDriveFile: HiveFileHandle {
         }
         return future
     }
-    */
+
 
     override func createFile(atPath: String) -> CallbackFuture<HiveResult<HiveFileHandle>>? {
         let fulture = CallbackFuture<HiveResult<HiveFileHandle>>{ resolver in
@@ -282,4 +324,5 @@ internal class OneDriveFile: HiveFileHandle {
         return driveFile
     }
 
+    */
 }
