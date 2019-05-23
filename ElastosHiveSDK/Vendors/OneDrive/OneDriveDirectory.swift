@@ -3,7 +3,7 @@ import PromiseKit
 import Unirest
 
 class OneDriveDirectory: HiveDirectoryHandle {
-    //var oneDrive: OneDrive?
+    var oneDrive: OneDriveDrive?
 
     override init(_ info: HiveDirectoryInfo, _ authHelper: AuthHelper) {
         super.init(info, authHelper)

@@ -4,23 +4,15 @@ import PromiseKit
 @objc(HiveFile)
 public class HiveFileHandle: NSObject, HiveResourceItem, HiveFileItem {
     public var drive: HiveDriveHandle?
+    public var fileId: String?
+    public var pathName: String?
+    public var name: String?
     public var createdDateTime: String?
     public var lastModifiedDateTime: String?
-    public var isFile: Bool?
-    public var isDirectory: Bool?
-    public var id: String?
-    //public var pathName: String?
-    public var name: String?
-    public var rootPath: String?
-    public var parentId: String?
-    public var parentPath: String?
-    public var driveId: String?
+    public var parentPathName: String?
     public var fileSystemInfo: Dictionary<AnyHashable, Any>?
     public var parentReference: Dictionary<AnyHashable, Any>?
-    public var createDateTime: String?
 
-    private var _pathName: String
-    private let fileId: String
     private let authHelper: AuthHelper?
     private var _lastInfo: HiveFileInfo?
 
@@ -28,14 +20,6 @@ public class HiveFileHandle: NSObject, HiveResourceItem, HiveFileItem {
         self._lastInfo = info
         self.authHelper = authHelper
         self.fileId = "TODO"
-        self._pathName = "TODO"
-    }
-
-    @objc
-    public var handleId: String? {
-        get {
-            return self.fileId;
-        }
     }
 
     public typealias resourceType = HiveFileInfo
@@ -56,21 +40,6 @@ public class HiveFileHandle: NSObject, HiveResourceItem, HiveFileItem {
     public func lastUpdatedInfo(handleBy: HiveCallback<resourceType>) -> Promise<resourceType>? {
         let error = HiveError.failue(des: "Dummy")
         return Promise<HiveFileInfo>(error: error)
-    }
-
-    @objc
-    public var pathName: String {
-        get {
-            return self._pathName
-        }
-    }
-
-    @objc
-    public var parentPathName: String {
-        get {
-            // TODO
-            return self._pathName
-        }
     }
 
     public func moveTo(newPath: String) -> Promise<HiveStatus>? {

@@ -5,28 +5,20 @@ import PromiseKit
 public class HiveDirectoryHandle: NSObject, HiveResourceItem, HiveFileItem, HiveDirectoryItem {
 
     public var drive: HiveDriveHandle?
-    //public var parentPathName: String?
-    public var parentPath: String?
-    public var createDateTime: String?
+    public var directoryId: String?
+    public var pathName: String?
+    public var parentReference: Dictionary<String, Any>?
+    public var createdDateTime: String?
     public var lastModifiedDateTime: String?
-    public var parentReference: Dictionary<AnyHashable, Any>?
+    public var parentPathName: String?
 
-    private let _directoryId: String?
     private var _lastInfo: HiveDirectoryInfo?
     internal let authHelper: AuthHelper
-    private var _pathName: String?
 
     init(_ info: HiveDirectoryInfo, _ authHelper: AuthHelper) {
         self._lastInfo = info
         self.authHelper = authHelper
-        self._directoryId = "TODO"
-    }
-
-    @objc
-    public var handleId: String? {
-        get {
-            return self._directoryId;
-        }
+        self.directoryId = "TODO"
     }
 
     public typealias resourceType = HiveDirectoryInfo
@@ -89,21 +81,6 @@ public class HiveDirectoryHandle: NSObject, HiveResourceItem, HiveFileItem, Hive
         return Promise<HiveFileHandle>(error: error)
     }
     // Get children.
-
-    @objc
-    public var pathName: String {
-        get {
-            return self._pathName!
-        }
-    }
-
-    @objc
-    public var parentPathName: String {
-        get {
-            // TODO_
-            return self.pathName
-        }
-    }
 
     public func moveTo(newPath: String) -> Promise<HiveStatus>? {
         return moveTo(newPath: newPath, handleBy: HiveCallback<HiveStatus>())

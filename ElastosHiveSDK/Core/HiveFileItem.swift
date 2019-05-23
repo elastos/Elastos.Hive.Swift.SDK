@@ -2,8 +2,6 @@ import Foundation
 import PromiseKit
 
 protocol HiveFileItem {
-    var pathName: String { get }
-    var parentPathName: String { get }
 
     func moveTo(newPath: String) -> Promise<HiveStatus>?
     func moveTo(newPath: String, handleBy: HiveCallback<HiveStatus>) -> Promise<HiveStatus>?
