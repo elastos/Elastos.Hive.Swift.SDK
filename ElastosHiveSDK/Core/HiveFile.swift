@@ -2,7 +2,7 @@ import Foundation
 import PromiseKit
 
 @objc(HiveFile)
-public class HiveFileHandle: NSObject {
+public class HiveFileHandle: NSObject, HiveResourceItem, HiveFileItem {
     public var drive: HiveDriveHandle?
     public var createdDateTime: String?
     public var lastModifiedDateTime: String?
@@ -18,43 +18,50 @@ public class HiveFileHandle: NSObject {
     public var fileSystemInfo: Dictionary<AnyHashable, Any>?
     public var parentReference: Dictionary<AnyHashable, Any>?
     public var createDateTime: String?
-}
 
-extension HiveFileHandle: HiveResourceItem {
-    internal typealias resourceType = HiveFileInfo
+    private var _pathName: String
+    private let fileId: String
+    private let authHelper: AuthHelper?
+    private var _lastInfo: HiveFileInfo?
+
+    init(_ info: HiveFileInfo, _ authHelper: AuthHelper) {
+        self._lastInfo = info
+        self.authHelper = authHelper
+        self.fileId = "TODO"
+        self._pathName = "TODO"
+    }
 
     @objc
-    var lastInfo: resourceType  {
+    public var handleId: String? {
         get {
-            return self.lastInfo
+            return self.fileId;
+        }
+    }
+
+    public typealias resourceType = HiveFileInfo
+    @objc
+    public var lastInfo: resourceType?  {
+        get {
+            return self._lastInfo
         }
         set (newInfo) {
-            self.lastInfo = newInfo
+            self._lastInfo = newInfo
         }
     }
 
-    @objc
-    var uniqueId: String {
-        get {
-            return self.uniqueId;
-        }
-    }
-
-    func lastUpdatedInfo() -> Promise<resourceType>? {
+    public func lastUpdatedInfo() -> Promise<resourceType>? {
         return lastUpdatedInfo(handleBy: HiveCallback<HiveFileHandle.resourceType>())
     }
 
-    func lastUpdatedInfo(handleBy: HiveCallback<resourceType>) -> Promise<resourceType>? {
-        // TODO
-        return nil
+    public func lastUpdatedInfo(handleBy: HiveCallback<resourceType>) -> Promise<resourceType>? {
+        let error = HiveError.failue(des: "Dummy")
+        return Promise<HiveFileInfo>(error: error)
     }
-}
 
-extension HiveFileHandle: HiveFileItem {
     @objc
     public var pathName: String {
         get {
-            return self.pathName
+            return self._pathName
         }
     }
 
@@ -62,7 +69,7 @@ extension HiveFileHandle: HiveFileItem {
     public var parentPathName: String {
         get {
             // TODO
-            return self.pathName
+            return self._pathName
         }
     }
 
@@ -71,8 +78,8 @@ extension HiveFileHandle: HiveFileItem {
     }
 
     public func moveTo(newPath: String, handleBy: HiveCallback<HiveStatus>) -> Promise<HiveStatus>? {
-        // TODO;
-        return nil;
+        let error = HiveError.failue(des: "Dummy")
+        return Promise<HiveStatus>(error: error)
     }
 
     public func copyTo(newPath: String) -> Promise<HiveStatus>? {
@@ -80,8 +87,8 @@ extension HiveFileHandle: HiveFileItem {
     }
 
     public func copyTo(newPath: String, handleBy: HiveCallback<HiveStatus>) -> Promise<HiveStatus>? {
-        // TODO;
-        return nil;
+        let error = HiveError.failue(des: "Dummy")
+        return Promise<HiveStatus>(error: error)
     }
 
     public func deleteItem() -> Promise<HiveStatus>? {
@@ -89,8 +96,8 @@ extension HiveFileHandle: HiveFileItem {
     }
 
     public func deleteItem(handleBy: HiveCallback<HiveStatus>) -> Promise<HiveStatus>? {
-        // TODO;
-        return nil;
+        let error = HiveError.failue(des: "Dummy")
+        return Promise<HiveStatus>(error: error)
     }
 
     public func close() {

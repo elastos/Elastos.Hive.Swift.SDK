@@ -8,8 +8,8 @@ internal class OneDriveDrive: HiveDriveHandle {
     private var authHelper: AuthHelper
 
     init(_ info: HiveDriveInfo, _ authHelper: AuthHelper) {
-        super.init(DriveType.oneDrive, info)
         self.authHelper = authHelper
+        super.init(DriveType.oneDrive, info)
     }
 
     override func lastUpdatedInfo() -> Promise<HiveDriveInfo>? {
@@ -49,7 +49,7 @@ internal class OneDriveDrive: HiveDriveHandle {
                 }
 
                 let info = HiveDirectoryInfo("TODO")
-                let handle = OneDriveDirectory(info);
+                let handle = OneDriveDirectory(info, self.authHelper);
                 handleBy.didSucceed(handle)
                 resolver.fulfill(handle)
             })
@@ -92,7 +92,7 @@ internal class OneDriveDrive: HiveDriveHandle {
                 }
 
                 let info = HiveDirectoryInfo("TODO")
-                let handle = OneDriveDirectory(info)
+                let handle = OneDriveDirectory(info, self.authHelper)
                 handleBy.didSucceed(handle)
                 resolver.fulfill(handle)
             })
@@ -129,7 +129,7 @@ internal class OneDriveDrive: HiveDriveHandle {
                 }
 
                 let info = HiveDirectoryInfo("TODO")
-                let handle = OneDriveDirectory(info)
+                let handle = OneDriveDirectory(info, self.authHelper)
                 handleBy.didSucceed(handle)
                 resolver.fulfill(handle)
             })
@@ -166,7 +166,7 @@ internal class OneDriveDrive: HiveDriveHandle {
                 }
 
                 let info = HiveFileInfo("TODO")
-                let handle = OneDriveFile(info)
+                let handle = OneDriveFile(info, self.authHelper)
                 handleBy.didSucceed(handle)
                 resolver.fulfill(handle)
             })

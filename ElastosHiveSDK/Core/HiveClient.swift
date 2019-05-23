@@ -51,15 +51,15 @@ public class HiveClientHandle: NSObject, HiveResourceItem{
     }
 
     @objc
-    var handleId: String? {
+    public var handleId: String? {
         get {
             return self._clientId;
         }
     }
 
-    internal typealias resourceType = HiveClientInfo
+    public typealias resourceType = HiveClientInfo
     @objc
-    var lastInfo: resourceType?  {
+    public var lastInfo: resourceType?  {
         get {
             return self._lastInfo
         }
@@ -78,11 +78,11 @@ public class HiveClientHandle: NSObject, HiveResourceItem{
         try _ = promise?.wait()
     }
 
-    func lastUpdatedInfo() -> Promise<resourceType>? {
+    public func lastUpdatedInfo() -> Promise<resourceType>? {
         return lastUpdatedInfo(handleBy: HiveCallback<resourceType>())
     }
 
-    func lastUpdatedInfo(handleBy: HiveCallback<resourceType>) -> Promise<resourceType>? {
+    public func lastUpdatedInfo(handleBy: HiveCallback<resourceType>) -> Promise<resourceType>? {
         let error = HiveError.failue(des: "TODO")
         return Promise<resourceType>(error: error)
     }
