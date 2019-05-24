@@ -3,32 +3,12 @@ import PromiseKit
 
 @objc(HiveDrive)
 public class HiveDriveHandle: NSObject, HiveResourceItem, HiveDirectoryItem {
-    public let driveType: DriveType
-    private let _driverId: String?
-    private var _lastInfo: HiveDriveInfo?
+    public var driveType: DriveType
+    public var handleId: String?
+    public var lastInfo: HiveDriveInfo?
 
     internal init(_ driveType: DriveType, _ info: HiveDriveInfo) {
         self.driveType = driveType
-        self._driverId = "TODO"
-        self._lastInfo = info
-    }
-
-    @objc
-    public var handleId: String? {
-        get {
-            return self._driverId
-        }
-    }
-
-    public typealias resourceType = HiveDriveInfo
-    @objc
-    public var lastInfo: resourceType? {
-        get {
-            return self._lastInfo
-        }
-        set (newInfo) {
-            self._lastInfo = newInfo
-        }
     }
 
     public func rootDirectoryHandle() -> Promise<HiveDirectoryHandle>? {

@@ -6,10 +6,22 @@ import PromiseKit
 
 internal class OneDriveDrive: HiveDriveHandle {
     private var authHelper: AuthHelper
+    internal static var oneDriveInstance: HiveDriveHandle?
 
     init(_ info: HiveDriveInfo, _ authHelper: AuthHelper) {
         self.authHelper = authHelper
         super.init(DriveType.oneDrive, info)
+    }
+
+    static func createInstance(_ info: HiveDriveInfo, _ authHelper: AuthHelper) {
+        if oneDriveInstance == nil {
+            let client = OneDriveDrive(info, authHelper)
+            oneDriveInstance = client
+        }
+    }
+
+   static func sharedInstance() -> OneDriveDrive {
+    return oneDriveInstance as! OneDriveDrive
     }
 
     override func lastUpdatedInfo() -> Promise<HiveDriveInfo>? {

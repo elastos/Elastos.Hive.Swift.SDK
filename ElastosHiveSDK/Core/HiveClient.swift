@@ -3,11 +3,12 @@ import PromiseKit
 
 @objc(HiveClient)
 public class HiveClientHandle: NSObject, HiveResourceItem{
+    public typealias resourceType = HiveClientInfo
     public let driveType: DriveType
+    public var handleId: String?
+    public var lastInfo: HiveClientInfo?
     internal var authHelper: AuthHelper?
     internal var token: AuthToken?
-    internal var _clientId: String?
-    internal var _lastInfo: HiveClientInfo?
 
     internal init(_ driveType: DriveType) {
         self.driveType = driveType
@@ -47,24 +48,6 @@ public class HiveClientHandle: NSObject, HiveResourceItem{
             return DropboxClient.sharedInstance()
         case .hiveIpfs:
             return HiveIpfsClient.sharedInstance()
-        }
-    }
-
-    @objc
-    public var handleId: String? {
-        get {
-            return self._clientId;
-        }
-    }
-
-    public typealias resourceType = HiveClientInfo
-    @objc
-    public var lastInfo: resourceType?  {
-        get {
-            return self._lastInfo
-        }
-        set (newInfo) {
-            self._lastInfo = newInfo
         }
     }
 
