@@ -4,7 +4,6 @@ import Unirest
 
 @objc(OneDriveFile)
 internal class OneDriveFile: HiveFileHandle {
-    //var oneDrive: OneDrive?
 
     override init(_ info: HiveFileInfo, _ authHelper: AuthHelper) {
         //super.lastInfo = info
@@ -25,8 +24,11 @@ internal class OneDriveFile: HiveFileHandle {
     }
 
     override func moveTo(newPath: String, handleBy: HiveCallback<HiveStatus>) -> Promise<HiveStatus>? {
-        let error = HiveError.failue(des: "Dummy")
-        return Promise<HiveStatus>(error: error)
+        let future = Promise<HiveStatus> { resolver in
+
+
+        }
+        return future
     }
 
     override func copyTo(newPath: String) -> Promise<HiveStatus>? {

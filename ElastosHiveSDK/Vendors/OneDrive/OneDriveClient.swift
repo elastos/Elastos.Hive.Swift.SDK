@@ -23,7 +23,13 @@ internal class OneDriveClient: HiveClientHandle {
     public static func sharedInstance() -> HiveClientHandle? {
         return clientInstance
     }
+    override func login(_ authenticator: Authenticator) -> Bool? {
+        return self.authHelper?.login(authenticator)
+    }
 
+    override func logout() -> Bool? {
+        return self.authHelper?.logout()
+    }
 /*
     private func validateDrive() throws {
         var error: NSError?

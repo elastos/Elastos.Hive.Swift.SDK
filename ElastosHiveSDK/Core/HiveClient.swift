@@ -68,14 +68,12 @@ public class HiveClientHandle: NSObject, HiveResourceItem{
         }
     }
 
-    public func login(_ authenticator: Authenticator) throws {
-        let promise = authHelper?.login(authenticator)
-        try token = promise?.wait()
+    public func login(_ authenticator: Authenticator) -> Bool? {
+        return nil
     }
 
-    public func logout() throws {
-        let promise = authHelper?.logout()
-        try _ = promise?.wait()
+    public func logout() -> Bool? {
+        return nil
     }
 
     public func lastUpdatedInfo() -> Promise<resourceType>? {
