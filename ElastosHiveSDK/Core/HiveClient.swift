@@ -1,6 +1,8 @@
 import Foundation
 import PromiseKit
 
+public typealias HivePromise = Promise
+
 @objc(HiveClient)
 public class HiveClientHandle: NSObject, HiveResourceItem{
     public typealias resourceType = HiveClientInfo
@@ -9,6 +11,7 @@ public class HiveClientHandle: NSObject, HiveResourceItem{
     public var lastInfo: HiveClientInfo?
     internal var authHelper: AuthHelper?
     internal var token: AuthToken?
+
 
     internal init(_ driveType: DriveType) {
         self.driveType = driveType
@@ -59,21 +62,21 @@ public class HiveClientHandle: NSObject, HiveResourceItem{
         return nil
     }
 
-    public func lastUpdatedInfo() -> Promise<resourceType>? {
+    public func lastUpdatedInfo() -> HivePromise<resourceType>? {
         return lastUpdatedInfo(handleBy: HiveCallback<resourceType>())
     }
 
-    public func lastUpdatedInfo(handleBy: HiveCallback<resourceType>) -> Promise<resourceType>? {
+    public func lastUpdatedInfo(handleBy: HiveCallback<resourceType>) -> HivePromise<resourceType>? {
         let error = HiveError.failue(des: "TODO")
-        return Promise<resourceType>(error: error)
+        return HivePromise<resourceType>(error: error)
     }
 
-    public func defaultDriveHandle() -> Promise<HiveDriveHandle>? {
+    public func defaultDriveHandle() -> HivePromise<HiveDriveHandle>? {
         return defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>())
     }
 
-    public func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> Promise<HiveDriveHandle>? {
+    public func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> HivePromise<HiveDriveHandle>? {
         let error = HiveError.failue(des: "TODO")
-        return Promise<HiveDriveHandle>(error: error)
+        return HivePromise<HiveDriveHandle>(error: error)
     }
 }

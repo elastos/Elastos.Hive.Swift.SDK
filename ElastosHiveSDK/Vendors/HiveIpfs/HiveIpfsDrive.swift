@@ -7,65 +7,65 @@ internal class HiveIpfsDrive: HiveDriveHandle {
         super.init(DriveType.hiveIpfs, info)
     }
 
-    override func lastUpdatedInfo() -> Promise<HiveDriveInfo>? {
+    override func lastUpdatedInfo() -> HivePromise<HiveDriveInfo>? {
         return lastUpdatedInfo(handleBy: HiveCallback<HiveDriveInfo>())
     }
 
-    override func lastUpdatedInfo(handleBy: HiveCallback<HiveDriveInfo>) -> Promise<HiveDriveInfo>? {
+    override func lastUpdatedInfo(handleBy: HiveCallback<HiveDriveInfo>) -> HivePromise<HiveDriveInfo>? {
         let error = HiveError.failue(des: "TODO")
-        return Promise<HiveDriveInfo>(error: error)
+        return HivePromise<HiveDriveInfo>(error: error)
     }
 
-    override func rootDirectoryHandle() -> Promise<HiveDirectoryHandle>? {
+    override func rootDirectoryHandle() -> HivePromise<HiveDirectoryHandle>? {
         return rootDirectoryHandle(handleBy: HiveCallback<HiveDirectoryHandle>())
     }
 
     override func rootDirectoryHandle(handleBy: HiveCallback<HiveDirectoryHandle>) ->
-        Promise<HiveDirectoryHandle>? {
+        HivePromise<HiveDirectoryHandle>? {
         let error = HiveError.failue(des: "TODO")
-        return Promise<HiveDirectoryHandle>(error: error)
+        return HivePromise<HiveDirectoryHandle>(error: error)
     }
 
-    override func createDirectory(withPath: String) -> Promise<HiveDirectoryHandle>? {
+    override func createDirectory(withPath: String) -> HivePromise<HiveDirectoryHandle>? {
         return createDirectory(withPath: withPath,
                                handleBy: HiveCallback<HiveDirectoryHandle>())
     }
 
     override func createDirectory(withPath: String, handleBy: HiveCallback<HiveDirectoryHandle>) ->
-        Promise<HiveDirectoryHandle>? {
+        HivePromise<HiveDirectoryHandle>? {
         let error = HiveError.failue(des: "TODO")
-        return Promise<HiveDirectoryHandle>(error: error)
+        return HivePromise<HiveDirectoryHandle>(error: error)
     }
 
-    override func directoryHandle(atPath: String) -> Promise<HiveDirectoryHandle>? {
+    override func directoryHandle(atPath: String) -> HivePromise<HiveDirectoryHandle>? {
         return directoryHandle(atPath: atPath,
                              handleBy: HiveCallback<HiveDirectoryHandle>())
     }
 
     override func directoryHandle(atPath: String, handleBy: HiveCallback<HiveDirectoryHandle>) ->
-        Promise<HiveDirectoryHandle>? {
+        HivePromise<HiveDirectoryHandle>? {
         let error = HiveError.failue(des: "TODO")
-        return Promise<HiveDirectoryHandle>(error: error)
+        return HivePromise<HiveDirectoryHandle>(error: error)
     }
 
-    override func createFile(withPath: String) -> Promise<HiveFileHandle>? {
+    override func createFile(withPath: String) -> HivePromise<HiveFileHandle>? {
         return createFile(withPath: withPath,
                           handleBy: HiveCallback<HiveFileHandle>())
     }
 
     override func createFile(withPath: String, handleBy: HiveCallback<HiveFileHandle>) ->
-        Promise<HiveFileHandle>? {
+        HivePromise<HiveFileHandle>? {
         let error = HiveError.failue(des: "TODO")
-        return Promise<HiveFileHandle>(error: error)
+        return HivePromise<HiveFileHandle>(error: error)
     }
 
-    override func fileHandle(atPath: String) -> Promise<HiveFileHandle>? {
+    override func fileHandle(atPath: String) -> HivePromise<HiveFileHandle>? {
         return fileHandle(atPath: atPath, handleBy: HiveCallback<HiveFileHandle>())
     }
 
     override func fileHandle(atPath: String, handleBy: HiveCallback<HiveFileHandle>) ->
-        Promise<HiveFileHandle>? {
+        HivePromise<HiveFileHandle>? {
         let error = HiveError.failue(des: "TODO")
-        return Promise<HiveFileHandle>(error: error)
+        return HivePromise<HiveFileHandle>(error: error)
     }
 }

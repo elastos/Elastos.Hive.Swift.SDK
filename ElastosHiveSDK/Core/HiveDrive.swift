@@ -11,57 +11,57 @@ public class HiveDriveHandle: NSObject, HiveResourceItem, HiveDirectoryItem {
         self.driveType = driveType
     }
 
-    public func rootDirectoryHandle() -> Promise<HiveDirectoryHandle>? {
+    public func rootDirectoryHandle() -> HivePromise<HiveDirectoryHandle>? {
         return rootDirectoryHandle(handleBy: HiveCallback<HiveDirectoryHandle>())
     }
 
-    public func rootDirectoryHandle(handleBy: HiveCallback<HiveDirectoryHandle>) -> Promise<HiveDirectoryHandle>? {
+    public func rootDirectoryHandle(handleBy: HiveCallback<HiveDirectoryHandle>) -> HivePromise<HiveDirectoryHandle>? {
         let error = HiveError.failue(des: "Dummy")
-        return Promise<HiveDirectoryHandle>(error: error)
+        return HivePromise<HiveDirectoryHandle>(error: error)
     }
 
-    public func lastUpdatedInfo() -> Promise<HiveDriveInfo>? {
+    public func lastUpdatedInfo() -> HivePromise<HiveDriveInfo>? {
         return lastUpdatedInfo(handleBy: HiveCallback<HiveDriveHandle.resourceType>())
     }
 
-    public func lastUpdatedInfo(handleBy: HiveCallback<HiveDriveInfo>) -> Promise<HiveDriveInfo>? {
+    public func lastUpdatedInfo(handleBy: HiveCallback<HiveDriveInfo>) -> HivePromise<HiveDriveInfo>? {
         let error = HiveError.failue(des: "Dummy")
-        return Promise<resourceType>(error: error)
+        return HivePromise<resourceType>(error: error)
     }
 
-    public func createDirectory(withPath: String) -> Promise<HiveDirectoryHandle>? {
+    public func createDirectory(withPath: String) -> HivePromise<HiveDirectoryHandle>? {
         return createDirectory(withPath: withPath, handleBy: HiveCallback<HiveDirectoryHandle>())
     }
 
-    public func createDirectory(withPath: String, handleBy: HiveCallback<HiveDirectoryHandle>) -> Promise<HiveDirectoryHandle>? {
+    public func createDirectory(withPath: String, handleBy: HiveCallback<HiveDirectoryHandle>) -> HivePromise<HiveDirectoryHandle>? {
         let error = HiveError.failue(des: "Dummy")
-        return Promise<HiveDirectoryHandle>(error: error)
+        return HivePromise<HiveDirectoryHandle>(error: error)
     }
 
-    public func directoryHandle(atPath: String) -> Promise<HiveDirectoryHandle>? {
+    public func directoryHandle(atPath: String) -> HivePromise<HiveDirectoryHandle>? {
         return directoryHandle(atPath: atPath, handleBy: HiveCallback<HiveDirectoryHandle>())
     }
 
-    public func directoryHandle(atPath: String, handleBy: HiveCallback<HiveDirectoryHandle>) -> Promise<HiveDirectoryHandle>? {
+    public func directoryHandle(atPath: String, handleBy: HiveCallback<HiveDirectoryHandle>) -> HivePromise<HiveDirectoryHandle>? {
         let error = HiveError.failue(des: "Dummy")
-        return Promise<HiveDirectoryHandle>(error: error)
+        return HivePromise<HiveDirectoryHandle>(error: error)
     }
 
-    public func createFile(withPath: String) -> Promise<HiveFileHandle>? {
+    public func createFile(withPath: String) -> HivePromise<HiveFileHandle>? {
         return createFile(withPath: withPath, handleBy: HiveCallback<HiveFileHandle>())
     }
 
-    public func createFile(withPath: String, handleBy: HiveCallback<HiveFileHandle>) -> Promise<HiveFileHandle>? {
+    public func createFile(withPath: String, handleBy: HiveCallback<HiveFileHandle>) -> HivePromise<HiveFileHandle>? {
         let error = HiveError.failue(des: "Dummy")
-        return Promise<HiveFileHandle>(error: error)
+        return HivePromise<HiveFileHandle>(error: error)
     }
 
-    public func fileHandle(atPath: String) -> Promise<HiveFileHandle>? {
+    public func fileHandle(atPath: String) -> HivePromise<HiveFileHandle>? {
         return fileHandle(atPath: atPath, handleBy: HiveCallback<HiveFileHandle>())
     }
 
-    public func fileHandle(atPath: String, handleBy: HiveCallback<HiveFileHandle>) -> Promise<HiveFileHandle>? {
+    public func fileHandle(atPath: String, handleBy: HiveCallback<HiveFileHandle>) -> HivePromise<HiveFileHandle>? {
         let error = HiveError.failue(des: "Dummy")
-        return Promise<HiveFileHandle>(error: error)
+        return HivePromise<HiveFileHandle>(error: error)
     }
 }

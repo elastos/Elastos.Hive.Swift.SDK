@@ -10,43 +10,43 @@ internal class OneDriveFile: HiveFileHandle {
         super.init(info, authHelper)
     }
 
-    override func lastUpdatedInfo() -> Promise<HiveFileInfo>? {
+    override func lastUpdatedInfo() -> HivePromise<HiveFileInfo>? {
         return lastUpdatedInfo(handleBy: HiveCallback<HiveFileInfo>())
     }
 
-    override func lastUpdatedInfo(handleBy: HiveCallback<HiveFileInfo>) -> Promise<HiveFileInfo>? {
+    override func lastUpdatedInfo(handleBy: HiveCallback<HiveFileInfo>) -> HivePromise<HiveFileInfo>? {
         let error = HiveError.failue(des: "Dummy")
-        return Promise<HiveFileInfo>(error: error)
+        return HivePromise<HiveFileInfo>(error: error)
     }
 
-    override func moveTo(newPath: String) -> Promise<HiveStatus>? {
-        return moveTo(newPath: newPath, handleBy: HiveCallback<HiveStatus>())
+    override func moveTo(newPath: String) -> HivePromise<Bool>? {
+        return moveTo(newPath: newPath, handleBy: HiveCallback<Bool>())
     }
 
-    override func moveTo(newPath: String, handleBy: HiveCallback<HiveStatus>) -> Promise<HiveStatus>? {
-        let future = Promise<HiveStatus> { resolver in
+    override func moveTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool>? {
+        let future = HivePromise<Bool> { resolver in
 
 
         }
         return future
     }
 
-    override func copyTo(newPath: String) -> Promise<HiveStatus>? {
-        return copyTo(newPath: newPath, handleBy: HiveCallback<HiveStatus>())
+    override func copyTo(newPath: String) -> HivePromise<Bool>? {
+        return copyTo(newPath: newPath, handleBy: HiveCallback<Bool>())
     }
 
-    override func copyTo(newPath: String, handleBy: HiveCallback<HiveStatus>) -> Promise<HiveStatus>? {
+    override func copyTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool>? {
         let error = HiveError.failue(des: "Dummy")
-        return Promise<HiveStatus>(error: error)
+        return HivePromise<Bool>(error: error)
     }
 
-    override func deleteItem() -> Promise<HiveStatus>? {
-        return deleteItem(handleBy: HiveCallback<HiveStatus>())
+    override func deleteItem() -> HivePromise<Bool>? {
+        return deleteItem(handleBy: HiveCallback<Bool>())
     }
 
-    override func deleteItem(handleBy: HiveCallback<HiveStatus>) -> Promise<HiveStatus>? {
+    override func deleteItem(handleBy: HiveCallback<Bool>) -> HivePromise<Bool>? {
         let error = HiveError.failue(des: "Dummy")
-        return Promise<HiveStatus>(error: error)
+        return HivePromise<Bool>(error: error)
     }
 
     override func close() {

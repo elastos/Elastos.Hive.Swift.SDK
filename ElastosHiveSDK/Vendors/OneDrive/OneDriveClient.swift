@@ -25,7 +25,7 @@ internal class OneDriveClient: HiveClientHandle {
     }
     override func login(_ authenticator: Authenticator) -> Bool? {
         let result = self.authHelper?.login(authenticator)
-       _ = driveHandelInfo()
+       _ = defaultDriveHandle()
         return result
     }
 
@@ -33,12 +33,12 @@ internal class OneDriveClient: HiveClientHandle {
         return self.authHelper?.logout()
     }
 
-    override func lastUpdatedInfo() -> Promise<HiveClientInfo>? {
+    override func lastUpdatedInfo() -> HivePromise<HiveClientInfo>? {
         return lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>())
     }
 
-    override func lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>) -> Promise<HiveClientInfo>? {
-        let promise = Promise<HiveClientInfo> { resolver in
+    override func lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>) -> HivePromise<HiveClientInfo>? {
+        let promise = HivePromise<HiveClientInfo> { resolver in
             Alamofire.request(ONEDRIVE_RESTFUL_URL, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: (OneDriveHttpHeader.headers())).responseJSON { (dataResponse) in
                 print(dataResponse)
                 dataResponse.result.ifSuccess {
@@ -61,6 +61,7 @@ internal class OneDriveClient: HiveClientHandle {
                     self.handleId = user["id"] as? String ?? ""
                     let clientInfo = HiveClientInfo()
                     clientInfo.displayName = user["displayName"] as? String ?? ""
+                    clientInfo.userId = user["id"] as? String ?? ""
                     handleBy.didSucceed(clientInfo)
                     resolver.fulfill(clientInfo)
                 }
@@ -74,41 +75,45 @@ internal class OneDriveClient: HiveClientHandle {
         return promise
     }
 
-    override func defaultDriveHandle() -> Promise<HiveDriveHandle>? {
+    override func defaultDriveHandle() -> HivePromise<HiveDriveHandle>? {
         return defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>())
     }
 
-    override func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> Promise<HiveDriveHandle>? {
-        return driveHandelInfo()
-    }
-
-    private func driveHandelInfo() -> Promise <HiveDriveHandle>? {
+    override func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> HivePromise<HiveDriveHandle>? {
         var driveInfo_1 = [String: Any]()
         var driveInfo_2 = [String: Any]()
         var driveId = ""
         if OneDriveDrive.oneDriveInstance != nil {
-            let promise = Promise<HiveDriveHandle>{ resolver in
-                resolver.fulfill(OneDriveDrive.sharedInstance())
+            let promise = HivePromise<HiveDriveHandle>{ resolver in
+                let hdHandle = OneDriveDrive.sharedInstance()
+                handleBy.didSucceed(hdHandle)
+                resolver.fulfill(hdHandle)
             }
             return promise
         }
-        let promise = Promise<HiveDriveHandle> { resolver in
+        let promise = HivePromise<HiveDriveHandle> { resolver in
             let group = DispatchGroup()
             let queue = DispatchQueue.main
 
             group.enter()
-                self.driveInfo().done({ (jsonData) in
+                self.driveInfo_1().done({ (jsonData) in
                     driveInfo_1 = jsonData ?? [: ]
                     group.leave()
                 }).catch({ (error) in
                     driveInfo_1 = [: ]
+                    let error = HiveError.systemError(error: error, jsonDes: nil)
+                    resolver.reject(error)
+                    handleBy.runError(error)
                     group.leave()
                 })
             group.enter()
-                self.rootDirectoryHandle().done({ (jsonData) in
+                self.driveInfo_2().done({ (jsonData) in
                     driveInfo_2 = jsonData ?? [: ]
                     group.leave()
                 }).catch({ (error) in
+                    let error = HiveError.systemError(error: error, jsonDes: nil)
+                    resolver.reject(error)
+                    handleBy.runError(error)
                     driveInfo_2 = [: ]
                     group.leave()
                 })
@@ -133,6 +138,12 @@ internal class OneDriveClient: HiveClientHandle {
                         driveInfo.driveState = .exceeded
                     }
                 }
+                if driveInfo_1.isEmpty || driveInfo_2.isEmpty {
+                    let error = HiveError.failue(des: "result is nil")
+                    handleBy.runError(error)
+                    resolver.reject(error)
+                    return
+                }
                 if !driveInfo_2.isEmpty {
                     print(driveInfo_2)
                     driveInfo.lastModifiedDateTime = driveInfo_2["lastModifiedDateTime"] as? String ?? ""
@@ -144,6 +155,7 @@ internal class OneDriveClient: HiveClientHandle {
                 OneDriveDrive.createInstance(driveInfo, self.authHelper!)
                 let onedriveHandle = OneDriveDrive.sharedInstance()
                 onedriveHandle.handleId = driveId
+                onedriveHandle.lastInfo = driveInfo
 
                 // driveclientInfo
                 let owner = driveInfo_1["owner"] as? Dictionary<String, Any> ?? [: ]
@@ -157,8 +169,8 @@ internal class OneDriveClient: HiveClientHandle {
         return promise
     }
 
-    private func driveInfo() -> Promise<Dictionary<String, Any>?> {
-        let promise = Promise<Dictionary<String, Any>?> { resolver in
+    private func driveInfo_1() -> HivePromise<Dictionary<String, Any>?> {
+        let promise = HivePromise<Dictionary<String, Any>?> { resolver in
             Alamofire.request(ONEDRIVE_RESTFUL_URL, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: (OneDriveHttpHeader.headers())).responseJSON { (dataResponse) in
                 print(dataResponse)
                 dataResponse.result.ifSuccess {
@@ -177,8 +189,8 @@ internal class OneDriveClient: HiveClientHandle {
         return promise
     }
 
-    private func rootDirectoryHandle() -> Promise<Dictionary<String, Any>?> {
-        let future = Promise<Dictionary<String, Any>?> { resolver in
+    private func driveInfo_2() -> HivePromise<Dictionary<String, Any>?> {
+        let future = HivePromise<Dictionary<String, Any>?> { resolver in
             Alamofire.request(OneDriveURL.API + "/root", method: .get, parameters: nil, encoding: JSONEncoding.default, headers: (OneDriveHttpHeader.headers())).responseJSON(completionHandler: { (dataResponse) in
                 dataResponse.result.ifSuccess {
                     guard dataResponse.response?.statusCode == 200 else{

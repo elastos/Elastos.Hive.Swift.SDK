@@ -10,8 +10,8 @@ public class HiveFileHandle: NSObject, HiveResourceItem, HiveFileItem {
     public var createdDateTime: String?
     public var lastModifiedDateTime: String?
     public var parentPathName: String?
-    public var fileSystemInfo: Dictionary<AnyHashable, Any>?
-    public var parentReference: Dictionary<AnyHashable, Any>?
+    public var fileSystemInfo: Dictionary<String, Any>?
+    public var parentReference: Dictionary<String, Any>?
 
     private let authHelper: AuthHelper?
     private var _lastInfo: HiveFileInfo?
@@ -33,40 +33,40 @@ public class HiveFileHandle: NSObject, HiveResourceItem, HiveFileItem {
         }
     }
 
-    public func lastUpdatedInfo() -> Promise<resourceType>? {
+    public func lastUpdatedInfo() -> HivePromise<resourceType>? {
         return lastUpdatedInfo(handleBy: HiveCallback<HiveFileHandle.resourceType>())
     }
 
-    public func lastUpdatedInfo(handleBy: HiveCallback<resourceType>) -> Promise<resourceType>? {
+    public func lastUpdatedInfo(handleBy: HiveCallback<resourceType>) -> HivePromise<resourceType>? {
         let error = HiveError.failue(des: "Dummy")
-        return Promise<HiveFileInfo>(error: error)
+        return HivePromise<HiveFileInfo>(error: error)
     }
 
-    public func moveTo(newPath: String) -> Promise<HiveStatus>? {
-        return moveTo(newPath: newPath, handleBy: HiveCallback<HiveStatus>())
+    public func moveTo(newPath: String) -> HivePromise<Bool>? {
+        return moveTo(newPath: newPath, handleBy: HiveCallback<Bool>())
     }
 
-    public func moveTo(newPath: String, handleBy: HiveCallback<HiveStatus>) -> Promise<HiveStatus>? {
+    public func moveTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool>? {
         let error = HiveError.failue(des: "Dummy")
-        return Promise<HiveStatus>(error: error)
+        return HivePromise<Bool>(error: error)
     }
 
-    public func copyTo(newPath: String) -> Promise<HiveStatus>? {
-        return copyTo(newPath: newPath, handleBy: HiveCallback<HiveStatus>())
+    public func copyTo(newPath: String) -> HivePromise<Bool>? {
+        return copyTo(newPath: newPath, handleBy: HiveCallback<Bool>())
     }
 
-    public func copyTo(newPath: String, handleBy: HiveCallback<HiveStatus>) -> Promise<HiveStatus>? {
+    public func copyTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool>? {
         let error = HiveError.failue(des: "Dummy")
-        return Promise<HiveStatus>(error: error)
+        return HivePromise<Bool>(error: error)
     }
 
-    public func deleteItem() -> Promise<HiveStatus>? {
-        return deleteItem(handleBy: HiveCallback<HiveStatus>())
+    public func deleteItem() -> HivePromise<Bool>? {
+        return deleteItem(handleBy: HiveCallback<Bool>())
     }
 
-    public func deleteItem(handleBy: HiveCallback<HiveStatus>) -> Promise<HiveStatus>? {
+    public func deleteItem(handleBy: HiveCallback<Bool>) -> HivePromise<Bool>? {
         let error = HiveError.failue(des: "Dummy")
-        return Promise<HiveStatus>(error: error)
+        return HivePromise<Bool>(error: error)
     }
 
     public func close() {

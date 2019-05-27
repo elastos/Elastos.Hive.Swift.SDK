@@ -81,8 +81,8 @@ internal class OneDriveAuthHelper: AuthHelper {
         return result
     }
 
-    private func refreshAccessToken() -> Promise<Bool> {
-        let promise = Promise<Bool> {  resolver in
+    private func refreshAccessToken() -> HivePromise<Bool> {
+        let promise = HivePromise<Bool> {  resolver in
             let params: Dictionary<String, Any> = [
                 "client_id" : self.authEntry.clientId,
                 "scope" : self.authEntry.scope,
@@ -123,8 +123,8 @@ internal class OneDriveAuthHelper: AuthHelper {
         return token == nil || token!.isExpired()
     }
 
-    override func checkExpired() -> Promise<Bool> {
-        let promise = Promise<Bool> { resolver in
+    override func checkExpired() -> HivePromise<Bool> {
+        let promise = HivePromise<Bool> { resolver in
             guard !isExpired() else {
                 _ = refreshAccessToken().done{ authToken in
                     resolver.fulfill(true)
