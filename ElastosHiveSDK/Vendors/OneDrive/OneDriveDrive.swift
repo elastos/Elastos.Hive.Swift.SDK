@@ -112,7 +112,7 @@ public class OneDriveDrive: HiveDriveHandle {
             let future = HivePromise<HiveDirectoryHandle> { resolver in
                 let params: Dictionary<String, Any> = ["name": HelperMethods.endPath(withPath) as Any,
                                                        "folder": [: ],
-                                                       "@microsoft.graph.conflictBehavior": "rename"
+                                                       "@microsoft.graph.conflictBehavior": "fail"
                 ]
                 let url = perUrl(withPath, "children")
                 Alamofire.request(url, method: .post, parameters: params, encoding: JSONEncoding.default, headers: (OneDriveHttpHeader.headers())).responseJSON(completionHandler: { (dataResponse) in

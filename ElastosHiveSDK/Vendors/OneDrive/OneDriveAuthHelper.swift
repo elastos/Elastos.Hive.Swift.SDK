@@ -133,13 +133,10 @@ internal class OneDriveAuthHelper: AuthHelper {
                 }
                 return
             }
-
             resolver.fulfill(true)
         }
-
         return promise
     }
-
 
     private func saveOnedriveAcount(_ jsonData: Dictionary<String, Any>){
         self.token = AuthToken()

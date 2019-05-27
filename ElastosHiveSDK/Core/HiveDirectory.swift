@@ -110,6 +110,22 @@ public class HiveDirectoryHandle: NSObject, HiveResourceItem, HiveFileItem, Hive
         return HivePromise<Bool>(error: error)
     }
 
+    func readData() -> HivePromise<String>? {
+        return readData(handleBy: HiveCallback<String>())
+    }
+
+    func readData(handleBy: HiveCallback<String>) -> HivePromise<String>? {
+        return nil
+    }
+
+    func writeData(withData: Data) -> HivePromise<Bool>? {
+        return writeData(withData: withData, handleBy: HiveCallback<Bool>())
+    }
+
+    func writeData(withData: Data, handleBy: HiveCallback<Bool>) -> HivePromise<Bool>? {
+        return nil
+    }
+
     public func close() {
         // TODO
     }

@@ -12,5 +12,11 @@ protocol HiveFileItem {
     func deleteItem() -> HivePromise<Bool>?
     func deleteItem(handleBy: HiveCallback<Bool>) -> HivePromise<Bool>?
 
+    func readData() -> HivePromise<String>?
+    func readData(handleBy: HiveCallback<String>) -> HivePromise<String>?
+
+    func writeData(withData: Data) -> HivePromise<Bool>?
+    func writeData(withData: Data, handleBy: HiveCallback<Bool>) -> HivePromise<Bool>?
+    
     func close()
 }

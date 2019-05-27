@@ -19,7 +19,6 @@ public class HiveFileHandle: NSObject, HiveResourceItem, HiveFileItem {
     init(_ info: HiveFileInfo, _ authHelper: AuthHelper) {
         self._lastInfo = info
         self.authHelper = authHelper
-        self.fileId = "TODO"
     }
 
     public typealias resourceType = HiveFileInfo
@@ -69,6 +68,21 @@ public class HiveFileHandle: NSObject, HiveResourceItem, HiveFileItem {
         return HivePromise<Bool>(error: error)
     }
 
+   public func readData() -> HivePromise<String>? {
+        return readData(handleBy: HiveCallback<String>())
+    }
+
+    public func readData(handleBy: HiveCallback<String>) -> HivePromise<String>? {
+        return nil
+    }
+
+   public func writeData(withData: Data) -> HivePromise<Bool>? {
+        return writeData(withData: withData, handleBy: HiveCallback<Bool>())
+    }
+
+   public func writeData(withData: Data, handleBy: HiveCallback<Bool>) -> HivePromise<Bool>? {
+        return nil
+    }
     public func close() {
         // TODO
     }

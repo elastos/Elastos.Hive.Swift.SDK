@@ -21,7 +21,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                 url = OneDriveURL.API + "/root"
             }
             else {
-              let ecurl = self.pathName!.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+                let ecurl = self.pathName!.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                 url  = OneDriveURL.API + "/root:\(ecurl)"
             }
             Alamofire.request(url,
@@ -66,7 +66,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
             let future = HivePromise<HiveDirectoryHandle> { resolver in
                 let params: Dictionary<String, Any> = ["name": withPath,
                                                        "folder": [: ],
-                                                       "@microsoft.graph.conflictBehavior": "rename"
+                                                       "@microsoft.graph.conflictBehavior": "fail"
                 ]
                 let url = perUrl("children")
                 Alamofire.request(url, method: .post,
@@ -158,9 +158,10 @@ class OneDriveDirectory: HiveDirectoryHandle {
                     let ecUrl = (self.pathName! + withPath).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                     url = OneDriveURL.API + "/root:\(ecUrl):/content"
                 }
+                let params = ["@microsoft.graph.conflictBehavior": "fail"]
                 Alamofire.request(url,
                                   method: .put,
-                                  parameters: nil,
+                                  parameters: params,
                                   encoding: JSONEncoding.default,
                                   headers: (OneDriveHttpHeader.headers()))
                     .responseJSON(completionHandler: { (dataResponse) in
@@ -249,7 +250,9 @@ class OneDriveDirectory: HiveDirectoryHandle {
             }
             let path = self.pathName!.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let url = "\(ONEDRIVE_RESTFUL_URL)\(ONEDRIVE_ROOTDIR):\(path)"
-            let params: Dictionary<String, Any> = ["parentReference": ["path": "/drive/root:" + newPath], "name": self.name!]
+            let params: Dictionary<String, Any> = ["parentReference": ["path": "/drive/root:" + newPath],
+                                                   "name": self.name!,
+                                                   "@microsoft.graph.conflictBehavior": "fail"]
             Alamofire.request(url,
                               method: .patch,
                               parameters: params,
@@ -295,20 +298,21 @@ class OneDriveDirectory: HiveDirectoryHandle {
                 url = ONEDRIVE_RESTFUL_URL + ONEDRIVE_ROOTDIR + "/copy"
             }
             let params: Dictionary<String, Any> = ["parentReference" : ["path": "/drive/root:\(newPath)"],
-                                                   "name": self.name as Any]
+                                                   "name": self.name as Any,
+                                                   "@microsoft.graph.conflictBehavior": "fail"]
             Alamofire.request(url, method: .post,
                               parameters: params,
                               encoding: JSONEncoding.default,
                               headers: (OneDriveHttpHeader.headers()))
                 .responseJSON(completionHandler: { (dataResponse) in
-                        guard dataResponse.response?.statusCode == 202 else{
-                            let error = HiveError.jsonFailue(des: dataResponse.result.value as? Dictionary<AnyHashable, Any>)
-                            resolver.reject(error)
-                            handleBy.runError(error)
-                            return
-                        }
-                        resolver.fulfill(true)
-                        handleBy.didSucceed(true)
+                    guard dataResponse.response?.statusCode == 202 else{
+                        let error = HiveError.jsonFailue(des: dataResponse.result.value as? Dictionary<AnyHashable, Any>)
+                        resolver.reject(error)
+                        handleBy.runError(error)
+                        return
+                    }
+                    resolver.fulfill(true)
+                    handleBy.didSucceed(true)
                 })
         }
         return future
