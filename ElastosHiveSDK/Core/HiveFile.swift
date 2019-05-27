@@ -13,7 +13,7 @@ public class HiveFileHandle: NSObject, HiveResourceItem, HiveFileItem {
     public var fileSystemInfo: Dictionary<String, Any>?
     public var parentReference: Dictionary<String, Any>?
 
-    private let authHelper: AuthHelper?
+    let authHelper: AuthHelper?
     private var _lastInfo: HiveFileInfo?
 
     init(_ info: HiveFileInfo, _ authHelper: AuthHelper) {
