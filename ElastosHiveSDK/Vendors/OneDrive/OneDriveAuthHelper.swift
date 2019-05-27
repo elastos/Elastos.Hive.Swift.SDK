@@ -83,11 +83,12 @@ internal class OneDriveAuthHelper: AuthHelper {
 
     private func refreshAccessToken() -> HivePromise<Bool> {
         let promise = HivePromise<Bool> {  resolver in
+            let refreshToken = HelperMethods.getKeychain(KEYCHAIN_ACCESS_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
             let params: Dictionary<String, Any> = [
                 "client_id" : self.authEntry.clientId,
                 "scope" : self.authEntry.scope,
                 "redirect_uri" : self.authEntry.redirectURL,
-                "refresh_token": self.token!.refreshToken as Any,
+                "refresh_token": refreshToken,
                 "grant_type": KEYCHAIN_REFRESH_TOKEN
             ]
             var urlRequest = URLRequest(url: URL(string: OneDriveURL.AUTH + OneDriveMethod.TOKEN)!)

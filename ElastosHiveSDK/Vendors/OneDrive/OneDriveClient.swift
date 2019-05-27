@@ -39,38 +39,45 @@ internal class OneDriveClient: HiveClientHandle {
 
     override func lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>) -> HivePromise<HiveClientInfo>? {
         let promise = HivePromise<HiveClientInfo> { resolver in
-            Alamofire.request(ONEDRIVE_RESTFUL_URL, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: (OneDriveHttpHeader.headers())).responseJSON { (dataResponse) in
-                print(dataResponse)
-                dataResponse.result.ifSuccess {
-                    guard dataResponse.response?.statusCode == 200 else {
+            _ = self.authHelper!.checkExpired().done({ (result) in
+
+                Alamofire.request(ONEDRIVE_RESTFUL_URL, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: (OneDriveHttpHeader.headers())).responseJSON { (dataResponse) in
+                    print(dataResponse)
+                    dataResponse.result.ifSuccess {
+                        guard dataResponse.response?.statusCode == 200 else {
+                            let error = HiveError.jsonFailue(des: dataResponse.result.value as? Dictionary<AnyHashable, Any>)
+                            resolver.reject(error)
+                            handleBy.runError(error)
+                            return
+                        }
+                        let jsonData = dataResponse.result.value as? Dictionary<String, Any>
+                        guard jsonData != nil else {
+                            let error = HiveError.failue(des: "result is nil")
+                            handleBy.runError(error)
+                            resolver.reject(error)
+                            return
+                        }
+                        // driveclientInfo
+                        let owner = jsonData!["owner"] as? Dictionary<String, Any> ?? [: ]
+                        let user = owner["user"] as? Dictionary<String, Any> ?? [: ]
+                        self.handleId = user["id"] as? String ?? ""
+                        let clientInfo = HiveClientInfo()
+                        clientInfo.displayName = user["displayName"] as? String ?? ""
+                        clientInfo.userId = user["id"] as? String ?? ""
+                        handleBy.didSucceed(clientInfo)
+                        resolver.fulfill(clientInfo)
+                    }
+                    dataResponse.result.ifFailure {
                         let error = HiveError.jsonFailue(des: dataResponse.result.value as? Dictionary<AnyHashable, Any>)
                         resolver.reject(error)
                         handleBy.runError(error)
-                        return
                     }
-                    let jsonData = dataResponse.result.value as? Dictionary<String, Any>
-                    guard jsonData != nil else {
-                        let error = HiveError.failue(des: "result is nil")
-                        handleBy.runError(error)
-                        resolver.reject(error)
-                        return
-                    }
-                    // driveclientInfo
-                    let owner = jsonData!["owner"] as? Dictionary<String, Any> ?? [: ]
-                    let user = owner["user"] as? Dictionary<String, Any> ?? [: ]
-                    self.handleId = user["id"] as? String ?? ""
-                    let clientInfo = HiveClientInfo()
-                    clientInfo.displayName = user["displayName"] as? String ?? ""
-                    clientInfo.userId = user["id"] as? String ?? ""
-                    handleBy.didSucceed(clientInfo)
-                    resolver.fulfill(clientInfo)
                 }
-                dataResponse.result.ifFailure {
-                    let error = HiveError.jsonFailue(des: dataResponse.result.value as? Dictionary<AnyHashable, Any>)
-                    resolver.reject(error)
-                    handleBy.runError(error)
-                }
-            }
+            }).catch({ (err) in
+                let error = HiveError.systemError(error: err, jsonDes: nil)
+                resolver.reject(error)
+                handleBy.runError(error)
+            })
         }
         return promise
     }
@@ -92,10 +99,12 @@ internal class OneDriveClient: HiveClientHandle {
             return promise
         }
         let promise = HivePromise<HiveDriveHandle> { resolver in
-            let group = DispatchGroup()
-            let queue = DispatchQueue.main
+            _ = self.authHelper!.checkExpired().done({ (result) in
 
-            group.enter()
+                let group = DispatchGroup()
+                let queue = DispatchQueue.main
+
+                group.enter()
                 self.driveInfo_1().done({ (jsonData) in
                     driveInfo_1 = jsonData ?? [: ]
                     group.leave()
@@ -106,7 +115,7 @@ internal class OneDriveClient: HiveClientHandle {
                     handleBy.runError(error)
                     group.leave()
                 })
-            group.enter()
+                group.enter()
                 self.driveInfo_2().done({ (jsonData) in
                     driveInfo_2 = jsonData ?? [: ]
                     group.leave()
@@ -117,53 +126,58 @@ internal class OneDriveClient: HiveClientHandle {
                     driveInfo_2 = [: ]
                     group.leave()
                 })
-            group.notify(queue: queue, execute: {
-                let driveInfo = HiveDriveInfo()
-                if !driveInfo_1.isEmpty {
-                    let quota = driveInfo_1["quota"] as? Dictionary<String, Any> ?? [: ]
-                    driveInfo.capacity = quota["total"] as? String ?? ""
-                    driveInfo.used = quota["used"] as? String ?? ""
-                    driveInfo.remaining = quota["remaining"] as? String ?? ""
-                    driveInfo.deleted = quota["deleted"] as? String ?? ""
-                    driveId = driveInfo_1["id"] as? String ?? ""
-                    let stat = driveInfo_1["state"] as? String ?? ""
-                    driveInfo.state = stat
-                    if stat == "normal" {
-                        driveInfo.driveState = .normal
-                    }else if stat == "nearing" {
-                        driveInfo.driveState = .nearing
-                    }else if stat == "critical" {
-                        driveInfo.driveState = .critical
-                    }else if stat == "exceeded" {
-                        driveInfo.driveState = .exceeded
+                group.notify(queue: queue, execute: {
+                    let driveInfo = HiveDriveInfo()
+                    if !driveInfo_1.isEmpty {
+                        let quota = driveInfo_1["quota"] as? Dictionary<String, Any> ?? [: ]
+                        driveInfo.capacity = quota["total"] as? String ?? ""
+                        driveInfo.used = quota["used"] as? String ?? ""
+                        driveInfo.remaining = quota["remaining"] as? String ?? ""
+                        driveInfo.deleted = quota["deleted"] as? String ?? ""
+                        driveId = driveInfo_1["id"] as? String ?? ""
+                        let stat = driveInfo_1["state"] as? String ?? ""
+                        driveInfo.state = stat
+                        if stat == "normal" {
+                            driveInfo.driveState = .normal
+                        }else if stat == "nearing" {
+                            driveInfo.driveState = .nearing
+                        }else if stat == "critical" {
+                            driveInfo.driveState = .critical
+                        }else if stat == "exceeded" {
+                            driveInfo.driveState = .exceeded
+                        }
                     }
-                }
-                if driveInfo_1.isEmpty || driveInfo_2.isEmpty {
-                    let error = HiveError.failue(des: "result is nil")
-                    handleBy.runError(error)
-                    resolver.reject(error)
-                    return
-                }
-                if !driveInfo_2.isEmpty {
-                    print(driveInfo_2)
-                    driveInfo.lastModifiedDateTime = driveInfo_2["lastModifiedDateTime"] as? String ?? ""
-                    let folder = driveInfo_2["folder"] as? Dictionary<String, Any> ?? [: ]
-                    driveInfo.fileCount = folder["childCount"] as? String ?? ""
-                    driveInfo.ddescription = ""
-                }
-                // driveHandle
-                OneDriveDrive.createInstance(driveInfo, self.authHelper!)
-                let onedriveHandle = OneDriveDrive.sharedInstance()
-                onedriveHandle.handleId = driveId
-                onedriveHandle.lastInfo = driveInfo
+                    if driveInfo_1.isEmpty || driveInfo_2.isEmpty {
+                        let error = HiveError.failue(des: "result is nil")
+                        handleBy.runError(error)
+                        resolver.reject(error)
+                        return
+                    }
+                    if !driveInfo_2.isEmpty {
+                        print(driveInfo_2)
+                        driveInfo.lastModifiedDateTime = driveInfo_2["lastModifiedDateTime"] as? String ?? ""
+                        let folder = driveInfo_2["folder"] as? Dictionary<String, Any> ?? [: ]
+                        driveInfo.fileCount = folder["childCount"] as? String ?? ""
+                        driveInfo.ddescription = ""
+                    }
+                    // driveHandle
+                    OneDriveDrive.createInstance(driveInfo, self.authHelper!)
+                    let onedriveHandle = OneDriveDrive.sharedInstance()
+                    onedriveHandle.handleId = driveId
+                    onedriveHandle.lastInfo = driveInfo
 
-                // driveclientInfo
-                let owner = driveInfo_1["owner"] as? Dictionary<String, Any> ?? [: ]
-                let user = owner["user"] as? Dictionary<String, Any> ?? [: ]
-                self.handleId = user["id"] as? String ?? ""
-                let clientInfo = HiveClientInfo()
-                clientInfo.displayName = user["displayName"] as? String ?? ""
-                resolver.fulfill(onedriveHandle)
+                    // driveclientInfo
+                    let owner = driveInfo_1["owner"] as? Dictionary<String, Any> ?? [: ]
+                    let user = owner["user"] as? Dictionary<String, Any> ?? [: ]
+                    self.handleId = user["id"] as? String ?? ""
+                    let clientInfo = HiveClientInfo()
+                    clientInfo.displayName = user["displayName"] as? String ?? ""
+                    resolver.fulfill(onedriveHandle)
+                })
+            }).catch({ (err) in
+                let error = HiveError.systemError(error: err, jsonDes: nil)
+                resolver.reject(error)
+                handleBy.runError(error)
             })
         }
         return promise

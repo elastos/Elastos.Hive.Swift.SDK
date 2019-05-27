@@ -14,7 +14,7 @@ public class HiveDirectoryHandle: NSObject, HiveResourceItem, HiveFileItem, Hive
     public var parentPathName: String?
 
     private var _lastInfo: HiveDirectoryInfo?
-    internal let authHelper: AuthHelper
+    internal var authHelper: AuthHelper
 
     init(_ info: HiveDirectoryInfo, _ authHelper: AuthHelper) {
         self._lastInfo = info
