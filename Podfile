@@ -6,6 +6,7 @@ target 'ElastosHiveSDK' do
   use_frameworks!
    pod 'Swifter', '~> 1.4.6'
    pod 'Unirest', '~> 1.1.4'
+   pod 'Alamofire'
    pod 'PromiseKit'
   
   target 'ElastosHiveSDKTests' do
@@ -13,6 +14,7 @@ target 'ElastosHiveSDK' do
     pod 'Swifter', '~> 1.4.6'
     pod 'Unirest', '~> 1.1.4'
     pod 'PromiseKit'
+    pod 'Alamofire'
 
   end
 
@@ -21,6 +23,7 @@ target 'ElastosHiveSDK' do
     pod 'Swifter', '~> 1.4.6'
     pod 'Unirest', '~> 1.1.4'
     pod 'PromiseKit'
+    pod 'Alamofire'
 
   end
 

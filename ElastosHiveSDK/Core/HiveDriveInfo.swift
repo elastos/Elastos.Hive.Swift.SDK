@@ -17,5 +17,5 @@ public class HiveDriveInfo: NSObject {
     public var lastModifiedDateTime: String?
     public var ddescription: String?
     public var driveState: DriveState?
-    public var currentWorkingPath: String?
+
 }

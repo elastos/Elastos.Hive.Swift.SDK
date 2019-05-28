@@ -1,20 +1,13 @@
 import Foundation
 
 class AuthToken: NSObject {
-    let scope: String
-    let refreshToken: String
-    let accessToken: String
-    let expiresIn: String
-
-    init(_ scope: String, _ refreshToken: String, _ accessToken: String, _ expiresIn: String) {
-        self.scope = scope
-        self.refreshToken = refreshToken
-        self.accessToken = accessToken
-        self.expiresIn = expiresIn
-    }
+    var expiredIn: Int64?
+    var accessToken: String?
+    var refreshToken: String?
+    var scopes: String?
+    var expiredTime: String?
 
     func isExpired() -> Bool {
-        // TODO
-        return false
+        return HelperMethods.checkIsExpired(self.expiredTime!)
     }
 }

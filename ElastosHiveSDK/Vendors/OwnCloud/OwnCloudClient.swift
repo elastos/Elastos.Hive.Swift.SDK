@@ -7,7 +7,7 @@ internal class OwnCloudClient: HiveClientHandle {
 
     private init(_ param: OwnCloudParameter) {
         super.init(DriveType.ownCloud)
-        super._clientId = "TODO"
+
     }
 
     @objc(createInstance:)
@@ -22,21 +22,21 @@ internal class OwnCloudClient: HiveClientHandle {
         return clientInstance
     }
 
-    override func lastUpdatedInfo() -> Promise<HiveClientInfo>? {
+    override func lastUpdatedInfo() -> HivePromise<HiveClientInfo>? {
         return lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>())
     }
 
-    override func lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>) -> Promise<HiveClientInfo>? {
+    override func lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>) -> HivePromise<HiveClientInfo>? {
         let error = HiveError.failue(des: "TODO")
-        return Promise<HiveClientInfo>(error: error)
+        return HivePromise<HiveClientInfo>(error: error)
     }
 
-    override func defaultDriveHandle() -> Promise<HiveDriveHandle>? {
+    override func defaultDriveHandle() -> HivePromise<HiveDriveHandle>? {
         return defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>())
     }
 
-    override func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> Promise<HiveDriveHandle>? {
+    override func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> HivePromise<HiveDriveHandle>? {
         let error = HiveError.failue(des: "TODO")
-        return Promise<HiveDriveHandle>(error: error)
+        return HivePromise<HiveDriveHandle>(error: error)
     }
 }

@@ -1,13 +1,17 @@
 import Foundation
 import PromiseKit
 
+public typealias HivePromise = Promise
+
 @objc(HiveClient)
 public class HiveClientHandle: NSObject, HiveResourceItem{
+    public typealias resourceType = HiveClientInfo
     public let driveType: DriveType
+    public var handleId: String?
+    public var lastInfo: HiveClientInfo?
     internal var authHelper: AuthHelper?
     internal var token: AuthToken?
-    internal var _clientId: String?
-    internal var _lastInfo: HiveClientInfo?
+
 
     internal init(_ driveType: DriveType) {
         self.driveType = driveType
@@ -50,49 +54,29 @@ public class HiveClientHandle: NSObject, HiveResourceItem{
         }
     }
 
-    @objc
-    public var handleId: String? {
-        get {
-            return self._clientId;
-        }
+    public func login(_ authenticator: Authenticator) -> Bool? {
+        return nil
     }
 
-    public typealias resourceType = HiveClientInfo
-    @objc
-    public var lastInfo: resourceType?  {
-        get {
-            return self._lastInfo
-        }
-        set (newInfo) {
-            self._lastInfo = newInfo
-        }
+    public func logout() -> Bool? {
+        return nil
     }
 
-    public func login(_ authenticator: Authenticator) throws {
-        let promise = authHelper?.login(authenticator)
-        try token = promise?.wait()
-    }
-
-    public func logout() throws {
-        let promise = authHelper?.logout()
-        try _ = promise?.wait()
-    }
-
-    public func lastUpdatedInfo() -> Promise<resourceType>? {
+    public func lastUpdatedInfo() -> HivePromise<resourceType>? {
         return lastUpdatedInfo(handleBy: HiveCallback<resourceType>())
     }
 
-    public func lastUpdatedInfo(handleBy: HiveCallback<resourceType>) -> Promise<resourceType>? {
+    public func lastUpdatedInfo(handleBy: HiveCallback<resourceType>) -> HivePromise<resourceType>? {
         let error = HiveError.failue(des: "TODO")
-        return Promise<resourceType>(error: error)
+        return HivePromise<resourceType>(error: error)
     }
 
-    public func defaultDriveHandle() -> Promise<HiveDriveHandle>? {
+    public func defaultDriveHandle() -> HivePromise<HiveDriveHandle>? {
         return defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>())
     }
 
-    public func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> Promise<HiveDriveHandle>? {
+    public func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> HivePromise<HiveDriveHandle>? {
         let error = HiveError.failue(des: "TODO")
-        return Promise<HiveDriveHandle>(error: error)
+        return HivePromise<HiveDriveHandle>(error: error)
     }
 }

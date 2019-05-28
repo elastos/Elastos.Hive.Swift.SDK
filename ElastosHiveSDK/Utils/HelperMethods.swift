@@ -65,4 +65,17 @@ class HelperMethods {
         let keychain = KeychainSwift()
         keychain.set(jsonstring!, forKey: account)
     }
+
+    class func prePath(_ path: String) -> String {
+        let index = path.range(of: "/", options: .backwards)?.lowerBound
+        let str = index.map(path.prefix(upTo:)) ?? ""
+        return String(str + "/")
+    }
+
+    class func endPath(_ path: String) -> String {
+        let arr = path.components(separatedBy: "/")
+        let str = arr.last ?? ""
+        return String(str)
+    }
+
 }

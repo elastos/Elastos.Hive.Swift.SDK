@@ -5,7 +5,12 @@ class OneDriveHttpHeader {
     internal static let ContentType     = "Content-Type"
     internal static let ContentTypeValue    = "application/x-www-form-urlencoded"
 
-    static func bearerValue(_ authHelper: AuthHelper) -> String {
-        return "TODO"
+   class func headers() -> Dictionary<String, String> {
+        let accesstoken = HelperMethods.getKeychain(KEYCHAIN_ACCESS_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
+        return [ContentType: "application/json;charset=UTF-8", Authorization: "bearer \(accesstoken)"]
+    }
+
+   class func authHeaders() -> Dictionary<String, String> {
+        return [ContentType: ContentTypeValue]
     }
 }

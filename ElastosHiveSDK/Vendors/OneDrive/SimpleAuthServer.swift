@@ -9,19 +9,20 @@ internal class SimpleAuthServer: NSObject {
         try? httpServer.start(port as in_port_t)
     }
 
-    func getCode() -> Promise<String> {
-        let promise = Promise<String> { resolver in
-            httpServer[""] = { request in
-                guard request.queryParams.count > 0 || request.queryParams[0].0 != "code" else {
-                    resolver.reject(HiveError.failue(des: "Abtain authorization code error"))
-                    return HttpResponse.ok(.json("nil" as AnyObject))
-                }
-                let json = request.queryParams[0]
-                resolver.fulfill(json.1)
+    func getCode() -> String {
+        var authCode = ""
+        let semaphore = DispatchSemaphore(value: 0)
+        httpServer[""] = { request in
+            guard request.queryParams.count > 0 || request.queryParams[0].0 != "code" else {
+                semaphore.signal()
                 return HttpResponse.ok(.json("nil" as AnyObject))
             }
+            authCode = request.queryParams[0].1
+            semaphore.signal()
+            return HttpResponse.ok(.json("nil" as AnyObject))
         }
-        return promise
+        semaphore.wait()
+        return authCode
     }
 
     func stop() {

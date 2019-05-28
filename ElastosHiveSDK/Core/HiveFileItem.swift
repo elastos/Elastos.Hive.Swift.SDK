@@ -2,17 +2,21 @@ import Foundation
 import PromiseKit
 
 protocol HiveFileItem {
-    var pathName: String { get }
-    var parentPathName: String { get }
 
-    func moveTo(newPath: String) -> Promise<HiveStatus>?
-    func moveTo(newPath: String, handleBy: HiveCallback<HiveStatus>) -> Promise<HiveStatus>?
+    func moveTo(newPath: String) -> HivePromise<Bool>?
+    func moveTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool>?
 
-    func copyTo(newPath: String) -> Promise<HiveStatus>?
-    func copyTo(newPath: String, handleBy: HiveCallback<HiveStatus>) -> Promise<HiveStatus>?
+    func copyTo(newPath: String) -> HivePromise<Bool>?
+    func copyTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool>?
 
-    func deleteItem() -> Promise<HiveStatus>?
-    func deleteItem(handleBy: HiveCallback<HiveStatus>) -> Promise<HiveStatus>?
+    func deleteItem() -> HivePromise<Bool>?
+    func deleteItem(handleBy: HiveCallback<Bool>) -> HivePromise<Bool>?
 
+    func readData() -> HivePromise<String>?
+    func readData(handleBy: HiveCallback<String>) -> HivePromise<String>?
+
+    func writeData(withData: Data) -> HivePromise<Bool>?
+    func writeData(withData: Data, handleBy: HiveCallback<Bool>) -> HivePromise<Bool>?
+    
     func close()
 }
