@@ -26,7 +26,7 @@ internal class OneDriveClient: HiveClientHandle {
     override func login(_ authenticator: Authenticator) -> Bool {
         let result = self.authHelper?.login(authenticator)
        _ = defaultDriveHandle()
-        return result!
+        return (result)!
     }
 
     override func logout() -> Bool {
@@ -64,7 +64,6 @@ internal class OneDriveClient: HiveClientHandle {
                         let clientInfo = HiveClientInfo()
                         clientInfo.displayName = user["displayName"] as? String ?? ""
                         clientInfo.userId = user["id"] as? String ?? ""
-                        self.lastInfo = clientInfo
                         handleBy.didSucceed(clientInfo)
                         resolver.fulfill(clientInfo)
                     }
@@ -107,7 +106,7 @@ internal class OneDriveClient: HiveClientHandle {
 
                 group.enter()
                 self.driveInfo_1().done({ (jsonData) in
-                    driveInfo_1 = jsonData
+                    driveInfo_1 = jsonData ?? [: ]
                     group.leave()
                 }).catch({ (error) in
                     driveInfo_1 = [: ]
@@ -118,7 +117,7 @@ internal class OneDriveClient: HiveClientHandle {
                 })
                 group.enter()
                 self.driveInfo_2().done({ (jsonData) in
-                    driveInfo_2 = jsonData
+                    driveInfo_2 = jsonData ?? [: ]
                     group.leave()
                 }).catch({ (error) in
                     let error = HiveError.systemError(error: error, jsonDes: nil)
@@ -173,8 +172,6 @@ internal class OneDriveClient: HiveClientHandle {
                     self.handleId = user["id"] as? String ?? ""
                     let clientInfo = HiveClientInfo()
                     clientInfo.displayName = user["displayName"] as? String ?? ""
-                    clientInfo.userId = user["id"] as? String ?? ""
-                    self.lastInfo = clientInfo
                     resolver.fulfill(onedriveHandle)
                 })
             }).catch({ (err) in
@@ -186,8 +183,8 @@ internal class OneDriveClient: HiveClientHandle {
         return promise
     }
 
-    private func driveInfo_1() -> HivePromise<Dictionary<String, Any>> {
-        let promise = HivePromise<Dictionary<String, Any>> { resolver in
+    private func driveInfo_1() -> HivePromise<Dictionary<String, Any>?> {
+        let promise = HivePromise<Dictionary<String, Any>?> { resolver in
             Alamofire.request(ONEDRIVE_RESTFUL_URL, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: (OneDriveHttpHeader.headers())).responseJSON { (dataResponse) in
                 print(dataResponse)
                 dataResponse.result.ifSuccess {
@@ -196,7 +193,7 @@ internal class OneDriveClient: HiveClientHandle {
                         return
                     }
                     let jsonData = dataResponse.result.value as? Dictionary<String, Any>
-                    resolver.fulfill(jsonData!)
+                    resolver.fulfill(jsonData)
                 }
                 dataResponse.result.ifFailure {
                     resolver.reject(HiveError.jsonFailue(des: dataResponse.result.value as? Dictionary<AnyHashable, Any>))
@@ -206,8 +203,8 @@ internal class OneDriveClient: HiveClientHandle {
         return promise
     }
 
-    private func driveInfo_2() -> HivePromise<Dictionary<String, Any>> {
-        let future = HivePromise<Dictionary<String, Any>> { resolver in
+    private func driveInfo_2() -> HivePromise<Dictionary<String, Any>?> {
+        let future = HivePromise<Dictionary<String, Any>?> { resolver in
             Alamofire.request(OneDriveURL.API + "/root", method: .get, parameters: nil, encoding: JSONEncoding.default, headers: (OneDriveHttpHeader.headers())).responseJSON(completionHandler: { (dataResponse) in
                 dataResponse.result.ifSuccess {
                     guard dataResponse.response?.statusCode == 200 else{
@@ -221,7 +218,7 @@ internal class OneDriveClient: HiveClientHandle {
                         resolver.reject(error)
                         return
                     }
-                    resolver.fulfill(jsonData!)
+                    resolver.fulfill(jsonData)
                 }
                 dataResponse.result.ifFailure {
                     resolver.reject(HiveError.jsonFailue(des: dataResponse.result.value as? Dictionary<AnyHashable, Any>))
