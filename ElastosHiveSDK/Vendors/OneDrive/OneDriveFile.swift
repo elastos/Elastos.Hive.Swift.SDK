@@ -16,7 +16,7 @@ internal class OneDriveFile: HiveFileHandle {
     }
 
     override func lastUpdatedInfo(handleBy: HiveCallback<HiveFileInfo>) -> HivePromise<HiveFileInfo> {
-        let future = HivePromise<HiveFileInfo> { resolver in
+        let promise = HivePromise<HiveFileInfo> { resolver in
             _ = self.authHelper!.checkExpired().done({ (result) in
 
                 var url = ""
@@ -62,7 +62,7 @@ internal class OneDriveFile: HiveFileHandle {
                 handleBy.runError(error)
             })
         }
-        return future
+        return promise
     }
 
     override func moveTo(newPath: String) -> HivePromise<Bool> {
@@ -70,7 +70,7 @@ internal class OneDriveFile: HiveFileHandle {
     }
 
     override func moveTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
-        let future = HivePromise<Bool>{ resolver in
+        let promise = HivePromise<Bool>{ resolver in
             _ = self.authHelper!.checkExpired().done({ (result) in
 
                 if self.validatePath(newPath).0 == false {
@@ -112,7 +112,7 @@ internal class OneDriveFile: HiveFileHandle {
                 handleBy.runError(error)
             })
         }
-        return future
+        return promise
     }
 
     override func copyTo(newPath: String) -> HivePromise<Bool> {
@@ -120,7 +120,7 @@ internal class OneDriveFile: HiveFileHandle {
     }
 
     override func copyTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
-        let future = HivePromise<Bool>{ resolver in
+        let promise = HivePromise<Bool>{ resolver in
             _ = self.authHelper!.checkExpired().done({ (result) in
 
                 if self.validatePath(newPath).0 == false {
@@ -167,7 +167,7 @@ internal class OneDriveFile: HiveFileHandle {
                 handleBy.runError(error)
             })
         }
-        return future
+        return promise
     }
 
     override func deleteItem() -> HivePromise<Bool> {
@@ -175,7 +175,7 @@ internal class OneDriveFile: HiveFileHandle {
     }
 
     override func deleteItem(handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
-        let future = HivePromise<Bool>{ resolver in
+        let promise = HivePromise<Bool>{ resolver in
             _ = self.authHelper!.checkExpired().done({ (result) in
 
                 guard self.pathName != nil else {
@@ -214,7 +214,7 @@ internal class OneDriveFile: HiveFileHandle {
                 handleBy.runError(error)
             })
         }
-        return future
+        return promise
     }
 
     override func readData() -> HivePromise<String> {
@@ -271,7 +271,7 @@ internal class OneDriveFile: HiveFileHandle {
     }
 
     override func writeData(withData: Data, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
-        let future = HivePromise<Bool> { resolver in
+        let promise = HivePromise<Bool> { resolver in
             _ = self.authHelper!.checkExpired().done({ (result) in
 
                 let accesstoken = HelperMethods.getKeychain(KEYCHAIN_ACCESS_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
@@ -297,7 +297,7 @@ internal class OneDriveFile: HiveFileHandle {
                 handleBy.runError(error)
             })
         }
-        return future
+        return promise
     }
 
     override func close() {
@@ -329,6 +329,7 @@ internal class OneDriveFile: HiveFileHandle {
     private func hiveFileInfo(_ jsonData: Dictionary<String, Any>) -> HiveFileInfo {
         let fileId = (jsonData["id"] as? String) ?? ""
         let fileInfo = HiveFileInfo(fileId)
+        self.lastInfo = fileInfo
         return fileInfo
     }
 

@@ -1,10 +1,4 @@
-//
-//  HiveOneDriveClient.swift
-//  ElastosHiveSDKTests
-//
-//  Created by 李爱红 on 2019/5/29.
-//  Copyright © 2019 org.elastos. All rights reserved.
-//
+
 
 import XCTest
 @testable import ElastosHiveSDK
@@ -43,7 +37,7 @@ class HiveOneDriveClient: XCTestCase,Authenticator {
 
     func test2_lastUpdatedInfo() {
         lock = XCTestExpectation(description: "wait for test2_lastUpdatedInfo")
-        self.hiveClient?.lastUpdatedInfo()?.done({ (clientInfo) in
+        self.hiveClient?.lastUpdatedInfo().done({ (clientInfo) in
             XCTAssertNotNil(clientInfo)
             self.lock?.fulfill()
         }).catch({ (error) in
@@ -55,7 +49,7 @@ class HiveOneDriveClient: XCTestCase,Authenticator {
 
     func test3_defaultDriveHandle() {
         lock = XCTestExpectation(description: "wait for test3_defaultDriveHandle")
-        self.hiveClient?.defaultDriveHandle()?.done({ (drive) in
+        self.hiveClient?.defaultDriveHandle().done({ (drive) in
             XCTAssertNotNil(drive)
             self.lock?.fulfill()
         }).catch({ (error) in

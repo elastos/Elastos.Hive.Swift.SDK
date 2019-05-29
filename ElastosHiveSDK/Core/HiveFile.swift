@@ -4,6 +4,7 @@ import PromiseKit
 @objc(HiveFile)
 public class HiveFileHandle: NSObject, HiveResourceItem, HiveFileItem {
 
+    public typealias resourceType = HiveFileInfo
     public var drive: HiveDriveHandle?
     public var fileId: String?
     public var pathName: String?
@@ -13,24 +14,12 @@ public class HiveFileHandle: NSObject, HiveResourceItem, HiveFileItem {
     public var parentPathName: String?
     public var fileSystemInfo: Dictionary<String, Any>?
     public var parentReference: Dictionary<String, Any>?
-
+    public var lastInfo: HiveFileInfo?
     var authHelper: AuthHelper?
-    private var _lastInfo: HiveFileInfo?
 
     init(_ info: HiveFileInfo, _ authHelper: AuthHelper) {
-        self._lastInfo = info
+        self.lastInfo = info
         self.authHelper = authHelper
-    }
-
-    public typealias resourceType = HiveFileInfo
-    @objc
-    public var lastInfo: resourceType?  {
-        get {
-            return self._lastInfo
-        }
-        set (newInfo) {
-            self._lastInfo = newInfo
-        }
     }
 
     public func lastUpdatedInfo() -> HivePromise<resourceType> {

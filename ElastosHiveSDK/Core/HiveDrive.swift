@@ -3,12 +3,15 @@ import PromiseKit
 
 @objc(HiveDrive)
 public class HiveDriveHandle: NSObject, HiveResourceItem, HiveDirectoryItem {
+
+    public typealias resourceType = HiveDriveInfo
     public var driveType: DriveType
     public var handleId: String?
     public var lastInfo: HiveDriveInfo?
 
     internal init(_ driveType: DriveType, _ info: HiveDriveInfo) {
         self.driveType = driveType
+        self.lastInfo = info
     }
 
     public func rootDirectoryHandle() -> HivePromise<HiveDirectoryHandle> {
@@ -20,11 +23,11 @@ public class HiveDriveHandle: NSObject, HiveResourceItem, HiveDirectoryItem {
         return HivePromise<HiveDirectoryHandle>(error: error)
     }
 
-    public func lastUpdatedInfo() -> HivePromise<HiveDriveInfo> {
+    public func lastUpdatedInfo() -> HivePromise<resourceType> {
         return lastUpdatedInfo(handleBy: HiveCallback<HiveDriveHandle.resourceType>())
     }
 
-    public func lastUpdatedInfo(handleBy: HiveCallback<HiveDriveInfo>) -> HivePromise<HiveDriveInfo> {
+    public func lastUpdatedInfo(handleBy: HiveCallback<resourceType>) -> HivePromise<resourceType> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<resourceType>(error: error)
     }

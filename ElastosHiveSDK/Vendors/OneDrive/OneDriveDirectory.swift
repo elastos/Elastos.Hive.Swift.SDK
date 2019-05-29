@@ -13,7 +13,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
     }
 
     override func lastUpdatedInfo(handleBy: HiveCallback<HiveDirectoryInfo>) -> HivePromise<HiveDirectoryInfo> {
-        let future = HivePromise<HiveDirectoryInfo> { resolver in
+        let promise = HivePromise<HiveDirectoryInfo> { resolver in
             _ = self.authHelper.checkExpired().done({ (result) in
 
                 var url = ""
@@ -59,7 +59,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                 handleBy.runError(error)
             })
         }
-        return future
+        return promise
     }
 
     override func createDirectory(withPath: String) -> HivePromise<HiveDirectoryHandle> {
@@ -68,7 +68,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
 
     override func createDirectory(withPath: String, handleBy: HiveCallback<HiveDirectoryHandle>) ->
         HivePromise<HiveDirectoryHandle> {
-            let future = HivePromise<HiveDirectoryHandle> { resolver in
+            let promise = HivePromise<HiveDirectoryHandle> { resolver in
                 _ = self.authHelper.checkExpired().done({ (result) in
 
                     let params: Dictionary<String, Any> = ["name": withPath,
@@ -110,7 +110,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                     handleBy.runError(error)
                 })
             }
-            return future
+            return promise
     }
 
     override func directoryHandle(atPath: String) -> HivePromise<HiveDirectoryHandle> {
@@ -119,9 +119,8 @@ class OneDriveDirectory: HiveDirectoryHandle {
 
     override func directoryHandle(atPath: String, handleBy: HiveCallback<HiveDirectoryHandle>) ->
         HivePromise<HiveDirectoryHandle> {
-            let future = HivePromise<HiveDirectoryHandle> { resolver in
+            let promise = HivePromise<HiveDirectoryHandle> { resolver in
                 _ = self.authHelper.checkExpired().done({ (result) in
-
                     let url = self.fullUrl("/" + atPath)
                     Alamofire.request(url,
                                       method: .get,
@@ -159,16 +158,15 @@ class OneDriveDirectory: HiveDirectoryHandle {
                     handleBy.runError(error)
                 })
             }
-            return future
+            return promise
     }
 
     override func createFile(withPath: String) -> HivePromise<HiveFileHandle> {
         return createFile(withPath: withPath, handleBy: HiveCallback<HiveFileHandle>())
     }
 
-    override func createFile(withPath: String, handleBy: HiveCallback<HiveFileHandle>) ->
-        HivePromise<HiveFileHandle> {
-            let future = HivePromise<HiveFileHandle> { resolver in
+    override func createFile(withPath: String, handleBy: HiveCallback<HiveFileHandle>) -> HivePromise<HiveFileHandle> {
+            let promise = HivePromise<HiveFileHandle> { resolver in
                 _ = self.authHelper.checkExpired().done({ (result) in
 
                     var url = ""
@@ -211,7 +209,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                     handleBy.runError(error)
                 })
             }
-            return future
+            return promise
     }
 
     override func fileHandle(atPath: String) -> HivePromise<HiveFileHandle> {
@@ -220,7 +218,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
 
     override func fileHandle(atPath: String, handleBy: HiveCallback<HiveFileHandle>) ->
         HivePromise<HiveFileHandle> {
-            let future = HivePromise<HiveFileHandle> { resolver in
+            let promise = HivePromise<HiveFileHandle> { resolver in
                 _ = self.authHelper.checkExpired().done({ (result) in
 
                     let url = self.fullUrl("/\(atPath)")
@@ -260,7 +258,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                     handleBy.runError(error)
                 })
             }
-            return future
+            return promise
     }
     // Get children.
 
@@ -269,7 +267,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
     }
 
     override func moveTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
-        let future = HivePromise<Bool>{ resolver in
+        let promise = HivePromise<Bool>{ resolver in
             _ = self.authHelper.checkExpired().done({ (result) in
 
                 if self.validatePath(newPath).0 == false {
@@ -311,7 +309,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                 handleBy.runError(error)
             })
         }
-        return future
+        return promise
     }
 
     override func copyTo(newPath: String) -> HivePromise<Bool> {
@@ -319,7 +317,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
     }
 
     override func copyTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
-        let future = HivePromise<Bool>{ resolver in
+        let promise = HivePromise<Bool>{ resolver in
             _ = self.authHelper.checkExpired().done({ (result) in
 
                 if self.validatePath(newPath).0 == false {
@@ -366,7 +364,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                 handleBy.runError(error)
             })
         }
-        return future
+        return promise
     }
 
     override func deleteItem() -> HivePromise<Bool> {
@@ -374,7 +372,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
     }
 
     override func deleteItem(handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
-        let future = HivePromise<Bool>{ resolver in
+        let promise = HivePromise<Bool>{ resolver in
             _ = self.authHelper.checkExpired().done({ (result) in
 
                 guard self.pathName != nil else {
@@ -413,7 +411,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                 handleBy.runError(error)
             })
         }
-        return future
+        return promise
     }
 
     override func close() {
@@ -445,6 +443,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
     private func hiveDirectoryInfo(_ jsonData: Dictionary<String, Any>) -> HiveDirectoryInfo {
         let dirId = (jsonData["id"] as? String) ?? ""
         let directoryInfo = HiveDirectoryInfo(dirId)
+        self.lastInfo = directoryInfo
         return directoryInfo
     }
 
@@ -488,6 +487,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
         if hdirectory.parentPathName == "" {
             hdirectory.parentPathName = "/"
         }
+        self.lastInfo = hdInfo
         return hdirectory
     }
 

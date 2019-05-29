@@ -64,6 +64,7 @@ internal class OneDriveClient: HiveClientHandle {
                         let clientInfo = HiveClientInfo()
                         clientInfo.displayName = user["displayName"] as? String ?? ""
                         clientInfo.userId = user["id"] as? String ?? ""
+                        self.lastInfo = clientInfo
                         handleBy.didSucceed(clientInfo)
                         resolver.fulfill(clientInfo)
                     }
@@ -106,7 +107,7 @@ internal class OneDriveClient: HiveClientHandle {
 
                 group.enter()
                 self.driveInfo_1().done({ (jsonData) in
-                    driveInfo_1 = jsonData ?? [: ]
+                    driveInfo_1 = jsonData
                     group.leave()
                 }).catch({ (error) in
                     driveInfo_1 = [: ]
@@ -117,7 +118,7 @@ internal class OneDriveClient: HiveClientHandle {
                 })
                 group.enter()
                 self.driveInfo_2().done({ (jsonData) in
-                    driveInfo_2 = jsonData ?? [: ]
+                    driveInfo_2 = jsonData
                     group.leave()
                 }).catch({ (error) in
                     let error = HiveError.systemError(error: error, jsonDes: nil)
@@ -172,6 +173,8 @@ internal class OneDriveClient: HiveClientHandle {
                     self.handleId = user["id"] as? String ?? ""
                     let clientInfo = HiveClientInfo()
                     clientInfo.displayName = user["displayName"] as? String ?? ""
+                    clientInfo.userId = user["id"] as? String ?? ""
+                    self.lastInfo = clientInfo
                     resolver.fulfill(onedriveHandle)
                 })
             }).catch({ (err) in
