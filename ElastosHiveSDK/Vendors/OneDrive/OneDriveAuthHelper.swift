@@ -1,6 +1,5 @@
 import Foundation
 import Swifter
-import Unirest
 import PromiseKit
 import Alamofire
 
@@ -29,17 +28,13 @@ internal class OneDriveAuthHelper: AuthHelper {
                                             parameters: nil,
                                             encoding: JSONEncoding.default,
                                             headers: nil).responseJSON()
-        dataResponse.result.ifSuccess {
             guard dataResponse.response?.statusCode == 200 else{
                 result = false
-                return
+                return result
             }
+            self.token = nil
+            self.removeOnedriveAcount()
             result = true
-        }
-        dataResponse.result.ifFailure {
-            result = false
-            return
-        }
         return result
     }
 
@@ -150,6 +145,13 @@ internal class OneDriveAuthHelper: AuthHelper {
         let onedriveAccountJson = [KEYCHAIN_ACCESS_TOKEN: (jsonData[KEYCHAIN_ACCESS_TOKEN] as! String),
                                    KEYCHAIN_REFRESH_TOKEN: (jsonData[KEYCHAIN_REFRESH_TOKEN] as! String),
                                    KEYCHAIN_EXPIRES_IN: expiredTime] as [String : Any]
+        HelperMethods.saveKeychain(KEYCHAIN_DRIVE_ACCOUNT, onedriveAccountJson)
+    }
+
+    private func removeOnedriveAcount(){
+        let onedriveAccountJson = [KEYCHAIN_ACCESS_TOKEN: "",
+                                   KEYCHAIN_REFRESH_TOKEN: "",
+                                   KEYCHAIN_EXPIRES_IN: ""]
         HelperMethods.saveKeychain(KEYCHAIN_DRIVE_ACCOUNT, onedriveAccountJson)
     }
 

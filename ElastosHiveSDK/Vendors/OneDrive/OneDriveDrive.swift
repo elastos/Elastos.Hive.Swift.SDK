@@ -24,11 +24,11 @@ public class OneDriveDrive: HiveDriveHandle {
         return oneDriveInstance as! OneDriveDrive
     }
 
-    override public func lastUpdatedInfo() -> HivePromise<HiveDriveInfo>? {
+    override public func lastUpdatedInfo() -> HivePromise<HiveDriveInfo> {
         return lastUpdatedInfo(handleBy: HiveCallback<HiveDriveInfo>())
     }
 
-    override public func lastUpdatedInfo(handleBy: HiveCallback<HiveDriveInfo>) -> HivePromise<HiveDriveInfo>? {
+    override public func lastUpdatedInfo(handleBy: HiveCallback<HiveDriveInfo>) -> HivePromise<HiveDriveInfo> {
 
         let future = HivePromise<HiveDriveInfo> { resolver in
             _ = self.authHelper.checkExpired().done({ (result) in
@@ -68,12 +68,12 @@ public class OneDriveDrive: HiveDriveHandle {
         return future
     }
 
-    override public func rootDirectoryHandle() -> HivePromise<HiveDirectoryHandle>? {
+    override public func rootDirectoryHandle() -> HivePromise<HiveDirectoryHandle> {
         return rootDirectoryHandle(handleBy: HiveCallback<HiveDirectoryHandle>())
     }
 
     override public func rootDirectoryHandle(handleBy: HiveCallback<HiveDirectoryHandle>)
-        -> HivePromise<HiveDirectoryHandle>? {
+        -> HivePromise<HiveDirectoryHandle> {
             let future = HivePromise<HiveDirectoryHandle> { resolver in
                 _ = self.authHelper.checkExpired().done({ (result) in
 
@@ -116,13 +116,13 @@ public class OneDriveDrive: HiveDriveHandle {
             return future
     }
 
-    override public func createDirectory(withPath: String) -> HivePromise<HiveDirectoryHandle>? {
+    override public func createDirectory(withPath: String) -> HivePromise<HiveDirectoryHandle> {
         return createDirectory(withPath: withPath,
                                handleBy: HiveCallback<HiveDirectoryHandle>())
     }
 
     override public func createDirectory(withPath: String, handleBy: HiveCallback<HiveDirectoryHandle>)
-        -> HivePromise<HiveDirectoryHandle>? {
+        -> HivePromise<HiveDirectoryHandle> {
             let future = HivePromise<HiveDirectoryHandle> { resolver in
                 _ = self.authHelper.checkExpired().done({ (result) in
 
@@ -164,17 +164,17 @@ public class OneDriveDrive: HiveDriveHandle {
             return future
     }
 
-    override public func directoryHandle(atPath: String) -> HivePromise<HiveDirectoryHandle>? {
+    override public func directoryHandle(atPath: String) -> HivePromise<HiveDirectoryHandle> {
         return directoryHandle(atPath: atPath,
                                handleBy: HiveCallback<HiveDirectoryHandle>())
     }
 
     override public func directoryHandle(atPath: String, handleBy: HiveCallback<HiveDirectoryHandle>)
-        -> HivePromise<HiveDirectoryHandle>? {
+        -> HivePromise<HiveDirectoryHandle> {
             let future = HivePromise<HiveDirectoryHandle> { resolver in
                 _ = self.authHelper.checkExpired().done({ (result) in
 
-                    let url = self.fullUrl(atPath)
+                    let url = self.fullUrl("/\(atPath)")
                     Alamofire.request(url, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: (OneDriveHttpHeader.headers())).responseJSON(completionHandler: { (dataResponse) in
                         dataResponse.result.ifSuccess {
                             guard dataResponse.response?.statusCode == 200 else{
@@ -209,13 +209,13 @@ public class OneDriveDrive: HiveDriveHandle {
             return future
     }
 
-    override public func createFile(withPath: String) -> HivePromise<HiveFileHandle>? {
+    override public func createFile(withPath: String) -> HivePromise<HiveFileHandle> {
         return createFile(withPath: withPath,
                           handleBy: HiveCallback<HiveFileHandle>())
     }
 
     override public func createFile(withPath: String, handleBy: HiveCallback<HiveFileHandle>)
-        -> HivePromise<HiveFileHandle>? {
+        -> HivePromise<HiveFileHandle> {
             let future = HivePromise<HiveFileHandle> { resolver in
                 _ = self.authHelper.checkExpired().done({ (result) in
 
@@ -254,12 +254,12 @@ public class OneDriveDrive: HiveDriveHandle {
             return future
     }
 
-    override public func fileHandle(atPath: String) -> HivePromise<HiveFileHandle>? {
+    override public func fileHandle(atPath: String) -> HivePromise<HiveFileHandle> {
         return fileHandle(atPath: atPath, handleBy: HiveCallback<HiveFileHandle>())
     }
 
     override public func fileHandle(atPath: String, handleBy: HiveCallback<HiveFileHandle>) ->
-        HivePromise<HiveFileHandle>? {
+        HivePromise<HiveFileHandle> {
             let future = HivePromise<HiveFileHandle> { resolver in
                 _ = self.authHelper.checkExpired().done({ (result) in
 

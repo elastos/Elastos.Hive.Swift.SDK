@@ -4,93 +4,123 @@ import XCTest
 @testable import ElastosHiveSDK
 
 let REDIRECT_URI: String = "http://localhost:44316"
-class HiveOneDriveTests: XCTestCase {
-
-    var hiveDrive: HiveDriveHandle? = nil
-    var hiveParam: DriveParameters? = nil
+class HiveOneDriveTests: XCTestCase,Authenticator {
+    func requestAuthentication(_ requestURL: String) -> Bool {
+        return true
+    }
+    var hiveClient: HiveClientHandle?
+    var hiveParam: DriveParameter?
     var lock: XCTestExpectation?
     let timeout: Double = 600.0
 
     override func setUp() {
 
-        hiveParam = DriveParameters.createForOneDrive(applicationId: "31c2dacc-80e0-47e1-afac-faac093a739c", scopes: ["Files.ReadWrite","offline_access"], redirectUrl: REDIRECT_URI)
-        HiveDriveHandle.createInstance(hiveParam!)
-        hiveDrive = HiveDriveHandle.sharedInstance(type: .oneDrive)
+        hiveParam = DriveParameter.createForOneDrive("31c2dacc-80e0-47e1-afac-faac093a739c", "Files.ReadWrite%20offline_access", REDIRECT_URI)
+        HiveClientHandle.createInstance(hiveParam!)
+        hiveClient = HiveClientHandle.sharedInstance(type: .oneDrive)
     }
 
     override func tearDown() {
-        hiveParam = nil
-        hiveDrive = nil
     }
 
     func test1_Login() {
-        lock = XCTestExpectation(description: "wait for hiveDrive call login callback")
-        hiveDrive?.login(withResult: { (result, error) in
+        lock = XCTestExpectation(description: "wait for test1_Login")
+
+        let globalQueue = DispatchQueue.global()
+        globalQueue.async {
+            let result = self.hiveClient?.login(self as Authenticator)
+            XCTAssertTrue(result!)
             self.lock?.fulfill()
-            XCTAssertTrue(result!, error.debugDescription)
+        }
+        wait(for: [lock!], timeout: timeout)
+    }
+ 
+
+    func test2_lastUpdatedInfo() {
+        lock = XCTestExpectation(description: "wait for test2_lastUpdatedInfo")
+        self.hiveClient?.defaultDriveHandle()?.then({ (drive) -> HivePromise<HiveDriveInfo> in
+            return drive.lastUpdatedInfo()!
+        }).done({ (driveInfo) in
+            XCTAssertNotNil(driveInfo)
+            self.lock?.fulfill()
+        }).catch({ (error) in
+            XCTFail()
+            self.lock?.fulfill()
         })
         wait(for: [lock!], timeout: timeout)
     }
 
-    func test2_RootDirectoryHandle() {
+    func test3_RootDirectoryHandle() {
 
-        lock = XCTestExpectation(description: "wait for hiveDrive call rootDirectoryHandle callback")
-        try? hiveDrive?.rootDirectoryHandle(withResult: { (hiveFile, error) in
+        lock = XCTestExpectation(description: "wait for test3_RootDirectoryHandle")
+        self.hiveClient?.defaultDriveHandle()?.then({ (drive) -> HivePromise<HiveDirectoryHandle> in
+            return drive.rootDirectoryHandle()!
+        }).done({ (directory) in
+            XCTAssertNotNil(directory)
             self.lock?.fulfill()
-            XCTAssertNotNil(hiveFile, error.debugDescription)
+        }).catch({ (error) in
+            XCTFail()
+            self.lock?.fulfill()
         })
         wait(for: [lock!], timeout: timeout)
     }
 
-    func test3_CreateDirectory() {
+    func test4_CreateDirectory() {
 
-        lock = XCTestExpectation(description: "wait for getFileHandle callback")
-        try? hiveDrive?.getFileHandle(atPath: "test1/test.txt", withResult: { (hiveFile, error) in
-            if hiveFile != nil {
-                XCTAssertEqual("test.txt", hiveFile!.name)
-                try? hiveFile?.deleteItem(withResult: { (re, error) in
-                    XCTAssertTrue(re!, error.debugDescription)
-                    self.lock?.fulfill()
-                })
-            }else{
-                self.lock?.fulfill()
-            }
-        })
-        wait(for: [lock!], timeout: timeout)
-
-        lock = XCTestExpectation(description: "wait for hiveDrive call createFile callback")
-        try? hiveDrive?.createFile(atPath: "test1/test.txt", withResult: { (hiveFile, error) in
+        lock = XCTestExpectation(description: "wait for test4_CreateDirectory")
+        timeTest = HelperMethods.getCurrentTime()
+        self.hiveClient?.defaultDriveHandle()?.then({ (drive) -> HivePromise<HiveDirectoryHandle> in
+            return drive.createDirectory(withPath: "/test_ios_folder_\(timeTest!)")!
+        }).done({ (directory) in
+            XCTAssertNotNil(directory)
             self.lock?.fulfill()
-            XCTAssertNotNil(hiveFile, error.debugDescription)
-            if hiveFile != nil {
-                XCTAssertEqual("test.txt", hiveFile!.name)
-            }
+        }).catch({ (error) in
+            XCTFail()
+            self.lock?.fulfill()
         })
         wait(for: [lock!], timeout: timeout)
     }
 
-    func test4_GetFileHandle() {
-
-        lock = XCTestExpectation(description: "wait for getFileHandle callback")
-        try? hiveDrive?.getFileHandle(atPath: "test1/test.txt", withResult: { (hiveFile, error) in
+    func test5_directoryHandle() {
+        lock = XCTestExpectation(description: "wait for test5_directoryHandle")
+        self.hiveClient?.defaultDriveHandle()?.then({ (drive) -> HivePromise<HiveDirectoryHandle> in
+            return drive.directoryHandle(atPath: "/test_ios_folder_\(timeTest!)")!
+        }).done({ (directory) in
+            XCTAssertNotNil(directory)
             self.lock?.fulfill()
-            XCTAssertNotNil(hiveFile, error.debugDescription)
-        })
-        wait(for: [lock!], timeout: timeout)
-
-        lock = XCTestExpectation(description: "wait for getFileHandle callback for get a nil file")
-        try? hiveDrive?.getFileHandle(atPath: "test1/some.txt", withResult: { (hiveFile, er) in
+        }).catch({ (error) in
+            XCTFail()
             self.lock?.fulfill()
-            XCTAssertNil(hiveFile, er.debugDescription)
         })
         wait(for: [lock!], timeout: timeout)
     }
 
-    func test5_Logout() {
-        lock = XCTestExpectation(description: "wait for hiveDrive call logout callback")
-        hiveDrive?.logout(withResult: { (re, er) in
+    func test6_createFile() {
+        timeTest = HelperMethods.getCurrentTime()
+        lock = XCTestExpectation(description: "wait for test6_createFile")
+        self.hiveClient?.defaultDriveHandle()?.then({ (drive) -> HivePromise<HiveFileHandle> in
+            return drive.createFile(withPath: "/test_ios_file_\(timeTest!)")!
+        }).done({ (file) in
+            XCTAssertNotNil(file)
             self.lock?.fulfill()
-            XCTAssertTrue(re!, er.debugDescription)
+        }).catch({ (error) in
+            XCTFail()
+            self.lock?.fulfill()
+        })
+        wait(for: [lock!], timeout: timeout)
+    }
+
+    func test7_GetFileHandle() {
+
+        lock = XCTestExpectation(description: "wait for test7_GetFileHandle")
+        self.hiveClient?.defaultDriveHandle()?.then({ (drive) -> HivePromise<HiveFileHandle> in
+            return drive.fileHandle(atPath: "/test_ios_file_\(timeTest!)")!
+        }).done({ (file) in
+            XCTAssertNotNil(file)
+            self.lock?.fulfill()
+        }).catch({ (error) in
+            XCTFail()
+            self.lock?.fulfill()
         })
         wait(for: [lock!], timeout: timeout)
     }

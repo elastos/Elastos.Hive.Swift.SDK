@@ -54,28 +54,28 @@ public class HiveClientHandle: NSObject, HiveResourceItem{
         }
     }
 
-    public func login(_ authenticator: Authenticator) -> Bool? {
-        return nil
+    public func login(_ authenticator: Authenticator) -> Bool {
+        return false
     }
 
-    public func logout() -> Bool? {
-        return nil
+    public func logout() -> Bool {
+        return false
     }
 
-    public func lastUpdatedInfo() -> HivePromise<resourceType>? {
+    public func lastUpdatedInfo() -> HivePromise<resourceType> {
         return lastUpdatedInfo(handleBy: HiveCallback<resourceType>())
     }
 
-    public func lastUpdatedInfo(handleBy: HiveCallback<resourceType>) -> HivePromise<resourceType>? {
+    public func lastUpdatedInfo(handleBy: HiveCallback<resourceType>) -> HivePromise<resourceType> {
         let error = HiveError.failue(des: "TODO")
         return HivePromise<resourceType>(error: error)
     }
 
-    public func defaultDriveHandle() -> HivePromise<HiveDriveHandle>? {
+    public func defaultDriveHandle() -> HivePromise<HiveDriveHandle> {
         return defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>())
     }
 
-    public func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> HivePromise<HiveDriveHandle>? {
+    public func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> HivePromise<HiveDriveHandle> {
         let error = HiveError.failue(des: "TODO")
         return HivePromise<HiveDriveHandle>(error: error)
     }

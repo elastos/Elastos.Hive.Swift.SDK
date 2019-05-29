@@ -1,6 +1,5 @@
 import Foundation
 import PromiseKit
-import Unirest
 import Alamofire
 
 class OneDriveDirectory: HiveDirectoryHandle {
@@ -9,11 +8,11 @@ class OneDriveDirectory: HiveDirectoryHandle {
         super.init(info, authHelper)
     }
 
-    override func lastUpdatedInfo() -> HivePromise<HiveDirectoryInfo>? {
+    override func lastUpdatedInfo() -> HivePromise<HiveDirectoryInfo> {
         return lastUpdatedInfo(handleBy: HiveCallback<HiveDirectoryInfo>())
     }
 
-    override func lastUpdatedInfo(handleBy: HiveCallback<HiveDirectoryInfo>) -> HivePromise<HiveDirectoryInfo>? {
+    override func lastUpdatedInfo(handleBy: HiveCallback<HiveDirectoryInfo>) -> HivePromise<HiveDirectoryInfo> {
         let future = HivePromise<HiveDirectoryInfo> { resolver in
             _ = self.authHelper.checkExpired().done({ (result) in
 
@@ -63,12 +62,12 @@ class OneDriveDirectory: HiveDirectoryHandle {
         return future
     }
 
-    override func createDirectory(withPath: String) -> HivePromise<HiveDirectoryHandle>? {
+    override func createDirectory(withPath: String) -> HivePromise<HiveDirectoryHandle> {
         return createDirectory(withPath: withPath, handleBy: HiveCallback<HiveDirectoryHandle>())
     }
 
     override func createDirectory(withPath: String, handleBy: HiveCallback<HiveDirectoryHandle>) ->
-        HivePromise<HiveDirectoryHandle>? {
+        HivePromise<HiveDirectoryHandle> {
             let future = HivePromise<HiveDirectoryHandle> { resolver in
                 _ = self.authHelper.checkExpired().done({ (result) in
 
@@ -114,12 +113,12 @@ class OneDriveDirectory: HiveDirectoryHandle {
             return future
     }
 
-    override func directoryHandle(atPath: String) -> HivePromise<HiveDirectoryHandle>? {
+    override func directoryHandle(atPath: String) -> HivePromise<HiveDirectoryHandle> {
         return directoryHandle(atPath: atPath, handleBy: HiveCallback<HiveDirectoryHandle>())
     }
 
     override func directoryHandle(atPath: String, handleBy: HiveCallback<HiveDirectoryHandle>) ->
-        HivePromise<HiveDirectoryHandle>? {
+        HivePromise<HiveDirectoryHandle> {
             let future = HivePromise<HiveDirectoryHandle> { resolver in
                 _ = self.authHelper.checkExpired().done({ (result) in
 
@@ -163,22 +162,18 @@ class OneDriveDirectory: HiveDirectoryHandle {
             return future
     }
 
-    override func createFile(withPath: String) -> HivePromise<HiveFileHandle>? {
+    override func createFile(withPath: String) -> HivePromise<HiveFileHandle> {
         return createFile(withPath: withPath, handleBy: HiveCallback<HiveFileHandle>())
     }
 
     override func createFile(withPath: String, handleBy: HiveCallback<HiveFileHandle>) ->
-        HivePromise<HiveFileHandle>? {
+        HivePromise<HiveFileHandle> {
             let future = HivePromise<HiveFileHandle> { resolver in
                 _ = self.authHelper.checkExpired().done({ (result) in
 
                     var url = ""
-                    if self.pathName == "" || self.pathName == "/" {
-                        url = OneDriveURL.API + "/root/content"
-                    }else{
                         let ecUrl = (self.pathName! + withPath).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                         url = OneDriveURL.API + "/root:\(ecUrl):/content"
-                    }
                     let params = ["@microsoft.graph.conflictBehavior": "fail"]
                     Alamofire.request(url,
                                       method: .put,
@@ -219,16 +214,16 @@ class OneDriveDirectory: HiveDirectoryHandle {
             return future
     }
 
-    override func fileHandle(atPath: String) -> HivePromise<HiveFileHandle>? {
+    override func fileHandle(atPath: String) -> HivePromise<HiveFileHandle> {
         return fileHandle(atPath: atPath, handleBy: HiveCallback<HiveFileHandle>())
     }
 
     override func fileHandle(atPath: String, handleBy: HiveCallback<HiveFileHandle>) ->
-        HivePromise<HiveFileHandle>? {
+        HivePromise<HiveFileHandle> {
             let future = HivePromise<HiveFileHandle> { resolver in
                 _ = self.authHelper.checkExpired().done({ (result) in
 
-                    let url = self.fullUrl(atPath)
+                    let url = self.fullUrl("/\(atPath)")
                     Alamofire.request(url,
                                       method: .get,
                                       parameters: nil,
@@ -269,11 +264,11 @@ class OneDriveDirectory: HiveDirectoryHandle {
     }
     // Get children.
 
-    override func moveTo(newPath: String) -> HivePromise<Bool>? {
+    override func moveTo(newPath: String) -> HivePromise<Bool> {
         return moveTo(newPath: newPath, handleBy: HiveCallback<Bool>())
     }
 
-    override func moveTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool>? {
+    override func moveTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
         let future = HivePromise<Bool>{ resolver in
             _ = self.authHelper.checkExpired().done({ (result) in
 
@@ -319,11 +314,11 @@ class OneDriveDirectory: HiveDirectoryHandle {
         return future
     }
 
-    override func copyTo(newPath: String) -> HivePromise<Bool>? {
+    override func copyTo(newPath: String) -> HivePromise<Bool> {
         return copyTo(newPath: newPath, handleBy: HiveCallback<Bool>())
     }
 
-    override func copyTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool>? {
+    override func copyTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
         let future = HivePromise<Bool>{ resolver in
             _ = self.authHelper.checkExpired().done({ (result) in
 
@@ -333,8 +328,8 @@ class OneDriveDirectory: HiveDirectoryHandle {
                     handleBy.runError(error)
                     return
                 }
-                let path = self.pathName!.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-                var url = ONEDRIVE_RESTFUL_URL + ONEDRIVE_ROOTDIR + ":/" + path + ":/copy"
+                let path = ("/" + self.pathName!).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+                var url = ONEDRIVE_RESTFUL_URL + ONEDRIVE_ROOTDIR + ":" + path + ":/copy"
                 if newPath == "/" {
                     url = ONEDRIVE_RESTFUL_URL + ONEDRIVE_ROOTDIR + "/copy"
                 }
@@ -352,8 +347,18 @@ class OneDriveDirectory: HiveDirectoryHandle {
                             handleBy.runError(error)
                             return
                         }
-                        resolver.fulfill(true)
-                        handleBy.didSucceed(true)
+                        let urlString = dataResponse.response?.allHeaderFields["Location"] as? String ?? ""
+                        self.pollingCopyresult(urlString, { (result) in
+                            if result == true {
+                                resolver.fulfill(true)
+                                handleBy.didSucceed(true)
+                            }
+                            else {
+                                let error = HiveError.failue(des: "Operation failed")
+                                resolver.reject(error)
+                                handleBy.runError(error)
+                            }
+                        })
                     })
             }).catch({ (err) in
                 let error = HiveError.systemError(error: err, jsonDes: nil)
@@ -364,11 +369,11 @@ class OneDriveDirectory: HiveDirectoryHandle {
         return future
     }
 
-    override func deleteItem() -> HivePromise<Bool>? {
+    override func deleteItem() -> HivePromise<Bool> {
         return deleteItem(handleBy: HiveCallback<Bool>())
     }
 
-    override func deleteItem(handleBy: HiveCallback<Bool>) -> HivePromise<Bool>? {
+    override func deleteItem(handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
         let future = HivePromise<Bool>{ resolver in
             _ = self.authHelper.checkExpired().done({ (result) in
 
@@ -413,6 +418,28 @@ class OneDriveDirectory: HiveDirectoryHandle {
 
     override func close() {
         // TODO
+    }
+
+    private func pollingCopyresult(_ url: String, _ copyResult: @escaping (_ isSucceed: Bool) -> Void) {
+        let url = url
+        Alamofire.request(url,
+                          method: .get,
+                          parameters: nil, encoding: JSONEncoding.default, headers: nil)
+            .responseJSON { (dataResponse) in
+                let jsonData = dataResponse.result.value as? Dictionary<String, Any>
+                let stat = jsonData!["status"] as? String ?? ""
+                if stat == "completed" || stat == "failed" {
+                    if stat == "completed" {
+                        copyResult(true)
+                        return
+                    }else {
+                        copyResult(false)
+                        return
+                    }
+                }else {
+                    self.pollingCopyresult(url, copyResult)
+                }
+        }
     }
 
     private func hiveDirectoryInfo(_ jsonData: Dictionary<String, Any>) -> HiveDirectoryInfo {
