@@ -4,6 +4,7 @@ public class HiveDirectoryInfo: NSObject {
     public final var dirId: String
     public var createdDateTime: String
     public var lastModifiedDateTime: String
+
     init(_ dirId: String) {
         self.dirId = dirId
         self.createdDateTime = ""
@@ -11,7 +12,7 @@ public class HiveDirectoryInfo: NSObject {
         super.init()
     }
 
-    func infoValue(_ jsonData: JSON) {
+    func installValue(_ jsonData: JSON) {
         self.createdDateTime = jsonData["createdDateTime"].stringValue
         self.lastModifiedDateTime = jsonData["lastModifiedDateTime"].stringValue
     }

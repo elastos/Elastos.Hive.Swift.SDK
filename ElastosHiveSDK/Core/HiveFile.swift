@@ -3,12 +3,11 @@ import PromiseKit
 
 @objc(HiveFile)
 public class HiveFileHandle: NSObject, HiveResourceItem, HiveFileItem {
-
     public typealias resourceType = HiveFileInfo
     public var drive: HiveDriveHandle?
     public var fileId: String
-    public var lastInfo: HiveFileInfo
     public var pathName: String
+    public var lastInfo: HiveFileInfo
     var authHelper: AuthHelper?
 
     init(_ info: HiveFileInfo, _ authHelper: AuthHelper) {

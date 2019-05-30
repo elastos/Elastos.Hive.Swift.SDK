@@ -13,7 +13,7 @@ public class HiveFileInfo: NSObject {
         super.init()
     }
 
-    func infoValue(_ jsonData: JSON) {
+    func installValue(_ jsonData: JSON) {
         self.createdDateTime = jsonData["createdDateTime"].stringValue
         self.lastModifiedDateTime = jsonData["lastModifiedDateTime"].stringValue
         self.fileSystemInfo = jsonData["fileSystemInfo"].dictionaryValue

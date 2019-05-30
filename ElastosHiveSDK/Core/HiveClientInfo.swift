@@ -13,12 +13,11 @@ public class HiveClientInfo: NSObject {
         super.init()
     }
 
-    func infoValue(_ jsonData: JSON) {
+    func installValue(_ jsonData: JSON) {
         self.userId = jsonData["id"].stringValue
         self.displayName = jsonData["createdDateTime"].stringValue
         self.email = jsonData["email"].stringValue
         self.phone = jsonData["phone"].stringValue
         self.region = jsonData["region"].stringValue
     }
-
 }

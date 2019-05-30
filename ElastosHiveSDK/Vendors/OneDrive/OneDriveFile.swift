@@ -297,5 +297,4 @@ internal class OneDriveFile: HiveFileHandle {
         let ecUrl = path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
         return OneDriveURL.API + "/root:\(ecUrl):/\(operation)"
     }
-
 }

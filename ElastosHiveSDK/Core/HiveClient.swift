@@ -67,7 +67,7 @@ public class HiveClientHandle: NSObject, HiveResourceItem{
     }
 
     public func lastUpdatedInfo(handleBy: HiveCallback<resourceType>) -> HivePromise<resourceType> {
-        let error = HiveError.failue(des: "TODO")
+        let error = HiveError.failue(des: "Dummy")
         return HivePromise<resourceType>(error: error)
     }
 
@@ -76,7 +76,7 @@ public class HiveClientHandle: NSObject, HiveResourceItem{
     }
 
     public func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> HivePromise<HiveDriveHandle> {
-        let error = HiveError.failue(des: "TODO")
+        let error = HiveError.failue(des: "Dummy")
         return HivePromise<HiveDriveHandle>(error: error)
     }
 }
