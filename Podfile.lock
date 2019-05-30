@@ -10,27 +10,23 @@ PODS:
   - PromiseKit/UIKit (6.8.4):
     - PromiseKit/CorePromise
   - Swifter (1.4.6)
-  - Unirest (1.1.4)
 
 DEPENDENCIES:
   - Alamofire
   - PromiseKit
   - Swifter (~> 1.4.6)
-  - Unirest (~> 1.1.4)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
     - PromiseKit
     - Swifter
-    - Unirest
 
 SPEC CHECKSUMS:
   Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
   PromiseKit: 51794a832647e7b819336dc2279039ce9f1cc49b
   Swifter: 2ed278fbf7b16cbe97269eb56d8e8749b1ec4042
-  Unirest: 5e4d93eaf32463bf619a4ecd3bbc8c32acf21eac
 
-PODFILE CHECKSUM: 80ebc89510c63a86bcddd5a16182940ca20d37bb
+PODFILE CHECKSUM: 6b3d7130afe298d0af262430f236134d3f97cfa3
 
-COCOAPODS: 1.7.0.rc.1
+COCOAPODS: 1.6.1

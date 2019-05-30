@@ -29,11 +29,15 @@ public class OneDriveDrive: HiveDriveHandle {
     }
 
     override public func lastUpdatedInfo(handleBy: HiveCallback<HiveDriveInfo>) -> HivePromise<HiveDriveInfo> {
-
         let promise = HivePromise<HiveDriveInfo> { resolver in
             _ = self.authHelper.checkExpired().done({ (result) in
 
-                Alamofire.request(OneDriveURL.API + "/root", method: .get, parameters: nil, encoding: JSONEncoding.default, headers: (OneDriveHttpHeader.headers())).responseJSON(completionHandler: { (dataResponse) in
+                Alamofire.request(OneDriveURL.API + "/root",
+                                  method: .get,
+                                  parameters: nil,
+                                  encoding: JSONEncoding.default,
+                                  headers: (OneDriveHttpHeader.headers()))
+                        .responseJSON(completionHandler: { dataResponse in
                     guard dataResponse.response?.statusCode == 200 else{
                         let error = HiveError.failue(des: "result is nil")
                         handleBy.runError(error)
@@ -43,7 +47,7 @@ public class OneDriveDrive: HiveDriveHandle {
                     let jsonData = JSON(dataResponse.result.value as Any)
                     let driId = jsonData["id"].stringValue
                     let driveInfo = HiveDriveInfo(driId)
-                    driveInfo.infoValue(jsonData)
+                    driveInfo.installValue(jsonData)
                     self.lastInfo = driveInfo
                     handleBy.didSucceed(driveInfo)
                     resolver.fulfill(driveInfo)
@@ -71,7 +75,7 @@ public class OneDriveDrive: HiveDriveHandle {
                                       parameters: nil,
                                       encoding: JSONEncoding.default,
                                       headers: (OneDriveHttpHeader.headers()))
-                        .responseJSON(completionHandler: { (dataResponse) in
+                        .responseJSON(completionHandler: { dataResponse in
                             guard dataResponse.response?.statusCode == 200 else{
                                 let error = HiveError.jsonFailue(des: dataResponse.result.value as? Dictionary<AnyHashable, Any>)
                                 resolver.reject(error)
@@ -81,7 +85,7 @@ public class OneDriveDrive: HiveDriveHandle {
                             let jsonData = JSON(dataResponse.result.value as Any)
                             let dirId = jsonData["id"].stringValue
                             let dirInfo = HiveDirectoryInfo(dirId)
-                            dirInfo.infoValue(jsonData)
+                            dirInfo.installValue(jsonData)
                             let dirHandle = OneDriveDirectory(dirInfo, self.authHelper)
                             dirHandle.name = jsonData["id"].stringValue
                             dirHandle.pathName = "/"
@@ -114,7 +118,12 @@ public class OneDriveDrive: HiveDriveHandle {
                                                            "@microsoft.graph.conflictBehavior": "fail"]
                     let path = HelperMethods.prePath(withPath)
                     let url = self.fullUrl(path, "children")
-                    Alamofire.request(url, method: .post, parameters: params, encoding: JSONEncoding.default, headers: (OneDriveHttpHeader.headers())).responseJSON(completionHandler: { (dataResponse) in
+                    Alamofire.request(url,
+                                      method: .post,
+                                      parameters: params,
+                                      encoding: JSONEncoding.default,
+                                      headers: (OneDriveHttpHeader.headers()))
+                             .responseJSON(completionHandler: { dataResponse in
                         guard dataResponse.response?.statusCode == 201 else{
                             let error = HiveError.jsonFailue(des: dataResponse.result.value as? Dictionary<AnyHashable, Any>)
                             resolver.reject(error)
@@ -124,7 +133,7 @@ public class OneDriveDrive: HiveDriveHandle {
                         let jsonData = JSON(dataResponse.result.value as Any)
                         let dirId = jsonData["id"].stringValue
                         let dirInfo = HiveDirectoryInfo(dirId)
-                        dirInfo.infoValue(jsonData)
+                        dirInfo.installValue(jsonData)
                         let dirHandle = OneDriveDirectory(dirInfo, self.authHelper)
                         dirHandle.name = jsonData["name"].string
                         dirHandle.pathName = withPath
@@ -153,7 +162,12 @@ public class OneDriveDrive: HiveDriveHandle {
                 _ = self.authHelper.checkExpired().done({ (result) in
 
                     let url = self.fullUrl("/\(atPath)")
-                    Alamofire.request(url, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: (OneDriveHttpHeader.headers())).responseJSON(completionHandler: { (dataResponse) in
+                    Alamofire.request(url,
+                                      method: .get,
+                                      parameters: nil,
+                                      encoding: JSONEncoding.default,
+                                      headers: (OneDriveHttpHeader.headers()))
+                             .responseJSON(completionHandler: { (dataResponse) in
                             guard dataResponse.response?.statusCode == 200 else{
                                 let error = HiveError.jsonFailue(des: dataResponse.result.value as? Dictionary<AnyHashable, Any>)
                                 resolver.reject(error)
@@ -163,7 +177,7 @@ public class OneDriveDrive: HiveDriveHandle {
                         let jsonData = JSON(dataResponse.result.value as Any)
                         let dirId = jsonData["id"].stringValue
                         let dirInfo = HiveDirectoryInfo(dirId)
-                        dirInfo.infoValue(jsonData)
+                        dirInfo.installValue(jsonData)
                         let dirHandle = OneDriveDirectory(dirInfo, self.authHelper)
                         dirHandle.name = jsonData["name"].stringValue
                         dirHandle.pathName = atPath
@@ -192,7 +206,12 @@ public class OneDriveDrive: HiveDriveHandle {
                 _ = self.authHelper.checkExpired().done({ (result) in
 
                     let url = self.fullUrl(withPath, "content")
-                    Alamofire.request(url, method: .put, parameters: nil, encoding: JSONEncoding.default, headers: (OneDriveHttpHeader.headers())).responseJSON(completionHandler: { (dataResponse) in
+                    Alamofire.request(url,
+                                      method: .put,
+                                      parameters: nil,
+                                      encoding: JSONEncoding.default,
+                                      headers: (OneDriveHttpHeader.headers()))
+                             .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 || dataResponse.response?.statusCode == 201 else{
                             let error = HiveError.jsonFailue(des: dataResponse.result.value as? Dictionary<AnyHashable, Any>)
                             resolver.reject(error)
@@ -202,7 +221,7 @@ public class OneDriveDrive: HiveDriveHandle {
                         let jsonData = JSON(dataResponse.result.value as Any)
                         let fileId = jsonData["id"].stringValue
                         let fileInfo = HiveFileInfo(fileId)
-                        fileInfo.infoValue(jsonData)
+                        fileInfo.installValue(jsonData)
                         let fileHandle = OneDriveFile(fileInfo, self.authHelper)
                         fileHandle.name = jsonData["name"].stringValue
                         fileHandle.pathName = withPath
@@ -230,7 +249,11 @@ public class OneDriveDrive: HiveDriveHandle {
                 _ = self.authHelper.checkExpired().done({ (result) in
 
                     let url = self.fullUrl(atPath)
-                    Alamofire.request(url, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: (OneDriveHttpHeader.headers())).responseJSON(completionHandler: { (dataResponse) in
+                    Alamofire.request(url, method: .get,
+                                      parameters: nil,
+                                      encoding: JSONEncoding.default,
+                                      headers: (OneDriveHttpHeader.headers()))
+                    .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else{
                             let error = HiveError.jsonFailue(des: dataResponse.result.value as? Dictionary<AnyHashable, Any>)
                             resolver.reject(error)
@@ -240,7 +263,7 @@ public class OneDriveDrive: HiveDriveHandle {
                         let jsonData = JSON(dataResponse.result.value as Any)
                         let fileId = jsonData["id"].stringValue
                         let fileInfo = HiveFileInfo(fileId)
-                        fileInfo.infoValue(jsonData)
+                        fileInfo.installValue(jsonData)
                         let fileHandle = OneDriveFile(fileInfo, self.authHelper)
                         fileHandle.name = jsonData["name"].stringValue
                         fileHandle.pathName = atPath

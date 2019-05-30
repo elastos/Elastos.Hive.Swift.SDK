@@ -58,7 +58,7 @@ internal class OneDriveClient: HiveClientHandle {
                         let user = JSON(owner["user"])
                         let clientId = user["id"].stringValue
                         let clientInfo = HiveClientInfo(clientId)
-                        clientInfo.infoValue(user)
+                        clientInfo.installValue(user)
                         handleBy.didSucceed(clientInfo)
                         resolver.fulfill(clientInfo)
                 }
@@ -100,7 +100,7 @@ internal class OneDriveClient: HiveClientHandle {
                         let jsonData = JSON(dataResponse.result.value as Any)
                         let driveId = jsonData["id"].stringValue
                         let driveInfo = HiveDriveInfo(driveId)
-                        driveInfo.infoValue(jsonData)
+                        driveInfo.installValue(jsonData)
                         let dirHandle = OneDriveDrive(driveInfo, self.authHelper!)
                         dirHandle.lastInfo = driveInfo
                         resolver.fulfill(dirHandle)

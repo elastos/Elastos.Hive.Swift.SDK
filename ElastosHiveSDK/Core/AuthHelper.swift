@@ -12,7 +12,7 @@ internal class AuthHelper: NSObject {
     }
 
     func checkExpired() -> HivePromise<Bool> {
-        let error = HiveError.failue(des: "AuthHelper::checkExpired")
+        let error = HiveError.failue(des: "Dummy")
         return HivePromise<Bool>(error: error)
     }
 }

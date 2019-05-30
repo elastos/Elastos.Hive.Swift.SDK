@@ -27,6 +27,7 @@
 		1176BF4B229E10DF00240EDF /* HiveOneDriveDirectoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176BF4A229E10DF00240EDF /* HiveOneDriveDirectoryTests.swift */; };
 		1176BF4D229E10F400240EDF /* HiveOneDriveClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176BF4C229E10F400240EDF /* HiveOneDriveClient.swift */; };
 		1176BF55229FCF3A00240EDF /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176BF54229FCF3A00240EDF /* SwiftyJSON.swift */; };
+		6DDA50FA35E7A18E5EF0C90E /* Pods_ElastosHiveSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D17AD36AC88E073FD2B2D930 /* Pods_ElastosHiveSDK.framework */; };
 		A34724DC226B4A750049DBD4 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34724DB226B4A750049DBD4 /* Log.swift */; };
 		A34724DE226B4ABE0049DBD4 /* LogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34724DD226B4ABE0049DBD4 /* LogLevel.swift */; };
 		A3743AD5226570B200C9493E /* OneDriveParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3743AD4226570B200C9493E /* OneDriveParameter.swift */; };
@@ -81,6 +82,7 @@
 		A3FD3C9222800A840031413A /* OwnCloudClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FD3C9122800A840031413A /* OwnCloudClient.swift */; };
 		A3FD3C9422800B0F0031413A /* HiveIpfsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FD3C9322800B0F0031413A /* HiveIpfsClient.swift */; };
 		A3FD3C9622800C320031413A /* DropboxClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FD3C9522800C320031413A /* DropboxClient.swift */; };
+		D11C186DCB4238199CA4FFF2 /* Pods_TestHost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F09DA7DC9D47111E630261C /* Pods_TestHost.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -123,7 +125,6 @@
 		556E8D39E54EDBDFA4DEAD42 /* Pods-TestHost.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestHost.release.xcconfig"; path = "Target Support Files/Pods-TestHost/Pods-TestHost.release.xcconfig"; sourceTree = "<group>"; };
 		5F09DA7DC9D47111E630261C /* Pods_TestHost.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TestHost.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6081910F0FC211291C05B08B /* Pods-ElastosHiveSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDK.release.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDK/Pods-ElastosHiveSDK.release.xcconfig"; sourceTree = "<group>"; };
-		A34724D8226B366A0049DBD4 /* ElastosHiveSDK-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ElastosHiveSDK-Bridging-Header.h"; sourceTree = "<group>"; };
 		A34724DB226B4A750049DBD4 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Log.swift; path = Utils/Log.swift; sourceTree = "<group>"; };
 		A34724DD226B4ABE0049DBD4 /* LogLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LogLevel.swift; path = Utils/LogLevel.swift; sourceTree = "<group>"; };
 		A3743AD4226570B200C9493E /* OneDriveParameter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OneDriveParameter.swift; path = Vendors/OneDrive/OneDriveParameter.swift; sourceTree = "<group>"; };
@@ -199,6 +200,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D11C186DCB4238199CA4FFF2 /* Pods_TestHost.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -206,6 +208,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6DDA50FA35E7A18E5EF0C90E /* Pods_ElastosHiveSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -304,7 +307,6 @@
 				A39C498D22539C560027BDF9 /* Core */,
 				A39C4972225399860027BDF9 /* ElastosHiveSDK.h */,
 				A39C4973225399860027BDF9 /* Info.plist */,
-				A34724D8226B366A0049DBD4 /* ElastosHiveSDK-Bridging-Header.h */,
 			);
 			path = ElastosHiveSDK;
 			sourceTree = "<group>";
@@ -474,9 +476,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1176BF3E229CE8F900240EDF /* Build configuration list for PBXNativeTarget "TestHost" */;
 			buildPhases = (
+				2A1FD9C428F9205650B62218 /* [CP] Check Pods Manifest.lock */,
 				1176BF2B229CE8F600240EDF /* Sources */,
 				1176BF2C229CE8F600240EDF /* Frameworks */,
 				1176BF2D229CE8F600240EDF /* Resources */,
+				7B26DAC6DCA970A18C36EA40 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -589,13 +593,46 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ElastosHiveSDKTests/Pods-ElastosHiveSDKTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ElastosHiveSDKTests/Pods-ElastosHiveSDKTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
+				"${BUILT_PRODUCTS_DIR}/Swifter/Swifter.framework",
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ElastosHiveSDKTests/Pods-ElastosHiveSDKTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PromiseKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Swifter.framework",
+			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ElastosHiveSDKTests/Pods-ElastosHiveSDKTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2A1FD9C428F9205650B62218 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TestHost-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		73827CA57F0DF5767CA9E536 /* [CP] Check Pods Manifest.lock */ = {
@@ -618,6 +655,32 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7B26DAC6DCA970A18C36EA40 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TestHost/Pods-TestHost-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
+				"${BUILT_PRODUCTS_DIR}/Swifter/Swifter.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PromiseKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Swifter.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TestHost/Pods-TestHost-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		9C6BAF7A402DDFEAEAE68FFC /* [CP] Check Pods Manifest.lock */ = {
@@ -808,6 +871,7 @@
 		};
 		1176BF3F229CE8F900240EDF /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DB374220454CA5325E399B9B /* Pods-TestHost.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = TestHost/TestHost.entitlements;
@@ -828,6 +892,7 @@
 		};
 		1176BF40229CE8F900240EDF /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 556E8D39E54EDBDFA4DEAD42 /* Pods-TestHost.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = TestHost/TestHost.entitlements;

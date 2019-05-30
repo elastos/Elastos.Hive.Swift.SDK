@@ -31,7 +31,7 @@ public class HiveDriveInfo: NSObject {
         super.init()
     }
 
-    func infoValue(_ jsonData: JSON) {
+    func installValue(_ jsonData: JSON) {
         let quota = JSON(jsonData["quota"])
         self.capacity = quota["capacity"].stringValue
         self.remaining = quota["remaining"].stringValue
@@ -52,5 +52,4 @@ public class HiveDriveInfo: NSObject {
             self.driveState = .exceeded
         }
     }
-
 }
