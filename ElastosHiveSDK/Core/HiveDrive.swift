@@ -7,11 +7,12 @@ public class HiveDriveHandle: NSObject, HiveResourceItem, HiveDirectoryItem {
     public typealias resourceType = HiveDriveInfo
     public var driveType: DriveType
     public var handleId: String?
-    public var lastInfo: HiveDriveInfo?
+    public var lastInfo: HiveDriveInfo
 
     internal init(_ driveType: DriveType, _ info: HiveDriveInfo) {
         self.driveType = driveType
         self.lastInfo = info
+        self.handleId = lastInfo.driveId
     }
 
     public func rootDirectoryHandle() -> HivePromise<HiveDirectoryHandle> {

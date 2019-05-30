@@ -12,9 +12,9 @@ public class HiveClientHandle: NSObject, HiveResourceItem{
     internal var authHelper: AuthHelper?
     internal var token: AuthToken?
 
-
     internal init(_ driveType: DriveType) {
         self.driveType = driveType
+        self.handleId = lastInfo?.userId
     }
 
     /**

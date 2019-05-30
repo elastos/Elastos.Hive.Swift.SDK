@@ -67,7 +67,7 @@ class HiveOneDriveFileTests: XCTestCase,Authenticator {
         wait(for: [lock!], timeout: timeout)
     }
 
-    func test4_copyTo_moveTo_deleteItem() {
+    func test4_copyTo() {
 
         // copy
         lock = XCTestExpectation(description: "wait for test4_preCreate")
@@ -95,7 +95,9 @@ class HiveOneDriveFileTests: XCTestCase,Authenticator {
             self.lock?.fulfill()
         })
         wait(for: [lock!], timeout: timeout)
+    }
 
+    func test6_deleteItem() {
         // delete
         lock = XCTestExpectation(description: "wait for test4_deleteItem")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveFileHandle> in
@@ -110,7 +112,9 @@ class HiveOneDriveFileTests: XCTestCase,Authenticator {
             self.lock?.fulfill()
         })
         wait(for: [lock!], timeout: timeout)
+    }
 
+    func test7_moveTo() {
         // move
         lock = XCTestExpectation(description: "wait for test4_moveTo")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveFileHandle> in
@@ -127,7 +131,7 @@ class HiveOneDriveFileTests: XCTestCase,Authenticator {
         wait(for: [lock!], timeout: timeout)
     }
 
-    func test5_writeData_readData() {
+    func test8_writeData() {
 
         lock = XCTestExpectation(description: "wait for test5_writeData")
         let data = "ios test for write \(timeTest!)".data(using: .utf8)
@@ -143,7 +147,9 @@ class HiveOneDriveFileTests: XCTestCase,Authenticator {
             self.lock?.fulfill()
         })
         wait(for: [lock!], timeout: timeout)
+    }
 
+    func test9_readData() {
         lock = XCTestExpectation(description: "wait for test5_readData")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveFileHandle> in
             return drive.fileHandle(atPath: "/test_file_\(timeTest!)")

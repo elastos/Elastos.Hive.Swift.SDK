@@ -6,20 +6,16 @@ public class HiveFileHandle: NSObject, HiveResourceItem, HiveFileItem {
 
     public typealias resourceType = HiveFileInfo
     public var drive: HiveDriveHandle?
-    public var fileId: String?
-    public var pathName: String?
-    public var name: String?
-    public var createdDateTime: String?
-    public var lastModifiedDateTime: String?
-    public var parentPathName: String?
-    public var fileSystemInfo: Dictionary<String, Any>?
-    public var parentReference: Dictionary<String, Any>?
-    public var lastInfo: HiveFileInfo?
+    public var fileId: String
+    public var lastInfo: HiveFileInfo
+    public var pathName: String
     var authHelper: AuthHelper?
 
     init(_ info: HiveFileInfo, _ authHelper: AuthHelper) {
         self.lastInfo = info
         self.authHelper = authHelper
+        self.fileId = lastInfo.fileId
+        self.pathName = ""
     }
 
     public func lastUpdatedInfo() -> HivePromise<resourceType> {
