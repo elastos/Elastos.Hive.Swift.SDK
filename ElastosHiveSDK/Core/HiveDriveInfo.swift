@@ -8,8 +8,8 @@ public enum DriveState {
 }
 
 public class HiveDriveInfo: NSObject {
+    public var driveId: String?
     public var capacity: String?
-    public var used: String?
     public var remaining: String?
     public var deleted: String?
     public var fileCount: String?
@@ -17,5 +17,40 @@ public class HiveDriveInfo: NSObject {
     public var lastModifiedDateTime: String?
     public var ddescription: String?
     public var driveState: DriveState?
+
+    init(_ driveId: String) {
+        self.driveId = driveId
+        self.capacity = ""
+        self.remaining = ""
+        self.deleted = ""
+        self.fileCount = ""
+        self.state = ""
+        self.lastModifiedDateTime = ""
+        self.ddescription = ""
+        self.driveState = .normal
+        super.init()
+    }
+
+    func infoValue(_ jsonData: JSON) {
+        let quota = JSON(jsonData["quota"])
+        self.capacity = quota["capacity"].stringValue
+        self.remaining = quota["remaining"].stringValue
+        self.deleted = quota["deleted"].stringValue
+        self.fileCount = quota["fileCount"].stringValue
+        self.lastModifiedDateTime = jsonData["lastModifiedDateTime"].stringValue
+        self.ddescription = ""
+        self.driveState = .normal
+        let state = jsonData["state"].stringValue
+        self.state = state
+        if state == "normal" {
+            self.driveState = .normal
+        }else if state == "nearing" {
+            self.driveState = .nearing
+        }else if state == "critical" {
+            self.driveState = .critical
+        }else if state == "exceeded" {
+            self.driveState = .exceeded
+        }
+    }
 
 }

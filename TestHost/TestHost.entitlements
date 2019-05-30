@@ -5,8 +5,6 @@
 	<key>keychain-access-groups</key>
 	<array>
 		<string>$(AppIdentifierPrefix)elastos.TestHost</string>
-		<string>$(AppIdentifierPrefix)org.elastos.hivesdk</string>
-		<string>$(AppIdentifierPrefix)shared</string>
 	</array>
 </dict>
 </plist>

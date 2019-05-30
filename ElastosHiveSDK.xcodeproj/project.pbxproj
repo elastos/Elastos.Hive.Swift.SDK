@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		0D94ED2D06BBCAE410D0273C /* Pods_ElastosHiveSDKTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DB068EABA0DB13AB595055A /* Pods_ElastosHiveSDKTests.framework */; };
 		1137942E227ED9AD004A1F65 /* ElastosHiveSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A39C496F225399860027BDF9 /* ElastosHiveSDK.framework */; };
-		1137943B227EDA66004A1F65 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1137943A227EDA66004A1F65 /* AppDelegate.swift */; };
-		11379442227EDA6A004A1F65 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11379441227EDA6A004A1F65 /* Assets.xcassets */; };
 		1137944D227EDE4B004A1F65 /* HiveOneDriveFileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1137944B227EDE4B004A1F65 /* HiveOneDriveFileTests.swift */; };
 		1137944E227EDE4B004A1F65 /* HiveOneDriveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1137944C227EDE4B004A1F65 /* HiveOneDriveTests.swift */; };
 		114FD8382296E19000467E38 /* Alamofire+Synchronous.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114FD8372296E19000467E38 /* Alamofire+Synchronous.swift */; };
@@ -20,7 +18,15 @@
 		1160625322696E9500BDCB9F /* TegKeychainConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1160624F22696E9500BDCB9F /* TegKeychainConstants.swift */; };
 		1160625522696E9500BDCB9F /* KeychainSwiftAccessOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1160625022696E9500BDCB9F /* KeychainSwiftAccessOptions.swift */; };
 		1160625822696EA500BDCB9F /* HelperMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1160625722696EA500BDCB9F /* HelperMethods.swift */; };
-		7857CCBA4BDBCCE9499A1338 /* Pods_TestHost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F09DA7DC9D47111E630261C /* Pods_TestHost.framework */; };
+		1176BF32229CE8F600240EDF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176BF31229CE8F600240EDF /* AppDelegate.swift */; };
+		1176BF34229CE8F600240EDF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176BF33229CE8F600240EDF /* ViewController.swift */; };
+		1176BF37229CE8F600240EDF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1176BF35229CE8F600240EDF /* Main.storyboard */; };
+		1176BF39229CE8F900240EDF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1176BF38229CE8F900240EDF /* Assets.xcassets */; };
+		1176BF3C229CE8F900240EDF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1176BF3A229CE8F900240EDF /* LaunchScreen.storyboard */; };
+		1176BF43229CEB4F00240EDF /* AuthWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176BF42229CEB4F00240EDF /* AuthWebViewController.swift */; };
+		1176BF4B229E10DF00240EDF /* HiveOneDriveDirectoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176BF4A229E10DF00240EDF /* HiveOneDriveDirectoryTests.swift */; };
+		1176BF4D229E10F400240EDF /* HiveOneDriveClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176BF4C229E10F400240EDF /* HiveOneDriveClient.swift */; };
+		1176BF55229FCF3A00240EDF /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176BF54229FCF3A00240EDF /* SwiftyJSON.swift */; };
 		A34724DC226B4A750049DBD4 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34724DB226B4A750049DBD4 /* Log.swift */; };
 		A34724DE226B4ABE0049DBD4 /* LogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34724DD226B4ABE0049DBD4 /* LogLevel.swift */; };
 		A3743AD5226570B200C9493E /* OneDriveParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3743AD4226570B200C9493E /* OneDriveParameter.swift */; };
@@ -91,11 +97,6 @@
 		0DB068EABA0DB13AB595055A /* Pods_ElastosHiveSDKTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ElastosHiveSDKTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		11379429227ED9AD004A1F65 /* ElastosHiveSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ElastosHiveSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1137942D227ED9AD004A1F65 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		11379438227EDA66004A1F65 /* TestHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		1137943A227EDA66004A1F65 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		11379441227EDA6A004A1F65 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		11379446227EDA6A004A1F65 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1137944A227EDAE9004A1F65 /* TestHost.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TestHost.entitlements; sourceTree = "<group>"; };
 		1137944B227EDE4B004A1F65 /* HiveOneDriveFileTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HiveOneDriveFileTests.swift; sourceTree = "<group>"; };
 		1137944C227EDE4B004A1F65 /* HiveOneDriveTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HiveOneDriveTests.swift; sourceTree = "<group>"; };
 		114FD8372296E19000467E38 /* Alamofire+Synchronous.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Alamofire+Synchronous.swift"; path = "Utils/Alamofire+Synchronous.swift"; sourceTree = "<group>"; };
@@ -105,6 +106,18 @@
 		1160624F22696E9500BDCB9F /* TegKeychainConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TegKeychainConstants.swift; sourceTree = "<group>"; };
 		1160625022696E9500BDCB9F /* KeychainSwiftAccessOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainSwiftAccessOptions.swift; sourceTree = "<group>"; };
 		1160625722696EA500BDCB9F /* HelperMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HelperMethods.swift; path = Utils/HelperMethods.swift; sourceTree = "<group>"; };
+		1176BF2F229CE8F600240EDF /* TestHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1176BF31229CE8F600240EDF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		1176BF33229CE8F600240EDF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		1176BF36229CE8F600240EDF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		1176BF38229CE8F900240EDF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1176BF3B229CE8F900240EDF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		1176BF3D229CE8F900240EDF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1176BF41229CE90E00240EDF /* TestHost.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TestHost.entitlements; sourceTree = "<group>"; };
+		1176BF42229CEB4F00240EDF /* AuthWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthWebViewController.swift; sourceTree = "<group>"; };
+		1176BF4A229E10DF00240EDF /* HiveOneDriveDirectoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiveOneDriveDirectoryTests.swift; sourceTree = "<group>"; };
+		1176BF4C229E10F400240EDF /* HiveOneDriveClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiveOneDriveClient.swift; sourceTree = "<group>"; };
+		1176BF54229FCF3A00240EDF /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		13C6D592C180032E4F31BEF6 /* Pods-ElastosHiveSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDK.debug.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDK/Pods-ElastosHiveSDK.debug.xcconfig"; sourceTree = "<group>"; };
 		2368C8CBAE94193EAF7DB87D /* Pods-ElastosHiveSDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDKTests.debug.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDKTests/Pods-ElastosHiveSDKTests.debug.xcconfig"; sourceTree = "<group>"; };
 		556E8D39E54EDBDFA4DEAD42 /* Pods-TestHost.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestHost.release.xcconfig"; path = "Target Support Files/Pods-TestHost/Pods-TestHost.release.xcconfig"; sourceTree = "<group>"; };
@@ -182,11 +195,10 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		11379435227EDA66004A1F65 /* Frameworks */ = {
+		1176BF2C229CE8F600240EDF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7857CCBA4BDBCCE9499A1338 /* Pods_TestHost.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -205,20 +217,11 @@
 			children = (
 				1137944C227EDE4B004A1F65 /* HiveOneDriveTests.swift */,
 				1137944B227EDE4B004A1F65 /* HiveOneDriveFileTests.swift */,
+				1176BF4A229E10DF00240EDF /* HiveOneDriveDirectoryTests.swift */,
+				1176BF4C229E10F400240EDF /* HiveOneDriveClient.swift */,
 				1137942D227ED9AD004A1F65 /* Info.plist */,
 			);
 			path = ElastosHiveSDKTests;
-			sourceTree = "<group>";
-		};
-		11379439227EDA66004A1F65 /* TestHost */ = {
-			isa = PBXGroup;
-			children = (
-				1137944A227EDAE9004A1F65 /* TestHost.entitlements */,
-				1137943A227EDA66004A1F65 /* AppDelegate.swift */,
-				11379441227EDA6A004A1F65 /* Assets.xcassets */,
-				11379446227EDA6A004A1F65 /* Info.plist */,
-			);
-			path = TestHost;
 			sourceTree = "<group>";
 		};
 		1160624D22696E9500BDCB9F /* Keychain */ = {
@@ -230,6 +233,21 @@
 			);
 			name = Keychain;
 			path = Utils/Keychain;
+			sourceTree = "<group>";
+		};
+		1176BF30229CE8F600240EDF /* TestHost */ = {
+			isa = PBXGroup;
+			children = (
+				1176BF41229CE90E00240EDF /* TestHost.entitlements */,
+				1176BF42229CEB4F00240EDF /* AuthWebViewController.swift */,
+				1176BF31229CE8F600240EDF /* AppDelegate.swift */,
+				1176BF33229CE8F600240EDF /* ViewController.swift */,
+				1176BF35229CE8F600240EDF /* Main.storyboard */,
+				1176BF38229CE8F900240EDF /* Assets.xcassets */,
+				1176BF3A229CE8F900240EDF /* LaunchScreen.storyboard */,
+				1176BF3D229CE8F900240EDF /* Info.plist */,
+			);
+			path = TestHost;
 			sourceTree = "<group>";
 		};
 		54606D10E83E614A3F17056C /* Frameworks */ = {
@@ -260,7 +278,7 @@
 			children = (
 				A39C4971225399860027BDF9 /* ElastosHiveSDK */,
 				1137942A227ED9AD004A1F65 /* ElastosHiveSDKTests */,
-				11379439227EDA66004A1F65 /* TestHost */,
+				1176BF30229CE8F600240EDF /* TestHost */,
 				A39C4970225399860027BDF9 /* Products */,
 				873FCFD648761A208C564AD4 /* Pods */,
 				54606D10E83E614A3F17056C /* Frameworks */,
@@ -272,7 +290,7 @@
 			children = (
 				A39C496F225399860027BDF9 /* ElastosHiveSDK.framework */,
 				11379429227ED9AD004A1F65 /* ElastosHiveSDKTests.xctest */,
-				11379438227EDA66004A1F65 /* TestHost.app */,
+				1176BF2F229CE8F600240EDF /* TestHost.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -335,6 +353,7 @@
 				1160624D22696E9500BDCB9F /* Keychain */,
 				114FD8372296E19000467E38 /* Alamofire+Synchronous.swift */,
 				1160625722696EA500BDCB9F /* HelperMethods.swift */,
+				1176BF54229FCF3A00240EDF /* SwiftyJSON.swift */,
 				A39C49AA22539CB90027BDF9 /* IOUtil.swift */,
 				A34724DB226B4A750049DBD4 /* Log.swift */,
 				A34724DD226B4ABE0049DBD4 /* LogLevel.swift */,
@@ -451,15 +470,13 @@
 			productReference = 11379429227ED9AD004A1F65 /* ElastosHiveSDKTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		11379437227EDA66004A1F65 /* TestHost */ = {
+		1176BF2E229CE8F600240EDF /* TestHost */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 11379449227EDA6A004A1F65 /* Build configuration list for PBXNativeTarget "TestHost" */;
+			buildConfigurationList = 1176BF3E229CE8F900240EDF /* Build configuration list for PBXNativeTarget "TestHost" */;
 			buildPhases = (
-				41D0E499F42D80DAAA47E803 /* [CP] Check Pods Manifest.lock */,
-				11379434227EDA66004A1F65 /* Sources */,
-				11379435227EDA66004A1F65 /* Frameworks */,
-				11379436227EDA66004A1F65 /* Resources */,
-				5FCFDC2390860C604B7D9C31 /* [CP] Embed Pods Frameworks */,
+				1176BF2B229CE8F600240EDF /* Sources */,
+				1176BF2C229CE8F600240EDF /* Frameworks */,
+				1176BF2D229CE8F600240EDF /* Resources */,
 			);
 			buildRules = (
 			);
@@ -467,7 +484,7 @@
 			);
 			name = TestHost;
 			productName = TestHost;
-			productReference = 11379438227EDA66004A1F65 /* TestHost.app */;
+			productReference = 1176BF2F229CE8F600240EDF /* TestHost.app */;
 			productType = "com.apple.product-type.application";
 		};
 		A39C496E225399860027BDF9 /* ElastosHiveSDK */ = {
@@ -502,7 +519,7 @@
 					11379428227ED9AD004A1F65 = {
 						CreatedOnToolsVersion = 10.2;
 					};
-					11379437227EDA66004A1F65 = {
+					1176BF2E229CE8F600240EDF = {
 						CreatedOnToolsVersion = 10.2;
 						SystemCapabilities = {
 							com.apple.Keychain = {
@@ -531,7 +548,7 @@
 			targets = (
 				A39C496E225399860027BDF9 /* ElastosHiveSDK */,
 				11379428227ED9AD004A1F65 /* ElastosHiveSDKTests */,
-				11379437227EDA66004A1F65 /* TestHost */,
+				1176BF2E229CE8F600240EDF /* TestHost */,
 			);
 		};
 /* End PBXProject section */
@@ -544,11 +561,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		11379436227EDA66004A1F65 /* Resources */ = {
+		1176BF2D229CE8F600240EDF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				11379442227EDA6A004A1F65 /* Assets.xcassets in Resources */,
+				1176BF3C229CE8F900240EDF /* LaunchScreen.storyboard in Resources */,
+				1176BF39229CE8F900240EDF /* Assets.xcassets in Resources */,
+				1176BF37229CE8F600240EDF /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -577,45 +596,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ElastosHiveSDKTests/Pods-ElastosHiveSDKTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		41D0E499F42D80DAAA47E803 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-TestHost-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		5FCFDC2390860C604B7D9C31 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TestHost/Pods-TestHost-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TestHost/Pods-TestHost-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TestHost/Pods-TestHost-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		73827CA57F0DF5767CA9E536 /* [CP] Check Pods Manifest.lock */ = {
@@ -670,15 +650,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				1137944E227EDE4B004A1F65 /* HiveOneDriveTests.swift in Sources */,
+				1176BF4B229E10DF00240EDF /* HiveOneDriveDirectoryTests.swift in Sources */,
+				1176BF4D229E10F400240EDF /* HiveOneDriveClient.swift in Sources */,
 				1137944D227EDE4B004A1F65 /* HiveOneDriveFileTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		11379434227EDA66004A1F65 /* Sources */ = {
+		1176BF2B229CE8F600240EDF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1137943B227EDA66004A1F65 /* AppDelegate.swift in Sources */,
+				1176BF34229CE8F600240EDF /* ViewController.swift in Sources */,
+				1176BF32229CE8F600240EDF /* AppDelegate.swift in Sources */,
+				1176BF43229CEB4F00240EDF /* AuthWebViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -735,6 +719,7 @@
 				114FD8382296E19000467E38 /* Alamofire+Synchronous.swift in Sources */,
 				A39C49A422539C9C0027BDF9 /* AuthHelper.swift in Sources */,
 				A39CB4BF2292854000535E43 /* HiveCallback.swift in Sources */,
+				1176BF55229FCF3A00240EDF /* SwiftyJSON.swift in Sources */,
 				A39CB4BB22927DB900535E43 /* HiveFileInfo.swift in Sources */,
 				A39CB4B922927DB900535E43 /* HiveDriveInfo.swift in Sources */,
 				A39C49B122539CD10027BDF9 /* OneDriveAuthHelper.swift in Sources */,
@@ -758,6 +743,25 @@
 			targetProxy = 1137942F227ED9AD004A1F65 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		1176BF35229CE8F600240EDF /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1176BF36229CE8F600240EDF /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		1176BF3A229CE8F900240EDF /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1176BF3B229CE8F900240EDF /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		11379432227ED9AD004A1F65 /* Debug */ = {
@@ -802,9 +806,8 @@
 			};
 			name = Release;
 		};
-		11379447227EDA6A004A1F65 /* Debug */ = {
+		1176BF3F229CE8F900240EDF /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DB374220454CA5325E399B9B /* Pods-TestHost.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = TestHost/TestHost.entitlements;
@@ -823,9 +826,8 @@
 			};
 			name = Debug;
 		};
-		11379448227EDA6A004A1F65 /* Release */ = {
+		1176BF40229CE8F900240EDF /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 556E8D39E54EDBDFA4DEAD42 /* Pods-TestHost.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = TestHost/TestHost.entitlements;
@@ -1041,11 +1043,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		11379449227EDA6A004A1F65 /* Build configuration list for PBXNativeTarget "TestHost" */ = {
+		1176BF3E229CE8F900240EDF /* Build configuration list for PBXNativeTarget "TestHost" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				11379447227EDA6A004A1F65 /* Debug */,
-				11379448227EDA6A004A1F65 /* Release */,
+				1176BF3F229CE8F900240EDF /* Debug */,
+				1176BF40229CE8F900240EDF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

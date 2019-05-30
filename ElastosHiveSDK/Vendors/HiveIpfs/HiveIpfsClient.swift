@@ -22,20 +22,20 @@ internal class HiveIpfsClient: HiveClientHandle {
         return clientInstance
     }
 
-    override func lastUpdatedInfo() -> HivePromise<HiveClientInfo>? {
+    override func lastUpdatedInfo() -> HivePromise<HiveClientInfo> {
         return lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>())
     }
 
-    override func lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>) -> HivePromise<HiveClientInfo>? {
+    override func lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>) -> HivePromise<HiveClientInfo> {
         let error = HiveError.failue(des: "TODO")
         return HivePromise<HiveClientInfo>(error: error)
     }
 
-    override func defaultDriveHandle() -> HivePromise<HiveDriveHandle>? {
+    override func defaultDriveHandle() -> HivePromise<HiveDriveHandle> {
         return defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>())
     }
 
-    override func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> HivePromise<HiveDriveHandle>? {
+    override func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> HivePromise<HiveDriveHandle> {
         let error = HiveError.failue(des: "TODO")
         return HivePromise<HiveDriveHandle>(error: error)
     }
