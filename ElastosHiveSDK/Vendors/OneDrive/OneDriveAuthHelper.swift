@@ -15,14 +15,20 @@ internal class OneDriveAuthHelper: AuthHelper {
         self.authEntry = authEntry
     }
 
-    override func loginAsync(_ authenticator: Authenticator) -> Promise<Bool> {
+    override func loginAsync(_ authenticator: Authenticator) -> HivePromise<Bool> {
         return loginAsync(authenticator, handleBy: HiveCallback<Bool>())
     }
 
-    override func loginAsync(_ authenticator: Authenticator, handleBy: HiveCallback<Bool>) -> Promise<Bool> {
+    override func loginAsync(_ authenticator: Authenticator, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
+        let access_token = HelperMethods.getKeychain(KEYCHAIN_ACCESS_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
+        guard access_token == "" else {
+            let promise = HivePromise<Bool> { resolver in
+                resolver.fulfill(true)
+            }
+            return promise
+        }
 
         let promise = HivePromise<Bool> { resolver in
-
             self.acquireAuthCode().then({ (authCode) -> HivePromise<Bool>  in
                 return self.acquireAccessToken(authCode)
             }).done({ (success) in
@@ -37,7 +43,7 @@ internal class OneDriveAuthHelper: AuthHelper {
         return promise
     }
 
-    override func logoutAsync() -> Promise<Bool> {
+    override func logoutAsync() -> HivePromise<Bool> {
         return logoutAsync(handleBy: HiveCallback<Bool>())
     }
 
@@ -105,7 +111,7 @@ internal class OneDriveAuthHelper: AuthHelper {
 
     private func refreshAccessToken() -> HivePromise<Bool> {
         let promise = HivePromise<Bool> {  resolver in
-            let refreshToken = HelperMethods.getKeychain(KEYCHAIN_ACCESS_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
+            let refreshToken = HelperMethods.getKeychain(KEYCHAIN_REFRESH_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
             let params: Dictionary<String, Any> = [
                 "client_id" : self.authEntry.clientId,
                 "scope" : self.authEntry.scope,

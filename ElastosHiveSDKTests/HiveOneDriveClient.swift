@@ -5,6 +5,7 @@ import XCTest
 
 
 class HiveOneDriveClient: XCTestCase,Authenticator {
+
     func requestAuthentication(_ requestURL: String) -> Bool {
         return true
     }
