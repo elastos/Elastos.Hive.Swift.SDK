@@ -78,4 +78,8 @@ class HelperMethods {
         return String(str)
     }
 
+    class func jsonToString(_ data: Data) -> String {
+        let jsonString = String(data: data, encoding: .utf8)
+        return jsonString ?? ""
+    }
 }

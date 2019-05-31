@@ -16,6 +16,10 @@ public class HiveFileHandle: NSObject, HiveResourceItem, HiveFileItem {
         self.fileId = lastInfo.fileId
         self.pathName = ""
     }
+    
+    public func parentPathName() -> String {
+        return ""
+    }
 
     public func lastUpdatedInfo() -> HivePromise<resourceType> {
         return lastUpdatedInfo(handleBy: HiveCallback<HiveFileHandle.resourceType>())

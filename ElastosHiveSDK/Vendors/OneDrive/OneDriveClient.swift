@@ -48,7 +48,7 @@ internal class OneDriveClient: HiveClientHandle {
                                   headers: (OneDriveHttpHeader.headers()))
                     .responseJSON { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else {
-                            let error = HiveError.jsonFailue(des: dataResponse.result.value as? Dictionary<AnyHashable, Any>)
+                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
                             resolver.reject(error)
                             handleBy.runError(error)
                             return
@@ -63,7 +63,7 @@ internal class OneDriveClient: HiveClientHandle {
                         resolver.fulfill(clientInfo)
                 }
             }).catch({ (err) in
-                let error = HiveError.systemError(error: err, jsonDes: nil)
+                let error = HiveError.failue(des: err.localizedDescription)
                 resolver.reject(error)
                 handleBy.runError(error)
             })
@@ -93,8 +93,9 @@ internal class OneDriveClient: HiveClientHandle {
                                   headers: (OneDriveHttpHeader.headers()))
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else{
-                            let error = HiveError.jsonFailue(des: dataResponse.result.value as? Dictionary<AnyHashable, Any>)
+                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
                             resolver.reject(error)
+                            handleBy.runError(error)
                             return
                         }
                         let jsonData = JSON(dataResponse.result.value as Any)
@@ -105,6 +106,10 @@ internal class OneDriveClient: HiveClientHandle {
                         dirHandle.lastInfo = driveInfo
                         resolver.fulfill(dirHandle)
                     })
+            }).catch({ (err) in
+                let error = HiveError.failue(des: err.localizedDescription)
+                resolver.reject(error)
+                handleBy.runError(error)
             })
         }
         return promise

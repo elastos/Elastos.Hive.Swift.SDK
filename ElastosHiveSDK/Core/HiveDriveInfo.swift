@@ -8,15 +8,15 @@ public enum DriveState {
 }
 
 public class HiveDriveInfo: NSObject {
-    public var driveId: String?
-    public var capacity: String?
-    public var remaining: String?
-    public var deleted: String?
-    public var fileCount: String?
-    public var state: String?
-    public var lastModifiedDateTime: String?
-    public var ddescription: String?
-    public var driveState: DriveState?
+    public var driveId: String
+    public var capacity: String
+    public var remaining: String
+    public var deleted: String
+    public var fileCount: String
+    public var state: String
+    public var lastModifiedDateTime: String
+    public var ddescription: String
+    public var driveState: DriveState
 
     init(_ driveId: String) {
         self.driveId = driveId
@@ -36,8 +36,9 @@ public class HiveDriveInfo: NSObject {
         self.capacity = quota["capacity"].stringValue
         self.remaining = quota["remaining"].stringValue
         self.deleted = quota["deleted"].stringValue
-        self.fileCount = quota["fileCount"].stringValue
         self.lastModifiedDateTime = jsonData["lastModifiedDateTime"].stringValue
+        let folder = JSON(jsonData["folder"])
+        self.fileCount = folder["childCount"].stringValue
         self.ddescription = ""
         self.driveState = .normal
         let state = jsonData["state"].stringValue
