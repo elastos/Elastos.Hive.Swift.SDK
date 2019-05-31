@@ -11,6 +11,10 @@ internal class OneDriveFile: HiveFileHandle {
         super.init(info, authHelper)
     }
 
+    override func parentPathName() -> String {
+        return HelperMethods.prePath(self.pathName)
+    }
+
     override func lastUpdatedInfo() -> HivePromise<HiveFileInfo> {
         return lastUpdatedInfo(handleBy: HiveCallback<HiveFileInfo>())
     }
@@ -30,7 +34,7 @@ internal class OneDriveFile: HiveFileHandle {
                                   headers: (OneDriveHttpHeader.headers()))
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else{
-                            let error = HiveError.failue(des: "result is nil")
+                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
                             handleBy.runError(error)
                             resolver.reject(error)
                             return
@@ -43,7 +47,7 @@ internal class OneDriveFile: HiveFileHandle {
                         resolver.fulfill(fileInfo)
                     })
             }).catch({ (err) in
-                let error = HiveError.systemError(error: err, jsonDes: nil)
+                let error = HiveError.failue(des: err.localizedDescription)
                 resolver.reject(error)
                 handleBy.runError(error)
             })
@@ -77,7 +81,7 @@ internal class OneDriveFile: HiveFileHandle {
                                   headers: (OneDriveHttpHeader.headers()))
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else{
-                            let error = HiveError.jsonFailue(des: dataResponse.result.value as? Dictionary<AnyHashable, Any>)
+                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
                             resolver.reject(error)
                             handleBy.runError(error)
                             return
@@ -86,7 +90,7 @@ internal class OneDriveFile: HiveFileHandle {
                         handleBy.didSucceed(true)
                     })
             }).catch({ (err) in
-                let error = HiveError.systemError(error: err, jsonDes: nil)
+                let error = HiveError.failue(des: err.localizedDescription)
                 resolver.reject(error)
                 handleBy.runError(error)
             })
@@ -122,7 +126,7 @@ internal class OneDriveFile: HiveFileHandle {
                                   headers: (OneDriveHttpHeader.headers()))
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 202 else{
-                            let error = HiveError.jsonFailue(des: dataResponse.result.value as? Dictionary<AnyHashable, Any>)
+                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
                             resolver.reject(error)
                             handleBy.runError(error)
                             return
@@ -141,7 +145,7 @@ internal class OneDriveFile: HiveFileHandle {
                         })
                     })
             }).catch({ (err) in
-                let error = HiveError.systemError(error: err, jsonDes: nil)
+                let error = HiveError.failue(des: err.localizedDescription)
                 resolver.reject(error)
                 handleBy.runError(error)
             })
@@ -166,7 +170,7 @@ internal class OneDriveFile: HiveFileHandle {
                                   headers: (OneDriveHttpHeader.headers()))
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 204 else{
-                            let error = HiveError.jsonFailue(des: dataResponse.result.value as? Dictionary<AnyHashable, Any>)
+                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
                             resolver.reject(error)
                             handleBy.runError(error)
                             return
@@ -175,7 +179,7 @@ internal class OneDriveFile: HiveFileHandle {
                         handleBy.didSucceed(true)
                     })
             }).catch({ (err) in
-                let error = HiveError.systemError(error: err, jsonDes: nil)
+                let error = HiveError.failue(des: err.localizedDescription)
                 resolver.reject(error)
                 handleBy.runError(error)
             })
@@ -217,7 +221,7 @@ internal class OneDriveFile: HiveFileHandle {
                         handleBy.didSucceed(jsonStr)
                     })
             }).catch({ (err) in
-                let error = HiveError.systemError(error: err, jsonDes: nil)
+                let error = HiveError.failue(des: err.localizedDescription)
                 resolver.reject(error)
                 handleBy.runError(error)
             })
@@ -242,7 +246,7 @@ internal class OneDriveFile: HiveFileHandle {
                                  headers: headers)
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 || dataResponse.response?.statusCode == 201 else{
-                            let error = HiveError.jsonFailue(des: dataResponse.result.value as? Dictionary<AnyHashable, Any>)
+                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
                             resolver.reject(error)
                             handleBy.runError(error)
                             return
@@ -251,7 +255,7 @@ internal class OneDriveFile: HiveFileHandle {
                         handleBy.didSucceed(true)
                     })
             }).catch({ (err) in
-                let error = HiveError.systemError(error: err, jsonDes: nil)
+                let error = HiveError.failue(des: err.localizedDescription)
                 resolver.reject(error)
                 handleBy.runError(error)
             })

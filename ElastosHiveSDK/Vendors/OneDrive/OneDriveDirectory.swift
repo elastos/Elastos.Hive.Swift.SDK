@@ -9,6 +9,10 @@ class OneDriveDirectory: HiveDirectoryHandle {
         super.init(info, authHelper)
     }
 
+    override func parentPathName() -> String {
+        return HelperMethods.prePath(self.pathName)
+    }
+
     override func lastUpdatedInfo() -> HivePromise<HiveDirectoryInfo> {
         return lastUpdatedInfo(handleBy: HiveCallback<HiveDirectoryInfo>())
     }
@@ -28,7 +32,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                   headers: (OneDriveHttpHeader.headers()))
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else{
-                            let error = HiveError.failue(des: "result is nil")
+                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
                             handleBy.runError(error)
                             resolver.reject(error)
                             return
@@ -42,7 +46,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                         resolver.fulfill(directoryInfo)
                     })
             }).catch({ (err) in
-                let error = HiveError.systemError(error: err, jsonDes: nil)
+                let error = HiveError.failue(des: err.localizedDescription)
                 resolver.reject(error)
                 handleBy.runError(error)
             })
@@ -73,7 +77,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                       headers: (OneDriveHttpHeader.headers()))
                         .responseJSON(completionHandler: { (dataResponse) in
                             guard dataResponse.response?.statusCode == 201 else{
-                                let error = HiveError.jsonFailue(des: dataResponse.result.value as? Dictionary<AnyHashable, Any>)
+                                let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
                                 resolver.reject(error)
                                 handleBy.runError(error)
                                 return
@@ -96,7 +100,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                             resolver.fulfill(dirHandle)
                         })
                 }).catch({ (err) in
-                    let error = HiveError.systemError(error: err, jsonDes: nil)
+                    let error = HiveError.failue(des: err.localizedDescription)
                     resolver.reject(error)
                     handleBy.runError(error)
                 })
@@ -126,7 +130,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                       headers: (OneDriveHttpHeader.headers()))
                         .responseJSON(completionHandler: { (dataResponse) in
                             guard dataResponse.response?.statusCode == 200 else{
-                                let error = HiveError.jsonFailue(des: dataResponse.result.value as? Dictionary<AnyHashable, Any>)
+                                let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
                                 resolver.reject(error)
                                 handleBy.runError(error)
                                 return
@@ -145,7 +149,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                             resolver.fulfill(dirHandle)
                         })
                 }).catch({ (err) in
-                    let error = HiveError.systemError(error: err, jsonDes: nil)
+                    let error = HiveError.failue(des: err.localizedDescription)
                     resolver.reject(error)
                     handleBy.runError(error)
                 })
@@ -174,7 +178,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                   headers: (OneDriveHttpHeader.headers()))
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 201 else{
-                            let error = HiveError.jsonFailue(des: dataResponse.result.value as? Dictionary<AnyHashable, Any>)
+                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
                             resolver.reject(error)
                             handleBy.runError(error)
                             return
@@ -193,7 +197,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                         resolver.fulfill(fileHandle)
                     })
             }).catch({ (err) in
-                let error = HiveError.systemError(error: err, jsonDes: nil)
+                let error = HiveError.failue(des: err.localizedDescription)
                 resolver.reject(error)
                 handleBy.runError(error)
             })
@@ -223,7 +227,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                       headers: (OneDriveHttpHeader.headers()))
                         .responseJSON(completionHandler: { (dataResponse) in
                             guard dataResponse.response?.statusCode == 200 else{
-                                let error = HiveError.jsonFailue(des: dataResponse.result.value as? Dictionary<AnyHashable, Any>)
+                                let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
                                 resolver.reject(error)
                                 handleBy.runError(error)
                                 return
@@ -242,7 +246,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                             resolver.fulfill(fileHandle)
                         })
                 }).catch({ (err) in
-                    let error = HiveError.systemError(error: err, jsonDes: nil)
+                    let error = HiveError.failue(des: err.localizedDescription)
                     resolver.reject(error)
                     handleBy.runError(error)
                 })
@@ -271,7 +275,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                   headers: (OneDriveHttpHeader.headers()))
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else{
-                            let error = HiveError.jsonFailue(des: dataResponse.result.value as? Dictionary<AnyHashable, Any>)
+                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
                             resolver.reject(error)
                             handleBy.runError(error)
                             return
@@ -280,7 +284,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                         handleBy.didSucceed(true)
                     })
             }).catch({ (err) in
-                let error = HiveError.systemError(error: err, jsonDes: nil)
+                let error = HiveError.failue(des: err.localizedDescription)
                 resolver.reject(error)
                 handleBy.runError(error)
             })
@@ -310,7 +314,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                   headers: (OneDriveHttpHeader.headers()))
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 202 else{
-                            let error = HiveError.jsonFailue(des: dataResponse.result.value as? Dictionary<AnyHashable, Any>)
+                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
                             resolver.reject(error)
                             handleBy.runError(error)
                             return
@@ -329,7 +333,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                         })
                     })
             }).catch({ (err) in
-                let error = HiveError.systemError(error: err, jsonDes: nil)
+                let error = HiveError.failue(des: err.localizedDescription)
                 resolver.reject(error)
                 handleBy.runError(error)
             })
@@ -354,7 +358,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                   headers: (OneDriveHttpHeader.headers()))
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 204 else{
-                            let error = HiveError.jsonFailue(des: dataResponse.result.value as? Dictionary<AnyHashable, Any>)
+                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
                             resolver.reject(error)
                             handleBy.runError(error)
                             return
@@ -363,7 +367,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                         handleBy.didSucceed(true)
                     })
             }).catch({ (err) in
-                let error = HiveError.systemError(error: err, jsonDes: nil)
+                let error = HiveError.failue(des: err.localizedDescription)
                 resolver.reject(error)
                 handleBy.runError(error)
             })
