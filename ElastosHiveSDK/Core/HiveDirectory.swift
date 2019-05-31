@@ -8,13 +8,13 @@ public class HiveDirectoryHandle: NSObject, HiveResourceItem, HiveFileItem, Hive
     public var drive: HiveDriveHandle?
     public var directoryId: String
     public var pathName: String
-    public var lastInfo: HiveDirectoryInfo
+    public var lastInfo: HiveDirectoryInfo?
     internal var authHelper: AuthHelper
 
     init(_ info: HiveDirectoryInfo, _ authHelper: AuthHelper) {
         self.lastInfo = info
         self.authHelper = authHelper
-        self.directoryId = lastInfo.dirId
+        self.directoryId = lastInfo!.dirId
         self.pathName = ""
     }
 

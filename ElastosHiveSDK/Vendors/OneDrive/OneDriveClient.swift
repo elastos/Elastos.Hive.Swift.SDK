@@ -23,14 +23,29 @@ internal class OneDriveClient: HiveClientHandle {
     public static func sharedInstance() -> HiveClientHandle? {
         return clientInstance
     }
+
     override func login(_ authenticator: Authenticator) -> Bool {
-        let result = self.authHelper?.login(authenticator)
+
+        var result = false
+        let promise =  self.authHelper?.loginAsync(authenticator)
         _ = defaultDriveHandle()
-        return (result)!
+        do {
+            result = try (promise?.wait())!
+        } catch  {
+            result = false
+        }
+        return result
     }
 
     override func logout() -> Bool {
-        return (self.authHelper?.logout())!
+        var result = false
+        let promise = self.authHelper?.logoutAsync()
+        do {
+            result = try (promise?.wait())!
+        } catch {
+            result = false
+        }
+        return result
     }
 
     override func lastUpdatedInfo() -> HivePromise<HiveClientInfo> {

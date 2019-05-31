@@ -276,6 +276,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else{
                             let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            self.pathName = newPath + self.name!
                             resolver.reject(error)
                             handleBy.runError(error)
                             return
@@ -363,6 +364,10 @@ class OneDriveDirectory: HiveDirectoryHandle {
                             handleBy.runError(error)
                             return
                         }
+                        self.pathName = ""
+                        self.drive = nil
+                        self.directoryId = ""
+                        self.lastInfo = nil
                         resolver.fulfill(true)
                         handleBy.didSucceed(true)
                     })
