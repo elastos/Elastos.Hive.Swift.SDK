@@ -64,7 +64,11 @@ internal class OneDriveAuthHelper: AuthHelper {
 
     private func acquireAuthCode() -> HivePromise<String> {
         let promise = HivePromise<String> { resolver in
-            server.startRun(44316)
+            let redirecturl = self.authEntry.redirectURL
+            let startIndex = redirecturl.index(redirecturl.startIndex, offsetBy: 17)
+            let endIndex =  redirecturl.index(redirecturl.startIndex, offsetBy: redirecturl.count)
+            let port = UInt16(redirecturl[startIndex..<endIndex])
+            server.startRun(port!)
             server.getCode().done({ (authCode) in
                 resolver.fulfill(authCode)
             }).catch({ (error) in
@@ -156,14 +160,16 @@ internal class OneDriveAuthHelper: AuthHelper {
         self.token?.expiredTime = expiredTime
         let onedriveAccountJson = [KEYCHAIN_ACCESS_TOKEN: jsonData[KEYCHAIN_ACCESS_TOKEN].stringValue,
                                    KEYCHAIN_REFRESH_TOKEN: jsonData[KEYCHAIN_REFRESH_TOKEN].stringValue,
-                                   KEYCHAIN_EXPIRES_IN: expiredTime] as [String : Any]
+                                   KEYCHAIN_EXPIRES_IN: expiredTime,
+                                   KEYCHAIN_REDIRECTURL: self.authEntry.redirectURL] as [String : Any]
         HelperMethods.saveKeychain(KEYCHAIN_DRIVE_ACCOUNT, onedriveAccountJson)
     }
 
     private func removeOnedriveAcount(){
         let onedriveAccountJson = [KEYCHAIN_ACCESS_TOKEN: "",
                                    KEYCHAIN_REFRESH_TOKEN: "",
-                                   KEYCHAIN_EXPIRES_IN: ""]
+                                   KEYCHAIN_EXPIRES_IN: "",
+                                   KEYCHAIN_REDIRECTURL: ""]
         HelperMethods.saveKeychain(KEYCHAIN_DRIVE_ACCOUNT, onedriveAccountJson)
     }
 

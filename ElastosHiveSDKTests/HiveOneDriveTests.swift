@@ -34,7 +34,6 @@ class HiveOneDriveTests: XCTestCase,Authenticator {
         }
         wait(for: [lock!], timeout: timeout)
     }
- 
 
     func test2_lastUpdatedInfo() {
         lock = XCTestExpectation(description: "wait for test2_lastUpdatedInfo")
