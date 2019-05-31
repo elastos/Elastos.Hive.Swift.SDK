@@ -86,6 +86,7 @@ internal class OneDriveFile: HiveFileHandle {
                             handleBy.runError(error)
                             return
                         }
+                        self.pathName = newPath + self.name!
                         resolver.fulfill(true)
                         handleBy.didSucceed(true)
                     })
@@ -175,6 +176,10 @@ internal class OneDriveFile: HiveFileHandle {
                             handleBy.runError(error)
                             return
                         }
+                        self.pathName = ""
+                        self.drive = nil
+                        self.fileId = ""
+                        self.lastInfo = nil
                         resolver.fulfill(true)
                         handleBy.didSucceed(true)
                     })

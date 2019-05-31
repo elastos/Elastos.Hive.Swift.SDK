@@ -15,52 +15,88 @@ internal class OneDriveAuthHelper: AuthHelper {
         self.authEntry = authEntry
     }
 
-    override func login(_ authenticator: Authenticator) -> Bool {
-        let authCode = acquireAuthCode()
-        let result = self.acquireAccessToken(authCode)
-        return result
+    override func loginAsync(_ authenticator: Authenticator) -> Promise<Bool> {
+        return loginAsync(authenticator, handleBy: HiveCallback<Bool>())
     }
 
-    override func logout() -> Bool {
-        var result = false
-        let dataResponse = Alamofire.request(OneDriveURL.AUTH + "/logout" + "?post_logout_redirect_uri=\(self.authEntry.redirectURL)",
-                                            method: .get,
-                                            parameters: nil,
-                                            encoding: JSONEncoding.default,
-                                            headers: nil).responseJSON()
+    override func loginAsync(_ authenticator: Authenticator, handleBy: HiveCallback<Bool>) -> Promise<Bool> {
+
+        let promise = HivePromise<Bool> { resolver in
+
+            self.acquireAuthCode().then({ (authCode) -> HivePromise<Bool>  in
+                return self.acquireAccessToken(authCode)
+            }).done({ (success) in
+                handleBy.didSucceed(success)
+                resolver.fulfill(success)
+            }).catch({ (err) in
+                let error = HiveError.failue(des: err.localizedDescription)
+                handleBy.runError(error)
+                resolver.reject(error)
+            })
+        }
+        return promise
+    }
+
+    override func logoutAsync() -> Promise<Bool> {
+        return logoutAsync(handleBy: HiveCallback<Bool>())
+    }
+
+    override func logoutAsync(handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
+        let promise = HivePromise<Bool> { resolver in
+            let dataResponse = Alamofire.request(OneDriveURL.AUTH + "/logout" + "?post_logout_redirect_uri=\(self.authEntry.redirectURL)",
+                method: .get,
+                parameters: nil,
+                encoding: JSONEncoding.default,
+                headers: nil).responseJSON()
             guard dataResponse.response?.statusCode == 200 else{
-                result = false
-                return result
+                let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                handleBy.runError(error)
+                resolver.reject(error)
+                return
             }
             self.token = nil
             self.removeOnedriveAcount()
-        result = true
-        return result
-    }
-
-    private func acquireAuthCode() -> String {
-        server.startRun(44316)
-        return server.getCode()
-    }
-
-    private func acquireAccessToken(_ authCode: String) -> Bool {
-        let params: Dictionary<String, Any> = [
-            "client_id" : self.authEntry.clientId,
-            "code" : authCode,
-            "grant_type" : AUTHORIZATION_TYPE_CODE,
-            "redirect_uri" : self.authEntry.redirectURL
-        ]
-        var urlRequest = URLRequest(url: URL(string: OneDriveURL.AUTH + OneDriveMethod.TOKEN)!)
-        urlRequest.httpMethod = "POST"
-        urlRequest.httpBody = params.queryString.data(using: String.Encoding.utf8)
-        urlRequest.setValue(OneDriveHttpHeader.ContentTypeValue, forHTTPHeaderField: OneDriveHttpHeader.ContentType)
-        let dataResponse = Alamofire.request(urlRequest).responseJSON()
-        guard dataResponse.response?.statusCode == 200 else{
-            return false
+            handleBy.didSucceed(true)
+            resolver.fulfill(true)
         }
-        let jsonData =  JSON(dataResponse.result.value as Any)
-        self.saveOnedriveAcount(jsonData)
-        return true
+        return promise
+    }
+
+    private func acquireAuthCode() -> HivePromise<String> {
+        let promise = HivePromise<String> { resolver in
+            server.startRun(44316)
+            server.getCode().done({ (authCode) in
+                resolver.fulfill(authCode)
+            }).catch({ (error) in
+                resolver.reject(error)
+            })
+        }
+        return promise
+    }
+
+    private func acquireAccessToken(_ authCode: String) -> HivePromise<Bool> {
+        let promise = HivePromise<Bool> { resolver in
+            let params: Dictionary<String, Any> = [
+                "client_id" : self.authEntry.clientId,
+                "code" : authCode,
+                "grant_type" : AUTHORIZATION_TYPE_CODE,
+                "redirect_uri" : self.authEntry.redirectURL
+            ]
+            var urlRequest = URLRequest(url: URL(string: OneDriveURL.AUTH + OneDriveMethod.TOKEN)!)
+            urlRequest.httpMethod = "POST"
+            urlRequest.httpBody = params.queryString.data(using: String.Encoding.utf8)
+            urlRequest.setValue(OneDriveHttpHeader.ContentTypeValue, forHTTPHeaderField: OneDriveHttpHeader.ContentType)
+            let dataResponse = Alamofire.request(urlRequest).responseJSON()
+            guard dataResponse.response?.statusCode == 200 else{
+                let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                resolver.reject(error)
+                return
+            }
+            let jsonData =  JSON(dataResponse.result.value as Any)
+            self.saveOnedriveAcount(jsonData)
+            resolver.fulfill(true)
+        }
+        return promise
     }
 
     private func refreshAccessToken() -> HivePromise<Bool> {
