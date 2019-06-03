@@ -9,10 +9,8 @@ public class OneDriveParameter: DriveParameter {
         self.authEntry = OAuthEntry(clientId, scope, redirectURL)
     }
 
-    public var driveType: DriveType {
-        get {
-            return DriveType.oneDrive
-        }
+    public override func driveType() -> DriveType {
+        return .oneDrive
     }
 
     public func getAuthEntry() -> OAuthEntry {

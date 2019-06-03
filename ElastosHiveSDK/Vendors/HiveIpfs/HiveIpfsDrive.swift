@@ -1,10 +1,14 @@
 import Foundation
 import PromiseKit
+import Alamofire
 
 @objc(HiveIpfsDrive)
 internal class HiveIpfsDrive: HiveDriveHandle {
-    init(_ info: HiveDriveInfo) {
-        super.init(DriveType.hiveIpfs, info)
+    private var authHelper: AuthHelper
+
+    init(_ info: HiveDriveInfo, _ authHelper: AuthHelper) {
+        self.authHelper = authHelper
+        super.init(DriveType.oneDrive, info)
     }
 
     override func lastUpdatedInfo() -> HivePromise<HiveDriveInfo> {
@@ -33,8 +37,29 @@ internal class HiveIpfsDrive: HiveDriveHandle {
 
     override func createDirectory(withPath: String, handleBy: HiveCallback<HiveDirectoryHandle>) ->
         HivePromise<HiveDirectoryHandle> {
-        let error = HiveError.failue(des: "TODO")
-        return HivePromise<HiveDirectoryHandle>(error: error)
+            let promise = HivePromise<HiveDirectoryHandle> { resolver in
+                let url = HiveIpfsURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_MKDIR.rawValue
+                let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                let param = ["uid": uid,"path": "/"]
+                Alamofire.request(url,
+                                  method: .post,
+                                  parameters: param,
+                                  encoding: URLEncoding.queryString,
+                                  headers: nil)
+                    .responseJSON(completionHandler: { (dataResponse) in
+                        guard dataResponse.response?.statusCode == 200 else{
+                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            resolver.reject(error)
+                            handleBy.runError(error)
+                            return
+                        }
+                        let directoryInfo = HiveDirectoryInfo(uid)
+                        let directoryHandle = HiveIpfsDirectory(directoryInfo, self.authHelper)
+                        resolver.fulfill(directoryHandle)
+                        handleBy.didSucceed(directoryHandle)
+                    })
+            }
+            return promise
     }
 
     override func directoryHandle(atPath: String) -> HivePromise<HiveDirectoryHandle> {
@@ -44,8 +69,30 @@ internal class HiveIpfsDrive: HiveDriveHandle {
 
     override func directoryHandle(atPath: String, handleBy: HiveCallback<HiveDirectoryHandle>) ->
         HivePromise<HiveDirectoryHandle> {
-        let error = HiveError.failue(des: "TODO")
-        return HivePromise<HiveDirectoryHandle>(error: error)
+
+            let promise = HivePromise<HiveDirectoryHandle> { resolver in
+                let url = HiveIpfsURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
+                let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                let param = ["": uid, "path": atPath]
+                Alamofire.request(url,
+                                  method: .post,
+                                  parameters: param,
+                                  encoding: URLEncoding.queryString,
+                                  headers: nil)
+                    .responseJSON(completionHandler: { (dataResponse) in
+                        guard dataResponse.response?.statusCode == 200 else {
+                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            resolver.reject(error)
+                            handleBy.runError(error)
+                            return
+                        }
+                        let directoryInfo = HiveDirectoryInfo(uid)
+                        let directoryHandle = HiveIpfsDirectory(directoryInfo, self.authHelper)
+                        resolver.fulfill(directoryHandle)
+                        handleBy.didSucceed(directoryHandle)
+                    })
+            }
+            return promise
     }
 
     override func createFile(withPath: String) -> HivePromise<HiveFileHandle> {

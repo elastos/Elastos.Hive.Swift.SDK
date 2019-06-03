@@ -1,17 +1,17 @@
 import Foundation
 import PromiseKit
+import Alamofire
 
 @objc(HiveIpfsClient)
 internal class HiveIpfsClient: HiveClientHandle {
     private static var clientInstance: HiveClientHandle?
 
     private init(param: HiveIpfsParameter){
-        super.init(DriveType.hiveIpfs)
-
+        super.init(.hiveIpfs)
+        self.authHelper = HiveIpfsAuthHelper(param)
     }
 
-    @objc(createInstance:)
-    private static func createInstance(param: HiveIpfsParameter) {
+    public static func createInstance(_ param: HiveIpfsParameter) {
         if clientInstance == nil {
             let client: HiveIpfsClient = HiveIpfsClient(param: param)
             clientInstance = client as HiveClientHandle;
@@ -20,6 +20,23 @@ internal class HiveIpfsClient: HiveClientHandle {
 
     static func sharedInstance() -> HiveClientHandle? {
         return clientInstance
+    }
+
+    override func login(_ authenticator: Authenticator) -> Bool {
+        var result = false
+        let promise =  self.authHelper?.loginAsync(authenticator)
+        do {
+            result = try (promise?.wait())!
+            _ = defaultDriveHandle()
+        } catch  {
+            result = false
+        }
+        return result
+    }
+
+    override func logout() -> Bool {
+        // TODO
+        return false
     }
 
     override func lastUpdatedInfo() -> HivePromise<HiveClientInfo> {
@@ -36,7 +53,30 @@ internal class HiveIpfsClient: HiveClientHandle {
     }
 
     override func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> HivePromise<HiveDriveHandle> {
-        let error = HiveError.failue(des: "TODO")
-        return HivePromise<HiveDriveHandle>(error: error)
+        let promise = HivePromise<HiveDriveHandle>{ resolver in
+            let url = "http://52.83.159.189:9095/api/v0/files/ls"
+            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+            let param = ["uid": uid, "path": "/"]
+            Alamofire.request(url,
+                              method: .post,
+                              parameters: param,
+                              encoding: URLEncoding.queryString, headers: nil)
+                .responseJSON(completionHandler: { (dataResponse) in
+                    guard dataResponse.response?.statusCode == 200 else{
+                        let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                        resolver.reject(error)
+                        handleBy.runError(error)
+                        return
+                    }
+                    let jsonData = JSON(dataResponse.result.value as Any)
+                    print(jsonData)
+                    let driveInfo = HiveDriveInfo(uid)
+                    let driveHandle = HiveDriveHandle(.oneDrive, driveInfo)
+                    driveHandle.lastInfo = driveInfo
+                    resolver.fulfill(driveHandle)
+                    handleBy.didSucceed(driveHandle)
+                })
+        }
+        return promise
     }
 }
