@@ -70,7 +70,7 @@ internal class OneDriveFile: HiveFileHandle {
                     return
                 }
                 let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-                let url = "\(ONEDRIVE_RESTFUL_URL)\(ONEDRIVE_ROOTDIR):\(path)"
+                let url = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):\(path)"
                 let params: Dictionary<String, Any> = ["parentReference": ["path": "/drive/root:" + newPath],
                                                        "name": self.name!,
                                                        "@microsoft.graph.conflictBehavior": "fail"]
@@ -114,9 +114,9 @@ internal class OneDriveFile: HiveFileHandle {
                     return
                 }
                 let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-                var url = ONEDRIVE_RESTFUL_URL + ONEDRIVE_ROOTDIR + ":" + path + ":/copy"
+                var url = OneDriveURL.API + ONEDRIVE_ROOTDIR + ":" + path + ":/copy"
                 if newPath == "/" {
-                    url = ONEDRIVE_RESTFUL_URL + ONEDRIVE_ROOTDIR + "/copy"
+                    url = OneDriveURL.API + ONEDRIVE_ROOTDIR + "/copy"
                 }
                 let params: Dictionary<String, Any> = ["parentReference" : ["path": "/drive/root:\(newPath)"],
                                                        "name": self.name as Any,
@@ -163,7 +163,7 @@ internal class OneDriveFile: HiveFileHandle {
             _ = self.authHelper!.checkExpired().done({ (result) in
 
                 let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-                let url: String = "\(ONEDRIVE_RESTFUL_URL)\(ONEDRIVE_ROOTDIR):/\(path)"
+                let url: String = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):/\(path)"
                 Alamofire.request(url,
                                   method: .delete,
                                   parameters: nil,
@@ -201,7 +201,7 @@ internal class OneDriveFile: HiveFileHandle {
             _ = self.authHelper!.checkExpired().done({ (result) in
 
                 let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-                let url: String = "\(ONEDRIVE_RESTFUL_URL)\(ONEDRIVE_ROOTDIR):\(path):/content"
+                let url: String = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):\(path):/content"
                 Alamofire.request(url,
                                   method: .get,
                                   parameters: nil,
@@ -242,7 +242,7 @@ internal class OneDriveFile: HiveFileHandle {
         let promise = HivePromise<Bool> { resolver in
             _ = self.authHelper!.checkExpired().done({ (result) in
 
-                let accesstoken = HelperMethods.getKeychain(KEYCHAIN_ACCESS_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
+                let accesstoken = HelperMethods.getKeychain(KEYCHAIN_ACCESS_TOKEN, .ONEDRIVEACOUNT) ?? ""
                 let url = self.fullUrl(self.pathName, "content")
                 let headers = ["Authorization": "bearer \(accesstoken)", "Content-Type": "text/plain"]
 

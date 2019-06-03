@@ -56,7 +56,7 @@ internal class OneDriveClient: HiveClientHandle {
         let promise = HivePromise<HiveClientInfo> { resolver in
             _ = self.authHelper!.checkExpired().done({ (result) in
 
-                Alamofire.request(ONEDRIVE_RESTFUL_URL,
+                Alamofire.request(OneDriveURL.API,
                                   method: .get,
                                   parameters: nil,
                                   encoding: JSONEncoding.default,

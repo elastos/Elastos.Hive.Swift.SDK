@@ -20,7 +20,7 @@ internal class OneDriveAuthHelper: AuthHelper {
     }
 
     override func loginAsync(_ authenticator: Authenticator, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
-        let access_token = HelperMethods.getKeychain(KEYCHAIN_ACCESS_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
+        let access_token = HelperMethods.getKeychain(KEYCHAIN_ACCESS_TOKEN, .ONEDRIVEACOUNT) ?? ""
         guard access_token == "" else {
             let promise = HivePromise<Bool> { resolver in
                 resolver.fulfill(true)
@@ -111,7 +111,7 @@ internal class OneDriveAuthHelper: AuthHelper {
 
     private func refreshAccessToken() -> HivePromise<Bool> {
         let promise = HivePromise<Bool> {  resolver in
-            let refreshToken = HelperMethods.getKeychain(KEYCHAIN_REFRESH_TOKEN, KEYCHAIN_DRIVE_ACCOUNT) ?? ""
+            let refreshToken = HelperMethods.getKeychain(KEYCHAIN_REFRESH_TOKEN, .ONEDRIVEACOUNT) ?? ""
             let params: Dictionary<String, Any> = [
                 "client_id" : self.authEntry.clientId,
                 "scope" : self.authEntry.scope,
@@ -168,7 +168,7 @@ internal class OneDriveAuthHelper: AuthHelper {
                                    KEYCHAIN_REFRESH_TOKEN: jsonData[KEYCHAIN_REFRESH_TOKEN].stringValue,
                                    KEYCHAIN_EXPIRES_IN: expiredTime,
                                    KEYCHAIN_REDIRECTURL: self.authEntry.redirectURL] as [String : Any]
-        HelperMethods.saveKeychain(KEYCHAIN_DRIVE_ACCOUNT, onedriveAccountJson)
+        HelperMethods.saveKeychain(.ONEDRIVEACOUNT, onedriveAccountJson)
     }
 
     private func removeOnedriveAcount(){
@@ -176,7 +176,7 @@ internal class OneDriveAuthHelper: AuthHelper {
                                    KEYCHAIN_REFRESH_TOKEN: "",
                                    KEYCHAIN_EXPIRES_IN: "",
                                    KEYCHAIN_REDIRECTURL: ""]
-        HelperMethods.saveKeychain(KEYCHAIN_DRIVE_ACCOUNT, onedriveAccountJson)
+        HelperMethods.saveKeychain(.ONEDRIVEACOUNT, onedriveAccountJson)
     }
 
 }

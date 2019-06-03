@@ -9,7 +9,6 @@ class HelperMethods {
         formatter.timeStyle = .short
         formatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
         formatter.timeZone = TimeZone.init(identifier: "Asia/Shanghai")
-
         return String.init(format: "%ld", Int(Date().timeIntervalSince1970))
     }
 
@@ -29,9 +28,9 @@ class HelperMethods {
         return currentTime > timeStemp;
     }
 
-    class func getKeychain(_ key: String, _ account: String) -> String? {
+    class func getKeychain(_ key: String, _ account: KEYCHAIN_DRIVE_ACCOUNT) -> String? {
         let keychain: KeychainSwift = KeychainSwift()
-        let account = keychain.get(account)
+        let account = keychain.get(account.rawValue)
         guard account != nil else {
             return nil
         }
@@ -51,7 +50,7 @@ class HelperMethods {
         return (value as! String)
     }
 
-    class func saveKeychain(_ account: String, _ value: Dictionary<String, Any>) {
+    class func saveKeychain(_ account: KEYCHAIN_DRIVE_ACCOUNT, _ value: Dictionary<String, Any>) {
         if !JSONSerialization.isValidJSONObject(value) {
             Log.e(TAG(), "Key-Value is not valid json object")
             return
@@ -59,11 +58,11 @@ class HelperMethods {
         let data = try? JSONSerialization.data(withJSONObject: value, options: [])
         let jsonstring = String(data: data!, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))
         guard jsonstring != nil else {
-            Log.e(TAG(), "Save Key-Value for account :%s", account)
+            Log.e(TAG(), "Save Key-Value for account :%s", account.rawValue)
             return
         }
         let keychain = KeychainSwift()
-        keychain.set(jsonstring!, forKey: account)
+        keychain.set(jsonstring!, forKey: account.rawValue)
     }
 
     class func prePath(_ path: String) -> String {

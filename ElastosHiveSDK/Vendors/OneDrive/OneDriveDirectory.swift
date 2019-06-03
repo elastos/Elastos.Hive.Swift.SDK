@@ -264,7 +264,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
             _ = self.authHelper.checkExpired().done({ (result) in
 
                 let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-                let url = "\(ONEDRIVE_RESTFUL_URL)\(ONEDRIVE_ROOTDIR):\(path)"
+                let url = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):\(path)"
                 let params: Dictionary<String, Any> = ["parentReference": ["path": "/drive/root:" + newPath],
                                                        "name": self.name!,
                                                        "@microsoft.graph.conflictBehavior": "fail"]
@@ -302,9 +302,9 @@ class OneDriveDirectory: HiveDirectoryHandle {
             _ = self.authHelper.checkExpired().done({ (result) in
 
                 let path = ("/" + self.pathName).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-                var url = ONEDRIVE_RESTFUL_URL + ONEDRIVE_ROOTDIR + ":" + path + ":/copy"
+                var url = OneDriveURL.API + ONEDRIVE_ROOTDIR + ":" + path + ":/copy"
                 if newPath == "/" {
-                    url = ONEDRIVE_RESTFUL_URL + ONEDRIVE_ROOTDIR + "/copy"
+                    url = OneDriveURL.API + ONEDRIVE_ROOTDIR + "/copy"
                 }
                 let params: Dictionary<String, Any> = ["parentReference" : ["path": "/drive/root:\(newPath)"],
                                                        "name": self.name as Any,
@@ -351,7 +351,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
             _ = self.authHelper.checkExpired().done({ (result) in
 
                 let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-                let url: String = "\(ONEDRIVE_RESTFUL_URL)\(ONEDRIVE_ROOTDIR):/\(path)"
+                let url: String = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):/\(path)"
                 Alamofire.request(url,
                                   method: .delete,
                                   parameters: nil,
