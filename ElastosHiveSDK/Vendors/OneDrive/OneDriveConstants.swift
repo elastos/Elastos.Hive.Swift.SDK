@@ -11,5 +11,7 @@ let KEYCHAIN_REFRESH_TOKEN  = "refresh_token"
 let KEYCHAIN_EXPIRES_IN     = "expires_in"
 let KEYCHAIN_SCOPE          = "scope"
 let KEYCHAIN_DRIVE_ACCOUNT  = "onedrive"
+let KEYCHAIN_REDIRECTURL     = "redirectURL"
+
 
 let AUTHORIZATION_TYPE_CODE = "authorization_code"
