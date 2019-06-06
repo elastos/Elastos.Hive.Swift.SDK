@@ -1,10 +1,4 @@
-//
-//  ViewController.swift
-//  TestHost
-//
-//  Created by 李爱红 on 2019/5/28.
-//  Copyright © 2019 org.elastos. All rights reserved.
-//
+
 
 import UIKit
 

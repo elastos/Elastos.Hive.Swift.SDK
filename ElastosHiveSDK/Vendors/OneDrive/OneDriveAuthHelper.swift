@@ -49,7 +49,7 @@ internal class OneDriveAuthHelper: AuthHelper {
 
     override func logoutAsync(handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
         let promise = HivePromise<Bool> { resolver in
-            let dataResponse = Alamofire.request(OneDriveURL.AUTH + "/logout" + "?post_logout_redirect_uri=\(self.authEntry.redirectURL)",
+            let dataResponse = Alamofire.request(OneDriveURL.AUTH + ONEDRIVE_SUB_Url.ONEDRIVE_LOGOUT.rawValue + "?post_logout_redirect_uri=\(self.authEntry.redirectURL)",
                 method: .get,
                 parameters: nil,
                 encoding: JSONEncoding.default,
@@ -92,7 +92,7 @@ internal class OneDriveAuthHelper: AuthHelper {
                 "grant_type" : AUTHORIZATION_TYPE_CODE,
                 "redirect_uri" : self.authEntry.redirectURL
             ]
-            var urlRequest = URLRequest(url: URL(string: OneDriveURL.AUTH + OneDriveMethod.TOKEN)!)
+            var urlRequest = URLRequest(url: URL(string: OneDriveURL.AUTH + ONEDRIVE_SUB_Url.ONEDRIVE_TOKEN.rawValue)!)
             urlRequest.httpMethod = "POST"
             urlRequest.httpBody = params.queryString.data(using: String.Encoding.utf8)
             urlRequest.setValue(OneDriveHttpHeader.ContentTypeValue, forHTTPHeaderField: OneDriveHttpHeader.ContentType)
@@ -119,7 +119,7 @@ internal class OneDriveAuthHelper: AuthHelper {
                 "refresh_token": refreshToken,
                 "grant_type": KEYCHAIN_REFRESH_TOKEN
             ]
-            var urlRequest = URLRequest(url: URL(string: OneDriveURL.AUTH + OneDriveMethod.TOKEN)!)
+            var urlRequest = URLRequest(url: URL(string: OneDriveURL.AUTH + ONEDRIVE_SUB_Url.ONEDRIVE_TOKEN.rawValue)!)
             urlRequest.httpMethod = "POST"
             urlRequest.httpBody = params.queryString.data(using: String.Encoding.utf8)
             urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
