@@ -20,28 +20,17 @@ class HiveIpfsAuthHelper: AuthHelper {
 
     override func loginAsync(_ authenticator: Authenticator, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
         let promise = HivePromise<Bool> { resolver in
-            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
-            self.getHash(uid, "/").done({ (hash) in
-                let url = "http://52.83.159.189:9095/api/v0/uid/login"
-                let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
-                let param = ["uid": uid, "hash": hash]
-                Alamofire.request(url,
-                                  method: .post,
-                                  parameters: param,
-                                  encoding: URLEncoding.queryString, headers: nil)
-                    .responseJSON(completionHandler: { (dataResponse) in
-                        guard dataResponse.response?.statusCode == 200 else{
-                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
-                            resolver.reject(error)
-                            return
-                        }
-                        resolver.fulfill(true)
-                    })
-            }).catch({ (error) in
-                let error = HiveError.failue(des: error.localizedDescription)
-                resolver.reject(error)
-                handleBy.runError(error)
-            })
+            self.getUID().then { (uid) -> HivePromise<String> in
+                return self.getPeerId(uid)
+                }.then { (peerId) -> HivePromise<String> in
+                    return self.getHash(peerId)
+                }.then { (hash) -> HivePromise<Bool> in
+                    return self.logIn(hash)
+                }.done { (success) in
+                    resolver.fulfill(success)
+                }.catch { (error) in
+                    resolver.reject(error)
+            }
         }
         return promise
     }
@@ -55,11 +44,87 @@ class HiveIpfsAuthHelper: AuthHelper {
         return HivePromise<Bool>(error: error)
     }
 
-    private func getHash(_ uid: String, _ path: String) -> HivePromise<String> {
+    private func getUID() -> HivePromise<String> {
+        let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+        guard uid == "" else {
+            let promise = HivePromise<String> { resolver in
+                resolver.fulfill(uid)
+            }
+            return promise
+        }
         let promise = HivePromise<String> { resolver in
-            let url = "http://52.83.159.189:9095/api/v0/files/stat"
+            let url = HiveIpfsURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_UID_NEW.rawValue
+            Alamofire.request(url,
+                              method: .post,
+                              parameters: nil,
+                              encoding: JSONEncoding.default,
+                              headers: nil)
+                .responseJSON(completionHandler: { (dataResponse) in
+                    guard dataResponse.response?.statusCode == 200 else {
+                        let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                        resolver.reject(error)
+                        return
+                    }
+                    let jsonData = JSON(dataResponse.result.value as Any)
+                    let uid = jsonData["uid"].stringValue
+                    self.saveIpfsAcount(uid)
+                    resolver.fulfill(uid)
+                })
+        }
+        return promise
+    }
+
+    private func getPeerId(_ uid: String) -> HivePromise<String> {
+        let promise = HivePromise<String> { resolver in
+            let url = HiveIpfsURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_UID_INFO.rawValue
+            let param = ["uid": uid]
+            Alamofire.request(url,
+                              method: .post,
+                              parameters: param,
+                              encoding: URLEncoding.queryString,
+                              headers: nil)
+                .responseJSON(completionHandler: { (dataResponse) in
+                    guard dataResponse.response?.statusCode == 200 else {
+                        let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                        resolver.reject(error)
+                        return
+                    }
+                    let jsonData = JSON(dataResponse.result.value as Any)
+                    let peerId = jsonData["PeerID"].stringValue
+                    resolver.fulfill(peerId)
+                })
+        }
+        return promise
+    }
+
+    private func getHash(_ peerId: String) -> HivePromise<String> {
+        let promise = HivePromise<String> { resolver in
+            let url = HiveIpfsURL.IPFS_NODE_API_BASE + "name/resolve"
+            let param = ["arg": peerId]
+            Alamofire.request(url,
+                              method: .post,
+                              parameters: param,
+                              encoding: JSONEncoding.default,
+                              headers: nil)
+                .responseJSON(completionHandler: { (dataResponse) in
+                    guard dataResponse.response?.statusCode == 200 else {
+                        let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                        resolver.reject(error)
+                        return
+                    }
+                    let jsonData = JSON(dataResponse.result.value as Any)
+                    let hash = jsonData["Path"].stringValue
+                    resolver.fulfill(hash)
+                })
+        }
+        return promise
+    }
+
+    private func logIn(_ hash: String) -> HivePromise<Bool> {
+        let promise = HivePromise<Bool> { resolver in
+            let url = HiveIpfsURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_UID_LOGIN.rawValue
             let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
-            let param = ["uid": uid, "path": "/"]
+            let param = ["uid": uid, "hash": hash]
             Alamofire.request(url,
                               method: .post,
                               parameters: param,
@@ -70,10 +135,7 @@ class HiveIpfsAuthHelper: AuthHelper {
                         resolver.reject(error)
                         return
                     }
-                    let jsonData = JSON(dataResponse.result.value as Any)
-                    let hash = jsonData["Hash"].stringValue
-                    self.saveIpfsAcount(uid)
-                    resolver.fulfill(hash)
+                    resolver.fulfill(true)
                 })
         }
         return promise
@@ -88,4 +150,5 @@ class HiveIpfsAuthHelper: AuthHelper {
         let hiveIpfsAccountJson = [KEYCHAIN_IPFS_UID: ""]
         HelperMethods.saveKeychain(.IPFSACCOUNT, hiveIpfsAccountJson)
     }
+
 }
