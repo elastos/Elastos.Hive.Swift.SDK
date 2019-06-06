@@ -158,6 +158,35 @@ class HiveIpfsApis {
         return promise
     }
 
+    class func writeData(_ path: String, _ withData: Data) -> HivePromise<Bool> {
+        let promise = HivePromise<Bool> { resolver in
+            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+            let params = ["uid": uid, "path": path, "file": "file", "create": "true"]
+            let url = HiveIpfsURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_WRITE.rawValue + "?" + params.queryString
+            Alamofire.upload(multipartFormData: { (data) in
+                data.append(withData, withName: "file", fileName: "file", mimeType: "text/plain")
+            }, to: url, encodingCompletion: { (result) in
+                switch result {
+                case .success(let upload, _, _):
+                    upload.responseJSON(completionHandler: { (dataResponse) in
+                        guard dataResponse.response?.statusCode == 200 else {
+                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            resolver.reject(error)
+                            return
+                        }
+                        resolver.fulfill(true)
+                    })
+                    break
+                case .failure(let error):
+                    let error = HiveError.failue(des: error.localizedDescription)
+                    resolver.reject(error)
+                    break
+                }
+            })
+        }
+        return promise
+    }
+
     class func getHash(_ uid: String, path: String) -> HivePromise<String> {
         let promise = HivePromise<String> { resolver in
             let url = HiveIpfsURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
