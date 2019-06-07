@@ -5,7 +5,7 @@ import Alamofire
 @objc(HiveIpfsClient)
 internal class HiveIpfsClient: HiveClientHandle {
     private static var clientInstance: HiveClientHandle?
-    
+
     private init(param: HiveIpfsParameter){
         super.init(.hiveIpfs)
         self.authHelper = HiveIpfsAuthHelper(param)
@@ -53,6 +53,14 @@ internal class HiveIpfsClient: HiveClientHandle {
     }
 
     override func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> HivePromise<HiveDriveHandle> {
+        if HiveIpfsDrive.hiveDriveInstance != nil {
+            let promise = HivePromise<HiveDriveHandle>{ resolver in
+                let hdHandle = HiveIpfsDrive.sharedInstance()
+                handleBy.didSucceed(hdHandle)
+                resolver.fulfill(hdHandle)
+            }
+            return promise
+        }
         let promise = HivePromise<HiveDriveHandle>{ resolver in
             let url = HiveIpfsURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_LS.rawValue
             let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""

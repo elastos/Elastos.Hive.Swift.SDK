@@ -89,31 +89,15 @@ internal class HiveIpfsFile: HiveFileHandle {
     override func writeData(withData: Data, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
 
         let promise = HivePromise<Bool> { resolver in
-            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
-            let params = ["uid": uid, "path": self.pathName, "file": "file", "create": "true"]
-            let url = HiveIpfsURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_WRITE.rawValue + "?" + params.queryString
-            Alamofire.upload(multipartFormData: { (data) in
-                data.append(withData, withName: "file", fileName: "file", mimeType: "text/plain")
-            }, to: url, encodingCompletion: { (result) in
-                switch result {
-                case .success(let upload, _, _):
-                    upload.responseJSON(completionHandler: { (dataResponse) in
-                        guard dataResponse.response?.statusCode == 200 else {
-                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
-                            handleBy.runError(error)
-                            resolver.reject(error)
-                            return
-                        }
-                        handleBy.didSucceed(true)
-                        resolver.fulfill(true)
-                    })
-                    break
-                case .failure(let error):
-                    let error = HiveError.failue(des: error.localizedDescription)
-                    handleBy.runError(error)
-                    resolver.reject(error)
-                    break
-                }
+            HiveIpfsApis.writeData(self.pathName, withData).then({ (success) -> HivePromise<Bool> in
+                return HiveIpfsApis.publish(self.pathName)
+            }).done({ (success) in
+                resolver.fulfill(true)
+                handleBy.didSucceed(true)
+            }).catch({ (error) in
+                let hiveError = HiveError.failue(des: error.localizedDescription)
+                resolver.reject(hiveError)
+                handleBy.runError(hiveError)
             })
         }
         return promise

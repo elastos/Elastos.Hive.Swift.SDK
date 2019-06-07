@@ -5,11 +5,22 @@ import Alamofire
 @objc(HiveIpfsDrive)
 internal class HiveIpfsDrive: HiveDriveHandle {
     private var authHelper: AuthHelper
-    
+    internal static var hiveDriveInstance: HiveDriveHandle?
 
     init(_ info: HiveDriveInfo, _ authHelper: AuthHelper) {
         self.authHelper = authHelper
-        super.init(DriveType.oneDrive, info)
+        super.init(.hiveIpfs, info)
+    }
+
+    static func createInstance(_ info: HiveDriveInfo, _ authHelper: AuthHelper) {
+        if hiveDriveInstance == nil {
+            let client = HiveIpfsDrive(info, authHelper)
+            hiveDriveInstance = client
+        }
+    }
+
+    static func sharedInstance() -> HiveIpfsDrive {
+        return hiveDriveInstance as! HiveIpfsDrive
     }
 
     override func lastUpdatedInfo() -> HivePromise<HiveDriveInfo> {
@@ -17,8 +28,30 @@ internal class HiveIpfsDrive: HiveDriveHandle {
     }
 
     override func lastUpdatedInfo(handleBy: HiveCallback<HiveDriveInfo>) -> HivePromise<HiveDriveInfo> {
-        let error = HiveError.failue(des: "TODO")
-        return HivePromise<HiveDriveInfo>(error: error)
+        let promise = HivePromise<HiveDriveInfo> { resolver in
+            let url = HiveIpfsURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
+            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+            let params = ["uid": uid, "path": "/"]
+            Alamofire.request(url,
+                              method: .post,
+                              parameters: params,
+                              encoding: URLEncoding.queryString,
+                              headers: nil)
+                .responseJSON(completionHandler: { (dataResponse) in
+                    guard dataResponse.response?.statusCode == 200 else {
+                        let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                        resolver.reject(error)
+                        handleBy.runError(error)
+                        return
+                    }
+                    let driId = "TODO"
+                    let driveInfo = HiveDriveInfo(driId)
+                    self.lastInfo = driveInfo
+                    handleBy.didSucceed(driveInfo)
+                    resolver.fulfill(driveInfo)
+                })
+        }
+        return promise
     }
 
     override func rootDirectoryHandle() -> HivePromise<HiveDirectoryHandle> {
