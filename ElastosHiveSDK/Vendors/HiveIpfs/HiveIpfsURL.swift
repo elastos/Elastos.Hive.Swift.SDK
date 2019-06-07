@@ -1,6 +1,6 @@
 
 
-import UIKit
+import Foundation
 
 enum HIVE_SUB_Url: String {
     case IPFS_UID_NEW = "uid/new"

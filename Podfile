@@ -1,27 +1,30 @@
-# Uncomment the next line to define a global platform for your project
- platform :ios, '9.0'
 
-target 'ElastosHiveSDK' do
-  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
+
+def import_pods
+  pod 'Swifter', '~> 1.4.6'
+  pod 'Alamofire'
+  pod 'PromiseKit'
+end
+
+target :ElastosHiveSDK do
+  platform :ios, '9.0'
   use_frameworks!
-   pod 'Swifter', '~> 1.4.6'
-   pod 'Alamofire'
-   pod 'PromiseKit'
-  
+  import_pods
+
   target 'ElastosHiveSDKTests' do
     inherit! :search_paths
-    pod 'Swifter', '~> 1.4.6'
-    pod 'PromiseKit'
-    pod 'Alamofire'
+    import_pods
 
   end
 
   target 'TestHost' do
     inherit! :search_paths
-    pod 'Swifter', '~> 1.4.6'
-    pod 'PromiseKit'
-    pod 'Alamofire'
-
+    import_pods
   end
+end
 
+target :ElastosHiveSDK_MacOS do
+  platform :osx, '10.10'
+  use_frameworks!
+  import_pods
 end

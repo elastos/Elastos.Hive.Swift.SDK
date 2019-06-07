@@ -1,6 +1,6 @@
 
 
-import UIKit
+import Foundation
 import Alamofire
 
 class HiveIpfsApis {
