@@ -4,10 +4,10 @@ sudo: true
 
 matrix:
   include:
-  - os: osx
+  - os: ios
     env: SDK=iphoneos12.2
 
-  - os: osx
+  - os: ios
     env: SDK=iphonesimulator12.2
 
 install:
