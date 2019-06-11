@@ -158,6 +158,38 @@ class HiveIpfsDirectory: HiveDirectoryHandle {
         return promise
     }
 
+    override func getChildren() -> HivePromise<HiveChildren> {
+        return getChildren(handleBy: HiveCallback<HiveChildren>())
+    }
+
+    override func getChildren(handleBy: HiveCallback<HiveChildren>) -> HivePromise<HiveChildren> {
+        let promise = HivePromise<HiveChildren> { resolver in
+            let url = HiveIpfsURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_LS.rawValue
+            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+            let path = self.pathName
+            let param = ["uid": uid, "path": path]
+            Alamofire.request(url,
+                              method: .post,
+                              parameters: param,
+                              encoding: URLEncoding.queryString,
+                              headers: nil)
+                .responseJSON(completionHandler: { (dataResponse) in
+                    guard dataResponse.response?.statusCode == 200 else {
+                        let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                        resolver.reject(error)
+                        handleBy.runError(error)
+                        return
+                    }
+                    let jsonData = JSON(dataResponse.result.value as Any)
+                    let children = HiveChildren()
+                    children.installValue(jsonData)
+                    resolver.fulfill(children)
+                    handleBy.didSucceed(children)
+                })
+        }
+        return promise
+    }
+
     override func moveTo(newPath: String) -> HivePromise<Bool> {
         return moveTo(newPath: newPath, handleBy: HiveCallback<Bool>())
     }

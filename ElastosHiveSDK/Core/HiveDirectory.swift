@@ -70,7 +70,15 @@ public class HiveDirectoryHandle: NSObject, HiveResourceItem, HiveFileItem, Hive
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<HiveFileHandle>(error: error)
     }
-    // Get children.
+
+    public func getChildren() -> HivePromise<HiveChildren> {
+        return getChildren(handleBy: HiveCallback<HiveChildren>())
+    }
+
+    public func getChildren(handleBy: HiveCallback<HiveChildren>) -> HivePromise<HiveChildren> {
+        let error = HiveError.failue(des: "Dummy")
+        return HivePromise<HiveChildren>(error: error)
+    }
 
     public func moveTo(newPath: String) -> HivePromise<Bool> {
         return moveTo(newPath: newPath, handleBy: HiveCallback<Bool>())

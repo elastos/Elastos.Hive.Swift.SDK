@@ -253,7 +253,45 @@ class OneDriveDirectory: HiveDirectoryHandle {
             }
             return promise
     }
-    // Get children.
+
+    override func getChildren() -> HivePromise<HiveChildren> {
+        return getChildren(handleBy: HiveCallback<HiveChildren>())
+    }
+
+    override func getChildren(handleBy: HiveCallback<HiveChildren>) -> HivePromise<HiveChildren> {
+        let promise = HivePromise<HiveChildren> { resolver in
+            _ = self.authHelper.checkExpired().done({ (result) in
+                let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+                var url = "\(OneDriveURL.API)/root:\(path):/children"
+                if self.pathName == "/" {
+                    url = "\(OneDriveURL.API)/root/children"
+                }
+                Alamofire.request(url,
+                                  method: .get,
+                                  parameters: nil,
+                                  encoding: JSONEncoding.default,
+                                  headers: (OneDriveHttpHeader.headers()))
+                    .responseJSON(completionHandler: { (dataResponse) in
+                        guard dataResponse.response?.statusCode == 200 else{
+                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            resolver.reject(error)
+                            handleBy.runError(error)
+                            return
+                        }
+                        let jsonData = JSON(dataResponse.result.value as Any)
+                        let children = HiveChildren()
+                        children.installValue(jsonData)
+                        resolver.fulfill(children)
+                        handleBy.didSucceed(children)
+                    })
+            }).catch({ (err) in
+                let error = HiveError.failue(des: err.localizedDescription)
+                resolver.reject(error)
+                handleBy.runError(error)
+            })
+        }
+        return promise
+    }
 
     override func moveTo(newPath: String) -> HivePromise<Bool> {
         return moveTo(newPath: newPath, handleBy: HiveCallback<Bool>())
