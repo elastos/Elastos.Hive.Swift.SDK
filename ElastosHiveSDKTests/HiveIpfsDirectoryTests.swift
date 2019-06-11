@@ -116,8 +116,24 @@ class HiveIpfsDirectoryTests: XCTestCase, Authenticator{
         wait(for: [lock!], timeout: timeout)
     }
 
-    func test7_copyTo() {
-        lock = XCTestExpectation(description: "wait for test7_precreate_directory")
+    func test7_getChildren() {
+        lock = XCTestExpectation(description: "wait for test7_getChildren")
+        self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
+            return drive.rootDirectoryHandle()
+        }).then({ (directory) -> HivePromise<HiveChildren> in
+            return directory.getChildren()
+        }).done({ (children) in
+            XCTAssertNotNil(children)
+            self.lock?.fulfill()
+        }).catch({ (error) in
+            XCTFail()
+            self.lock?.fulfill()
+        })
+        wait(for: [lock!], timeout: timeout)
+    }
+
+    func test8_copyTo() {
+        lock = XCTestExpectation(description: "wait for test8_precreate_directory")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
             return drive.createDirectory(withPath: "/\(timeTest!)")
         }).done({ (re) in
@@ -129,7 +145,7 @@ class HiveIpfsDirectoryTests: XCTestCase, Authenticator{
         })
         wait(for: [lock!], timeout: timeout)
 
-        lock = XCTestExpectation(description: "wait for test7_copyTo")
+        lock = XCTestExpectation(description: "wait for test8_copyTo")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
             return drive.directoryHandle(atPath: "/hiveIpfs_Directory_test3_createDirectory\(timeTest!)")
         }).then({ (directory) -> HivePromise<Bool> in
@@ -144,8 +160,8 @@ class HiveIpfsDirectoryTests: XCTestCase, Authenticator{
         wait(for: [lock!], timeout: timeout)
     }
 
-    func test8_deleteItem() {
-        lock = XCTestExpectation(description: "wait for test8_deleteItem")
+    func test9_deleteItem() {
+        lock = XCTestExpectation(description: "wait for test9_deleteItem")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
             return drive.directoryHandle(atPath: "/hiveIpfs_Directory_test3_createDirectory\(timeTest!)")
         }).then({ (directory) -> HivePromise<Bool> in
@@ -160,8 +176,8 @@ class HiveIpfsDirectoryTests: XCTestCase, Authenticator{
         wait(for: [lock!], timeout: timeout)
     }
 
-    func test9_moveTo() {
-        lock = XCTestExpectation(description: "wait for test9_moveTo")
+    func test10_moveTo() {
+        lock = XCTestExpectation(description: "wait for test10_moveTo")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
             return drive.directoryHandle(atPath: "/\(timeTest!)/hiveIpfs_Directory_test3_createDirectory\(timeTest!)")
         }).then({ (directory) -> HivePromise<Bool> in
