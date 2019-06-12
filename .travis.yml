@@ -1,14 +1,13 @@
 language: swift
+os: osx
 osx_image: xcode10.2
 sudo: true
 
 matrix:
   include:
-  - os: osx
-    env: SDK=iphoneos12.2
+  - env: DESTINATION=iphoneos
 
-  - os: osx
-    env: SDK=iphonesimulator12.2
+  - env: DESTINATION=iphonesimulator
 
 install:
   - sudo gem update --system
@@ -17,7 +16,10 @@ install:
   - pod install
 
 script:
-  # - xcodebuild -showsdks
-  # default build release
-  - xcodebuild -workspace ElastosHiveSDK.xcworkspace -scheme ElastosHiveSDK build -sdk ${SDK}
+  - xcodebuild -showsdks
+  - if [ $DESTINATION == "iphoneos" ]; then
+      xcodebuild -workspace ElastosHiveSDK.xcworkspace -scheme ElastosHiveSDK -configuration Release build;
+    else
+      xcodebuild -workspace ElastosHiveSDK.xcworkspace -scheme ElastosHiveSDK -configuration Release -destination 'platform=iOS Simulator,name=iPhone Xs,OS=12.2' build;
+    fi
   #- ./docs.sh
