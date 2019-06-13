@@ -63,6 +63,12 @@ internal class OneDriveClient: HiveClientHandle {
                                   headers: (OneDriveHttpHeader.headers()))
                     .responseJSON { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else {
+                            guard dataResponse.response?.statusCode == 401 else {
+                                let error = HiveError.failue(des: TOKEN_INVALID)
+                                resolver.reject(error)
+                                handleBy.runError(error)
+                                return
+                            }
                             let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
                             resolver.reject(error)
                             handleBy.runError(error)
@@ -108,6 +114,12 @@ internal class OneDriveClient: HiveClientHandle {
                                   headers: (OneDriveHttpHeader.headers()))
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else{
+                            guard dataResponse.response?.statusCode == 401 else {
+                                let error = HiveError.failue(des: TOKEN_INVALID)
+                                resolver.reject(error)
+                                handleBy.runError(error)
+                                return
+                            }
                             let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
                             resolver.reject(error)
                             handleBy.runError(error)

@@ -18,7 +18,7 @@ class HiveIpfsDriveClient: XCTestCase, Authenticator {
         hiveClient = HiveClientHandle.sharedInstance(type: .hiveIpfs)
     }
 
-    func test1_login() {
+    func testA_login() {
         lock = XCTestExpectation(description: "wait for test1_Login")
         let globalQueue = DispatchQueue.global()
         globalQueue.async {
@@ -30,7 +30,7 @@ class HiveIpfsDriveClient: XCTestCase, Authenticator {
     }
 
     /*
-    func test2_lastUpdatedInfo() {
+    func testB_lastUpdatedInfo() {
         lock = XCTestExpectation(description: "wait for test2_lastUpdatedInfo")
         self.hiveClient?.lastUpdatedInfo().done({ (clientInfo) in
             XCTAssertNotNil(clientInfo)
@@ -43,7 +43,7 @@ class HiveIpfsDriveClient: XCTestCase, Authenticator {
     }
  */
 
-    func test3_defaultDriveHandle() {
+    func testC_defaultDriveHandle() {
         lock = XCTestExpectation(description: "wait for test3_defaultDriveHandle")
         self.hiveClient?.defaultDriveHandle().done({ (drive) in
             XCTAssertNotNil(drive)
@@ -56,7 +56,7 @@ class HiveIpfsDriveClient: XCTestCase, Authenticator {
     }
 
     /*
-    func test4_logout() {
+    func testD_logout() {
         lock = XCTestExpectation(description: "wait for test4_logout")
         let globalQueue = DispatchQueue.global()
         globalQueue.async {

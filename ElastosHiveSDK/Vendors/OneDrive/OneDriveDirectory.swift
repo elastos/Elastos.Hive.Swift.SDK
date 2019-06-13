@@ -32,6 +32,12 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                   headers: (OneDriveHttpHeader.headers()))
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else{
+                            guard dataResponse.response?.statusCode == 401 else {
+                                let error = HiveError.failue(des: TOKEN_INVALID)
+                                resolver.reject(error)
+                                handleBy.runError(error)
+                                return
+                            }
                             let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
                             handleBy.runError(error)
                             resolver.reject(error)
@@ -77,6 +83,12 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                       headers: (OneDriveHttpHeader.headers()))
                         .responseJSON(completionHandler: { (dataResponse) in
                             guard dataResponse.response?.statusCode == 201 else{
+                                guard dataResponse.response?.statusCode == 401 else {
+                                    let error = HiveError.failue(des: TOKEN_INVALID)
+                                    resolver.reject(error)
+                                    handleBy.runError(error)
+                                    return
+                                }
                                 let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
                                 resolver.reject(error)
                                 handleBy.runError(error)
@@ -130,6 +142,12 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                       headers: (OneDriveHttpHeader.headers()))
                         .responseJSON(completionHandler: { (dataResponse) in
                             guard dataResponse.response?.statusCode == 200 else{
+                                guard dataResponse.response?.statusCode == 401 else {
+                                    let error = HiveError.failue(des: TOKEN_INVALID)
+                                    resolver.reject(error)
+                                    handleBy.runError(error)
+                                    return
+                                }
                                 let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
                                 resolver.reject(error)
                                 handleBy.runError(error)
@@ -178,6 +196,12 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                   headers: (OneDriveHttpHeader.headers()))
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 201 else{
+                            guard dataResponse.response?.statusCode == 401 else {
+                                let error = HiveError.failue(des: TOKEN_INVALID)
+                                resolver.reject(error)
+                                handleBy.runError(error)
+                                return
+                            }
                             let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
                             resolver.reject(error)
                             handleBy.runError(error)
@@ -227,6 +251,12 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                       headers: (OneDriveHttpHeader.headers()))
                         .responseJSON(completionHandler: { (dataResponse) in
                             guard dataResponse.response?.statusCode == 200 else{
+                                guard dataResponse.response?.statusCode == 401 else {
+                                    let error = HiveError.failue(des: TOKEN_INVALID)
+                                    resolver.reject(error)
+                                    handleBy.runError(error)
+                                    return
+                                }
                                 let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
                                 resolver.reject(error)
                                 handleBy.runError(error)
@@ -273,6 +303,12 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                   headers: (OneDriveHttpHeader.headers()))
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else{
+                            guard dataResponse.response?.statusCode == 401 else {
+                                let error = HiveError.failue(des: TOKEN_INVALID)
+                                resolver.reject(error)
+                                handleBy.runError(error)
+                                return
+                            }
                             let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
                             resolver.reject(error)
                             handleBy.runError(error)
@@ -313,6 +349,12 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                   headers: (OneDriveHttpHeader.headers()))
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else{
+                            guard dataResponse.response?.statusCode == 401 else {
+                                let error = HiveError.failue(des: TOKEN_INVALID)
+                                resolver.reject(error)
+                                handleBy.runError(error)
+                                return
+                            }
                             let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
                             self.pathName = newPath + self.name!
                             resolver.reject(error)
@@ -353,6 +395,12 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                   headers: (OneDriveHttpHeader.headers()))
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 202 else{
+                            guard dataResponse.response?.statusCode == 401 else {
+                                let error = HiveError.failue(des: TOKEN_INVALID)
+                                resolver.reject(error)
+                                handleBy.runError(error)
+                                return
+                            }
                             let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
                             resolver.reject(error)
                             handleBy.runError(error)
@@ -397,6 +445,12 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                   headers: (OneDriveHttpHeader.headers()))
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 204 else{
+                            guard dataResponse.response?.statusCode == 401 else {
+                                let error = HiveError.failue(des: TOKEN_INVALID)
+                                resolver.reject(error)
+                                handleBy.runError(error)
+                                return
+                            }
                             let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
                             resolver.reject(error)
                             handleBy.runError(error)

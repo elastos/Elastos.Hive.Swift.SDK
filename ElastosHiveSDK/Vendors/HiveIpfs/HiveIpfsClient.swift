@@ -62,26 +62,29 @@ internal class HiveIpfsClient: HiveClientHandle {
             return promise
         }
         let promise = HivePromise<HiveDriveHandle>{ resolver in
-            let url = HiveIpfsURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_LS.rawValue
-            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
-            let param = ["uid": uid, "path": "/"]
-            Alamofire.request(url,
-                              method: .post,
-                              parameters: param,
-                              encoding: URLEncoding.queryString, headers: nil)
-                .responseJSON(completionHandler: { (dataResponse) in
-                    guard dataResponse.response?.statusCode == 200 else{
-                        let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
-                        resolver.reject(error)
-                        handleBy.runError(error)
-                        return
-                    }
-                    let driveInfo = HiveDriveInfo(uid)
-                    let driveHandle = HiveIpfsDrive(driveInfo, self.authHelper!)
-                    driveHandle.lastInfo = driveInfo
-                    resolver.fulfill(driveHandle)
-                    handleBy.didSucceed(driveHandle)
-                })
+            _ = self.authHelper?.checkExpired().done({ (success) in
+
+                let url = HiveIpfsURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_LS.rawValue
+                let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                let param = ["uid": uid, "path": "/"]
+                Alamofire.request(url,
+                                  method: .post,
+                                  parameters: param,
+                                  encoding: URLEncoding.queryString, headers: nil)
+                    .responseJSON(completionHandler: { (dataResponse) in
+                        guard dataResponse.response?.statusCode == 200 else{
+                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            resolver.reject(error)
+                            handleBy.runError(error)
+                            return
+                        }
+                        let driveInfo = HiveDriveInfo(uid)
+                        let driveHandle = HiveIpfsDrive(driveInfo, self.authHelper!)
+                        driveHandle.lastInfo = driveInfo
+                        resolver.fulfill(driveHandle)
+                        handleBy.didSucceed(driveHandle)
+                    })
+            })
         }
         return promise
     }

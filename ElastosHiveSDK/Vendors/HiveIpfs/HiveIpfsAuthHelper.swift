@@ -20,7 +20,9 @@ class HiveIpfsAuthHelper: AuthHelper {
 
     override func loginAsync(_ authenticator: Authenticator, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
         let promise = HivePromise<Bool> { resolver in
-            self.getUID().then { (uid) -> HivePromise<String> in
+            self.checkExpired().then({ (success) -> HivePromise<String> in
+                return self.getUID()
+            }).then { (uid) -> HivePromise<String> in
                 return self.getPeerId(uid)
                 }.then { (peerId) -> HivePromise<String> in
                     return self.getHash(peerId)
@@ -42,6 +44,10 @@ class HiveIpfsAuthHelper: AuthHelper {
     override func logoutAsync(handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
         let error = HiveError.failue(des: "TODO")
         return HivePromise<Bool>(error: error)
+    }
+
+    override func checkExpired() -> HivePromise<Bool> {
+       return HiveIpfsURL.validURL()
     }
 
     private func getUID() -> HivePromise<String> {

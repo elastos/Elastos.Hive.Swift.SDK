@@ -29,15 +29,18 @@ internal class HiveIpfsFile: HiveFileHandle {
 
     override func moveTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
         let promise = HivePromise<Bool> { resolver in
-            HiveIpfsApis.moveTo(self.pathName, newPath).then({ (success) -> HivePromise<Bool> in
-                return HiveIpfsApis.publish(newPath)
-            }).done({ (success) in
-                resolver.fulfill(true)
-                handleBy.didSucceed(true)
-            }).catch({ (error) in
-                let hiveError = HiveError.failue(des: error.localizedDescription)
-                resolver.reject(hiveError)
-                handleBy.runError(hiveError)
+            _ = self.authHelper!.checkExpired().done({ (success) in
+
+                HiveIpfsApis.moveTo(self.pathName, newPath).then({ (success) -> HivePromise<Bool> in
+                    return HiveIpfsApis.publish(newPath)
+                }).done({ (success) in
+                    resolver.fulfill(true)
+                    handleBy.didSucceed(true)
+                }).catch({ (error) in
+                    let hiveError = HiveError.failue(des: error.localizedDescription)
+                    resolver.reject(hiveError)
+                    handleBy.runError(hiveError)
+                })
             })
         }
         return promise
@@ -49,15 +52,18 @@ internal class HiveIpfsFile: HiveFileHandle {
 
     override func copyTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
         let promise = HivePromise<Bool> { resolver in
-            HiveIpfsApis.copyTo(self.pathName, newPath).then({ (success) -> HivePromise<Bool> in
-                return HiveIpfsApis.publish(newPath)
-            }).done({ (success) in
-                resolver.fulfill(true)
-                handleBy.didSucceed(true)
-            }).catch({ (error) in
-                let hiveError = HiveError.failue(des: error.localizedDescription)
-                resolver.reject(hiveError)
-                handleBy.runError(hiveError)
+            _ = self.authHelper!.checkExpired().done({ (success) in
+
+                HiveIpfsApis.copyTo(self.pathName, newPath).then({ (success) -> HivePromise<Bool> in
+                    return HiveIpfsApis.publish(newPath)
+                }).done({ (success) in
+                    resolver.fulfill(true)
+                    handleBy.didSucceed(true)
+                }).catch({ (error) in
+                    let hiveError = HiveError.failue(des: error.localizedDescription)
+                    resolver.reject(hiveError)
+                    handleBy.runError(hiveError)
+                })
             })
         }
         return promise
@@ -69,14 +75,17 @@ internal class HiveIpfsFile: HiveFileHandle {
 
     override func deleteItem(handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
         let promise = HivePromise<Bool> { resolver in
-            HiveIpfsApis.deleteItem(self.pathName).then({ (success) -> HivePromise<Bool> in
-                return HiveIpfsApis.publish("/")
-            }).done({ (success) in
-                resolver.fulfill(success)
-            }).catch({ (error) in
-                let hiveError = HiveError.failue(des: error.localizedDescription)
-                resolver.reject(hiveError)
-                handleBy.runError(hiveError)
+            _ = self.authHelper!.checkExpired().done({ (success) in
+
+                HiveIpfsApis.deleteItem(self.pathName).then({ (success) -> HivePromise<Bool> in
+                    return HiveIpfsApis.publish("/")
+                }).done({ (success) in
+                    resolver.fulfill(success)
+                }).catch({ (error) in
+                    let hiveError = HiveError.failue(des: error.localizedDescription)
+                    resolver.reject(hiveError)
+                    handleBy.runError(hiveError)
+                })
             })
         }
         return promise
@@ -89,15 +98,18 @@ internal class HiveIpfsFile: HiveFileHandle {
     override func writeData(withData: Data, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
 
         let promise = HivePromise<Bool> { resolver in
-            HiveIpfsApis.writeData(self.pathName, withData).then({ (success) -> HivePromise<Bool> in
-                return HiveIpfsApis.publish(self.pathName)
-            }).done({ (success) in
-                resolver.fulfill(true)
-                handleBy.didSucceed(true)
-            }).catch({ (error) in
-                let hiveError = HiveError.failue(des: error.localizedDescription)
-                resolver.reject(hiveError)
-                handleBy.runError(hiveError)
+            _ = self.authHelper!.checkExpired().done({ (success) in
+
+                HiveIpfsApis.writeData(self.pathName, withData).then({ (success) -> HivePromise<Bool> in
+                    return HiveIpfsApis.publish(self.pathName)
+                }).done({ (success) in
+                    resolver.fulfill(true)
+                    handleBy.didSucceed(true)
+                }).catch({ (error) in
+                    let hiveError = HiveError.failue(des: error.localizedDescription)
+                    resolver.reject(hiveError)
+                    handleBy.runError(hiveError)
+                })
             })
         }
         return promise
@@ -109,26 +121,29 @@ internal class HiveIpfsFile: HiveFileHandle {
 
     override func readData(handleBy: HiveCallback<String>) -> HivePromise<String> {
         let promise = HivePromise<String> { resolver in
-            let url = HiveIpfsURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_READ.rawValue
-            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
-            let param = ["uid": uid, "path": self.pathName]
-            Alamofire.request(url,
-                              method: .post,
-                              parameters: param,
-                              encoding: URLEncoding.queryString,
-                              headers: nil)
-                .responseJSON(completionHandler: { (dataResponse) in
-                    guard dataResponse.response?.statusCode == 200 else {
-                        let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
-                        resolver.reject(error)
-                        handleBy.runError(error)
-                        return
-                    }
-                    let data = dataResponse.data
-                    let content: String = String(data: data!, encoding: .utf8) ?? ""
-                    resolver.fulfill(content)
-                    handleBy.didSucceed(content)
-                })
+            _ = self.authHelper!.checkExpired().done({ (success) in
+
+                let url = HiveIpfsURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_READ.rawValue
+                let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                let param = ["uid": uid, "path": self.pathName]
+                Alamofire.request(url,
+                                  method: .post,
+                                  parameters: param,
+                                  encoding: URLEncoding.queryString,
+                                  headers: nil)
+                    .responseJSON(completionHandler: { (dataResponse) in
+                        guard dataResponse.response?.statusCode == 200 else {
+                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            resolver.reject(error)
+                            handleBy.runError(error)
+                            return
+                        }
+                        let data = dataResponse.data
+                        let content: String = String(data: data!, encoding: .utf8) ?? ""
+                        resolver.fulfill(content)
+                        handleBy.didSucceed(content)
+                    })
+            })
         }
         return promise
     }
