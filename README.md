@@ -8,8 +8,8 @@ Elastos Hive Swift Framework
 Elastos Hive Swift Framework is a set of Swift APIs as well as an uniform layer that would be used by Elastos dApps  to access  (or store)  their files or datum from (or to) cloud driver backends, which is currently including the list of following cloud drivers supported:
 
 - OneDriver
-- ownCloud  on WebDav
 - Hive IPFS/Cluster
+- ownCloud  on WebDav (Not supported yet)
 
 ## Build from source
 
@@ -41,6 +41,10 @@ Then run the command below to install it before open your Xcode workspace:
 ```shell
 $ pod install
 ```
+
+## How-to use APIs
+
+TODO
 
 ## Build Docs
 
