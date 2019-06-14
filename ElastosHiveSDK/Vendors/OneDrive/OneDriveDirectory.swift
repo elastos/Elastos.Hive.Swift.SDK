@@ -1,6 +1,7 @@
 import Foundation
 import PromiseKit
 import Alamofire
+@inline(__always) private func TAG() -> String { return "OneDriveDirectory" }
 
 class OneDriveDirectory: HiveDirectoryHandle {
     var name: String?
@@ -32,11 +33,20 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                   headers: (OneDriveHttpHeader.headers()))
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else{
+                            guard dataResponse.response?.statusCode == 401 else {
+                                let error = HiveError.failue(des: TOKEN_INVALID)
+                                Log.e(TAG(), "lastUpdatedInfo falied: %s", error.localizedDescription)
+                                resolver.reject(error)
+                                handleBy.runError(error)
+                                return
+                            }
                             let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            Log.e(TAG(), "lastUpdatedInfo falied: %s", error.localizedDescription)
                             handleBy.runError(error)
                             resolver.reject(error)
                             return
                         }
+                        Log.d(TAG(), "lastUpdatedInfo succeed")
                         let jsonData = JSON(dataResponse.result.value as Any)
                         let dirId = jsonData["id"].stringValue
                         let directoryInfo = HiveDirectoryInfo(dirId)
@@ -47,6 +57,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                     })
             }).catch({ (err) in
                 let error = HiveError.failue(des: err.localizedDescription)
+                Log.e(TAG(), "lastUpdatedInfo falied: %s", error.localizedDescription)
                 resolver.reject(error)
                 handleBy.runError(error)
             })
@@ -77,11 +88,20 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                       headers: (OneDriveHttpHeader.headers()))
                         .responseJSON(completionHandler: { (dataResponse) in
                             guard dataResponse.response?.statusCode == 201 else{
+                                guard dataResponse.response?.statusCode == 401 else {
+                                    let error = HiveError.failue(des: TOKEN_INVALID)
+                                    Log.e(TAG(), "createDirectory falied: %s", error.localizedDescription)
+                                    resolver.reject(error)
+                                    handleBy.runError(error)
+                                    return
+                                }
                                 let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                                Log.e(TAG(), "createDirectory falied: %s", error.localizedDescription)
                                 resolver.reject(error)
                                 handleBy.runError(error)
                                 return
                             }
+                            Log.d(TAG(), "createDirectory succeed")
                             let jsonData = JSON(dataResponse.result.value as Any)
                             let dirId = jsonData["id"].stringValue
                             let dirInfo = HiveDirectoryInfo(dirId)
@@ -101,6 +121,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                         })
                 }).catch({ (err) in
                     let error = HiveError.failue(des: err.localizedDescription)
+                    Log.e(TAG(), "createDirectory falied: %s", error.localizedDescription)
                     resolver.reject(error)
                     handleBy.runError(error)
                 })
@@ -130,11 +151,20 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                       headers: (OneDriveHttpHeader.headers()))
                         .responseJSON(completionHandler: { (dataResponse) in
                             guard dataResponse.response?.statusCode == 200 else{
+                                guard dataResponse.response?.statusCode == 401 else {
+                                    let error = HiveError.failue(des: TOKEN_INVALID)
+                                    Log.e(TAG(), "directoryHandle falied: %s", error.localizedDescription)
+                                    resolver.reject(error)
+                                    handleBy.runError(error)
+                                    return
+                                }
                                 let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                                Log.e(TAG(), "directoryHandle falied: %s", error.localizedDescription)
                                 resolver.reject(error)
                                 handleBy.runError(error)
                                 return
                             }
+                            Log.d(TAG(), "directoryHandle succeed")
                             let jsonData = JSON(dataResponse.result.value as Any)
                             let dirId = jsonData["id"].stringValue
                             let dirInfo = HiveDirectoryInfo(dirId)
@@ -150,6 +180,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                         })
                 }).catch({ (err) in
                     let error = HiveError.failue(des: err.localizedDescription)
+                    Log.e(TAG(), "directoryHandle falied: %s", error.localizedDescription)
                     resolver.reject(error)
                     handleBy.runError(error)
                 })
@@ -178,11 +209,20 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                   headers: (OneDriveHttpHeader.headers()))
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 201 else{
+                            guard dataResponse.response?.statusCode == 401 else {
+                                let error = HiveError.failue(des: TOKEN_INVALID)
+                                Log.e(TAG(), "createFile falied: %s", error.localizedDescription)
+                                resolver.reject(error)
+                                handleBy.runError(error)
+                                return
+                            }
                             let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            Log.e(TAG(), "createFile falied: %s", error.localizedDescription)
                             resolver.reject(error)
                             handleBy.runError(error)
                             return
                         }
+                        Log.d(TAG(), "createFile succeed")
                         let jsonData = JSON(dataResponse.result.value as Any)
                         let fileId = jsonData["id"].stringValue
                         let fileInfo = HiveFileInfo(fileId)
@@ -198,6 +238,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                     })
             }).catch({ (err) in
                 let error = HiveError.failue(des: err.localizedDescription)
+                Log.e(TAG(), "createFile falied: %s", error.localizedDescription)
                 resolver.reject(error)
                 handleBy.runError(error)
             })
@@ -227,11 +268,20 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                       headers: (OneDriveHttpHeader.headers()))
                         .responseJSON(completionHandler: { (dataResponse) in
                             guard dataResponse.response?.statusCode == 200 else{
+                                guard dataResponse.response?.statusCode == 401 else {
+                                    let error = HiveError.failue(des: TOKEN_INVALID)
+                                    Log.e(TAG(), "fileHandle falied: %s", error.localizedDescription)
+                                    resolver.reject(error)
+                                    handleBy.runError(error)
+                                    return
+                                }
                                 let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                                Log.e(TAG(), "fileHandle falied: %s", error.localizedDescription)
                                 resolver.reject(error)
                                 handleBy.runError(error)
                                 return
                             }
+                            Log.d(TAG(), "fileHandle succeed")
                             let jsonData = JSON(dataResponse.result.value as Any)
                             let fileId = jsonData["id"].stringValue
                             let fileInfo = HiveFileInfo(fileId)
@@ -247,6 +297,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                         })
                 }).catch({ (err) in
                     let error = HiveError.failue(des: err.localizedDescription)
+                    Log.e(TAG(), "fileHandle falied: %s", error.localizedDescription)
                     resolver.reject(error)
                     handleBy.runError(error)
                 })
@@ -273,11 +324,20 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                   headers: (OneDriveHttpHeader.headers()))
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else{
+                            guard dataResponse.response?.statusCode == 401 else {
+                                let error = HiveError.failue(des: TOKEN_INVALID)
+                                Log.e(TAG(), "getChildren falied: %s", error.localizedDescription)
+                                resolver.reject(error)
+                                handleBy.runError(error)
+                                return
+                            }
                             let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            Log.e(TAG(), "getChildren falied: %s", error.localizedDescription)
                             resolver.reject(error)
                             handleBy.runError(error)
                             return
                         }
+                        Log.d(TAG(), "getChildren succeed")
                         let jsonData = JSON(dataResponse.result.value as Any)
                         let children = HiveChildren()
                         children.installValue(jsonData)
@@ -286,6 +346,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                     })
             }).catch({ (err) in
                 let error = HiveError.failue(des: err.localizedDescription)
+                Log.e(TAG(), "getChildren falied: %s", error.localizedDescription)
                 resolver.reject(error)
                 handleBy.runError(error)
             })
@@ -313,17 +374,27 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                   headers: (OneDriveHttpHeader.headers()))
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else{
+                            guard dataResponse.response?.statusCode == 401 else {
+                                let error = HiveError.failue(des: TOKEN_INVALID)
+                                Log.e(TAG(), "moveTo falied: %s", error.localizedDescription)
+                                resolver.reject(error)
+                                handleBy.runError(error)
+                                return
+                            }
                             let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            Log.e(TAG(), "moveTo falied: %s", error.localizedDescription)
                             self.pathName = newPath + self.name!
                             resolver.reject(error)
                             handleBy.runError(error)
                             return
                         }
+                        Log.d(TAG(), "moveTo succeed")
                         resolver.fulfill(true)
                         handleBy.didSucceed(true)
                     })
             }).catch({ (err) in
                 let error = HiveError.failue(des: err.localizedDescription)
+                Log.e(TAG(), "moveTo falied: %s", error.localizedDescription)
                 resolver.reject(error)
                 handleBy.runError(error)
             })
@@ -353,7 +424,15 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                   headers: (OneDriveHttpHeader.headers()))
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 202 else{
+                            guard dataResponse.response?.statusCode == 401 else {
+                                let error = HiveError.failue(des: TOKEN_INVALID)
+                                Log.e(TAG(), "copyTo falied: %s", error.localizedDescription)
+                                resolver.reject(error)
+                                handleBy.runError(error)
+                                return
+                            }
                             let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            Log.e(TAG(), "copyTo falied: %s", error.localizedDescription)
                             resolver.reject(error)
                             handleBy.runError(error)
                             return
@@ -361,11 +440,13 @@ class OneDriveDirectory: HiveDirectoryHandle {
                         let urlString = dataResponse.response?.allHeaderFields["Location"] as? String ?? ""
                         self.pollingCopyresult(urlString, { (result) in
                             if result == true {
+                                Log.d(TAG(), "copyTo succeed")
                                 resolver.fulfill(true)
                                 handleBy.didSucceed(true)
                             }
                             else {
                                 let error = HiveError.failue(des: "Operation failed")
+                                Log.e(TAG(), "copyTo falied: %s", error.localizedDescription)
                                 resolver.reject(error)
                                 handleBy.runError(error)
                             }
@@ -373,6 +454,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                     })
             }).catch({ (err) in
                 let error = HiveError.failue(des: err.localizedDescription)
+                Log.e(TAG(), "copyTo falied: %s", error.localizedDescription)
                 resolver.reject(error)
                 handleBy.runError(error)
             })
@@ -397,11 +479,20 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                   headers: (OneDriveHttpHeader.headers()))
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 204 else{
+                            guard dataResponse.response?.statusCode == 401 else {
+                                let error = HiveError.failue(des: TOKEN_INVALID)
+                                Log.e(TAG(), "deleteItem falied: %s", error.localizedDescription)
+                                resolver.reject(error)
+                                handleBy.runError(error)
+                                return
+                            }
                             let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            Log.e(TAG(), "deleteItem falied: %s", error.localizedDescription)
                             resolver.reject(error)
                             handleBy.runError(error)
                             return
                         }
+                        Log.d(TAG(), "deleteItem succeed")
                         self.pathName = ""
                         self.drive = nil
                         self.directoryId = ""
@@ -411,6 +502,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                     })
             }).catch({ (err) in
                 let error = HiveError.failue(des: err.localizedDescription)
+                Log.e(TAG(), "deleteItem falied: %s", error.localizedDescription)
                 resolver.reject(error)
                 handleBy.runError(error)
             })

@@ -2,6 +2,8 @@ import Foundation
 import PromiseKit
 import Alamofire
 
+@inline(__always) private func TAG() -> String { return "HiveIpfsClient" }
+
 @objc(HiveIpfsClient)
 internal class HiveIpfsClient: HiveClientHandle {
     private static var clientInstance: HiveClientHandle?
@@ -14,7 +16,8 @@ internal class HiveIpfsClient: HiveClientHandle {
     public static func createInstance(_ param: HiveIpfsParameter) {
         if clientInstance == nil {
             let client: HiveIpfsClient = HiveIpfsClient(param: param)
-            clientInstance = client as HiveClientHandle;
+            clientInstance = client as HiveClientHandle
+            Log.d(TAG(), "createInstance succeed")
         }
     }
 
@@ -44,8 +47,40 @@ internal class HiveIpfsClient: HiveClientHandle {
     }
 
     override func lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>) -> HivePromise<HiveClientInfo> {
-        let error = HiveError.failue(des: "TODO")
-        return HivePromise<HiveClientInfo>(error: error)
+        let promise = HivePromise<HiveClientInfo> { resolver in
+            _ = self.authHelper!.checkExpired().done({ (success) in
+
+                let url = HiveIpfsURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
+                let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                let params = ["uid": uid, "path": "/"]
+                Alamofire.request(url,
+                                  method: .post,
+                                  parameters: params,
+                                  encoding: URLEncoding.queryString,
+                                  headers: nil)
+                    .responseJSON(completionHandler: { (dataResponse) in
+                        guard dataResponse.response?.statusCode == 200 else {
+                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            Log.e(TAG(), "lastUpdatedInfo falied: %s", error.localizedDescription)
+                            resolver.reject(error)
+                            handleBy.runError(error)
+                            return
+                        }
+                        Log.d(TAG(), "lastUpdatedInfo succeed")
+                        let clientId = "TODO"
+                        let clientInfo = HiveClientInfo(clientId)
+                        self.lastInfo = clientInfo
+                        handleBy.didSucceed(clientInfo)
+                        resolver.fulfill(clientInfo)
+                    })
+            }).catch({ (error) in
+                let error = HiveError.failue(des: error.localizedDescription)
+                Log.e(TAG(), "lastUpdatedInfo falied: %s", error.localizedDescription)
+                resolver.reject(error)
+                handleBy.runError(error)
+            })
+        }
+        return promise
     }
 
     override func defaultDriveHandle() -> HivePromise<HiveDriveHandle> {
@@ -62,26 +97,36 @@ internal class HiveIpfsClient: HiveClientHandle {
             return promise
         }
         let promise = HivePromise<HiveDriveHandle>{ resolver in
-            let url = HiveIpfsURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_LS.rawValue
-            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
-            let param = ["uid": uid, "path": "/"]
-            Alamofire.request(url,
-                              method: .post,
-                              parameters: param,
-                              encoding: URLEncoding.queryString, headers: nil)
-                .responseJSON(completionHandler: { (dataResponse) in
-                    guard dataResponse.response?.statusCode == 200 else{
-                        let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
-                        resolver.reject(error)
-                        handleBy.runError(error)
-                        return
-                    }
-                    let driveInfo = HiveDriveInfo(uid)
-                    let driveHandle = HiveIpfsDrive(driveInfo, self.authHelper!)
-                    driveHandle.lastInfo = driveInfo
-                    resolver.fulfill(driveHandle)
-                    handleBy.didSucceed(driveHandle)
-                })
+            _ = self.authHelper?.checkExpired().done({ (success) in
+
+                let url = HiveIpfsURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_LS.rawValue
+                let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                let param = ["uid": uid, "path": "/"]
+                Alamofire.request(url,
+                                  method: .post,
+                                  parameters: param,
+                                  encoding: URLEncoding.queryString, headers: nil)
+                    .responseJSON(completionHandler: { (dataResponse) in
+                        guard dataResponse.response?.statusCode == 200 else{
+                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            Log.e(TAG(), "defaultDriveHandle falied: %s", error.localizedDescription)
+                            resolver.reject(error)
+                            handleBy.runError(error)
+                            return
+                        }
+                        Log.d(TAG(), "defaultDriveHandle succeed")
+                        let driveInfo = HiveDriveInfo(uid)
+                        let driveHandle = HiveIpfsDrive(driveInfo, self.authHelper!)
+                        driveHandle.lastInfo = driveInfo
+                        resolver.fulfill(driveHandle)
+                        handleBy.didSucceed(driveHandle)
+                    })
+            }).catch({ (error) in
+                let error = HiveError.failue(des: error.localizedDescription)
+                Log.e(TAG(), "defaultDriveHandle falied: %s", error.localizedDescription)
+                resolver.reject(error)
+                handleBy.runError(error)
+            })
         }
         return promise
     }

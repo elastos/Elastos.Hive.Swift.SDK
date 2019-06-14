@@ -20,7 +20,9 @@ class HiveIpfsAuthHelper: AuthHelper {
 
     override func loginAsync(_ authenticator: Authenticator, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
         let promise = HivePromise<Bool> { resolver in
-            self.getUID().then { (uid) -> HivePromise<String> in
+            self.checkExpired().then({ (success) -> HivePromise<String> in
+                return self.getUID()
+            }).then { (uid) -> HivePromise<String> in
                 return self.getPeerId(uid)
                 }.then { (peerId) -> HivePromise<String> in
                     return self.getHash(peerId)
@@ -28,8 +30,10 @@ class HiveIpfsAuthHelper: AuthHelper {
                     return self.logIn(hash)
                 }.done { (success) in
                     resolver.fulfill(success)
+                    Log.d(TAG(), "login succeed")
                 }.catch { (error) in
                     resolver.reject(error)
+                    Log.e(TAG(), "login falied: %s", error.localizedDescription)
             }
         }
         return promise
@@ -42,6 +46,10 @@ class HiveIpfsAuthHelper: AuthHelper {
     override func logoutAsync(handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
         let error = HiveError.failue(des: "TODO")
         return HivePromise<Bool>(error: error)
+    }
+
+    override func checkExpired() -> HivePromise<Bool> {
+       return HiveIpfsURL.validURL()
     }
 
     private func getUID() -> HivePromise<String> {
@@ -67,7 +75,6 @@ class HiveIpfsAuthHelper: AuthHelper {
                     }
                     let jsonData = JSON(dataResponse.result.value as Any)
                     let uid = jsonData["uid"].stringValue
-                    self.saveIpfsAcount(uid)
                     resolver.fulfill(uid)
                 })
         }
@@ -140,15 +147,4 @@ class HiveIpfsAuthHelper: AuthHelper {
         }
         return promise
     }
-
-    private func saveIpfsAcount(_ uid: String){
-        let hiveIpfsAccountJson = [KEYCHAIN_IPFS_UID: uid]
-        HelperMethods.saveKeychain(.IPFSACCOUNT, hiveIpfsAccountJson)
-    }
-
-    private func removeIpfsAcount(){
-        let hiveIpfsAccountJson = [KEYCHAIN_IPFS_UID: ""]
-        HelperMethods.saveKeychain(.IPFSACCOUNT, hiveIpfsAccountJson)
-    }
-
 }

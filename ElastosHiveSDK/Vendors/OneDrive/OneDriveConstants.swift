@@ -2,18 +2,24 @@ import Foundation
 
 enum KEYCHAIN_DRIVE_ACCOUNT: String {
     typealias RawValue = String
-    case ONEDRIVEACOUNT = "onedriveAccount"
-    case IPFSACCOUNT = "ipfsAccount"
+    case ONEDRIVEACOUNT = "onedrive"
+    case IPFSACCOUNT = "ipfs"
 }
 
-// onedrive
+enum KEYCHAIN_KEY: String {
+    typealias RawValue = String
+    case ACCESS_TOKEN   = "access_token"
+    case REFRESH_TOKEN  = "refresh_token"
+    case EXPIRES_IN     = "expires_in"
+    case REDIRECTURL    = "redirectURL"
+    case SCOPE          = "scope"
+    case CLIENT_ID      = "client_id"
+
+}
+
 let AUTHORIZATION_TYPE_CODE = "authorization_code"
 let ONEDRIVE_ROOTDIR     = "/root"
-let KEYCHAIN_ACCESS_TOKEN   = "access_token"
-let KEYCHAIN_REFRESH_TOKEN  = "refresh_token"
-let KEYCHAIN_EXPIRES_IN     = "expires_in"
-let KEYCHAIN_SCOPE          = "scope"
-let KEYCHAIN_REDIRECTURL     = "redirectURL"
+let TOKEN_INVALID = "The token is invalid, please refresh token"
 
 
 

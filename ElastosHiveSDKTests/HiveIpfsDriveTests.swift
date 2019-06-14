@@ -20,7 +20,7 @@ class HiveIpfsDriveTests: XCTestCase, Authenticator{
         hiveClient = HiveClientHandle.sharedInstance(type: .hiveIpfs)
     }
 
-    func test1_login() {
+    func testA_login() {
         lock = XCTestExpectation(description: "wait for test1_Login")
 
         let globalQueue = DispatchQueue.global()
@@ -33,7 +33,7 @@ class HiveIpfsDriveTests: XCTestCase, Authenticator{
     }
 
     /*
-    func test2_lastUpdatedInfo() {
+    func testB_lastUpdatedInfo() {
         lock = XCTestExpectation(description: "wait for test2_lastUpdatedInfo")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDriveInfo> in
             return drive.lastUpdatedInfo()
@@ -48,7 +48,7 @@ class HiveIpfsDriveTests: XCTestCase, Authenticator{
     }
  */
 
-    func test3_RootDirectoryHandle() {
+    func testC_RootDirectoryHandle() {
 
         lock = XCTestExpectation(description: "wait for test3_RootDirectoryHandle")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
@@ -63,7 +63,7 @@ class HiveIpfsDriveTests: XCTestCase, Authenticator{
         wait(for: [lock!], timeout: timeOut)
     }
 
-    func test4_CreateDirectory() {
+    func testD_CreateDirectory() {
 
         lock = XCTestExpectation(description: "wait for test4_CreateDirectory")
         timeTest = HelperMethods.getCurrentTime()
@@ -79,7 +79,7 @@ class HiveIpfsDriveTests: XCTestCase, Authenticator{
         wait(for: [lock!], timeout: timeOut)
     }
 
-    func test5_directoryHandle() {
+    func testE_directoryHandle() {
         lock = XCTestExpectation(description: "wait for test5_directoryHandle")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
             return drive.directoryHandle(atPath: "/hiveIpfs_Drive_test4_CreateDirectory_\(timeTest!)")
@@ -92,7 +92,8 @@ class HiveIpfsDriveTests: XCTestCase, Authenticator{
         })
         wait(for: [lock!], timeout: timeOut)
     }
-    func test6_createFile() {
+
+    func testF_createFile() {
         timeTest = HelperMethods.getCurrentTime()
         lock = XCTestExpectation(description: "wait for test6_createFile")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveFileHandle> in
@@ -107,7 +108,7 @@ class HiveIpfsDriveTests: XCTestCase, Authenticator{
         wait(for: [lock!], timeout: timeOut)
     }
 
-    func test7_GetFileHandle() {
+    func testG_GetFileHandle() {
 
         lock = XCTestExpectation(description: "wait for test7_GetFileHandle")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveFileHandle> in

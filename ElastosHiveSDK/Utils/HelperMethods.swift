@@ -36,18 +36,18 @@ class HelperMethods {
         }
         let jsonData:Data = account!.data(using: .utf8)!
         let dict = try? JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers)
-        guard dict != nil else {
-            return nil
-        }
-        let json = dict as? Dictionary<String, Any>
-        guard json != nil else {
-            return nil
-        }
-        let value = json![key]
-        guard value != nil else {
-            return nil
-        }
-        return (value as! String)
+        let json = JSON(dict as Any)
+        let value = json[key].stringValue
+        return value
+    }
+
+    class func getKeychainForAll(_ account: KEYCHAIN_DRIVE_ACCOUNT) -> JSON {
+        let keychain: KeychainSwift = KeychainSwift()
+        let account = keychain.get(account.rawValue) ?? ""
+        let jsonData:Data = account.data(using: .utf8)!
+        let dict = try? JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers)
+        let json = JSON(dict as Any)
+        return json
     }
 
     class func saveKeychain(_ account: KEYCHAIN_DRIVE_ACCOUNT, _ value: Dictionary<String, Any>) {

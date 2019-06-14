@@ -2,7 +2,7 @@ import Foundation
 import PromiseKit
 import Alamofire
 
-@inline(__always) private func TAG() -> String { return "OneDrive" }
+@inline(__always) private func TAG() -> String { return "OneDriveClient" }
 
 @objc(OneDriveClient)
 internal class OneDriveClient: HiveClientHandle {
@@ -17,6 +17,7 @@ internal class OneDriveClient: HiveClientHandle {
         if clientInstance == nil {
             let client: OneDriveClient = OneDriveClient(param)
             clientInstance = client as HiveClientHandle
+            Log.d(TAG(), "Create instance succeed")
         }
     }
 
@@ -63,11 +64,19 @@ internal class OneDriveClient: HiveClientHandle {
                                   headers: (OneDriveHttpHeader.headers()))
                     .responseJSON { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else {
+                            guard dataResponse.response?.statusCode == 401 else {
+                                let error = HiveError.failue(des: TOKEN_INVALID)
+                                resolver.reject(error)
+                                handleBy.runError(error)
+                                return
+                            }
                             let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            Log.e(TAG(), "lastUpdatedInfo falied: %s", error.localizedDescription)
                             resolver.reject(error)
                             handleBy.runError(error)
                             return
                         }
+                        Log.d(TAG(), "lastUpdatedInfo succeed")
                         let jsonData = JSON(dataResponse.result.value as Any)
                         let owner = JSON(jsonData["owner"])
                         let user = JSON(owner["user"])
@@ -79,6 +88,7 @@ internal class OneDriveClient: HiveClientHandle {
                 }
             }).catch({ (err) in
                 let error = HiveError.failue(des: err.localizedDescription)
+                Log.e(TAG(), "lastUpdatedInfo falied: %s", error.localizedDescription)
                 resolver.reject(error)
                 handleBy.runError(error)
             })
@@ -93,6 +103,7 @@ internal class OneDriveClient: HiveClientHandle {
     override func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> HivePromise<HiveDriveHandle> {
         if OneDriveDrive.oneDriveInstance != nil {
             let promise = HivePromise<HiveDriveHandle>{ resolver in
+                Log.d(TAG(), "defaultDriveHandle succeed")
                 let hdHandle = OneDriveDrive.sharedInstance()
                 handleBy.didSucceed(hdHandle)
                 resolver.fulfill(hdHandle)
@@ -108,11 +119,19 @@ internal class OneDriveClient: HiveClientHandle {
                                   headers: (OneDriveHttpHeader.headers()))
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else{
+                            guard dataResponse.response?.statusCode == 401 else {
+                                let error = HiveError.failue(des: TOKEN_INVALID)
+                                resolver.reject(error)
+                                handleBy.runError(error)
+                                return
+                            }
                             let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            Log.e(TAG(), "defaultDriveHandle falied: %s", error.localizedDescription)
                             resolver.reject(error)
                             handleBy.runError(error)
                             return
                         }
+                        Log.d(TAG(), "defaultDriveHandle succeed")
                         let jsonData = JSON(dataResponse.result.value as Any)
                         let driveId = jsonData["id"].stringValue
                         let driveInfo = HiveDriveInfo(driveId)
@@ -123,6 +142,7 @@ internal class OneDriveClient: HiveClientHandle {
                     })
             }).catch({ (err) in
                 let error = HiveError.failue(des: err.localizedDescription)
+                Log.e(TAG(), "lastUpdatedInfo falied: %s", error.localizedDescription)
                 resolver.reject(error)
                 handleBy.runError(error)
             })

@@ -3,6 +3,8 @@
 import UIKit
 import Alamofire
 
+@inline(__always) private func TAG() -> String { return "HiveIpfsApis" }
+
 class HiveIpfsApis {
 
     class func publish(_ path: String) -> HivePromise<Bool> {
@@ -11,7 +13,7 @@ class HiveIpfsApis {
             let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             getHash(uid, path: path).done { (hash) in
                 let params = ["uid": uid, "path": hash]
-                let url = "http://52.83.159.189:9095/api/v0/" + HIVE_SUB_Url.IPFS_NAME_PUBLISH.rawValue
+                let url = HiveIpfsURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_NAME_PUBLISH.rawValue
                 Alamofire.request(url,
                                   method: .post,
                                   parameters: params,
@@ -191,7 +193,7 @@ class HiveIpfsApis {
         let promise = HivePromise<String> { resolver in
             let url = HiveIpfsURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
             let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
-            let params = ["uid": uid, "path": path]
+            let params = ["uid": uid, "path": "/"]
             Alamofire.request(url,
                               method: .post,
                               parameters: params,
@@ -209,5 +211,4 @@ class HiveIpfsApis {
         }
         return promise
     }
-
 }
