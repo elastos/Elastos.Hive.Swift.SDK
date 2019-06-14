@@ -19,7 +19,7 @@ enum HIVE_SUB_Url: String {
     case IPFS_NAME_PUBLISH = "name/publish"
 }
 
-let KEYCHAIN_IPFS_UID  = "uid"
+let KEYCHAIN_IPFS_UID  = "last_uid"
 class HiveIpfsURL {
     static var URL_POOL = [
         "http://52.83.159.189:9095/api/v0/",

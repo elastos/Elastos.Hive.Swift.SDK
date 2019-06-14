@@ -18,12 +18,30 @@ public class HiveIpfsParameter: DriveParameter {
         self.uid = uid
         self.path = path
         super.init()
-        saveOnedriveAcount()
+        saveIpfsAcount()
     }
 
-    private func saveOnedriveAcount() {
-        let ipfsdriveAccountJson = [KEYCHAIN_IPFS_UID: uid]
-        HelperMethods.saveKeychain(.IPFSACCOUNT, ipfsdriveAccountJson)
+    private func saveIpfsAcount() {
+        let statJson = HelperMethods.getKeychainForAll(.IPFSACCOUNT)
+        let lastUid = statJson["last_uid"].stringValue
+        guard lastUid != uid else {
+            return
+        }
+        var uidArry = statJson["uids"].arrayValue
+        let u = uidArry.filter { (item) -> Bool in
+            let u = item["uid"].stringValue
+            if u == uid{
+                return true
+            }
+            else {
+                return false
+            }
+            }.first
+        if u == nil {
+            uidArry.append(u!)
+        }
+        let ipfsAccountJson = ["last_uid": uid, "uids": uidArry] as [String : Any]
+        HelperMethods.saveKeychain(.IPFSACCOUNT, ipfsAccountJson)
     }
 
 

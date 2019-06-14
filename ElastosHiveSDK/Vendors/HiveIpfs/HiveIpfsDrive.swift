@@ -2,6 +2,8 @@ import Foundation
 import PromiseKit
 import Alamofire
 
+@inline(__always) private func TAG() -> String { return "HiveIpfsDrive" }
+
 @objc(HiveIpfsDrive)
 internal class HiveIpfsDrive: HiveDriveHandle {
     private var authHelper: AuthHelper
@@ -16,6 +18,7 @@ internal class HiveIpfsDrive: HiveDriveHandle {
         if hiveDriveInstance == nil {
             let client = HiveIpfsDrive(info, authHelper)
             hiveDriveInstance = client
+            Log.d(TAG(), "createInstance succeed")
         }
     }
 
@@ -42,16 +45,23 @@ internal class HiveIpfsDrive: HiveDriveHandle {
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else {
                             let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            Log.e(TAG(), "lastUpdatedInfo falied: %s", error.localizedDescription)
                             resolver.reject(error)
                             handleBy.runError(error)
                             return
                         }
+                        Log.d(TAG(), "lastUpdatedInfo succeed")
                         let driId = "TODO"
                         let driveInfo = HiveDriveInfo(driId)
                         self.lastInfo = driveInfo
                         handleBy.didSucceed(driveInfo)
                         resolver.fulfill(driveInfo)
                     })
+            }).catch({ (error) in
+                let error = HiveError.failue(des: error.localizedDescription)
+                Log.e(TAG(), "lastUpdatedInfo falied: %s", error.localizedDescription)
+                resolver.reject(error)
+                handleBy.runError(error)
             })
         }
         return promise
@@ -77,10 +87,12 @@ internal class HiveIpfsDrive: HiveDriveHandle {
                         .responseJSON(completionHandler: { (dataResponse) in
                             guard dataResponse.response?.statusCode == 200 else {
                                 let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                                Log.e(TAG(), "rootDirectoryHandle falied: %s", error.localizedDescription)
                                 handleBy.runError(error)
                                 resolver.reject(error)
                                 return
                             }
+                            Log.d(TAG(), "rootDirectoryHandle succeed")
                             let directoryInfo = HiveDirectoryInfo(uid)
                             let directoryHandle = HiveIpfsDirectory(directoryInfo, self.authHelper)
                             directoryHandle.lastInfo = directoryInfo
@@ -89,6 +101,11 @@ internal class HiveIpfsDrive: HiveDriveHandle {
                             resolver.fulfill(directoryHandle)
                             handleBy.didSucceed(directoryHandle)
                         })
+                }).catch({ (error) in
+                    let error = HiveError.failue(des: error.localizedDescription)
+                    Log.e(TAG(), "rootDirectoryHandle falied: %s", error.localizedDescription)
+                    handleBy.runError(error)
+                    resolver.reject(error)
                 })
             }
             return promise
@@ -107,6 +124,7 @@ internal class HiveIpfsDrive: HiveDriveHandle {
                     HiveIpfsApis.createDirectory(withPath).then({ (json) -> HivePromise<Bool> in
                         return HiveIpfsApis.publish(withPath)
                     }).done({ (success) in
+                        Log.d(TAG(), "createDirectory succeed")
                         let dirId = "TODO"
                         let directoryInfo = HiveDirectoryInfo(dirId)
                         let directoryHandle = HiveIpfsDirectory(directoryInfo, self.authHelper)
@@ -117,8 +135,15 @@ internal class HiveIpfsDrive: HiveDriveHandle {
                         handleBy.didSucceed(directoryHandle)
                     }).catch({ (error) in
                         let hiveError = HiveError.failue(des: error.localizedDescription)
+                        Log.e(TAG(), "createDirectory falied: %s", error.localizedDescription)
                         resolver.reject(hiveError)
+                        handleBy.runError(hiveError)
                     })
+                }).catch({ (error) in
+                    let hiveError = HiveError.failue(des: error.localizedDescription)
+                    Log.e(TAG(), "createDirectory falied: %s", error.localizedDescription)
+                    resolver.reject(hiveError)
+                    handleBy.runError(hiveError)
                 })
             }
             return promise
@@ -146,10 +171,12 @@ internal class HiveIpfsDrive: HiveDriveHandle {
                         .responseJSON(completionHandler: { (dataResponse) in
                             guard dataResponse.response?.statusCode == 200 else {
                                 let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                                Log.e(TAG(), "directoryHandle falied: %s", error.localizedDescription)
                                 resolver.reject(error)
                                 handleBy.runError(error)
                                 return
                             }
+                            Log.d(TAG(), "directoryHandle succeed")
                             let directoryInfo = HiveDirectoryInfo(uid)
                             let directoryHandle = HiveIpfsDirectory(directoryInfo, self.authHelper)
                             directoryHandle.lastInfo = directoryInfo
@@ -158,6 +185,11 @@ internal class HiveIpfsDrive: HiveDriveHandle {
                             resolver.fulfill(directoryHandle)
                             handleBy.didSucceed(directoryHandle)
                         })
+                }).catch({ (error) in
+                    let error = HiveError.failue(des: error.localizedDescription)
+                    Log.e(TAG(), "directoryHandle falied: %s", error.localizedDescription)
+                    resolver.reject(error)
+                    handleBy.runError(error)
                 })
             }
             return promise
@@ -176,6 +208,7 @@ internal class HiveIpfsDrive: HiveDriveHandle {
                     HiveIpfsApis.creatFile(withPath).then({ (json) -> HivePromise<Bool> in
                         return HiveIpfsApis.publish(withPath)
                     }).done({ (success) in
+                        Log.d(TAG(), "createFile succeed")
                         let fileId = "TODO"
                         let fileInfo = HiveFileInfo(fileId)
                         let fileHandle = HiveIpfsFile(fileInfo, self.authHelper)
@@ -186,9 +219,15 @@ internal class HiveIpfsDrive: HiveDriveHandle {
                         resolver.fulfill(fileHandle)
                     }).catch({ (error) in
                         let hiveError = HiveError.failue(des: error.localizedDescription)
+                        Log.e(TAG(), "directoryHandle falied: %s", error.localizedDescription)
                         handleBy.runError(hiveError)
                         resolver.reject(hiveError)
                     })
+                }).catch({ (error) in
+                    let hiveError = HiveError.failue(des: error.localizedDescription)
+                    Log.e(TAG(), "directoryHandle falied: %s", error.localizedDescription)
+                    handleBy.runError(hiveError)
+                    resolver.reject(hiveError)
                 })
             }
             return promise
@@ -214,10 +253,12 @@ internal class HiveIpfsDrive: HiveDriveHandle {
                         .responseJSON(completionHandler: { (dataResponse) in
                             guard dataResponse.response?.statusCode == 200 else {
                                 let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                                Log.e(TAG(), "fileHandle falied: %s", error.localizedDescription)
                                 resolver.reject(error)
                                 handleBy.runError(error)
                                 return
                             }
+                            Log.d(TAG(), "fileHandle succeed")
                             let fileInfo = HiveFileInfo(uid)
                             let fileHandle = HiveIpfsFile(fileInfo, self.authHelper)
                             fileHandle.lastInfo = fileInfo
@@ -226,6 +267,11 @@ internal class HiveIpfsDrive: HiveDriveHandle {
                             resolver.fulfill(fileHandle)
                             handleBy.didSucceed(fileHandle)
                         })
+                }).catch({ (error) in
+                    let error = HiveError.failue(des: error.localizedDescription)
+                    Log.e(TAG(), "fileHandle falied: %s", error.localizedDescription)
+                    resolver.reject(error)
+                    handleBy.runError(error)
                 })
             }
             return promise

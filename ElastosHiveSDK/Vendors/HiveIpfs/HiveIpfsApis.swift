@@ -3,6 +3,8 @@
 import UIKit
 import Alamofire
 
+@inline(__always) private func TAG() -> String { return "HiveIpfsApis" }
+
 class HiveIpfsApis {
 
     class func publish(_ path: String) -> HivePromise<Bool> {

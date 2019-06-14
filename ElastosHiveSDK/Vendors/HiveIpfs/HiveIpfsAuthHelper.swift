@@ -30,8 +30,10 @@ class HiveIpfsAuthHelper: AuthHelper {
                     return self.logIn(hash)
                 }.done { (success) in
                     resolver.fulfill(success)
+                    Log.d(TAG(), "login succeed")
                 }.catch { (error) in
                     resolver.reject(error)
+                    Log.e(TAG(), "login falied: %s", error.localizedDescription)
             }
         }
         return promise
@@ -73,7 +75,6 @@ class HiveIpfsAuthHelper: AuthHelper {
                     }
                     let jsonData = JSON(dataResponse.result.value as Any)
                     let uid = jsonData["uid"].stringValue
-                    self.saveIpfsAcount(uid)
                     resolver.fulfill(uid)
                 })
         }
@@ -146,15 +147,4 @@ class HiveIpfsAuthHelper: AuthHelper {
         }
         return promise
     }
-
-    private func saveIpfsAcount(_ uid: String){
-        let hiveIpfsAccountJson = [KEYCHAIN_IPFS_UID: uid]
-        HelperMethods.saveKeychain(.IPFSACCOUNT, hiveIpfsAccountJson)
-    }
-
-    private func removeIpfsAcount(){
-        let hiveIpfsAccountJson = [KEYCHAIN_IPFS_UID: ""]
-        HelperMethods.saveKeychain(.IPFSACCOUNT, hiveIpfsAccountJson)
-    }
-
 }
