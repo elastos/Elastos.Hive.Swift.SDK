@@ -17,7 +17,7 @@ internal class OneDriveClient: HiveClientHandle {
         if clientInstance == nil {
             let client: OneDriveClient = OneDriveClient(param)
             clientInstance = client as HiveClientHandle
-            Log.d(TAG(), "Create instance succeed")
+            Log.d(TAG(), "OneDrive Client singleton instance created")
         }
     }
 
@@ -25,13 +25,12 @@ internal class OneDriveClient: HiveClientHandle {
         return clientInstance
     }
 
-    override func login(_ authenticator: Authenticator) -> Bool {
-
+    override func login(_ authenticator: Authenticator) -> Bool { // TODO: should throw Error.
         var result = false
-        let promise =  self.authHelper?.loginAsync(authenticator)
+        let promise = self.authHelper?.loginAsync(authenticator)
         do {
             result = try (promise?.wait())!
-             _ = defaultDriveHandle()
+             _ = defaultDriveHandle() // TODO:
         } catch  {
             result = false
         }
@@ -55,28 +54,25 @@ internal class OneDriveClient: HiveClientHandle {
 
     override func lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>) -> HivePromise<HiveClientInfo> {
         let promise = HivePromise<HiveClientInfo> { resolver in
-            _ = self.authHelper!.checkExpired().done({ (result) in
-
-                Alamofire.request(OneDriveURL.API,
-                                  method: .get,
+            _ = self.authHelper!.checkExpired().done { result in
+                Alamofire.request(OneDriveURL.API, method: .get,
                                   parameters: nil,
-                                  encoding: JSONEncoding.default,
-                                  headers: (OneDriveHttpHeader.headers()))
-                    .responseJSON { (dataResponse) in
-                        guard dataResponse.response?.statusCode == 200 else {
-                            guard dataResponse.response?.statusCode == 401 else {
-                                let error = HiveError.failue(des: TOKEN_INVALID)
-                                resolver.reject(error)
-                                handleBy.runError(error)
-                                return
-                            }
-                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
-                            Log.e(TAG(), "lastUpdatedInfo falied: %s", error.localizedDescription)
+                                    encoding: JSONEncoding.default,
+                                     headers: OneDriveHttpHeader.headers())
+                    .responseJSON { dataResponse in
+                        guard dataResponse.response?.statusCode != 401 else {
+                            let error = HiveError.failue(des: TOKEN_INVALID)
                             resolver.reject(error)
                             handleBy.runError(error)
                             return
                         }
-                        Log.d(TAG(), "lastUpdatedInfo succeed")
+                        guard dataResponse.response?.statusCode == 200 else {
+                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            Log.e(TAG(), "Acquire last client information failed: %s", error.localizedDescription)
+                            resolver.reject(error)
+                            handleBy.runError(error)
+                            return
+                        }
                         let jsonData = JSON(dataResponse.result.value as Any)
                         let owner = JSON(jsonData["owner"])
                         let user = JSON(owner["user"])
@@ -85,13 +81,15 @@ internal class OneDriveClient: HiveClientHandle {
                         clientInfo.installValue(user)
                         handleBy.didSucceed(clientInfo)
                         resolver.fulfill(clientInfo)
+
+                        Log.d(TAG(), "Acquired client information from remote drive: %s", clientInfo.debugDescription);
                 }
-            }).catch({ (err) in
+            }.catch { err in
                 let error = HiveError.failue(des: err.localizedDescription)
-                Log.e(TAG(), "lastUpdatedInfo falied: %s", error.localizedDescription)
+                Log.e(TAG(), "Acquiring client information from remote server failed: %s", error.localizedDescription)
                 resolver.reject(error)
                 handleBy.runError(error)
-            })
+            }
         }
         return promise
     }
@@ -101,37 +99,33 @@ internal class OneDriveClient: HiveClientHandle {
     }
 
     override func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> HivePromise<HiveDriveHandle> {
-        if OneDriveDrive.oneDriveInstance != nil {
-            let promise = HivePromise<HiveDriveHandle>{ resolver in
-                Log.d(TAG(), "defaultDriveHandle succeed")
-                let hdHandle = OneDriveDrive.sharedInstance()
-                handleBy.didSucceed(hdHandle)
-                resolver.fulfill(hdHandle)
-            }
-            return promise
-        }
         let promise = HivePromise<HiveDriveHandle> { resolver in
-            _ = self.authHelper!.checkExpired().done({ (result) in
-                Alamofire.request(OneDriveURL.API + "/root",
-                                  method: .get,
+            guard OneDriveDrive.oneDriveInstance == nil else {
+                let handle = OneDriveDrive.sharedInstance()
+                handleBy.didSucceed(handle)
+                resolver.fulfill(handle)
+                return
+            }
+
+            _ = self.authHelper!.checkExpired().done { result in
+                Alamofire.request(OneDriveURL.API + "/root", method: .get,
                                   parameters: nil,
-                                  encoding: JSONEncoding.default,
-                                  headers: (OneDriveHttpHeader.headers()))
-                    .responseJSON(completionHandler: { (dataResponse) in
-                        guard dataResponse.response?.statusCode == 200 else{
-                            guard dataResponse.response?.statusCode == 401 else {
-                                let error = HiveError.failue(des: TOKEN_INVALID)
-                                resolver.reject(error)
-                                handleBy.runError(error)
-                                return
-                            }
-                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
-                            Log.e(TAG(), "defaultDriveHandle falied: %s", error.localizedDescription)
+                                    encoding: JSONEncoding.default,
+                                     headers: OneDriveHttpHeader.headers())
+                    .responseJSON { dataResponse in
+                        guard dataResponse.response?.statusCode != 401 else {
+                            let error = HiveError.failue(des: TOKEN_INVALID)
                             resolver.reject(error)
                             handleBy.runError(error)
                             return
                         }
-                        Log.d(TAG(), "defaultDriveHandle succeed")
+                        guard dataResponse.response?.statusCode == 200 else{
+                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            Log.e(TAG(), "Acquiring default drive handle failed: %s", error.localizedDescription)
+                            resolver.reject(error)
+                            handleBy.runError(error)
+                            return
+                        }
                         let jsonData = JSON(dataResponse.result.value as Any)
                         let driveId = jsonData["id"].stringValue
                         let driveInfo = HiveDriveInfo(driveId)
@@ -139,15 +133,14 @@ internal class OneDriveClient: HiveClientHandle {
                         let dirHandle = OneDriveDrive(driveInfo, self.authHelper!)
                         dirHandle.lastInfo = driveInfo
                         resolver.fulfill(dirHandle)
-                    })
-            }).catch({ (err) in
+                }
+            }.catch { err in
                 let error = HiveError.failue(des: err.localizedDescription)
-                Log.e(TAG(), "lastUpdatedInfo falied: %s", error.localizedDescription)
+                Log.e(TAG(), "Acquiring default drive instance failed: %s", error.localizedDescription)
                 resolver.reject(error)
                 handleBy.runError(error)
-            })
+            }
         }
         return promise
     }
-
 }
