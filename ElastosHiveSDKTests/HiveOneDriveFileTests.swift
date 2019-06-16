@@ -11,7 +11,7 @@ class HiveOneDriveFileTests: XCTestCase,Authenticator {
     var hiveClient: HiveClientHandle?
     var hiveParam: DriveParameter?
     var lock: XCTestExpectation?
-    let timeout: Double = 600.0
+    let timeout: Double = 6000.0
 
     override func setUp() {
         hiveParam = DriveParameter.createForOneDrive("31c2dacc-80e0-47e1-afac-faac093a739c", "Files.ReadWrite%20offline_access", REDIRECT_URI)
@@ -157,6 +157,33 @@ class HiveOneDriveFileTests: XCTestCase,Authenticator {
             return file.readData()
         }).done({ (content) in
             XCTAssertEqual(content, "ios test for write \(timeTest!)")
+            self.lock?.fulfill()
+        }).catch({ (er) in
+            XCTFail()
+            self.lock?.fulfill()
+        })
+        wait(for: [lock!], timeout: timeout)
+    }
+
+    func test9_writeDataLagre() {
+
+        timeTest = HelperMethods.getCurrentTime()
+        lock = XCTestExpectation(description: "wait for test5_writeData")
+        let urlPath = "/Users/liaihong/Desktop/DSC_0788.JPG"
+        let url = URL(fileURLWithPath: urlPath)
+        var data = Data()
+        do {
+            data = try Data.init(contentsOf: url)
+        } catch {
+            print(error)
+        }
+        print(data)
+        self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveFileHandle> in
+            return drive.createFile(withPath: "/test_file_\(timeTest!)_large")
+        }).then({ (file) -> HivePromise<Bool> in
+            return file.writeDataWithLarge(withPath: urlPath)
+        }).done({ (re) in
+            XCTAssertTrue(re)
             self.lock?.fulfill()
         }).catch({ (er) in
             XCTFail()
