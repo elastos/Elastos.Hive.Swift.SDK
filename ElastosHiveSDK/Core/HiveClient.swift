@@ -17,12 +17,11 @@ public class HiveClientHandle: NSObject, HiveResourceItem{
         self.handleId = lastInfo?.userId
     }
 
-    /**
-     * Create an instance with specific options.
-     *
-     * @param options TODO
-     * @return An new client instance.
-     */
+    /// Creates an instance with the specific `OneDriveParameter`,
+    /// `DropBoxParameter`, `OwnCloudParameter`, 'HiveIpfsParameter' and 'LocalParameter'.
+    ///
+    /// - Parameter param: Client singleton type & requred param,
+    ///   for example: use a OneDriveParameter will create OneDriveClient singleton
     public static func createInstance(_ param: DriveParameter) {
         let type: DriveType = param.driveType()
         switch type {
@@ -39,6 +38,10 @@ public class HiveClientHandle: NSObject, HiveResourceItem{
         }
     }
 
+    /// Returns a spacific HiveClient singleton
+    ///
+    /// - Parameter type: will returns type
+    /// - Returns: return a HiveClient singleton
     public static func sharedInstance(type: DriveType) -> HiveClientHandle? {
         switch type {
         case .local:
@@ -54,6 +57,11 @@ public class HiveClientHandle: NSObject, HiveResourceItem{
         }
     }
 
+    /// Login with account
+    ///
+    /// - Parameter Authenticator: authenticator instance,
+    ///   implement related delegate for authorization
+    /// - Returns:  Returns `true` if the login succees, `false` otherwise.
     public func login(_ authenticator: Authenticator) -> Bool {
         return false
     }

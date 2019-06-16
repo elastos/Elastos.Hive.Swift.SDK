@@ -74,6 +74,16 @@ public class HiveFileHandle: NSObject, HiveResourceItem, HiveFileItem {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<Bool>(error: error)
     }
+
+    public func writeDataWithLarge(withPath: String) -> HivePromise<Bool> {
+        return writeDataWithLarge(withPath: withPath, handleBy: HiveCallback<Bool>())
+    }
+
+    public func writeDataWithLarge(withPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
+        let error = HiveError.failue(des: "Dummy")
+        return HivePromise<Bool>(error: error)
+    }
+    
     public func close() {
         // TODO
     }

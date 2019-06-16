@@ -26,6 +26,7 @@ internal class OneDriveAuthHelper: AuthHelper {
                 self.token = AuthToken()
                 self.token?.accessToken = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
                 self.token?.refreshToken = HelperMethods.getKeychain(KEYCHAIN_KEY.REFRESH_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
+                self.token?.expiredTime = HelperMethods.getKeychain(KEYCHAIN_KEY.EXPIRES_IN.rawValue, .ONEDRIVEACOUNT) ?? ""
                 Log.d(TAG(), "Already logged")
                 resolver.fulfill(true)
             }
