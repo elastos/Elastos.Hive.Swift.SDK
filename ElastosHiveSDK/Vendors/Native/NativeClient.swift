@@ -1,18 +1,18 @@
 import Foundation
 import PromiseKit
 
-@objc(LocalClient)
-internal class LocalClient: HiveClientHandle {
+@objc(NativeClient)
+internal class NativeClient: HiveClientHandle {
     private static var clientInstance: HiveClientHandle?
 
-    private init(_ param: LocalParameter) {
+    private init(_ param: NativeParameter) {
         super.init(DriveType.local)
     }
 
     @objc(createInstance:)
     private static func createInstance(param: DriveParameter) {
         if clientInstance == nil {
-            let client: LocalClient = LocalClient(param as! LocalParameter)
+            let client: NativeClient = NativeClient(param as! NativeParameter)
             clientInstance = client as HiveClientHandle
         }
     }

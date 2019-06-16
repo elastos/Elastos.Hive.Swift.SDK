@@ -1,8 +1,8 @@
 import Foundation
 import PromiseKit
 
-@objc(LocalDrive)
-internal class LocalDrive: HiveDriveHandle {
+@objc(NativeDrive)
+internal class NativeDrive: HiveDriveHandle {
     init(_ info: HiveDriveInfo) {
         super.init(DriveType.local, info)
     }
