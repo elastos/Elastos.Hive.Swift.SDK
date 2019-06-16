@@ -340,7 +340,8 @@ internal class OneDriveFile: HiveFileHandle {
 
         let promise = HivePromise<Bool> { resolver in
             _ = self.authHelper!.checkExpired().done({ (result) in
-                let url = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):/WechatIMG360.txt:/createUploadSession"
+                let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+                let url = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):\(path):/createUploadSession"
                 let params: Dictionary<String, Any> = ["file": "miaolegemi.gif",
                                                        "@microsoft.graph.conflictBehavior": "replace"]
                 Alamofire.request(url,
@@ -389,7 +390,7 @@ internal class OneDriveFile: HiveFileHandle {
         splitData(path, uploadUrl, 0, 1024 * 1024, Int64(size), true, uploadResult)
     }
 
-    private func splitData(_ path: String, _ uploadUrl: String, _ offset: Int64, _ length: Int64, _ size: Int64, _ isFirst: Bool, _ copyResult: @escaping (_ isSucceed: Bool) -> Void) {
+    private func splitData(_ path: String, _ uploadUrl: String, _ offset: Int64, _ length: Int64, _ size: Int64, _ isFirst: Bool, _ uploadResult: @escaping (_ isSucceed: Bool) -> Void) {
         var newOffset = offset + length
         var newLength = 0
         if (size - newOffset) < (1024 * 1024) {
@@ -404,7 +405,7 @@ internal class OneDriveFile: HiveFileHandle {
         let fileReader = FileHandle.init(forReadingAtPath:path)
         fileReader?.seek(toFileOffset: UInt64(newOffset))
         let newData = (fileReader?.readData(ofLength: newLength))!
-        writeLarge(path, newData, uploadUrl, newOffset, Int64(newLength), Int64(size), copyResult)
+        writeLarge(path, newData, uploadUrl, newOffset, Int64(newLength), Int64(size), uploadResult)
     }
 
     private func writeLarge(_ path: String, _ data: Data,_ uploadUrl: String, _ offset: Int64, _ length: Int64, _ size: Int64, _ uploadResult: @escaping (_ isSucceed: Bool) -> Void) {

@@ -181,7 +181,7 @@ class HiveOneDriveFileTests: XCTestCase,Authenticator {
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveFileHandle> in
             return drive.createFile(withPath: "/test_file_\(timeTest!)_large")
         }).then({ (file) -> HivePromise<Bool> in
-            return file.writeDataWithLarge(withData: urlPath)
+            return file.writeDataWithLarge(withPath: urlPath)
         }).done({ (re) in
             XCTAssertTrue(re)
             self.lock?.fulfill()
