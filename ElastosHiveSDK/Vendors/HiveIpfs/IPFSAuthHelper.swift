@@ -1,15 +1,13 @@
-
-
-import UIKit
+import Foundation
 import Alamofire
 import PromiseKit
 
-@inline(__always) private func TAG() -> String { return "HiveIpfsAuthHelper" }
+@inline(__always) private func TAG() -> String { return "IPFSAuthHelper" }
 
-class HiveIpfsAuthHelper: AuthHelper {
-    let param: HiveIpfsParameter
+class IPFSAuthHelper: AuthHelper {
+    let param: IPFSParameter
 
-    init(_ param: HiveIpfsParameter) {
+    init(_ param: IPFSParameter) {
         self.param = param
         super.init()
     }
@@ -49,7 +47,7 @@ class HiveIpfsAuthHelper: AuthHelper {
     }
 
     override func checkExpired() -> HivePromise<Bool> {
-       return HiveIpfsURL.validURL()
+       return IPFSURL.validURL()
     }
 
     private func getUID() -> HivePromise<String> {
@@ -61,7 +59,7 @@ class HiveIpfsAuthHelper: AuthHelper {
             return promise
         }
         let promise = HivePromise<String> { resolver in
-            let url = HiveIpfsURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_UID_NEW.rawValue
+            let url = IPFSURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_UID_NEW.rawValue
             Alamofire.request(url,
                               method: .post,
                               parameters: nil,
@@ -83,7 +81,7 @@ class HiveIpfsAuthHelper: AuthHelper {
 
     private func getPeerId(_ uid: String) -> HivePromise<String> {
         let promise = HivePromise<String> { resolver in
-            let url = HiveIpfsURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_UID_INFO.rawValue
+            let url = IPFSURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_UID_INFO.rawValue
             let param = ["uid": uid]
             Alamofire.request(url,
                               method: .post,
@@ -106,7 +104,7 @@ class HiveIpfsAuthHelper: AuthHelper {
 
     private func getHash(_ peerId: String) -> HivePromise<String> {
         let promise = HivePromise<String> { resolver in
-            let url = HiveIpfsURL.IPFS_NODE_API_BASE + "name/resolve"
+            let url = IPFSURL.IPFS_NODE_API_BASE + "name/resolve"
             let param = ["arg": peerId]
             Alamofire.request(url,
                               method: .post,
@@ -129,7 +127,7 @@ class HiveIpfsAuthHelper: AuthHelper {
 
     private func logIn(_ hash: String) -> HivePromise<Bool> {
         let promise = HivePromise<Bool> { resolver in
-            let url = HiveIpfsURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_UID_LOGIN.rawValue
+            let url = IPFSURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_UID_LOGIN.rawValue
             let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             let param = ["uid": uid, "hash": hash]
             Alamofire.request(url,

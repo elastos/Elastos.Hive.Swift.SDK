@@ -1,5 +1,3 @@
-
-
 import UIKit
 import Alamofire
 
@@ -20,7 +18,7 @@ enum HIVE_SUB_Url: String {
 }
 
 let KEYCHAIN_IPFS_UID  = "last_uid"
-class HiveIpfsURL {
+class IPFSURL {
     static var URL_POOL = [
         "http://52.83.159.189:9095/api/v0/",
         "http://52.83.119.110:9095/api/v0/",
@@ -28,7 +26,7 @@ class HiveIpfsURL {
         "http://18.217.147.205:9095/api/v0/",
         "http://18.219.53.133:9095/api/v0/"]
 
-    internal static let IPFS_NODE_API_BASE = HiveIpfsURL.URL_POOL[0]
+    internal static let IPFS_NODE_API_BASE = IPFSURL.URL_POOL[0]
     internal static let IPFS_NODE_API_VRESION = "http://52.83.159.189:9095/version"
 
     class func validURL() -> HivePromise<Bool> {
@@ -117,7 +115,4 @@ class HiveIpfsURL {
                 result(currentUrl)
             })
     }
-
 }
-
-

@@ -11,6 +11,6 @@ public class DriveParameter: NSObject {
     }
 
     public static func createForIpfsDrive(_ uid: String, _ path: String) -> DriveParameter {
-        return HiveIpfsParameter(uid, path)
+        return IPFSParameter(uid, path)
     }
 }

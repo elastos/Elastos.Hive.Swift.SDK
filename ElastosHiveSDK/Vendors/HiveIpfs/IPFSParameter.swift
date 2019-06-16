@@ -1,7 +1,7 @@
 import Foundation
 
-@objc(HiveIpfsParameter)
-public class HiveIpfsParameter: DriveParameter {
+@objc(IPFSParameter)
+public class IPFSParameter: DriveParameter {
     internal typealias authEntryType = NullEntry
     let uid: String
     let path: String
@@ -43,6 +43,4 @@ public class HiveIpfsParameter: DriveParameter {
         let ipfsAccountJson = ["last_uid": uid, "uids": uidArry] as [String : Any]
         HelperMethods.saveKeychain(.IPFSACCOUNT, ipfsAccountJson)
     }
-
-
 }

@@ -1,10 +1,10 @@
 import Foundation
 import Alamofire
 
-@inline(__always) private func TAG() -> String { return "HiveIpfsFile" }
+@inline(__always) private func TAG() -> String { return "IPFSFile" }
 
-@objc(HiveIpfsFile)
-internal class HiveIpfsFile: HiveFileHandle {
+@objc(IPFSFile)
+internal class IPFSFile: HiveFileHandle {
 
     override init(_ info: HiveFileInfo, _ authHelper: AuthHelper) {
         super.init(info, authHelper)
@@ -22,7 +22,7 @@ internal class HiveIpfsFile: HiveFileHandle {
         let promise = HivePromise<HiveFileInfo> { resolver in
             _ = self.authHelper!.checkExpired().done({ (success) in
 
-                let url = HiveIpfsURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
+                let url = IPFSURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
                 let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
                 let params = ["uid": uid, "path": self.pathName]
                 Alamofire.request(url,
@@ -62,9 +62,9 @@ internal class HiveIpfsFile: HiveFileHandle {
     override func moveTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
         let promise = HivePromise<Bool> { resolver in
             self.authHelper!.checkExpired().then({ (succeed) -> HivePromise<Bool> in
-                return HiveIpfsApis.moveTo(self.pathName, newPath)
+                return IPFSAPIs.moveTo(self.pathName, newPath)
             }).then({ (succeed) -> HivePromise<Bool> in
-                return HiveIpfsApis.publish(newPath)
+                return IPFSAPIs.publish(newPath)
             }).done({ (success) in
                 Log.d(TAG(), "moveTo succeed")
                 resolver.fulfill(true)
@@ -86,9 +86,9 @@ internal class HiveIpfsFile: HiveFileHandle {
     override func copyTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
         let promise = HivePromise<Bool> { resolver in
             self.authHelper!.checkExpired().then({ (succeed) -> HivePromise<Bool> in
-                return HiveIpfsApis.copyTo(self.pathName, newPath)
+                return IPFSAPIs.copyTo(self.pathName, newPath)
             }).then({ (success) -> HivePromise<Bool> in
-                return HiveIpfsApis.publish(newPath)
+                return IPFSAPIs.publish(newPath)
             }).done({ (success) in
                 Log.d(TAG(), "copyTo succeed")
                 resolver.fulfill(true)
@@ -110,9 +110,9 @@ internal class HiveIpfsFile: HiveFileHandle {
     override func deleteItem(handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
         let promise = HivePromise<Bool> { resolver in
             self.authHelper!.checkExpired().then({ (succeed) -> HivePromise<Bool> in
-                return HiveIpfsApis.deleteItem(self.pathName)
+                return IPFSAPIs.deleteItem(self.pathName)
             }).then({ (success) -> HivePromise<Bool> in
-                return HiveIpfsApis.publish("/")
+                return IPFSAPIs.publish("/")
             }).done({ (success) in
                 Log.d(TAG(), "deleteItem succeed")
                 resolver.fulfill(success)
@@ -135,9 +135,9 @@ internal class HiveIpfsFile: HiveFileHandle {
 
         let promise = HivePromise<Bool> { resolver in
             self.authHelper!.checkExpired().then({ (succeed) -> HivePromise<Bool> in
-                return HiveIpfsApis.writeData(self.pathName, withData)
+                return IPFSAPIs.writeData(self.pathName, withData)
             }).then({ (success) -> HivePromise<Bool> in
-                return HiveIpfsApis.publish(self.pathName)
+                return IPFSAPIs.publish(self.pathName)
             }).done({ (success) in
                 Log.d(TAG(), "writeData succeed")
                 resolver.fulfill(true)
@@ -160,7 +160,7 @@ internal class HiveIpfsFile: HiveFileHandle {
         let promise = HivePromise<String> { resolver in
             _ = self.authHelper!.checkExpired().done({ (success) in
 
-                let url = HiveIpfsURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_READ.rawValue
+                let url = IPFSURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_READ.rawValue
                 let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
                 let param = ["uid": uid, "path": self.pathName]
                 Alamofire.request(url,
@@ -191,5 +191,4 @@ internal class HiveIpfsFile: HiveFileHandle {
         }
         return promise
     }
-    
 }

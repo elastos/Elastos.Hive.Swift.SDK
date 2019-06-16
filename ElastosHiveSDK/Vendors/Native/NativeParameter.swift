@@ -1,7 +1,7 @@
 import Foundation
 
-@objc(LocalParameter)
-public class LocalParameter: DriveParameter {
+@objc(NativeParameter)
+public class NativeParameter: DriveParameter {
     internal typealias authEntryType = NullEntry
 
     public var driveType: DriveType {
