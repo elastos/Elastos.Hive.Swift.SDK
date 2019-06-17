@@ -161,7 +161,7 @@ class IPFSAPIs {
     class func writeData(_ path: String, _ withData: Data) -> HivePromise<Bool> {
         let promise = HivePromise<Bool> { resolver in
             let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
-            let params = ["uid": uid, "path": path, "file": "file", "create": "true"]
+            let params = ["uid": uid, "path": path + "0", "file": "file", "create": "true"]
             let url = IPFSURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_WRITE.rawValue + "?" + params.queryString
             Alamofire.upload(multipartFormData: { (data) in
                 data.append(withData, withName: "file", fileName: "file", mimeType: "text/plain")

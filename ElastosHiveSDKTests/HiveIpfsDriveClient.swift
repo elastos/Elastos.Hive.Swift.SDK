@@ -10,7 +10,7 @@ class HiveIpfsDriveClient: XCTestCase, Authenticator {
     var hiveClient: HiveClientHandle?
     var hiveParams: DriveParameter?
     var lock: XCTestExpectation?
-    var timeOut: Double = 600.0
+    var timeOut: Double = 6000.0
 
     override func setUp() {
         hiveParams = DriveParameter.createForIpfsDrive("uid-37dd2923-baf6-4aae-bc28-d4e5fd92a7b0", "/")
@@ -22,9 +22,14 @@ class HiveIpfsDriveClient: XCTestCase, Authenticator {
         lock = XCTestExpectation(description: "wait for test1_Login")
         let globalQueue = DispatchQueue.global()
         globalQueue.async {
-            let result = self.hiveClient?.login(self as Authenticator)
-            XCTAssertTrue(result!)
-            self.lock?.fulfill()
+            do {
+                let result = try self.hiveClient?.login(self as Authenticator)
+                XCTAssertTrue(result!)
+                self.lock?.fulfill()
+            }catch {
+                XCTFail()
+                self.lock?.fulfill()
+            }
         }
         wait(for: [lock!], timeout: timeOut)
     }

@@ -12,13 +12,16 @@ public class HiveClientHandle: NSObject, HiveResourceItem{
     internal var authHelper: AuthHelper?
     internal var token: AuthToken?
 
+    /// Creates an instance with the specified `driveType`.
+    ///
+    /// - Parameter driveType: The `DriveType` instance
     internal init(_ driveType: DriveType) {
         self.driveType = driveType
         self.handleId = lastInfo?.userId
     }
 
     /// Creates an instance with the specific `OneDriveParameter`,
-    /// `DropBoxParameter`, `OwnCloudParameter`, 'HiveIpfsParameter' and 'LocalParameter'.
+    /// `DropBoxParameter`, `OwnCloudParameter`, 'IPFSParameter' and 'NativeParameter'.
     ///
     /// - Parameter param: Client singleton type & requred param,
     ///   for example: use a OneDriveParameter will create OneDriveClient singleton
@@ -62,27 +65,44 @@ public class HiveClientHandle: NSObject, HiveResourceItem{
     /// - Parameter Authenticator: authenticator instance,
     ///   implement related delegate for authorization
     /// - Returns:  Returns `true` if the login succees, `false` otherwise.
-    public func login(_ authenticator: Authenticator) -> Bool {
+    public func login(_ authenticator: Authenticator) throws -> Bool {
         return false
     }
 
+    /// Logout with account
+    ///
+    /// - Returns: Returns `true` if the logout succees, `false` otherwise.
     public func logout() -> Bool {
         return false
     }
 
+    /// Latst update for HiveClientHandle subclasses
+    ///
+    /// - Returns: Returns the latest update information for the subclasses
     public func lastUpdatedInfo() -> HivePromise<resourceType> {
         return lastUpdatedInfo(handleBy: HiveCallback<resourceType>())
     }
 
+    /// Latst update for HiveClientHandle subclasses
+    ///
+    /// - Parameter handleBy: the result of returns
+    /// - Returns: Returns the latest update information for the subclasses
     public func lastUpdatedInfo(handleBy: HiveCallback<resourceType>) -> HivePromise<resourceType> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<resourceType>(error: error)
     }
 
+    /// Creates a default HiveDriveHandle for subclasses
+    ///
+    /// - Returns: Returns singleton instance for subclasses
     public func defaultDriveHandle() -> HivePromise<HiveDriveHandle> {
         return defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>())
     }
 
+    /// Creates a default HiveDriveHandle for subclasses
+    ///
+    /// - Parameter handleBy: the result of returns
+    /// - Returns: Returns singleton instance for subclasses
     public func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> HivePromise<HiveDriveHandle> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<HiveDriveHandle>(error: error)

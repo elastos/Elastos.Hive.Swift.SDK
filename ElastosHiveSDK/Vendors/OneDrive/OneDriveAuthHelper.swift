@@ -192,7 +192,6 @@ internal class OneDriveAuthHelper: AuthHelper {
         let onedriveAccountJson = [KEYCHAIN_KEY.ACCESS_TOKEN.rawValue: "",
                                    KEYCHAIN_KEY.REFRESH_TOKEN.rawValue: "",
                                    KEYCHAIN_KEY.EXPIRES_IN.rawValue: "",
-                                   KEYCHAIN_KEY.REDIRECTURL.rawValue: "",
                                    KEYCHAIN_KEY.REDIRECTURL.rawValue: self.authEntry.redirectURL,
                                    KEYCHAIN_KEY.CLIENT_ID.rawValue: self.authEntry.clientId,
                                    KEYCHAIN_KEY.SCOPE.rawValue: self.authEntry.scope]

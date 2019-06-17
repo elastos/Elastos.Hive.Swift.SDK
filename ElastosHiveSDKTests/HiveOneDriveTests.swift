@@ -28,9 +28,14 @@ class HiveOneDriveTests: XCTestCase,Authenticator {
 
         let globalQueue = DispatchQueue.global()
         globalQueue.async {
-            let result = self.hiveClient?.login(self as Authenticator)
-            XCTAssertTrue(result!)
-            self.lock?.fulfill()
+            do {
+                let result = try self.hiveClient?.login(self as Authenticator)
+                XCTAssertTrue(result!)
+                self.lock?.fulfill()
+            }catch {
+                XCTFail()
+                self.lock?.fulfill()
+            }
         }
         wait(for: [lock!], timeout: timeout)
     }

@@ -23,19 +23,24 @@ class HiveOneDriveDirectoryTests: XCTestCase,Authenticator {
     override func tearDown() {
     }
 
-    func test1_Login() {
+    func testA_Login() {
         lock = XCTestExpectation(description: "wait for test1_Login")
 
         let globalQueue = DispatchQueue.global()
         globalQueue.async {
-            let result = self.hiveClient?.login(self as Authenticator)
-            XCTAssertTrue(result!)
-            self.lock?.fulfill()
+            do {
+                let result = try self.hiveClient?.login(self as Authenticator)
+                XCTAssertTrue(result!)
+                self.lock?.fulfill()
+            }catch {
+                XCTFail()
+                self.lock?.fulfill()
+            }
         }
         wait(for: [lock!], timeout: timeout)
     }
 
-    func test2_lastUpdatedInfo() {
+    func testB_lastUpdatedInfo() {
         lock = XCTestExpectation(description: "wait for test2_lastUpdatedInfo")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
             return drive.rootDirectoryHandle()
@@ -51,14 +56,14 @@ class HiveOneDriveDirectoryTests: XCTestCase,Authenticator {
         wait(for: [lock!], timeout: timeout)
     }
 
-    func test3_createDirectory() {
+    func testC_createDirectory() {
 
         timeTest = HelperMethods.getCurrentTime()
         lock = XCTestExpectation(description: "wait for test3_createDirectory")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
             return drive.rootDirectoryHandle()
         }).then({ (directory) -> HivePromise<HiveDirectoryHandle> in
-            return directory.createDirectory(withPath: "测试\(timeTest!)")
+            return directory.createDirectory(withName: "测试\(timeTest!)")
         }).done({ (directory) in
             XCTAssertNotNil(directory)
             self.lock?.fulfill()
@@ -69,13 +74,13 @@ class HiveOneDriveDirectoryTests: XCTestCase,Authenticator {
         wait(for: [lock!], timeout: timeout)
     }
 
-    func test4_directoryHandle() {
+    func testD_directoryHandle() {
 
         lock = XCTestExpectation(description: "wait for test4_directoryHandle")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
             return drive.rootDirectoryHandle()
         }).then({ (directory) -> HivePromise<HiveDirectoryHandle> in
-            return directory.directoryHandle(atPath: "测试\(timeTest!)")
+            return directory.directoryHandle(atName: "测试\(timeTest!)")
         }).done({ (directory) in
             XCTAssertNotNil(directory)
             self.lock?.fulfill()
@@ -86,12 +91,12 @@ class HiveOneDriveDirectoryTests: XCTestCase,Authenticator {
         wait(for: [lock!], timeout: timeout)
     }
 
-    func test5_createFile() {
+    func testE_createFile() {
         lock = XCTestExpectation(description: "wait for test5_createFile")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
             return drive.rootDirectoryHandle()
         }).then({ (directory) -> HivePromise<HiveFileHandle> in
-            directory.createFile(withPath: "creat_file\(timeTest!)")
+            directory.createFile(withName: "creat_file\(timeTest!)")
         }).done({ (file) in
             XCTAssertNotNil(file)
             self.lock?.fulfill()
@@ -102,13 +107,13 @@ class HiveOneDriveDirectoryTests: XCTestCase,Authenticator {
         wait(for: [lock!], timeout: timeout)
     }
 
-    func test6_fileHandle() {
+    func testF_fileHandle() {
 
         lock = XCTestExpectation(description: "wait for test6_fileHandle")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
             return drive.rootDirectoryHandle()
         }).then({ (directory) -> HivePromise<HiveFileHandle> in
-            return directory.fileHandle(atPath: "creat_file\(timeTest!)")
+            return directory.fileHandle(atName: "creat_file\(timeTest!)")
         }).done({ (file) in
             XCTAssertNotNil(file)
             self.lock?.fulfill()
@@ -119,12 +124,12 @@ class HiveOneDriveDirectoryTests: XCTestCase,Authenticator {
         wait(for: [lock!], timeout: timeout)
     }
 
-    func test7_getChildren() {
+    func testG_getChildren() {
         lock = XCTestExpectation(description: "wait for test7_getChildren")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
             return drive.rootDirectoryHandle()
         }).then({ (directory) -> HivePromise<HiveDirectoryHandle> in
-            return directory.directoryHandle(atPath: "/\(timeTest!)")
+            return directory.directoryHandle(atName: "测试\(timeTest!)")
         }).then({ (directory) -> HivePromise<HiveChildren> in
             return directory.getChildren()
         }).done({ (children) in
@@ -137,7 +142,7 @@ class HiveOneDriveDirectoryTests: XCTestCase,Authenticator {
         wait(for: [lock!], timeout: timeout)
     }
 
-    func test8_copyTo() {
+    func testH_copyTo() {
 
         lock = XCTestExpectation(description: "wait for test8_copyTo")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
@@ -166,7 +171,7 @@ class HiveOneDriveDirectoryTests: XCTestCase,Authenticator {
         wait(for: [lock!], timeout: timeout)
     }
 
-    func test9_deleteItem() {
+    func testI_deleteItem() {
 
         lock = XCTestExpectation(description: "wait for test9_deleteItem")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
@@ -183,7 +188,7 @@ class HiveOneDriveDirectoryTests: XCTestCase,Authenticator {
         wait(for: [lock!], timeout: timeout)
     }
 
-    func test10_moveTo() {
+    func testJ_moveTo() {
 
         lock = XCTestExpectation(description: "wait for test10_moveTo")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in

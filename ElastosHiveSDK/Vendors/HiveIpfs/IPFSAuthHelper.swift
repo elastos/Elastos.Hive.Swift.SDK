@@ -18,20 +18,20 @@ class IPFSAuthHelper: AuthHelper {
 
     override func loginAsync(_ authenticator: Authenticator, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
         let promise = HivePromise<Bool> { resolver in
-            self.checkExpired().then({ (success) -> HivePromise<String> in
+            self.checkExpired().then{ (success) -> HivePromise<String> in
                 return self.getUID()
-            }).then { (uid) -> HivePromise<String> in
+            }.then { (uid) -> HivePromise<String> in
                 return self.getPeerId(uid)
-                }.then { (peerId) -> HivePromise<String> in
-                    return self.getHash(peerId)
-                }.then { (hash) -> HivePromise<Bool> in
-                    return self.logIn(hash)
-                }.done { (success) in
-                    resolver.fulfill(success)
-                    Log.d(TAG(), "login succeed")
-                }.catch { (error) in
-                    resolver.reject(error)
-                    Log.e(TAG(), "login falied: %s", error.localizedDescription)
+            }.then { (peerId) -> HivePromise<String> in
+                return self.getHash(peerId)
+            }.then { (hash) -> HivePromise<Bool> in
+                return self.logIn(hash)
+            }.done { (success) in
+                resolver.fulfill(success)
+                Log.d(TAG(), "login succeed")
+            }.catch { (error) in
+                resolver.reject(error)
+                Log.e(TAG(), "login falied: %s", error.localizedDescription)
             }
         }
         return promise

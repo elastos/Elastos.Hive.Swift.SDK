@@ -55,15 +55,15 @@ class IPFSDirectory: HiveDirectoryHandle {
         return promise
     }
 
-    override func createDirectory(withPath: String) -> HivePromise<HiveDirectoryHandle> {
-        return createDirectory(withPath: withPath, handleBy: HiveCallback<HiveDirectoryHandle>())
+    override func createDirectory(withName: String) -> HivePromise<HiveDirectoryHandle> {
+        return createDirectory(withName: withName, handleBy: HiveCallback<HiveDirectoryHandle>())
     }
 
-    override func createDirectory(withPath: String, handleBy: HiveCallback<HiveDirectoryHandle>) -> HivePromise<HiveDirectoryHandle> {
+    override func createDirectory(withName: String, handleBy: HiveCallback<HiveDirectoryHandle>) -> HivePromise<HiveDirectoryHandle> {
         let promise = HivePromise<HiveDirectoryHandle> { resolver in
-            var path = self.pathName + "/" + withPath
+            var path = self.pathName + "/" + withName
             if self.pathName == "/" {
-                path = self.pathName + withPath
+                path = self.pathName + withName
             }
             self.authHelper.checkExpired().then({ (succeed) -> HivePromise<JSON> in
                 return IPFSAPIs.createDirectory(path)
@@ -89,19 +89,19 @@ class IPFSDirectory: HiveDirectoryHandle {
         return promise
     }
 
-    override func directoryHandle(atPath: String) -> HivePromise<HiveDirectoryHandle> {
-        return directoryHandle(atPath: atPath, handleBy: HiveCallback<HiveDirectoryHandle>())
+    override func directoryHandle(atName: String) -> HivePromise<HiveDirectoryHandle> {
+        return directoryHandle(atName: atName, handleBy: HiveCallback<HiveDirectoryHandle>())
     }
 
-    override func directoryHandle(atPath: String, handleBy: HiveCallback<HiveDirectoryHandle>) -> HivePromise<HiveDirectoryHandle> {
+    override func directoryHandle(atName: String, handleBy: HiveCallback<HiveDirectoryHandle>) -> HivePromise<HiveDirectoryHandle> {
         let promise = HivePromise<HiveDirectoryHandle> { resolver in
             _ = self.authHelper.checkExpired().done({ (success) in
 
                 let url = IPFSURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
                 let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
-                var path = self.pathName + "/" + atPath
+                var path = self.pathName + "/" + atName
                 if self.pathName == "/" {
-                    path = self.pathName + atPath
+                    path = self.pathName + atName
                 }
                 let param = ["uid": uid, "path": path]
                 Alamofire.request(url,
@@ -136,15 +136,15 @@ class IPFSDirectory: HiveDirectoryHandle {
         return promise
     }
 
-    override func createFile(withPath: String) -> HivePromise<HiveFileHandle> {
-        return createFile(withPath: withPath, handleBy: HiveCallback<HiveFileHandle>())
+    override func createFile(withName: String) -> HivePromise<HiveFileHandle> {
+        return createFile(withName: withName, handleBy: HiveCallback<HiveFileHandle>())
     }
 
-    override func createFile(withPath: String, handleBy: HiveCallback<HiveFileHandle>) -> HivePromise<HiveFileHandle> {
+    override func createFile(withName: String, handleBy: HiveCallback<HiveFileHandle>) -> HivePromise<HiveFileHandle> {
         let promise = HivePromise<HiveFileHandle> { resolver in
-            var path = self.pathName + "/" + withPath
+            var path = self.pathName + "/" + withName
             if self.pathName == "/" {
-                path = self.pathName + withPath
+                path = self.pathName + withName
             }
             self.authHelper.checkExpired().then({ (succeed) -> HivePromise<JSON> in
                 return IPFSAPIs.creatFile(path)
@@ -170,19 +170,19 @@ class IPFSDirectory: HiveDirectoryHandle {
         return promise
     }
 
-    override func fileHandle(atPath: String) -> HivePromise<HiveFileHandle> {
-        return fileHandle(atPath: atPath, handleBy: HiveCallback<HiveFileHandle>())
+    override func fileHandle(atName: String) -> HivePromise<HiveFileHandle> {
+        return fileHandle(atName: atName, handleBy: HiveCallback<HiveFileHandle>())
     }
 
-    override func fileHandle(atPath: String, handleBy: HiveCallback<HiveFileHandle>) -> HivePromise<HiveFileHandle> {
+    override func fileHandle(atName: String, handleBy: HiveCallback<HiveFileHandle>) -> HivePromise<HiveFileHandle> {
         let promise = HivePromise<HiveFileHandle> { resolver in
             _ = self.authHelper.checkExpired().done({ (success) in
 
                 let url = IPFSURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
                 let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
-                var path = self.pathName + "/" + atPath
+                var path = self.pathName + "/" + atName
                 if self.pathName == "/" {
-                    path = self.pathName + atPath
+                    path = self.pathName + atName
                 }
                 let param = ["uid": uid, "path": path]
                 Alamofire.request(url,

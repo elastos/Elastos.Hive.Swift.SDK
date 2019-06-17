@@ -26,9 +26,14 @@ class HiveIpfsFileTests: XCTestCase, Authenticator{
 
         let globalQueue = DispatchQueue.global()
         globalQueue.async {
-            let result = self.hiveClient?.login(self as Authenticator)
-            XCTAssertTrue(result!)
-            self.lock?.fulfill()
+            do {
+                let result = try self.hiveClient?.login(self as Authenticator)
+                XCTAssertTrue(result!)
+                self.lock?.fulfill()
+            }catch {
+                XCTFail()
+                self.lock?.fulfill()
+            }
         }
         wait(for: [lock!], timeout: timeout)
     }
@@ -153,7 +158,7 @@ class HiveIpfsFileTests: XCTestCase, Authenticator{
     func testH_readData() {
         lock = XCTestExpectation(description: "wait for test8_readData")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveFileHandle> in
-            return drive.fileHandle(atPath: "/hiveIpfs_File_test2_creatFile_\(timeTest!)")
+            return drive.fileHandle(atPath: "/hiveIpfs_File_test2_creatFile_\(timeTest!)0")
         }).then({ (file) -> HivePromise<String> in
             return file.readData()
         }).done({ (content) in

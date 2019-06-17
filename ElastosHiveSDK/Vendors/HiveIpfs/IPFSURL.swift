@@ -20,8 +20,8 @@ enum HIVE_SUB_Url: String {
 let KEYCHAIN_IPFS_UID  = "last_uid"
 class IPFSURL {
     static var URL_POOL = [
-        "http://52.83.159.189:9095/api/v0/",
         "http://52.83.119.110:9095/api/v0/",
+        "http://52.83.159.189:9095/api/v0/",
         "http://3.16.202.140:9095/api/v0/",
         "http://18.217.147.205:9095/api/v0/",
         "http://18.219.53.133:9095/api/v0/"]
@@ -104,13 +104,14 @@ class IPFSURL {
                           encoding: URLEncoding.queryString,
                           headers: nil)
             .responseJSON(completionHandler: { (dataResponse) in
-                if dataResponse.response?.statusCode != 200 {
+                if dataResponse.response?.statusCode != 200 || dataResponse.result.isFailure {
                     i += 1
                     if i > URL_POOL.count - 1 {
                         currentUrl = ""
                         return
                     }
                     validUseStat(URL_POOL[i], uid, result)
+                    return
                 }
                 result(currentUrl)
             })

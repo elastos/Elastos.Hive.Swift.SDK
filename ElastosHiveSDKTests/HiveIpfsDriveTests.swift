@@ -25,9 +25,14 @@ class HiveIpfsDriveTests: XCTestCase, Authenticator{
 
         let globalQueue = DispatchQueue.global()
         globalQueue.async {
-            let result = self.hiveClient?.login(self as Authenticator)
-            XCTAssertTrue(result!)
-            self.lock?.fulfill()
+            do {
+                let result = try self.hiveClient?.login(self as Authenticator)
+                XCTAssertTrue(result!)
+                self.lock?.fulfill()
+            }catch {
+                XCTFail()
+                self.lock?.fulfill()
+            }
         }
         wait(for: [lock!], timeout: timeOut)
     }
@@ -97,7 +102,7 @@ class HiveIpfsDriveTests: XCTestCase, Authenticator{
         timeTest = HelperMethods.getCurrentTime()
         lock = XCTestExpectation(description: "wait for test6_createFile")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveFileHandle> in
-            return drive.createFile(withPath: "/hiveIpfs_Drive_test6_createFile_\(timeTest!)")
+            return drive.createFile(withPath: "/hiveIpfs_Drive_test6_createFile_\(timeTest!)0")
         }).done({ (file) in
             XCTAssertNotNil(file)
             self.lock?.fulfill()
@@ -112,7 +117,7 @@ class HiveIpfsDriveTests: XCTestCase, Authenticator{
 
         lock = XCTestExpectation(description: "wait for test7_GetFileHandle")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveFileHandle> in
-            return drive.fileHandle(atPath: "/hiveIpfs_Drive_test6_createFile_\(timeTest!)")
+            return drive.fileHandle(atPath: "/hiveIpfs_Drive_test6_createFile_\(timeTest!)0")
         }).done({ (file) in
             XCTAssertNotNil(file)
             self.lock?.fulfill()
