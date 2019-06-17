@@ -76,14 +76,14 @@ public class HiveClientHandle: NSObject, HiveResourceItem{
         return false
     }
 
-    /// Latst update for HiveClientHandle subclasses
+    /// Last update for HiveClientHandle subclasses
     ///
     /// - Returns: Returns the latest update information for the subclasses
     public func lastUpdatedInfo() -> HivePromise<resourceType> {
         return lastUpdatedInfo(handleBy: HiveCallback<resourceType>())
     }
 
-    /// Latst update for HiveClientHandle subclasses
+    /// Last update for HiveClientHandle subclasses
     ///
     /// - Parameter handleBy: the result of returns
     /// - Returns: Returns the latest update information for the subclasses

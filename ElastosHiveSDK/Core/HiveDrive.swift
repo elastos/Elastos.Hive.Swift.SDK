@@ -35,14 +35,14 @@ public class HiveDriveHandle: NSObject, HiveResourceItem, HiveDirectoryItem {
         return HivePromise<HiveDirectoryHandle>(error: error)
     }
 
-    /// Latst update for HiveDrive subclasses
+    /// Last update for HiveDrive subclasses
     ///
     /// - Returns: Returns the latest update information for the subclasses
     public func lastUpdatedInfo() -> HivePromise<resourceType> {
         return lastUpdatedInfo(handleBy: HiveCallback<HiveDriveHandle.resourceType>())
     }
 
-    /// Latst update for HiveDrive subclasses
+    /// Last update for HiveDrive subclasses
     ///
     /// - Parameter handleBy: The result of the returns
     /// - Returns: Returns the latest update information for the subclasses
