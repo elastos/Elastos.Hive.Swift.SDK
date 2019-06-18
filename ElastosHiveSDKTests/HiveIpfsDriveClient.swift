@@ -34,7 +34,6 @@ class HiveIpfsDriveClient: XCTestCase, Authenticator {
         wait(for: [lock!], timeout: timeOut)
     }
 
-    /*
     func testB_lastUpdatedInfo() {
         lock = XCTestExpectation(description: "wait for test2_lastUpdatedInfo")
         self.hiveClient?.lastUpdatedInfo().done({ (clientInfo) in
@@ -46,7 +45,6 @@ class HiveIpfsDriveClient: XCTestCase, Authenticator {
         })
         wait(for: [lock!], timeout: timeOut)
     }
- */
 
     func testC_defaultDriveHandle() {
         lock = XCTestExpectation(description: "wait for test3_defaultDriveHandle")

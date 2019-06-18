@@ -34,7 +34,7 @@ internal class IPFSDrive: HiveDriveHandle {
         let promise = HivePromise<HiveDriveInfo> { resolver in
             _ = self.authHelper.checkExpired().done({ (success) in
 
-                let url = IPFSURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
+                let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
                 let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
                 let params = ["uid": uid, "path": "/"]
                 Alamofire.request(url,
@@ -76,7 +76,7 @@ internal class IPFSDrive: HiveDriveHandle {
             let promise = HivePromise<HiveDirectoryHandle> { resolver in
                 _ = self.authHelper.checkExpired().done({ (success) in
 
-                    let url = IPFSURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_LS.rawValue
+                    let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_LS.rawValue
                     let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
                     let params = ["uid": uid, "path": "/"]
                     Alamofire.request(url,
@@ -160,7 +160,7 @@ internal class IPFSDrive: HiveDriveHandle {
             let promise = HivePromise<HiveDirectoryHandle> { resolver in
                 _ = self.authHelper.checkExpired().done({ (success) in
 
-                    let url = IPFSURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
+                    let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
                     let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
                     let param = ["uid": uid, "path": atPath]
                     Alamofire.request(url,
@@ -242,7 +242,7 @@ internal class IPFSDrive: HiveDriveHandle {
             let promise = HivePromise<HiveFileHandle> { resolver in
                 _ = self.authHelper.checkExpired().done({ (success) in
 
-                    let url = IPFSURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
+                    let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
                     let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
                     let param = ["uid": uid, "path": atPath]
                     Alamofire.request(url,

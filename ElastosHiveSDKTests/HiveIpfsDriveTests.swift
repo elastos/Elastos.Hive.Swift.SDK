@@ -37,7 +37,6 @@ class HiveIpfsDriveTests: XCTestCase, Authenticator{
         wait(for: [lock!], timeout: timeOut)
     }
 
-    /*
     func testB_lastUpdatedInfo() {
         lock = XCTestExpectation(description: "wait for test2_lastUpdatedInfo")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDriveInfo> in
@@ -51,7 +50,6 @@ class HiveIpfsDriveTests: XCTestCase, Authenticator{
         })
         wait(for: [lock!], timeout: timeOut)
     }
- */
 
     func testC_RootDirectoryHandle() {
 

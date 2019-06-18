@@ -3,9 +3,16 @@
 import XCTest
 @testable import ElastosHiveSDK
 
-let REDIRECT_URI: String = "http://localhost:44316"
 class HiveOneDriveTests: XCTestCase,Authenticator {
     func requestAuthentication(_ requestURL: String) -> Bool {
+        let scops = ["Files.ReadWrite","offline_access"]
+        let scopStr = scops.joined(separator: " ")
+        let authViewController: AuthWebViewController = AuthWebViewController()
+        DispatchQueue.main.sync {
+            let rootViewController = UIApplication.shared.keyWindow?.rootViewController
+            rootViewController!.present(authViewController, animated: true, completion: nil)
+            authViewController.loadRequest("31c2dacc-80e0-47e1-afac-faac093a739c", REDIRECT_URI, "code", scopStr)
+        }
         return true
     }
     var hiveClient: HiveClientHandle?

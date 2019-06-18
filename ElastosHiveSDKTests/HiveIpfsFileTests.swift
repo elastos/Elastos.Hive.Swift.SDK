@@ -54,7 +54,6 @@ class HiveIpfsFileTests: XCTestCase, Authenticator{
         wait(for: [lock!], timeout: timeout)
     }
 
-    /*
     func testC_lastUpdatedInfo() {
 
         lock = XCTestExpectation(description: "wait for test3_lastUpdatedInfo")
@@ -71,7 +70,6 @@ class HiveIpfsFileTests: XCTestCase, Authenticator{
         })
         wait(for: [lock!], timeout: timeout)
     }
-*/
 
     func testD_copyTo() {
 

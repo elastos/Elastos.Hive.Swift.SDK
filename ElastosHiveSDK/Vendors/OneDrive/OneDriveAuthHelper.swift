@@ -34,7 +34,7 @@ internal class OneDriveAuthHelper: AuthHelper {
         }
 
         let promise = HivePromise<Bool> { resolver in
-            self.acquireAuthCode().then({ (authCode) -> HivePromise<Bool>  in
+            self.acquireAuthCode(authenticator).then({ (authCode) -> HivePromise<Bool>  in
                 return self.acquireAccessToken(authCode)
             }).done({ (success) in
                 Log.d(TAG(), "Login succeed")
@@ -77,13 +77,14 @@ internal class OneDriveAuthHelper: AuthHelper {
         return promise
     }
 
-    private func acquireAuthCode() -> HivePromise<String> {
+    private func acquireAuthCode(_ authenticator: Authenticator) -> HivePromise<String> {
         let promise = HivePromise<String> { resolver in
             let redirecturl = self.authEntry.redirectURL
             let startIndex = redirecturl.index(redirecturl.startIndex, offsetBy: 17)
             let endIndex =  redirecturl.index(redirecturl.startIndex, offsetBy: redirecturl.count)
             let port = UInt16(redirecturl[startIndex..<endIndex])
             server.startRun(port!)
+           _ = authenticator.requestAuthentication(redirecturl)
             server.getCode().done({ (authCode) in
                 Log.d(TAG(), "AuthCode succeed")
                 resolver.fulfill(authCode)

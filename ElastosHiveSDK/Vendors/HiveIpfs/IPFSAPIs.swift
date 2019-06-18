@@ -11,7 +11,7 @@ class IPFSAPIs {
             let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             getHash(uid, path: path).done { (hash) in
                 let params = ["uid": uid, "path": hash]
-                let url = IPFSURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_NAME_PUBLISH.rawValue
+                let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_NAME_PUBLISH.rawValue
                 Alamofire.request(url,
                                   method: .post,
                                   parameters: params,
@@ -37,7 +37,7 @@ class IPFSAPIs {
         let promise = HivePromise<JSON> { resolver in
             let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             let params = ["uid": uid, "path": path, "file": "file", "create": "true"]
-            let url = IPFSURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_WRITE.rawValue + "?" + params.queryString
+            let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_WRITE.rawValue + "?" + params.queryString
             let str = ""
             let ipfsdata = str.data(using: .utf8)
             Alamofire.upload(multipartFormData: { (data) in
@@ -67,7 +67,7 @@ class IPFSAPIs {
 
     class func createDirectory(_ path: String) -> HivePromise<JSON> {
         let promise = HivePromise<JSON> { resolver in
-            let url = IPFSURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_MKDIR.rawValue
+            let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_MKDIR.rawValue
             let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             let param = ["uid": uid,"path": path]
             Alamofire.request(url,
@@ -90,7 +90,7 @@ class IPFSAPIs {
 
     class func moveTo(_ originPath: String, _ newPath: String) -> HivePromise<Bool> {
         let promise = HivePromise<Bool> { resolver in
-            let url = IPFSURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_MV.rawValue
+            let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_MV.rawValue
             let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             let params = ["uid": uid, "source": originPath + "/", "dest": newPath]
             Alamofire.request(url,
@@ -114,7 +114,7 @@ class IPFSAPIs {
         let promise = HivePromise<Bool> { resolver in
             let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             getHash(uid, path: originPath).done({ (hash) in
-                let url = IPFSURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_CP.rawValue
+                let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_CP.rawValue
                 let params = ["uid": uid, "source": hash, "dest": newParh + "/"]
                 Alamofire.request(url,
                                   method: .post,
@@ -138,7 +138,7 @@ class IPFSAPIs {
 
     class func deleteItem(_ path: String) -> HivePromise<Bool> {
         let promise = HivePromise<Bool> { resolver in
-            let url = IPFSURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_RM.rawValue
+            let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_RM.rawValue
             let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             let params = ["uid": uid, "path": path, "recursive": true] as [String : Any]
             Alamofire.request(url,
@@ -162,7 +162,7 @@ class IPFSAPIs {
         let promise = HivePromise<Bool> { resolver in
             let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             let params = ["uid": uid, "path": path + "0", "file": "file", "create": "true"]
-            let url = IPFSURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_WRITE.rawValue + "?" + params.queryString
+            let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_WRITE.rawValue + "?" + params.queryString
             Alamofire.upload(multipartFormData: { (data) in
                 data.append(withData, withName: "file", fileName: "file", mimeType: "text/plain")
             }, to: url, encodingCompletion: { (result) in
@@ -189,7 +189,7 @@ class IPFSAPIs {
 
     class func getHash(_ uid: String, path: String) -> HivePromise<String> {
         let promise = HivePromise<String> { resolver in
-            let url = IPFSURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
+            let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
             let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             let params = ["uid": uid, "path": "/"]
             Alamofire.request(url,
