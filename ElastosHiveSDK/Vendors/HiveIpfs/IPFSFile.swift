@@ -22,7 +22,7 @@ internal class IPFSFile: HiveFileHandle {
         let promise = HivePromise<HiveFileInfo> { resolver in
             _ = self.authHelper!.checkExpired().done({ (success) in
 
-                let url = IPFSURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
+                let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
                 let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
                 let params = ["uid": uid, "path": self.pathName]
                 Alamofire.request(url,
@@ -160,7 +160,7 @@ internal class IPFSFile: HiveFileHandle {
         let promise = HivePromise<String> { resolver in
             _ = self.authHelper!.checkExpired().done({ (success) in
 
-                let url = IPFSURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_READ.rawValue
+                let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_READ.rawValue
                 let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
                 let param = ["uid": uid, "path": self.pathName]
                 Alamofire.request(url,

@@ -86,9 +86,9 @@ internal class OneDriveFile: HiveFileHandle {
                     "name": self.name!,
                     "@microsoft.graph.conflictBehavior": "fail"]
                 Alamofire.request(url, method: .patch,
-                           parameters: params,
-                             encoding: JSONEncoding.default,
-                              headers: OneDriveHttpHeader.headers())
+                                  parameters: params,
+                                  encoding: JSONEncoding.default,
+                                  headers: OneDriveHttpHeader.headers())
                     .responseJSON { dataResponse in
                         guard dataResponse.response?.statusCode != 401 else {
                             let error = HiveError.failue(des: TOKEN_INVALID)
@@ -241,9 +241,9 @@ internal class OneDriveFile: HiveFileHandle {
                 let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                 let url: String = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):\(path):/content"
                 Alamofire.request(url, method: .get,
-                           parameters: nil,
-                             encoding: JSONEncoding.default,
-                              headers: OneDriveHttpHeader.headers())
+                                  parameters: nil,
+                                  encoding: JSONEncoding.default,
+                                  headers: OneDriveHttpHeader.headers())
                     .responseData { dataResponse in
                         guard dataResponse.response?.mimeType == "text/plain" || dataResponse.response?.mimeType == "application/octet-stream" else {
                             let jsonStr = String(data: dataResponse.data!, encoding: .utf8) ?? ""
@@ -335,10 +335,9 @@ internal class OneDriveFile: HiveFileHandle {
             _ = self.authHelper!.checkExpired().done({ (result) in
                 let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                 let url = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):\(path):/createUploadSession"
-                let params: Dictionary<String, Any> = ["file": "miaolegemi.gif",
-                                                       "@microsoft.graph.conflictBehavior": "replace"]
-                Alamofire.request(url,
-                                  method: .post,
+                let params: Dictionary<String, Any> = ["file": "file",
+                                                       "@microsoft.graph.conflictBehavior": "rename"]
+                Alamofire.request(url, method: .post,
                                   parameters: params,
                                   encoding: JSONEncoding.default,
                                   headers: (OneDriveHttpHeader.headers()))

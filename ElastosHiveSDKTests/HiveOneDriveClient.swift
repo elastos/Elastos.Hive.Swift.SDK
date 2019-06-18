@@ -7,6 +7,14 @@ import XCTest
 class HiveOneDriveClient: XCTestCase,Authenticator {
 
     func requestAuthentication(_ requestURL: String) -> Bool {
+        let scops = ["Files.ReadWrite","offline_access"]
+        let scopStr = scops.joined(separator: " ")
+        let authViewController: AuthWebViewController = AuthWebViewController()
+        DispatchQueue.main.sync {
+            let rootViewController = UIApplication.shared.keyWindow?.rootViewController
+            rootViewController!.present(authViewController, animated: true, completion: nil)
+            authViewController.loadRequest("31c2dacc-80e0-47e1-afac-faac093a739c", REDIRECT_URI, "code", scopStr)
+        }
         return true
     }
     var hiveClient: HiveClientHandle?
@@ -29,9 +37,14 @@ class HiveOneDriveClient: XCTestCase,Authenticator {
 
         let globalQueue = DispatchQueue.global()
         globalQueue.async {
-            let result = self.hiveClient?.login(self as Authenticator)
-            XCTAssertTrue(result!)
-            self.lock?.fulfill()
+            do {
+                let result = try self.hiveClient?.login(self as Authenticator)
+                XCTAssertTrue(result!)
+                self.lock?.fulfill()
+            }catch {
+                XCTFail()
+                self.lock?.fulfill()
+            }
         }
         wait(for: [lock!], timeout: timeout)
     }

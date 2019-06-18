@@ -25,7 +25,7 @@ internal class OneDriveClient: HiveClientHandle {
         return clientInstance
     }
 
-    override func login(_ authenticator: Authenticator) -> Bool { // TODO: should throw Error.
+    override func login(_ authenticator: Authenticator) throws -> Bool{ 
         var result = false
         let promise = self.authHelper?.loginAsync(authenticator)
         do {
@@ -33,6 +33,7 @@ internal class OneDriveClient: HiveClientHandle {
              _ = defaultDriveHandle() // TODO:
         } catch  {
             result = false
+            throw error
         }
         return result
     }

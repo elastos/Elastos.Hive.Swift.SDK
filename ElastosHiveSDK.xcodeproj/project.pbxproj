@@ -37,6 +37,9 @@
 		11FA093622A3C8BC004EB400 /* IPFSDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FA093522A3C8BC004EB400 /* IPFSDirectory.swift */; };
 		11FA093822A4BE11004EB400 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FA093722A4BE11004EB400 /* SwiftyJSON.swift */; };
 		11FA094022A4F0A8004EB400 /* HiveIpfsDriveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FA093F22A4F0A8004EB400 /* HiveIpfsDriveTests.swift */; };
+		11FD703222B89D1A00B346AC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176BF33229CE8F600240EDF /* ViewController.swift */; };
+		11FD703322B89F4D00B346AC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176BF31229CE8F600240EDF /* AppDelegate.swift */; };
+		11FD703422B89F5100B346AC /* AuthWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176BF42229CEB4F00240EDF /* AuthWebViewController.swift */; };
 		6DDA50FA35E7A18E5EF0C90E /* Pods_ElastosHiveSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D17AD36AC88E073FD2B2D930 /* Pods_ElastosHiveSDK.framework */; };
 		A34724DC226B4A750049DBD4 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34724DB226B4A750049DBD4 /* Log.swift */; };
 		A34724DE226B4ABE0049DBD4 /* LogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34724DD226B4ABE0049DBD4 /* LogLevel.swift */; };
@@ -720,12 +723,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				11FA094022A4F0A8004EB400 /* HiveIpfsDriveTests.swift in Sources */,
+				11FD703422B89F5100B346AC /* AuthWebViewController.swift in Sources */,
 				11FA093022A2B1CD004EB400 /* HiveIpfsDriveClient.swift in Sources */,
 				11F10B9222A770E100A4C371 /* HiveIpfsDirectoryTests.swift in Sources */,
+				11FD703222B89D1A00B346AC /* ViewController.swift in Sources */,
 				11F10B9422A770F800A4C371 /* HiveIpfsFileTests.swift in Sources */,
 				1137944E227EDE4B004A1F65 /* HiveOneDriveTests.swift in Sources */,
 				1176BF4B229E10DF00240EDF /* HiveOneDriveDirectoryTests.swift in Sources */,
 				1176BF4D229E10F400240EDF /* HiveOneDriveClient.swift in Sources */,
+				11FD703322B89F4D00B346AC /* AppDelegate.swift in Sources */,
 				1137944D227EDE4B004A1F65 /* HiveOneDriveFileTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -25,7 +25,7 @@ internal class IPFSClient: HiveClientHandle {
         return clientInstance
     }
 
-    override func login(_ authenticator: Authenticator) -> Bool {
+    override func login(_ authenticator: Authenticator) throws -> Bool {
         var result = false
         let promise =  self.authHelper?.loginAsync(authenticator)
         do {
@@ -33,6 +33,7 @@ internal class IPFSClient: HiveClientHandle {
             _ = defaultDriveHandle()
         } catch  {
             result = false
+            throw error
         }
         return result
     }
@@ -50,7 +51,7 @@ internal class IPFSClient: HiveClientHandle {
         let promise = HivePromise<HiveClientInfo> { resolver in
             _ = self.authHelper!.checkExpired().done({ (success) in
 
-                let url = IPFSURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
+                let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
                 let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
                 let params = ["uid": uid, "path": "/"]
                 Alamofire.request(url,
@@ -99,7 +100,7 @@ internal class IPFSClient: HiveClientHandle {
         let promise = HivePromise<HiveDriveHandle>{ resolver in
             _ = self.authHelper?.checkExpired().done({ (success) in
 
-                let url = IPFSURL.IPFS_NODE_API_BASE + HIVE_SUB_Url.IPFS_FILES_LS.rawValue
+                let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_LS.rawValue
                 let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
                 let param = ["uid": uid, "path": "/"]
                 Alamofire.request(url,

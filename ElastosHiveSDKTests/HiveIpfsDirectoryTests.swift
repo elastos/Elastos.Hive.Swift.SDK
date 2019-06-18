@@ -26,14 +26,18 @@ class HiveIpfsDirectoryTests: XCTestCase, Authenticator{
 
         let globalQueue = DispatchQueue.global()
         globalQueue.async {
-            let result = self.hiveClient?.login(self as Authenticator)
-            XCTAssertTrue(result!)
-            self.lock?.fulfill()
+            do {
+                let result = try self.hiveClient?.login(self as Authenticator)
+                XCTAssertTrue(result!)
+                self.lock?.fulfill()
+            }catch {
+                XCTFail()
+                self.lock?.fulfill()
+            }
         }
         wait(for: [lock!], timeout: timeout)
     }
 
-    /*
     func testB_lastUpdatedInfo() {
         lock = XCTestExpectation(description: "wait for test2_lastUpdatedInfo")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
@@ -45,11 +49,10 @@ class HiveIpfsDirectoryTests: XCTestCase, Authenticator{
             self.lock?.fulfill()
         }).catch({ (error) in
             XCTFail()
-            self.lock?.fulfi ll()
+            self.lock?.fulfill()
         })
         wait(for: [lock!], timeout: timeout)
     }
- */
 
     func testC_createDirectory() {
         timeTest = HelperMethods.getCurrentTime()
@@ -57,7 +60,7 @@ class HiveIpfsDirectoryTests: XCTestCase, Authenticator{
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
             return drive.rootDirectoryHandle()
         }).then({ (directory) -> HivePromise<HiveDirectoryHandle> in
-            return directory.createDirectory(withPath: "hiveIpfs_Directory_test3_createDirectory\(timeTest!)")
+            return directory.createDirectory(withName: "hiveIpfs_Directory_test3_createDirectory\(timeTest!)")
         }).done({ (directory) in
             XCTAssertNotNil(directory)
             self.lock?.fulfill()
@@ -73,7 +76,7 @@ class HiveIpfsDirectoryTests: XCTestCase, Authenticator{
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
             return drive.rootDirectoryHandle()
         }).then({ (directory) -> HivePromise<HiveDirectoryHandle> in
-            return directory.directoryHandle(atPath: "hiveIpfs_Directory_test3_createDirectory\(timeTest!)")
+            return directory.directoryHandle(atName: "hiveIpfs_Directory_test3_createDirectory\(timeTest!)")
         }).done({ (directory) in
             XCTAssertNotNil(directory)
             self.lock?.fulfill()
@@ -89,7 +92,7 @@ class HiveIpfsDirectoryTests: XCTestCase, Authenticator{
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
             return drive.rootDirectoryHandle()
         }).then({ (directory) -> HivePromise<HiveFileHandle> in
-            directory.createFile(withPath: "hiveIpfs_Directory_test5_createFile\(timeTest!)")
+            directory.createFile(withName: "hiveIpfs_Directory_test5_createFile\(timeTest!)")
         }).done({ (file) in
             XCTAssertNotNil(file)
             self.lock?.fulfill()
@@ -105,7 +108,7 @@ class HiveIpfsDirectoryTests: XCTestCase, Authenticator{
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
             return drive.rootDirectoryHandle()
         }).then({ (directory) -> HivePromise<HiveFileHandle> in
-            return directory.fileHandle(atPath: "hiveIpfs_Directory_test5_createFile\(timeTest!)")
+            return directory.fileHandle(atName: "hiveIpfs_Directory_test5_createFile\(timeTest!)")
         }).done({ (file) in
             XCTAssertNotNil(file)
             self.lock?.fulfill()

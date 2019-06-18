@@ -37,7 +37,7 @@ public class IPFSParameter: DriveParameter {
                 return false
             }
             }.first
-        if u == nil {
+        if u != nil {
             uidArry.append(u!)
         }
         let ipfsAccountJson = ["last_uid": uid, "uids": uidArry] as [String : Any]
