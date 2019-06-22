@@ -30,7 +30,7 @@ class HiveOneDriveFileTests: XCTestCase,Authenticator {
     override func tearDown() {
     }
 
-    func test1_Login() {
+    func testA_Login() {
         lock = XCTestExpectation(description: "wait for test1_Login")
 
         let globalQueue = DispatchQueue.global()
@@ -47,7 +47,7 @@ class HiveOneDriveFileTests: XCTestCase,Authenticator {
         wait(for: [lock!], timeout: timeout)
     }
 
-    func test2_creatFile() {
+    func testB_creatFile() {
 
         timeTest = HelperMethods.getCurrentTime()
         lock = XCTestExpectation(description: "wait for test2_creatFile")
@@ -63,12 +63,12 @@ class HiveOneDriveFileTests: XCTestCase,Authenticator {
         wait(for: [lock!], timeout: timeout)
     }
 
-    func test3_lastUpdatedInfo() {
+    func testC_lastUpdatedInfo() {
 
         lock = XCTestExpectation(description: "wait for test2_creatFile")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveFileHandle> in
             return drive.fileHandle(atPath: "/test_file_\(timeTest!)")
-        }).then({ (file) -> HivePromise<HiveFileInfo> in
+        }).then({ (file) -> HivePromise<HiveFileHandle.Info> in
             return file.lastUpdatedInfo()
         }).done({ (fileInfo) in
             XCTAssertNotNil(fileInfo)
@@ -80,7 +80,7 @@ class HiveOneDriveFileTests: XCTestCase,Authenticator {
         wait(for: [lock!], timeout: timeout)
     }
 
-    func test4_copyTo() {
+    func testD_copyTo() {
 
         // copy
         lock = XCTestExpectation(description: "wait for test4_preCreate")
@@ -110,7 +110,7 @@ class HiveOneDriveFileTests: XCTestCase,Authenticator {
         wait(for: [lock!], timeout: timeout)
     }
 
-    func test5_deleteItem() {
+    func testE_deleteItem() {
         // delete
         lock = XCTestExpectation(description: "wait for test4_deleteItem")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveFileHandle> in
@@ -127,7 +127,7 @@ class HiveOneDriveFileTests: XCTestCase,Authenticator {
         wait(for: [lock!], timeout: timeout)
     }
 
-    func test6_moveTo() {
+    func testF_moveTo() {
         // move
         lock = XCTestExpectation(description: "wait for test4_moveTo")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveFileHandle> in
@@ -144,7 +144,7 @@ class HiveOneDriveFileTests: XCTestCase,Authenticator {
         wait(for: [lock!], timeout: timeout)
     }
 
-    func test7_writeData() {
+    func testG_writeData() {
 
         lock = XCTestExpectation(description: "wait for test5_writeData")
         let data = "ios test for write \(timeTest!)".data(using: .utf8)
@@ -161,8 +161,8 @@ class HiveOneDriveFileTests: XCTestCase,Authenticator {
         })
         wait(for: [lock!], timeout: timeout)
     }
-
-    func test8_readData() {
+/*
+    func testH_readData() {
         lock = XCTestExpectation(description: "wait for test5_readData")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveFileHandle> in
             return drive.fileHandle(atPath: "/test_file_\(timeTest!)")
@@ -177,26 +177,19 @@ class HiveOneDriveFileTests: XCTestCase,Authenticator {
         })
         wait(for: [lock!], timeout: timeout)
     }
+*/
 
-    func test9_writeDataLagre() {
-
-        timeTest = HelperMethods.getCurrentTime()
-        lock = XCTestExpectation(description: "wait for test5_writeData")
-        let urlPath = "/Users/liaihong/Desktop/DSC_0788.JPG"
-        let url = URL(fileURLWithPath: urlPath)
+    func testI_read_tobuffer() {
+        lock = XCTestExpectation(description: "wait for testI_read_tobuffer")
         var data = Data()
-        do {
-            data = try Data.init(contentsOf: url)
-        } catch {
-            print(error)
-        }
-        print(data)
+
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveFileHandle> in
-            return drive.createFile(withPath: "/test_file_\(timeTest!)_large")
-        }).then({ (file) -> HivePromise<Bool> in
-            return file.writeDataWithLarge(withPath: urlPath)
-        }).done({ (re) in
-            XCTAssertTrue(re)
+            return drive.fileHandle(atPath: "/test_file_\(timeTest!)")
+        }).then({ (file) -> HivePromise<Int32> in
+            return file.readData(toBuffer: &data)
+        }).done({ (content) in
+            print(data)
+            XCTAssertEqual(content, 0)
             self.lock?.fulfill()
         }).catch({ (er) in
             XCTFail()
@@ -204,5 +197,32 @@ class HiveOneDriveFileTests: XCTestCase,Authenticator {
         })
         wait(for: [lock!], timeout: timeout)
     }
+
+    func testJ_write_tobuffer() {
+        lock = XCTestExpectation(description: "wait for testJ_write_tobuffer")
+        let data = "ios test for write \(timeTest!)".data(using: .utf8)
+        let data2 = "save 2 ios test for write \(timeTest!)".data(using: .utf8)
+
+        var fl: HiveFileHandle?
+        self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveFileHandle> in
+            return drive.fileHandle(atPath: "/test_file_\(timeTest!)")
+        }).then({ (file) -> HivePromise<Int32> in
+            fl = file
+            return file.writeData(withData: data!, 0)
+        }).then({ (length) -> HivePromise<Int32> in
+            return fl!.writeData(withData: data2!, 30)
+        }).then({ (l) -> HivePromise<Bool> in
+            return (fl?.commitData())!
+        }).done({ (re) in
+            print(re)
+            self.lock?.fulfill()
+        }).catch({ (er) in
+            XCTFail()
+            self.lock?.fulfill()
+        })
+        wait(for: [lock!], timeout: timeout)
+    }
+
+
 
 }

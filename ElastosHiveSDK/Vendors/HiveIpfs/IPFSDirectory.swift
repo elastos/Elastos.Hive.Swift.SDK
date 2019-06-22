@@ -39,8 +39,8 @@ class IPFSDirectory: HiveDirectoryHandle {
                             return
                         }
                         Log.d(TAG(), "lastUpdatedInfo succeed")
-                        let dirId = "TODO"
-                        let dirInfo = HiveDirectoryInfo(dirId)
+                        let dic = [HiveDirectoryInfo.itemId: uid]
+                        let dirInfo = HiveDirectoryInfo(dic)
                         self.lastInfo = dirInfo
                         handleBy.didSucceed(dirInfo)
                         resolver.fulfill(dirInfo)
@@ -62,6 +62,7 @@ class IPFSDirectory: HiveDirectoryHandle {
     override func createDirectory(withName: String, handleBy: HiveCallback<HiveDirectoryHandle>) -> HivePromise<HiveDirectoryHandle> {
         let promise = HivePromise<HiveDirectoryHandle> { resolver in
             var path = self.pathName + "/" + withName
+            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             if self.pathName == "/" {
                 path = self.pathName + withName
             }
@@ -71,8 +72,8 @@ class IPFSDirectory: HiveDirectoryHandle {
                 return IPFSAPIs.publish(path)
             }).done({ (success) in
                 Log.d(TAG(), "createDirectory succeed")
-                let dirId = "TODO"
-                let directoryInfo = HiveDirectoryInfo(dirId)
+                let dic = [HiveDirectoryInfo.itemId: uid]
+                let directoryInfo = HiveDirectoryInfo(dic)
                 let directoryHandle = IPFSDirectory(directoryInfo, self.authHelper)
                 directoryHandle.lastInfo = directoryInfo
                 directoryHandle.pathName = path
@@ -118,7 +119,8 @@ class IPFSDirectory: HiveDirectoryHandle {
                             return
                         }
                         Log.d(TAG(), "directoryHandle succeed")
-                        let directoryInfo = HiveDirectoryInfo(uid)
+                        let dic = [HiveDirectoryInfo.itemId: uid]
+                        let directoryInfo = HiveDirectoryInfo(dic)
                         let directoryHandle = IPFSDirectory(directoryInfo, self.authHelper)
                         directoryHandle.lastInfo = directoryInfo
                         directoryHandle.pathName = path
@@ -152,8 +154,9 @@ class IPFSDirectory: HiveDirectoryHandle {
                 return IPFSAPIs.publish(path)
             }).done({ (success) in
                 Log.d(TAG(), "createFile succeed")
-                let fileId = "TODO"
-                let fileInfo = HiveFileInfo(fileId)
+                let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                let dic = [HiveFileInfo.itemId: uid]
+                let fileInfo = HiveFileInfo(dic)
                 let fileHandle = IPFSFile(fileInfo, self.authHelper)
                 fileHandle.pathName = path
                 fileHandle.lastInfo = fileInfo
@@ -199,7 +202,8 @@ class IPFSDirectory: HiveDirectoryHandle {
                             return
                         }
                         Log.d(TAG(), "fileHandle succeed")
-                        let fileInfo = HiveFileInfo(uid)
+                        let dic = [HiveDirectoryInfo.itemId: uid]
+                        let fileInfo = HiveFileInfo(dic)
                         let fileHandle = IPFSFile(fileInfo, self.authHelper)
                         fileHandle.lastInfo = fileInfo
                         fileHandle.pathName = path
@@ -245,7 +249,7 @@ class IPFSDirectory: HiveDirectoryHandle {
                         Log.d(TAG(), "getChildren succeed")
                         let jsonData = JSON(dataResponse.result.value as Any)
                         let children = HiveChildren()
-                        children.installValue(jsonData)
+                            // todo
                         resolver.fulfill(children)
                         handleBy.didSucceed(children)
                     })

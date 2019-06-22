@@ -4,7 +4,7 @@ import UIKit
 
 public class HiveChildren: NSObject {
 
-    public var children: Array<HiveItem>
+    public var children: Array<ItemInfo>
 
     public override init() {
         children = []
@@ -12,10 +12,20 @@ public class HiveChildren: NSObject {
 
     func installValue(_ jsonData: JSON) {
         let childrenData = jsonData["value"].arrayValue
-        for item in childrenData {
-            let hiveItem = HiveItem()
-            hiveItem.installValue(item)
-            children.append(hiveItem)
+        print(childrenData)
+        for it in childrenData {
+            let folder = it["folder"].stringValue
+            var type = folder
+            if folder == "" {
+                type = "file"
+            }
+            let dic = [ItemInfo.itemId: it["id"].stringValue,
+                       ItemInfo.name: it["name"].stringValue,
+                       ItemInfo.size: it["size"].stringValue,
+                       ItemInfo.type: type]
+            let item = ItemInfo(dic)
+            children.append(item)
         }
+
     }
 }

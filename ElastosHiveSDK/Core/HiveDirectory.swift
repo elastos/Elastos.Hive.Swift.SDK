@@ -3,7 +3,7 @@ import PromiseKit
 
 @objc(HiveDirectory)
 public class HiveDirectoryHandle: NSObject, HiveResourceItem, HiveFileItem, HiveDirectoryItem {
-
+    
     public typealias resourceType = HiveDirectoryInfo
     public var drive: HiveDriveHandle?
     public var directoryId: String
@@ -19,7 +19,7 @@ public class HiveDirectoryHandle: NSObject, HiveResourceItem, HiveFileItem, Hive
     init(_ info: HiveDirectoryInfo, _ authHelper: AuthHelper) {
         self.lastInfo = info
         self.authHelper = authHelper
-        self.directoryId = lastInfo!.dirId
+        self.directoryId = lastInfo!.attrDic![HiveDirectoryInfo.itemId]!
         self.pathName = ""
     }
 

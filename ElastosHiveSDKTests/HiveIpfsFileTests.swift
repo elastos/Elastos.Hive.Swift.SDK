@@ -59,7 +59,7 @@ class HiveIpfsFileTests: XCTestCase, Authenticator{
         lock = XCTestExpectation(description: "wait for test3_lastUpdatedInfo")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveFileHandle> in
             return drive.fileHandle(atPath: "/hiveIpfs_File_test2_creatFile_\(timeTest!)")
-        }).then({ (file) -> HivePromise<HiveFileInfo> in
+        }).then({ (file) -> HivePromise<HiveFileHandle.Info> in
             return file.lastUpdatedInfo()
         }).done({ (fileInfo) in
             XCTAssertNotNil(fileInfo)

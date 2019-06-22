@@ -39,8 +39,8 @@ internal class IPFSFile: HiveFileHandle {
                             return
                         }
                         Log.d(TAG(), "lastUpdatedInfo succeed")
-                        let fileId = "TODO"
-                        let fileInfo = HiveFileInfo(fileId)
+                        let dic = [HiveFileInfo.itemId: uid]
+                        let fileInfo = HiveFileInfo(dic)
                         self.lastInfo = fileInfo
                         handleBy.didSucceed(fileInfo)
                         resolver.fulfill(fileInfo)
@@ -126,7 +126,7 @@ internal class IPFSFile: HiveFileHandle {
         }
         return promise
     }
-
+/*
     override func writeData(withData: Data) -> HivePromise<Bool> {
         return writeData(withData: withData, handleBy: HiveCallback<Bool>())
     }
@@ -191,4 +191,5 @@ internal class IPFSFile: HiveFileHandle {
         }
         return promise
     }
+ */
 }
