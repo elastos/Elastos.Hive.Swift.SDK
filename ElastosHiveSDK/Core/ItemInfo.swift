@@ -1,9 +1,6 @@
+import Foundation
 
-
-import UIKit
-
-public class ItemInfo: HiveAttributeMap {
-
+public class ItemInfo: AttributeMap {
     public static let itemId: String = "itemId"
     public static let name: String = "name"
     public static let type: String = "type"

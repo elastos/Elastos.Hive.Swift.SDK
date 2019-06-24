@@ -136,5 +136,4 @@ public class HiveDriveHandle: NSObject, HiveResourceItem, HiveDirectoryItem {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<ItemInfo>(error: error)
     }
-    
 }

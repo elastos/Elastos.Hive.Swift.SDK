@@ -247,7 +247,7 @@ class IPFSDirectory: HiveDirectoryHandle {
                             return
                         }
                         Log.d(TAG(), "getChildren succeed")
-                        let jsonData = JSON(dataResponse.result.value as Any)
+                        //let jsonData = JSON(dataResponse.result.value as Any)
                         let children = HiveChildren()
                             // todo
                         resolver.fulfill(children)

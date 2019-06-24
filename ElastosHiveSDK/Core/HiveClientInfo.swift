@@ -1,8 +1,6 @@
+import Foundation
 
-
-import UIKit
-
-public class HiveClientInfo: HiveAttributeMap {
+public class HiveClientInfo: AttributeMap {
     public static let userId: String = "UserId"
     public static let name: String = "DisplayName"
     public static let email: String = "Email"

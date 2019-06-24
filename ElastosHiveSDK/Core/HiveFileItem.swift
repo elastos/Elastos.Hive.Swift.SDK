@@ -2,7 +2,6 @@ import Foundation
 import PromiseKit
 
 protocol HiveFileItem {
-
     func moveTo(newPath: String) -> HivePromise<Bool>
     func moveTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool>
 
@@ -12,6 +11,7 @@ protocol HiveFileItem {
     func deleteItem() -> HivePromise<Bool>
     func deleteItem(handleBy: HiveCallback<Bool>) -> HivePromise<Bool>
 
+    /*
     func readData() -> HivePromise<Data>
     func readData(handleBy: HiveCallback<Data>) -> HivePromise<Data>
 
@@ -26,7 +26,7 @@ protocol HiveFileItem {
 
     func commitData() -> HivePromise<Bool>
     func discardData()
-
+    */
     func close()
 }
 

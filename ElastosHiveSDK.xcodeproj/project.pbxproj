@@ -8,9 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0D94ED2D06BBCAE410D0273C /* Pods_ElastosHiveSDKTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DB068EABA0DB13AB595055A /* Pods_ElastosHiveSDKTests.framework */; };
-		110744BA22BF2B600076529D /* HiveAttributeMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110744B922BF2B600076529D /* HiveAttributeMap.swift */; };
+		110744BA22BF2B600076529D /* AttributeMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110744B922BF2B600076529D /* AttributeMap.swift */; };
 		110744BE22C0CD2D0076529D /* HiveDriveInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110744BD22C0CD2D0076529D /* HiveDriveInfo.swift */; };
-		110744C222C0CD5D0076529D /* DummyCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110744BF22C0CD5D0076529D /* DummyCallback.swift */; };
 		110744C322C0CD5D0076529D /* HiveClientInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110744C022C0CD5D0076529D /* HiveClientInfo.swift */; };
 		110744C422C0CD5D0076529D /* AuthInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110744C122C0CD5D0076529D /* AuthInfo.swift */; };
 		110744C622C0D06A0076529D /* HiveDirectoryInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110744C522C0D06A0076529D /* HiveDirectoryInfo.swift */; };
@@ -37,21 +36,24 @@
 		11CBF1E522BE242600CD129B /* HiveExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CBF1E422BE242600CD129B /* HiveExtension.swift */; };
 		11F10B9222A770E100A4C371 /* HiveIpfsDirectoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F10B9122A770E100A4C371 /* HiveIpfsDirectoryTests.swift */; };
 		11F10B9422A770F800A4C371 /* HiveIpfsFileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F10B9322A770F800A4C371 /* HiveIpfsFileTests.swift */; };
-		11F10B9622A78C6300A4C371 /* IPFSAPIs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F10B9522A78C6300A4C371 /* IPFSAPIs.swift */; };
-		11F10B9A22A78CA700A4C371 /* IPFSURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F10B9922A78CA700A4C371 /* IPFSURL.swift */; };
 		11FA093022A2B1CD004EB400 /* HiveIpfsDriveClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FA092F22A2B1CD004EB400 /* HiveIpfsDriveClient.swift */; };
-		11FA093222A2C3EB004EB400 /* IPFSAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FA093122A2C3EB004EB400 /* IPFSAuthHelper.swift */; };
-		11FA093622A3C8BC004EB400 /* IPFSDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FA093522A3C8BC004EB400 /* IPFSDirectory.swift */; };
 		11FA093822A4BE11004EB400 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FA093722A4BE11004EB400 /* SwiftyJSON.swift */; };
 		11FA094022A4F0A8004EB400 /* HiveIpfsDriveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FA093F22A4F0A8004EB400 /* HiveIpfsDriveTests.swift */; };
 		11FD703222B89D1A00B346AC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176BF33229CE8F600240EDF /* ViewController.swift */; };
 		11FD703322B89F4D00B346AC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176BF31229CE8F600240EDF /* AppDelegate.swift */; };
 		11FD703422B89F5100B346AC /* AuthWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176BF42229CEB4F00240EDF /* AuthWebViewController.swift */; };
 		6DDA50FA35E7A18E5EF0C90E /* Pods_ElastosHiveSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D17AD36AC88E073FD2B2D930 /* Pods_ElastosHiveSDK.framework */; };
+		A3003F3822C1039B00A341C4 /* IPFSDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3003F3022C1039A00A341C4 /* IPFSDirectory.swift */; };
+		A3003F3922C1039B00A341C4 /* IPFSAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3003F3122C1039A00A341C4 /* IPFSAuthHelper.swift */; };
+		A3003F3A22C1039B00A341C4 /* IPFSParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3003F3222C1039A00A341C4 /* IPFSParameter.swift */; };
+		A3003F3B22C1039B00A341C4 /* IPFSClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3003F3322C1039B00A341C4 /* IPFSClient.swift */; };
+		A3003F3C22C1039B00A341C4 /* IPFSURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3003F3422C1039B00A341C4 /* IPFSURL.swift */; };
+		A3003F3D22C1039B00A341C4 /* IPFSAPIs.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3003F3522C1039B00A341C4 /* IPFSAPIs.swift */; };
+		A3003F3E22C1039B00A341C4 /* IPFSFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3003F3622C1039B00A341C4 /* IPFSFile.swift */; };
+		A3003F3F22C1039B00A341C4 /* IPFSDrive.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3003F3722C1039B00A341C4 /* IPFSDrive.swift */; };
 		A34724DC226B4A750049DBD4 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34724DB226B4A750049DBD4 /* Log.swift */; };
 		A34724DE226B4ABE0049DBD4 /* LogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34724DD226B4ABE0049DBD4 /* LogLevel.swift */; };
 		A3743AD5226570B200C9493E /* OneDriveParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3743AD4226570B200C9493E /* OneDriveParameter.swift */; };
-		A3743AD72265710000C9493E /* IPFSParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3743AD6226570FF00C9493E /* IPFSParameter.swift */; };
 		A3743AD92265710B00C9493E /* OwnCloudParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3743AD82265710B00C9493E /* OwnCloudParameter.swift */; };
 		A3743ADB2265711A00C9493E /* DropBoxParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3743ADA2265711A00C9493E /* DropBoxParameter.swift */; };
 		A3743ADD2265743400C9493E /* OneDriveConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3743ADC2265743400C9493E /* OneDriveConstants.swift */; };
@@ -69,8 +71,6 @@
 		A39C49B022539CD10027BDF9 /* OneDriveDrive.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C49AD22539CD10027BDF9 /* OneDriveDrive.swift */; };
 		A39C49B122539CD10027BDF9 /* OneDriveAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C49AE22539CD10027BDF9 /* OneDriveAuthHelper.swift */; };
 		A39C49B222539CD10027BDF9 /* OneDriveFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C49AF22539CD10027BDF9 /* OneDriveFile.swift */; };
-		A39C49B822539D040027BDF9 /* IPFSFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C49B622539D030027BDF9 /* IPFSFile.swift */; };
-		A39C49B922539D040027BDF9 /* IPFSDrive.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C49B722539D040027BDF9 /* IPFSDrive.swift */; };
 		A39C49BC22539D2E0027BDF9 /* OwnCloudFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C49BA22539D2E0027BDF9 /* OwnCloudFile.swift */; };
 		A39C49BD22539D2E0027BDF9 /* OwnCloudDrive.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C49BB22539D2E0027BDF9 /* OwnCloudDrive.swift */; };
 		A39C49C022539D3B0027BDF9 /* DropboxFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C49BE22539D3B0027BDF9 /* DropboxFile.swift */; };
@@ -78,7 +78,7 @@
 		A39CB4B822927DB900535E43 /* HiveDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39CB4B322927DB900535E43 /* HiveDirectory.swift */; };
 		A39CB4BD22927DF100535E43 /* OneDriveDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39CB4BC22927DF100535E43 /* OneDriveDirectory.swift */; };
 		A39CB4BF2292854000535E43 /* HiveCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39CB4BE2292854000535E43 /* HiveCallback.swift */; };
-		A39CB4C72292878100535E43 /* HiveStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39CB4C62292878100535E43 /* HiveStatus.swift */; };
+		A39CB4C72292878100535E43 /* HiveVoid.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39CB4C62292878100535E43 /* HiveVoid.swift */; };
 		A39CB4C92292905100535E43 /* HiveResourceItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39CB4C82292905100535E43 /* HiveResourceItem.swift */; };
 		A39CB4CB22929E4600535E43 /* HiveFileItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39CB4CA22929E4600535E43 /* HiveFileItem.swift */; };
 		A39CB4CD2292A0EF00535E43 /* HiveDirectoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39CB4CC2292A0EF00535E43 /* HiveDirectoryItem.swift */; };
@@ -95,7 +95,6 @@
 		A3FD3C81228000EE0031413A /* HiveClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FD3C80228000EE0031413A /* HiveClient.swift */; };
 		A3FD3C83228001EB0031413A /* OneDriveClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FD3C82228001EB0031413A /* OneDriveClient.swift */; };
 		A3FD3C9222800A840031413A /* OwnCloudClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FD3C9122800A840031413A /* OwnCloudClient.swift */; };
-		A3FD3C9422800B0F0031413A /* IPFSClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FD3C9322800B0F0031413A /* IPFSClient.swift */; };
 		A3FD3C9622800C320031413A /* DropboxClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FD3C9522800C320031413A /* DropboxClient.swift */; };
 		D11C186DCB4238199CA4FFF2 /* Pods_TestHost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F09DA7DC9D47111E630261C /* Pods_TestHost.framework */; };
 /* End PBXBuildFile section */
@@ -112,9 +111,8 @@
 
 /* Begin PBXFileReference section */
 		0DB068EABA0DB13AB595055A /* Pods_ElastosHiveSDKTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ElastosHiveSDKTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		110744B922BF2B600076529D /* HiveAttributeMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HiveAttributeMap.swift; path = Core/HiveAttributeMap.swift; sourceTree = "<group>"; };
+		110744B922BF2B600076529D /* AttributeMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AttributeMap.swift; path = Core/AttributeMap.swift; sourceTree = "<group>"; };
 		110744BD22C0CD2D0076529D /* HiveDriveInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HiveDriveInfo.swift; path = Core/HiveDriveInfo.swift; sourceTree = "<group>"; };
-		110744BF22C0CD5D0076529D /* DummyCallback.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DummyCallback.swift; path = Core/DummyCallback.swift; sourceTree = "<group>"; };
 		110744C022C0CD5D0076529D /* HiveClientInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HiveClientInfo.swift; path = Core/HiveClientInfo.swift; sourceTree = "<group>"; };
 		110744C122C0CD5D0076529D /* AuthInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuthInfo.swift; path = Core/AuthInfo.swift; sourceTree = "<group>"; };
 		110744C522C0D06A0076529D /* HiveDirectoryInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HiveDirectoryInfo.swift; path = Core/HiveDirectoryInfo.swift; sourceTree = "<group>"; };
@@ -145,11 +143,7 @@
 		11CBF1E422BE242600CD129B /* HiveExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HiveExtension.swift; path = Utils/HiveExtension.swift; sourceTree = "<group>"; };
 		11F10B9122A770E100A4C371 /* HiveIpfsDirectoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiveIpfsDirectoryTests.swift; sourceTree = "<group>"; };
 		11F10B9322A770F800A4C371 /* HiveIpfsFileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiveIpfsFileTests.swift; sourceTree = "<group>"; };
-		11F10B9522A78C6300A4C371 /* IPFSAPIs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = IPFSAPIs.swift; path = Vendors/HiveIpfs/IPFSAPIs.swift; sourceTree = "<group>"; };
-		11F10B9922A78CA700A4C371 /* IPFSURL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IPFSURL.swift; path = Vendors/HiveIpfs/IPFSURL.swift; sourceTree = "<group>"; };
 		11FA092F22A2B1CD004EB400 /* HiveIpfsDriveClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiveIpfsDriveClient.swift; sourceTree = "<group>"; };
-		11FA093122A2C3EB004EB400 /* IPFSAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = IPFSAuthHelper.swift; path = Vendors/HiveIpfs/IPFSAuthHelper.swift; sourceTree = "<group>"; };
-		11FA093522A3C8BC004EB400 /* IPFSDirectory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IPFSDirectory.swift; path = Vendors/HiveIpfs/IPFSDirectory.swift; sourceTree = "<group>"; };
 		11FA093722A4BE11004EB400 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftyJSON.swift; path = Utils/SwiftyJSON.swift; sourceTree = "<group>"; };
 		11FA093F22A4F0A8004EB400 /* HiveIpfsDriveTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiveIpfsDriveTests.swift; sourceTree = "<group>"; };
 		13C6D592C180032E4F31BEF6 /* Pods-ElastosHiveSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDK.debug.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDK/Pods-ElastosHiveSDK.debug.xcconfig"; sourceTree = "<group>"; };
@@ -157,10 +151,17 @@
 		556E8D39E54EDBDFA4DEAD42 /* Pods-TestHost.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestHost.release.xcconfig"; path = "Target Support Files/Pods-TestHost/Pods-TestHost.release.xcconfig"; sourceTree = "<group>"; };
 		5F09DA7DC9D47111E630261C /* Pods_TestHost.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TestHost.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6081910F0FC211291C05B08B /* Pods-ElastosHiveSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDK.release.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDK/Pods-ElastosHiveSDK.release.xcconfig"; sourceTree = "<group>"; };
+		A3003F3022C1039A00A341C4 /* IPFSDirectory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IPFSDirectory.swift; path = Vendors/IPFS/IPFSDirectory.swift; sourceTree = "<group>"; };
+		A3003F3122C1039A00A341C4 /* IPFSAuthHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IPFSAuthHelper.swift; path = Vendors/IPFS/IPFSAuthHelper.swift; sourceTree = "<group>"; };
+		A3003F3222C1039A00A341C4 /* IPFSParameter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IPFSParameter.swift; path = Vendors/IPFS/IPFSParameter.swift; sourceTree = "<group>"; };
+		A3003F3322C1039B00A341C4 /* IPFSClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IPFSClient.swift; path = Vendors/IPFS/IPFSClient.swift; sourceTree = "<group>"; };
+		A3003F3422C1039B00A341C4 /* IPFSURL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IPFSURL.swift; path = Vendors/IPFS/IPFSURL.swift; sourceTree = "<group>"; };
+		A3003F3522C1039B00A341C4 /* IPFSAPIs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IPFSAPIs.swift; path = Vendors/IPFS/IPFSAPIs.swift; sourceTree = "<group>"; };
+		A3003F3622C1039B00A341C4 /* IPFSFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IPFSFile.swift; path = Vendors/IPFS/IPFSFile.swift; sourceTree = "<group>"; };
+		A3003F3722C1039B00A341C4 /* IPFSDrive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IPFSDrive.swift; path = Vendors/IPFS/IPFSDrive.swift; sourceTree = "<group>"; };
 		A34724DB226B4A750049DBD4 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Log.swift; path = Utils/Log.swift; sourceTree = "<group>"; };
 		A34724DD226B4ABE0049DBD4 /* LogLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LogLevel.swift; path = Utils/LogLevel.swift; sourceTree = "<group>"; };
 		A3743AD4226570B200C9493E /* OneDriveParameter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OneDriveParameter.swift; path = Vendors/OneDrive/OneDriveParameter.swift; sourceTree = "<group>"; };
-		A3743AD6226570FF00C9493E /* IPFSParameter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IPFSParameter.swift; path = Vendors/HiveIpfs/IPFSParameter.swift; sourceTree = "<group>"; };
 		A3743AD82265710B00C9493E /* OwnCloudParameter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OwnCloudParameter.swift; path = Vendors/OwnCloud/OwnCloudParameter.swift; sourceTree = "<group>"; };
 		A3743ADA2265711A00C9493E /* DropBoxParameter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DropBoxParameter.swift; path = Vendors/DropBox/DropBoxParameter.swift; sourceTree = "<group>"; };
 		A3743ADC2265743400C9493E /* OneDriveConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OneDriveConstants.swift; path = Vendors/OneDrive/OneDriveConstants.swift; sourceTree = "<group>"; };
@@ -180,8 +181,6 @@
 		A39C49AD22539CD10027BDF9 /* OneDriveDrive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OneDriveDrive.swift; path = Vendors/OneDrive/OneDriveDrive.swift; sourceTree = "<group>"; };
 		A39C49AE22539CD10027BDF9 /* OneDriveAuthHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OneDriveAuthHelper.swift; path = Vendors/OneDrive/OneDriveAuthHelper.swift; sourceTree = "<group>"; };
 		A39C49AF22539CD10027BDF9 /* OneDriveFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OneDriveFile.swift; path = Vendors/OneDrive/OneDriveFile.swift; sourceTree = "<group>"; };
-		A39C49B622539D030027BDF9 /* IPFSFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IPFSFile.swift; path = Vendors/HiveIpfs/IPFSFile.swift; sourceTree = "<group>"; };
-		A39C49B722539D040027BDF9 /* IPFSDrive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IPFSDrive.swift; path = Vendors/HiveIpfs/IPFSDrive.swift; sourceTree = "<group>"; };
 		A39C49BA22539D2E0027BDF9 /* OwnCloudFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OwnCloudFile.swift; path = Vendors/OwnCloud/OwnCloudFile.swift; sourceTree = "<group>"; };
 		A39C49BB22539D2E0027BDF9 /* OwnCloudDrive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OwnCloudDrive.swift; path = Vendors/OwnCloud/OwnCloudDrive.swift; sourceTree = "<group>"; };
 		A39C49BE22539D3B0027BDF9 /* DropboxFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DropboxFile.swift; path = Vendors/DropBox/DropboxFile.swift; sourceTree = "<group>"; };
@@ -189,7 +188,7 @@
 		A39CB4B322927DB900535E43 /* HiveDirectory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HiveDirectory.swift; path = Core/HiveDirectory.swift; sourceTree = "<group>"; };
 		A39CB4BC22927DF100535E43 /* OneDriveDirectory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OneDriveDirectory.swift; path = Vendors/OneDrive/OneDriveDirectory.swift; sourceTree = "<group>"; };
 		A39CB4BE2292854000535E43 /* HiveCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HiveCallback.swift; path = Core/HiveCallback.swift; sourceTree = "<group>"; };
-		A39CB4C62292878100535E43 /* HiveStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HiveStatus.swift; path = Core/HiveStatus.swift; sourceTree = "<group>"; };
+		A39CB4C62292878100535E43 /* HiveVoid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HiveVoid.swift; path = Core/HiveVoid.swift; sourceTree = "<group>"; };
 		A39CB4C82292905100535E43 /* HiveResourceItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HiveResourceItem.swift; path = Core/HiveResourceItem.swift; sourceTree = "<group>"; };
 		A39CB4CA22929E4600535E43 /* HiveFileItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HiveFileItem.swift; path = Core/HiveFileItem.swift; sourceTree = "<group>"; };
 		A39CB4CC2292A0EF00535E43 /* HiveDirectoryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HiveDirectoryItem.swift; path = Core/HiveDirectoryItem.swift; sourceTree = "<group>"; };
@@ -206,7 +205,6 @@
 		A3FD3C80228000EE0031413A /* HiveClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HiveClient.swift; path = Core/HiveClient.swift; sourceTree = "<group>"; };
 		A3FD3C82228001EB0031413A /* OneDriveClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OneDriveClient.swift; path = Vendors/OneDrive/OneDriveClient.swift; sourceTree = "<group>"; };
 		A3FD3C9122800A840031413A /* OwnCloudClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OwnCloudClient.swift; path = Vendors/OwnCloud/OwnCloudClient.swift; sourceTree = "<group>"; };
-		A3FD3C9322800B0F0031413A /* IPFSClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IPFSClient.swift; path = Vendors/HiveIpfs/IPFSClient.swift; sourceTree = "<group>"; };
 		A3FD3C9522800C320031413A /* DropboxClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DropboxClient.swift; path = Vendors/DropBox/DropboxClient.swift; sourceTree = "<group>"; };
 		C228C56325B65D63A60C99C8 /* Pods-ElastosHiveSDKTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDKTests.release.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDKTests/Pods-ElastosHiveSDKTests.release.xcconfig"; sourceTree = "<group>"; };
 		D17AD36AC88E073FD2B2D930 /* Pods_ElastosHiveSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ElastosHiveSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -345,10 +343,9 @@
 		A39C498D22539C560027BDF9 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				110744BF22C0CD5D0076529D /* DummyCallback.swift */,
 				114FD83F2297CF7600467E38 /* Authenticator.swift */,
 				110744C122C0CD5D0076529D /* AuthInfo.swift */,
-				110744B922BF2B600076529D /* HiveAttributeMap.swift */,
+				110744B922BF2B600076529D /* AttributeMap.swift */,
 				A39CB4C82292905100535E43 /* HiveResourceItem.swift */,
 				A3FD3C80228000EE0031413A /* HiveClient.swift */,
 				110744C022C0CD5D0076529D /* HiveClientInfo.swift */,
@@ -368,7 +365,7 @@
 				A39C499722539C9C0027BDF9 /* SdkVersion.swift */,
 				A39CB4CE2292A95500535E43 /* GenericCallback.swift */,
 				A39CB4BE2292854000535E43 /* HiveCallback.swift */,
-				A39CB4C62292878100535E43 /* HiveStatus.swift */,
+				A39CB4C62292878100535E43 /* HiveVoid.swift */,
 				A39CB4D42292FF1600535E43 /* AuthCode.swift */,
 				A3EC496522954DB600CC4546 /* NullEntry.swift */,
 				A38E8BAE2293CB13001B2AF2 /* OAuthEntry.swift */,
@@ -454,14 +451,14 @@
 		A39C49B522539CE70027BDF9 /* IPFS */ = {
 			isa = PBXGroup;
 			children = (
-				A3FD3C9322800B0F0031413A /* IPFSClient.swift */,
-				A39C49B722539D040027BDF9 /* IPFSDrive.swift */,
-				11FA093522A3C8BC004EB400 /* IPFSDirectory.swift */,
-				A39C49B622539D030027BDF9 /* IPFSFile.swift */,
-				11F10B9522A78C6300A4C371 /* IPFSAPIs.swift */,
-				11FA093122A2C3EB004EB400 /* IPFSAuthHelper.swift */,
-				A3743AD6226570FF00C9493E /* IPFSParameter.swift */,
-				11F10B9922A78CA700A4C371 /* IPFSURL.swift */,
+				A3003F3522C1039B00A341C4 /* IPFSAPIs.swift */,
+				A3003F3122C1039A00A341C4 /* IPFSAuthHelper.swift */,
+				A3003F3322C1039B00A341C4 /* IPFSClient.swift */,
+				A3003F3022C1039A00A341C4 /* IPFSDirectory.swift */,
+				A3003F3722C1039B00A341C4 /* IPFSDrive.swift */,
+				A3003F3622C1039B00A341C4 /* IPFSFile.swift */,
+				A3003F3222C1039A00A341C4 /* IPFSParameter.swift */,
+				A3003F3422C1039B00A341C4 /* IPFSURL.swift */,
 			);
 			name = IPFS;
 			sourceTree = "<group>";
@@ -632,9 +629,20 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ElastosHiveSDKTests/Pods-ElastosHiveSDKTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ElastosHiveSDKTests/Pods-ElastosHiveSDKTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
+				"${BUILT_PRODUCTS_DIR}/Swifter/Swifter.framework",
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ElastosHiveSDKTests/Pods-ElastosHiveSDKTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PromiseKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Swifter.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -693,9 +701,20 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TestHost/Pods-TestHost-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TestHost/Pods-TestHost-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
+				"${BUILT_PRODUCTS_DIR}/Swifter/Swifter.framework",
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TestHost/Pods-TestHost-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PromiseKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Swifter.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -760,51 +779,52 @@
 			buildActionMask = 2147483647;
 			files = (
 				1183CEB122AF4C1300796951 /* ItemInfo.swift in Sources */,
+				A3003F3A22C1039B00A341C4 /* IPFSParameter.swift in Sources */,
 				A3E8760722B4E15200D59692 /* NativeFile.swift in Sources */,
 				110744C322C0CD5D0076529D /* HiveClientInfo.swift in Sources */,
-				A39C49B822539D040027BDF9 /* IPFSFile.swift in Sources */,
 				A34724DE226B4ABE0049DBD4 /* LogLevel.swift in Sources */,
 				A34724DC226B4A750049DBD4 /* Log.swift in Sources */,
 				1183CEAF22AF4BFE00796951 /* HiveChildren.swift in Sources */,
+				A3003F3922C1039B00A341C4 /* IPFSAuthHelper.swift in Sources */,
 				A39CB4B822927DB900535E43 /* HiveDirectory.swift in Sources */,
 				114FD8402297CF7700467E38 /* Authenticator.swift in Sources */,
 				A39CB4D52292FF1600535E43 /* AuthCode.swift in Sources */,
 				A3CC8DAB226D99FC00EE80D0 /* SimpleAuthServer.swift in Sources */,
+				A3003F3B22C1039B00A341C4 /* IPFSClient.swift in Sources */,
 				1160625122696E9500BDCB9F /* KeychainSwift.swift in Sources */,
 				11CBF1E522BE242600CD129B /* HiveExtension.swift in Sources */,
 				A39C49BD22539D2E0027BDF9 /* OwnCloudDrive.swift in Sources */,
 				1160625822696EA500BDCB9F /* HelperMethods.swift in Sources */,
 				A3FD3C83228001EB0031413A /* OneDriveClient.swift in Sources */,
 				A3743ADB2265711A00C9493E /* DropBoxParameter.swift in Sources */,
+				A3003F3D22C1039B00A341C4 /* IPFSAPIs.swift in Sources */,
 				A3FD3C9222800A840031413A /* OwnCloudClient.swift in Sources */,
+				A3003F3822C1039B00A341C4 /* IPFSDirectory.swift in Sources */,
 				A3E8760522B4E15200D59692 /* NativeDrive.swift in Sources */,
 				A39C49A522539C9C0027BDF9 /* DriveType.swift in Sources */,
-				110744C222C0CD5D0076529D /* DummyCallback.swift in Sources */,
 				A39C49A122539C9C0027BDF9 /* SdkVersion.swift in Sources */,
 				A39CB4CD2292A0EF00535E43 /* HiveDirectoryItem.swift in Sources */,
 				110744C622C0D06A0076529D /* HiveDirectoryInfo.swift in Sources */,
 				A3743ADD2265743400C9493E /* OneDriveConstants.swift in Sources */,
-				A3743AD72265710000C9493E /* IPFSParameter.swift in Sources */,
 				A39CB4C92292905100535E43 /* HiveResourceItem.swift in Sources */,
 				A39C49A222539C9C0027BDF9 /* DriveParameter.swift in Sources */,
 				A39C49C122539D3B0027BDF9 /* DropboxDrive.swift in Sources */,
 				110744C422C0CD5D0076529D /* AuthInfo.swift in Sources */,
 				A39C499F22539C9C0027BDF9 /* HiveFile.swift in Sources */,
 				A39C49A022539C9C0027BDF9 /* HiveDrive.swift in Sources */,
-				A39CB4C72292878100535E43 /* HiveStatus.swift in Sources */,
-				A39C49B922539D040027BDF9 /* IPFSDrive.swift in Sources */,
+				A39CB4C72292878100535E43 /* HiveVoid.swift in Sources */,
 				A3FD3C9622800C320031413A /* DropboxClient.swift in Sources */,
 				110744BE22C0CD2D0076529D /* HiveDriveInfo.swift in Sources */,
 				A39CB4CB22929E4600535E43 /* HiveFileItem.swift in Sources */,
+				A3003F3E22C1039B00A341C4 /* IPFSFile.swift in Sources */,
 				A39C49B222539CD10027BDF9 /* OneDriveFile.swift in Sources */,
 				A38E8BB12293CD2D001B2AF2 /* AuthToken.swift in Sources */,
 				A39C49C022539D3B0027BDF9 /* DropboxFile.swift in Sources */,
 				1160625522696E9500BDCB9F /* KeychainSwiftAccessOptions.swift in Sources */,
 				A3E8760822B4E15200D59692 /* NativeParameter.swift in Sources */,
-				11F10B9622A78C6300A4C371 /* IPFSAPIs.swift in Sources */,
-				A3FD3C9422800B0F0031413A /* IPFSClient.swift in Sources */,
 				A38E8BAF2293CB13001B2AF2 /* OAuthEntry.swift in Sources */,
 				A39CB4D12292E5FA00535E43 /* OneDriveURL.swift in Sources */,
+				A3003F3C22C1039B00A341C4 /* IPFSURL.swift in Sources */,
 				A3EC496622954DB600CC4546 /* NullEntry.swift in Sources */,
 				11FA093822A4BE11004EB400 /* SwiftyJSON.swift in Sources */,
 				A39C49AB22539CB90027BDF9 /* IOUtil.swift in Sources */,
@@ -813,19 +833,17 @@
 				114FD8382296E19000467E38 /* Alamofire+Synchronous.swift in Sources */,
 				A39C49A422539C9C0027BDF9 /* AuthHelper.swift in Sources */,
 				A39CB4BF2292854000535E43 /* HiveCallback.swift in Sources */,
+				A3003F3F22C1039B00A341C4 /* IPFSDrive.swift in Sources */,
 				A3E8760622B4E15200D59692 /* NativeClient.swift in Sources */,
 				A39C49B122539CD10027BDF9 /* OneDriveAuthHelper.swift in Sources */,
 				A39C49BC22539D2E0027BDF9 /* OwnCloudFile.swift in Sources */,
 				A39C49B022539CD10027BDF9 /* OneDriveDrive.swift in Sources */,
 				A3743AD5226570B200C9493E /* OneDriveParameter.swift in Sources */,
-				11FA093622A3C8BC004EB400 /* IPFSDirectory.swift in Sources */,
 				110744C822C0D19F0076529D /* HiveFileInfo.swift in Sources */,
-				110744BA22BF2B600076529D /* HiveAttributeMap.swift in Sources */,
+				110744BA22BF2B600076529D /* AttributeMap.swift in Sources */,
 				1160625322696E9500BDCB9F /* TegKeychainConstants.swift in Sources */,
-				11FA093222A2C3EB004EB400 /* IPFSAuthHelper.swift in Sources */,
 				A39CB4CF2292A95500535E43 /* GenericCallback.swift in Sources */,
 				A3743AD92265710B00C9493E /* OwnCloudParameter.swift in Sources */,
-				11F10B9A22A78CA700A4C371 /* IPFSURL.swift in Sources */,
 				A3FD3C81228000EE0031413A /* HiveClient.swift in Sources */,
 				A3EC4962229537E500CC4546 /* OneDriveHttpHeader.swift in Sources */,
 			);

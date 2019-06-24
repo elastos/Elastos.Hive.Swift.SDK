@@ -1,9 +1,6 @@
-
-
-import UIKit
+import Foundation
 
 public class HiveChildren: NSObject {
-
     public var children: Array<ItemInfo>
 
     public override init() {
