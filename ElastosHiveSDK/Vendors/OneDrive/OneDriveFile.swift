@@ -484,6 +484,7 @@ internal class OneDriveFile: HiveFileHandle {
                             resolver.reject(error)
                             return
                         }
+                        HelperMethods.uploadCache(.ONEDRIVEACOUNT, url.md5)
                         Log.d(TAG(), "writeData succeed")
                         resolver.fulfill(true)
                 }
@@ -502,8 +503,10 @@ internal class OneDriveFile: HiveFileHandle {
             Log.d(TAG(), "Please login first")
             return
         }
+        cursor = 0
+        finish = false
         let url = self.fullUrl(self.pathName, "content")
-        _ = HelperMethods.clearCache(.ONEDRIVEACOUNT, url.md5)
+        _ = HelperMethods.discardCache(.ONEDRIVEACOUNT, url.md5)
     }
 
     override func close() {

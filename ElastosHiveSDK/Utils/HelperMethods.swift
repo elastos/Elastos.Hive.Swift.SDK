@@ -76,8 +76,8 @@ class HelperMethods {
         let cachePath = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + path
         let cacheDirectory = self.prePath(cachePath)
         let fileManager: FileManager = FileManager.default
-        let exist = fileManager.fileExists(atPath: cacheDirectory)
-        if (!exist) {
+        let cacheExist = fileManager.fileExists(atPath: cacheDirectory)
+        if (!cacheExist) {
             do {
                 try fileManager.createDirectory(atPath: cacheDirectory, withIntermediateDirectories: true, attributes: nil)
             }
@@ -86,6 +86,7 @@ class HelperMethods {
                 return -1
             }
         }
+
         let existFile = fileManager.fileExists(atPath: cachePath)
         if !existFile {
             let isSuccess = fileManager.createFile(atPath: cachePath, contents: nil, attributes: nil)
@@ -94,7 +95,16 @@ class HelperMethods {
                 return -1
             }
         }
-        let writeHandle = FileHandle(forWritingAtPath: cachePath)
+        // copy-on-write
+        let copyPath = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + "copy-" + path
+        do {
+            try fileManager.copyItem(atPath: cachePath, toPath: copyPath)
+        } catch {
+            Log.e(TAG(), "writing failed")
+            return -1
+        }
+
+        let writeHandle = FileHandle(forWritingAtPath: copyPath)
         writeHandle?.seek(toFileOffset: position)
         writeHandle?.write(data)
         return Int32(data.count)
@@ -136,9 +146,9 @@ class HelperMethods {
         else { return Data() }
     }
 
-    class func clearCache(_ account: KEYCHAIN_DRIVE_ACCOUNT, _ path: String) {
+    class func discardCache(_ account: KEYCHAIN_DRIVE_ACCOUNT, _ path: String) {
 
-        let cachePath = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + path
+        let cachePath = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + "copy-" + path
         let fileManager: FileManager = FileManager.default
         let exist = fileManager.fileExists(atPath: cachePath)
         if exist {
@@ -151,6 +161,22 @@ class HelperMethods {
 
     class func clearCacheAll() {
 
+    }
+
+    class func uploadCache(_ account: KEYCHAIN_DRIVE_ACCOUNT, _ path: String) {
+        let cachePath = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + path
+        let copyPath = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + "copy-" + path
+        let fileManager: FileManager = FileManager.default
+        let cacheExist = fileManager.fileExists(atPath: cachePath)
+        let copyExist = fileManager.fileExists(atPath: copyPath)
+        if copyExist && cacheExist {
+            do {
+                try fileManager.removeItem(atPath: cachePath)
+                try fileManager.moveItem(atPath: copyPath, toPath: cachePath)
+            }
+            catch {
+            }
+        }
     }
 
     class func getKeychain(_ key: String, _ account: KEYCHAIN_DRIVE_ACCOUNT) -> String? {
