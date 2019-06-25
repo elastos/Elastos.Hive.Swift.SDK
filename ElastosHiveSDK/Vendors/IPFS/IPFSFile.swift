@@ -5,6 +5,8 @@ import Alamofire
 
 @objc(IPFSFile)
 internal class IPFSFile: HiveFileHandle {
+    var cursor: UInt64 = 0
+    var finish: Bool = false
 
     override init(_ info: HiveFileInfo, _ authHelper: AuthHelper) {
         super.init(info, authHelper)
@@ -126,6 +128,51 @@ internal class IPFSFile: HiveFileHandle {
         }
         return promise
     }
+
+    override func readData() -> HivePromise<Data> {
+        return readData(handleBy: HiveCallback<Data>())
+    }
+
+    override func readData(handleBy: HiveCallback<Data>) -> HivePromise<Data> {
+        let promise = HivePromise<Data>{ resolver in
+            //todo
+        }
+        return promise
+    }
+
+    override func readData(_ position: UInt64) -> HivePromise<Data> {
+       return readData(position, handleBy: HiveCallback<Data>())
+    }
+
+    override func readData(_ position: UInt64, handleBy: HiveCallback<Data>) -> HivePromise<Data> {
+        let promise = HivePromise<Data>{ resolver in
+            // todo
+        }
+        return promise
+    }
+
+    override func writeData(withData: Data) -> HivePromise<Int32> {
+        return writeData(withData: withData, handleBy: HiveCallback<Int32>())
+    }
+
+    override func writeData(withData: Data, handleBy: HiveCallback<Int32>) -> HivePromise<Int32> {
+        let promise = HivePromise<Int32>{ resolver in
+            // todo
+        }
+        return promise
+    }
+
+    override func writeData(withData: Data, _ position: UInt64) -> HivePromise<Int32> {
+        return writeData(withData: withData, position, handleBy: HiveCallback<Int32>())
+    }
+
+    override func writeData(withData: Data, _ position: UInt64, handleBy: HiveCallback<Int32>) -> HivePromise<Int32> {
+        let promise = HivePromise<Int32> { resolver in
+            // todo
+        }
+        return promise
+    }
+
 /*
     override func writeData(withData: Data) -> HivePromise<Bool> {
         return writeData(withData: withData, handleBy: HiveCallback<Bool>())
