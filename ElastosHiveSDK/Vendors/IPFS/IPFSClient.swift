@@ -68,8 +68,12 @@ internal class IPFSClient: HiveClientHandle {
                             return
                         }
                         Log.d(TAG(), "lastUpdatedInfo succeed")
-                        let clientId = "TODO"
-                        let clientInfo = HiveClientInfo(clientId)
+                        let dic = [HiveClientInfo.email: "",
+                                   HiveClientInfo.name: "",
+                                   HiveClientInfo.phoneNo: "",
+                                   HiveClientInfo.region: "",
+                                   HiveClientInfo.userId: uid]
+                        let clientInfo = HiveClientInfo(dic)
                         self.lastInfo = clientInfo
                         handleBy.didSucceed(clientInfo)
                         resolver.fulfill(clientInfo)
@@ -116,7 +120,8 @@ internal class IPFSClient: HiveClientHandle {
                             return
                         }
                         Log.d(TAG(), "defaultDriveHandle succeed")
-                        let driveInfo = HiveDriveInfo(uid)
+                        let dic = [HiveDriveInfo.driveId: uid]
+                        let driveInfo = HiveDriveInfo(dic)
                         let driveHandle = IPFSDrive(driveInfo, self.authHelper!)
                         driveHandle.lastInfo = driveInfo
                         resolver.fulfill(driveHandle)

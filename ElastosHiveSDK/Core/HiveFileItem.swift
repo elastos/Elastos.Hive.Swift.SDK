@@ -2,7 +2,6 @@ import Foundation
 import PromiseKit
 
 protocol HiveFileItem {
-
     func moveTo(newPath: String) -> HivePromise<Bool>
     func moveTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool>
 
@@ -12,44 +11,62 @@ protocol HiveFileItem {
     func deleteItem() -> HivePromise<Bool>
     func deleteItem(handleBy: HiveCallback<Bool>) -> HivePromise<Bool>
 
-    func readData() -> HivePromise<String>
-    func readData(handleBy: HiveCallback<String>) -> HivePromise<String>
+    /*
+    func readData() -> HivePromise<Data>
+    func readData(handleBy: HiveCallback<Data>) -> HivePromise<Data>
 
-    func writeData(withData: Data) -> HivePromise<Bool>
-    func writeData(withData: Data, handleBy: HiveCallback<Bool>) -> HivePromise<Bool>
+    func readData(_ position: UInt64) -> HivePromise<Data>
+    func readData(_ position: UInt64, handleBy: HiveCallback<Data>) -> HivePromise<Data>
 
-    func writeDataWithLarge(withPath: String) -> HivePromise<Bool>
-    func writeDataWithLarge(withPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool>
+    func writeData(withData: Data) -> HivePromise<Int32>
+    func writeData(withData: Data, handleBy: HiveCallback<Int32>) -> HivePromise<Int32>
 
+    func writeData(withData: Data, _ position: UInt64) -> HivePromise<Int32>
+    func writeData(withData: Data, _ position: UInt64, handleBy: HiveCallback<Int32>) -> HivePromise<Int32>
+
+    func commitData() -> HivePromise<Bool>
+    func discardData()
+    */
     func close()
 }
 
 extension HiveFileItem {
 
-    public func readData() -> HivePromise<String> {
-        return readData(handleBy: HiveCallback<String>())
+    public func readData() -> HivePromise<Data>{
+        return readData(handleBy: HiveCallback<Data>())
     }
-
-    public func readData(handleBy: HiveCallback<String>) -> HivePromise<String> {
+    public func readData(handleBy: HiveCallback<Data>) -> HivePromise<Data>{
         let error = HiveError.failue(des: "Dummy")
-        return HivePromise<String>(error: error)
+        return HivePromise<Data>(error: error)
     }
 
-    public func writeData(withData: Data) -> HivePromise<Bool> {
-        return writeData(withData: withData, handleBy: HiveCallback<Bool>())
+    public func readData(_ position: UInt64) -> HivePromise<Data>{
+        return readData(position, handleBy: HiveCallback<Data>())
     }
-    
-    public func writeData(withData: Data, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
+    public func readData(_ position: UInt64, handleBy: HiveCallback<Data>) -> HivePromise<Data>{
+        let error = HiveError.failue(des: "Dummy")
+        return HivePromise<Data>(error: error)
+    }
+
+    public func writeData(withData: Data) -> HivePromise<Int32>{
+        return writeData(withData: withData, handleBy: HiveCallback<Int32>())
+    }
+    public func writeData(withData: Data, handleBy: HiveCallback<Int32>) -> HivePromise<Int32>{
+        let error = HiveError.failue(des: "Dummy")
+        return HivePromise<Int32>(error: error)
+    }
+    public func writeData(withData: Data, _ position: UInt64) -> HivePromise<Int32>{
+        return writeData(withData: withData, position, handleBy: HiveCallback<Int32>())
+    }
+    public func writeData(withData: Data, _ position: UInt64, handleBy: HiveCallback<Int32>) -> HivePromise<Int32>{
+        let error = HiveError.failue(des: "Dummy")
+        return HivePromise<Int32>(error: error)
+    }
+
+    public func commitData() -> HivePromise<Bool>{
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<Bool>(error: error)
     }
+    public func discardData(){}
 
-    public func writeDataWithLarge(withPath: String) -> HivePromise<Bool> {
-        return writeDataWithLarge(withPath: withPath, handleBy: HiveCallback<Bool>())
-    }
-
-    public func writeDataWithLarge(withPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
-        let error = HiveError.failue(des: "Dummy")
-        return HivePromise<Bool>(error: error)
-    }
 }

@@ -3,6 +3,7 @@ import PromiseKit
 
 @objc(HiveFile)
 public class HiveFileHandle: NSObject, HiveResourceItem, HiveFileItem {
+    
     public typealias resourceType = HiveFileInfo
     public var drive: HiveDriveHandle?
     public var fileId: String
@@ -18,7 +19,7 @@ public class HiveFileHandle: NSObject, HiveResourceItem, HiveFileItem {
     init(_ info: HiveFileInfo, _ authHelper: AuthHelper) {
         self.lastInfo = info
         self.authHelper = authHelper
-        self.fileId = lastInfo!.fileId
+        self.fileId = info.attrDic![HiveFileInfo.itemId]!
         self.pathName = ""
     }
     
@@ -99,60 +100,49 @@ public class HiveFileHandle: NSObject, HiveResourceItem, HiveFileItem {
         return HivePromise<Bool>(error: error)
     }
 
-    /// Read file content
-    ///
-    /// - Returns: Returns file content
-    public func readData() -> HivePromise<String> {
-        return readData(handleBy: HiveCallback<String>())
+    public func readData() -> HivePromise<Data> {
+        return readData(handleBy: HiveCallback<Data>())
     }
 
-    /// Read file content
-    ///
-    /// - Parameter handleBy: The result
-    /// - Returns: Returns file content
-    public func readData(handleBy: HiveCallback<String>) -> HivePromise<String> {
+    public func readData(handleBy: HiveCallback<Data>) -> HivePromise<Data> {
         let error = HiveError.failue(des: "Dummy")
-        return HivePromise<String>(error: error)
+        return HivePromise<Data>(error: error)
     }
 
-    /// Maximum Write 4MB
-    ///
-    /// - Parameter withData: The data with write
-    /// - Returns: Returns `true` if the write succees, `false` otherwise.
-    public func writeData(withData: Data) -> HivePromise<Bool> {
-        return writeData(withData: withData, handleBy: HiveCallback<Bool>())
+    public func readData(_ position: UInt64) -> HivePromise<Data> {
+        return readData(position, handleBy: HiveCallback<Data>())
     }
 
-    /// Maximum Write 4MB
-    ///
-    /// - Parameters:
-    ///   - withData: The data with write
-    ///   - handleBy: The result
-    /// - Returns: Returns `true` if the write succees, `false` otherwise.
-    public func writeData(withData: Data, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
+    public func readData(_ position: UInt64, handleBy: HiveCallback<Data>) -> HivePromise<Data> {
         let error = HiveError.failue(des: "Dummy")
-        return HivePromise<Bool>(error: error)
+        return HivePromise<Data>(error: error)
     }
 
-    /// Write large data
-    ///
-    /// - Parameter withPath: The file path
-    /// - Returns: Returns `true` if the write succees, `false` otherwise.
-    public func writeDataWithLarge(withPath: String) -> HivePromise<Bool> {
-        return writeDataWithLarge(withPath: withPath, handleBy: HiveCallback<Bool>())
+    public func writeData(withData: Data) -> HivePromise<Int32> {
+        return writeData(withData: withData, handleBy: HiveCallback<Int32>())
     }
 
-    /// Write large data
-    ///
-    /// - Parameters:
-    ///   - withPath: The file path
-    ///   - handleBy: The result
-    /// - Returns: Returns `true` if the write succees, `false` otherwise.
-    public func writeDataWithLarge(withPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
+    public func writeData(withData: Data, handleBy: HiveCallback<Int32>) -> HivePromise<Int32> {
+        let error = HiveError.failue(des: "Dummy")
+        return HivePromise<Int32>(error: error)
+    }
+
+    public func writeData(withData: Data, _ position: UInt64) -> HivePromise<Int32> {
+        return writeData(withData: withData, position, handleBy: HiveCallback<Int32>())
+    }
+
+    public func writeData(withData: Data, _ position: UInt64, handleBy: HiveCallback<Int32>) -> HivePromise<Int32> {
+        let error = HiveError.failue(des: "Dummy")
+        return HivePromise<Int32>(error: error)
+    }
+
+    public func commitData() -> Promise<Bool> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<Bool>(error: error)
     }
-    
+
+    public func discardData() {}
+
     /// Close
     public func close() {
         // TODO

@@ -55,6 +55,14 @@ internal class OneDriveClient: HiveClientHandle {
 
     override func lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>) -> HivePromise<HiveClientInfo> {
         let promise = HivePromise<HiveClientInfo> { resolver in
+            let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
+            guard login != "" else {
+                Log.d(TAG(), "Please login first")
+                let error = HiveError.failue(des: "Please login first")
+                resolver.reject(error)
+                handleBy.runError(error)
+                return
+            }
             _ = self.authHelper!.checkExpired().done { result in
                 Alamofire.request(OneDriveURL.API, method: .get,
                                   parameters: nil,
@@ -77,9 +85,14 @@ internal class OneDriveClient: HiveClientHandle {
                         let jsonData = JSON(dataResponse.result.value as Any)
                         let owner = JSON(jsonData["owner"])
                         let user = JSON(owner["user"])
-                        let clientId = user["id"].stringValue
-                        let clientInfo = HiveClientInfo(clientId)
-                        clientInfo.installValue(user)
+                        let dic = [
+                            HiveClientInfo.userId: user["id"].stringValue,
+                            HiveClientInfo.name: "",
+                            HiveClientInfo.email: user["email"].stringValue,
+                            HiveClientInfo.phoneNo: user["phone"].stringValue,
+                            HiveClientInfo.region: user["region"].stringValue
+                        ]
+                        let clientInfo = HiveClientInfo(dic)
                         handleBy.didSucceed(clientInfo)
                         resolver.fulfill(clientInfo)
 
@@ -101,6 +114,14 @@ internal class OneDriveClient: HiveClientHandle {
 
     override func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> HivePromise<HiveDriveHandle> {
         let promise = HivePromise<HiveDriveHandle> { resolver in
+            let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
+            guard login != "" else {
+                Log.d(TAG(), "Please login first")
+                let error = HiveError.failue(des: "Please login first")
+                resolver.reject(error)
+                handleBy.runError(error)
+                return
+            }
             guard OneDriveDrive.oneDriveInstance == nil else {
                 let handle = OneDriveDrive.sharedInstance()
                 handleBy.didSucceed(handle)
@@ -129,8 +150,8 @@ internal class OneDriveClient: HiveClientHandle {
                         }
                         let jsonData = JSON(dataResponse.result.value as Any)
                         let driveId = jsonData["id"].stringValue
-                        let driveInfo = HiveDriveInfo(driveId)
-                        driveInfo.installValue(jsonData)
+                        let dic = [HiveDriveInfo.driveId: driveId]
+                        let driveInfo = HiveDriveInfo(dic)
                         let dirHandle = OneDriveDrive(driveInfo, self.authHelper!)
                         dirHandle.lastInfo = driveInfo
                         resolver.fulfill(dirHandle)

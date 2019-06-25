@@ -49,7 +49,7 @@ class HiveOneDriveTests: XCTestCase,Authenticator {
 
     func test2_lastUpdatedInfo() {
         lock = XCTestExpectation(description: "wait for test2_lastUpdatedInfo")
-        self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDriveInfo> in
+        self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDriveHandle.Info> in
             return drive.lastUpdatedInfo()
         }).done({ (driveInfo) in
             XCTAssertNotNil(driveInfo)

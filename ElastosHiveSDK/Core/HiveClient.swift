@@ -5,6 +5,7 @@ public typealias HivePromise = Promise
 
 @objc(HiveClient)
 public class HiveClientHandle: NSObject, HiveResourceItem{
+    
     public typealias resourceType = HiveClientInfo
     public let driveType: DriveType
     public var handleId: String?
@@ -17,7 +18,6 @@ public class HiveClientHandle: NSObject, HiveResourceItem{
     /// - Parameter driveType: The `DriveType` instance
     internal init(_ driveType: DriveType) {
         self.driveType = driveType
-        self.handleId = lastInfo?.userId
     }
 
     /// Creates an instance with the specific `OneDriveParameter`,

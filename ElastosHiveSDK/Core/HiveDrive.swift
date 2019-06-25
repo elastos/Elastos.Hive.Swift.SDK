@@ -3,6 +3,7 @@ import PromiseKit
 
 @objc(HiveDrive)
 public class HiveDriveHandle: NSObject, HiveResourceItem, HiveDirectoryItem {
+
     public typealias resourceType = HiveDriveInfo
     public var driveType: DriveType
     public var handleId: String?
@@ -16,7 +17,7 @@ public class HiveDriveHandle: NSObject, HiveResourceItem, HiveDirectoryItem {
     internal init(_ driveType: DriveType, _ info: HiveDriveInfo) {
         self.driveType = driveType
         self.lastInfo = info
-        self.handleId = lastInfo.driveId
+        self.handleId = lastInfo.attrDic![HiveDriveInfo.driveId]
     }
 
     /// Creates a root directory.
@@ -125,5 +126,14 @@ public class HiveDriveHandle: NSObject, HiveResourceItem, HiveDirectoryItem {
     public func fileHandle(atPath: String, handleBy: HiveCallback<HiveFileHandle>) -> HivePromise<HiveFileHandle> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<HiveFileHandle>(error: error)
+    }
+
+    public func getItemInfo(_ path: String) -> HivePromise<ItemInfo> {
+        return getItemInfo(path, handleBy: HiveCallback<ItemInfo>())
+    }
+
+    public func getItemInfo(_ path: String, handleBy: HiveCallback<ItemInfo>) -> HivePromise<ItemInfo>{
+        let error = HiveError.failue(des: "Dummy")
+        return HivePromise<ItemInfo>(error: error)
     }
 }

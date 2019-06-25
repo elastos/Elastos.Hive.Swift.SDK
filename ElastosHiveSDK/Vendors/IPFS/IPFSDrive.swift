@@ -51,8 +51,8 @@ internal class IPFSDrive: HiveDriveHandle {
                             return
                         }
                         Log.d(TAG(), "lastUpdatedInfo succeed")
-                        let driId = "TODO"
-                        let driveInfo = HiveDriveInfo(driId)
+                        let dic: Dictionary<String, String> = [HiveDriveInfo.driveId: uid]
+                        let driveInfo = HiveDriveInfo(dic)
                         self.lastInfo = driveInfo
                         handleBy.didSucceed(driveInfo)
                         resolver.fulfill(driveInfo)
@@ -93,7 +93,8 @@ internal class IPFSDrive: HiveDriveHandle {
                                 return
                             }
                             Log.d(TAG(), "rootDirectoryHandle succeed")
-                            let directoryInfo = HiveDirectoryInfo(uid)
+                            let dic = [HiveDirectoryInfo.itemId: uid]
+                            let directoryInfo = HiveDirectoryInfo(dic)
                             let directoryHandle = IPFSDirectory(directoryInfo, self.authHelper)
                             directoryHandle.lastInfo = directoryInfo
                             directoryHandle.pathName = "/"
@@ -125,8 +126,9 @@ internal class IPFSDrive: HiveDriveHandle {
                         return IPFSAPIs.publish(withPath)
                     }).done({ (success) in
                         Log.d(TAG(), "createDirectory succeed")
-                        let dirId = "TODO"
-                        let directoryInfo = HiveDirectoryInfo(dirId)
+                        let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                        let dic = [HiveDirectoryInfo.itemId: uid]
+                        let directoryInfo = HiveDirectoryInfo(dic)
                         let directoryHandle = IPFSDirectory(directoryInfo, self.authHelper)
                         directoryHandle.lastInfo = directoryInfo
                         directoryHandle.pathName = withPath
@@ -177,7 +179,8 @@ internal class IPFSDrive: HiveDriveHandle {
                                 return
                             }
                             Log.d(TAG(), "directoryHandle succeed")
-                            let directoryInfo = HiveDirectoryInfo(uid)
+                            let dic = [HiveDirectoryInfo.itemId: uid]
+                            let directoryInfo = HiveDirectoryInfo(dic)
                             let directoryHandle = IPFSDirectory(directoryInfo, self.authHelper)
                             directoryHandle.lastInfo = directoryInfo
                             directoryHandle.pathName = atPath
@@ -209,8 +212,9 @@ internal class IPFSDrive: HiveDriveHandle {
                         return IPFSAPIs.publish(withPath)
                     }).done({ (success) in
                         Log.d(TAG(), "createFile succeed")
-                        let fileId = "TODO"
-                        let fileInfo = HiveFileInfo(fileId)
+                        let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                        let dic = [HiveFileInfo.itemId: uid]
+                        let fileInfo = HiveFileInfo(dic)
                         let fileHandle = IPFSFile(fileInfo, self.authHelper)
                         fileHandle.pathName = withPath
                         fileHandle.lastInfo = fileInfo
@@ -259,7 +263,8 @@ internal class IPFSDrive: HiveDriveHandle {
                                 return
                             }
                             Log.d(TAG(), "fileHandle succeed")
-                            let fileInfo = HiveFileInfo(uid)
+                            let dic = [HiveFileInfo.itemId: uid]
+                            let fileInfo = HiveFileInfo(dic)
                             let fileHandle = IPFSFile(fileInfo, self.authHelper)
                             fileHandle.lastInfo = fileInfo
                             fileHandle.pathName = atPath
@@ -270,6 +275,50 @@ internal class IPFSDrive: HiveDriveHandle {
                 }).catch({ (error) in
                     let error = HiveError.failue(des: error.localizedDescription)
                     Log.e(TAG(), "fileHandle falied: %s", error.localizedDescription)
+                    resolver.reject(error)
+                    handleBy.runError(error)
+                })
+            }
+            return promise
+    }
+
+    override func getItemInfo(_ path: String) -> HivePromise<ItemInfo> {
+        return getItemInfo(path, handleBy: HiveCallback<ItemInfo>())
+    }
+
+    override func getItemInfo(_ path: String, handleBy: HiveCallback<ItemInfo>) -> HivePromise<ItemInfo> {
+            let promise = HivePromise<ItemInfo> { resolver in
+                _ = self.authHelper.checkExpired().done({ (success) in
+
+                    let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
+                    let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                    let param = ["uid": uid, "path": path]
+                    Alamofire.request(url,
+                                      method: .post,
+                                      parameters: param,
+                                      encoding: URLEncoding.queryString,
+                                      headers: nil)
+                        .responseJSON(completionHandler: { (dataResponse) in
+                            guard dataResponse.response?.statusCode == 200 else {
+                                let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                                Log.e(TAG(), "getItemInfo falied: %s", error.localizedDescription)
+                                resolver.reject(error)
+                                handleBy.runError(error)
+                                return
+                            }
+                            Log.d(TAG(), "getItemInfo succeed")
+                            let jsonData = JSON(dataResponse.result.value as Any)
+                            let dic = [ItemInfo.itemId: uid,
+                                       ItemInfo.name: HelperMethods.endPath(path),
+                                       ItemInfo.size: jsonData["Size"].stringValue,
+                                       ItemInfo.type: jsonData["Type"].stringValue]
+                            let itemInfo = ItemInfo(dic)
+                            resolver.fulfill(itemInfo)
+                            handleBy.didSucceed(itemInfo)
+                        })
+                }).catch({ (error) in
+                    let error = HiveError.failue(des: error.localizedDescription)
+                    Log.e(TAG(), "getItemInfo falied: %s", error.localizedDescription)
                     resolver.reject(error)
                     handleBy.runError(error)
                 })

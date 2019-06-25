@@ -20,6 +20,14 @@ class OneDriveDirectory: HiveDirectoryHandle {
 
     override func lastUpdatedInfo(handleBy: HiveCallback<HiveDirectoryInfo>) -> HivePromise<HiveDirectoryInfo> {
         let promise = HivePromise<HiveDirectoryInfo> { resolver in
+            let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
+            guard login != "" else {
+                Log.d(TAG(), "Please login first")
+                let error = HiveError.failue(des: "Please login first")
+                resolver.reject(error)
+                handleBy.runError(error)
+                return
+            }
             _ = self.authHelper.checkExpired().done { (result) in
                 var url = OneDriveURL.API + "/root"
                 if self.pathName != "/" {
@@ -46,8 +54,8 @@ class OneDriveDirectory: HiveDirectoryHandle {
                         }
                         let jsonData = JSON(dataResponse.result.value as Any)
                         let dirId = jsonData["id"].stringValue
-                        let directoryInfo = HiveDirectoryInfo(dirId)
-                        directoryInfo.installValue(jsonData)
+                        let dic = [HiveDirectoryInfo.itemId: dirId]
+                        let directoryInfo = HiveDirectoryInfo(dic)
                         self.lastInfo = directoryInfo
                         handleBy.didSucceed(directoryInfo)
                         resolver.fulfill(directoryInfo)
@@ -70,6 +78,14 @@ class OneDriveDirectory: HiveDirectoryHandle {
     override func createDirectory(withName: String, handleBy: HiveCallback<HiveDirectoryHandle>) ->
         HivePromise<HiveDirectoryHandle> {
         let promise = HivePromise<HiveDirectoryHandle> { resolver in
+            let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
+            guard login != "" else {
+                Log.d(TAG(), "Please login first")
+                let error = HiveError.failue(des: "Please login first")
+                resolver.reject(error)
+                handleBy.runError(error)
+                return
+            }
             _ = self.authHelper.checkExpired().done { result in
                 let params: Dictionary<String, Any> = [
                     "name": withName,
@@ -102,8 +118,8 @@ class OneDriveDirectory: HiveDirectoryHandle {
                         }
                         let jsonData = JSON(dataResponse.result.value as Any)
                         let dirId = jsonData["id"].stringValue
-                        let dirInfo = HiveDirectoryInfo(dirId)
-                        dirInfo.installValue(jsonData)
+                        let dic = [HiveDirectoryInfo.itemId: dirId]
+                        let dirInfo = HiveDirectoryInfo(dic)
                         let dirHandle = OneDriveDirectory(dirInfo, self.authHelper)
                         dirHandle.name = jsonData["name"].string
                         var path = self.pathName + "/" + withName
@@ -135,6 +151,14 @@ class OneDriveDirectory: HiveDirectoryHandle {
     override func directoryHandle(atName: String, handleBy: HiveCallback<HiveDirectoryHandle>) ->
         HivePromise<HiveDirectoryHandle> {
         let promise = HivePromise<HiveDirectoryHandle> { resolver in
+            let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
+            guard login != "" else {
+                Log.d(TAG(), "Please login first")
+                let error = HiveError.failue(des: "Please login first")
+                resolver.reject(error)
+                handleBy.runError(error)
+                return
+            }
             _ = self.authHelper.checkExpired().done { result in
                 var path = self.pathName + "/" + atName
                 if self.pathName == "/" {
@@ -163,8 +187,8 @@ class OneDriveDirectory: HiveDirectoryHandle {
                         }
                         let jsonData = JSON(dataResponse.result.value as Any)
                         let dirId = jsonData["id"].stringValue
-                        let dirInfo = HiveDirectoryInfo(dirId)
-                        dirInfo.installValue(jsonData)
+                        let dic = [HiveDirectoryInfo.itemId: dirId]
+                        let dirInfo = HiveDirectoryInfo(dic)
                         let dirHandle = OneDriveDirectory(dirInfo, self.authHelper)
                         dirHandle.name = jsonData["name"].string
                         dirHandle.pathName = path
@@ -192,6 +216,14 @@ class OneDriveDirectory: HiveDirectoryHandle {
 
     override func createFile(withName: String, handleBy: HiveCallback<HiveFileHandle>) -> HivePromise<HiveFileHandle> {
         let promise = HivePromise<HiveFileHandle> { resolver in
+            let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
+            guard login != "" else {
+                Log.d(TAG(), "Please login first")
+                let error = HiveError.failue(des: "Please login first")
+                resolver.reject(error)
+                handleBy.runError(error)
+                return
+            }
             _ = self.authHelper.checkExpired().done { result in
                 var path = self.pathName + "/" + withName
                 if self.pathName == "/" {
@@ -221,8 +253,8 @@ class OneDriveDirectory: HiveDirectoryHandle {
                         }
                         let jsonData = JSON(dataResponse.result.value as Any)
                         let fileId = jsonData["id"].stringValue
-                        let fileInfo = HiveFileInfo(fileId)
-                        fileInfo.installValue(jsonData)
+                        let dic = [HiveFileInfo.itemId: fileId]
+                        let fileInfo = HiveFileInfo(dic)
                         let fileHandle = OneDriveFile(fileInfo, self.authHelper)
                         fileHandle.name = jsonData["name"].string
                         fileHandle.pathName = path
@@ -251,6 +283,14 @@ class OneDriveDirectory: HiveDirectoryHandle {
     override func fileHandle(atName: String, handleBy: HiveCallback<HiveFileHandle>) ->
         HivePromise<HiveFileHandle> {
         let promise = HivePromise<HiveFileHandle> { resolver in
+            let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
+            guard login != "" else {
+                Log.d(TAG(), "Please login first")
+                let error = HiveError.failue(des: "Please login first")
+                resolver.reject(error)
+                handleBy.runError(error)
+                return
+            }
             _ = self.authHelper.checkExpired().done { result in
                 var path = self.pathName + "/" + atName
                 if self.pathName == "/" {
@@ -280,8 +320,8 @@ class OneDriveDirectory: HiveDirectoryHandle {
                         }
                         let jsonData = JSON(dataResponse.result.value as Any)
                         let fileId = jsonData["id"].stringValue
-                        let fileInfo = HiveFileInfo(fileId)
-                        fileInfo.installValue(jsonData)
+                        let dic = [HiveFileInfo.itemId: fileId]
+                        let fileInfo = HiveFileInfo(dic)
                         let fileHandle = OneDriveFile(fileInfo, self.authHelper)
                         fileHandle.name = jsonData["name"].string
                         fileHandle.pathName = path
@@ -309,6 +349,14 @@ class OneDriveDirectory: HiveDirectoryHandle {
 
     override func getChildren(handleBy: HiveCallback<HiveChildren>) -> HivePromise<HiveChildren> {
         let promise = HivePromise<HiveChildren> { resolver in
+            let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
+            guard login != "" else {
+                Log.d(TAG(), "Please login first")
+                let error = HiveError.failue(des: "Please login first")
+                resolver.reject(error)
+                handleBy.runError(error)
+                return
+            }
             _ = self.authHelper.checkExpired().done { result in
                 let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                 var url = "\(OneDriveURL.API)/root:\(path):/children"
@@ -336,6 +384,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                         }
                         let jsonData = JSON(dataResponse.result.value as Any)
                         let children = HiveChildren()
+                        // todo
                         children.installValue(jsonData)
                         handleBy.didSucceed(children)
                         resolver.fulfill(children)
@@ -356,6 +405,14 @@ class OneDriveDirectory: HiveDirectoryHandle {
 
     override func moveTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
         let promise = HivePromise<Bool>{ resolver in
+            let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
+            guard login != "" else {
+                Log.d(TAG(), "Please login first")
+                let error = HiveError.failue(des: "Please login first")
+                resolver.reject(error)
+                handleBy.runError(error)
+                return
+            }
             _ = self.authHelper.checkExpired().done { result in
                 let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                 let url = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):\(path)"
@@ -402,6 +459,14 @@ class OneDriveDirectory: HiveDirectoryHandle {
 
     override func copyTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
         let promise = HivePromise<Bool>{ resolver in
+            let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
+            guard login != "" else {
+                Log.d(TAG(), "Please login first")
+                let error = HiveError.failue(des: "Please login first")
+                resolver.reject(error)
+                handleBy.runError(error)
+                return
+            }
             _ = self.authHelper.checkExpired().done { result in
                 let path = ("/" + self.pathName).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                 var url = OneDriveURL.API + ONEDRIVE_ROOTDIR + ":" + path + ":/copy"
@@ -461,6 +526,14 @@ class OneDriveDirectory: HiveDirectoryHandle {
 
     override func deleteItem(handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
         let promise = HivePromise<Bool>{ resolver in
+            let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
+            guard login != "" else {
+                Log.d(TAG(), "Please login first")
+                let error = HiveError.failue(des: "Please login first")
+                resolver.reject(error)
+                handleBy.runError(error)
+                return
+            }
             _ = self.authHelper.checkExpired().done { result in
                 let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                 let url: String = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):/\(path)"
