@@ -471,7 +471,7 @@ internal class OneDriveFile: HiveFileHandle {
                 let accesstoken = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
                 let url = self.fullUrl(self.pathName, "content")
                 let headers = ["Authorization": "bearer \(accesstoken)", "Content-Type": "text/plain"]
-                let data = HelperMethods.readCache(.ONEDRIVEACOUNT, url.md5, 0)
+                let data = HelperMethods.uploadFile(.ONEDRIVEACOUNT, url.md5)
                 Alamofire.upload(data, to: url,
                                  method: .put,
                                  headers: headers)

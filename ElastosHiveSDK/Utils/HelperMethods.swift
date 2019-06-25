@@ -146,8 +146,21 @@ class HelperMethods {
         else { return Data() }
     }
 
-    class func discardCache(_ account: KEYCHAIN_DRIVE_ACCOUNT, _ path: String) {
+    class func uploadFile(_ account: KEYCHAIN_DRIVE_ACCOUNT, _ path: String) -> Data  {
+        let copyPath = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + "copy-" + path
+        let fileManager = FileManager.default
+        let exist = fileManager.fileExists(atPath: copyPath)
+        if (exist) {
+            let readHandler = FileHandle(forReadingAtPath: copyPath)
+            var dt = Data()
+            readHandler?.seek(toFileOffset: 0)
+            dt = (readHandler?.readDataToEndOfFile())!
+            return dt
+        }
+        else { return Data() }
+    }
 
+    class func discardCache(_ account: KEYCHAIN_DRIVE_ACCOUNT, _ path: String) {
         let cachePath = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + "copy-" + path
         let fileManager: FileManager = FileManager.default
         let exist = fileManager.fileExists(atPath: cachePath)
