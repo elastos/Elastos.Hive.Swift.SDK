@@ -3,7 +3,6 @@ import PromiseKit
 
 @objc(HiveFile)
 public class HiveFileHandle: Result, ResourceItem, FileItem {
-    
     public typealias resourceType = HiveFileInfo
     public var drive: HiveDriveHandle?
     public var fileId: String
