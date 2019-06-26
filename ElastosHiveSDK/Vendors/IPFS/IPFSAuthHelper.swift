@@ -12,13 +12,13 @@ class IPFSAuthHelper: AuthHelper {
         super.init()
     }
 
-    override func loginAsync(_ authenticator: Authenticator) -> HivePromise<Bool> {
-        return loginAsync(authenticator, handleBy: HiveCallback<Bool>())
+    override func loginAsync(_ authenticator: Authenticator) -> HivePromise<HiveVoid> {
+        return loginAsync(authenticator, handleBy: HiveCallback<HiveVoid>())
     }
 
-    override func loginAsync(_ authenticator: Authenticator, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
-        let promise = HivePromise<Bool> { resolver in
-            self.checkExpired().then{ (success) -> HivePromise<String> in
+    override func loginAsync(_ authenticator: Authenticator, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
+        let promise = HivePromise<HiveVoid> { resolver in
+            self.checkExpired().then { padding -> HivePromise<String> in
                 return self.getUID()
             }.then { (uid) -> HivePromise<String> in
                 return self.getPeerId(uid)
@@ -26,8 +26,9 @@ class IPFSAuthHelper: AuthHelper {
                 return self.getHash(peerId)
             }.then { (hash) -> HivePromise<Bool> in
                 return self.logIn(hash)
-            }.done { (success) in
-                resolver.fulfill(success)
+            }.done { padding in
+                let padding = HiveVoid();
+                resolver.fulfill(padding)
                 Log.d(TAG(), "login succeed")
             }.catch { (error) in
                 resolver.reject(error)
@@ -37,17 +38,19 @@ class IPFSAuthHelper: AuthHelper {
         return promise
     }
 
-    override func logoutAsync() -> HivePromise<Bool> {
-        return logoutAsync(handleBy: HiveCallback<Bool>())
+    override func logoutAsync() -> HivePromise<HiveVoid> {
+        return logoutAsync(handleBy: HiveCallback<HiveVoid>())
     }
 
-    override func logoutAsync(handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
+    override func logoutAsync(handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
         let error = HiveError.failue(des: "TODO")
-        return HivePromise<Bool>(error: error)
+        return HivePromise<HiveVoid>(error: error)
     }
 
-    override func checkExpired() -> HivePromise<Bool> {
-       return IPFSURL.validURL()
+    override func checkExpired() -> HivePromise<HiveVoid> {
+       //return IPFSURL.validURL()
+        let error = HiveError.failue(des: "Dummy")
+        return HivePromise<HiveVoid>(error: error)
     }
 
     private func getUID() -> HivePromise<String> {
