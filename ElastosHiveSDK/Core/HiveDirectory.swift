@@ -2,7 +2,7 @@ import Foundation
 import PromiseKit
 
 @objc(HiveDirectory)
-public class HiveDirectoryHandle: NSObject, HiveResourceItem, HiveFileItem, HiveDirectoryItem {
+public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem {
     
     public typealias resourceType = HiveDirectoryInfo
     public var drive: HiveDriveHandle?
@@ -14,7 +14,7 @@ public class HiveDirectoryHandle: NSObject, HiveResourceItem, HiveFileItem, Hive
     /// Creates an instance with the specified `info` and `authHelper`.
     ///
     /// - Parameters:
-    ///   - info: The `HiveDirectoryInfo` instance
+    ///   - info: The `DirectoryInfo` instance
     ///   - authHelper: The `AuthHelper` instance of the subclasses
     init(_ info: HiveDirectoryInfo, _ authHelper: AuthHelper) {
         self.lastInfo = info

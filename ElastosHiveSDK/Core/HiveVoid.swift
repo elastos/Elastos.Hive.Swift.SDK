@@ -1,4 +1,4 @@
 import Foundation
 
-public class HiveVoid: NSObject {
+public class HiveVoid: Result {
 }

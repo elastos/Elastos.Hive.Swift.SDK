@@ -2,7 +2,7 @@ import Foundation
 import PromiseKit
 
 @objc(HiveDrive)
-public class HiveDriveHandle: NSObject, HiveResourceItem, HiveDirectoryItem {
+public class HiveDriveHandle: Result, ResourceItem, DirectoryItem {
 
     public typealias resourceType = HiveDriveInfo
     public var driveType: DriveType

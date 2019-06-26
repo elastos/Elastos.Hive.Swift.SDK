@@ -1,6 +1,6 @@
 import Foundation
 
-public class HiveChildren: NSObject {
+public class HiveChildren: Result {
     public var children: Array<ItemInfo>
 
     public override init() {

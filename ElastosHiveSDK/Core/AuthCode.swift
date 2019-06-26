@@ -1,6 +1,6 @@
 import Foundation
 
-class AuthCode {
+class AuthCode: Result {
     public final var authCode: String
 
     init(_ authCode: String) {
