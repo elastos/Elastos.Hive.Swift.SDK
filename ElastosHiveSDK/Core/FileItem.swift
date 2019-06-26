@@ -1,7 +1,7 @@
 import Foundation
 import PromiseKit
 
-protocol HiveFileItem {
+protocol FileItem {
     func moveTo(newPath: String) -> HivePromise<Bool>
     func moveTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool>
 
@@ -11,26 +11,10 @@ protocol HiveFileItem {
     func deleteItem() -> HivePromise<Bool>
     func deleteItem(handleBy: HiveCallback<Bool>) -> HivePromise<Bool>
 
-    /*
-    func readData() -> HivePromise<Data>
-    func readData(handleBy: HiveCallback<Data>) -> HivePromise<Data>
-
-    func readData(_ position: UInt64) -> HivePromise<Data>
-    func readData(_ position: UInt64, handleBy: HiveCallback<Data>) -> HivePromise<Data>
-
-    func writeData(withData: Data) -> HivePromise<Int32>
-    func writeData(withData: Data, handleBy: HiveCallback<Int32>) -> HivePromise<Int32>
-
-    func writeData(withData: Data, _ position: UInt64) -> HivePromise<Int32>
-    func writeData(withData: Data, _ position: UInt64, handleBy: HiveCallback<Int32>) -> HivePromise<Int32>
-
-    func commitData() -> HivePromise<Bool>
-    func discardData()
-    */
     func close()
 }
 
-extension HiveFileItem {
+extension FileItem {
 
     public func readData() -> HivePromise<Data>{
         return readData(handleBy: HiveCallback<Data>())
@@ -67,6 +51,6 @@ extension HiveFileItem {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<Bool>(error: error)
     }
-    public func discardData(){}
 
+    public func discardData(){}
 }

@@ -4,7 +4,7 @@ import PromiseKit
 public typealias HivePromise = Promise
 
 @objc(HiveClient)
-public class HiveClientHandle: NSObject, HiveResourceItem{
+public class HiveClientHandle: Result, ResourceItem{
     
     public typealias resourceType = HiveClientInfo
     public let driveType: DriveType

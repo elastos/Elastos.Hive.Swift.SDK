@@ -2,7 +2,7 @@ import Foundation
 import PromiseKit
 
 @objc(HiveFile)
-public class HiveFileHandle: NSObject, HiveResourceItem, HiveFileItem {
+public class HiveFileHandle: Result, ResourceItem, FileItem {
     
     public typealias resourceType = HiveFileInfo
     public var drive: HiveDriveHandle?

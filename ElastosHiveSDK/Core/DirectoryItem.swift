@@ -1,7 +1,7 @@
 import Foundation
 import PromiseKit
 
-public protocol HiveDirectoryItem {
+public protocol DirectoryItem {
     // for drive
     func createDirectory(withPath: String) -> HivePromise<HiveDirectoryHandle>
     func createDirectory(withPath: String, handleBy: HiveCallback<HiveDirectoryHandle>)
@@ -37,7 +37,7 @@ public protocol HiveDirectoryItem {
         -> HivePromise<HiveFileHandle>
 }
 
-extension HiveDirectoryItem{
+extension DirectoryItem{
 
     public func createDirectory(withPath: String) -> HivePromise<HiveDirectoryHandle> {
         return createDirectory(withPath: withPath, handleBy: HiveCallback<HiveDirectoryHandle>())
