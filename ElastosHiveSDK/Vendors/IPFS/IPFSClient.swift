@@ -25,22 +25,18 @@ internal class IPFSClient: HiveClientHandle {
         return clientInstance
     }
 
-    override func login(_ authenticator: Authenticator) throws -> Bool {
-        var result = false
+    override func login(_ authenticator: Authenticator) throws {
         let promise =  self.authHelper?.loginAsync(authenticator)
         do {
-            result = try (promise?.wait())!
+            _ = try (promise?.wait())!
             _ = defaultDriveHandle()
         } catch  {
-            result = false
             throw error
         }
-        return result
     }
 
-    override func logout() -> Bool {
+    override func logout() throws {
         // TODO
-        return false
     }
 
     override func lastUpdatedInfo() -> HivePromise<HiveClientInfo> {
