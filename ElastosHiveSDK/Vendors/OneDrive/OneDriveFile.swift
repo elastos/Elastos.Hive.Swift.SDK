@@ -270,11 +270,11 @@ internal class OneDriveFile: HiveFileHandle {
         return promise
     }
 
-    override func readData() -> Promise<Data> {
-        return readData(handleBy: HiveCallback<Data>())
+    override func readData(_ length: Int) -> Promise<Data> {
+        return readData(length, handleBy: HiveCallback<Data>())
     }
 
-    override func readData(handleBy: HiveCallback<Data>) -> HivePromise<Data> {
+    override func readData(_ length: Int, handleBy: HiveCallback<Data>) -> HivePromise<Data> {
         let promise = HivePromise<Data> { resolver in
             let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
             guard login != "" else {
@@ -295,7 +295,7 @@ internal class OneDriveFile: HiveFileHandle {
             let cachePath = url.md5
             let file = HelperMethods.checkCacheFileIsExist(.ONEDRIVEACOUNT, cachePath)
             if file {
-                let data: Data = HelperMethods.readCache(.ONEDRIVEACOUNT, cachePath, cursor)
+                let data: Data = HelperMethods.readCache(.ONEDRIVEACOUNT, cachePath, cursor, length)
                 cursor += UInt64(data.count)
                 resolver.fulfill(data)
                 handleBy.didSucceed(data)
@@ -315,7 +315,7 @@ internal class OneDriveFile: HiveFileHandle {
                 let isSuccess = HelperMethods.saveCache(.ONEDRIVEACOUNT, cachePath, data: data!)
                 var readData = Data()
                 if isSuccess {
-                    readData = HelperMethods.readCache(.ONEDRIVEACOUNT, cachePath, self.cursor)
+                    readData = HelperMethods.readCache(.ONEDRIVEACOUNT, cachePath, self.cursor, length)
                 }
                 self.cursor += UInt64(readData.count)
                 Log.d(TAG(), "readData succeed")
@@ -326,11 +326,11 @@ internal class OneDriveFile: HiveFileHandle {
         return promise
     }
 
-    override func readData(_ position: UInt64) -> HivePromise<Data> {
-        return readData(position, handleBy: HiveCallback<Data>())
+    override func readData(_ length: Int, _ position: UInt64) -> HivePromise<Data> {
+        return readData(length, position, handleBy: HiveCallback<Data>())
     }
 
-    override func readData(_ position: UInt64, handleBy: HiveCallback<Data>) -> HivePromise<Data> {
+    override func readData(_ length: Int, _ position: UInt64, handleBy: HiveCallback<Data>) -> HivePromise<Data> {
         let promise = HivePromise<Data> { resolver in
             let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
             guard login != "" else {
@@ -345,7 +345,7 @@ internal class OneDriveFile: HiveFileHandle {
             let cachePath = url.md5
             let file = HelperMethods.checkCacheFileIsExist(.ONEDRIVEACOUNT, cachePath)
             if file {
-                let data = HelperMethods.readCache(.ONEDRIVEACOUNT, cachePath, position)
+                let data = HelperMethods.readCache(.ONEDRIVEACOUNT, cachePath, position, length)
                 cursor += UInt64(data.count)
                 resolver.fulfill(data)
                 handleBy.didSucceed(data)
@@ -361,7 +361,7 @@ internal class OneDriveFile: HiveFileHandle {
                 let isSuccess = HelperMethods.saveCache(.ONEDRIVEACOUNT, cachePath, data: data!)
                 var readData = Data()
                 if isSuccess {
-                    readData = HelperMethods.readCache(.ONEDRIVEACOUNT, cachePath, position)
+                    readData = HelperMethods.readCache(.ONEDRIVEACOUNT, cachePath, position, length)
                     self.cursor += UInt64(readData.count)
                 }
                 Log.d(TAG(), "readData succeed")

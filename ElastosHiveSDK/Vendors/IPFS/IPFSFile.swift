@@ -129,24 +129,88 @@ internal class IPFSFile: HiveFileHandle {
         return promise
     }
 
-    override func readData() -> HivePromise<Data> {
-        return readData(handleBy: HiveCallback<Data>())
+    override func readData(_ length: Int) -> HivePromise<Data> {
+        return readData(length, handleBy: HiveCallback<Data>())
     }
 
-    override func readData(handleBy: HiveCallback<Data>) -> HivePromise<Data> {
-        let promise = HivePromise<Data>{ resolver in
-            //todo
+    override func readData(_ length: Int, handleBy: HiveCallback<Data>) -> HivePromise<Data> {
+        let promise = HivePromise<Data> { resolver in
+            if finish == true {
+                Log.e(TAG(), "The file has been read finished")
+                resolver.fulfill(Data())
+                handleBy.didSucceed(Data())
+                return
+            }
+            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+            let url: String = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_READ.rawValue + "?uid=" + uid + "&path=" + self.pathName
+            let cachePath = url.md5
+            let file = HelperMethods.checkCacheFileIsExist(.IPFSACCOUNT, cachePath)
+            if file {
+                let data: Data = HelperMethods.readCache(.IPFSACCOUNT, cachePath, cursor, length)
+                cursor += UInt64(data.count)
+                resolver.fulfill(data)
+                handleBy.didSucceed(data)
+                if data.count == 0 {
+                    cursor = 0
+                    finish = true
+                }
+                return
+            }
+            self.getRemoteFile(url, { (data, error) in
+                guard error == nil else {
+                    Log.e(TAG(), "readData falied: %s", error!.localizedDescription)
+                    resolver.reject(error!)
+                    handleBy.runError(error!)
+                    return
+                }
+                let isSuccess = HelperMethods.saveCache(.IPFSACCOUNT, cachePath, data: data!)
+                var readData = Data()
+                if isSuccess {
+                    readData = HelperMethods.readCache(.IPFSACCOUNT, cachePath, self.cursor, length)
+                }
+                self.cursor += UInt64(readData.count)
+                Log.d(TAG(), "readData succeed")
+                resolver.fulfill(readData)
+                handleBy.didSucceed(readData)
+            })
         }
         return promise
     }
 
-    override func readData(_ position: UInt64) -> HivePromise<Data> {
-       return readData(position, handleBy: HiveCallback<Data>())
+    override func readData(_ length: Int, _ position: UInt64) -> HivePromise<Data> {
+       return readData(length, position, handleBy: HiveCallback<Data>())
     }
 
-    override func readData(_ position: UInt64, handleBy: HiveCallback<Data>) -> HivePromise<Data> {
-        let promise = HivePromise<Data>{ resolver in
-            // todo
+    override func readData(_ length: Int, _ position: UInt64, handleBy: HiveCallback<Data>) -> HivePromise<Data> {
+        let promise = HivePromise<Data> { resolver in
+            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+            let url: String = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_READ.rawValue + "?uid=" + uid + "&path=" + self.pathName
+            let cachePath = url.md5
+            let file = HelperMethods.checkCacheFileIsExist(.IPFSACCOUNT, cachePath)
+            if file {
+                let data = HelperMethods.readCache(.IPFSACCOUNT, cachePath, position, length)
+                cursor += UInt64(data.count)
+                resolver.fulfill(data)
+                handleBy.didSucceed(data)
+                return
+            }
+            self.getRemoteFile(url, { (data, error) in
+                guard error == nil else {
+                    Log.e(TAG(), "readData falied: %s", error!.localizedDescription)
+                    resolver.reject(error!)
+                    handleBy.runError(error!)
+                    return
+                }
+                let isSuccess = HelperMethods.saveCache(.IPFSACCOUNT, cachePath, data: data!)
+                var readData = Data()
+                if isSuccess {
+                    readData = HelperMethods.readCache(.IPFSACCOUNT, cachePath, position, length)
+                    self.cursor += UInt64(readData.count)
+                }
+                Log.d(TAG(), "readData succeed")
+                resolver.fulfill(readData)
+                handleBy.didSucceed(readData)
+            })
         }
         return promise
     }
@@ -156,8 +220,32 @@ internal class IPFSFile: HiveFileHandle {
     }
 
     override func writeData(withData: Data, handleBy: HiveCallback<Int32>) -> HivePromise<Int32> {
-        let promise = HivePromise<Int32>{ resolver in
-            // todo
+        let promise = HivePromise<Int32> { resolver in
+            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+            let url: String = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_READ.rawValue + "?uid=" + uid + "&path=" + self.pathName
+            let cachePath = url.md5
+            let file = HelperMethods.checkCacheFileIsExist(.IPFSACCOUNT, cachePath)
+            if file {
+                let length = HelperMethods.writeCache(.IPFSACCOUNT, cachePath, data: withData, cursor)
+                cursor += UInt64(length)
+                resolver.fulfill(length)
+                handleBy.didSucceed(length)
+                return
+            }
+            self.getRemoteFile(url, { (data, error) in
+                guard error == nil else {
+                    Log.e(TAG(), "writeData falied: %s", error!.localizedDescription)
+                    resolver.reject(error!)
+                    handleBy.runError(error!)
+                    return
+                }
+                _ = HelperMethods.saveCache(.IPFSACCOUNT, cachePath, data: data!)
+                let length = HelperMethods.writeCache(.IPFSACCOUNT, cachePath, data: withData, self.cursor)
+                self.cursor += UInt64(length)
+                Log.d(TAG(), "writeData succeed")
+                resolver.fulfill(length)
+                handleBy.didSucceed(length)
+            })
         }
         return promise
     }
@@ -168,75 +256,93 @@ internal class IPFSFile: HiveFileHandle {
 
     override func writeData(withData: Data, _ position: UInt64, handleBy: HiveCallback<Int32>) -> HivePromise<Int32> {
         let promise = HivePromise<Int32> { resolver in
-            // todo
+            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+            let url: String = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_READ.rawValue + "?uid=" + uid + "&path=" + self.pathName
+            let cachePath = url.md5
+            let file = HelperMethods.checkCacheFileIsExist(.IPFSACCOUNT, cachePath)
+            if file {
+                let length = HelperMethods.writeCache(.IPFSACCOUNT, cachePath, data: withData, position)
+                cursor += UInt64(length)
+                resolver.fulfill(length)
+                handleBy.didSucceed(length)
+                return
+            }
+            self.getRemoteFile(url, { (data, error) in
+                guard error == nil else {
+                    Log.e(TAG(), "writeData falied: %s", error!.localizedDescription)
+                    resolver.reject(error!)
+                    handleBy.runError(error!)
+                    return
+                }
+                _ = HelperMethods.saveCache(.IPFSACCOUNT, cachePath, data: data!)
+                let length = HelperMethods.writeCache(.IPFSACCOUNT, cachePath, data: withData, position)
+                self.cursor += UInt64(length)
+                Log.d(TAG(), "writeData succeed")
+                resolver.fulfill(length)
+                handleBy.didSucceed(length)
+            })
         }
         return promise
     }
 
-/*
-    override func writeData(withData: Data) -> HivePromise<Bool> {
-        return writeData(withData: withData, handleBy: HiveCallback<Bool>())
-    }
-
-    override func writeData(withData: Data, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
-
+    override func commitData() -> HivePromise<Bool> {
         let promise = HivePromise<Bool> { resolver in
+            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+            let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_READ.rawValue + "?uid=" + uid + "&path=" + self.pathName
+            let data = HelperMethods.uploadFile(.IPFSACCOUNT, url.md5)
             self.authHelper!.checkExpired().then({ (succeed) -> HivePromise<Bool> in
-                return IPFSAPIs.writeData(self.pathName, withData)
+                return IPFSAPIs.writeData(self.pathName, data)
             }).then({ (success) -> HivePromise<Bool> in
                 return IPFSAPIs.publish(self.pathName)
             }).done({ (success) in
                 Log.d(TAG(), "writeData succeed")
                 resolver.fulfill(true)
-                handleBy.didSucceed(true)
             }).catch({ (error) in
                 let hiveError = HiveError.failue(des: error.localizedDescription)
                 Log.e(TAG(), "writeData falied: %s", error.localizedDescription)
                 resolver.reject(hiveError)
-                handleBy.runError(hiveError)
             })
         }
         return promise
     }
 
-    override func readData() -> HivePromise<String> {
-        return readData(handleBy: HiveCallback<String>())
+    override func discardData() {
+        cursor = 0
+        finish = false
+        let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+        let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_READ.rawValue + "?uid=" + uid + "&path=" + self.pathName
+        _ = HelperMethods.discardCache(.IPFSACCOUNT, url.md5)
     }
 
-    override func readData(handleBy: HiveCallback<String>) -> HivePromise<String> {
-        let promise = HivePromise<String> { resolver in
-            _ = self.authHelper!.checkExpired().done({ (success) in
+    override func close() {
+        cursor = 0
+        finish = false
+    }
 
-                let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_READ.rawValue
-                let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
-                let param = ["uid": uid, "path": self.pathName]
-                Alamofire.request(url,
-                                  method: .post,
-                                  parameters: param,
-                                  encoding: URLEncoding.queryString,
-                                  headers: nil)
-                    .responseJSON(completionHandler: { (dataResponse) in
-                        guard dataResponse.response?.statusCode == 200 else {
-                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
-                            Log.e(TAG(), "readData falied: %s", error.localizedDescription)
-                            resolver.reject(error)
-                            handleBy.runError(error)
-                            return
-                        }
-                        Log.d(TAG(), "readData succeed")
-                        let data = dataResponse.data
-                        let content: String = String(data: data!, encoding: .utf8) ?? ""
-                        resolver.fulfill(content)
-                        handleBy.didSucceed(content)
-                    })
-            }).catch({ (error) in
-                let error = HiveError.failue(des: error.localizedDescription)
-                Log.e(TAG(), "readData falied: %s", error.localizedDescription)
-                resolver.reject(error)
-                handleBy.runError(error)
-            })
+    private func getRemoteFile(_ url: String, _ fileResult: @escaping (_ data: Data?, _ error: HiveError?) -> Void) {
+        _ = self.authHelper!.checkExpired().done { result in
+            let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_READ.rawValue
+            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+            let param = ["uid": uid, "path": self.pathName]
+            Alamofire.request(url,
+                              method: .post,
+                              parameters: param,
+                              encoding: URLEncoding.queryString,
+                              headers: nil)
+                .responseJSON(completionHandler: { (dataResponse) in
+                    guard dataResponse.response?.statusCode == 200 else {
+                        let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                        Log.e(TAG(), "readData falied: %s", error.localizedDescription)
+                        fileResult(nil, error)
+                        return
+                    }
+                    Log.d(TAG(), "readData succeed")
+                    let data = dataResponse.data
+                    fileResult(data, nil)
+                })
+            }.catch { err in
+                let error = HiveError.failue(des: err.localizedDescription)
+                fileResult(nil, error)
         }
-        return promise
     }
- */
 }

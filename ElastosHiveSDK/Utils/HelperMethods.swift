@@ -3,8 +3,6 @@ import Foundation
 
 @inline(__always) private func TAG() -> String { return "HelperMethods" }
 
-let defaultLength = 1024 * 1024
-
 class HelperMethods {
     static var ps: UInt64 = 0
 
@@ -110,7 +108,7 @@ class HelperMethods {
         return Int32(data.count)
     }
 
-    class func readCache(_ account: KEYCHAIN_DRIVE_ACCOUNT, _ path: String, _ position: UInt64) -> Data {
+    class func readCache(_ account: KEYCHAIN_DRIVE_ACCOUNT, _ path: String, _ position: UInt64, _ length: Int) -> Data {
         let cachePath = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + path
         let fileManager = FileManager.default
         let exist = fileManager.fileExists(atPath: cachePath)
@@ -125,13 +123,13 @@ class HelperMethods {
                     return Data()
                 }
                 readHandler?.seek(toFileOffset: position)
-                if fileSize <= defaultLength {
+                if fileSize <= length {
                     dt = readHandler?.readDataToEndOfFile() ?? Data()
                 }
                 else {
-                    if fileSize >= position + UInt64(defaultLength)
+                    if fileSize >= position + UInt64(length)
                     {
-                        dt = (readHandler?.readData(ofLength: defaultLength))!
+                        dt = (readHandler?.readData(ofLength: length))!
                     }
                     else{
                         dt = (readHandler?.readDataToEndOfFile())!

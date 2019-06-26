@@ -59,7 +59,7 @@ class HiveIpfsFileTests: XCTestCase, Authenticator{
         lock = XCTestExpectation(description: "wait for test3_lastUpdatedInfo")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveFileHandle> in
             return drive.fileHandle(atPath: "/hiveIpfs_File_test2_creatFile_\(timeTest!)")
-        }).then({ (file) -> HivePromise<HiveFileHandle.Info> in
+        }).then({ (file) -> HivePromise<HiveFileInfo> in
             return file.lastUpdatedInfo()
         }).done({ (fileInfo) in
             XCTAssertNotNil(fileInfo)
@@ -135,6 +135,7 @@ class HiveIpfsFileTests: XCTestCase, Authenticator{
         wait(for: [lock!], timeout: timeout)
     }
 
+    /*
     func testG_writeData() {
 
         lock = XCTestExpectation(description: "wait for test7_writeData")
@@ -168,5 +169,5 @@ class HiveIpfsFileTests: XCTestCase, Authenticator{
         })
         wait(for: [lock!], timeout: timeout)
     }
-
+*/
 }

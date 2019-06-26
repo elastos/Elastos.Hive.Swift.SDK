@@ -68,7 +68,7 @@ class HiveOneDriveFileTests: XCTestCase,Authenticator {
         lock = XCTestExpectation(description: "wait for test2_creatFile")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveFileHandle> in
             return drive.fileHandle(atPath: "/test_file_\(timeTest!)")
-        }).then({ (file) -> HivePromise<HiveFileHandle.Info> in
+        }).then({ (file) -> HivePromise<HiveFileInfo> in
             return file.lastUpdatedInfo()
         }).done({ (fileInfo) in
             XCTAssertNotNil(fileInfo)
@@ -143,7 +143,7 @@ class HiveOneDriveFileTests: XCTestCase,Authenticator {
         })
         wait(for: [lock!], timeout: timeout)
     }
-
+/*
     func testG_writeData() {
 
         lock = XCTestExpectation(description: "wait for test5_writeData")
@@ -161,7 +161,7 @@ class HiveOneDriveFileTests: XCTestCase,Authenticator {
         })
         wait(for: [lock!], timeout: timeout)
     }
-/*
+
     func testH_readData() {
         lock = XCTestExpectation(description: "wait for test5_readData")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveFileHandle> in
@@ -177,7 +177,7 @@ class HiveOneDriveFileTests: XCTestCase,Authenticator {
         })
         wait(for: [lock!], timeout: timeout)
     }
-*/
+
 
     func testI_read_tobuffer() {
         lock = XCTestExpectation(description: "wait for testI_read_tobuffer")
@@ -223,6 +223,6 @@ class HiveOneDriveFileTests: XCTestCase,Authenticator {
         wait(for: [lock!], timeout: timeout)
     }
 
-
+*/
 
 }
