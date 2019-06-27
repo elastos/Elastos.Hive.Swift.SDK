@@ -7,7 +7,7 @@ public class IPFSParameter: DriveParameter {
     let path: String
 
     public override func driveType() -> DriveType {
-        return .hiveIpfs
+        return .hiveIPFS
     }
 
     public func getAuthEntry() -> NullEntry {

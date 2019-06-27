@@ -35,5 +35,3 @@ public struct KeychainSwiftConstants {
     return value as String
   }
 }
-
-

@@ -1,11 +1,7 @@
-
-
 import Foundation
 import Alamofire
 
 extension DataRequest {
-    
-    
     /**
      Wait for the request to finish then return the response value.
      
@@ -24,7 +20,6 @@ extension DataRequest {
         }
         
         _ = semaphore.wait(timeout: DispatchTime.distantFuture)
-        
         return result
     }
     
@@ -48,7 +43,6 @@ extension DataRequest {
         }
         
         _ = semaphore.wait(timeout: DispatchTime.distantFuture)
-        
         return result
     }
     
@@ -100,7 +94,6 @@ extension DataRequest {
         return response(responseSerializer: DataRequest.propertyListResponseSerializer(options: options))
     }
 }
-
 
 extension DownloadRequest {
     /**

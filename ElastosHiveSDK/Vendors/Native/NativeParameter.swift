@@ -6,7 +6,7 @@ public class NativeParameter: DriveParameter {
 
     public var driveType: DriveType {
         get {
-            return DriveType.local
+            return .nativeStorage
         }
     }
 

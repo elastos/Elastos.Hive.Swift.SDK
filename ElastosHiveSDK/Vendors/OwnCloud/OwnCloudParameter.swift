@@ -6,7 +6,7 @@ public class OwnCloudParameter: DriveParameter {
 
     public var driveType: DriveType {
         get {
-            return DriveType.hiveIpfs
+            return .ownCloud
         }
     }
 

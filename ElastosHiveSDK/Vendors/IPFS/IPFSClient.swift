@@ -9,7 +9,7 @@ internal class IPFSClient: HiveClientHandle {
     private static var clientInstance: HiveClientHandle?
 
     private init(param: IPFSParameter){
-        super.init(.hiveIpfs)
+        super.init(.hiveIPFS)
         self.authHelper = IPFSAuthHelper(param)
     }
 

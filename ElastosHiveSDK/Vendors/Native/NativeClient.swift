@@ -6,7 +6,7 @@ internal class NativeClient: HiveClientHandle {
     private static var clientInstance: HiveClientHandle?
 
     private init(_ param: NativeParameter) {
-        super.init(DriveType.local)
+        super.init(.nativeStorage)
     }
 
     @objc(createInstance:)

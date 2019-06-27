@@ -20,7 +20,3 @@ enum KEYCHAIN_KEY: String {
 let AUTHORIZATION_TYPE_CODE = "authorization_code"
 let ONEDRIVE_ROOTDIR     = "/root"
 let TOKEN_INVALID = "The token is invalid, please refresh token"
-
-
-
-
