@@ -48,7 +48,7 @@ internal class IPFSClient: HiveClientHandle {
             _ = self.authHelper!.checkExpired().done({ (success) in
 
                 let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
-                let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
                 let params = ["uid": uid, "path": "/"]
                 Alamofire.request(url,
                                   method: .post,
@@ -57,7 +57,7 @@ internal class IPFSClient: HiveClientHandle {
                                   headers: nil)
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else {
-                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
                             Log.e(TAG(), "lastUpdatedInfo falied: %s", error.localizedDescription)
                             resolver.reject(error)
                             handleBy.runError(error)
@@ -101,7 +101,7 @@ internal class IPFSClient: HiveClientHandle {
             _ = self.authHelper?.checkExpired().done({ (success) in
 
                 let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_LS.rawValue
-                let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
                 let param = ["uid": uid, "path": "/"]
                 Alamofire.request(url,
                                   method: .post,
@@ -109,7 +109,7 @@ internal class IPFSClient: HiveClientHandle {
                                   encoding: URLEncoding.queryString, headers: nil)
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else{
-                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
                             Log.e(TAG(), "defaultDriveHandle falied: %s", error.localizedDescription)
                             resolver.reject(error)
                             handleBy.runError(error)

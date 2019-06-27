@@ -52,7 +52,7 @@ class IPFSAuthHelper: AuthHelper {
     }
 
     private func getUID() -> HivePromise<String> {
-        let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+        let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
         guard uid == "" else {
             let promise = HivePromise<String> { resolver in
                 resolver.fulfill(uid)
@@ -68,7 +68,7 @@ class IPFSAuthHelper: AuthHelper {
                               headers: nil)
                 .responseJSON(completionHandler: { (dataResponse) in
                     guard dataResponse.response?.statusCode == 200 else {
-                        let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                        let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
                         resolver.reject(error)
                         return
                     }
@@ -91,7 +91,7 @@ class IPFSAuthHelper: AuthHelper {
                               headers: nil)
                 .responseJSON(completionHandler: { (dataResponse) in
                     guard dataResponse.response?.statusCode == 200 else {
-                        let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                        let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
                         resolver.reject(error)
                         return
                     }
@@ -114,7 +114,7 @@ class IPFSAuthHelper: AuthHelper {
                               headers: nil)
                 .responseJSON(completionHandler: { (dataResponse) in
                     guard dataResponse.response?.statusCode == 200 else {
-                        let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                        let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
                         resolver.reject(error)
                         return
                     }
@@ -129,7 +129,7 @@ class IPFSAuthHelper: AuthHelper {
     private func logIn(_ hash: String) -> HivePromise<Bool> {
         let promise = HivePromise<Bool> { resolver in
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_UID_LOGIN.rawValue
-            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+            let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             let param = ["uid": uid, "hash": hash]
             Alamofire.request(url,
                               method: .post,
@@ -137,7 +137,7 @@ class IPFSAuthHelper: AuthHelper {
                               encoding: URLEncoding.queryString, headers: nil)
                 .responseJSON(completionHandler: { (dataResponse) in
                     guard dataResponse.response?.statusCode == 200 else{
-                        let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                        let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
                         resolver.reject(error)
                         return
                     }

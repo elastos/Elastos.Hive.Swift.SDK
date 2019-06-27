@@ -8,7 +8,7 @@ class IPFSAPIs {
     class func publish(_ path: String) -> HivePromise<Bool> {
 
         let promise = HivePromise<Bool> { resolver in
-            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+            let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             getHash(uid, path: path).done { (hash) in
                 let params = ["uid": uid, "path": hash]
                 let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_NAME_PUBLISH.rawValue
@@ -19,7 +19,7 @@ class IPFSAPIs {
                                   headers: nil)
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else{
-                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
                             resolver.reject(error)
                             return
                         }
@@ -35,7 +35,7 @@ class IPFSAPIs {
 
     class func creatFile(_ path: String) -> HivePromise<JSON> {
         let promise = HivePromise<JSON> { resolver in
-            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+            let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             let params = ["uid": uid, "path": path, "file": "file", "create": "true"]
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_WRITE.rawValue + "?" + params.queryString
             let str = ""
@@ -47,7 +47,7 @@ class IPFSAPIs {
                 case .success(let upload, _, _):
                     upload.responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else {
-                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
                             resolver.reject(error)
                             return
                         }
@@ -68,7 +68,7 @@ class IPFSAPIs {
     class func createDirectory(_ path: String) -> HivePromise<JSON> {
         let promise = HivePromise<JSON> { resolver in
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_MKDIR.rawValue
-            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+            let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             let param = ["uid": uid,"path": path]
             Alamofire.request(url,
                               method: .post,
@@ -77,7 +77,7 @@ class IPFSAPIs {
                               headers: nil)
                 .responseJSON(completionHandler: { (dataResponse) in
                     guard dataResponse.response?.statusCode == 200 else{
-                        let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                        let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
                         resolver.reject(error)
                         return
                     }
@@ -91,7 +91,7 @@ class IPFSAPIs {
     class func moveTo(_ originPath: String, _ newPath: String) -> HivePromise<Bool> {
         let promise = HivePromise<Bool> { resolver in
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_MV.rawValue
-            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+            let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             let params = ["uid": uid, "source": originPath + "/", "dest": newPath]
             Alamofire.request(url,
                               method: .post,
@@ -100,7 +100,7 @@ class IPFSAPIs {
                               headers: nil)
                 .responseJSON(completionHandler: { (dataResponse) in
                     guard dataResponse.response?.statusCode == 200 else {
-                        let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                        let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
                         resolver.reject(error)
                         return
                     }
@@ -112,7 +112,7 @@ class IPFSAPIs {
 
     class func copyTo(_ originPath: String, _ newParh: String) -> HivePromise<Bool> {
         let promise = HivePromise<Bool> { resolver in
-            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+            let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             getHash(uid, path: originPath).done({ (hash) in
                 let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_CP.rawValue
                 let params = ["uid": uid, "source": hash, "dest": newParh + "/"]
@@ -123,7 +123,7 @@ class IPFSAPIs {
                                   headers: nil)
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else {
-                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
                             resolver.reject(error)
                             return
                         }
@@ -139,7 +139,7 @@ class IPFSAPIs {
     class func deleteItem(_ path: String) -> HivePromise<Bool> {
         let promise = HivePromise<Bool> { resolver in
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_RM.rawValue
-            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+            let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             let params = ["uid": uid, "path": path, "recursive": true] as [String : Any]
             Alamofire.request(url,
                               method: .post,
@@ -148,7 +148,7 @@ class IPFSAPIs {
                               headers: nil)
                 .responseJSON(completionHandler: { (dataResponse) in
                     guard dataResponse.response?.statusCode == 200 else {
-                        let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                        let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
                         resolver.reject(error)
                         return
                     }
@@ -160,7 +160,7 @@ class IPFSAPIs {
 
     class func writeData(_ path: String, _ withData: Data) -> HivePromise<Bool> {
         let promise = HivePromise<Bool> { resolver in
-            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+            let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             let params = ["uid": uid, "path": path, "file": "file", "create": "true"]
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_WRITE.rawValue + "?" + params.queryString
             Alamofire.upload(multipartFormData: { (data) in
@@ -170,7 +170,7 @@ class IPFSAPIs {
                 case .success(let upload, _, _):
                     upload.responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else {
-                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
                             resolver.reject(error)
                             return
                         }
@@ -190,7 +190,7 @@ class IPFSAPIs {
     class func getHash(_ uid: String, path: String) -> HivePromise<String> {
         let promise = HivePromise<String> { resolver in
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
-            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+            let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             let params = ["uid": uid, "path": "/"]
             Alamofire.request(url,
                               method: .post,
@@ -199,7 +199,7 @@ class IPFSAPIs {
                               headers: nil)
                 .responseJSON(completionHandler: { (dataResponse) in
                     guard dataResponse.response?.statusCode == 200 else {
-                        let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                        let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
                         resolver.reject(error)
                         return
                     }
