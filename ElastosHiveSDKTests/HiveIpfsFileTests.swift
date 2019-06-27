@@ -15,7 +15,7 @@ class HiveIpfsFileTests: XCTestCase, Authenticator{
     override func setUp() {
         hiveParams = DriveParameter.createForIpfsDrive("uid-37dd2923-baf6-4aae-bc28-d4e5fd92a7b0", "/")
         HiveClientHandle.createInstance(hiveParams!)
-        hiveClient = HiveClientHandle.sharedInstance(type: .hiveIpfs)
+        hiveClient = HiveClientHandle.sharedInstance(type: .hiveIPFS)
     }
 
     override func tearDown() {
@@ -27,8 +27,7 @@ class HiveIpfsFileTests: XCTestCase, Authenticator{
         let globalQueue = DispatchQueue.global()
         globalQueue.async {
             do {
-                let result = try self.hiveClient?.login(self as Authenticator)
-                XCTAssertTrue(result!)
+                _ = try self.hiveClient?.login(self as Authenticator)
                 self.lock?.fulfill()
             }catch {
                 XCTFail()

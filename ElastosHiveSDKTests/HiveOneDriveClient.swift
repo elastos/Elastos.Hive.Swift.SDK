@@ -38,8 +38,7 @@ class HiveOneDriveClient: XCTestCase,Authenticator {
         let globalQueue = DispatchQueue.global()
         globalQueue.async {
             do {
-                let result = try self.hiveClient?.login(self as Authenticator)
-                XCTAssertTrue(result!)
+                _ = try self.hiveClient?.login(self as Authenticator)
                 self.lock?.fulfill()
             }catch {
                 XCTFail()
@@ -77,9 +76,13 @@ class HiveOneDriveClient: XCTestCase,Authenticator {
         lock = XCTestExpectation(description: "wait for test4_logout")
         let globalQueue = DispatchQueue.global()
         globalQueue.async {
-            let result = self.hiveClient?.logout()
-            XCTAssertTrue(result!)
-            self.lock?.fulfill()
+            do{
+                _ = try self.hiveClient?.logout()
+                self.lock?.fulfill()
+            }catch{
+                XCTFail()
+                self.lock?.fulfill()
+            }
         }
         wait(for: [lock!], timeout: timeout)
     }

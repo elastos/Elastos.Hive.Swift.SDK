@@ -29,54 +29,34 @@ internal class OneDriveFile: HiveFileHandle {
 
     override func lastUpdatedInfo(handleBy: HiveCallback<HiveFileInfo>) -> HivePromise<HiveFileInfo> {
         let promise = HivePromise<HiveFileInfo> { resolver in
-            let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
-            guard login != "" else {
-                Log.d(TAG(), "Please login first")
-                let error = HiveError.failue(des: "Please login first")
-                resolver.reject(error)
-                handleBy.runError(error)
-                return
+            var url = OneDriveURL.API + "/root"
+            if self.pathName != "/" {
+                let ecurl = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+                url  = OneDriveURL.API + "/root:\(ecurl)"
             }
-            _ = self.authHelper!.checkExpired().done { result in
-                var url = OneDriveURL.API + "/root"
-                if self.pathName != "/" {
-                    let ecurl = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-                    url  = OneDriveURL.API + "/root:\(ecurl)"
-                }
-                Alamofire.request(url, method: .get,
-                           parameters: nil,
-                             encoding: JSONEncoding.default,
-                              headers: OneDriveHttpHeader.headers())
-                    .responseJSON { dataResponse in
-                        guard dataResponse.response?.statusCode != 401 else {
-                            let error = HiveError.failue(des: TOKEN_INVALID)
-                            Log.e(TAG(), "Acquiring last file info failed: %s", error.localizedDescription)
-                            resolver.reject(error)
-                            handleBy.runError(error)
-                            return
-                        }
-                        guard dataResponse.response?.statusCode == 200 else{
-                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
-                            Log.e(TAG(), "Acquiring last file info failed: %s", error.localizedDescription)
-                            handleBy.runError(error)
-                            resolver.reject(error)
-                            return
-                        }
-                        let jsonData = JSON(dataResponse.result.value as Any)
-                        let fileId = jsonData["id"].stringValue
-                        let dic = [HiveFileInfo.itemId: fileId]
-                        let fileInfo = HiveFileInfo(dic)
-                        self.lastInfo = fileInfo
-                        handleBy.didSucceed(fileInfo)
-                        resolver.fulfill(fileInfo)
-                        Log.d(TAG(), "Acquiring last file information succeeded: %s", fileInfo.description)
-                }
-            }.catch { err in
-                let error = HiveError.failue(des: err.localizedDescription)
-                Log.e(TAG(), "Acquiring last file info failed: %s", error.localizedDescription)
-                resolver.reject(error)
-                handleBy.runError(error)
-            }
+            self.authHelper?.checkExpired()
+                .then({ (viod) -> HivePromise<JSON> in
+                    return OneDriveHttpHelper
+                        .request(url: url,
+                                 method: .get,parameters: nil,
+                                 encoding: JSONEncoding.default,
+                                 headers: OneDriveHttpHeader.headers(),
+                                 avalidCode: 200)
+                })
+                .done({ (jsonData) in
+                    let fileId = jsonData["id"].stringValue
+                    let dic = [HiveFileInfo.itemId: fileId]
+                    let fileInfo = HiveFileInfo(dic)
+                    self.lastInfo = fileInfo
+                    handleBy.didSucceed(fileInfo)
+                    resolver.fulfill(fileInfo)
+                    Log.d(TAG(), "Acquiring last file information succeeded: %s", fileInfo.description)
+                })
+                .catch({ (error) in
+                    resolver.reject(error)
+                    handleBy.runError(error as! HiveError)
+                    Log.e(TAG(), "Acquiring last file info failed: %s", error.localizedDescription)
+                })
         }
         return promise
     }
@@ -87,57 +67,31 @@ internal class OneDriveFile: HiveFileHandle {
 
     override func moveTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
         let promise = HivePromise<Bool>{ resolver in
-            let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
-            guard login != "" else {
-                Log.d(TAG(), "Please login first")
-                let error = HiveError.failue(des: "Please login first")
-                resolver.reject(error)
-                handleBy.runError(error)
-                return
-            }
-            _ = self.authHelper!.checkExpired().done { result in
-                if self.validatePath(newPath).0 == false {
-                    let error = HiveError.failue(des: self.validatePath(newPath).1)
+            let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+            let url = (OneDriveURL.API) + (ONEDRIVE_ROOTDIR) + ":" + path
+            let params: Dictionary<String, Any> = [
+                "parentReference": ["path": "/drive/root:" + newPath],
+                "name": self.name!,
+                "@microsoft.graph.conflictBehavior": "fail"]
+            self.authHelper?.checkExpired()
+                .then({ (void) -> HivePromise<JSON> in
+                    return OneDriveHttpHelper
+                        .request(url: url, method: .patch,
+                                 parameters: params,
+                                 encoding: JSONEncoding.default,
+                                 headers: OneDriveHttpHeader.headers(),
+                                 avalidCode: 200)
+                })
+                .done({ (jsonData) in
+                    self.pathName = newPath + self.name!
+                    resolver.fulfill(true)
+                    handleBy.didSucceed(true)
+                })
+                .catch({ (error) in
                     resolver.reject(error)
-                    handleBy.runError(error)
-                    return
-                }
-                let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-                let url = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):\(path)"
-                let params: Dictionary<String, Any> = [
-                    "parentReference": ["path": "/drive/root:" + newPath],
-                    "name": self.name!,
-                    "@microsoft.graph.conflictBehavior": "fail"]
-                Alamofire.request(url, method: .patch,
-                                  parameters: params,
-                                  encoding: JSONEncoding.default,
-                                  headers: OneDriveHttpHeader.headers())
-                    .responseJSON { dataResponse in
-                        guard dataResponse.response?.statusCode != 401 else {
-                            let error = HiveError.failue(des: TOKEN_INVALID)
-                            Log.e(TAG(), "Moving this file to %s failed.", newPath, error.localizedDescription)
-                            resolver.reject(error)
-                            handleBy.runError(error)
-                            return
-                        }
-                        guard dataResponse.response?.statusCode == 200 else{
-                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
-                            Log.e(TAG(), "Moving this file to %s failed.", newPath, error.localizedDescription)
-                            resolver.reject(error)
-                            handleBy.runError(error)
-                            return
-                        }
-                        self.pathName = newPath + self.name!
-                        resolver.fulfill(true)
-                        handleBy.didSucceed(true)
-                        Log.d(TAG(), "Moving this file to %s succeeded.", newPath)
-                }
-            }.catch { err in
-                let error = HiveError.failue(des: err.localizedDescription)
-                Log.e(TAG(), "Moving this file to %s failed.", newPath, error.localizedDescription)
-                resolver.reject(error)
-                handleBy.runError(error)
-            }
+                    handleBy.runError(error as! HiveError)
+                    Log.e(TAG(), error.localizedDescription)
+                })
         }
         return promise
     }
@@ -148,69 +102,38 @@ internal class OneDriveFile: HiveFileHandle {
 
     override func copyTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
         let promise = HivePromise<Bool>{ resolver in
-            let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
-            guard login != "" else {
-                Log.d(TAG(), "Please login first")
-                let error = HiveError.failue(des: "Please login first")
-                resolver.reject(error)
-                handleBy.runError(error)
-                return
+            let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+            var url = OneDriveURL.API + ONEDRIVE_ROOTDIR + ":" + path + ":/copy"
+            if newPath == "/" {
+                url = OneDriveURL.API + ONEDRIVE_ROOTDIR + "/copy"
             }
-            _ = self.authHelper!.checkExpired().done { result in
-                if self.validatePath(newPath).0 == false {
-                    let error = HiveError.failue(des: self.validatePath(newPath).1)
+            let params: Dictionary<String, Any> = [
+                "parentReference" : ["path": "/drive/root:\(newPath)"],
+                "name": self.name as Any,
+                "@microsoft.graph.conflictBehavior": "fail"]
+            self.authHelper?.checkExpired()
+                .then({ (void) -> HivePromise<JSON> in
+                    return OneDriveHttpHelper
+                        .request(url: url, method: .post,
+                                 parameters: params,
+                                 encoding: JSONEncoding.default,
+                                 headers: OneDriveHttpHeader.headers(),
+                                 avalidCode: 202)
+                })
+                .then({ (jsonData) -> HivePromise<HiveVoid> in
+                    let urlString = jsonData["Location"].stringValue
+                    return OneDriveHttpHelper.pollingCopyresult(urlString)
+                })
+                .done({ (void) in
+                    resolver.fulfill(true)
+                    handleBy.didSucceed(true)
+                    Log.d(TAG(), "Copying this file to %s succeeded", newPath)
+                })
+                .catch({ (error) in
                     resolver.reject(error)
-                    handleBy.runError(error)
-                    return
-                }
-                let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-                var url = OneDriveURL.API + ONEDRIVE_ROOTDIR + ":" + path + ":/copy"
-                if newPath == "/" {
-                    url = OneDriveURL.API + ONEDRIVE_ROOTDIR + "/copy"
-                }
-                let params: Dictionary<String, Any> = [
-                    "parentReference" : ["path": "/drive/root:\(newPath)"],
-                    "name": self.name as Any,
-                    "@microsoft.graph.conflictBehavior": "fail"]
-                Alamofire.request(url, method: .post,
-                           parameters: params,
-                             encoding: JSONEncoding.default,
-                              headers: OneDriveHttpHeader.headers())
-                    .responseJSON { dataResponse in
-                        guard dataResponse.response?.statusCode != 401 else {
-                            let error = HiveError.failue(des: TOKEN_INVALID)
-                            Log.e(TAG(), "Copying this file to %s falied: %s", newPath, error.localizedDescription)
-                            resolver.reject(error)
-                            handleBy.runError(error)
-                            return
-                        }
-                        guard dataResponse.response?.statusCode == 202 else{
-                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
-                            Log.e(TAG(), "Copying this file to %s falied: %s", newPath, error.localizedDescription)
-                            resolver.reject(error)
-                            handleBy.runError(error)
-                            return
-                        }
-                        let urlString = dataResponse.response?.allHeaderFields["Location"] as? String ?? ""
-                        self.pollingCopyresult(urlString, { result in
-                            guard result == true else {
-                                let error = HiveError.failue(des: "Operation failed")
-                                Log.e(TAG(), "Copying this file to %s falied: %s", newPath, error.localizedDescription)
-                                resolver.reject(error)
-                                handleBy.runError(error)
-                                return
-                            }
-                            resolver.fulfill(true)
-                            handleBy.didSucceed(true)
-                            Log.d(TAG(), "Copying this file to %s succeeded", newPath)
-                        })
-                    }
-            }.catch { err in
-                let error = HiveError.failue(des: err.localizedDescription)
-                Log.e(TAG(), "Copying this file to %s falied: %s", newPath, error.localizedDescription)
-                resolver.reject(error)
-                handleBy.runError(error)
-            }
+                    handleBy.runError(error as! HiveError)
+                    Log.e(TAG(),"Copying this file to %s failed", error.localizedDescription)
+                })
         }
         return promise
     }
@@ -221,51 +144,31 @@ internal class OneDriveFile: HiveFileHandle {
 
     override func deleteItem(handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
         let promise = HivePromise<Bool>{ resolver in
-            let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
-            guard login != "" else {
-                Log.d(TAG(), "Please login first")
-                let error = HiveError.failue(des: "Please login first")
-                resolver.reject(error)
-                handleBy.runError(error)
-                return
-            }
-            _ = self.authHelper!.checkExpired().done { result in
-                let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-                let url: String = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):/\(path)"
-                Alamofire.request(url, method: .delete,
-                           parameters: nil,
-                             encoding: JSONEncoding.default,
-                              headers: OneDriveHttpHeader.headers())
-                    .responseJSON(completionHandler: { dataResponse in
-                        guard dataResponse.response?.statusCode != 401 else {
-                            let error = HiveError.failue(des: TOKEN_INVALID)
-                            Log.e(TAG(), "Deleting the file item falied: %s", error.localizedDescription)
-                            resolver.reject(error)
-                            handleBy.runError(error)
-                            return
-                        }
-                        guard dataResponse.response?.statusCode == 204 else{
-
-                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
-                            Log.e(TAG(), "Deleting the file item falied: %s", error.localizedDescription)
-                            resolver.reject(error)
-                            handleBy.runError(error)
-                            return
-                        }
-                        self.pathName = ""
-                        self.drive = nil
-                        self.fileId = ""
-                        self.lastInfo = nil
-                        resolver.fulfill(true)
-                        handleBy.didSucceed(true)
-                        Log.d(TAG(), "Deleting the file item succeeded")
-                    })
-            }.catch { err in
-                let error = HiveError.failue(des: err.localizedDescription)
-                Log.e(TAG(), "Deleting the file item falied: %s", error.localizedDescription)
-                resolver.reject(error)
-                handleBy.runError(error)
-            }
+            let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+            let url: String = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):/\(path)"
+            self.authHelper?.checkExpired()
+                .then({ (void) -> HivePromise<JSON> in
+                    return OneDriveHttpHelper
+                        .request(url: url, method: .delete,
+                                 parameters: nil,
+                                 encoding: JSONEncoding.default,
+                                 headers: OneDriveHttpHeader.headers(),
+                                 avalidCode: 204)
+                })
+                .done({ (jsonData) in
+                    self.pathName = ""
+                    self.drive = nil
+                    self.fileId = ""
+                    self.lastInfo = nil
+                    resolver.fulfill(true)
+                    handleBy.didSucceed(true)
+                    Log.d(TAG(), "Deleting the file item succeeded")
+                })
+                .catch({ (error) in
+                    resolver.reject(error)
+                    handleBy.runError(error as! HiveError)
+                    Log.e(TAG(), "Deleting the file item falied: %s", error.localizedDescription)
+                })
         }
         return promise
     }
@@ -276,14 +179,6 @@ internal class OneDriveFile: HiveFileHandle {
 
     override func readData(_ length: Int, handleBy: HiveCallback<Data>) -> HivePromise<Data> {
         let promise = HivePromise<Data> { resolver in
-            let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
-            guard login != "" else {
-                Log.d(TAG(), "Please login first")
-                let error = HiveError.failue(des: "Please login first")
-                resolver.reject(error)
-                handleBy.runError(error)
-                return
-            }
             if finish == true {
                 Log.e(TAG(), "The file has been read finished")
                 resolver.fulfill(Data())
@@ -305,23 +200,23 @@ internal class OneDriveFile: HiveFileHandle {
                 }
                 return
             }
-            self.getRemoteFile(url, { (data, error) in
-                guard error == nil else {
-                    Log.e(TAG(), "readData falied: %s", error!.localizedDescription)
-                    resolver.reject(error!)
-                    handleBy.runError(error!)
-                    return
-                }
-                let isSuccess = HelperMethods.saveCache(.ONEDRIVEACOUNT, cachePath, data: data!)
-                var readData = Data()
-                if isSuccess {
-                    readData = HelperMethods.readCache(.ONEDRIVEACOUNT, cachePath, self.cursor, length)
-                }
-                self.cursor += UInt64(readData.count)
-                Log.d(TAG(), "readData succeed")
-                resolver.fulfill(readData)
-                handleBy.didSucceed(readData)
-            })
+            self.authHelper?.checkExpired()
+                .then({ (void) -> HivePromise<Data> in
+                    return OneDriveHttpHelper.getRemoteFile(authHelper: self.authHelper!, url: url)
+                })
+                .done({ (jsonData) in
+                    _ = HelperMethods.saveCache(.ONEDRIVEACOUNT, cachePath, data: jsonData)
+                    let readData = HelperMethods.readCache(.ONEDRIVEACOUNT, cachePath, self.cursor, length)
+                    self.cursor += UInt64(readData.count)
+                    Log.d(TAG(), "readData succeed")
+                    resolver.fulfill(readData)
+                    handleBy.didSucceed(readData)
+                })
+                .catch({ (error) in
+                    Log.e(TAG(), "readData falied: %s", error.localizedDescription)
+                    resolver.reject(error)
+                    handleBy.runError(error as! HiveError)
+                })
         }
         return promise
     }
@@ -332,14 +227,6 @@ internal class OneDriveFile: HiveFileHandle {
 
     override func readData(_ length: Int, _ position: UInt64, handleBy: HiveCallback<Data>) -> HivePromise<Data> {
         let promise = HivePromise<Data> { resolver in
-            let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
-            guard login != "" else {
-                Log.d(TAG(), "Please login first")
-                let error = HiveError.failue(des: "Please login first")
-                resolver.reject(error)
-                handleBy.runError(error)
-                return
-            }
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let url: String = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):\(path):/content"
             let cachePath = url.md5
@@ -351,23 +238,23 @@ internal class OneDriveFile: HiveFileHandle {
                 handleBy.didSucceed(data)
                 return
             }
-            self.getRemoteFile(url, { (data, error) in
-                guard error == nil else {
-                    Log.e(TAG(), "readData falied: %s", error!.localizedDescription)
-                    resolver.reject(error!)
-                    handleBy.runError(error!)
-                    return
-                }
-                let isSuccess = HelperMethods.saveCache(.ONEDRIVEACOUNT, cachePath, data: data!)
-                var readData = Data()
-                if isSuccess {
-                    readData = HelperMethods.readCache(.ONEDRIVEACOUNT, cachePath, position, length)
+            self.authHelper?.checkExpired()
+                .then({ (void) -> HivePromise<Data> in
+                    return OneDriveHttpHelper.getRemoteFile(authHelper: self.authHelper!, url: url)
+                })
+                .done({ (jsonData) in
+                    _ = HelperMethods.saveCache(.ONEDRIVEACOUNT, cachePath, data: jsonData)
+                    let readData = HelperMethods.readCache(.ONEDRIVEACOUNT, cachePath, self.cursor, length)
                     self.cursor += UInt64(readData.count)
-                }
-                Log.d(TAG(), "readData succeed")
-                resolver.fulfill(readData)
-                handleBy.didSucceed(readData)
-            })
+                    Log.d(TAG(), "readData succeed")
+                    resolver.fulfill(readData)
+                    handleBy.didSucceed(readData)
+                })
+                .catch({ (error) in
+                    Log.e(TAG(), "readData falied: %s", error.localizedDescription)
+                    resolver.reject(error)
+                    handleBy.runError(error as! HiveError)
+                })
         }
         return promise
     }
@@ -378,14 +265,6 @@ internal class OneDriveFile: HiveFileHandle {
 
     override func writeData(withData: Data, handleBy: HiveCallback<Int32>) -> HivePromise<Int32> {
         let promise = HivePromise<Int32> { resolver in
-            let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
-            guard login != "" else {
-                Log.d(TAG(), "Please login first")
-                let error = HiveError.failue(des: "Please login first")
-                resolver.reject(error)
-                handleBy.runError(error)
-                return
-            }
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let url: String = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):\(path):/content"
             let cachePath = url.md5
@@ -397,20 +276,23 @@ internal class OneDriveFile: HiveFileHandle {
                 handleBy.didSucceed(length)
                 return
             }
-            self.getRemoteFile(url, { (data, error) in
-                guard error == nil else {
-                    Log.e(TAG(), "writeData falied: %s", error!.localizedDescription)
-                    resolver.reject(error!)
-                    handleBy.runError(error!)
-                    return
-                }
-                _ = HelperMethods.saveCache(.ONEDRIVEACOUNT, cachePath, data: data!)
-                let length = HelperMethods.writeCache(.ONEDRIVEACOUNT, cachePath, data: withData, self.cursor)
-                self.cursor += UInt64(length)
-                Log.d(TAG(), "writeData succeed")
-                resolver.fulfill(length)
-                handleBy.didSucceed(length)
-            })
+            self.authHelper?.checkExpired()
+                .then({ (void) -> HivePromise<Data> in
+                    return OneDriveHttpHelper.getRemoteFile(authHelper: self.authHelper!, url: url)
+                })
+                .done({ (jsonData) in
+                    _ = HelperMethods.saveCache(.ONEDRIVEACOUNT, cachePath, data: jsonData)
+                    let length = HelperMethods.writeCache(.ONEDRIVEACOUNT, cachePath, data: withData, self.cursor)
+                    self.cursor += UInt64(length)
+                    Log.d(TAG(), "writeData succeed")
+                    resolver.fulfill(length)
+                    handleBy.didSucceed(length)
+                })
+                .catch({ (error) in
+                    Log.e(TAG(), "writeData falied: %s", error.localizedDescription)
+                    resolver.reject(error)
+                    handleBy.runError(error as! HiveError)
+                })
         }
         return promise
     }
@@ -421,14 +303,6 @@ internal class OneDriveFile: HiveFileHandle {
 
     override func writeData(withData: Data, _ position: UInt64, handleBy: HiveCallback<Int32>) -> HivePromise<Int32> {
         let promise = HivePromise<Int32> { resolver in
-            let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
-            guard login != "" else {
-                Log.d(TAG(), "Please login first")
-                let error = HiveError.failue(des: "Please login first")
-                resolver.reject(error)
-                handleBy.runError(error)
-                return
-            }
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let url: String = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):\(path):/content"
             let cachePath = url.md5
@@ -440,73 +314,55 @@ internal class OneDriveFile: HiveFileHandle {
                 handleBy.didSucceed(length)
                 return
             }
-            self.getRemoteFile(url, { (data, error) in
-                guard error == nil else {
-                    Log.e(TAG(), "writeData falied: %s", error!.localizedDescription)
-                    resolver.reject(error!)
-                    handleBy.runError(error!)
-                    return
-                }
-                _ = HelperMethods.saveCache(.ONEDRIVEACOUNT, cachePath, data: data!)
-                let length = HelperMethods.writeCache(.ONEDRIVEACOUNT, cachePath, data: withData, position)
-                self.cursor += UInt64(length)
-                Log.d(TAG(), "writeData succeed")
-                resolver.fulfill(length)
-                handleBy.didSucceed(length)
-            })
+            self.authHelper?.checkExpired()
+                .then({ (void) -> HivePromise<Data> in
+                    return OneDriveHttpHelper.getRemoteFile(authHelper: self.authHelper!, url: url)
+                })
+                .done({ (jsonData) in
+                    _ = HelperMethods.saveCache(.ONEDRIVEACOUNT, cachePath, data: jsonData)
+                    let length = HelperMethods.writeCache(.ONEDRIVEACOUNT, cachePath, data: withData, self.cursor)
+                    self.cursor += UInt64(length)
+                    Log.d(TAG(), "writeData succeed")
+                    resolver.fulfill(length)
+                    handleBy.didSucceed(length)
+                })
+                .catch({ (error) in
+                    Log.e(TAG(), "writeData falied: %s", error.localizedDescription)
+                    resolver.reject(error)
+                    handleBy.runError(error as! HiveError)
+                })
         }
         return promise
     }
 
     override func commitData() -> HivePromise<Bool> {
         let promise = HivePromise<Bool> { resolver in
-            let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
-            guard login != "" else {
-                Log.d(TAG(), "Please login first")
-                let error = HiveError.failue(des: "Please login first")
-                resolver.reject(error)
-                return
-            }
-            _ = self.authHelper!.checkExpired().done { result in
-                let accesstoken = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
-                let url = self.fullUrl(self.pathName, "content")
-                let headers = ["Authorization": "bearer \(accesstoken)", "Content-Type": "text/plain"]
-                let data = HelperMethods.uploadFile(.ONEDRIVEACOUNT, url.md5)
-                Alamofire.upload(data, to: url,
-                                 method: .put,
-                                 headers: headers)
-                    .responseJSON { dataResponse in
-                        guard dataResponse.response?.statusCode != 401 else {
-                            let error = HiveError.failue(des: TOKEN_INVALID)
-                            Log.e(TAG(), "writeData falied: %s", error.localizedDescription)
-                            resolver.reject(error)
-                            return
-                        }
-                        guard dataResponse.response?.statusCode == 200 || dataResponse.response?.statusCode == 201 else{
-                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
-                            Log.e(TAG(), "writeData falied: %s", error.localizedDescription)
-                            resolver.reject(error)
-                            return
-                        }
-                        HelperMethods.uploadCache(.ONEDRIVEACOUNT, url.md5)
-                        Log.d(TAG(), "writeData succeed")
-                        resolver.fulfill(true)
-                }
-                }.catch { err in
-                    let error = HiveError.failue(des: err.localizedDescription)
+            let accesstoken = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
+            let url = self.fullUrl(self.pathName, "content")
+            let headers = ["Authorization": "bearer \(accesstoken)", "Content-Type": "text/plain"]
+            let data = HelperMethods.uploadFile(.ONEDRIVEACOUNT, url.md5)
+            self.authHelper?.checkExpired()
+                .then({ (void) -> HivePromise<HiveVoid> in
+                    return OneDriveHttpHelper
+                        .upload(data: data, to: url,
+                                headers: headers,
+                                avalidCode: 201)
+                })
+                .done({ (jsonData) in
+                    HelperMethods.uploadCache(.ONEDRIVEACOUNT, url.md5)
+                    Log.d(TAG(), "writeData succeed")
+                    resolver.fulfill(true)
+                })
+                .catch({ (error) in
+                    let error = HiveError.failue(des: error.localizedDescription)
                     Log.e(TAG(), "writeData falied: %s", error.localizedDescription)
                     resolver.reject(error)
-            }
+                })
         }
         return promise
     }
 
     override func discardData() {
-        let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
-        guard login != "" else {
-            Log.d(TAG(), "Please login first")
-            return
-        }
         cursor = 0
         finish = false
         let url = self.fullUrl(self.pathName, "content")
@@ -514,76 +370,8 @@ internal class OneDriveFile: HiveFileHandle {
     }
 
     override func close() {
-        let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
-        guard login != "" else {
-            Log.d(TAG(), "Please login first")
-            return
-        }
         cursor = 0
         finish = false
-    }
-
-    private func pollingCopyresult(_ url: String, _ copyResult: @escaping (_ isSucceed: Bool) -> Void) {
-        Alamofire.request(url,
-                          method: .get,
-                          parameters: nil, encoding: JSONEncoding.default, headers: nil)
-            .responseJSON { (dataResponse) in
-                let jsonData = JSON(dataResponse.result.value as Any)
-                let stat = jsonData["status"].stringValue
-                if stat == "completed" {
-                    copyResult(true)
-                    return
-                }else if stat == "failed" {
-                    copyResult(false)
-                    return
-                }else {
-                    self.pollingCopyresult(url, copyResult)
-                }
-        }
-    }
-
-    private func pollingDowloadresult(_ url: String, _ dowloadResult: @escaping (_ isSucceed: Bool) -> Void) {
-        Alamofire.request(url,
-                          method: .get,
-                          parameters: nil, encoding: JSONEncoding.default, headers: nil)
-            .responseJSON { (dataResponse) in
-//                TODO
-        }
-    }
-
-    private func getRemoteFile(_ url: String, _ fileResult: @escaping (_ data: Data?, _ error: HiveError?) -> Void) {
-        _ = self.authHelper!.checkExpired().done { result in
-            Alamofire.request(url, method: .get,
-                              parameters: nil,
-                              encoding: JSONEncoding.default,
-                              headers: OneDriveHttpHeader.headers())
-                .responseData { dataResponse in
-                    let jsonStr = String(data: dataResponse.data!, encoding: .utf8) ?? ""
-                    guard dataResponse.response?.statusCode != 401 else {
-                        let error = HiveError.failue(des: TOKEN_INVALID)
-                        fileResult(nil, error)
-                        return
-                    }
-                    guard dataResponse.response?.statusCode == 200 else{
-                        let error = HiveError.failue(des: jsonStr)
-                        fileResult(nil, error)
-                        return
-                    }
-                    let data = dataResponse.data ?? Data()
-                    fileResult(data, nil)
-            }
-            }.catch { err in
-                let error = HiveError.failue(des: err.localizedDescription)
-                fileResult(nil, error)
-        }
-    }
-
-    private func validatePath(_ atPath: String) -> (Bool, String) {
-
-        if self.pathName == "/" {
-            return (false, "This is root file")
-        }
-        return (true, "")
     }
 
     private func fullUrl(_ path: String, _ operation: String) -> String {
