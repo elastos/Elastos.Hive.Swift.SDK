@@ -150,7 +150,7 @@ class HiveIpfsDirectoryTests: XCTestCase, Authenticator{
         lock = XCTestExpectation(description: "wait for test8_copyTo")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
             return drive.directoryHandle(atPath: "/hiveIpfs_Directory_test3_createDirectory\(timeTest!)")
-        }).then({ (directory) -> HivePromise<Bool> in
+        }).then({ (directory) -> HivePromise<HiveVoid> in
             return directory.copyTo(newPath: "/\(timeTest!)/hiveIpfs_Directory_test3_createDirectory\(timeTest!)")
         }).done({ (re) in
             XCTAssertTrue(re)
@@ -166,7 +166,7 @@ class HiveIpfsDirectoryTests: XCTestCase, Authenticator{
         lock = XCTestExpectation(description: "wait for test9_deleteItem")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
             return drive.directoryHandle(atPath: "/hiveIpfs_Directory_test3_createDirectory\(timeTest!)")
-        }).then({ (directory) -> HivePromise<Bool> in
+        }).then({ (directory) -> HivePromise<HiveVoid> in
             return directory.deleteItem()
         }).done({ (re) in
             XCTAssertTrue(re)
@@ -182,7 +182,7 @@ class HiveIpfsDirectoryTests: XCTestCase, Authenticator{
         lock = XCTestExpectation(description: "wait for test10_moveTo")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
             return drive.directoryHandle(atPath: "/\(timeTest!)/hiveIpfs_Directory_test3_createDirectory\(timeTest!)")
-        }).then({ (directory) -> HivePromise<Bool> in
+        }).then({ (directory) -> HivePromise<HiveVoid> in
             return directory.moveTo(newPath: "/")
         }).done({ (re) in
             XCTAssertTrue(re)

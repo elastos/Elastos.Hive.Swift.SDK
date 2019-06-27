@@ -49,8 +49,8 @@ public class HiveFileHandle: Result, ResourceItem, FileItem {
     ///
     /// - Parameter newPath: The new path with the file
     /// - Returns: Returns `true` if the move succees, `false` otherwise.
-    public func moveTo(newPath: String) -> HivePromise<Bool> {
-        return moveTo(newPath: newPath, handleBy: HiveCallback<Bool>())
+    public func moveTo(newPath: String) -> HivePromise<HiveVoid> {
+        return moveTo(newPath: newPath, handleBy: HiveCallback<HiveVoid>())
     }
 
     /// Current File move to the new path
@@ -59,17 +59,17 @@ public class HiveFileHandle: Result, ResourceItem, FileItem {
     ///   - newPath: The new path with the file
     ///   - handleBy: The result
     /// - Returns: Returns `true` if the move succees, `false` otherwise.
-    public func moveTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
+    public func moveTo(newPath: String, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
         let error = HiveError.failue(des: "Dummy")
-        return HivePromise<Bool>(error: error)
+        return HivePromise<HiveVoid>(error: error)
     }
 
     /// Current file copy to the new path
     ///
     /// - Parameter newPath: The path to copy
     /// - Returns: Returns `true` if the copy succees, `false` otherwise.
-    public func copyTo(newPath: String) -> HivePromise<Bool> {
-        return copyTo(newPath: newPath, handleBy: HiveCallback<Bool>())
+    public func copyTo(newPath: String) -> HivePromise<HiveVoid> {
+        return copyTo(newPath: newPath, handleBy: HiveCallback<HiveVoid>())
     }
 
     /// Current file copy to the new path
@@ -78,25 +78,25 @@ public class HiveFileHandle: Result, ResourceItem, FileItem {
     ///   - newPath: The path to copy
     ///   - handleBy: The result
     /// - Returns: Returns `true` if the copy succees, `false` otherwise.
-    public func copyTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
+    public func copyTo(newPath: String, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
         let error = HiveError.failue(des: "Dummy")
-        return HivePromise<Bool>(error: error)
+        return HivePromise<HiveVoid>(error: error)
     }
 
     /// Delete the current file
     ///
     /// - Returns: Returns `true` if the delete succees, `false` otherwise.
-    public func deleteItem() -> HivePromise<Bool> {
-        return deleteItem(handleBy: HiveCallback<Bool>())
+    public func deleteItem() -> HivePromise<HiveVoid> {
+        return deleteItem(handleBy: HiveCallback<HiveVoid>())
     }
 
     /// Delete the current file
     ///
     /// - Parameter handleBy: The result
     /// - Returns: Returns `true` if the delete succees, `false` otherwise.
-    public func deleteItem(handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
+    public func deleteItem(handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
         let error = HiveError.failue(des: "Dummy")
-        return HivePromise<Bool>(error: error)
+        return HivePromise<HiveVoid>(error: error)
     }
 
     public func readData(_ length: Int) -> HivePromise<Data> {
@@ -135,9 +135,9 @@ public class HiveFileHandle: Result, ResourceItem, FileItem {
         return HivePromise<Int32>(error: error)
     }
 
-    public func commitData() -> Promise<Bool> {
+    public func commitData() -> HivePromise<HiveVoid> {
         let error = HiveError.failue(des: "Dummy")
-        return HivePromise<Bool>(error: error)
+        return HivePromise<HiveVoid>(error: error)
     }
 
     public func discardData() {}
