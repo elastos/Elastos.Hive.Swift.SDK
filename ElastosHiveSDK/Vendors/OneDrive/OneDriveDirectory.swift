@@ -11,7 +11,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
     }
 
     override func parentPathName() -> String {
-        return HelperMethods.prePath(self.pathName)
+        return ConvertHelper.prePath(self.pathName)
     }
 
     override func lastUpdatedInfo() -> HivePromise<HiveDirectoryInfo> {

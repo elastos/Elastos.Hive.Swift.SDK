@@ -15,12 +15,12 @@ internal class OneDriveFile: HiveFileHandle {
     }
 
     override func parentPathName() -> String {
-        let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
+        let login = KeyChainHelper.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
         guard login != "" else {
             Log.d(TAG(), "Please login first")
             return "failed"
         }
-        return HelperMethods.prePath(self.pathName)
+        return ConvertHelper.prePath(self.pathName)
     }
 
     override func lastUpdatedInfo() -> HivePromise<HiveFileInfo> {
@@ -188,9 +188,9 @@ internal class OneDriveFile: HiveFileHandle {
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let url: String = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):\(path):/content"
             let cachePath = url.md5
-            let file = HelperMethods.checkCacheFileIsExist(.ONEDRIVEACOUNT, cachePath)
+            let file = CacheHelper.checkCacheFileIsExist(.ONEDRIVEACOUNT, cachePath)
             if file {
-                let data: Data = HelperMethods.readCache(.ONEDRIVEACOUNT, cachePath, cursor, length)
+                let data: Data = CacheHelper.readCache(.ONEDRIVEACOUNT, cachePath, cursor, length)
                 cursor += UInt64(data.count)
                 resolver.fulfill(data)
                 handleBy.didSucceed(data)
@@ -205,8 +205,8 @@ internal class OneDriveFile: HiveFileHandle {
                     return OneDriveHttpHelper.getRemoteFile(authHelper: self.authHelper!, url: url)
                 })
                 .done({ (jsonData) in
-                    _ = HelperMethods.saveCache(.ONEDRIVEACOUNT, cachePath, data: jsonData)
-                    let readData = HelperMethods.readCache(.ONEDRIVEACOUNT, cachePath, self.cursor, length)
+                    _ = CacheHelper.saveCache(.ONEDRIVEACOUNT, cachePath, data: jsonData)
+                    let readData = CacheHelper.readCache(.ONEDRIVEACOUNT, cachePath, self.cursor, length)
                     self.cursor += UInt64(readData.count)
                     Log.d(TAG(), "readData succeed")
                     resolver.fulfill(readData)
@@ -230,9 +230,9 @@ internal class OneDriveFile: HiveFileHandle {
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let url: String = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):\(path):/content"
             let cachePath = url.md5
-            let file = HelperMethods.checkCacheFileIsExist(.ONEDRIVEACOUNT, cachePath)
+            let file = CacheHelper.checkCacheFileIsExist(.ONEDRIVEACOUNT, cachePath)
             if file {
-                let data = HelperMethods.readCache(.ONEDRIVEACOUNT, cachePath, position, length)
+                let data = CacheHelper.readCache(.ONEDRIVEACOUNT, cachePath, position, length)
                 cursor += UInt64(data.count)
                 resolver.fulfill(data)
                 handleBy.didSucceed(data)
@@ -243,8 +243,8 @@ internal class OneDriveFile: HiveFileHandle {
                     return OneDriveHttpHelper.getRemoteFile(authHelper: self.authHelper!, url: url)
                 })
                 .done({ (jsonData) in
-                    _ = HelperMethods.saveCache(.ONEDRIVEACOUNT, cachePath, data: jsonData)
-                    let readData = HelperMethods.readCache(.ONEDRIVEACOUNT, cachePath, self.cursor, length)
+                    _ = CacheHelper.saveCache(.ONEDRIVEACOUNT, cachePath, data: jsonData)
+                    let readData = CacheHelper.readCache(.ONEDRIVEACOUNT, cachePath, self.cursor, length)
                     self.cursor += UInt64(readData.count)
                     Log.d(TAG(), "readData succeed")
                     resolver.fulfill(readData)
@@ -268,9 +268,9 @@ internal class OneDriveFile: HiveFileHandle {
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let url: String = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):\(path):/content"
             let cachePath = url.md5
-            let file = HelperMethods.checkCacheFileIsExist(.ONEDRIVEACOUNT, cachePath)
+            let file = CacheHelper.checkCacheFileIsExist(.ONEDRIVEACOUNT, cachePath)
             if file {
-                let length = HelperMethods.writeCache(.ONEDRIVEACOUNT, cachePath, data: withData, cursor)
+                let length = CacheHelper.writeCache(.ONEDRIVEACOUNT, cachePath, data: withData, cursor)
                 cursor += UInt64(length)
                 resolver.fulfill(length)
                 handleBy.didSucceed(length)
@@ -281,8 +281,8 @@ internal class OneDriveFile: HiveFileHandle {
                     return OneDriveHttpHelper.getRemoteFile(authHelper: self.authHelper!, url: url)
                 })
                 .done({ (jsonData) in
-                    _ = HelperMethods.saveCache(.ONEDRIVEACOUNT, cachePath, data: jsonData)
-                    let length = HelperMethods.writeCache(.ONEDRIVEACOUNT, cachePath, data: withData, self.cursor)
+                    _ = CacheHelper.saveCache(.ONEDRIVEACOUNT, cachePath, data: jsonData)
+                    let length = CacheHelper.writeCache(.ONEDRIVEACOUNT, cachePath, data: withData, self.cursor)
                     self.cursor += UInt64(length)
                     Log.d(TAG(), "writeData succeed")
                     resolver.fulfill(length)
@@ -306,9 +306,9 @@ internal class OneDriveFile: HiveFileHandle {
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let url: String = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):\(path):/content"
             let cachePath = url.md5
-            let file = HelperMethods.checkCacheFileIsExist(.ONEDRIVEACOUNT, cachePath)
+            let file = CacheHelper.checkCacheFileIsExist(.ONEDRIVEACOUNT, cachePath)
             if file {
-                let length = HelperMethods.writeCache(.ONEDRIVEACOUNT, cachePath, data: withData, position)
+                let length = CacheHelper.writeCache(.ONEDRIVEACOUNT, cachePath, data: withData, position)
                 cursor += UInt64(length)
                 resolver.fulfill(length)
                 handleBy.didSucceed(length)
@@ -319,8 +319,8 @@ internal class OneDriveFile: HiveFileHandle {
                     return OneDriveHttpHelper.getRemoteFile(authHelper: self.authHelper!, url: url)
                 })
                 .done({ (jsonData) in
-                    _ = HelperMethods.saveCache(.ONEDRIVEACOUNT, cachePath, data: jsonData)
-                    let length = HelperMethods.writeCache(.ONEDRIVEACOUNT, cachePath, data: withData, self.cursor)
+                    _ = CacheHelper.saveCache(.ONEDRIVEACOUNT, cachePath, data: jsonData)
+                    let length = CacheHelper.writeCache(.ONEDRIVEACOUNT, cachePath, data: withData, self.cursor)
                     self.cursor += UInt64(length)
                     Log.d(TAG(), "writeData succeed")
                     resolver.fulfill(length)
@@ -337,10 +337,10 @@ internal class OneDriveFile: HiveFileHandle {
 
     override func commitData() -> HivePromise<Bool> {
         let promise = HivePromise<Bool> { resolver in
-            let accesstoken = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
-            let url = self.fullUrl(self.pathName, "content")
+            let accesstoken = KeyChainHelper.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
+            let url = ConvertHelper.fullUrl(self.pathName, "content")
             let headers = ["Authorization": "bearer \(accesstoken)", "Content-Type": "text/plain"]
-            let data = HelperMethods.uploadFile(.ONEDRIVEACOUNT, url.md5)
+            let data = CacheHelper.uploadFile(.ONEDRIVEACOUNT, url.md5)
             self.authHelper?.checkExpired()
                 .then({ (void) -> HivePromise<HiveVoid> in
                     return OneDriveHttpHelper
@@ -349,7 +349,7 @@ internal class OneDriveFile: HiveFileHandle {
                                 avalidCode: 201)
                 })
                 .done({ (jsonData) in
-                    HelperMethods.uploadCache(.ONEDRIVEACOUNT, url.md5)
+                    CacheHelper.uploadCache(.ONEDRIVEACOUNT, url.md5)
                     Log.d(TAG(), "writeData succeed")
                     resolver.fulfill(true)
                 })
@@ -365,20 +365,12 @@ internal class OneDriveFile: HiveFileHandle {
     override func discardData() {
         cursor = 0
         finish = false
-        let url = self.fullUrl(self.pathName, "content")
-        _ = HelperMethods.discardCache(.ONEDRIVEACOUNT, url.md5)
+        let url = ConvertHelper.fullUrl(self.pathName, "content")
+        _ = CacheHelper.discardCache(.ONEDRIVEACOUNT, url.md5)
     }
 
     override func close() {
         cursor = 0
         finish = false
-    }
-
-    private func fullUrl(_ path: String, _ operation: String) -> String {
-        if path == "" || path == "/" {
-            return OneDriveURL.API + "/root/\(operation)"
-        }
-        let ecUrl = path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-        return OneDriveURL.API + "/root:\(ecUrl):/\(operation)"
     }
 }

@@ -22,7 +22,7 @@ public class IPFSParameter: DriveParameter {
     }
 
     private func saveIpfsAcount() {
-        let statJson = HelperMethods.getKeychainForAll(.IPFSACCOUNT)
+        let statJson = KeyChainHelper.getKeychainForAll(.IPFSACCOUNT)
         let lastUid = statJson["last_uid"].stringValue
         guard lastUid != uid else {
             return
@@ -41,6 +41,6 @@ public class IPFSParameter: DriveParameter {
             uidArry.append(u!)
         }
         let ipfsAccountJson = ["last_uid": uid, "uids": uidArry] as [String : Any]
-        HelperMethods.saveKeychain(.IPFSACCOUNT, ipfsAccountJson)
+        KeyChainHelper.saveKeychain(.IPFSACCOUNT, ipfsAccountJson)
     }
 }

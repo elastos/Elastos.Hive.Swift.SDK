@@ -13,7 +13,7 @@ internal class IPFSFile: HiveFileHandle {
     }
 
     override func parentPathName() -> String {
-        return HelperMethods.prePath(self.pathName)
+        return ConvertHelper.prePath(self.pathName)
     }
 
     override func lastUpdatedInfo() -> HivePromise<HiveFileInfo> {
@@ -25,7 +25,7 @@ internal class IPFSFile: HiveFileHandle {
             _ = self.authHelper!.checkExpired().done({ (success) in
 
                 let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
-                let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
                 let params = ["uid": uid, "path": self.pathName]
                 Alamofire.request(url,
                                   method: .post,
@@ -34,7 +34,7 @@ internal class IPFSFile: HiveFileHandle {
                                   headers: nil)
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else {
-                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
                             Log.e(TAG(), "lastUpdatedInfo falied: %s", error.localizedDescription)
                             resolver.reject(error)
                             handleBy.runError(error)
@@ -141,12 +141,12 @@ internal class IPFSFile: HiveFileHandle {
                 handleBy.didSucceed(Data())
                 return
             }
-            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+            let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             let url: String = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_READ.rawValue + "?uid=" + uid + "&path=" + self.pathName
             let cachePath = url.md5
-            let file = HelperMethods.checkCacheFileIsExist(.IPFSACCOUNT, cachePath)
+            let file = CacheHelper.checkCacheFileIsExist(.IPFSACCOUNT, cachePath)
             if file {
-                let data: Data = HelperMethods.readCache(.IPFSACCOUNT, cachePath, cursor, length)
+                let data: Data = CacheHelper.readCache(.IPFSACCOUNT, cachePath, cursor, length)
                 cursor += UInt64(data.count)
                 resolver.fulfill(data)
                 handleBy.didSucceed(data)
@@ -163,10 +163,10 @@ internal class IPFSFile: HiveFileHandle {
                     handleBy.runError(error!)
                     return
                 }
-                let isSuccess = HelperMethods.saveCache(.IPFSACCOUNT, cachePath, data: data!)
+                let isSuccess = CacheHelper.saveCache(.IPFSACCOUNT, cachePath, data: data!)
                 var readData = Data()
                 if isSuccess {
-                    readData = HelperMethods.readCache(.IPFSACCOUNT, cachePath, self.cursor, length)
+                    readData = CacheHelper.readCache(.IPFSACCOUNT, cachePath, self.cursor, length)
                 }
                 self.cursor += UInt64(readData.count)
                 Log.d(TAG(), "readData succeed")
@@ -183,12 +183,12 @@ internal class IPFSFile: HiveFileHandle {
 
     override func readData(_ length: Int, _ position: UInt64, handleBy: HiveCallback<Data>) -> HivePromise<Data> {
         let promise = HivePromise<Data> { resolver in
-            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+            let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             let url: String = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_READ.rawValue + "?uid=" + uid + "&path=" + self.pathName
             let cachePath = url.md5
-            let file = HelperMethods.checkCacheFileIsExist(.IPFSACCOUNT, cachePath)
+            let file = CacheHelper.checkCacheFileIsExist(.IPFSACCOUNT, cachePath)
             if file {
-                let data = HelperMethods.readCache(.IPFSACCOUNT, cachePath, position, length)
+                let data = CacheHelper.readCache(.IPFSACCOUNT, cachePath, position, length)
                 cursor += UInt64(data.count)
                 resolver.fulfill(data)
                 handleBy.didSucceed(data)
@@ -201,10 +201,10 @@ internal class IPFSFile: HiveFileHandle {
                     handleBy.runError(error!)
                     return
                 }
-                let isSuccess = HelperMethods.saveCache(.IPFSACCOUNT, cachePath, data: data!)
+                let isSuccess = CacheHelper.saveCache(.IPFSACCOUNT, cachePath, data: data!)
                 var readData = Data()
                 if isSuccess {
-                    readData = HelperMethods.readCache(.IPFSACCOUNT, cachePath, position, length)
+                    readData = CacheHelper.readCache(.IPFSACCOUNT, cachePath, position, length)
                     self.cursor += UInt64(readData.count)
                 }
                 Log.d(TAG(), "readData succeed")
@@ -221,12 +221,12 @@ internal class IPFSFile: HiveFileHandle {
 
     override func writeData(withData: Data, handleBy: HiveCallback<Int32>) -> HivePromise<Int32> {
         let promise = HivePromise<Int32> { resolver in
-            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+            let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             let url: String = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_READ.rawValue + "?uid=" + uid + "&path=" + self.pathName
             let cachePath = url.md5
-            let file = HelperMethods.checkCacheFileIsExist(.IPFSACCOUNT, cachePath)
+            let file = CacheHelper.checkCacheFileIsExist(.IPFSACCOUNT, cachePath)
             if file {
-                let length = HelperMethods.writeCache(.IPFSACCOUNT, cachePath, data: withData, cursor)
+                let length = CacheHelper.writeCache(.IPFSACCOUNT, cachePath, data: withData, cursor)
                 cursor += UInt64(length)
                 resolver.fulfill(length)
                 handleBy.didSucceed(length)
@@ -239,8 +239,8 @@ internal class IPFSFile: HiveFileHandle {
                     handleBy.runError(error!)
                     return
                 }
-                _ = HelperMethods.saveCache(.IPFSACCOUNT, cachePath, data: data!)
-                let length = HelperMethods.writeCache(.IPFSACCOUNT, cachePath, data: withData, self.cursor)
+                _ = CacheHelper.saveCache(.IPFSACCOUNT, cachePath, data: data!)
+                let length = CacheHelper.writeCache(.IPFSACCOUNT, cachePath, data: withData, self.cursor)
                 self.cursor += UInt64(length)
                 Log.d(TAG(), "writeData succeed")
                 resolver.fulfill(length)
@@ -256,12 +256,12 @@ internal class IPFSFile: HiveFileHandle {
 
     override func writeData(withData: Data, _ position: UInt64, handleBy: HiveCallback<Int32>) -> HivePromise<Int32> {
         let promise = HivePromise<Int32> { resolver in
-            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+            let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             let url: String = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_READ.rawValue + "?uid=" + uid + "&path=" + self.pathName
             let cachePath = url.md5
-            let file = HelperMethods.checkCacheFileIsExist(.IPFSACCOUNT, cachePath)
+            let file = CacheHelper.checkCacheFileIsExist(.IPFSACCOUNT, cachePath)
             if file {
-                let length = HelperMethods.writeCache(.IPFSACCOUNT, cachePath, data: withData, position)
+                let length = CacheHelper.writeCache(.IPFSACCOUNT, cachePath, data: withData, position)
                 cursor += UInt64(length)
                 resolver.fulfill(length)
                 handleBy.didSucceed(length)
@@ -274,8 +274,8 @@ internal class IPFSFile: HiveFileHandle {
                     handleBy.runError(error!)
                     return
                 }
-                _ = HelperMethods.saveCache(.IPFSACCOUNT, cachePath, data: data!)
-                let length = HelperMethods.writeCache(.IPFSACCOUNT, cachePath, data: withData, position)
+                _ = CacheHelper.saveCache(.IPFSACCOUNT, cachePath, data: data!)
+                let length = CacheHelper.writeCache(.IPFSACCOUNT, cachePath, data: withData, position)
                 self.cursor += UInt64(length)
                 Log.d(TAG(), "writeData succeed")
                 resolver.fulfill(length)
@@ -287,9 +287,9 @@ internal class IPFSFile: HiveFileHandle {
 
     override func commitData() -> HivePromise<Bool> {
         let promise = HivePromise<Bool> { resolver in
-            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+            let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_READ.rawValue + "?uid=" + uid + "&path=" + self.pathName
-            let data = HelperMethods.uploadFile(.IPFSACCOUNT, url.md5)
+            let data = CacheHelper.uploadFile(.IPFSACCOUNT, url.md5)
             self.authHelper!.checkExpired().then({ (succeed) -> HivePromise<Bool> in
                 return IPFSAPIs.writeData(self.pathName, data)
             }).then({ (success) -> HivePromise<Bool> in
@@ -309,9 +309,9 @@ internal class IPFSFile: HiveFileHandle {
     override func discardData() {
         cursor = 0
         finish = false
-        let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+        let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
         let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_READ.rawValue + "?uid=" + uid + "&path=" + self.pathName
-        _ = HelperMethods.discardCache(.IPFSACCOUNT, url.md5)
+        _ = CacheHelper.discardCache(.IPFSACCOUNT, url.md5)
     }
 
     override func close() {
@@ -322,7 +322,7 @@ internal class IPFSFile: HiveFileHandle {
     private func getRemoteFile(_ url: String, _ fileResult: @escaping (_ data: Data?, _ error: HiveError?) -> Void) {
         _ = self.authHelper!.checkExpired().done { result in
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_READ.rawValue
-            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+            let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             let param = ["uid": uid, "path": self.pathName]
             Alamofire.request(url,
                               method: .post,
@@ -331,7 +331,7 @@ internal class IPFSFile: HiveFileHandle {
                               headers: nil)
                 .responseJSON(completionHandler: { (dataResponse) in
                     guard dataResponse.response?.statusCode == 200 else {
-                        let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                        let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
                         Log.e(TAG(), "readData falied: %s", error.localizedDescription)
                         fileResult(nil, error)
                         return
