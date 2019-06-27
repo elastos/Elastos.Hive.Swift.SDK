@@ -2,14 +2,14 @@ import Foundation
 import PromiseKit
 
 protocol FileItem {
-    func moveTo(newPath: String) -> HivePromise<Bool>
-    func moveTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool>
+    func moveTo(newPath: String) -> HivePromise<HiveVoid>
+    func moveTo(newPath: String, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid>
 
-    func copyTo(newPath: String) -> HivePromise<Bool>
-    func copyTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool>
+    func copyTo(newPath: String) -> HivePromise<HiveVoid>
+    func copyTo(newPath: String, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid>
 
-    func deleteItem() -> HivePromise<Bool>
-    func deleteItem(handleBy: HiveCallback<Bool>) -> HivePromise<Bool>
+    func deleteItem() -> HivePromise<HiveVoid>
+    func deleteItem(handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid>
 
     func close()
 }
@@ -47,9 +47,9 @@ extension FileItem {
         return HivePromise<Int32>(error: error)
     }
 
-    public func commitData() -> HivePromise<Bool>{
+    public func commitData() -> HivePromise<HiveVoid>{
         let error = HiveError.failue(des: "Dummy")
-        return HivePromise<Bool>(error: error)
+        return HivePromise<HiveVoid>(error: error)
     }
 
     public func discardData(){}

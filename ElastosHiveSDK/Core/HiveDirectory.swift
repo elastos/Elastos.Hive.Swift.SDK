@@ -146,8 +146,8 @@ public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem 
     ///
     /// - Parameter newPath: The new path with the directory
     /// - Returns: Returns `true` if the move succees, `false` otherwise.
-    public func moveTo(newPath: String) -> HivePromise<Bool> {
-        return moveTo(newPath: newPath, handleBy: HiveCallback<Bool>())
+    public func moveTo(newPath: String) -> HivePromise<HiveVoid> {
+        return moveTo(newPath: newPath, handleBy: HiveCallback<HiveVoid>())
     }
 
     /// Current directory move to the new path
@@ -156,17 +156,17 @@ public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem 
     ///   - newPath: The new path with the directory
     ///   - handleBy: The result
     /// - Returns: Returns `true` if the move succees, `false` otherwise.
-    public func moveTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
+    public func moveTo(newPath: String, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
         let error = HiveError.failue(des: "Dummy")
-        return HivePromise<Bool>(error: error)
+        return HivePromise<HiveVoid>(error: error)
     }
 
     /// Current directory copy to the new path
     ///
     /// - Parameter newPath: The new path to copy
     /// - Returns: Returns `true` if the copy succees, `false` otherwise.
-    public func copyTo(newPath: String) -> HivePromise<Bool> {
-        return copyTo(newPath: newPath, handleBy: HiveCallback<Bool>())
+    public func copyTo(newPath: String) -> HivePromise<HiveVoid> {
+        return copyTo(newPath: newPath, handleBy: HiveCallback<HiveVoid>())
     }
 
     /// Current directory copy to the new path
@@ -175,25 +175,25 @@ public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem 
     ///   - newPath: The new path to copy
     ///   - handleBy: The result
     /// - Returns: Returns `true` if the copy succees, `false` otherwise.
-    public func copyTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
+    public func copyTo(newPath: String, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
         let error = HiveError.failue(des: "Dummy")
-        return HivePromise<Bool>(error: error)
+        return HivePromise<HiveVoid>(error: error)
     }
 
     /// Delete the current directory
     ///
     /// - Returns: Returns `true` if the delete succees, `false` otherwise.
-    public func deleteItem() -> HivePromise<Bool> {
-        return deleteItem(handleBy: HiveCallback<Bool>())
+    public func deleteItem() -> HivePromise<HiveVoid> {
+        return deleteItem(handleBy: HiveCallback<HiveVoid>())
     }
 
     /// Delete the current directory
     ///
     /// - Parameter handleBy: The result
     /// - Returns: Returns `true` if the delete succees, `false` otherwise.
-    public func deleteItem(handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
+    public func deleteItem(handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
         let error = HiveError.failue(des: "Dummy")
-        return HivePromise<Bool>(error: error)
+        return HivePromise<HiveVoid>(error: error)
     }
 
     /// Close

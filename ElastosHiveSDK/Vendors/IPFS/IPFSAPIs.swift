@@ -5,9 +5,9 @@ import Alamofire
 
 class IPFSAPIs {
 
-    class func publish(_ path: String) -> HivePromise<Bool> {
+    class func publish(_ path: String) -> HivePromise<HiveVoid> {
 
-        let promise = HivePromise<Bool> { resolver in
+        let promise = HivePromise<HiveVoid> { resolver in
             let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             getHash(uid, path: path).done { (hash) in
                 let params = ["uid": uid, "path": hash]
@@ -23,7 +23,7 @@ class IPFSAPIs {
                             resolver.reject(error)
                             return
                         }
-                        resolver.fulfill(true)
+                        resolver.fulfill(HiveVoid())
                     })
                 }.catch({ (error) in
                     let hiveError = HiveError.failue(des: error.localizedDescription)
@@ -88,8 +88,8 @@ class IPFSAPIs {
         return promise
     }
 
-    class func moveTo(_ originPath: String, _ newPath: String) -> HivePromise<Bool> {
-        let promise = HivePromise<Bool> { resolver in
+    class func moveTo(_ originPath: String, _ newPath: String) -> HivePromise<HiveVoid> {
+        let promise = HivePromise<HiveVoid> { resolver in
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_MV.rawValue
             let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             let params = ["uid": uid, "source": originPath + "/", "dest": newPath]
@@ -104,14 +104,14 @@ class IPFSAPIs {
                         resolver.reject(error)
                         return
                     }
-                    resolver.fulfill(true)
+                    resolver.fulfill(HiveVoid())
                 })
         }
         return promise
     }
 
-    class func copyTo(_ originPath: String, _ newParh: String) -> HivePromise<Bool> {
-        let promise = HivePromise<Bool> { resolver in
+    class func copyTo(_ originPath: String, _ newParh: String) -> HivePromise<HiveVoid> {
+        let promise = HivePromise<HiveVoid> { resolver in
             let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             getHash(uid, path: originPath).done({ (hash) in
                 let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_CP.rawValue
@@ -127,7 +127,7 @@ class IPFSAPIs {
                             resolver.reject(error)
                             return
                         }
-                        resolver.fulfill(true)
+                        resolver.fulfill(HiveVoid())
                     })
             }).catch({ (error) in
                 
@@ -136,8 +136,8 @@ class IPFSAPIs {
         return promise
     }
 
-    class func deleteItem(_ path: String) -> HivePromise<Bool> {
-        let promise = HivePromise<Bool> { resolver in
+    class func deleteItem(_ path: String) -> HivePromise<HiveVoid> {
+        let promise = HivePromise<HiveVoid> { resolver in
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_RM.rawValue
             let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             let params = ["uid": uid, "path": path, "recursive": true] as [String : Any]
@@ -152,14 +152,14 @@ class IPFSAPIs {
                         resolver.reject(error)
                         return
                     }
-                    resolver.fulfill(true)
+                    resolver.fulfill(HiveVoid())
                 })
         }
         return promise
     }
 
-    class func writeData(_ path: String, _ withData: Data) -> HivePromise<Bool> {
-        let promise = HivePromise<Bool> { resolver in
+    class func writeData(_ path: String, _ withData: Data) -> HivePromise<HiveVoid> {
+        let promise = HivePromise<HiveVoid> { resolver in
             let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             let params = ["uid": uid, "path": path, "file": "file", "create": "true"]
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_WRITE.rawValue + "?" + params.queryString
@@ -174,7 +174,7 @@ class IPFSAPIs {
                             resolver.reject(error)
                             return
                         }
-                        resolver.fulfill(true)
+                        resolver.fulfill(HiveVoid())
                     })
                     break
                 case .failure(let error):

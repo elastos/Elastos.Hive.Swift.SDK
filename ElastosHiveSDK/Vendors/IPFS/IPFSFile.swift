@@ -57,20 +57,20 @@ internal class IPFSFile: HiveFileHandle {
         return promise
     }
 
-    override func moveTo(newPath: String) -> HivePromise<Bool> {
-        return moveTo(newPath: newPath, handleBy: HiveCallback<Bool>())
+    override func moveTo(newPath: String) -> HivePromise<HiveVoid> {
+        return moveTo(newPath: newPath, handleBy: HiveCallback<HiveVoid>())
     }
 
-    override func moveTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
-        let promise = HivePromise<Bool> { resolver in
-            self.authHelper!.checkExpired().then({ (succeed) -> HivePromise<Bool> in
+    override func moveTo(newPath: String, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
+        let promise = HivePromise<HiveVoid> { resolver in
+            self.authHelper!.checkExpired().then({ (succeed) -> HivePromise<HiveVoid> in
                 return IPFSAPIs.moveTo(self.pathName, newPath)
-            }).then({ (succeed) -> HivePromise<Bool> in
+            }).then({ (succeed) -> HivePromise<HiveVoid> in
                 return IPFSAPIs.publish(newPath)
             }).done({ (success) in
                 Log.d(TAG(), "moveTo succeed")
-                resolver.fulfill(true)
-                handleBy.didSucceed(true)
+                resolver.fulfill(HiveVoid())
+                handleBy.didSucceed(HiveVoid())
             }).catch({ (error) in
                 let hiveError = HiveError.failue(des: error.localizedDescription)
                 Log.e(TAG(), "moveTo falied: %s", error.localizedDescription)
@@ -81,20 +81,20 @@ internal class IPFSFile: HiveFileHandle {
         return promise
     }
 
-    override func copyTo(newPath: String) -> HivePromise<Bool> {
-        return copyTo(newPath: newPath, handleBy: HiveCallback<Bool>())
+    override func copyTo(newPath: String) -> HivePromise<HiveVoid> {
+        return copyTo(newPath: newPath, handleBy: HiveCallback<HiveVoid>())
     }
 
-    override func copyTo(newPath: String, handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
-        let promise = HivePromise<Bool> { resolver in
-            self.authHelper!.checkExpired().then({ (succeed) -> HivePromise<Bool> in
+    override func copyTo(newPath: String, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
+        let promise = HivePromise<HiveVoid> { resolver in
+            self.authHelper!.checkExpired().then({ (succeed) -> HivePromise<HiveVoid> in
                 return IPFSAPIs.copyTo(self.pathName, newPath)
-            }).then({ (success) -> HivePromise<Bool> in
+            }).then({ (success) -> HivePromise<HiveVoid> in
                 return IPFSAPIs.publish(newPath)
             }).done({ (success) in
                 Log.d(TAG(), "copyTo succeed")
-                resolver.fulfill(true)
-                handleBy.didSucceed(true)
+                resolver.fulfill(HiveVoid())
+                handleBy.didSucceed(HiveVoid())
             }).catch({ (error) in
                 let hiveError = HiveError.failue(des: error.localizedDescription)
                 Log.e(TAG(), "copyTo falied: %s", error.localizedDescription)
@@ -105,15 +105,15 @@ internal class IPFSFile: HiveFileHandle {
         return promise
     }
 
-    override func deleteItem() -> HivePromise<Bool> {
-        return deleteItem(handleBy: HiveCallback<Bool>())
+    override func deleteItem() -> HivePromise<HiveVoid> {
+        return deleteItem(handleBy: HiveCallback<HiveVoid>())
     }
 
-    override func deleteItem(handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
-        let promise = HivePromise<Bool> { resolver in
-            self.authHelper!.checkExpired().then({ (succeed) -> HivePromise<Bool> in
+    override func deleteItem(handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
+        let promise = HivePromise<HiveVoid> { resolver in
+            self.authHelper!.checkExpired().then({ (succeed) -> HivePromise<HiveVoid> in
                 return IPFSAPIs.deleteItem(self.pathName)
-            }).then({ (success) -> HivePromise<Bool> in
+            }).then({ (success) -> HivePromise<HiveVoid> in
                 return IPFSAPIs.publish("/")
             }).done({ (success) in
                 Log.d(TAG(), "deleteItem succeed")
@@ -285,18 +285,18 @@ internal class IPFSFile: HiveFileHandle {
         return promise
     }
 
-    override func commitData() -> HivePromise<Bool> {
-        let promise = HivePromise<Bool> { resolver in
+    override func commitData() -> HivePromise<HiveVoid> {
+        let promise = HivePromise<HiveVoid> { resolver in
             let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_READ.rawValue + "?uid=" + uid + "&path=" + self.pathName
             let data = CacheHelper.uploadFile(.IPFSACCOUNT, url.md5)
-            self.authHelper!.checkExpired().then({ (succeed) -> HivePromise<Bool> in
+            self.authHelper!.checkExpired().then({ (succeed) -> HivePromise<HiveVoid> in
                 return IPFSAPIs.writeData(self.pathName, data)
-            }).then({ (success) -> HivePromise<Bool> in
+            }).then({ (success) -> HivePromise<HiveVoid> in
                 return IPFSAPIs.publish(self.pathName)
             }).done({ (success) in
                 Log.d(TAG(), "writeData succeed")
-                resolver.fulfill(true)
+                resolver.fulfill(HiveVoid())
             }).catch({ (error) in
                 let hiveError = HiveError.failue(des: error.localizedDescription)
                 Log.e(TAG(), "writeData falied: %s", error.localizedDescription)

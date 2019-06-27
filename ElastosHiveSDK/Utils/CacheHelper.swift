@@ -71,7 +71,10 @@ class CacheHelper: NSObject {
         // copy-on-write
         let copyPath = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + "copy-" + path
         do {
-            try fileManager.copyItem(atPath: cachePath, toPath: copyPath)
+            let existFile = fileManager.fileExists(atPath: copyPath)
+            if  !existFile {
+                try fileManager.copyItem(atPath: cachePath, toPath: copyPath)
+            }
         } catch {
             Log.e(TAG(), "writing failed")
             return -1

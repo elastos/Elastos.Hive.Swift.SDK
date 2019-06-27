@@ -88,7 +88,7 @@ class HiveIpfsFileTests: XCTestCase, Authenticator{
         lock = XCTestExpectation(description: "wait for test4_copyTo")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveFileHandle> in
             return drive.fileHandle(atPath: "/hiveIpfs_File_test2_creatFile_\(timeTest!)")
-        }).then({ (file) -> HivePromise<Bool> in
+        }).then({ (file) -> HivePromise<HiveVoid> in
             return file.copyTo(newPath: "/\(timeTest!)/hiveIpfs_File_test2_creatFile_\(timeTest!)")
         }).done({ (re) in
             XCTAssertTrue(re)
@@ -105,7 +105,7 @@ class HiveIpfsFileTests: XCTestCase, Authenticator{
         lock = XCTestExpectation(description: "wait for test5_deleteItem")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveFileHandle> in
             return drive.fileHandle(atPath: "/hiveIpfs_File_test2_creatFile_\(timeTest!)")
-        }).then({ (file) -> HivePromise<Bool> in
+        }).then({ (file) -> HivePromise<HiveVoid> in
             return file.deleteItem()
         }).done({ (re) in
             XCTAssertTrue(re)
@@ -122,7 +122,7 @@ class HiveIpfsFileTests: XCTestCase, Authenticator{
         lock = XCTestExpectation(description: "wait for test6_moveTo")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveFileHandle> in
             return drive.fileHandle(atPath: "/\(timeTest!)/hiveIpfs_File_test2_creatFile_\(timeTest!)")
-        }).then({ (file) -> HivePromise<Bool> in
+        }).then({ (file) -> HivePromise<HiveVoid> in
             return file.moveTo(newPath: "/")
         }).done({ (re) in
             XCTAssertTrue(re)
@@ -141,7 +141,7 @@ class HiveIpfsFileTests: XCTestCase, Authenticator{
         let data = "ios test for write \(timeTest!)".data(using: .utf8)
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveFileHandle> in
             return drive.fileHandle(atPath: "/hiveIpfs_File_test2_creatFile_\(timeTest!)")
-        }).then({ (file) -> HivePromise<Bool> in
+        }).then({ (file) -> HivePromise<HiveVoid> in
             return file.writeData(withData: data!)
         }).done({ (re) in
             XCTAssertTrue(re)

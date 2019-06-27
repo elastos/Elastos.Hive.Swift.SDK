@@ -122,7 +122,7 @@ internal class IPFSDrive: HiveDriveHandle {
             let promise = HivePromise<HiveDirectoryHandle> { resolver in
                 _ = self.authHelper.checkExpired().done({ (success) in
 
-                    IPFSAPIs.createDirectory(withPath).then({ (json) -> HivePromise<Bool> in
+                    IPFSAPIs.createDirectory(withPath).then({ (json) -> HivePromise<HiveVoid> in
                         return IPFSAPIs.publish(withPath)
                     }).done({ (success) in
                         Log.d(TAG(), "createDirectory succeed")
@@ -208,7 +208,7 @@ internal class IPFSDrive: HiveDriveHandle {
             let promise = HivePromise<HiveFileHandle> { resolver in
                 _ = self.authHelper.checkExpired().done({ (success) in
 
-                    IPFSAPIs.creatFile(withPath).then({ (json) -> HivePromise<Bool> in
+                    IPFSAPIs.creatFile(withPath).then({ (json) -> HivePromise<HiveVoid> in
                         return IPFSAPIs.publish(withPath)
                     }).done({ (success) in
                         Log.d(TAG(), "createFile succeed")

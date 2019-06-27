@@ -127,8 +127,8 @@ internal class OneDriveAuthHelper: AuthHelper {
         return promise
     }
 
-    private func refreshToken() -> HivePromise<Bool> {
-        let promise = HivePromise<Bool> {  resolver in
+    private func refreshToken() -> HivePromise<HiveVoid> {
+        let promise = HivePromise<HiveVoid> {  resolver in
             let refreshToken = KeyChainHelper.getKeychain(KEYCHAIN_KEY.REFRESH_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
             let params: Dictionary<String, Any> = [
                 "client_id" : self.authEntry.clientId,
@@ -151,7 +151,7 @@ internal class OneDriveAuthHelper: AuthHelper {
                 Log.d(TAG(), "RefreshToken succeed")
                 let jsonData = JSON(dataResponse.result.value as Any)
                 self.saveOnedriveAcount(jsonData)
-                resolver.fulfill(true)
+                resolver.fulfill(HiveVoid())
             })
         }
         return promise

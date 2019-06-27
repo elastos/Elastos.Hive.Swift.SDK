@@ -24,7 +24,7 @@ class IPFSAuthHelper: AuthHelper {
                 return self.getPeerId(uid)
             }.then { (peerId) -> HivePromise<String> in
                 return self.getHash(peerId)
-            }.then { (hash) -> HivePromise<Bool> in
+            }.then { (hash) -> HivePromise<HiveVoid> in
                 return self.logIn(hash)
             }.done { padding in
                 let padding = HiveVoid();
@@ -126,8 +126,8 @@ class IPFSAuthHelper: AuthHelper {
         return promise
     }
 
-    private func logIn(_ hash: String) -> HivePromise<Bool> {
-        let promise = HivePromise<Bool> { resolver in
+    private func logIn(_ hash: String) -> HivePromise<HiveVoid> {
+        let promise = HivePromise<HiveVoid> { resolver in
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_UID_LOGIN.rawValue
             let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             let param = ["uid": uid, "hash": hash]
@@ -141,7 +141,7 @@ class IPFSAuthHelper: AuthHelper {
                         resolver.reject(error)
                         return
                     }
-                    resolver.fulfill(true)
+                    resolver.fulfill(HiveVoid())
                 })
         }
         return promise
