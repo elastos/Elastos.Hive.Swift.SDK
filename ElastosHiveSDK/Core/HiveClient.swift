@@ -28,7 +28,7 @@ public class HiveClientHandle: Result, ResourceItem{
     public static func createInstance(_ param: DriveParameter) {
         let type: DriveType = param.driveType()
         switch type {
-        case .local:
+        case .nativeStorage:
             NativeClient.createInstance(param as! NativeParameter)
         case .oneDrive:
             OneDriveClient.createInstance(param as! OneDriveParameter)
@@ -36,7 +36,7 @@ public class HiveClientHandle: Result, ResourceItem{
             OwnCloudClient.createInstance(param as! OwnCloudParameter)
         case .dropBox:
             DropboxClient.createInstance(param as! DropBoxParameter)
-        case .hiveIpfs:
+        case .hiveIPFS:
             IPFSClient.createInstance(param as! IPFSParameter)
         }
     }
@@ -47,7 +47,7 @@ public class HiveClientHandle: Result, ResourceItem{
     /// - Returns: return a HiveClient singleton
     public static func sharedInstance(type: DriveType) -> HiveClientHandle? {
         switch type {
-        case .local:
+        case .nativeStorage:
             return NativeClient.sharedInstance()
         case .oneDrive:
             return OneDriveClient.sharedInstance()
@@ -55,7 +55,7 @@ public class HiveClientHandle: Result, ResourceItem{
             return OwnCloudClient.sharedInstance()
         case .dropBox:
             return DropboxClient.sharedInstance()
-        case .hiveIpfs:
+        case .hiveIPFS:
             return IPFSClient.sharedInstance()
         }
     }

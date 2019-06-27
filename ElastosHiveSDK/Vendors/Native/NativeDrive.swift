@@ -4,7 +4,7 @@ import PromiseKit
 @objc(NativeDrive)
 internal class NativeDrive: HiveDriveHandle {
     init(_ info: HiveDriveInfo) {
-        super.init(DriveType.local, info)
+        super.init(DriveType.nativeStorage, info)
     }
 
     override func lastUpdatedInfo() -> HivePromise<HiveDriveInfo> {

@@ -11,7 +11,7 @@ internal class IPFSDrive: HiveDriveHandle {
 
     init(_ info: HiveDriveInfo, _ authHelper: AuthHelper) {
         self.authHelper = authHelper
-        super.init(.hiveIpfs, info)
+        super.init(.hiveIPFS, info)
     }
 
     static func createInstance(_ info: HiveDriveInfo, _ authHelper: AuthHelper) {
