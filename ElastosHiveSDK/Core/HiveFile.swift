@@ -99,20 +99,20 @@ public class HiveFileHandle: Result, ResourceItem, FileItem {
         return HivePromise<Bool>(error: error)
     }
 
-    public func readData() -> HivePromise<Data> {
-        return readData(handleBy: HiveCallback<Data>())
+    public func readData(_ length: Int) -> HivePromise<Data> {
+        return readData(length, handleBy: HiveCallback<Data>())
     }
 
-    public func readData(handleBy: HiveCallback<Data>) -> HivePromise<Data> {
+    public func readData(_ length: Int, handleBy: HiveCallback<Data>) -> HivePromise<Data> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<Data>(error: error)
     }
 
-    public func readData(_ position: UInt64) -> HivePromise<Data> {
-        return readData(position, handleBy: HiveCallback<Data>())
+    public func readData(_ length: Int, _ position: UInt64) -> HivePromise<Data> {
+        return readData(length, position, handleBy: HiveCallback<Data>())
     }
 
-    public func readData(_ position: UInt64, handleBy: HiveCallback<Data>) -> HivePromise<Data> {
+    public func readData(_ length: Int, _ position: UInt64, handleBy: HiveCallback<Data>) -> HivePromise<Data> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<Data>(error: error)
     }
