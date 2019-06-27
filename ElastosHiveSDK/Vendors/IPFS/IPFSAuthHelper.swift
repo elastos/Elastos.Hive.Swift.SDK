@@ -48,9 +48,7 @@ class IPFSAuthHelper: AuthHelper {
     }
 
     override func checkExpired() -> HivePromise<HiveVoid> {
-       //return IPFSURL.validURL()
-        let error = HiveError.failue(des: "Dummy")
-        return HivePromise<HiveVoid>(error: error)
+       return IPFSURL.validURL()
     }
 
     private func getUID() -> HivePromise<String> {

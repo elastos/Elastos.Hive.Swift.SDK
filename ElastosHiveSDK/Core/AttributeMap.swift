@@ -5,4 +5,8 @@ public class AttributeMap: Result {
     init(_ dic: Dictionary<String, String>) {
         self.attrDic = dic
     }
+
+    public func getValue(_ key: String) -> String {
+        return self.attrDic![key] ?? ""
+    }
 }

@@ -28,15 +28,15 @@ internal var validIp = 0
 
 class IPFSURL {
 
-    class func validURL() -> HivePromise<Bool> {
-        let promise = HivePromise<Bool> { resolver in
+    class func validURL() -> HivePromise<HiveVoid> {
+        let promise = HivePromise<HiveVoid> { resolver in
             let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             if uid == "" {
                 validUseNewUID(URL_POOL[validIp], { (url) in
                     if url == "" {
                         resolver.reject(HiveError.failue(des: "ALL URLS ARE INVALID"))
                     }else {
-                        resolver.fulfill(true)
+                        resolver.fulfill(HiveVoid())
                     }
                 })
             }
@@ -45,7 +45,7 @@ class IPFSURL {
                     if url == "" {
                         resolver.reject(HiveError.failue(des: "ALL URLS ARE INVALID"))
                     }else {
-                        resolver.fulfill(true)
+                        resolver.fulfill(HiveVoid())
                     }
                 })
             }
