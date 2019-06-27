@@ -11,7 +11,7 @@ class IPFSDirectory: HiveDirectoryHandle {
     }
 
     override func parentPathName() -> String {
-        return HelperMethods.prePath(self.pathName)
+        return ConvertHelper.prePath(self.pathName)
     }
 
     override func lastUpdatedInfo() -> HivePromise<HiveDirectoryInfo> {
@@ -23,7 +23,7 @@ class IPFSDirectory: HiveDirectoryHandle {
             _ = self.authHelper.checkExpired().done({ (success) in
 
                 let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
-                let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
                 let params = ["uid": uid, "path": self.pathName]
                 Alamofire.request(url,
                                   method: .post,
@@ -32,7 +32,7 @@ class IPFSDirectory: HiveDirectoryHandle {
                                   headers: nil)
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else {
-                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
                             Log.e(TAG(), "lastUpdatedInfo falied: %s", error.localizedDescription)
                             resolver.reject(error)
                             handleBy.runError(error)
@@ -62,7 +62,7 @@ class IPFSDirectory: HiveDirectoryHandle {
     override func createDirectory(withName: String, handleBy: HiveCallback<HiveDirectoryHandle>) -> HivePromise<HiveDirectoryHandle> {
         let promise = HivePromise<HiveDirectoryHandle> { resolver in
             var path = self.pathName + "/" + withName
-            let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+            let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             if self.pathName == "/" {
                 path = self.pathName + withName
             }
@@ -99,7 +99,7 @@ class IPFSDirectory: HiveDirectoryHandle {
             _ = self.authHelper.checkExpired().done({ (success) in
 
                 let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
-                let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
                 var path = self.pathName + "/" + atName
                 if self.pathName == "/" {
                     path = self.pathName + atName
@@ -112,7 +112,7 @@ class IPFSDirectory: HiveDirectoryHandle {
                                   headers: nil)
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else {
-                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
                             Log.e(TAG(), "directoryHandle falied: %s", error.localizedDescription)
                             resolver.reject(error)
                             handleBy.runError(error)
@@ -154,7 +154,7 @@ class IPFSDirectory: HiveDirectoryHandle {
                 return IPFSAPIs.publish(path)
             }).done({ (success) in
                 Log.d(TAG(), "createFile succeed")
-                let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
                 let dic = [HiveFileInfo.itemId: uid]
                 let fileInfo = HiveFileInfo(dic)
                 let fileHandle = IPFSFile(fileInfo, self.authHelper)
@@ -182,7 +182,7 @@ class IPFSDirectory: HiveDirectoryHandle {
             _ = self.authHelper.checkExpired().done({ (success) in
 
                 let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
-                let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
                 var path = self.pathName + "/" + atName
                 if self.pathName == "/" {
                     path = self.pathName + atName
@@ -195,7 +195,7 @@ class IPFSDirectory: HiveDirectoryHandle {
                                   headers: nil)
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else {
-                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
                             Log.e(TAG(), "fileHandle falied: %s", error.localizedDescription)
                             resolver.reject(error)
                             handleBy.runError(error)
@@ -230,7 +230,7 @@ class IPFSDirectory: HiveDirectoryHandle {
             _ = self.authHelper.checkExpired().done({ (success) in
 
                 let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_LS.rawValue
-                let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
                 let path = self.pathName
                 let param = ["uid": uid, "path": path]
                 Alamofire.request(url,
@@ -240,7 +240,7 @@ class IPFSDirectory: HiveDirectoryHandle {
                                   headers: nil)
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else {
-                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
                             Log.e(TAG(), "getChildren falied: %s", error.localizedDescription)
                             resolver.reject(error)
                             handleBy.runError(error)

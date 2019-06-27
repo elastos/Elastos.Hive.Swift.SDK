@@ -1,35 +1,10 @@
-import Foundation
 
 
-@inline(__always) private func TAG() -> String { return "HelperMethods" }
+import UIKit
 
-class HelperMethods {
-    static var ps: UInt64 = 0
+@inline(__always) private func TAG() -> String { return "KeyChainHelper" }
 
-   class func getCurrentTime() -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
-        formatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
-        formatter.timeZone = TimeZone.init(identifier: "Asia/Shanghai")
-        return String.init(format: "%ld", Int(Date().timeIntervalSince1970))
-    }
-
-    class func getExpireTime(time: Int64) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
-        formatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
-        formatter.timeZone = TimeZone.init(identifier: "Asia/Shanghai")
-
-        let dateNow = Date.init(timeIntervalSinceNow: TimeInterval(time))
-        return String.init(format: "%ld", Int(dateNow.timeIntervalSince1970))
-    }
-
-    class func checkIsExpired(_ timeStemp: String) -> Bool {
-        let currentTime = getCurrentTime()
-        return currentTime > timeStemp;
-    }
+class CacheHelper: NSObject {
 
     class func checkCacheFileIsExist(_ account: KEYCHAIN_DRIVE_ACCOUNT, _ path: String) -> Bool {
         let cachePath = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + path
@@ -40,7 +15,7 @@ class HelperMethods {
 
     class func saveCache(_ account: KEYCHAIN_DRIVE_ACCOUNT, _ path: String, data: Data) -> Bool {
         let cachePath = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + path
-        let cacheDirectory = self.prePath(cachePath)
+        let cacheDirectory = ConvertHelper.prePath(cachePath)
         let fileManager: FileManager = FileManager.default
         let exist = fileManager.fileExists(atPath: cacheDirectory)
         if (!exist) {
@@ -72,7 +47,7 @@ class HelperMethods {
 
     class func writeCache(_ account: KEYCHAIN_DRIVE_ACCOUNT, _ path: String, data: Data, _ position: UInt64) -> Int32 {
         let cachePath = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + path
-        let cacheDirectory = self.prePath(cachePath)
+        let cacheDirectory = ConvertHelper.prePath(cachePath)
         let fileManager: FileManager = FileManager.default
         let cacheExist = fileManager.fileExists(atPath: cacheDirectory)
         if (!cacheExist) {
@@ -188,59 +163,5 @@ class HelperMethods {
             catch {
             }
         }
-    }
-
-    class func getKeychain(_ key: String, _ account: KEYCHAIN_DRIVE_ACCOUNT) -> String? {
-        let keychain: KeychainSwift = KeychainSwift()
-        let account = keychain.get(account.rawValue)
-        guard account != nil else {
-            return nil
-        }
-        let jsonData:Data = account!.data(using: .utf8)!
-        let dict = try? JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers)
-        let json = JSON(dict as Any)
-        let value = json[key].stringValue
-        return value
-    }
-
-    class func getKeychainForAll(_ account: KEYCHAIN_DRIVE_ACCOUNT) -> JSON {
-        let keychain: KeychainSwift = KeychainSwift()
-        let account = keychain.get(account.rawValue) ?? ""
-        let jsonData:Data = account.data(using: .utf8)!
-        let dict = try? JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers)
-        let json = JSON(dict as Any)
-        return json
-    }
-
-    class func saveKeychain(_ account: KEYCHAIN_DRIVE_ACCOUNT, _ value: Dictionary<String, Any>) {
-        if !JSONSerialization.isValidJSONObject(value) {
-            Log.e(TAG(), "Key-Value is not valid json object")
-            return
-        }
-        let data = try? JSONSerialization.data(withJSONObject: value, options: [])
-        let jsonstring = String(data: data!, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))
-        guard jsonstring != nil else {
-            Log.e(TAG(), "Save Key-Value for account :%s", account.rawValue)
-            return
-        }
-        let keychain = KeychainSwift()
-        keychain.set(jsonstring!, forKey: account.rawValue)
-    }
-
-    class func prePath(_ path: String) -> String {
-        let index = path.range(of: "/", options: .backwards)?.lowerBound
-        let str = index.map(path.prefix(upTo:)) ?? ""
-        return String(str + "/")
-    }
-
-    class func endPath(_ path: String) -> String {
-        let arr = path.components(separatedBy: "/")
-        let str = arr.last ?? ""
-        return String(str)
-    }
-
-    class func jsonToString(_ data: Data) -> String {
-        let jsonString = String(data: data, encoding: .utf8)
-        return jsonString ?? ""
     }
 }

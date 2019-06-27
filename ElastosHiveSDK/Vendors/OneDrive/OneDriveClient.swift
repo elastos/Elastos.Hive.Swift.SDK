@@ -50,7 +50,7 @@ internal class OneDriveClient: HiveClientHandle {
 
     override func lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>) -> HivePromise<HiveClientInfo> {
         let promise = HivePromise<HiveClientInfo> { resolver in
-            let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
+            let login = KeyChainHelper.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
             guard login != "" else {
                 Log.d(TAG(), "Please login first")
                 let error = HiveError.failue(des: "Please login first")
@@ -99,7 +99,7 @@ internal class OneDriveClient: HiveClientHandle {
 
     override func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> HivePromise<HiveDriveHandle> {
         let promise = HivePromise<HiveDriveHandle> { resolver in
-            let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
+            let login = KeyChainHelper.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
             guard login != "" else {
                 Log.d(TAG(), "Please login first")
                 let error = HiveError.failue(des: "Please login first")

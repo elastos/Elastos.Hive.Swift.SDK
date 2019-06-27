@@ -65,7 +65,7 @@ public class OneDriveDrive: HiveDriveHandle {
     override public func rootDirectoryHandle(handleBy: HiveCallback<HiveDirectoryHandle>)
         -> HivePromise<HiveDirectoryHandle> {
             let promise = HivePromise<HiveDirectoryHandle> { resolver in
-                let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
+                let login = KeyChainHelper.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
                 guard login != "" else {
                     Log.d(TAG(), "Please login first")
                     let error = HiveError.failue(des: "Please login first")
@@ -113,7 +113,7 @@ public class OneDriveDrive: HiveDriveHandle {
     override public func createDirectory(withPath: String, handleBy: HiveCallback<HiveDirectoryHandle>)
         -> HivePromise<HiveDirectoryHandle> {
             let promise = HivePromise<HiveDirectoryHandle> { resolver in
-                let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
+                let login = KeyChainHelper.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
                 guard login != "" else {
                     Log.d(TAG(), "Please login first")
                     let error = HiveError.failue(des: "Please login first")
@@ -122,11 +122,11 @@ public class OneDriveDrive: HiveDriveHandle {
                     return
                 }
                 let params: Dictionary<String, Any> = [
-                    "name": HelperMethods.endPath(withPath) as Any,
+                    "name": ConvertHelper.endPath(withPath) as Any,
                     "folder": [: ],
                     "@microsoft.graph.conflictBehavior": "fail"]
-                let path = HelperMethods.prePath(withPath)
-                let url = self.fullUrl(path, "children")
+                let path = ConvertHelper.prePath(withPath)
+                let url = ConvertHelper.fullUrl(path, "children")
                 self.authHelper.checkExpired()
                     .then({ (void) -> HivePromise<JSON> in
                         return OneDriveHttpHelper
@@ -167,7 +167,7 @@ public class OneDriveDrive: HiveDriveHandle {
     override public func directoryHandle(atPath: String, handleBy: HiveCallback<HiveDirectoryHandle>)
         -> HivePromise<HiveDirectoryHandle> {
             let promise = HivePromise<HiveDirectoryHandle> { resolver in
-                let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
+                let login = KeyChainHelper.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
                 guard login != "" else {
                     Log.d(TAG(), "Please login first")
                     let error = HiveError.failue(des: "Please login first")
@@ -178,7 +178,7 @@ public class OneDriveDrive: HiveDriveHandle {
                 self.authHelper.checkExpired()
                     .then({ (void) -> HivePromise<JSON> in
                         return OneDriveHttpHelper
-                            .request(url: self.fullUrl("/\(atPath)"),
+                            .request(url: ConvertHelper.fullUrl("/\(atPath)"),
                                      method: .get, parameters: nil,
                                      encoding: JSONEncoding.default,
                                      headers: OneDriveHttpHeader.headers(),
@@ -214,7 +214,7 @@ public class OneDriveDrive: HiveDriveHandle {
     override public func createFile(withPath: String, handleBy: HiveCallback<HiveFileHandle>)
         -> HivePromise<HiveFileHandle> {
             let promise = HivePromise<HiveFileHandle> { resolver in
-                let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
+                let login = KeyChainHelper.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
                 guard login != "" else {
                     Log.d(TAG(), "Please login first")
                     let error = HiveError.failue(des: "Please login first")
@@ -225,7 +225,7 @@ public class OneDriveDrive: HiveDriveHandle {
                 self.authHelper.checkExpired()
                     .then({ (void) -> HivePromise<JSON> in
                         return OneDriveHttpHelper
-                            .request(url: self.fullUrl(withPath, "content"),
+                            .request(url: ConvertHelper.fullUrl(withPath, "content"),
                                      method: .put, parameters: nil,
                                      encoding: JSONEncoding.default,
                                      headers: OneDriveHttpHeader.headers(),
@@ -261,7 +261,7 @@ public class OneDriveDrive: HiveDriveHandle {
     override public func fileHandle(atPath: String, handleBy: HiveCallback<HiveFileHandle>) ->
         HivePromise<HiveFileHandle> {
             let promise = HivePromise<HiveFileHandle> { resolver in
-                let login = HelperMethods.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
+                let login = KeyChainHelper.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
                 guard login != "" else {
                     Log.d(TAG(), "Please login first")
                     let error = HiveError.failue(des: "Please login first")
@@ -272,7 +272,7 @@ public class OneDriveDrive: HiveDriveHandle {
                 self.authHelper.checkExpired()
                     .then({ (void) -> HivePromise<JSON> in
                         return OneDriveHttpHelper
-                            .request(url: self.fullUrl(atPath),
+                            .request(url: ConvertHelper.fullUrl(atPath),
                                      method: .get, parameters: nil,
                                      encoding: JSONEncoding.default,
                                      headers: OneDriveHttpHeader.headers(),
@@ -309,21 +309,5 @@ public class OneDriveDrive: HiveDriveHandle {
         // todo
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<ItemInfo>(error: error)
-    }
-
-    private func fullUrl(_ path: String, _ operation: String) -> String {
-        if path == "" || path == "/" {
-            return OneDriveURL.API + "/root/\(operation)"
-        }
-        let ecUrl = path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-        return OneDriveURL.API + "/root:\(ecUrl):/\(operation)"
-    }
-
-    private func fullUrl(_ path: String) -> String {
-        if path == "" || path == "/" {
-            return OneDriveURL.API + "/root"
-        }
-        let ecUrl = path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-        return OneDriveURL.API + "/root:\(ecUrl)"
     }
 }

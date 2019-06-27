@@ -35,7 +35,7 @@ internal class IPFSDrive: HiveDriveHandle {
             _ = self.authHelper.checkExpired().done({ (success) in
 
                 let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
-                let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
                 let params = ["uid": uid, "path": "/"]
                 Alamofire.request(url,
                                   method: .post,
@@ -44,7 +44,7 @@ internal class IPFSDrive: HiveDriveHandle {
                                   headers: nil)
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else {
-                            let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                            let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
                             Log.e(TAG(), "lastUpdatedInfo falied: %s", error.localizedDescription)
                             resolver.reject(error)
                             handleBy.runError(error)
@@ -77,7 +77,7 @@ internal class IPFSDrive: HiveDriveHandle {
                 _ = self.authHelper.checkExpired().done({ (success) in
 
                     let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_LS.rawValue
-                    let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                    let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
                     let params = ["uid": uid, "path": "/"]
                     Alamofire.request(url,
                                       method: .post,
@@ -86,7 +86,7 @@ internal class IPFSDrive: HiveDriveHandle {
                                       headers: nil)
                         .responseJSON(completionHandler: { (dataResponse) in
                             guard dataResponse.response?.statusCode == 200 else {
-                                let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                                let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
                                 Log.e(TAG(), "rootDirectoryHandle falied: %s", error.localizedDescription)
                                 handleBy.runError(error)
                                 resolver.reject(error)
@@ -126,7 +126,7 @@ internal class IPFSDrive: HiveDriveHandle {
                         return IPFSAPIs.publish(withPath)
                     }).done({ (success) in
                         Log.d(TAG(), "createDirectory succeed")
-                        let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                        let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
                         let dic = [HiveDirectoryInfo.itemId: uid]
                         let directoryInfo = HiveDirectoryInfo(dic)
                         let directoryHandle = IPFSDirectory(directoryInfo, self.authHelper)
@@ -163,7 +163,7 @@ internal class IPFSDrive: HiveDriveHandle {
                 _ = self.authHelper.checkExpired().done({ (success) in
 
                     let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
-                    let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                    let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
                     let param = ["uid": uid, "path": atPath]
                     Alamofire.request(url,
                                       method: .post,
@@ -172,7 +172,7 @@ internal class IPFSDrive: HiveDriveHandle {
                                       headers: nil)
                         .responseJSON(completionHandler: { (dataResponse) in
                             guard dataResponse.response?.statusCode == 200 else {
-                                let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                                let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
                                 Log.e(TAG(), "directoryHandle falied: %s", error.localizedDescription)
                                 resolver.reject(error)
                                 handleBy.runError(error)
@@ -212,7 +212,7 @@ internal class IPFSDrive: HiveDriveHandle {
                         return IPFSAPIs.publish(withPath)
                     }).done({ (success) in
                         Log.d(TAG(), "createFile succeed")
-                        let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                        let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
                         let dic = [HiveFileInfo.itemId: uid]
                         let fileInfo = HiveFileInfo(dic)
                         let fileHandle = IPFSFile(fileInfo, self.authHelper)
@@ -247,7 +247,7 @@ internal class IPFSDrive: HiveDriveHandle {
                 _ = self.authHelper.checkExpired().done({ (success) in
 
                     let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
-                    let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                    let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
                     let param = ["uid": uid, "path": atPath]
                     Alamofire.request(url,
                                       method: .post,
@@ -256,7 +256,7 @@ internal class IPFSDrive: HiveDriveHandle {
                                       headers: nil)
                         .responseJSON(completionHandler: { (dataResponse) in
                             guard dataResponse.response?.statusCode == 200 else {
-                                let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                                let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
                                 Log.e(TAG(), "fileHandle falied: %s", error.localizedDescription)
                                 resolver.reject(error)
                                 handleBy.runError(error)
@@ -291,7 +291,7 @@ internal class IPFSDrive: HiveDriveHandle {
                 _ = self.authHelper.checkExpired().done({ (success) in
 
                     let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
-                    let uid = HelperMethods.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                    let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
                     let param = ["uid": uid, "path": path]
                     Alamofire.request(url,
                                       method: .post,
@@ -300,7 +300,7 @@ internal class IPFSDrive: HiveDriveHandle {
                                       headers: nil)
                         .responseJSON(completionHandler: { (dataResponse) in
                             guard dataResponse.response?.statusCode == 200 else {
-                                let error = HiveError.failue(des: HelperMethods.jsonToString(dataResponse.data!))
+                                let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
                                 Log.e(TAG(), "getItemInfo falied: %s", error.localizedDescription)
                                 resolver.reject(error)
                                 handleBy.runError(error)
@@ -309,7 +309,7 @@ internal class IPFSDrive: HiveDriveHandle {
                             Log.d(TAG(), "getItemInfo succeed")
                             let jsonData = JSON(dataResponse.result.value as Any)
                             let dic = [ItemInfo.itemId: uid,
-                                       ItemInfo.name: HelperMethods.endPath(path),
+                                       ItemInfo.name: ConvertHelper.endPath(path),
                                        ItemInfo.size: jsonData["Size"].stringValue,
                                        ItemInfo.type: jsonData["Type"].stringValue]
                             let itemInfo = ItemInfo(dic)
