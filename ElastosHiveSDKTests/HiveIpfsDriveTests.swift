@@ -39,7 +39,7 @@ class HiveIpfsDriveTests: XCTestCase, Authenticator{
 
     func testB_lastUpdatedInfo() {
         lock = XCTestExpectation(description: "wait for test2_lastUpdatedInfo")
-        self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDriveHandle.Info> in
+        self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDriveInfo> in
             return drive.lastUpdatedInfo()
         }).done({ (driveInfo) in
             XCTAssertNotNil(driveInfo)

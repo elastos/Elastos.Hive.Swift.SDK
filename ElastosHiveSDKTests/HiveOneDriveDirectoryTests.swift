@@ -52,7 +52,7 @@ class HiveOneDriveDirectoryTests: XCTestCase,Authenticator {
         lock = XCTestExpectation(description: "wait for test2_lastUpdatedInfo")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
             return drive.rootDirectoryHandle()
-        }).then({ (directory) -> HivePromise<HiveDirectoryHandle.Info> in
+        }).then({ (directory) -> HivePromise<HiveDirectoryInfo> in
             return directory.lastUpdatedInfo()
         }).done({ (directoryInfo) in
             XCTAssertNotNil(directoryInfo)
