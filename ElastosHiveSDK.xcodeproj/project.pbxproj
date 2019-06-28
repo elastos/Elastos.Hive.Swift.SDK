@@ -64,6 +64,7 @@
 		A3743AD92265710B00C9493E /* OwnCloudParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3743AD82265710B00C9493E /* OwnCloudParameter.swift */; };
 		A3743ADB2265711A00C9493E /* DropBoxParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3743ADA2265711A00C9493E /* DropBoxParameter.swift */; };
 		A3743ADD2265743400C9493E /* OneDriveConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3743ADC2265743400C9493E /* OneDriveConstants.swift */; };
+		A388E4E722C6635300F2D981 /* KeyChainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A388E4E622C6635300F2D981 /* KeyChainStore.swift */; };
 		A38E8BAF2293CB13001B2AF2 /* OAuthEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A38E8BAE2293CB13001B2AF2 /* OAuthEntry.swift */; };
 		A39C4980225399860027BDF9 /* ElastosHiveSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = A39C4972225399860027BDF9 /* ElastosHiveSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A39C499E22539C9C0027BDF9 /* HiveError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C499422539C9C0027BDF9 /* HiveError.swift */; };
@@ -174,6 +175,7 @@
 		A3743AD82265710B00C9493E /* OwnCloudParameter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OwnCloudParameter.swift; path = Vendors/OwnCloud/OwnCloudParameter.swift; sourceTree = "<group>"; };
 		A3743ADA2265711A00C9493E /* DropBoxParameter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DropBoxParameter.swift; path = Vendors/DropBox/DropBoxParameter.swift; sourceTree = "<group>"; };
 		A3743ADC2265743400C9493E /* OneDriveConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OneDriveConstants.swift; path = Vendors/OneDrive/OneDriveConstants.swift; sourceTree = "<group>"; };
+		A388E4E622C6635300F2D981 /* KeyChainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChainStore.swift; sourceTree = "<group>"; };
 		A38E8BAE2293CB13001B2AF2 /* OAuthEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OAuthEntry.swift; path = Core/OAuthEntry.swift; sourceTree = "<group>"; };
 		A39C496F225399860027BDF9 /* ElastosHiveSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ElastosHiveSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A39C4972225399860027BDF9 /* ElastosHiveSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ElastosHiveSDK.h; sourceTree = "<group>"; };
@@ -248,6 +250,7 @@
 			isa = PBXGroup;
 			children = (
 				113629B122C467E800C6DCCC /* KeyChainHelper.swift */,
+				A388E4E622C6635300F2D981 /* KeyChainStore.swift */,
 				113629B222C467E800C6DCCC /* Keychain */,
 			);
 			path = KeyChain;
@@ -812,6 +815,7 @@
 				A3E8760722B4E15200D59692 /* NativeFile.swift in Sources */,
 				110744C322C0CD5D0076529D /* HiveClientInfo.swift in Sources */,
 				A34724DE226B4ABE0049DBD4 /* LogLevel.swift in Sources */,
+				A388E4E722C6635300F2D981 /* KeyChainStore.swift in Sources */,
 				A34724DC226B4A750049DBD4 /* Log.swift in Sources */,
 				1183CEAF22AF4BFE00796951 /* HiveChildren.swift in Sources */,
 				A3003F3922C1039B00A341C4 /* IPFSAuthHelper.swift in Sources */,

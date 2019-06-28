@@ -7,7 +7,7 @@ import Alamofire
 
 @objc(OneDriveAuthHelper)
 internal class OneDriveAuthHelper: AuthHelper {
-    var token: AuthToken = AuthToken()
+    var token: AuthToken?
     let server = SimpleAuthServer()
     private let authEntry: OAuthEntry
 
@@ -20,31 +20,31 @@ internal class OneDriveAuthHelper: AuthHelper {
     }
 
     override func loginAsync(_ authenticator: Authenticator, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
-        let access_token = KeyChainHelper.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
-        guard access_token == "" else {
+        token = KeyChainStore(.oneDrive).restoreToken()
+        guard token == nil else {
             let promise = HivePromise<HiveVoid> { resolver in
-                self.token.accessToken = KeyChainHelper.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
-                self.token.refreshToken = KeyChainHelper.getKeychain(KEYCHAIN_KEY.REFRESH_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
-                self.token.expiredTime = KeyChainHelper.getKeychain(KEYCHAIN_KEY.EXPIRES_IN.rawValue, .ONEDRIVEACOUNT) ?? ""
-                Log.d(TAG(), "Already logged")
-                resolver.fulfill(HiveVoid())
+                Log.d(TAG(), "OneDrive already logined")
+                let padding = HiveVoid()
+                handleBy.didSucceed(padding)
+                resolver.fulfill(padding)
             }
             return promise
         }
 
         let promise = HivePromise<HiveVoid> { resolver in
-            self.acquireAuthCode(authenticator).then({ (authCode) -> HivePromise<HiveVoid>  in
+            self.acquireAuthCode(authenticator)
+            .then { authCode -> HivePromise<HiveVoid>  in
                 return self.acquireAccessToken(authCode)
-            }).done({ padding in
+            }.done { padding in
                 Log.d(TAG(), "Login succeed")
                 handleBy.didSucceed(padding)
                 resolver.fulfill(padding)
-            }).catch({ (err) in
+            }.catch { err in
                 let error = HiveError.failue(des: err.localizedDescription)
                 Log.e(TAG(), "Login faild: %s",error.localizedDescription)
                 handleBy.runError(error)
                 resolver.reject(error)
-            })
+            }
         }
         return promise
     }
@@ -175,6 +175,7 @@ internal class OneDriveAuthHelper: AuthHelper {
         return promise
     }
 
+/*
     private func saveOnedriveAcount(_ jsonData: JSON){
         self.token.accessToken = jsonData[KEYCHAIN_KEY.ACCESS_TOKEN.rawValue].stringValue
         self.token.refreshToken = jsonData[KEYCHAIN_KEY.REFRESH_TOKEN.rawValue].stringValue
@@ -200,4 +201,5 @@ internal class OneDriveAuthHelper: AuthHelper {
                                    KEYCHAIN_KEY.SCOPE.rawValue: self.authEntry.scope]
         KeyChainHelper.saveKeychain(.ONEDRIVEACOUNT, onedriveAccountJson)
     }
+*/
 }
