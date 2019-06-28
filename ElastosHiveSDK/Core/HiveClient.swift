@@ -10,7 +10,6 @@ public class HiveClientHandle: Result, ResourceItem{
     public let driveType: DriveType
     public var handleId: String?
     public var lastInfo: HiveClientInfo?
-    internal var authHelper: AuthHelper = AuthHelper()
 
     /// Creates an instance with the specified `driveType`.
     ///

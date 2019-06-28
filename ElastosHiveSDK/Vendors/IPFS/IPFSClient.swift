@@ -7,10 +7,11 @@ import Alamofire
 @objc(IPFSClient)
 internal class IPFSClient: HiveClientHandle {
     private static var clientInstance: HiveClientHandle?
+    private let authHelper: IPFSAuthHelper
 
     private init(param: IPFSParameter){
-        super.init(.hiveIPFS)
         self.authHelper = IPFSAuthHelper(param)
+        super.init(.hiveIPFS)
     }
 
     public static func createInstance(_ param: IPFSParameter) {

@@ -7,10 +7,11 @@ import Alamofire
 @objc(OneDriveClient)
 internal class OneDriveClient: HiveClientHandle {
     private static var clientInstance: HiveClientHandle?
+    private let authHelper: AuthHelper
 
     private init(_ param: OneDriveParameter) {
-        super.init(DriveType.oneDrive)
         self.authHelper = OneDriveAuthHelper(param.getAuthEntry())
+        super.init(DriveType.oneDrive)
     }
 
     public static func createInstance(_ param: OneDriveParameter) {
