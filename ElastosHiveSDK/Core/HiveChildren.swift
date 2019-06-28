@@ -1,7 +1,7 @@
 import Foundation
 
 public class HiveChildren: Result {
-    public var children: Array<ItemInfo>
+    public var children: Array<HiveItemInfo>
 
     public override init() {
         children = []
@@ -16,11 +16,11 @@ public class HiveChildren: Result {
             if folder == "" {
                 type = "file"
             }
-            let dic = [ItemInfo.itemId: it["id"].stringValue,
-                       ItemInfo.name: it["name"].stringValue,
-                       ItemInfo.size: it["size"].stringValue,
-                       ItemInfo.type: type]
-            let item = ItemInfo(dic)
+            let dic = [HiveItemInfo.itemId: it["id"].stringValue,
+                       HiveItemInfo.name: it["name"].stringValue,
+                       HiveItemInfo.size: it["size"].stringValue,
+                       HiveItemInfo.type: type]
+            let item = HiveItemInfo(dic)
             children.append(item)
         }
 

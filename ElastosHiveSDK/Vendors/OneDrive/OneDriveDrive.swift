@@ -301,13 +301,13 @@ public class OneDriveDrive: HiveDriveHandle {
             return promise
     }
 
-    public override func getItemInfo(_ path: String) -> Promise<ItemInfo> {
-        return getItemInfo(path, handleBy: HiveCallback<ItemInfo>())
+    public override func getItemInfo(_ path: String) -> Promise<HiveItemInfo> {
+        return getItemInfo(path, handleBy: HiveCallback<HiveItemInfo>())
     }
 
-    public override func getItemInfo(_ path: String, handleBy: HiveCallback<ItemInfo>) -> Promise<ItemInfo> {
+    public override func getItemInfo(_ path: String, handleBy: HiveCallback<HiveItemInfo>) -> Promise<HiveItemInfo> {
         // todo
         let error = HiveError.failue(des: "Dummy")
-        return HivePromise<ItemInfo>(error: error)
+        return HivePromise<HiveItemInfo>(error: error)
     }
 }
