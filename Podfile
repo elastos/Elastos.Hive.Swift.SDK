@@ -4,13 +4,13 @@
 target 'ElastosHiveSDK' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
-   pod 'Swifter', '~> 1.4.6'
-   pod 'Alamofire'
-   pod 'PromiseKit'
+    pod 'Swifter', '~> 1.4.7'
+    pod 'Alamofire'
+    pod 'PromiseKit'
   
   target 'ElastosHiveSDKTests' do
     inherit! :search_paths
-    pod 'Swifter', '~> 1.4.6'
+    pod 'Swifter', '~> 1.4.7'
     pod 'PromiseKit'
     pod 'Alamofire'
 
@@ -18,7 +18,7 @@ target 'ElastosHiveSDK' do
 
   target 'TestHost' do
     inherit! :search_paths
-    pod 'Swifter', '~> 1.4.6'
+    pod 'Swifter', '~> 1.4.7'
     pod 'PromiseKit'
     pod 'Alamofire'
 
