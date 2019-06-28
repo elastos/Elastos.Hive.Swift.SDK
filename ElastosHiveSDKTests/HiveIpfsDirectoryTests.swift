@@ -153,7 +153,6 @@ class HiveIpfsDirectoryTests: XCTestCase, Authenticator{
         }).then({ (directory) -> HivePromise<HiveVoid> in
             return directory.copyTo(newPath: "/\(timeTest!)/hiveIpfs_Directory_test3_createDirectory\(timeTest!)")
         }).done({ (re) in
-            XCTAssertTrue(re)
             self.lock?.fulfill()
         }).catch({ (err) in
             XCTFail()
@@ -169,7 +168,6 @@ class HiveIpfsDirectoryTests: XCTestCase, Authenticator{
         }).then({ (directory) -> HivePromise<HiveVoid> in
             return directory.deleteItem()
         }).done({ (re) in
-            XCTAssertTrue(re)
             self.lock?.fulfill()
         }).catch({ (err) in
             XCTFail()
@@ -185,7 +183,6 @@ class HiveIpfsDirectoryTests: XCTestCase, Authenticator{
         }).then({ (directory) -> HivePromise<HiveVoid> in
             return directory.moveTo(newPath: "/")
         }).done({ (re) in
-            XCTAssertTrue(re)
             self.lock?.fulfill()
         }).catch({ (err) in
             XCTFail()

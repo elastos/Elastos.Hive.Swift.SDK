@@ -107,7 +107,7 @@ class OneDriveHttpHelper: NSObject {
                 Alamofire.request(url, method: .get,
                                   parameters: nil,
                                   encoding: JSONEncoding.default,
-                                  headers: OneDriveHttpHeader.headers())
+                                  headers: OneDriveHttpHeader.headers(authHelper))
                     .responseData { dataResponse in
                         let jsonStr = String(data: dataResponse.data!, encoding: .utf8) ?? ""
                         guard dataResponse.response?.statusCode != 401 else {

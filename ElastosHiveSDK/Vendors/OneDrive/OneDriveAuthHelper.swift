@@ -7,7 +7,7 @@ import Alamofire
 
 @objc(OneDriveAuthHelper)
 internal class OneDriveAuthHelper: AuthHelper {
-    var token: AuthToken?
+    var token: AuthToken = AuthToken()
     let server = SimpleAuthServer()
     private let authEntry: OAuthEntry
 
@@ -23,10 +23,9 @@ internal class OneDriveAuthHelper: AuthHelper {
         let access_token = KeyChainHelper.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
         guard access_token == "" else {
             let promise = HivePromise<HiveVoid> { resolver in
-                self.token = AuthToken()
-                self.token?.accessToken = KeyChainHelper.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
-                self.token?.refreshToken = KeyChainHelper.getKeychain(KEYCHAIN_KEY.REFRESH_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
-                self.token?.expiredTime = KeyChainHelper.getKeychain(KEYCHAIN_KEY.EXPIRES_IN.rawValue, .ONEDRIVEACOUNT) ?? ""
+                self.token.accessToken = KeyChainHelper.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
+                self.token.refreshToken = KeyChainHelper.getKeychain(KEYCHAIN_KEY.REFRESH_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
+                self.token.expiredTime = KeyChainHelper.getKeychain(KEYCHAIN_KEY.EXPIRES_IN.rawValue, .ONEDRIVEACOUNT) ?? ""
                 Log.d(TAG(), "Already logged")
                 resolver.fulfill(HiveVoid())
             }
@@ -69,7 +68,7 @@ internal class OneDriveAuthHelper: AuthHelper {
                 return
             }
             Log.d(TAG(), "Logout succeed")
-            self.token = nil
+            self.token = AuthToken()
             self.removeOnedriveAcount()
 
             let padding = HiveVoid()
@@ -129,7 +128,7 @@ internal class OneDriveAuthHelper: AuthHelper {
 
     private func refreshToken() -> HivePromise<HiveVoid> {
         let promise = HivePromise<HiveVoid> {  resolver in
-            let refreshToken = KeyChainHelper.getKeychain(KEYCHAIN_KEY.REFRESH_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
+            let refreshToken = self.token.refreshToken
             let params: Dictionary<String, Any> = [
                 "client_id" : self.authEntry.clientId,
                 "scope" : self.authEntry.scope,
@@ -158,7 +157,7 @@ internal class OneDriveAuthHelper: AuthHelper {
     }
     
     private func isExpired() -> Bool {
-        return token == nil || token!.isExpired()
+        return token.isExpired()
     }
 
     override func checkExpired() -> HivePromise<HiveVoid> {
@@ -177,12 +176,11 @@ internal class OneDriveAuthHelper: AuthHelper {
     }
 
     private func saveOnedriveAcount(_ jsonData: JSON){
-        self.token = AuthToken()
-        self.token?.accessToken = jsonData[KEYCHAIN_KEY.ACCESS_TOKEN.rawValue].stringValue
-        self.token?.refreshToken = jsonData[KEYCHAIN_KEY.REFRESH_TOKEN.rawValue].stringValue
-        self.token?.expiredIn = jsonData[KEYCHAIN_KEY.EXPIRES_IN.rawValue].int64
-        let expiredTime = ConvertHelper.getExpireTime(time: self.token!.expiredIn!)
-        self.token?.expiredTime = expiredTime
+        self.token.accessToken = jsonData[KEYCHAIN_KEY.ACCESS_TOKEN.rawValue].stringValue
+        self.token.refreshToken = jsonData[KEYCHAIN_KEY.REFRESH_TOKEN.rawValue].stringValue
+        self.token.expiredIn = jsonData[KEYCHAIN_KEY.EXPIRES_IN.rawValue].int64!
+        let expiredTime = ConvertHelper.getExpireTime(time: self.token.expiredIn)
+        self.token.expiredTime = expiredTime
         let onedriveAccountJson = [KEYCHAIN_KEY.ACCESS_TOKEN.rawValue: jsonData[KEYCHAIN_KEY.ACCESS_TOKEN.rawValue].stringValue,
                                    KEYCHAIN_KEY.REFRESH_TOKEN.rawValue: jsonData[KEYCHAIN_KEY.REFRESH_TOKEN.rawValue].stringValue,
                                    KEYCHAIN_KEY.EXPIRES_IN.rawValue: expiredTime,

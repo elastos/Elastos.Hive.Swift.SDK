@@ -115,7 +115,7 @@ class IPFSAPIs {
             let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             getHash(uid, path: originPath).done({ (hash) in
                 let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_CP.rawValue
-                let params = ["uid": uid, "source": hash, "dest": newParh + "/"]
+                let params = ["uid": uid, "source": hash, "dest": newParh]
                 Alamofire.request(url,
                                   method: .post,
                                   parameters: params,
