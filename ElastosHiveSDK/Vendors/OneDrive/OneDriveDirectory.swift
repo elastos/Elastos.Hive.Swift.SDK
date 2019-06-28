@@ -31,7 +31,8 @@ class OneDriveDirectory: HiveDirectoryHandle {
                         .request(url: url, method: .get,
                                  parameters: nil,
                                  encoding: JSONEncoding.default,
-                                 headers: OneDriveHttpHeader.headers(), avalidCode: 200)
+                                 headers: OneDriveHttpHeader.headers(self.authHelper),
+                                 avalidCode: 200)
                 })
                 .done({ (jsonData) in
                     let dirId = jsonData["id"].stringValue
@@ -75,7 +76,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                      method: .post,
                                      parameters: params,
                                      encoding: JSONEncoding.default,
-                                     headers: OneDriveHttpHeader.headers(),
+                                     headers: OneDriveHttpHeader.headers(self.authHelper),
                                      avalidCode: 201)
                     })
                     .done({ (jsonData) in
@@ -124,7 +125,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                             .request(url: url, method: .get,
                                      parameters: nil,
                                      encoding: JSONEncoding.default,
-                                     headers: OneDriveHttpHeader.headers(),
+                                     headers: OneDriveHttpHeader.headers(self.authHelper),
                                      avalidCode: 200)
                     })
                     .done({ (jsonData) in
@@ -171,7 +172,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                         .request(url: url, method: .put,
                                  parameters: params,
                                  encoding: JSONEncoding.default,
-                                 headers: OneDriveHttpHeader.headers(),
+                                 headers: OneDriveHttpHeader.headers(self.authHelper),
                                  avalidCode: 201)
                 })
                 .done({ (jsonData) in
@@ -218,7 +219,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                             .request(url: url, method: .get,
                                      parameters: nil,
                                      encoding: JSONEncoding.default,
-                                     headers: OneDriveHttpHeader.headers(),
+                                     headers: OneDriveHttpHeader.headers(self.authHelper),
                                      avalidCode: 200)
                     })
                     .done({ (jsonData) in
@@ -263,7 +264,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                         .request(url: url, method: .get,
                                  parameters: nil,
                                  encoding: JSONEncoding.default,
-                                 headers: OneDriveHttpHeader.headers(),
+                                 headers: OneDriveHttpHeader.headers(self.authHelper),
                                  avalidCode: 200)
                 })
                 .done({ (jsonData) in
@@ -301,7 +302,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                         .request(url: url, method: .patch,
                                  parameters: params,
                                  encoding: JSONEncoding.default,
-                                 headers: OneDriveHttpHeader.headers(),
+                                 headers: OneDriveHttpHeader.headers(self.authHelper),
                                  avalidCode: 200)
                 })
                 .done({ (jsonData) in
@@ -339,7 +340,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                         .request(url: url, method: .post,
                                  parameters: params,
                                  encoding: JSONEncoding.default,
-                                 headers: OneDriveHttpHeader.headers(),
+                                 headers: OneDriveHttpHeader.headers(self.authHelper),
                                  avalidCode: 202)
                 })
                 .then({ (jsonData) -> HivePromise<HiveVoid> in
@@ -375,7 +376,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                         .request(url: url, method: .delete,
                                  parameters: nil,
                                  encoding: JSONEncoding.default,
-                                 headers: OneDriveHttpHeader.headers(),
+                                 headers: OneDriveHttpHeader.headers(self.authHelper),
                                  avalidCode: 204)
                 })
                 .done({ (jsonData) in

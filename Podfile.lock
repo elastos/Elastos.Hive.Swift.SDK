@@ -1,15 +1,15 @@
 PODS:
   - Alamofire (4.8.2)
-  - PromiseKit (6.8.4):
-    - PromiseKit/CorePromise (= 6.8.4)
-    - PromiseKit/Foundation (= 6.8.4)
-    - PromiseKit/UIKit (= 6.8.4)
-  - PromiseKit/CorePromise (6.8.4)
-  - PromiseKit/Foundation (6.8.4):
+  - PromiseKit (6.9.0):
+    - PromiseKit/CorePromise (= 6.9.0)
+    - PromiseKit/Foundation (= 6.9.0)
+    - PromiseKit/UIKit (= 6.9.0)
+  - PromiseKit/CorePromise (6.9.0)
+  - PromiseKit/Foundation (6.9.0):
     - PromiseKit/CorePromise
-  - PromiseKit/UIKit (6.8.4):
+  - PromiseKit/UIKit (6.9.0):
     - PromiseKit/CorePromise
-  - Swifter (1.4.6)
+  - Swifter (1.4.7)
 
 DEPENDENCIES:
   - Alamofire
@@ -24,8 +24,8 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
-  PromiseKit: 51794a832647e7b819336dc2279039ce9f1cc49b
-  Swifter: 2ed278fbf7b16cbe97269eb56d8e8749b1ec4042
+  PromiseKit: 97397236f9e9c443d5b70a941d49cad25160af7a
+  Swifter: 2327ef5d872c638aebab79646ce494af508b0c8f
 
 PODFILE CHECKSUM: 6b3d7130afe298d0af262430f236134d3f97cfa3
 

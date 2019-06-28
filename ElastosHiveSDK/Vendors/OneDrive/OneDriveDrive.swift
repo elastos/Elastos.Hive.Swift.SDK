@@ -5,11 +5,11 @@ import PromiseKit
 @inline(__always) private func TAG() -> String { return "OneDriveDrive" }
 
 public class OneDriveDrive: HiveDriveHandle {
-    private var authHelper: AuthHelper
+    private var authHelper: OneDriveAuthHelper
     internal static var oneDriveInstance: HiveDriveHandle?
 
     init(_ info: HiveDriveInfo, _ authHelper: AuthHelper) {
-        self.authHelper = authHelper
+        self.authHelper = authHelper as! OneDriveAuthHelper
         super.init(DriveType.oneDrive, info)
     }
 
@@ -36,7 +36,7 @@ public class OneDriveDrive: HiveDriveHandle {
                         .request(url: OneDriveURL.API + "/root",
                                  method: .get,parameters: nil,
                                  encoding: JSONEncoding.default,
-                                 headers: OneDriveHttpHeader.headers(),
+                                 headers: OneDriveHttpHeader.headers(self.authHelper),
                                  avalidCode: 200)
                 })
                 .done({ (jsonData) in
@@ -65,21 +65,13 @@ public class OneDriveDrive: HiveDriveHandle {
     override public func rootDirectoryHandle(handleBy: HiveCallback<HiveDirectoryHandle>)
         -> HivePromise<HiveDirectoryHandle> {
             let promise = HivePromise<HiveDirectoryHandle> { resolver in
-                let login = KeyChainHelper.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
-                guard login != "" else {
-                    Log.d(TAG(), "Please login first")
-                    let error = HiveError.failue(des: "Please login first")
-                    resolver.reject(error)
-                    handleBy.runError(error)
-                    return
-                }
                 self.authHelper.checkExpired()
                     .then({ (void) -> HivePromise<JSON> in
                         return OneDriveHttpHelper
                             .request(url: OneDriveURL.API + "/root",
                                      method: .get,parameters: nil,
                                      encoding: JSONEncoding.default,
-                                     headers: OneDriveHttpHeader.headers(),
+                                     headers: OneDriveHttpHeader.headers(self.authHelper),
                                      avalidCode: 200)
                     })
                     .done({ (jsonData) in
@@ -113,14 +105,6 @@ public class OneDriveDrive: HiveDriveHandle {
     override public func createDirectory(withPath: String, handleBy: HiveCallback<HiveDirectoryHandle>)
         -> HivePromise<HiveDirectoryHandle> {
             let promise = HivePromise<HiveDirectoryHandle> { resolver in
-                let login = KeyChainHelper.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
-                guard login != "" else {
-                    Log.d(TAG(), "Please login first")
-                    let error = HiveError.failue(des: "Please login first")
-                    resolver.reject(error)
-                    handleBy.runError(error)
-                    return
-                }
                 let params: Dictionary<String, Any> = [
                     "name": ConvertHelper.endPath(withPath) as Any,
                     "folder": [: ],
@@ -134,7 +118,7 @@ public class OneDriveDrive: HiveDriveHandle {
                                      method: .post,
                                      parameters: params,
                                      encoding: JSONEncoding.default,
-                                     headers: OneDriveHttpHeader.headers(),
+                                     headers: OneDriveHttpHeader.headers(self.authHelper),
                                      avalidCode: 201)
                     })
                     .done({ (jsonData) in
@@ -167,21 +151,13 @@ public class OneDriveDrive: HiveDriveHandle {
     override public func directoryHandle(atPath: String, handleBy: HiveCallback<HiveDirectoryHandle>)
         -> HivePromise<HiveDirectoryHandle> {
             let promise = HivePromise<HiveDirectoryHandle> { resolver in
-                let login = KeyChainHelper.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
-                guard login != "" else {
-                    Log.d(TAG(), "Please login first")
-                    let error = HiveError.failue(des: "Please login first")
-                    resolver.reject(error)
-                    handleBy.runError(error)
-                    return
-                }
                 self.authHelper.checkExpired()
                     .then({ (void) -> HivePromise<JSON> in
                         return OneDriveHttpHelper
                             .request(url: ConvertHelper.fullUrl("/\(atPath)"),
                                      method: .get, parameters: nil,
                                      encoding: JSONEncoding.default,
-                                     headers: OneDriveHttpHeader.headers(),
+                                     headers: OneDriveHttpHeader.headers(self.authHelper),
                                      avalidCode: 200)
                     })
                     .done({ (jsonData) in
@@ -214,21 +190,13 @@ public class OneDriveDrive: HiveDriveHandle {
     override public func createFile(withPath: String, handleBy: HiveCallback<HiveFileHandle>)
         -> HivePromise<HiveFileHandle> {
             let promise = HivePromise<HiveFileHandle> { resolver in
-                let login = KeyChainHelper.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
-                guard login != "" else {
-                    Log.d(TAG(), "Please login first")
-                    let error = HiveError.failue(des: "Please login first")
-                    resolver.reject(error)
-                    handleBy.runError(error)
-                    return
-                }
                 self.authHelper.checkExpired()
                     .then({ (void) -> HivePromise<JSON> in
                         return OneDriveHttpHelper
                             .request(url: ConvertHelper.fullUrl(withPath, "content"),
                                      method: .put, parameters: nil,
                                      encoding: JSONEncoding.default,
-                                     headers: OneDriveHttpHeader.headers(),
+                                     headers: OneDriveHttpHeader.headers(self.authHelper),
                                      avalidCode: 201)
                     })
                     .done({ (jsonData) in
@@ -261,21 +229,13 @@ public class OneDriveDrive: HiveDriveHandle {
     override public func fileHandle(atPath: String, handleBy: HiveCallback<HiveFileHandle>) ->
         HivePromise<HiveFileHandle> {
             let promise = HivePromise<HiveFileHandle> { resolver in
-                let login = KeyChainHelper.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
-                guard login != "" else {
-                    Log.d(TAG(), "Please login first")
-                    let error = HiveError.failue(des: "Please login first")
-                    resolver.reject(error)
-                    handleBy.runError(error)
-                    return
-                }
                 self.authHelper.checkExpired()
                     .then({ (void) -> HivePromise<JSON> in
                         return OneDriveHttpHelper
                             .request(url: ConvertHelper.fullUrl(atPath),
                                      method: .get, parameters: nil,
                                      encoding: JSONEncoding.default,
-                                     headers: OneDriveHttpHeader.headers(),
+                                     headers: OneDriveHttpHeader.headers(self.authHelper),
                                      avalidCode: 200)
                     })
                     .done({ (jsonData) in

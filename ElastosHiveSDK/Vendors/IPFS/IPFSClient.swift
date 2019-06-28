@@ -26,9 +26,9 @@ internal class IPFSClient: HiveClientHandle {
     }
 
     override func login(_ authenticator: Authenticator) throws {
-        let promise =  self.authHelper?.loginAsync(authenticator)
+        let promise =  self.authHelper.loginAsync(authenticator)
         do {
-            _ = try (promise?.wait())!
+            _ = try (promise.wait())
             _ = defaultDriveHandle()
         } catch  {
             throw error
@@ -45,7 +45,7 @@ internal class IPFSClient: HiveClientHandle {
 
     override func lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>) -> HivePromise<HiveClientInfo> {
         let promise = HivePromise<HiveClientInfo> { resolver in
-            _ = self.authHelper!.checkExpired().done({ (success) in
+            _ = self.authHelper.checkExpired().done({ (success) in
 
                 let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
                 let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
@@ -98,7 +98,7 @@ internal class IPFSClient: HiveClientHandle {
             return promise
         }
         let promise = HivePromise<HiveDriveHandle>{ resolver in
-            _ = self.authHelper?.checkExpired().done({ (success) in
+            _ = self.authHelper.checkExpired().done({ (success) in
 
                 let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_LS.rawValue
                 let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
@@ -118,7 +118,7 @@ internal class IPFSClient: HiveClientHandle {
                         Log.d(TAG(), "defaultDriveHandle succeed")
                         let dic = [HiveDriveInfo.driveId: uid]
                         let driveInfo = HiveDriveInfo(dic)
-                        let driveHandle = IPFSDrive(driveInfo, self.authHelper!)
+                        let driveHandle = IPFSDrive(driveInfo, self.authHelper)
                         driveHandle.lastInfo = driveInfo
                         resolver.fulfill(driveHandle)
                         handleBy.didSucceed(driveHandle)

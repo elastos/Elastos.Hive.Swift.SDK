@@ -26,19 +26,19 @@ internal class OneDriveClient: HiveClientHandle {
     }
 
     override func login(_ authenticator: Authenticator) throws {
-        let promise = self.authHelper?.loginAsync(authenticator)
+        let promise = self.authHelper.loginAsync(authenticator)
         do {
-            _ = try (promise?.wait())!
-            _ = defaultDriveHandle() // TODO:
+            _ = try (promise.wait())
+            _ = defaultDriveHandle() 
         } catch  {
             throw error
         }
     }
 
     override func logout() throws {
-        let promise = self.authHelper?.logoutAsync()
+        let promise = self.authHelper.logoutAsync()
         do {
-            _ = try (promise?.wait())!
+            _ = try (promise.wait())
         } catch {
             throw error;
         }
@@ -50,7 +50,7 @@ internal class OneDriveClient: HiveClientHandle {
 
     override func lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>) -> HivePromise<HiveClientInfo> {
         let promise = HivePromise<HiveClientInfo> { resolver in
-            let login = KeyChainHelper.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
+            let login = (self.authHelper as! OneDriveAuthHelper).token.accessToken
             guard login != "" else {
                 Log.d(TAG(), "Please login first")
                 let error = HiveError.failue(des: "Please login first")
@@ -58,13 +58,13 @@ internal class OneDriveClient: HiveClientHandle {
                 handleBy.runError(error)
                 return
             }
-            self.authHelper?.checkExpired()
+            self.authHelper.checkExpired()
                 .then({ (void) -> HivePromise<JSON> in
                     return OneDriveHttpHelper
                         .request(url: OneDriveURL.API,
                                  method: .get,parameters: nil,
                                  encoding: JSONEncoding.default,
-                                 headers: OneDriveHttpHeader.headers(),
+                                 headers: OneDriveHttpHeader.headers(self.authHelper),
                                  avalidCode: 200)
                 })
                 .done({ (jsonData) in
@@ -99,7 +99,7 @@ internal class OneDriveClient: HiveClientHandle {
 
     override func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> HivePromise<HiveDriveHandle> {
         let promise = HivePromise<HiveDriveHandle> { resolver in
-            let login = KeyChainHelper.getKeychain(KEYCHAIN_KEY.ACCESS_TOKEN.rawValue, .ONEDRIVEACOUNT) ?? ""
+            let login = (self.authHelper as! OneDriveAuthHelper).token.accessToken
             guard login != "" else {
                 Log.d(TAG(), "Please login first")
                 let error = HiveError.failue(des: "Please login first")
@@ -113,20 +113,20 @@ internal class OneDriveClient: HiveClientHandle {
                 resolver.fulfill(handle)
                 return
             }
-            self.authHelper?.checkExpired()
+            self.authHelper.checkExpired()
                 .then({ (void) -> HivePromise<JSON> in
                     return OneDriveHttpHelper
                         .request(url: OneDriveURL.API + "/root",
                                  method: .get,parameters: nil,
                                  encoding: JSONEncoding.default,
-                                 headers: OneDriveHttpHeader.headers(),
+                                 headers: OneDriveHttpHeader.headers(self.authHelper),
                                  avalidCode: 200)
                 })
                 .done({ (jsonData) in
                     let driveId = jsonData["id"].stringValue
                     let dic = [HiveDriveInfo.driveId: driveId]
                     let driveInfo = HiveDriveInfo(dic)
-                    let dirHandle = OneDriveDrive(driveInfo, self.authHelper!)
+                    let dirHandle = OneDriveDrive(driveInfo, self.authHelper)
                     dirHandle.lastInfo = driveInfo
                     resolver.fulfill(dirHandle)
                     Log.d(TAG(), "Acquired default drive instance succeeded: %s", dirHandle.debugDescription);

@@ -22,7 +22,7 @@ internal class IPFSFile: HiveFileHandle {
 
     override func lastUpdatedInfo(handleBy: HiveCallback<HiveFileInfo>) -> HivePromise<HiveFileInfo> {
         let promise = HivePromise<HiveFileInfo> { resolver in
-            _ = self.authHelper!.checkExpired().done({ (success) in
+            _ = self.authHelper.checkExpired().done({ (success) in
 
                 let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
                 let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
@@ -63,7 +63,7 @@ internal class IPFSFile: HiveFileHandle {
 
     override func moveTo(newPath: String, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
         let promise = HivePromise<HiveVoid> { resolver in
-            self.authHelper!.checkExpired().then({ (succeed) -> HivePromise<HiveVoid> in
+            self.authHelper.checkExpired().then({ (succeed) -> HivePromise<HiveVoid> in
                 return IPFSAPIs.moveTo(self.pathName, newPath)
             }).then({ (succeed) -> HivePromise<HiveVoid> in
                 return IPFSAPIs.publish(newPath)
@@ -87,7 +87,7 @@ internal class IPFSFile: HiveFileHandle {
 
     override func copyTo(newPath: String, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
         let promise = HivePromise<HiveVoid> { resolver in
-            self.authHelper!.checkExpired().then({ (succeed) -> HivePromise<HiveVoid> in
+            self.authHelper.checkExpired().then({ (succeed) -> HivePromise<HiveVoid> in
                 return IPFSAPIs.copyTo(self.pathName, newPath)
             }).then({ (success) -> HivePromise<HiveVoid> in
                 return IPFSAPIs.publish(newPath)
@@ -111,7 +111,7 @@ internal class IPFSFile: HiveFileHandle {
 
     override func deleteItem(handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
         let promise = HivePromise<HiveVoid> { resolver in
-            self.authHelper!.checkExpired().then({ (succeed) -> HivePromise<HiveVoid> in
+            self.authHelper.checkExpired().then({ (succeed) -> HivePromise<HiveVoid> in
                 return IPFSAPIs.deleteItem(self.pathName)
             }).then({ (success) -> HivePromise<HiveVoid> in
                 return IPFSAPIs.publish("/")
@@ -290,11 +290,12 @@ internal class IPFSFile: HiveFileHandle {
             let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_READ.rawValue + "?uid=" + uid + "&path=" + self.pathName
             let data = CacheHelper.uploadFile(.IPFSACCOUNT, url.md5)
-            self.authHelper!.checkExpired().then({ (succeed) -> HivePromise<HiveVoid> in
+            self.authHelper.checkExpired().then({ (succeed) -> HivePromise<HiveVoid> in
                 return IPFSAPIs.writeData(self.pathName, data)
             }).then({ (success) -> HivePromise<HiveVoid> in
                 return IPFSAPIs.publish(self.pathName)
             }).done({ (success) in
+                CacheHelper.uploadCache(.IPFSACCOUNT, url.md5)
                 Log.d(TAG(), "writeData succeed")
                 resolver.fulfill(HiveVoid())
             }).catch({ (error) in
@@ -320,7 +321,7 @@ internal class IPFSFile: HiveFileHandle {
     }
 
     private func getRemoteFile(_ url: String, _ fileResult: @escaping (_ data: Data?, _ error: HiveError?) -> Void) {
-        _ = self.authHelper!.checkExpired().done { result in
+        _ = self.authHelper.checkExpired().done { result in
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_READ.rawValue
             let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
             let param = ["uid": uid, "path": self.pathName]

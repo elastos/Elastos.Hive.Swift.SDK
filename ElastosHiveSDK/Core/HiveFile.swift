@@ -9,7 +9,7 @@ public class HiveFileHandle: Result, ResourceItem, FileItem {
     public var fileId: String
     public var pathName: String
     public var lastInfo: HiveFileInfo?
-    var authHelper: AuthHelper?
+    var authHelper: AuthHelper
 
     /// Creates an instance with the specified `info` and `authHelper`.
     ///
