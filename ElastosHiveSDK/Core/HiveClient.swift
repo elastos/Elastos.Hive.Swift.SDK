@@ -5,11 +5,12 @@ public typealias HivePromise = Promise
 
 @objc(HiveClient)
 public class HiveClientHandle: Result, ResourceItem{
-    
+
     public typealias resourceType = HiveClientInfo
     public let driveType: DriveType
     public var handleId: String?
     public var lastInfo: HiveClientInfo?
+
     internal var authHelper: AuthHelper?
     internal var token: AuthToken?
 

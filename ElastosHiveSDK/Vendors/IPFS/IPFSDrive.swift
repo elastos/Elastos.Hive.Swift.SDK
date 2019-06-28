@@ -282,12 +282,12 @@ internal class IPFSDrive: HiveDriveHandle {
             return promise
     }
 
-    override func getItemInfo(_ path: String) -> HivePromise<ItemInfo> {
-        return getItemInfo(path, handleBy: HiveCallback<ItemInfo>())
+    override func getItemInfo(_ path: String) -> HivePromise<HiveItemInfo> {
+        return getItemInfo(path, handleBy: HiveCallback<HiveItemInfo>())
     }
 
-    override func getItemInfo(_ path: String, handleBy: HiveCallback<ItemInfo>) -> HivePromise<ItemInfo> {
-            let promise = HivePromise<ItemInfo> { resolver in
+    override func getItemInfo(_ path: String, handleBy: HiveCallback<HiveItemInfo>) -> HivePromise<HiveItemInfo> {
+            let promise = HivePromise<HiveItemInfo> { resolver in
                 _ = self.authHelper.checkExpired().done({ (success) in
 
                     let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
@@ -308,11 +308,11 @@ internal class IPFSDrive: HiveDriveHandle {
                             }
                             Log.d(TAG(), "getItemInfo succeed")
                             let jsonData = JSON(dataResponse.result.value as Any)
-                            let dic = [ItemInfo.itemId: uid,
-                                       ItemInfo.name: ConvertHelper.endPath(path),
-                                       ItemInfo.size: jsonData["Size"].stringValue,
-                                       ItemInfo.type: jsonData["Type"].stringValue]
-                            let itemInfo = ItemInfo(dic)
+                            let dic = [HiveItemInfo.itemId: uid,
+                                       HiveItemInfo.name: ConvertHelper.endPath(path),
+                                       HiveItemInfo.size: jsonData["Size"].stringValue,
+                                       HiveItemInfo.type: jsonData["Type"].stringValue]
+                            let itemInfo = HiveItemInfo(dic)
                             resolver.fulfill(itemInfo)
                             handleBy.didSucceed(itemInfo)
                         })
