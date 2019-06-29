@@ -334,7 +334,7 @@ internal class OneDriveFile: HiveFileHandle {
     override func commitData() -> HivePromise<HiveVoid> {
         let promise = HivePromise<HiveVoid> { resolver in
             let accesstoken = (self.authHelper as! OneDriveAuthHelper).token!.accessToken
-            let url = ConvertHelper.fullUrl(self.pathName, "content")
+            let url = OneDriveURL(pathName, "content").compose()
             let headers = ["Authorization": "bearer \(accesstoken)", "Content-Type": "text/plain"]
             let data = CacheHelper.uploadFile(.oneDrive, url.md5)
             self.authHelper.checkExpired()
@@ -364,7 +364,7 @@ internal class OneDriveFile: HiveFileHandle {
     override func discardData() {
         cursor = 0
         finish = false
-        let url = ConvertHelper.fullUrl(self.pathName, "content")
+        let url = OneDriveURL(pathName, "content").compose()
         _ = CacheHelper.discardCache(.oneDrive, url.md5)
     }
 

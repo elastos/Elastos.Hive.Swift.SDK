@@ -44,20 +44,4 @@ class ConvertHelper: NSObject {
         let jsonString = String(data: data, encoding: .utf8)
         return jsonString ?? ""
     }
-
-    class func fullUrl(_ path: String, _ operation: String) -> String {
-        if path == "" || path == "/" {
-            return OneDriveURL.API + "/root/\(operation)"
-        }
-        let ecUrl = path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-        return OneDriveURL.API + "/root:\(ecUrl):/\(operation)"
-    }
-
-    class func fullUrl(_ path: String) -> String {
-        if path == "" || path == "/" {
-            return OneDriveURL.API + "/root"
-        }
-        let ecUrl = path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-        return OneDriveURL.API + "/root:\(ecUrl)"
-    }
 }

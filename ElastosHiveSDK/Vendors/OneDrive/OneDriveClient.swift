@@ -101,8 +101,8 @@ internal class OneDriveClient: HiveClientHandle {
 
     override func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> HivePromise<HiveDriveHandle> {
         let promise = HivePromise<HiveDriveHandle> { resolver in
-            let login = (self.authHelper as! OneDriveAuthHelper).token!.accessToken
-            guard login != "" else {
+            let token = (self.authHelper as! OneDriveAuthHelper).token
+            guard token != nil else {
                 Log.d(TAG(), "Please login first")
                 let error = HiveError.failue(des: "Please login first")
                 resolver.reject(error)

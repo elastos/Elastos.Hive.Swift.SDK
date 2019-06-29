@@ -104,7 +104,7 @@ public class OneDriveDrive: HiveDriveHandle {
                     "folder": [: ],
                     "@microsoft.graph.conflictBehavior": "fail"]
                 let path = ConvertHelper.prePath(withPath)
-                let url = ConvertHelper.fullUrl(path, "children")
+                let url = OneDriveURL(path, "children").compose()
                 self.authHelper.checkExpired()
                     .then({ (void) -> HivePromise<JSON> in
                         return OneDriveHttpHelper
@@ -148,7 +148,7 @@ public class OneDriveDrive: HiveDriveHandle {
                 self.authHelper.checkExpired()
                     .then({ (void) -> HivePromise<JSON> in
                         return OneDriveHttpHelper
-                            .request(url: ConvertHelper.fullUrl("/\(atPath)"),
+                            .request(url: OneDriveURL(atPath).compose(),
                                      method: .get, parameters: nil,
                                      encoding: JSONEncoding.default,
                                      headers: OneDriveHttpHeader.headers(self.authHelper),
@@ -187,7 +187,7 @@ public class OneDriveDrive: HiveDriveHandle {
                 self.authHelper.checkExpired()
                     .then({ (void) -> HivePromise<JSON> in
                         return OneDriveHttpHelper
-                            .request(url: ConvertHelper.fullUrl(withPath, "content"),
+                            .request(url: OneDriveURL(withPath, "content").compose(),
                                      method: .put, parameters: nil,
                                      encoding: JSONEncoding.default,
                                      headers: OneDriveHttpHeader.headers(self.authHelper),
@@ -226,7 +226,7 @@ public class OneDriveDrive: HiveDriveHandle {
                 self.authHelper.checkExpired()
                     .then({ (void) -> HivePromise<JSON> in
                         return OneDriveHttpHelper
-                            .request(url: ConvertHelper.fullUrl(atPath),
+                            .request(url: OneDriveURL(atPath).compose(),
                                      method: .get, parameters: nil,
                                      encoding: JSONEncoding.default,
                                      headers: OneDriveHttpHeader.headers(self.authHelper),
@@ -264,7 +264,7 @@ public class OneDriveDrive: HiveDriveHandle {
             self.authHelper.checkExpired()
                 .then({ (void) -> HivePromise<JSON> in
                     return OneDriveHttpHelper
-                        .request(url: ConvertHelper.fullUrl("/\(path)"),
+                        .request(url: OneDriveURL(path).compose(),
                                  method: .get,parameters: nil,
                                  encoding: JSONEncoding.default,
                                  headers: OneDriveHttpHeader.headers(self.authHelper),
