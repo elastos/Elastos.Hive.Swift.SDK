@@ -9,7 +9,7 @@ class PathExtracter {
 
     /*
      * example: /foo/bar/example.txt
-     * baseNamePart() -> "exmaple.txt"
+     * dirNamePart() -> "/foo/bar/"
      */
     func dirNamePart() -> String {
         let index = path.range(of: "/", options: .backwards)?.lowerBound
