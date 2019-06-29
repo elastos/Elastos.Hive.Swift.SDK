@@ -100,10 +100,10 @@ public class OneDriveDrive: HiveDriveHandle {
         -> HivePromise<HiveDirectoryHandle> {
             let promise = HivePromise<HiveDirectoryHandle> { resolver in
                 let params: Dictionary<String, Any> = [
-                    "name": ConvertHelper.endPath(withPath) as Any,
+                    "name": PathExtracter(withPath).baseNamePart() as Any,
                     "folder": [: ],
                     "@microsoft.graph.conflictBehavior": "fail"]
-                let path = ConvertHelper.prePath(withPath)
+                let path = PathExtracter(withPath).dirNamePart()
                 let url = OneDriveURL(path, "children").compose()
                 self.authHelper.checkExpired()
                     .then({ (void) -> HivePromise<JSON> in

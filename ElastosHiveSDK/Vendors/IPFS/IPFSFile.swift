@@ -13,7 +13,7 @@ internal class IPFSFile: HiveFileHandle {
     }
 
     override func parentPathName() -> String {
-        return ConvertHelper.prePath(self.pathName)
+        return PathExtracter(pathName).dirNamePart()
     }
 
     override func lastUpdatedInfo() -> HivePromise<HiveFileInfo> {

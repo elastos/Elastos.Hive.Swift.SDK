@@ -302,7 +302,7 @@ internal class IPFSDrive: HiveDriveHandle {
                             Log.d(TAG(), "getItemInfo succeed")
                             let jsonData = JSON(dataResponse.result.value as Any)
                             let dic = [HiveItemInfo.itemId: uid,
-                                       HiveItemInfo.name: ConvertHelper.endPath(path),
+                                       HiveItemInfo.name: PathExtracter(path).baseNamePart(),
                                        HiveItemInfo.size: jsonData["Size"].stringValue,
                                        HiveItemInfo.type: jsonData["Type"].stringValue]
                             let itemInfo = HiveItemInfo(dic)

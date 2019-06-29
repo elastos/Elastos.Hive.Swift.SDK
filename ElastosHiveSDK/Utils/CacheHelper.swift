@@ -15,7 +15,7 @@ class CacheHelper: NSObject {
 
     class func saveCache(_ account: DriveType, _ path: String, data: Data) -> Bool {
         let cachePath = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + path
-        let cacheDirectory = ConvertHelper.prePath(cachePath)
+        let cacheDirectory = PathExtracter(cachePath).dirNamePart()
         let fileManager: FileManager = FileManager.default
         let exist = fileManager.fileExists(atPath: cacheDirectory)
         if (!exist) {
@@ -47,7 +47,7 @@ class CacheHelper: NSObject {
 
     class func writeCache(_ account: DriveType, _ path: String, data: Data, _ position: UInt64) -> Int32 {
         let cachePath = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + path
-        let cacheDirectory = ConvertHelper.prePath(cachePath)
+        let cacheDirectory = PathExtracter(cachePath).dirNamePart()
         let fileManager: FileManager = FileManager.default
         let cacheExist = fileManager.fileExists(atPath: cacheDirectory)
         if (!cacheExist) {

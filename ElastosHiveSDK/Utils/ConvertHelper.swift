@@ -28,18 +28,6 @@ class ConvertHelper: NSObject {
         return currentTime > timeStemp;
     }
 
-    class func prePath(_ path: String) -> String {
-        let index = path.range(of: "/", options: .backwards)?.lowerBound
-        let str = index.map(path.prefix(upTo:)) ?? ""
-        return String(str + "/")
-    }
-
-    class func endPath(_ path: String) -> String {
-        let arr = path.components(separatedBy: "/")
-        let str = arr.last ?? ""
-        return String(str)
-    }
-
     class func jsonToString(_ data: Data) -> String {
         let jsonString = String(data: data, encoding: .utf8)
         return jsonString ?? ""
