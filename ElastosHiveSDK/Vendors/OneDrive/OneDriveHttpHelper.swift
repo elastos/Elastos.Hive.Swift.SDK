@@ -9,7 +9,8 @@ class OneDriveHttpHelper: NSObject {
                        method: HTTPMethod = .get,
                        parameters: Parameters? = nil,
                        encoding: ParameterEncoding = URLEncoding.default,
-                       headers: HTTPHeaders, avalidCode: Int) -> HivePromise<JSON> {
+                       headers: HTTPHeaders, avalidCode: Int,
+                       _ authHelper: AuthHelper) -> HivePromise<JSON> {
         let promise = HivePromise<JSON> { resolver in
             Alamofire.request(url, method: method,
                               parameters: parameters,
@@ -17,6 +18,10 @@ class OneDriveHttpHelper: NSObject {
                               headers: headers)
                 .responseJSON { dataResponse in
                     guard dataResponse.response?.statusCode != 401 else {
+                        (authHelper as! OneDriveAuthHelper).token?.expiredTime = ""
+                        KeyChainStore.writeback((authHelper as! OneDriveAuthHelper).token!,
+                                                (authHelper as! OneDriveAuthHelper).authEntry,
+                                                .oneDrive)
                         let error = HiveError.failue(des: TOKEN_INVALID)
                         resolver.reject(error)
                         return
@@ -39,13 +44,17 @@ class OneDriveHttpHelper: NSObject {
     class func upload(data: Data, to: URLConvertible,
                       method: HTTPMethod = .get,
                       headers: HTTPHeaders,
-                      avalidCode: Int) -> HivePromise<HiveVoid> {
+                      avalidCode: Int, _ authHelper: AuthHelper) -> HivePromise<HiveVoid> {
         let promise = HivePromise<HiveVoid> { resolver in
             Alamofire.upload(data, to: to,
                              method: method,
                              headers: headers)
                 .responseJSON { dataResponse in
                     guard dataResponse.response?.statusCode != 401 else {
+                        (authHelper as! OneDriveAuthHelper).token?.expiredTime = ""
+                        KeyChainStore.writeback((authHelper as! OneDriveAuthHelper).token!,
+                                                (authHelper as! OneDriveAuthHelper).authEntry,
+                                                .oneDrive)
                         let error = HiveError.failue(des: TOKEN_INVALID)
                         resolver.reject(error)
                         return
@@ -111,6 +120,10 @@ class OneDriveHttpHelper: NSObject {
                     .responseData { dataResponse in
                         let jsonStr = String(data: dataResponse.data!, encoding: .utf8) ?? ""
                         guard dataResponse.response?.statusCode != 401 else {
+                            (authHelper as! OneDriveAuthHelper).token?.expiredTime = ""
+                            KeyChainStore.writeback((authHelper as! OneDriveAuthHelper).token!,
+                                                    (authHelper as! OneDriveAuthHelper).authEntry,
+                                                    .oneDrive)
                             let error = HiveError.failue(des: TOKEN_INVALID)
                             resolver.reject(error)
                             return

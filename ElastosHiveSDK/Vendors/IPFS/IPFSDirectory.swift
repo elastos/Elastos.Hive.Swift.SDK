@@ -20,7 +20,7 @@ class IPFSDirectory: HiveDirectoryHandle {
 
     override func lastUpdatedInfo(handleBy: HiveCallback<HiveDirectoryInfo>) -> HivePromise<HiveDirectoryInfo> {
         let promise = HivePromise<HiveDirectoryInfo> { resolver in
-            _ = self.authHelper.checkExpired().done({ (success) in
+            _ = self.authHelper!.checkExpired().done({ (success) in
 
                 let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
                 let uid = KeyChainStore.restoreUid(.hiveIPFS)
@@ -66,7 +66,7 @@ class IPFSDirectory: HiveDirectoryHandle {
             if self.pathName == "/" {
                 path = self.pathName + withName
             }
-            self.authHelper.checkExpired().then({ (succeed) -> HivePromise<JSON> in
+            self.authHelper!.checkExpired().then({ (succeed) -> HivePromise<JSON> in
                 return IPFSAPIs.createDirectory(path)
             }).then({ (json) -> HivePromise<HiveVoid> in
                 return IPFSAPIs.publish(path)
@@ -74,7 +74,7 @@ class IPFSDirectory: HiveDirectoryHandle {
                 Log.d(TAG(), "createDirectory succeed")
                 let dic = [HiveDirectoryInfo.itemId: uid]
                 let directoryInfo = HiveDirectoryInfo(dic)
-                let directoryHandle = IPFSDirectory(directoryInfo, self.authHelper)
+                let directoryHandle = IPFSDirectory(directoryInfo, self.authHelper!)
                 directoryHandle.lastInfo = directoryInfo
                 directoryHandle.pathName = path
                 directoryHandle.drive = self.drive
@@ -96,7 +96,7 @@ class IPFSDirectory: HiveDirectoryHandle {
 
     override func directoryHandle(atName: String, handleBy: HiveCallback<HiveDirectoryHandle>) -> HivePromise<HiveDirectoryHandle> {
         let promise = HivePromise<HiveDirectoryHandle> { resolver in
-            _ = self.authHelper.checkExpired().done({ (success) in
+            _ = self.authHelper!.checkExpired().done({ (success) in
 
                 let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
                 let uid = KeyChainStore.restoreUid(.hiveIPFS)
@@ -121,7 +121,7 @@ class IPFSDirectory: HiveDirectoryHandle {
                         Log.d(TAG(), "directoryHandle succeed")
                         let dic = [HiveDirectoryInfo.itemId: uid]
                         let directoryInfo = HiveDirectoryInfo(dic)
-                        let directoryHandle = IPFSDirectory(directoryInfo, self.authHelper)
+                        let directoryHandle = IPFSDirectory(directoryInfo, self.authHelper!)
                         directoryHandle.lastInfo = directoryInfo
                         directoryHandle.pathName = path
                         directoryHandle.drive = self.drive
@@ -148,7 +148,7 @@ class IPFSDirectory: HiveDirectoryHandle {
             if self.pathName == "/" {
                 path = self.pathName + withName
             }
-            self.authHelper.checkExpired().then({ (succeed) -> HivePromise<JSON> in
+            self.authHelper!.checkExpired().then({ (succeed) -> HivePromise<JSON> in
                 return IPFSAPIs.creatFile(path)
             }).then({ (json) -> HivePromise<HiveVoid> in
                 return IPFSAPIs.publish(path)
@@ -157,7 +157,7 @@ class IPFSDirectory: HiveDirectoryHandle {
                 let uid = KeyChainStore.restoreUid(.hiveIPFS)
                 let dic = [HiveFileInfo.itemId: uid]
                 let fileInfo = HiveFileInfo(dic)
-                let fileHandle = IPFSFile(fileInfo, self.authHelper)
+                let fileHandle = IPFSFile(fileInfo, self.authHelper!)
                 fileHandle.pathName = path
                 fileHandle.lastInfo = fileInfo
                 fileHandle.drive = self.drive
@@ -179,7 +179,7 @@ class IPFSDirectory: HiveDirectoryHandle {
 
     override func fileHandle(atName: String, handleBy: HiveCallback<HiveFileHandle>) -> HivePromise<HiveFileHandle> {
         let promise = HivePromise<HiveFileHandle> { resolver in
-            _ = self.authHelper.checkExpired().done({ (success) in
+            _ = self.authHelper!.checkExpired().done({ (success) in
 
                 let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
                 let uid = KeyChainStore.restoreUid(.hiveIPFS)
@@ -204,7 +204,7 @@ class IPFSDirectory: HiveDirectoryHandle {
                         Log.d(TAG(), "fileHandle succeed")
                         let dic = [HiveDirectoryInfo.itemId: uid]
                         let fileInfo = HiveFileInfo(dic)
-                        let fileHandle = IPFSFile(fileInfo, self.authHelper)
+                        let fileHandle = IPFSFile(fileInfo, self.authHelper!)
                         fileHandle.lastInfo = fileInfo
                         fileHandle.pathName = path
                         fileHandle.drive = self.drive
@@ -227,7 +227,7 @@ class IPFSDirectory: HiveDirectoryHandle {
 
     override func getChildren(handleBy: HiveCallback<HiveChildren>) -> HivePromise<HiveChildren> {
         let promise = HivePromise<HiveChildren> { resolver in
-            _ = self.authHelper.checkExpired().done({ (success) in
+            _ = self.authHelper!.checkExpired().done({ (success) in
 
                 let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_LS.rawValue
                 let uid = KeyChainStore.restoreUid(.hiveIPFS)
@@ -269,7 +269,7 @@ class IPFSDirectory: HiveDirectoryHandle {
 
     override func moveTo(newPath: String, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
         let promise = HivePromise<HiveVoid> { resolver in
-            self.authHelper.checkExpired().then({ (succeed) -> HivePromise<HiveVoid> in
+            self.authHelper!.checkExpired().then({ (succeed) -> HivePromise<HiveVoid> in
                 return IPFSAPIs.moveTo(self.pathName, newPath)
             }).then({ (success) -> HivePromise<HiveVoid> in
                 return IPFSAPIs.publish(newPath)
@@ -293,7 +293,7 @@ class IPFSDirectory: HiveDirectoryHandle {
 
     override func copyTo(newPath: String, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
         let promise = HivePromise<HiveVoid> { resolver in
-            self.authHelper.checkExpired().then({ (error) -> HivePromise<HiveVoid> in
+            self.authHelper!.checkExpired().then({ (error) -> HivePromise<HiveVoid> in
                 return IPFSAPIs.copyTo(self.pathName, newPath)
             }).then({ (success) -> HivePromise<HiveVoid> in
                 return IPFSAPIs.publish(newPath)
@@ -317,7 +317,7 @@ class IPFSDirectory: HiveDirectoryHandle {
 
     override func deleteItem(handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
         let promise = HivePromise<HiveVoid> { resolver in
-            self.authHelper.checkExpired().then({ (error) -> HivePromise<HiveVoid> in
+            self.authHelper!.checkExpired().then({ (error) -> HivePromise<HiveVoid> in
                 return IPFSAPIs.deleteItem(self.pathName)
             }).then({ (success) -> HivePromise<HiveVoid> in
                 return IPFSAPIs.publish("/")
