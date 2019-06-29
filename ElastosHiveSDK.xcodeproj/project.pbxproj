@@ -15,7 +15,6 @@
 		110744C822C0D19F0076529D /* HiveFileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110744C722C0D19F0076529D /* HiveFileInfo.swift */; };
 		113629AD22C4678B00C6DCCC /* ResourceItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113629AC22C4678A00C6DCCC /* ResourceItem.swift */; };
 		113629AF22C467A700C6DCCC /* FileItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113629AE22C467A700C6DCCC /* FileItem.swift */; };
-		113629B622C467E900C6DCCC /* KeyChainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113629B122C467E800C6DCCC /* KeyChainHelper.swift */; };
 		113629B722C467E900C6DCCC /* KeychainSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113629B322C467E800C6DCCC /* KeychainSwift.swift */; };
 		113629B822C467E900C6DCCC /* TegKeychainConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113629B422C467E800C6DCCC /* TegKeychainConstants.swift */; };
 		113629B922C467E900C6DCCC /* KeychainSwiftAccessOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113629B522C467E800C6DCCC /* KeychainSwiftAccessOptions.swift */; };
@@ -121,7 +120,6 @@
 		110744C722C0D19F0076529D /* HiveFileInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HiveFileInfo.swift; path = Core/HiveFileInfo.swift; sourceTree = "<group>"; };
 		113629AC22C4678A00C6DCCC /* ResourceItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ResourceItem.swift; path = Core/ResourceItem.swift; sourceTree = "<group>"; };
 		113629AE22C467A700C6DCCC /* FileItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FileItem.swift; path = Core/FileItem.swift; sourceTree = "<group>"; };
-		113629B122C467E800C6DCCC /* KeyChainHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyChainHelper.swift; sourceTree = "<group>"; };
 		113629B322C467E800C6DCCC /* KeychainSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainSwift.swift; sourceTree = "<group>"; };
 		113629B422C467E800C6DCCC /* TegKeychainConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TegKeychainConstants.swift; sourceTree = "<group>"; };
 		113629B522C467E800C6DCCC /* KeychainSwiftAccessOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainSwiftAccessOptions.swift; sourceTree = "<group>"; };
@@ -249,7 +247,6 @@
 		113629B022C467E800C6DCCC /* KeyChain */ = {
 			isa = PBXGroup;
 			children = (
-				113629B122C467E800C6DCCC /* KeyChainHelper.swift */,
 				A388E4E622C6635300F2D981 /* KeyChainStore.swift */,
 				113629B222C467E800C6DCCC /* Keychain */,
 			);
@@ -661,20 +658,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ElastosHiveSDKTests/Pods-ElastosHiveSDKTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ElastosHiveSDKTests/Pods-ElastosHiveSDKTests-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
-				"${BUILT_PRODUCTS_DIR}/Swifter/Swifter.framework",
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ElastosHiveSDKTests/Pods-ElastosHiveSDKTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PromiseKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Swifter.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -733,20 +719,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TestHost/Pods-TestHost-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TestHost/Pods-TestHost-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
-				"${BUILT_PRODUCTS_DIR}/Swifter/Swifter.framework",
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TestHost/Pods-TestHost-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PromiseKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Swifter.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -850,7 +825,6 @@
 				A39C49A022539C9C0027BDF9 /* HiveDrive.swift in Sources */,
 				A39CB4C72292878100535E43 /* HiveVoid.swift in Sources */,
 				A3FD3C9622800C320031413A /* DropboxClient.swift in Sources */,
-				113629B622C467E900C6DCCC /* KeyChainHelper.swift in Sources */,
 				110744BE22C0CD2D0076529D /* HiveDriveInfo.swift in Sources */,
 				A3003F3E22C1039B00A341C4 /* IPFSFile.swift in Sources */,
 				A39C49B222539CD10027BDF9 /* OneDriveFile.swift in Sources */,

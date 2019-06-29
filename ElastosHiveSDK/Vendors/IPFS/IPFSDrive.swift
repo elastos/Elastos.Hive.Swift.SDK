@@ -35,7 +35,7 @@ internal class IPFSDrive: HiveDriveHandle {
             _ = self.authHelper.checkExpired().done({ (success) in
 
                 let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
-                let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                let uid = KeyChainStore.restoreUid(.hiveIPFS)
                 let params = ["uid": uid, "path": "/"]
                 Alamofire.request(url,
                                   method: .post,
@@ -77,7 +77,7 @@ internal class IPFSDrive: HiveDriveHandle {
                 _ = self.authHelper.checkExpired().done({ (success) in
 
                     let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_LS.rawValue
-                    let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                    let uid = KeyChainStore.restoreUid(.hiveIPFS)
                     let params = ["uid": uid, "path": "/"]
                     Alamofire.request(url,
                                       method: .post,
@@ -126,7 +126,7 @@ internal class IPFSDrive: HiveDriveHandle {
                         return IPFSAPIs.publish(withPath)
                     }).done({ (success) in
                         Log.d(TAG(), "createDirectory succeed")
-                        let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                        let uid = KeyChainStore.restoreUid(.hiveIPFS)
                         let dic = [HiveDirectoryInfo.itemId: uid]
                         let directoryInfo = HiveDirectoryInfo(dic)
                         let directoryHandle = IPFSDirectory(directoryInfo, self.authHelper)
@@ -163,7 +163,7 @@ internal class IPFSDrive: HiveDriveHandle {
                 _ = self.authHelper.checkExpired().done({ (success) in
 
                     let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
-                    let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                    let uid = KeyChainStore.restoreUid(.hiveIPFS)
                     let param = ["uid": uid, "path": atPath]
                     Alamofire.request(url,
                                       method: .post,
@@ -212,7 +212,7 @@ internal class IPFSDrive: HiveDriveHandle {
                         return IPFSAPIs.publish(withPath)
                     }).done({ (success) in
                         Log.d(TAG(), "createFile succeed")
-                        let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                        let uid = KeyChainStore.restoreUid(.hiveIPFS)
                         let dic = [HiveFileInfo.itemId: uid]
                         let fileInfo = HiveFileInfo(dic)
                         let fileHandle = IPFSFile(fileInfo, self.authHelper)
@@ -247,7 +247,7 @@ internal class IPFSDrive: HiveDriveHandle {
                 _ = self.authHelper.checkExpired().done({ (success) in
 
                     let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
-                    let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                    let uid = KeyChainStore.restoreUid(.hiveIPFS)
                     let param = ["uid": uid, "path": atPath]
                     Alamofire.request(url,
                                       method: .post,
@@ -291,7 +291,7 @@ internal class IPFSDrive: HiveDriveHandle {
                 _ = self.authHelper.checkExpired().done({ (success) in
 
                     let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
-                    let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+                    let uid = KeyChainStore.restoreUid(.hiveIPFS)
                     let param = ["uid": uid, "path": path]
                     Alamofire.request(url,
                                       method: .post,

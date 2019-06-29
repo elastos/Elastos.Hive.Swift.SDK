@@ -9,7 +9,7 @@ import Alamofire
 internal class OneDriveAuthHelper: AuthHelper {
     var token: AuthToken?
     let server = SimpleAuthServer()
-    private let authEntry: OAuthEntry
+    private var authEntry: OAuthEntry
 
     init(_ authEntry: OAuthEntry) {
         self.authEntry = authEntry
@@ -20,10 +20,11 @@ internal class OneDriveAuthHelper: AuthHelper {
     }
 
     override func loginAsync(_ authenticator: Authenticator, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
-        token = KeyChainStore(.oneDrive).restoreToken()
         guard token == nil else {
             let promise = HivePromise<HiveVoid> { resolver in
                 Log.d(TAG(), "OneDrive already logined")
+                token = KeyChainStore.restoreToken(.oneDrive)
+                authEntry = KeyChainStore.restoreAuthEntry(.oneDrive)!
                 let padding = HiveVoid()
                 handleBy.didSucceed(padding)
                 resolver.fulfill(padding)
@@ -55,33 +56,32 @@ internal class OneDriveAuthHelper: AuthHelper {
 
     override func logoutAsync(handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
         let promise = HivePromise<HiveVoid> { resolver in
-            Alamofire.request(OneDriveURL.AUTH + ONEDRIVE_SUB_Url.ONEDRIVE_LOGOUT.rawValue + "?post_logout_redirect_uri=\(self.authEntry.redirectURL)",
+            Alamofire.request(OneDriveURL.AUTH + ONEDRIVE_SUB_Url.ONEDRIVE_LOGOUT.rawValue + "?post_logout_redirect_uri=\(authEntry.redirectURL)",
                 method: .get,
                 parameters: nil,
                 encoding: JSONEncoding.default,
                 headers: nil).responseJSON(completionHandler: { (dataResponse) in
-            guard dataResponse.response?.statusCode == 200 else{
-                let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
-                Log.e(TAG(), "Logout faild: %s",error.localizedDescription)
-                handleBy.runError(error)
-                resolver.reject(error)
-                return
-            }
-            Log.d(TAG(), "Logout succeed")
-            self.token = AuthToken()
-            self.removeOnedriveAcount()
-
-            let padding = HiveVoid()
-            handleBy.didSucceed(padding)
-            resolver.fulfill(padding)
-                       })
+                    guard dataResponse.response?.statusCode == 200 else{
+                        let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
+                        Log.e(TAG(), "Logout faild: %s",error.localizedDescription)
+                        handleBy.runError(error)
+                        resolver.reject(error)
+                        return
+                    }
+                    Log.d(TAG(), "Logout succeed")
+                    self.token = nil
+                    KeyChainStore.removeback(authEntry: self.authEntry, forDrive: .oneDrive)
+                    let padding = HiveVoid()
+                    handleBy.didSucceed(padding)
+                    resolver.fulfill(padding)
+                })
         }
         return promise
     }
 
     private func acquireAuthCode(_ authenticator: Authenticator) -> HivePromise<String> {
         let promise = HivePromise<String> { resolver in
-            let redirecturl = self.authEntry.redirectURL
+            let redirecturl = authEntry.redirectURL
             let startIndex = redirecturl.index(redirecturl.startIndex, offsetBy: 17)
             let endIndex =  redirecturl.index(redirecturl.startIndex, offsetBy: redirecturl.count)
             let port = UInt16(redirecturl[startIndex..<endIndex])
@@ -119,7 +119,12 @@ internal class OneDriveAuthHelper: AuthHelper {
                 }
                 Log.d(TAG(), "AccessToken succeed")
                 let jsonData =  JSON(dataResponse.result.value as Any)
-                self.saveOnedriveAcount(jsonData)
+                self.token = AuthToken()
+                self.token?.accessToken = jsonData[KEYCHAIN_KEY.ACCESS_TOKEN.rawValue].stringValue
+                self.token?.refreshToken = jsonData[KEYCHAIN_KEY.REDIRECTURL.rawValue].stringValue
+                self.token?.expiredIn = jsonData[KEYCHAIN_KEY.EXPIRES_IN.rawValue].int64Value
+                self.token?.expiredTime = ConvertHelper.getExpireTime(time: self.token!.expiredIn)
+                KeyChainStore.writeback(self.token!, self.authEntry, .oneDrive)
                 resolver.fulfill(HiveVoid())
             })
         }
@@ -128,12 +133,11 @@ internal class OneDriveAuthHelper: AuthHelper {
 
     private func refreshToken() -> HivePromise<HiveVoid> {
         let promise = HivePromise<HiveVoid> {  resolver in
-            let refreshToken = self.token.refreshToken
             let params: Dictionary<String, Any> = [
                 "client_id" : self.authEntry.clientId,
                 "scope" : self.authEntry.scope,
                 "redirect_uri" : self.authEntry.redirectURL,
-                "refresh_token": refreshToken,
+                "refresh_token": self.token!.refreshToken,
                 "grant_type": KEYCHAIN_KEY.REFRESH_TOKEN.rawValue
             ]
             var urlRequest = URLRequest(url: URL(string: OneDriveURL.AUTH + ONEDRIVE_SUB_Url.ONEDRIVE_TOKEN.rawValue)!)
@@ -149,7 +153,12 @@ internal class OneDriveAuthHelper: AuthHelper {
                 }
                 Log.d(TAG(), "RefreshToken succeed")
                 let jsonData = JSON(dataResponse.result.value as Any)
-                self.saveOnedriveAcount(jsonData)
+                self.token = AuthToken()
+                self.token?.accessToken = jsonData[KEYCHAIN_KEY.ACCESS_TOKEN.rawValue].stringValue
+                self.token?.refreshToken = jsonData[KEYCHAIN_KEY.REDIRECTURL.rawValue].stringValue
+                self.token?.expiredIn = jsonData[KEYCHAIN_KEY.EXPIRES_IN.rawValue].int64Value
+                self.token?.expiredTime = ConvertHelper.getExpireTime(time: self.token!.expiredIn)
+                KeyChainStore.writeback(self.token!, self.authEntry, .oneDrive)
                 resolver.fulfill(HiveVoid())
             })
         }
@@ -157,7 +166,7 @@ internal class OneDriveAuthHelper: AuthHelper {
     }
     
     private func isExpired() -> Bool {
-        return token.isExpired()
+        return token == nil || token!.isExpired()
     }
 
     override func checkExpired() -> HivePromise<HiveVoid> {
@@ -174,32 +183,4 @@ internal class OneDriveAuthHelper: AuthHelper {
         }
         return promise
     }
-
-/*
-    private func saveOnedriveAcount(_ jsonData: JSON){
-        self.token.accessToken = jsonData[KEYCHAIN_KEY.ACCESS_TOKEN.rawValue].stringValue
-        self.token.refreshToken = jsonData[KEYCHAIN_KEY.REFRESH_TOKEN.rawValue].stringValue
-        self.token.expiredIn = jsonData[KEYCHAIN_KEY.EXPIRES_IN.rawValue].int64!
-        let expiredTime = ConvertHelper.getExpireTime(time: self.token.expiredIn)
-        self.token.expiredTime = expiredTime
-        let onedriveAccountJson = [KEYCHAIN_KEY.ACCESS_TOKEN.rawValue: jsonData[KEYCHAIN_KEY.ACCESS_TOKEN.rawValue].stringValue,
-                                   KEYCHAIN_KEY.REFRESH_TOKEN.rawValue: jsonData[KEYCHAIN_KEY.REFRESH_TOKEN.rawValue].stringValue,
-                                   KEYCHAIN_KEY.EXPIRES_IN.rawValue: expiredTime,
-                                   KEYCHAIN_KEY.REDIRECTURL.rawValue: self.authEntry.redirectURL,
-                                   KEYCHAIN_KEY.CLIENT_ID.rawValue: self.authEntry.clientId,
-                                   KEYCHAIN_KEY.SCOPE.rawValue: self.authEntry.scope
-                                   ] as [String : Any]
-        KeyChainHelper.saveKeychain(.ONEDRIVEACOUNT, onedriveAccountJson)
-    }
-
-    private func removeOnedriveAcount(){
-        let onedriveAccountJson = [KEYCHAIN_KEY.ACCESS_TOKEN.rawValue: "",
-                                   KEYCHAIN_KEY.REFRESH_TOKEN.rawValue: "",
-                                   KEYCHAIN_KEY.EXPIRES_IN.rawValue: "",
-                                   KEYCHAIN_KEY.REDIRECTURL.rawValue: self.authEntry.redirectURL,
-                                   KEYCHAIN_KEY.CLIENT_ID.rawValue: self.authEntry.clientId,
-                                   KEYCHAIN_KEY.SCOPE.rawValue: self.authEntry.scope]
-        KeyChainHelper.saveKeychain(.ONEDRIVEACOUNT, onedriveAccountJson)
-    }
-*/
 }
