@@ -52,7 +52,7 @@ class IPFSAuthHelper: AuthHelper {
     }
 
     private func getUID() -> HivePromise<String> {
-        let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+        let uid = KeyChainStore.restoreUid(.hiveIPFS)
         guard uid == "" else {
             let promise = HivePromise<String> { resolver in
                 resolver.fulfill(uid)
@@ -129,7 +129,7 @@ class IPFSAuthHelper: AuthHelper {
     private func logIn(_ hash: String) -> HivePromise<HiveVoid> {
         let promise = HivePromise<HiveVoid> { resolver in
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_UID_LOGIN.rawValue
-            let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+            let uid = KeyChainStore.restoreUid(.hiveIPFS)
             let param = ["uid": uid, "hash": hash]
             Alamofire.request(url,
                               method: .post,

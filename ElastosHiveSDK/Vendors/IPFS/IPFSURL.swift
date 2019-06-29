@@ -30,7 +30,7 @@ class IPFSURL {
 
     class func validURL() -> HivePromise<HiveVoid> {
         let promise = HivePromise<HiveVoid> { resolver in
-            let uid = KeyChainHelper.getKeychain(KEYCHAIN_IPFS_UID, .IPFSACCOUNT) ?? ""
+            let uid = KeyChainStore.restoreUid(.hiveIPFS)
             if uid == "" {
                 validUseNewUID(URL_POOL[validIp], { (url) in
                     if url == "" {
@@ -72,6 +72,8 @@ class IPFSURL {
                     }
                     validUseNewUID(URL_POOL[validIp], result)
                 }
+                let json = JSON(dataResponse.result.value as Any)
+                KeyChainStore.writebackForIpfs(.hiveIPFS, json["UID"].stringValue)
                 result(currentUrl)
         }
     }

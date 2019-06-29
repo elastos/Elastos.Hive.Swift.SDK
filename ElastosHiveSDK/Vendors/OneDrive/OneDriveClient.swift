@@ -51,14 +51,15 @@ internal class OneDriveClient: HiveClientHandle {
 
     override func lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>) -> HivePromise<HiveClientInfo> {
         let promise = HivePromise<HiveClientInfo> { resolver in
-            let login = (self.authHelper as! OneDriveAuthHelper).token.accessToken
-            guard login != "" else {
+            let token = (self.authHelper as! OneDriveAuthHelper).token
+            guard token != nil else {
                 Log.d(TAG(), "Please login first")
                 let error = HiveError.failue(des: "Please login first")
                 resolver.reject(error)
                 handleBy.runError(error)
                 return
             }
+            
             self.authHelper.checkExpired()
                 .then({ (void) -> HivePromise<JSON> in
                     return OneDriveHttpHelper
@@ -100,7 +101,7 @@ internal class OneDriveClient: HiveClientHandle {
 
     override func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> HivePromise<HiveDriveHandle> {
         let promise = HivePromise<HiveDriveHandle> { resolver in
-            let login = (self.authHelper as! OneDriveAuthHelper).token.accessToken
+            let login = (self.authHelper as! OneDriveAuthHelper).token!.accessToken
             guard login != "" else {
                 Log.d(TAG(), "Please login first")
                 let error = HiveError.failue(des: "Please login first")

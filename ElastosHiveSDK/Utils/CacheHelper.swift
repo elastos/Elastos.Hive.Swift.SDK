@@ -6,14 +6,14 @@ import UIKit
 
 class CacheHelper: NSObject {
 
-    class func checkCacheFileIsExist(_ account: KEYCHAIN_DRIVE_ACCOUNT, _ path: String) -> Bool {
+    class func checkCacheFileIsExist(_ account:DriveType, _ path: String) -> Bool {
         let cachePath = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + path
         let fileManager: FileManager = FileManager.default
         let isExist = fileManager.fileExists(atPath: cachePath)
         return isExist
     }
 
-    class func saveCache(_ account: KEYCHAIN_DRIVE_ACCOUNT, _ path: String, data: Data) -> Bool {
+    class func saveCache(_ account: DriveType, _ path: String, data: Data) -> Bool {
         let cachePath = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + path
         let cacheDirectory = ConvertHelper.prePath(cachePath)
         let fileManager: FileManager = FileManager.default
@@ -45,7 +45,7 @@ class CacheHelper: NSObject {
         return true
     }
 
-    class func writeCache(_ account: KEYCHAIN_DRIVE_ACCOUNT, _ path: String, data: Data, _ position: UInt64) -> Int32 {
+    class func writeCache(_ account: DriveType, _ path: String, data: Data, _ position: UInt64) -> Int32 {
         let cachePath = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + path
         let cacheDirectory = ConvertHelper.prePath(cachePath)
         let fileManager: FileManager = FileManager.default
@@ -86,7 +86,7 @@ class CacheHelper: NSObject {
         return Int32(data.count)
     }
 
-    class func readCache(_ account: KEYCHAIN_DRIVE_ACCOUNT, _ path: String, _ position: UInt64, _ length: Int) -> Data {
+    class func readCache(_ account: DriveType, _ path: String, _ position: UInt64, _ length: Int) -> Data {
         let cachePath = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + path
         let fileManager = FileManager.default
         let exist = fileManager.fileExists(atPath: cachePath)
@@ -122,7 +122,7 @@ class CacheHelper: NSObject {
         else { return Data() }
     }
 
-    class func uploadFile(_ account: KEYCHAIN_DRIVE_ACCOUNT, _ path: String) -> Data  {
+    class func uploadFile(_ account: DriveType, _ path: String) -> Data  {
         let copyPath = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + "copy-" + path
         let fileManager = FileManager.default
         let exist = fileManager.fileExists(atPath: copyPath)
@@ -136,7 +136,7 @@ class CacheHelper: NSObject {
         else { return Data() }
     }
 
-    class func discardCache(_ account: KEYCHAIN_DRIVE_ACCOUNT, _ path: String) {
+    class func discardCache(_ account: DriveType, _ path: String) {
         let cachePath = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + "copy-" + path
         let fileManager: FileManager = FileManager.default
         let exist = fileManager.fileExists(atPath: cachePath)
@@ -152,7 +152,7 @@ class CacheHelper: NSObject {
 
     }
 
-    class func uploadCache(_ account: KEYCHAIN_DRIVE_ACCOUNT, _ path: String) {
+    class func uploadCache(_ account: DriveType, _ path: String) {
         let cachePath = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + path
         let copyPath = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + "copy-" + path
         let fileManager: FileManager = FileManager.default
