@@ -21,7 +21,7 @@ class HiveIpfsDriveTests: XCTestCase, Authenticator{
     }
 
     func testA_login() {
-        lock = XCTestExpectation(description: "wait for test1_Login")
+        lock = XCTestExpectation(description: "wait for testA_login")
 
         let globalQueue = DispatchQueue.global()
         globalQueue.async {
@@ -37,7 +37,7 @@ class HiveIpfsDriveTests: XCTestCase, Authenticator{
     }
 
     func testB_lastUpdatedInfo() {
-        lock = XCTestExpectation(description: "wait for test2_lastUpdatedInfo")
+        lock = XCTestExpectation(description: "wait for testB_lastUpdatedInfo")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDriveInfo> in
             return drive.lastUpdatedInfo()
         }).done({ (driveInfo) in
@@ -52,7 +52,7 @@ class HiveIpfsDriveTests: XCTestCase, Authenticator{
 
     func testC_RootDirectoryHandle() {
 
-        lock = XCTestExpectation(description: "wait for test3_RootDirectoryHandle")
+        lock = XCTestExpectation(description: "wait for testC_RootDirectoryHandle")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
             return drive.rootDirectoryHandle()
         }).done({ (directory) in
@@ -67,7 +67,7 @@ class HiveIpfsDriveTests: XCTestCase, Authenticator{
 
     func testD_CreateDirectory() {
 
-        lock = XCTestExpectation(description: "wait for test4_CreateDirectory")
+        lock = XCTestExpectation(description: "wait for testD_CreateDirectory")
         timeTest = ConvertHelper.getCurrentTime()
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
             return drive.createDirectory(withPath: "/hiveIpfs_Drive_test4_CreateDirectory_\(timeTest!)")
@@ -82,7 +82,7 @@ class HiveIpfsDriveTests: XCTestCase, Authenticator{
     }
 
     func testE_directoryHandle() {
-        lock = XCTestExpectation(description: "wait for test5_directoryHandle")
+        lock = XCTestExpectation(description: "wait for testE_directoryHandle")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
             return drive.directoryHandle(atPath: "/hiveIpfs_Drive_test4_CreateDirectory_\(timeTest!)")
         }).done({ (directory) in
@@ -97,9 +97,9 @@ class HiveIpfsDriveTests: XCTestCase, Authenticator{
 
     func testF_createFile() {
         timeTest = ConvertHelper.getCurrentTime()
-        lock = XCTestExpectation(description: "wait for test6_createFile")
+        lock = XCTestExpectation(description: "wait for testF_createFile")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveFileHandle> in
-            return drive.createFile(withPath: "/hiveIpfs_Drive_test6_createFile_\(timeTest!)0")
+            return drive.createFile(withPath: "/hiveIpfs_Drive_test6_createFile_\(timeTest!)")
         }).done({ (file) in
             XCTAssertNotNil(file)
             self.lock?.fulfill()
@@ -112,9 +112,9 @@ class HiveIpfsDriveTests: XCTestCase, Authenticator{
 
     func testG_GetFileHandle() {
 
-        lock = XCTestExpectation(description: "wait for test7_GetFileHandle")
+        lock = XCTestExpectation(description: "wait for testG_GetFileHandle")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveFileHandle> in
-            return drive.fileHandle(atPath: "/hiveIpfs_Drive_test6_createFile_\(timeTest!)0")
+            return drive.fileHandle(atPath: "/hiveIpfs_Drive_test6_createFile_\(timeTest!)")
         }).done({ (file) in
             XCTAssertNotNil(file)
             self.lock?.fulfill()
@@ -124,5 +124,21 @@ class HiveIpfsDriveTests: XCTestCase, Authenticator{
         })
         wait(for: [lock!], timeout: timeOut)
     }
+
+    func testH_getItemInfo() {
+
+        lock = XCTestExpectation(description: "wait for testH_getItemInfo")
+        self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveItemInfo> in
+            return drive.getItemInfo("/hiveIpfs_Drive_test6_createFile_\(timeTest!)")
+        }).done({ (file) in
+            XCTAssertNotNil(file)
+            self.lock?.fulfill()
+        }).catch({ (error) in
+            XCTFail()
+            self.lock?.fulfill()
+        })
+        wait(for: [lock!], timeout: timeOut)
+    }
+
 
 }
