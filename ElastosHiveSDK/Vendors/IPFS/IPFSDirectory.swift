@@ -336,6 +336,10 @@ class IPFSDirectory: HiveDirectoryHandle {
     }
 
     override func close() {
-        _ = "TODO"
+        self.drive = nil
+        self.directoryId = ""
+        self.pathName = ""
+        self.lastInfo = nil
+        self.authHelper = nil
     }
 }
