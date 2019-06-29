@@ -180,7 +180,9 @@ class HiveOneDriveDirectoryTests: XCTestCase,Authenticator {
 
         lock = XCTestExpectation(description: "wait for test8_copyTo")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
-            return drive.directoryHandle(atPath: "测试\(timeTest!)")
+            return drive.rootDirectoryHandle()
+        }).then({ (directory) -> HivePromise<HiveDirectoryHandle> in
+            return directory.directoryHandle(atName: "测试\(timeTest!)")
         }).then({ (directory) -> HivePromise<HiveVoid> in
             return directory.copyTo(newPath: "/\(timeTest!)")
         }).done({ (re) in
@@ -196,7 +198,9 @@ class HiveOneDriveDirectoryTests: XCTestCase,Authenticator {
 
         lock = XCTestExpectation(description: "wait for test9_deleteItem")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
-            return drive.directoryHandle(atPath: "测试\(timeTest!)")
+            return drive.rootDirectoryHandle()
+        }).then({ (directory) -> HivePromise<HiveDirectoryHandle> in
+            return directory.directoryHandle(atName: "测试\(timeTest!)")
         }).then({ (directory) -> HivePromise<HiveVoid> in
             return directory.deleteItem()
         }).done({ (re) in
@@ -212,7 +216,9 @@ class HiveOneDriveDirectoryTests: XCTestCase,Authenticator {
 
         lock = XCTestExpectation(description: "wait for test10_moveTo")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
-            return drive.directoryHandle(atPath: "/\(timeTest!)/测试\(timeTest!)")
+            return drive.rootDirectoryHandle()
+        }).then({ (directory) -> HivePromise<HiveDirectoryHandle> in
+            return directory.directoryHandle(atName: "/\(timeTest!)/测试\(timeTest!)")
         }).then({ (directory) -> HivePromise<HiveVoid> in
             return directory.moveTo(newPath: "/")
         }).done({ (re) in

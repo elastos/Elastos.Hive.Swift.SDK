@@ -9,7 +9,7 @@ class IPFSAPIs {
 
         let promise = HivePromise<HiveVoid> { resolver in
             let uid = (authHelper as! IPFSAuthHelper).param.uid
-            getHash(uid, path: path, authHelper).done { (hash) in
+            getHash(uid, path: "/", authHelper).done { (hash) in
                 let params = ["uid": uid, "path": hash]
                 let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_NAME_PUBLISH.rawValue
                 Alamofire.request(url,
@@ -191,7 +191,7 @@ class IPFSAPIs {
         let promise = HivePromise<String> { resolver in
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
             let uid = (authHelper as! IPFSAuthHelper).param.uid
-            let params = ["uid": uid, "path": "/"]
+            let params = ["uid": uid, "path": path]
             Alamofire.request(url,
                               method: .post,
                               parameters: params,
