@@ -130,6 +130,7 @@ class IPFSAuthHelper: AuthHelper {
         let promise = HivePromise<HiveVoid> { resolver in
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_UID_LOGIN.rawValue
             let uid = KeyChainStore.restoreUid(.hiveIPFS)
+            param.uid = uid
             let param = ["uid": uid, "hash": hash]
             Alamofire.request(url,
                               method: .post,

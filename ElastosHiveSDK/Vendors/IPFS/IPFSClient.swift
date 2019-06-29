@@ -49,7 +49,7 @@ internal class IPFSClient: HiveClientHandle {
             _ = self.authHelper.checkExpired().done({ (success) in
 
                 let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
-                let uid = KeyChainStore.restoreUid(.hiveIPFS)
+                let uid = self.authHelper.param.uid
                 let params = ["uid": uid, "path": "/"]
                 Alamofire.request(url,
                                   method: .post,
@@ -102,7 +102,7 @@ internal class IPFSClient: HiveClientHandle {
             _ = self.authHelper.checkExpired().done({ (success) in
 
                 let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_LS.rawValue
-                let uid = KeyChainStore.restoreUid(.hiveIPFS)
+                let uid = self.authHelper.param.uid
                 let param = ["uid": uid, "path": "/"]
                 Alamofire.request(url,
                                   method: .post,
