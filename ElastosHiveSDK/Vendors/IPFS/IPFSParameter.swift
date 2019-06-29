@@ -3,7 +3,7 @@ import Foundation
 @objc(IPFSParameter)
 public class IPFSParameter: DriveParameter {
     internal typealias authEntryType = NullEntry
-    let uid: String
+    var uid: String
     let path: String
 
     public override func driveType() -> DriveType {

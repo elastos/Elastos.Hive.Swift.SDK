@@ -5,11 +5,11 @@ import Alamofire
 
 class IPFSAPIs {
 
-    class func publish(_ path: String) -> HivePromise<HiveVoid> {
+    class func publish(_ path: String, _ authHelper: AuthHelper) -> HivePromise<HiveVoid> {
 
         let promise = HivePromise<HiveVoid> { resolver in
-            let uid = KeyChainStore.restoreUid(.hiveIPFS)
-            getHash(uid, path: path).done { (hash) in
+            let uid = (authHelper as! IPFSAuthHelper).param.uid
+            getHash(uid, path: path, authHelper).done { (hash) in
                 let params = ["uid": uid, "path": hash]
                 let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_NAME_PUBLISH.rawValue
                 Alamofire.request(url,
@@ -33,9 +33,9 @@ class IPFSAPIs {
         return promise
     }
 
-    class func creatFile(_ path: String) -> HivePromise<JSON> {
+    class func creatFile(_ path: String, _ authHelper: AuthHelper) -> HivePromise<JSON> {
         let promise = HivePromise<JSON> { resolver in
-            let uid = KeyChainStore.restoreUid(.hiveIPFS)
+            let uid = (authHelper as! IPFSAuthHelper).param.uid
             let params = ["uid": uid, "path": path, "file": "file", "create": "true"]
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_WRITE.rawValue + "?" + params.queryString
             let str = ""
@@ -65,10 +65,10 @@ class IPFSAPIs {
         return promise
     }
 
-    class func createDirectory(_ path: String) -> HivePromise<JSON> {
+    class func createDirectory(_ path: String, _ authHelper: AuthHelper) -> HivePromise<JSON> {
         let promise = HivePromise<JSON> { resolver in
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_MKDIR.rawValue
-            let uid = KeyChainStore.restoreUid(.hiveIPFS)
+            let uid = (authHelper as! IPFSAuthHelper).param.uid
             let param = ["uid": uid,"path": path]
             Alamofire.request(url,
                               method: .post,
@@ -88,10 +88,10 @@ class IPFSAPIs {
         return promise
     }
 
-    class func moveTo(_ originPath: String, _ newPath: String) -> HivePromise<HiveVoid> {
+    class func moveTo(_ originPath: String, _ newPath: String, _ authHelper: AuthHelper) -> HivePromise<HiveVoid> {
         let promise = HivePromise<HiveVoid> { resolver in
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_MV.rawValue
-            let uid = KeyChainStore.restoreUid(.hiveIPFS)
+            let uid = (authHelper as! IPFSAuthHelper).param.uid
             let params = ["uid": uid, "source": originPath + "/", "dest": newPath]
             Alamofire.request(url,
                               method: .post,
@@ -110,10 +110,10 @@ class IPFSAPIs {
         return promise
     }
 
-    class func copyTo(_ originPath: String, _ newParh: String) -> HivePromise<HiveVoid> {
+    class func copyTo(_ originPath: String, _ newParh: String, _ authHelper: AuthHelper) -> HivePromise<HiveVoid> {
         let promise = HivePromise<HiveVoid> { resolver in
-            let uid = KeyChainStore.restoreUid(.hiveIPFS)
-            getHash(uid, path: originPath).done({ (hash) in
+            let uid = (authHelper as! IPFSAuthHelper).param.uid
+            getHash(uid, path: originPath, authHelper).done({ (hash) in
                 let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_CP.rawValue
                 let params = ["uid": uid, "source": hash, "dest": newParh]
                 Alamofire.request(url,
@@ -136,10 +136,10 @@ class IPFSAPIs {
         return promise
     }
 
-    class func deleteItem(_ path: String) -> HivePromise<HiveVoid> {
+    class func deleteItem(_ path: String, _ authHelper: AuthHelper) -> HivePromise<HiveVoid> {
         let promise = HivePromise<HiveVoid> { resolver in
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_RM.rawValue
-            let uid = KeyChainStore.restoreUid(.hiveIPFS)
+            let uid = (authHelper as! IPFSAuthHelper).param.uid
             let params = ["uid": uid, "path": path, "recursive": true] as [String : Any]
             Alamofire.request(url,
                               method: .post,
@@ -158,9 +158,9 @@ class IPFSAPIs {
         return promise
     }
 
-    class func writeData(_ path: String, _ withData: Data) -> HivePromise<HiveVoid> {
+    class func writeData(_ path: String, _ withData: Data, _ authHelper: AuthHelper) -> HivePromise<HiveVoid> {
         let promise = HivePromise<HiveVoid> { resolver in
-            let uid = KeyChainStore.restoreUid(.hiveIPFS)
+            let uid = (authHelper as! IPFSAuthHelper).param.uid
             let params = ["uid": uid, "path": path, "file": "file", "create": "true"]
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_WRITE.rawValue + "?" + params.queryString
             Alamofire.upload(multipartFormData: { (data) in
@@ -187,10 +187,10 @@ class IPFSAPIs {
         return promise
     }
 
-    class func getHash(_ uid: String, path: String) -> HivePromise<String> {
+    class func getHash(_ uid: String, path: String, _ authHelper: AuthHelper) -> HivePromise<String> {
         let promise = HivePromise<String> { resolver in
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
-            let uid = KeyChainStore.restoreUid(.hiveIPFS)
+            let uid = (authHelper as! IPFSAuthHelper).param.uid
             let params = ["uid": uid, "path": "/"]
             Alamofire.request(url,
                               method: .post,

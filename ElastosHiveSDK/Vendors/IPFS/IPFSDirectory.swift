@@ -23,7 +23,7 @@ class IPFSDirectory: HiveDirectoryHandle {
             _ = self.authHelper!.checkExpired().done({ (success) in
 
                 let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
-                let uid = KeyChainStore.restoreUid(.hiveIPFS)
+                let uid = (self.authHelper as! IPFSAuthHelper).param.uid
                 let params = ["uid": uid, "path": self.pathName]
                 Alamofire.request(url,
                                   method: .post,
@@ -62,14 +62,14 @@ class IPFSDirectory: HiveDirectoryHandle {
     override func createDirectory(withName: String, handleBy: HiveCallback<HiveDirectoryHandle>) -> HivePromise<HiveDirectoryHandle> {
         let promise = HivePromise<HiveDirectoryHandle> { resolver in
             var path = self.pathName + "/" + withName
-            let uid = KeyChainStore.restoreUid(.hiveIPFS)
+            let uid = (self.authHelper as! IPFSAuthHelper).param.uid
             if self.pathName == "/" {
                 path = self.pathName + withName
             }
             self.authHelper!.checkExpired().then({ (succeed) -> HivePromise<JSON> in
-                return IPFSAPIs.createDirectory(path)
+                return IPFSAPIs.createDirectory(path, self.authHelper!)
             }).then({ (json) -> HivePromise<HiveVoid> in
-                return IPFSAPIs.publish(path)
+                return IPFSAPIs.publish(path, self.authHelper!)
             }).done({ (success) in
                 Log.d(TAG(), "createDirectory succeed")
                 let dic = [HiveDirectoryInfo.itemId: uid]
@@ -99,7 +99,7 @@ class IPFSDirectory: HiveDirectoryHandle {
             _ = self.authHelper!.checkExpired().done({ (success) in
 
                 let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
-                let uid = KeyChainStore.restoreUid(.hiveIPFS)
+                let uid = (self.authHelper as! IPFSAuthHelper).param.uid
                 var path = self.pathName + "/" + atName
                 if self.pathName == "/" {
                     path = self.pathName + atName
@@ -149,12 +149,12 @@ class IPFSDirectory: HiveDirectoryHandle {
                 path = self.pathName + withName
             }
             self.authHelper!.checkExpired().then({ (succeed) -> HivePromise<JSON> in
-                return IPFSAPIs.creatFile(path)
+                return IPFSAPIs.creatFile(path, self.authHelper!)
             }).then({ (json) -> HivePromise<HiveVoid> in
-                return IPFSAPIs.publish(path)
+                return IPFSAPIs.publish(path, self.authHelper!)
             }).done({ (success) in
                 Log.d(TAG(), "createFile succeed")
-                let uid = KeyChainStore.restoreUid(.hiveIPFS)
+                let uid = (self.authHelper as! IPFSAuthHelper).param.uid
                 let dic = [HiveFileInfo.itemId: uid]
                 let fileInfo = HiveFileInfo(dic)
                 let fileHandle = IPFSFile(fileInfo, self.authHelper!)
@@ -182,7 +182,7 @@ class IPFSDirectory: HiveDirectoryHandle {
             _ = self.authHelper!.checkExpired().done({ (success) in
 
                 let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
-                let uid = KeyChainStore.restoreUid(.hiveIPFS)
+                let uid = (self.authHelper as! IPFSAuthHelper).param.uid
                 var path = self.pathName + "/" + atName
                 if self.pathName == "/" {
                     path = self.pathName + atName
@@ -230,7 +230,7 @@ class IPFSDirectory: HiveDirectoryHandle {
             _ = self.authHelper!.checkExpired().done({ (success) in
 
                 let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_LS.rawValue
-                let uid = KeyChainStore.restoreUid(.hiveIPFS)
+                let uid = (self.authHelper as! IPFSAuthHelper).param.uid
                 let path = self.pathName
                 let param = ["uid": uid, "path": path]
                 Alamofire.request(url,
@@ -270,9 +270,9 @@ class IPFSDirectory: HiveDirectoryHandle {
     override func moveTo(newPath: String, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
         let promise = HivePromise<HiveVoid> { resolver in
             self.authHelper!.checkExpired().then({ (succeed) -> HivePromise<HiveVoid> in
-                return IPFSAPIs.moveTo(self.pathName, newPath)
+                return IPFSAPIs.moveTo(self.pathName, newPath, self.authHelper!)
             }).then({ (success) -> HivePromise<HiveVoid> in
-                return IPFSAPIs.publish(newPath)
+                return IPFSAPIs.publish(newPath, self.authHelper!)
             }).done({ (success) in
                 Log.d(TAG(), "moveTo succeed")
                 resolver.fulfill(HiveVoid())
@@ -294,9 +294,9 @@ class IPFSDirectory: HiveDirectoryHandle {
     override func copyTo(newPath: String, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
         let promise = HivePromise<HiveVoid> { resolver in
             self.authHelper!.checkExpired().then({ (error) -> HivePromise<HiveVoid> in
-                return IPFSAPIs.copyTo(self.pathName, newPath)
+                return IPFSAPIs.copyTo(self.pathName, newPath, self.authHelper!)
             }).then({ (success) -> HivePromise<HiveVoid> in
-                return IPFSAPIs.publish(newPath)
+                return IPFSAPIs.publish(newPath, self.authHelper!)
             }).done({ (success) in
                 Log.d(TAG(), "copyTo succeed")
                 resolver.fulfill(HiveVoid())
@@ -318,9 +318,9 @@ class IPFSDirectory: HiveDirectoryHandle {
     override func deleteItem(handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
         let promise = HivePromise<HiveVoid> { resolver in
             self.authHelper!.checkExpired().then({ (error) -> HivePromise<HiveVoid> in
-                return IPFSAPIs.deleteItem(self.pathName)
+                return IPFSAPIs.deleteItem(self.pathName, self.authHelper!)
             }).then({ (success) -> HivePromise<HiveVoid> in
-                return IPFSAPIs.publish("/")
+                return IPFSAPIs.publish("/", self.authHelper!)
             }).done({ (success) in
                 Log.d(TAG(), "deleteItem succeed")
                 resolver.fulfill(success)
