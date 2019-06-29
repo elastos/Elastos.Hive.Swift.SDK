@@ -9,7 +9,7 @@ public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem 
     public var directoryId: String
     public var pathName: String
     public var lastInfo: HiveDirectoryInfo?
-    internal var authHelper: AuthHelper
+    internal var authHelper: AuthHelper?
 
     /// Creates an instance with the specified `info` and `authHelper`.
     ///

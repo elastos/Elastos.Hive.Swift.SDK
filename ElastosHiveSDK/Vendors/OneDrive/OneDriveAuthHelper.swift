@@ -9,7 +9,7 @@ import Alamofire
 internal class OneDriveAuthHelper: AuthHelper {
     var token: AuthToken?
     let server = SimpleAuthServer()
-    private var authEntry: OAuthEntry
+    var authEntry: OAuthEntry
 
     init(_ authEntry: OAuthEntry) {
         self.authEntry = authEntry

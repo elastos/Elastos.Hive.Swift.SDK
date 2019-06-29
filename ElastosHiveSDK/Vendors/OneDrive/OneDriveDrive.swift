@@ -10,14 +10,8 @@ public class OneDriveDrive: HiveDriveHandle {
 
     init(_ info: HiveDriveInfo, _ authHelper: AuthHelper) {
         self.authHelper = authHelper as! OneDriveAuthHelper
-        super.init(DriveType.oneDrive, info)
-    }
-
-    static func createInstance(_ info: HiveDriveInfo, _ authHelper: AuthHelper) {
-        if oneDriveInstance == nil {
-            let client = OneDriveDrive(info, authHelper)
-            oneDriveInstance = client
-        }
+        super.init(.oneDrive, info)
+        OneDriveDrive.oneDriveInstance = self
     }
 
     static func sharedInstance() -> OneDriveDrive {
@@ -37,7 +31,7 @@ public class OneDriveDrive: HiveDriveHandle {
                                  method: .get,parameters: nil,
                                  encoding: JSONEncoding.default,
                                  headers: OneDriveHttpHeader.headers(self.authHelper),
-                                 avalidCode: 200)
+                                 avalidCode: 200, self.authHelper)
                 })
                 .done({ (jsonData) in
                     let driId = jsonData["id"].stringValue
@@ -72,7 +66,7 @@ public class OneDriveDrive: HiveDriveHandle {
                                      method: .get,parameters: nil,
                                      encoding: JSONEncoding.default,
                                      headers: OneDriveHttpHeader.headers(self.authHelper),
-                                     avalidCode: 200)
+                                     avalidCode: 200, self.authHelper)
                     })
                     .done({ (jsonData) in
                         let dirId = jsonData["id"].stringValue
@@ -119,7 +113,7 @@ public class OneDriveDrive: HiveDriveHandle {
                                      parameters: params,
                                      encoding: JSONEncoding.default,
                                      headers: OneDriveHttpHeader.headers(self.authHelper),
-                                     avalidCode: 201)
+                                     avalidCode: 201, self.authHelper)
                     })
                     .done({ (jsonData) in
                         let dirId = jsonData["id"].stringValue
@@ -158,7 +152,7 @@ public class OneDriveDrive: HiveDriveHandle {
                                      method: .get, parameters: nil,
                                      encoding: JSONEncoding.default,
                                      headers: OneDriveHttpHeader.headers(self.authHelper),
-                                     avalidCode: 200)
+                                     avalidCode: 200, self.authHelper)
                     })
                     .done({ (jsonData) in
                         let dirId = jsonData["id"].stringValue
@@ -197,7 +191,7 @@ public class OneDriveDrive: HiveDriveHandle {
                                      method: .put, parameters: nil,
                                      encoding: JSONEncoding.default,
                                      headers: OneDriveHttpHeader.headers(self.authHelper),
-                                     avalidCode: 201)
+                                     avalidCode: 201, self.authHelper)
                     })
                     .done({ (jsonData) in
                         let fileId = jsonData["id"].stringValue
@@ -236,7 +230,7 @@ public class OneDriveDrive: HiveDriveHandle {
                                      method: .get, parameters: nil,
                                      encoding: JSONEncoding.default,
                                      headers: OneDriveHttpHeader.headers(self.authHelper),
-                                     avalidCode: 200)
+                                     avalidCode: 200, self.authHelper)
                     })
                     .done({ (jsonData) in
                         let fileId = jsonData["id"].stringValue
@@ -261,13 +255,43 @@ public class OneDriveDrive: HiveDriveHandle {
             return promise
     }
 
-    public override func getItemInfo(_ path: String) -> Promise<HiveItemInfo> {
+    public override func getItemInfo(_ path: String) -> HivePromise<HiveItemInfo> {
         return getItemInfo(path, handleBy: HiveCallback<HiveItemInfo>())
     }
 
-    public override func getItemInfo(_ path: String, handleBy: HiveCallback<HiveItemInfo>) -> Promise<HiveItemInfo> {
-        // todo
-        let error = HiveError.failue(des: "Dummy")
-        return HivePromise<HiveItemInfo>(error: error)
+    public override func getItemInfo(_ path: String, handleBy: HiveCallback<HiveItemInfo>) -> HivePromise<HiveItemInfo> {
+        let promise = HivePromise<HiveItemInfo> { resolver in
+            self.authHelper.checkExpired()
+                .then({ (void) -> HivePromise<JSON> in
+                    return OneDriveHttpHelper
+                        .request(url: ConvertHelper.fullUrl("/\(path)"),
+                                 method: .get,parameters: nil,
+                                 encoding: JSONEncoding.default,
+                                 headers: OneDriveHttpHeader.headers(self.authHelper),
+                                 avalidCode: 200, self.authHelper)
+                })
+                .done({ (jsonData) in
+                    let file = jsonData["file"].stringValue
+                    var type: String = "directory"
+                    if file != "" {
+                        type = "file"
+                    }
+                    let dic = [HiveItemInfo.itemId: jsonData["id"].stringValue,
+                               HiveItemInfo.name: jsonData["name"].stringValue,
+                               HiveItemInfo.size: jsonData["size"].stringValue,
+                               HiveItemInfo.type: type]
+                    let itemInfo = HiveItemInfo(dic)
+                    resolver.fulfill(itemInfo)
+                    handleBy.didSucceed(itemInfo)
+                    Log.d(TAG(), "Acquiring item info information succeeeded (info: %s)", itemInfo.attrDic!.description)
+                })
+                .catch({ (error) in
+                    let error = HiveError.failue(des: error.localizedDescription)
+                    Log.e(TAG(), "Acquireing item info information falied: %s", error.localizedDescription)
+                    resolver.reject(error)
+                    handleBy.runError(error)
+                })
+        }
+        return promise
     }
 }

@@ -67,7 +67,7 @@ internal class OneDriveClient: HiveClientHandle {
                                  method: .get,parameters: nil,
                                  encoding: JSONEncoding.default,
                                  headers: OneDriveHttpHeader.headers(self.authHelper),
-                                 avalidCode: 200)
+                                 avalidCode: 200, self.authHelper)
                 })
                 .done({ (jsonData) in
                     let owner = JSON(jsonData["owner"])
@@ -122,7 +122,7 @@ internal class OneDriveClient: HiveClientHandle {
                                  method: .get,parameters: nil,
                                  encoding: JSONEncoding.default,
                                  headers: OneDriveHttpHeader.headers(self.authHelper),
-                                 avalidCode: 200)
+                                 avalidCode: 200, self.authHelper)
                 })
                 .done({ (jsonData) in
                     let driveId = jsonData["id"].stringValue
@@ -142,4 +142,5 @@ internal class OneDriveClient: HiveClientHandle {
         }
         return promise
     }
+
 }
