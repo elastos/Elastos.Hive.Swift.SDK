@@ -1,5 +1,4 @@
-
-import UIKit
+import Foundation
 
 class ConvertHelper: NSObject {
 
@@ -26,10 +25,5 @@ class ConvertHelper: NSObject {
     class func checkIsExpired(_ timeStemp: String) -> Bool {
         let currentTime = getCurrentTime()
         return currentTime > timeStemp;
-    }
-
-    class func jsonToString(_ data: Data) -> String {
-        let jsonString = String(data: data, encoding: .utf8)
-        return jsonString ?? ""
     }
 }

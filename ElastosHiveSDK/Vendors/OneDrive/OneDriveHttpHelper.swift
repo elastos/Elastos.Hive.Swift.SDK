@@ -27,7 +27,7 @@ class OneDriveHttpHelper: NSObject {
                         return
                     }
                     guard dataResponse.response?.statusCode == avalidCode || dataResponse.response?.statusCode == 200 else{
-                        let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
+                        let error = HiveError.failue(des: dataResponse.toString())
                         resolver.reject(error)
                         return
                     }
@@ -61,7 +61,7 @@ class OneDriveHttpHelper: NSObject {
                     }
                     guard dataResponse.response?.statusCode == 200 || dataResponse.response?.statusCode == avalidCode
                         else{
-                            let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
+                            let error = HiveError.failue(des: dataResponse.toString())
                             resolver.reject(error)
                             return
                     }
