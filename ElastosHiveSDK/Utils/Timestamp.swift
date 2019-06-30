@@ -1,8 +1,7 @@
 import Foundation
 
-class ConvertHelper: NSObject {
-
-    class func getCurrentTime() -> String {
+class Timestamp {
+    class func getTimeAtNow() -> String {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         formatter.timeStyle = .short
@@ -11,7 +10,7 @@ class ConvertHelper: NSObject {
         return String.init(format: "%ld", Int(Date().timeIntervalSince1970))
     }
 
-    class func getExpireTime(time: Int64) -> String {
+    class func getTimeAfter(time: Int64) -> String {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         formatter.timeStyle = .short
@@ -22,8 +21,8 @@ class ConvertHelper: NSObject {
         return String.init(format: "%ld", Int(dateNow.timeIntervalSince1970))
     }
 
-    class func checkIsExpired(_ timeStemp: String) -> Bool {
-        let currentTime = getCurrentTime()
+    class func isAfter(_ timeStemp: String) -> Bool {
+        let currentTime = getTimeAtNow()
         return currentTime > timeStemp;
     }
 }

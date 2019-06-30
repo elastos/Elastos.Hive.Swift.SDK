@@ -39,7 +39,6 @@
 		11E573FF22C4C33400F85419 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FB22C4C33400F85419 /* StringExtension.swift */; };
 		11E5740022C4C33400F85419 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FD22C4C33400F85419 /* SwiftyJSON.swift */; };
 		11E5740222C4C34200F85419 /* CacheHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5740122C4C34200F85419 /* CacheHelper.swift */; };
-		11E5740822C4CE2400F85419 /* ConvertHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E5740722C4CE2400F85419 /* ConvertHelper.swift */; };
 		11F10B9222A770E100A4C371 /* HiveIpfsDirectoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F10B9122A770E100A4C371 /* HiveIpfsDirectoryTests.swift */; };
 		11F10B9422A770F800A4C371 /* HiveIpfsFileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F10B9322A770F800A4C371 /* HiveIpfsFileTests.swift */; };
 		11F3024B22C46B47002D0351 /* AuthToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F3024A22C46B47002D0351 /* AuthToken.swift */; };
@@ -89,6 +88,7 @@
 		A39CB4D12292E5FA00535E43 /* OneDriveURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39CB4D02292E5F900535E43 /* OneDriveURL.swift */; };
 		A39CB4D52292FF1600535E43 /* AuthCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39CB4D42292FF1600535E43 /* AuthCode.swift */; };
 		A3CC8DAB226D99FC00EE80D0 /* SimpleAuthServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CC8DAA226D99FB00EE80D0 /* SimpleAuthServer.swift */; };
+		A3E7A73722C86FC6000E7BE2 /* Timestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E7A73622C86FC6000E7BE2 /* Timestamp.swift */; };
 		A3E8760522B4E15200D59692 /* NativeDrive.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E8760122B4E15200D59692 /* NativeDrive.swift */; };
 		A3E8760622B4E15200D59692 /* NativeClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E8760222B4E15200D59692 /* NativeClient.swift */; };
 		A3E8760722B4E15200D59692 /* NativeFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E8760322B4E15200D59692 /* NativeFile.swift */; };
@@ -149,7 +149,6 @@
 		11E573FB22C4C33400F85419 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		11E573FD22C4C33400F85419 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		11E5740122C4C34200F85419 /* CacheHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CacheHelper.swift; path = Utils/CacheHelper.swift; sourceTree = "<group>"; };
-		11E5740722C4CE2400F85419 /* ConvertHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConvertHelper.swift; path = Utils/ConvertHelper.swift; sourceTree = "<group>"; };
 		11F10B9122A770E100A4C371 /* HiveIpfsDirectoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiveIpfsDirectoryTests.swift; sourceTree = "<group>"; };
 		11F10B9322A770F800A4C371 /* HiveIpfsFileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiveIpfsFileTests.swift; sourceTree = "<group>"; };
 		11F3024A22C46B47002D0351 /* AuthToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AuthToken.swift; path = Core/AuthToken.swift; sourceTree = "<group>"; };
@@ -202,6 +201,7 @@
 		A39CB4D02292E5F900535E43 /* OneDriveURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OneDriveURL.swift; path = Vendors/OneDrive/OneDriveURL.swift; sourceTree = "<group>"; };
 		A39CB4D42292FF1600535E43 /* AuthCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AuthCode.swift; path = Core/AuthCode.swift; sourceTree = "<group>"; };
 		A3CC8DAA226D99FB00EE80D0 /* SimpleAuthServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SimpleAuthServer.swift; path = Vendors/OneDrive/SimpleAuthServer.swift; sourceTree = "<group>"; };
+		A3E7A73622C86FC6000E7BE2 /* Timestamp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Timestamp.swift; path = Utils/Timestamp.swift; sourceTree = "<group>"; };
 		A3E8760122B4E15200D59692 /* NativeDrive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NativeDrive.swift; path = Vendors/Native/NativeDrive.swift; sourceTree = "<group>"; };
 		A3E8760222B4E15200D59692 /* NativeClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NativeClient.swift; path = Vendors/Native/NativeClient.swift; sourceTree = "<group>"; };
 		A3E8760322B4E15200D59692 /* NativeFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NativeFile.swift; path = Vendors/Native/NativeFile.swift; sourceTree = "<group>"; };
@@ -419,11 +419,11 @@
 			isa = PBXGroup;
 			children = (
 				11E5740122C4C34200F85419 /* CacheHelper.swift */,
-				11E5740722C4CE2400F85419 /* ConvertHelper.swift */,
 				A34724DB226B4A750049DBD4 /* Log.swift */,
 				A34724DD226B4ABE0049DBD4 /* LogLevel.swift */,
 				A35C619222C7A3AE00343CA1 /* PathExtracter.swift */,
 				A35C619422C8530300343CA1 /* DataResponse.swift */,
+				A3E7A73622C86FC6000E7BE2 /* Timestamp.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -816,6 +816,7 @@
 				110744C322C0CD5D0076529D /* HiveClientInfo.swift in Sources */,
 				A34724DE226B4ABE0049DBD4 /* LogLevel.swift in Sources */,
 				A388E4E722C6635300F2D981 /* KeyChainStore.swift in Sources */,
+				A3E7A73722C86FC6000E7BE2 /* Timestamp.swift in Sources */,
 				A34724DC226B4A750049DBD4 /* Log.swift in Sources */,
 				1183CEAF22AF4BFE00796951 /* HiveChildren.swift in Sources */,
 				A3003F3922C1039B00A341C4 /* IPFSAuthHelper.swift in Sources */,
@@ -826,7 +827,6 @@
 				A39CB4D52292FF1600535E43 /* AuthCode.swift in Sources */,
 				A3CC8DAB226D99FC00EE80D0 /* SimpleAuthServer.swift in Sources */,
 				A3003F3B22C1039B00A341C4 /* IPFSClient.swift in Sources */,
-				11E5740822C4CE2400F85419 /* ConvertHelper.swift in Sources */,
 				11E573EC22C46E7D00F85419 /* Result.swift in Sources */,
 				11E5740222C4C34200F85419 /* CacheHelper.swift in Sources */,
 				113629AD22C4678B00C6DCCC /* ResourceItem.swift in Sources */,
