@@ -8,6 +8,6 @@ class AuthToken: NSObject {
     var expiredTime: String = ""
 
     func isExpired() -> Bool {
-        return ConvertHelper.checkIsExpired(self.expiredTime)
+        return Timestamp.isAfter(expiredTime)
     }
 }
