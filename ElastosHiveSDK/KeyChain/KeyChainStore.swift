@@ -47,7 +47,7 @@ class KeyChainStore {
     class func writeback(_ token: AuthToken, _ authEntry: OAuthEntry, _ forDrive: DriveType) -> Void {
         let count = [KEYCHAIN_KEY.ACCESS_TOKEN.rawValue: token.accessToken,
                      KEYCHAIN_KEY.REFRESH_TOKEN.rawValue: token.refreshToken,
-                     KEYCHAIN_KEY.EXPIRED_TIME.rawValue: ConvertHelper.getExpireTime(time: token.expiredIn),
+                     KEYCHAIN_KEY.EXPIRED_TIME.rawValue: Timestamp.getTimeAfter(time: token.expiredIn),
                      KEYCHAIN_KEY.EXPIRES_IN.rawValue: token.expiredIn,
                      KEYCHAIN_KEY.REDIRECTURL.rawValue: authEntry.redirectURL,
                      KEYCHAIN_KEY.CLIENT_ID.rawValue: authEntry.clientId,
