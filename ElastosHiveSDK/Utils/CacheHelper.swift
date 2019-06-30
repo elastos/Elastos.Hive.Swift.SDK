@@ -1,6 +1,4 @@
-
-
-import UIKit
+import Foundation
 
 @inline(__always) private func TAG() -> String { return "KeyChainHelper" }
 

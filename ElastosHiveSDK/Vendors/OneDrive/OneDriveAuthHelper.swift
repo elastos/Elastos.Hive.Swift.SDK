@@ -62,7 +62,7 @@ internal class OneDriveAuthHelper: AuthHelper {
                 encoding: JSONEncoding.default,
                 headers: nil).responseJSON(completionHandler: { (dataResponse) in
                     guard dataResponse.response?.statusCode == 200 else{
-                        let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
+                        let error = HiveError.failue(des: dataResponse.toString())
                         Log.e(TAG(), "Logout faild: %s",error.localizedDescription)
                         handleBy.runError(error)
                         resolver.reject(error)
@@ -112,7 +112,7 @@ internal class OneDriveAuthHelper: AuthHelper {
             urlRequest.setValue(OneDriveHttpHeader.ContentTypeValue, forHTTPHeaderField: OneDriveHttpHeader.ContentType)
             Alamofire.request(urlRequest).responseJSON(completionHandler: { (dataResponse) in
                 guard dataResponse.response?.statusCode == 200 else{
-                    let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
+                    let error = HiveError.failue(des: dataResponse.toString())
                     Log.e(TAG(), "AccessToken faild: %s",error.localizedDescription)
                     resolver.reject(error)
                     return
@@ -146,7 +146,7 @@ internal class OneDriveAuthHelper: AuthHelper {
             urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
             Alamofire.request(urlRequest).responseJSON(completionHandler: { (dataResponse) in
                 guard dataResponse.response?.statusCode == 200 else{
-                    let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
+                    let error = HiveError.failue(des: dataResponse.toString())
                     Log.e(TAG(), "RefreshToken faild: %s",error.localizedDescription)
                     resolver.reject(error)
                     return

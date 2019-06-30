@@ -68,7 +68,7 @@ class IPFSAuthHelper: AuthHelper {
                               headers: nil)
                 .responseJSON(completionHandler: { (dataResponse) in
                     guard dataResponse.response?.statusCode == 200 else {
-                        let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
+                        let error = HiveError.failue(des: dataResponse.toString())
                         resolver.reject(error)
                         return
                     }
@@ -91,7 +91,7 @@ class IPFSAuthHelper: AuthHelper {
                               headers: nil)
                 .responseJSON(completionHandler: { (dataResponse) in
                     guard dataResponse.response?.statusCode == 200 else {
-                        let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
+                        let error = HiveError.failue(des: dataResponse.toString())
                         resolver.reject(error)
                         return
                     }
@@ -114,7 +114,7 @@ class IPFSAuthHelper: AuthHelper {
                               headers: nil)
                 .responseJSON(completionHandler: { (dataResponse) in
                     guard dataResponse.response?.statusCode == 200 else {
-                        let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
+                        let error = HiveError.failue(des: dataResponse.toString())
                         resolver.reject(error)
                         return
                     }
@@ -138,7 +138,7 @@ class IPFSAuthHelper: AuthHelper {
                               encoding: URLEncoding.queryString, headers: nil)
                 .responseJSON(completionHandler: { (dataResponse) in
                     guard dataResponse.response?.statusCode == 200 else{
-                        let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
+                        let error = HiveError.failue(des: dataResponse.toString())
                         resolver.reject(error)
                         return
                     }

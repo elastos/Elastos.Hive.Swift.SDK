@@ -34,7 +34,7 @@ internal class IPFSFile: HiveFileHandle {
                                   headers: nil)
                     .responseJSON(completionHandler: { (dataResponse) in
                         guard dataResponse.response?.statusCode == 200 else {
-                            let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
+                            let error = HiveError.failue(des: dataResponse.toString())
                             Log.e(TAG(), "lastUpdatedInfo falied: %s", error.localizedDescription)
                             resolver.reject(error)
                             handleBy.runError(error)
@@ -332,7 +332,7 @@ internal class IPFSFile: HiveFileHandle {
                               headers: nil)
                 .responseJSON(completionHandler: { (dataResponse) in
                     guard dataResponse.response?.statusCode == 200 else {
-                        let error = HiveError.failue(des: ConvertHelper.jsonToString(dataResponse.data!))
+                        let error = HiveError.failue(des: dataResponse.toString())
                         Log.e(TAG(), "readData falied: %s", error.localizedDescription)
                         fileResult(nil, error)
                         return
