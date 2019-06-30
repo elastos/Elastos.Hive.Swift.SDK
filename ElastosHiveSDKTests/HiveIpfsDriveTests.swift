@@ -68,7 +68,7 @@ class HiveIpfsDriveTests: XCTestCase, Authenticator{
     func testD_CreateDirectory() {
 
         lock = XCTestExpectation(description: "wait for testD_CreateDirectory")
-        timeTest = ConvertHelper.getCurrentTime()
+        timeTest = Timestamp.getTimeAtNow()
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
             return drive.createDirectory(withPath: "/hiveIpfs_Drive_test4_CreateDirectory_\(timeTest!)")
         }).done({ (directory) in
@@ -96,7 +96,7 @@ class HiveIpfsDriveTests: XCTestCase, Authenticator{
     }
 
     func testF_createFile() {
-        timeTest = ConvertHelper.getCurrentTime()
+        timeTest = Timestamp.getTimeAtNow()
         lock = XCTestExpectation(description: "wait for testF_createFile")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveFileHandle> in
             return drive.createFile(withPath: "/hiveIpfs_Drive_test6_createFile_\(timeTest!)")

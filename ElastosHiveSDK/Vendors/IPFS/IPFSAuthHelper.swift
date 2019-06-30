@@ -105,11 +105,10 @@ class IPFSAuthHelper: AuthHelper {
 
     private func getHash(_ peerId: String) -> HivePromise<String> {
         let promise = HivePromise<String> { resolver in
-            let url = URL_POOL[validIp] + "/api/v0/name/resolve"
-            let param = ["arg": peerId]
+            let url = URL_POOL[validIp] + "/api/v0/name/resolve" + "?" + "arg=" + peerId
             Alamofire.request(url,
-                              method: .post,
-                              parameters: param,
+                              method: .get,
+                              parameters: nil,
                               encoding: JSONEncoding.default,
                               headers: nil)
                 .responseJSON(completionHandler: { (dataResponse) in
