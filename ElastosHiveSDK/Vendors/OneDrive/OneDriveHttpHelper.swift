@@ -98,13 +98,22 @@ class OneDriveHttpHelper: NSObject {
         return promise
     }
 
-    class func pollingDowloadresult(_ url: String) -> HivePromise<HiveVoid> {
-        let promise = HivePromise<HiveVoid> { resolver in
+    class func pollingDowloadresult(_ url: String) -> HivePromise<Data> {
+        let promise = HivePromise<Data> { resolver in
             Alamofire.request(url,
                               method: .get,
-                              parameters: nil, encoding: JSONEncoding.default, headers: nil)
-                .responseJSON { (dataResponse) in
-                    //                TODO
+                              parameters: nil,
+                              encoding: JSONEncoding.default,
+                              headers: nil)
+                .responseJSON { dataResponse in
+                    let jsonStr = String(data: dataResponse.data!, encoding: .utf8) ?? ""
+                    guard dataResponse.response?.statusCode == 200 else{
+                        let error = HiveError.failue(des: jsonStr)
+                        resolver.reject(error)
+                        return
+                    }
+                    let data = dataResponse.data ?? Data()
+                    resolver.fulfill(data)
             }
         }
         return promise
@@ -126,6 +135,19 @@ class OneDriveHttpHelper: NSObject {
                                                     .oneDrive)
                             let error = HiveError.failue(des: TOKEN_INVALID)
                             resolver.reject(error)
+                            return
+                        }
+                        guard dataResponse.response?.statusCode != 302 else{
+                            let jsonData = JSON(dataResponse.result.value as Any)
+                            let url = jsonData["Location"].stringValue
+                            pollingDowloadresult(url)
+                                .done{ data in
+                                    let data = dataResponse.data ?? Data()
+                                    resolver.fulfill(data)
+                                }.catch{ error in
+                                    let error = HiveError.failue(des: error.localizedDescription)
+                                    resolver.reject(error)
+                                }
                             return
                         }
                         guard dataResponse.response?.statusCode == 200 else{
