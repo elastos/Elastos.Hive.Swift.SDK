@@ -48,7 +48,8 @@ internal class IPFSClient: HiveClientHandle {
         let promise = HivePromise<HiveClientInfo> { resolver in
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
             let uid = self.authHelper.param.uid
-            let params = ["uid": uid, "path": "/".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!]
+            let path = "/".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+            let params = ["uid": uid, "path": path]
             self.authHelper.checkExpired()
                 .then{ void -> HivePromise<JSON> in
                     return IPFSAPIs.request(url, .post, params)
@@ -91,7 +92,8 @@ internal class IPFSClient: HiveClientHandle {
         let promise = HivePromise<HiveDriveHandle>{ resolver in
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_LS.rawValue
             let uid = self.authHelper.param.uid
-            let param = ["uid": uid, "path": "/".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!]
+            let path = "/".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+            let param = ["uid": uid, "path": path]
 
             self.authHelper.checkExpired()
                 .then{ viod -> HivePromise<JSON> in
