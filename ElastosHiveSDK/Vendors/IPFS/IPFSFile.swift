@@ -25,7 +25,6 @@ internal class IPFSFile: HiveFileHandle {
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
             let uid = (self.authHelper as! IPFSAuthHelper).param.uid
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-
             let params = ["uid": uid, "path": path]
             self.authHelper.checkExpired()
                 .then{ void -> HivePromise<JSON> in

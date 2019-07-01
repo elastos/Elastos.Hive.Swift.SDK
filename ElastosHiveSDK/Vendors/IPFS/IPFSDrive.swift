@@ -104,7 +104,7 @@ internal class IPFSDrive: HiveDriveHandle {
                 self.authHelper.checkExpired().then{ void -> HivePromise<JSON> in
                     return IPFSAPIs.request(url, .post, param)
                     }.then{ json -> HivePromise<String> in
-                        return IPFSAPIs.getHash(path, self.authHelper)
+                        return IPFSAPIs.getHash("/", self.authHelper)
                     }.then{  hash -> HivePromise<HiveVoid>  in
                         return IPFSAPIs.publish(hash, self.authHelper)
                     }.done{ success in
@@ -178,7 +178,7 @@ internal class IPFSDrive: HiveDriveHandle {
             let promise = HivePromise<HiveFileHandle> { resolver in
                 self.authHelper.checkExpired()
                     .then{ void -> HivePromise<JSON> in
-                        return IPFSAPIs.creatFile(withPath, self.authHelper)
+                        return IPFSAPIs.creatFile(path, self.authHelper)
                     }
                     .then{ json -> HivePromise<String> in
                         return IPFSAPIs.getHash("/", self.authHelper)
@@ -252,7 +252,8 @@ internal class IPFSDrive: HiveDriveHandle {
         let promise = HivePromise<HiveItemInfo> { resolver in
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
             let uid = (self.authHelper as! IPFSAuthHelper).param.uid
-            let param = ["uid": uid, "path": path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!]
+            let path = path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+            let param = ["uid": uid, "path": path]
             self.authHelper.checkExpired()
                 .then{ void -> HivePromise<JSON> in
                     return IPFSAPIs.request(url, .post, param)

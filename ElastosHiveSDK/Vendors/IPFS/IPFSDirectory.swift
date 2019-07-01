@@ -22,7 +22,8 @@ class IPFSDirectory: HiveDirectoryHandle {
         let promise = HivePromise<HiveDirectoryInfo> { resolver in
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
             let uid = (self.authHelper as! IPFSAuthHelper).param.uid
-            let params = ["uid": uid, "path": self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!]
+            let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+            let params = ["uid": uid, "path": path]
             self.authHelper?.checkExpired()
                 .then{ void -> HivePromise<JSON> in
                     return IPFSAPIs.request(url, .post, params)
@@ -55,9 +56,10 @@ class IPFSDirectory: HiveDirectoryHandle {
             if self.pathName == "/" {
                 path = self.pathName + withName
             }
+            path = path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_MKDIR.rawValue
             let uid = (authHelper as! IPFSAuthHelper).param.uid
-            let param = ["uid": uid,"path": path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!]
+            let param = ["uid": uid,"path": path]
             self.authHelper!.checkExpired()
                 .then{ void -> HivePromise<JSON> in
                     return IPFSAPIs.request(url, .post, param)
@@ -101,7 +103,8 @@ class IPFSDirectory: HiveDirectoryHandle {
             if self.pathName == "/" {
                 path = self.pathName + atName
             }
-            let param = ["uid": uid, "path": path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!]
+            path = path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+            let param = ["uid": uid, "path": path]
             self.authHelper?.checkExpired()
                 .then{ json -> HivePromise<JSON> in
                     return IPFSAPIs.request(url, .post, param)
@@ -137,9 +140,10 @@ class IPFSDirectory: HiveDirectoryHandle {
             if self.pathName == "/" {
                 path = self.pathName + withName
             }
+            path = path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             self.authHelper!.checkExpired()
                 .then{ succeed -> HivePromise<JSON> in
-                    return IPFSAPIs.creatFile(path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!,self.authHelper!)
+                    return IPFSAPIs.creatFile(path, self.authHelper!)
                 }
                 .then{ json -> HivePromise<String> in
                     return IPFSAPIs.getHash("/", self.authHelper!)
@@ -180,7 +184,8 @@ class IPFSDirectory: HiveDirectoryHandle {
             if self.pathName == "/" {
                 path = self.pathName + atName
             }
-            let param = ["uid": uid, "path": path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!]
+            path = path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+            let param = ["uid": uid, "path": path]
             self.authHelper?.checkExpired()
                 .then{ void -> HivePromise<JSON> in
                     return IPFSAPIs.request(url, .post, param)
@@ -214,7 +219,7 @@ class IPFSDirectory: HiveDirectoryHandle {
         let promise = HivePromise<HiveChildren> { resolver in
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_LS.rawValue
             let uid = (self.authHelper as! IPFSAuthHelper).param.uid
-            let path = self.pathName
+            let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let param = ["uid": uid, "path": path]
             self.authHelper?.checkExpired()
                 .then{ void -> HivePromise<JSON> in
@@ -244,7 +249,7 @@ class IPFSDirectory: HiveDirectoryHandle {
         let promise = HivePromise<HiveVoid> { resolver in
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_MV.rawValue
             let uid = (authHelper as! IPFSAuthHelper).param.uid
-            let originPath = self.self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+            let originPath = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let dest = newPath.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let params = ["uid": uid,
                           "source": originPath,
@@ -320,7 +325,8 @@ class IPFSDirectory: HiveDirectoryHandle {
         let promise = HivePromise<HiveVoid> { resolver in
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_RM.rawValue
             let uid = (authHelper as! IPFSAuthHelper).param.uid
-            let params = ["uid": uid, "path": self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!, "recursive": true] as [String : Any]
+            let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+            let params = ["uid": uid, "path": path, "recursive": true] as [String : Any]
             self.authHelper?.checkExpired()
                 .then{ void -> HivePromise<JSON> in
                     return IPFSAPIs.request(url, .post, params)
