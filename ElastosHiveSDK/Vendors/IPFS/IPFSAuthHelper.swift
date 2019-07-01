@@ -19,20 +19,20 @@ class IPFSAuthHelper: AuthHelper {
     override func loginAsync(_ authenticator: Authenticator, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
         let promise = HivePromise<HiveVoid> { resolver in
             self.checkExpired().then { padding -> HivePromise<String> in
-                return self.getUID()
-            }.then { (uid) -> HivePromise<String> in
-                return self.getPeerId(uid)
-            }.then { (peerId) -> HivePromise<String> in
-                return self.getHash(peerId)
-            }.then { (hash) -> HivePromise<HiveVoid> in
-                return self.logIn(hash)
-            }.done { padding in
-                let padding = HiveVoid();
-                resolver.fulfill(padding)
-                Log.d(TAG(), "login succeed")
-            }.catch { (error) in
-                resolver.reject(error)
-                Log.e(TAG(), "login falied: %s", error.localizedDescription)
+                return self.getUID(self)
+                }.then { (uid) -> HivePromise<String> in
+                    return self.getPeerId(uid)
+                }.then { (peerId) -> HivePromise<String> in
+                    return self.getHash(peerId)
+                }.then { (hash) -> HivePromise<HiveVoid> in
+                    return self.logIn(hash)
+                }.done { padding in
+                    let padding = HiveVoid();
+                    resolver.fulfill(padding)
+                    Log.d(TAG(), "login succeed")
+                }.catch { (error) in
+                    resolver.reject(error)
+                    Log.e(TAG(), "login falied: %s", error.localizedDescription)
             }
         }
         return promise
@@ -48,10 +48,10 @@ class IPFSAuthHelper: AuthHelper {
     }
 
     override func checkExpired() -> HivePromise<HiveVoid> {
-       return IPFSURL.validURL()
+        return IPFSURL.validURL()
     }
 
-    private func getUID() -> HivePromise<String> {
+    private func getUID(_ authHelper: AuthHelper) -> HivePromise<String> {
         let uid = KeyChainStore.restoreUid(.hiveIPFS)
         guard uid == "" else {
             let promise = HivePromise<String> { resolver in
@@ -146,4 +146,5 @@ class IPFSAuthHelper: AuthHelper {
         }
         return promise
     }
+
 }

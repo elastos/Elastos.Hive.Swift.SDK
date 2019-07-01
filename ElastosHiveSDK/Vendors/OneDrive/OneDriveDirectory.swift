@@ -26,15 +26,15 @@ class OneDriveDirectory: HiveDirectoryHandle {
                 url  = OneDriveURL.API + "/root:\(ecurl)"
             }
             self.authHelper!.checkExpired()
-                .then({ (void) -> HivePromise<JSON> in
+                .then{ void -> HivePromise<JSON> in
                     return OneDriveHttpHelper
                         .request(url: url, method: .get,
                                  parameters: nil,
                                  encoding: JSONEncoding.default,
                                  headers: OneDriveHttpHeader.headers(self.authHelper!),
                                  avalidCode: 200, self.authHelper!)
-                })
-                .done({ (jsonData) in
+                }
+                .done{ jsonData in
                     let dirId = jsonData["id"].stringValue
                     let dic = [HiveDirectoryInfo.itemId: dirId]
                     let directoryInfo = HiveDirectoryInfo(dic)
@@ -42,13 +42,13 @@ class OneDriveDirectory: HiveDirectoryHandle {
                     handleBy.didSucceed(directoryInfo)
                     resolver.fulfill(directoryInfo)
                     Log.e(TAG(), "Acquire directory last info succeeded: %s", directoryInfo.description)
-                })
-                .catch({ (error) in
+                }
+                .catch{ error in
                     let error = HiveError.failue(des: error.localizedDescription)
                     Log.e(TAG(), "Acquiring directory last info falied: %s", error.localizedDescription)
                     resolver.reject(error)
                     handleBy.runError(error)
-                })
+            }
         }
         return promise
     }
@@ -70,7 +70,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                     url = OneDriveURL.API + "/root:\(ecUrl):/children"
                 }
                 self.authHelper!.checkExpired()
-                    .then({ (void) -> HivePromise<JSON> in
+                    .then{ void -> HivePromise<JSON> in
                         return OneDriveHttpHelper
                             .request(url: url,
                                      method: .post,
@@ -78,8 +78,8 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                      encoding: JSONEncoding.default,
                                      headers: OneDriveHttpHeader.headers(self.authHelper!),
                                      avalidCode: 201, self.authHelper!)
-                    })
-                    .done({ (jsonData) in
+                    }
+                    .done{ jsonData in
                         let dirId = jsonData["id"].stringValue
                         let dic = [HiveDirectoryInfo.itemId: dirId]
                         let dirInfo = HiveDirectoryInfo(dic)
@@ -95,13 +95,13 @@ class OneDriveDirectory: HiveDirectoryHandle {
 
                         handleBy.didSucceed(dirHandle)
                         resolver.fulfill(dirHandle)
-                    })
-                    .catch({ (error) in
+                    }
+                    .catch{ error in
                         let error = HiveError.failue(des: error.localizedDescription)
                         Log.e(TAG(), "Creating directory %s failed: %s", withName, error.localizedDescription)
                         resolver.reject(error)
                         handleBy.runError(error)
-                    })
+                }
             }
             return promise
     }
@@ -120,15 +120,15 @@ class OneDriveDirectory: HiveDirectoryHandle {
                 let ecUrl = path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                 let url = OneDriveURL.API + "/root:\(ecUrl)"
                 self.authHelper!.checkExpired()
-                    .then({ (void) -> HivePromise<JSON> in
+                    .then{ void -> HivePromise<JSON> in
                         return OneDriveHttpHelper
                             .request(url: url, method: .get,
                                      parameters: nil,
                                      encoding: JSONEncoding.default,
                                      headers: OneDriveHttpHeader.headers(self.authHelper!),
                                      avalidCode: 200, self.authHelper!)
-                    })
-                    .done({ (jsonData) in
+                    }
+                    .done{ jsonData in
                         let dirId = jsonData["id"].stringValue
                         let dic = [HiveDirectoryInfo.itemId: dirId]
                         let dirInfo = HiveDirectoryInfo(dic)
@@ -142,13 +142,13 @@ class OneDriveDirectory: HiveDirectoryHandle {
                         resolver.fulfill(dirHandle)
 
                         Log.d(TAG(), "Acquire subdirectory %s handle succeeded.", atName)
-                    })
-                    .catch({ (error) in
+                    }
+                    .catch{ error in
                         let error = HiveError.failue(des: error.localizedDescription)
                         Log.e(TAG(), "Acquiring subdirectory %s handle falied: %s", atName, error.localizedDescription)
                         resolver.reject(error)
                         handleBy.runError(error)
-                    })
+                }
             }
             return promise
     }
@@ -167,15 +167,15 @@ class OneDriveDirectory: HiveDirectoryHandle {
             let url = OneDriveURL.API + "/root:\(ecUrl):/content"
             let params = ["@microsoft.graph.conflictBehavior": "fail"]
             self.authHelper!.checkExpired()
-                .then({ (void) -> HivePromise<JSON> in
+                .then{ void -> HivePromise<JSON> in
                     return OneDriveHttpHelper
                         .request(url: url, method: .put,
                                  parameters: params,
                                  encoding: JSONEncoding.default,
                                  headers: OneDriveHttpHeader.headers(self.authHelper!),
                                  avalidCode: 201, self.authHelper!)
-                })
-                .done({ (jsonData) in
+                }
+                .done{ jsonData in
                     let fileId = jsonData["id"].stringValue
                     let dic = [HiveFileInfo.itemId: fileId]
                     let fileInfo = HiveFileInfo(dic)
@@ -189,13 +189,13 @@ class OneDriveDirectory: HiveDirectoryHandle {
                     resolver.fulfill(fileHandle)
 
                     Log.d(TAG(), "Creating a file %s under this directory succeeded", withName)
-                })
-                .catch({ (error) in
+                }
+                .catch{ error in
                     let error = HiveError.failue(des: error.localizedDescription)
                     Log.e(TAG(), "Creating file %s falied: %s", withName, error.localizedDescription)
                     resolver.reject(error)
                     handleBy.runError(error)
-                })
+            }
         }
         return promise
     }
@@ -214,15 +214,15 @@ class OneDriveDirectory: HiveDirectoryHandle {
                 let ecUrl = path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                 let url = OneDriveURL.API + "/root:\(ecUrl)"
                 self.authHelper!.checkExpired()
-                    .then({ (void) -> HivePromise<JSON> in
+                    .then{ void -> HivePromise<JSON> in
                         return OneDriveHttpHelper
                             .request(url: url, method: .get,
                                      parameters: nil,
                                      encoding: JSONEncoding.default,
                                      headers: OneDriveHttpHeader.headers(self.authHelper!),
                                      avalidCode: 200, self.authHelper!)
-                    })
-                    .done({ (jsonData) in
+                    }
+                    .done{ jsonData in
                         let fileId = jsonData["id"].stringValue
                         let dic = [HiveFileInfo.itemId: fileId]
                         let fileInfo = HiveFileInfo(dic)
@@ -236,13 +236,13 @@ class OneDriveDirectory: HiveDirectoryHandle {
                         resolver.fulfill(fileHandle)
 
                         Log.d(TAG(), "Acquire file %s handle succeeded.", atName)
-                    })
-                    .catch({ (error) in
+                    }
+                    .catch{ error in
                         let error = HiveError.failue(des: error.localizedDescription)
                         Log.e(TAG(), "Acquiring file %s handle falied: %s", atName, error.localizedDescription)
                         resolver.reject(error)
                         handleBy.runError(error)
-                    })
+                }
             }
             return promise
     }
@@ -259,27 +259,26 @@ class OneDriveDirectory: HiveDirectoryHandle {
                 url = "\(OneDriveURL.API)/root/children"
             }
             self.authHelper!.checkExpired()
-                .then({ (void) -> HivePromise<JSON> in
+                .then{ void -> HivePromise<JSON> in
                     return OneDriveHttpHelper
                         .request(url: url, method: .get,
                                  parameters: nil,
                                  encoding: JSONEncoding.default,
                                  headers: OneDriveHttpHeader.headers(self.authHelper!),
                                  avalidCode: 200, self.authHelper!)
-                })
-                .done({ (jsonData) in
+                }
+                .done{ jsonData in
                     let children = HiveChildren()
-                    // todo
                     children.installValue(jsonData)
                     handleBy.didSucceed(children)
                     resolver.fulfill(children)
-                })
-                .catch({ (error) in
+                }
+                .catch{ error in
                     let error = HiveError.failue(des: error.localizedDescription)
                     Log.e(TAG(), "Acquiring children infos under this directory falied: %s", error.localizedDescription)
                     resolver.reject(error)
                     handleBy.runError(error)
-                })
+            }
         }
         return promise
     }
@@ -297,24 +296,24 @@ class OneDriveDirectory: HiveDirectoryHandle {
                 "name": self.name!,
                 "@microsoft.graph.conflictBehavior": "fail"]
             self.authHelper!.checkExpired()
-                .then({ (void) -> HivePromise<JSON> in
+                .then{ void -> HivePromise<JSON> in
                     return OneDriveHttpHelper
                         .request(url: url, method: .patch,
                                  parameters: params,
                                  encoding: JSONEncoding.default,
                                  headers: OneDriveHttpHeader.headers(self.authHelper!),
                                  avalidCode: 200, self.authHelper!)
-                })
-                .done({ (jsonData) in
+                }
+                .done{ jsonData in
                     resolver.fulfill(HiveVoid())
                     handleBy.didSucceed(HiveVoid())
-                })
-                .catch({ (error) in
+                }
+                .catch{ error in
                     let error = HiveError.failue(des: error.localizedDescription)
                     Log.e(TAG(), "Moving this directory to %s failed: %s", newPath, error.localizedDescription)
                     resolver.reject(error)
                     handleBy.runError(error)
-                })
+            }
         }
         return promise
     }
@@ -335,29 +334,29 @@ class OneDriveDirectory: HiveDirectoryHandle {
                 "name": self.name as Any,
                 "@microsoft.graph.conflictBehavior": "fail"]
             self.authHelper!.checkExpired()
-                .then({ (void) -> HivePromise<JSON> in
+                .then{ void -> HivePromise<JSON> in
                     return OneDriveHttpHelper
                         .request(url: url, method: .post,
                                  parameters: params,
                                  encoding: JSONEncoding.default,
                                  headers: OneDriveHttpHeader.headers(self.authHelper!),
                                  avalidCode: 202, self.authHelper!)
-                })
-                .then({ (jsonData) -> HivePromise<HiveVoid> in
+                }
+                .then{ jsonData -> HivePromise<HiveVoid> in
                     let urlString = jsonData["Location"].stringValue
                     return OneDriveHttpHelper.pollingCopyresult(urlString)
-                })
-                .done({ (void) in
+                }
+                .done{ void in
                     resolver.fulfill(HiveVoid())
                     handleBy.didSucceed(HiveVoid())
                     Log.d(TAG(), "copyTo this directory to %s succeeded", newPath)
-                })
-                .catch({ (error) in
+                }
+                .catch{ error in
                     let error = HiveError.failue(des: error.localizedDescription)
                     Log.e(TAG(), "Copying this directory to %s falied: %s", newPath, error.localizedDescription)
                     resolver.reject(error)
                     handleBy.runError(error)
-                })
+            }
         }
         return promise
     }
@@ -371,15 +370,15 @@ class OneDriveDirectory: HiveDirectoryHandle {
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let url: String = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):/\(path)"
             self.authHelper!.checkExpired()
-                .then({ (void) -> HivePromise<JSON> in
+                .then{ void -> HivePromise<JSON> in
                     return OneDriveHttpHelper
                         .request(url: url, method: .delete,
                                  parameters: nil,
                                  encoding: JSONEncoding.default,
                                  headers: OneDriveHttpHeader.headers(self.authHelper!),
                                  avalidCode: 204, self.authHelper!)
-                })
-                .done({ (jsonData) in
+                }
+                .done{ jsonData in
                     self.pathName = ""
                     self.drive = nil
                     self.directoryId = ""
@@ -387,13 +386,13 @@ class OneDriveDirectory: HiveDirectoryHandle {
                     resolver.fulfill(HiveVoid())
                     handleBy.didSucceed(HiveVoid())
                     Log.e(TAG(), "Delete the directory item succeeded")
-                })
-                .catch({ (error) in
+                }
+                .catch{ error in
                     let error = HiveError.failue(des: error.localizedDescription)
                     Log.e(TAG(), "Delete this directory item failed: %s", error.localizedDescription)
                     resolver.reject(error)
                     handleBy.runError(error)
-                })
+            }
         }
         return promise
     }

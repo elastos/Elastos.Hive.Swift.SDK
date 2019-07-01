@@ -31,15 +31,15 @@ internal class OneDriveFile: HiveFileHandle {
                 url  = OneDriveURL.API + "/root:\(ecurl)"
             }
             self.authHelper.checkExpired()
-                .then({ (viod) -> HivePromise<JSON> in
+                .then{ viod -> HivePromise<JSON> in
                     return OneDriveHttpHelper
                         .request(url: url,
                                  method: .get,parameters: nil,
                                  encoding: JSONEncoding.default,
                                  headers: OneDriveHttpHeader.headers(self.authHelper),
                                  avalidCode: 200, self.authHelper)
-                })
-                .done({ (jsonData) in
+                }
+                .done{ jsonData in
                     let fileId = jsonData["id"].stringValue
                     let dic = [HiveFileInfo.itemId: fileId]
                     let fileInfo = HiveFileInfo(dic)
@@ -47,12 +47,12 @@ internal class OneDriveFile: HiveFileHandle {
                     handleBy.didSucceed(fileInfo)
                     resolver.fulfill(fileInfo)
                     Log.d(TAG(), "Acquiring last file information succeeded: %s", fileInfo.description)
-                })
-                .catch({ (error) in
+                }
+                .catch{ error in
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
                     Log.e(TAG(), "Acquiring last file info failed: %s", error.localizedDescription)
-                })
+            }
         }
         return promise
     }
@@ -70,24 +70,24 @@ internal class OneDriveFile: HiveFileHandle {
                 "name": self.name!,
                 "@microsoft.graph.conflictBehavior": "fail"]
             self.authHelper.checkExpired()
-                .then({ (void) -> HivePromise<JSON> in
+                .then{ void -> HivePromise<JSON> in
                     return OneDriveHttpHelper
                         .request(url: url, method: .patch,
                                  parameters: params,
                                  encoding: JSONEncoding.default,
                                  headers: OneDriveHttpHeader.headers(self.authHelper),
                                  avalidCode: 200, self.authHelper)
-                })
-                .done({ (jsonData) in
+                }
+                .done{ jsonData in
                     self.pathName = newPath + self.name!
                     resolver.fulfill(HiveVoid())
                     handleBy.didSucceed(HiveVoid())
-                })
-                .catch({ (error) in
+                }
+                .catch{ error in
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
                     Log.e(TAG(), error.localizedDescription)
-                })
+            }
         }
         return promise
     }
@@ -108,28 +108,28 @@ internal class OneDriveFile: HiveFileHandle {
                 "name": self.name as Any,
                 "@microsoft.graph.conflictBehavior": "fail"]
             self.authHelper.checkExpired()
-                .then({ (void) -> HivePromise<JSON> in
+                .then{ void -> HivePromise<JSON> in
                     return OneDriveHttpHelper
                         .request(url: url, method: .post,
                                  parameters: params,
                                  encoding: JSONEncoding.default,
                                  headers: OneDriveHttpHeader.headers(self.authHelper),
                                  avalidCode: 202, self.authHelper)
-                })
-                .then({ (jsonData) -> HivePromise<HiveVoid> in
+                }
+                .then{ jsonData -> HivePromise<HiveVoid> in
                     let urlString = jsonData["Location"].stringValue
                     return OneDriveHttpHelper.pollingCopyresult(urlString)
-                })
-                .done({ (void) in
+                }
+                .done{ void in
                     resolver.fulfill(HiveVoid())
                     handleBy.didSucceed(HiveVoid())
                     Log.d(TAG(), "Copying this file to %s succeeded", newPath)
-                })
-                .catch({ (error) in
+                }
+                .catch{ error in
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
                     Log.e(TAG(),"Copying this file to %s failed", error.localizedDescription)
-                })
+            }
         }
         return promise
     }
@@ -143,15 +143,15 @@ internal class OneDriveFile: HiveFileHandle {
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let url: String = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):/\(path)"
             self.authHelper.checkExpired()
-                .then({ (void) -> HivePromise<JSON> in
+                .then{ void -> HivePromise<JSON> in
                     return OneDriveHttpHelper
                         .request(url: url, method: .delete,
                                  parameters: nil,
                                  encoding: JSONEncoding.default,
                                  headers: OneDriveHttpHeader.headers(self.authHelper),
                                  avalidCode: 204, self.authHelper)
-                })
-                .done({ (jsonData) in
+                }
+                .done{ jsonData in
                     self.pathName = ""
                     self.drive = nil
                     self.fileId = ""
@@ -159,12 +159,12 @@ internal class OneDriveFile: HiveFileHandle {
                     resolver.fulfill(HiveVoid())
                     handleBy.didSucceed(HiveVoid())
                     Log.d(TAG(), "Deleting the file item succeeded")
-                })
-                .catch({ (error) in
+                }
+                .catch{ error in
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
                     Log.e(TAG(), "Deleting the file item falied: %s", error.localizedDescription)
-                })
+            }
         }
         return promise
     }
@@ -197,22 +197,22 @@ internal class OneDriveFile: HiveFileHandle {
                 return
             }
             self.authHelper.checkExpired()
-                .then({ (void) -> HivePromise<Data> in
+                .then{ void -> HivePromise<Data> in
                     return OneDriveHttpHelper.getRemoteFile(authHelper: self.authHelper, url: url)
-                })
-                .done({ (jsonData) in
+                }
+                .done{ jsonData in
                     _ = CacheHelper.saveCache(.oneDrive, cachePath, data: jsonData)
                     let readData = CacheHelper.readCache(.oneDrive, cachePath, self.cursor, length)
                     self.cursor += UInt64(readData.count)
                     Log.d(TAG(), "readData succeed")
                     resolver.fulfill(readData)
                     handleBy.didSucceed(readData)
-                })
-                .catch({ (error) in
+                }
+                .catch{ error in
                     Log.e(TAG(), "readData falied: %s", error.localizedDescription)
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
-                })
+            }
         }
         return promise
     }
@@ -235,22 +235,22 @@ internal class OneDriveFile: HiveFileHandle {
                 return
             }
             self.authHelper.checkExpired()
-                .then({ (void) -> HivePromise<Data> in
+                .then{ void -> HivePromise<Data> in
                     return OneDriveHttpHelper.getRemoteFile(authHelper: self.authHelper, url: url)
-                })
-                .done({ (jsonData) in
+                }
+                .done{ jsonData in
                     _ = CacheHelper.saveCache(.oneDrive, cachePath, data: jsonData)
                     let readData = CacheHelper.readCache(.oneDrive, cachePath, self.cursor, length)
                     self.cursor += UInt64(readData.count)
                     Log.d(TAG(), "readData succeed")
                     resolver.fulfill(readData)
                     handleBy.didSucceed(readData)
-                })
-                .catch({ (error) in
+                }
+                .catch{ error in
                     Log.e(TAG(), "readData falied: %s", error.localizedDescription)
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
-                })
+            }
         }
         return promise
     }
@@ -273,22 +273,22 @@ internal class OneDriveFile: HiveFileHandle {
                 return
             }
             self.authHelper.checkExpired()
-                .then({ (void) -> HivePromise<Data> in
+                .then{ (void) -> HivePromise<Data> in
                     return OneDriveHttpHelper.getRemoteFile(authHelper: self.authHelper, url: url)
-                })
-                .done({ (jsonData) in
+                }
+                .done{ jsonData in
                     _ = CacheHelper.saveCache(.oneDrive, cachePath, data: jsonData)
                     let length = CacheHelper.writeCache(.oneDrive, cachePath, data: withData, self.cursor)
                     self.cursor += UInt64(length)
                     Log.d(TAG(), "writeData succeed")
                     resolver.fulfill(length)
                     handleBy.didSucceed(length)
-                })
-                .catch({ (error) in
+                }
+                .catch{ error in
                     Log.e(TAG(), "writeData falied: %s", error.localizedDescription)
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
-                })
+            }
         }
         return promise
     }
@@ -311,22 +311,22 @@ internal class OneDriveFile: HiveFileHandle {
                 return
             }
             self.authHelper.checkExpired()
-                .then({ (void) -> HivePromise<Data> in
+                .then{ void -> HivePromise<Data> in
                     return OneDriveHttpHelper.getRemoteFile(authHelper: self.authHelper, url: url)
-                })
-                .done({ (jsonData) in
+                }
+                .done{ jsonData in
                     _ = CacheHelper.saveCache(.oneDrive, cachePath, data: jsonData)
                     let length = CacheHelper.writeCache(.oneDrive, cachePath, data: withData, self.cursor)
                     self.cursor += UInt64(length)
                     Log.d(TAG(), "writeData succeed")
                     resolver.fulfill(length)
                     handleBy.didSucceed(length)
-                })
-                .catch({ (error) in
+                }
+                .catch{ error in
                     Log.e(TAG(), "writeData falied: %s", error.localizedDescription)
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
-                })
+            }
         }
         return promise
     }
@@ -338,7 +338,7 @@ internal class OneDriveFile: HiveFileHandle {
             let headers = ["Authorization": "bearer \(accesstoken)", "Content-Type": "text/plain"]
             let data = CacheHelper.uploadFile(.oneDrive, url.md5)
             self.authHelper.checkExpired()
-                .then({ (void) -> HivePromise<HiveVoid> in
+                .then{ void -> HivePromise<HiveVoid> in
                     return OneDriveHttpHelper
                         .upload(data: data,
                                 to: url,
@@ -346,17 +346,17 @@ internal class OneDriveFile: HiveFileHandle {
                                 headers: headers,
                                 avalidCode: 201,
                                 self.authHelper)
-                })
-                .done({ (jsonData) in
+                }
+                .done{ jsonData in
                     CacheHelper.uploadCache(.oneDrive, url.md5)
                     Log.d(TAG(), "writeData succeed")
                     resolver.fulfill(HiveVoid())
-                })
-                .catch({ (error) in
+                }
+                .catch{ error in
                     let error = HiveError.failue(des: error.localizedDescription)
                     Log.e(TAG(), "writeData falied: %s", error.localizedDescription)
                     resolver.reject(error)
-                })
+            }
         }
         return promise
     }

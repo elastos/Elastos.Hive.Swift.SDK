@@ -47,7 +47,7 @@ public class OneDriveDrive: HiveDriveHandle {
                     Log.e(TAG(), "Acquireing last drve information falied: %s", error.localizedDescription)
                     resolver.reject(error)
                     handleBy.runError(error)
-                }
+            }
         }
         return promise
     }
@@ -87,7 +87,7 @@ public class OneDriveDrive: HiveDriveHandle {
                         Log.e(TAG(), "Acquiring root directory instance falied: %s", error.localizedDescription)
                         resolver.reject(error)
                         handleBy.runError(error)
-                    }
+                }
             }
             return promise
     }
@@ -133,7 +133,7 @@ public class OneDriveDrive: HiveDriveHandle {
                         Log.e(TAG(), "createDirectory falied: %s", error.localizedDescription)
                         resolver.reject(error)
                         handleBy.runError(error)
-                    }
+                }
             }
             return promise
     }
@@ -172,7 +172,7 @@ public class OneDriveDrive: HiveDriveHandle {
                         Log.e(TAG(), "Acquiring directory %s instance failed", atPath, error.localizedDescription)
                         resolver.reject(error)
                         handleBy.runError(error)
-                    }
+                }
             }
             return promise
     }
@@ -211,7 +211,7 @@ public class OneDriveDrive: HiveDriveHandle {
                         Log.e(TAG(), "Creating file %s on remote OneDrive failed %s", withPath, error.localizedDescription)
                         resolver.reject(error)
                         handleBy.runError(error)
-                    }
+                }
             }
             return promise
     }
@@ -250,7 +250,7 @@ public class OneDriveDrive: HiveDriveHandle {
                         Log.e(TAG(), "Acquiring file %s instance failed: %s", atPath, error.localizedDescription)
                         resolver.reject(error)
                         handleBy.runError(error)
-                    }
+                }
             }
             return promise
     }
@@ -290,7 +290,7 @@ public class OneDriveDrive: HiveDriveHandle {
                     Log.e(TAG(), "Acquireing item info information falied: %s", error.localizedDescription)
                     resolver.reject(error)
                     handleBy.runError(error)
-                }
+            }
         }
         return promise
     }

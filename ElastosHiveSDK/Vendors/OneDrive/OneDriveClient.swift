@@ -90,7 +90,7 @@ internal class OneDriveClient: HiveClientHandle {
                     Log.e(TAG(), "Acquire last client information failed: %s", error.localizedDescription)
                     resolver.reject(error)
                     handleBy.runError(error)
-                }
+            }
         }
         return promise
     }
@@ -138,7 +138,7 @@ internal class OneDriveClient: HiveClientHandle {
                     Log.e(TAG(), "Acquiring default drive instance failed: %s", error.localizedDescription)
                     resolver.reject(error)
                     handleBy.runError(error)
-                }
+            }
         }
         return promise
     }

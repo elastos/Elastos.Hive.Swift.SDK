@@ -13,7 +13,7 @@ class HiveIpfsDirectoryTests: XCTestCase, Authenticator{
     let timeout: Double = 600.0
 
     override func setUp() {
-        hiveParams = DriveParameter.createForIpfsDrive("uid-37dd2923-baf6-4aae-bc28-d4e5fd92a7b0", "/")
+        hiveParams = DriveParameter.createForIpfsDrive("uid-6516f0c7-d5bb-431a-9f12-1f8d8e923642")
         HiveClientHandle.createInstance(hiveParams!)
         hiveClient = HiveClientHandle.sharedInstance(type: .hiveIPFS)
     }

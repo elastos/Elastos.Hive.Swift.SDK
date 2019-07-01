@@ -10,7 +10,7 @@ internal class SimpleAuthServer: NSObject {
     func startRun(_ port: UInt16) {
         try? httpServer.start(port as in_port_t)
     }
-
+    
     func getCode() -> HivePromise<String> {
         let promise = HivePromise<String>{ resolver in
             httpServer[""] = { request in

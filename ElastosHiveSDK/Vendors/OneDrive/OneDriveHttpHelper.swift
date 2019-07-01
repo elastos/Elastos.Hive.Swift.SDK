@@ -87,11 +87,11 @@ class OneDriveHttpHelper: NSObject {
                         resolver.reject(error)
                         return
                     }else {
-                        self.pollingCopyresult(url).done({ (void) in
+                        self.pollingCopyresult(url).done{ (void) in
                             resolver.fulfill(HiveVoid())
-                        }).catch({ (error) in
-                            resolver.reject(error)
-                        })
+                            }.catch{ (error) in
+                                resolver.reject(error)
+                        }
                     }
             }
         }
