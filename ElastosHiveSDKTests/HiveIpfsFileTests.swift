@@ -39,7 +39,7 @@ class HiveIpfsFileTests: XCTestCase, Authenticator{
 
     func testB_creatFile() {
 
-        timeTest = ConvertHelper.getCurrentTime()
+        timeTest = Timestamp.getTimeAtNow()
         lock = XCTestExpectation(description: "wait for test2_creatFile")
         self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveFileHandle> in
             return drive.createFile(withPath: "/Ipfs_testB_creatFile_\(timeTest!)")
