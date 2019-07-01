@@ -61,15 +61,15 @@ internal class OneDriveClient: HiveClientHandle {
             }
             
             self.authHelper.checkExpired()
-                .then({ (void) -> HivePromise<JSON> in
+                .then { void -> HivePromise<JSON> in
                     return OneDriveHttpHelper
                         .request(url: OneDriveURL.API,
                                  method: .get,parameters: nil,
                                  encoding: JSONEncoding.default,
                                  headers: OneDriveHttpHeader.headers(self.authHelper),
                                  avalidCode: 200, self.authHelper)
-                })
-                .done({ (jsonData) in
+                }
+                .done { jsonData in
                     let owner = JSON(jsonData["owner"])
                     let user = JSON(owner["user"])
                     let dic = [
@@ -84,13 +84,13 @@ internal class OneDriveClient: HiveClientHandle {
                     resolver.fulfill(clientInfo)
 
                     Log.d(TAG(), "Acquired client information from remote drive: %s", clientInfo.debugDescription);
-                })
-                .catch({ (error) in
+                }
+                .catch { error in
                     let error = HiveError.failue(des: error.localizedDescription)
                     Log.e(TAG(), "Acquire last client information failed: %s", error.localizedDescription)
                     resolver.reject(error)
                     handleBy.runError(error)
-                })
+                }
         }
         return promise
     }
@@ -116,15 +116,15 @@ internal class OneDriveClient: HiveClientHandle {
                 return
             }
             self.authHelper.checkExpired()
-                .then({ (void) -> HivePromise<JSON> in
+                .then { void -> HivePromise<JSON> in
                     return OneDriveHttpHelper
                         .request(url: OneDriveURL.API + "/root",
                                  method: .get,parameters: nil,
                                  encoding: JSONEncoding.default,
                                  headers: OneDriveHttpHeader.headers(self.authHelper),
                                  avalidCode: 200, self.authHelper)
-                })
-                .done({ (jsonData) in
+                }
+                .done { jsonData in
                     let driveId = jsonData["id"].stringValue
                     let dic = [HiveDriveInfo.driveId: driveId]
                     let driveInfo = HiveDriveInfo(dic)
@@ -132,15 +132,14 @@ internal class OneDriveClient: HiveClientHandle {
                     dirHandle.lastInfo = driveInfo
                     resolver.fulfill(dirHandle)
                     Log.d(TAG(), "Acquired default drive instance succeeded: %s", dirHandle.debugDescription);
-                })
-                .catch({ (error) in
+                }
+                .catch { error in
                     let error = HiveError.failue(des: error.localizedDescription)
                     Log.e(TAG(), "Acquiring default drive instance failed: %s", error.localizedDescription)
                     resolver.reject(error)
                     handleBy.runError(error)
-                })
+                }
         }
         return promise
     }
-
 }
