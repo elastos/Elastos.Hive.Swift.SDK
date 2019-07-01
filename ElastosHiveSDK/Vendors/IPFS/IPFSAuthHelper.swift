@@ -61,21 +61,15 @@ class IPFSAuthHelper: AuthHelper {
         }
         let promise = HivePromise<String> { resolver in
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_UID_NEW.rawValue
-            Alamofire.request(url,
-                              method: .post,
-                              parameters: nil,
-                              encoding: JSONEncoding.default,
-                              headers: nil)
-                .responseJSON(completionHandler: { (dataResponse) in
-                    guard dataResponse.response?.statusCode == 200 else {
-                        let error = HiveError.failue(des: dataResponse.toString())
-                        resolver.reject(error)
-                        return
-                    }
-                    let jsonData = JSON(dataResponse.result.value as Any)
+            IPFSAPIs.request(url, .post, nil)
+                .done { jsonData in
                     let uid = jsonData["uid"].stringValue
                     resolver.fulfill(uid)
-                })
+                }
+                .catch { error in
+                    let error = HiveError.failue(des: error.localizedDescription)
+                    resolver.reject(error)
+            }
         }
         return promise
     }
@@ -84,21 +78,15 @@ class IPFSAuthHelper: AuthHelper {
         let promise = HivePromise<String> { resolver in
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_UID_INFO.rawValue
             let param = ["uid": uid]
-            Alamofire.request(url,
-                              method: .post,
-                              parameters: param,
-                              encoding: URLEncoding.queryString,
-                              headers: nil)
-                .responseJSON(completionHandler: { (dataResponse) in
-                    guard dataResponse.response?.statusCode == 200 else {
-                        let error = HiveError.failue(des: dataResponse.toString())
-                        resolver.reject(error)
-                        return
-                    }
-                    let jsonData = JSON(dataResponse.result.value as Any)
+            IPFSAPIs.request(url, .post, param)
+                .done{ jsonData in
                     let peerId = jsonData["PeerID"].stringValue
                     resolver.fulfill(peerId)
-                })
+                }
+                .catch{ error in
+                    let error = HiveError.failue(des: error.localizedDescription)
+                    resolver.reject(error)
+            }
         }
         return promise
     }
@@ -106,21 +94,15 @@ class IPFSAuthHelper: AuthHelper {
     private func getHash(_ peerId: String) -> HivePromise<String> {
         let promise = HivePromise<String> { resolver in
             let url = URL_POOL[validIp] + "/api/v0/name/resolve" + "?" + "arg=" + peerId
-            Alamofire.request(url,
-                              method: .get,
-                              parameters: nil,
-                              encoding: JSONEncoding.default,
-                              headers: nil)
-                .responseJSON(completionHandler: { (dataResponse) in
-                    guard dataResponse.response?.statusCode == 200 else {
-                        let error = HiveError.failue(des: dataResponse.toString())
-                        resolver.reject(error)
-                        return
-                    }
-                    let jsonData = JSON(dataResponse.result.value as Any)
+            IPFSAPIs.request(url, .get, nil)
+                .done{ jsonData in
                     let hash = jsonData["Path"].stringValue
                     resolver.fulfill(hash)
-                })
+                }
+                .catch{ error in
+                    let error = HiveError.failue(des: error.localizedDescription)
+                    resolver.reject(error)
+            }
         }
         return promise
     }
@@ -131,18 +113,14 @@ class IPFSAuthHelper: AuthHelper {
             let uid = KeyChainStore.restoreUid(.hiveIPFS)
             param.uid = uid
             let param = ["uid": uid, "hash": hash]
-            Alamofire.request(url,
-                              method: .post,
-                              parameters: param,
-                              encoding: URLEncoding.queryString, headers: nil)
-                .responseJSON(completionHandler: { (dataResponse) in
-                    guard dataResponse.response?.statusCode == 200 else{
-                        let error = HiveError.failue(des: dataResponse.toString())
-                        resolver.reject(error)
-                        return
-                    }
+            IPFSAPIs.request(url, .post, param)
+                .done{ json in
                     resolver.fulfill(HiveVoid())
-                })
+                }
+                .catch{ error in
+                    let error = HiveError.failue(des: error.localizedDescription)
+                    resolver.reject(error)
+            }
         }
         return promise
     }
