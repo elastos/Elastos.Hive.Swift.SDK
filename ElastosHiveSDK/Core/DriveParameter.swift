@@ -10,7 +10,7 @@ public class DriveParameter: NSObject {
         return OneDriveParameter(clientId, scope, redirectUrl)
     }
 
-    public static func createForIpfsDrive(_ uid: String, _ path: String) -> DriveParameter {
-        return IPFSParameter(uid, path)
+    public static func createForIpfsDrive(_ uid: String) -> DriveParameter {
+        return IPFSParameter(uid)
     }
 }

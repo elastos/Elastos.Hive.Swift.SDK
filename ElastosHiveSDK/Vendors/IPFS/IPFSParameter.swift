@@ -4,7 +4,6 @@ import Foundation
 public class IPFSParameter: DriveParameter {
     internal typealias authEntryType = NullEntry
     var uid: String
-    let path: String
 
     public override func driveType() -> DriveType {
         return .hiveIPFS
@@ -14,9 +13,8 @@ public class IPFSParameter: DriveParameter {
         return NullEntry()
     }
 
-    public init(_ uid: String, _ path: String) {
+    public init(_ uid: String) {
         self.uid = uid
-        self.path = path
         super.init()
         KeyChainStore.writebackForIpfs(.hiveIPFS, uid)
     }
