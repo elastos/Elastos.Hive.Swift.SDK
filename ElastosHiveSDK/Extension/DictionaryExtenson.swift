@@ -1,5 +1,5 @@
 
-import UIKit
+import Foundation
 
 extension Dictionary {
     var queryString: String {

@@ -1,4 +1,4 @@
-import UIKit
+import Foundation
 import Alamofire
 
 internal enum HIVE_SUB_Url: String {
