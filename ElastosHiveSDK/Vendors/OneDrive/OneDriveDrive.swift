@@ -243,6 +243,9 @@ public class OneDriveDrive: HiveDriveHandle {
                         fileHandle.drive = self
                         handleBy.didSucceed(fileHandle)
                         resolver.fulfill(fileHandle)
+                        let pathName = ("/" + PathExtracter(atPath).baseNamePart())
+                        let url = OneDriveURL(pathName, "content").compose()
+                        _ = CacheHelper.clearCache(.oneDrive, url.md5)
                         Log.d(TAG(), "Acquiring file %s instance succeeded", atPath)
                     }
                     .catch { error in
