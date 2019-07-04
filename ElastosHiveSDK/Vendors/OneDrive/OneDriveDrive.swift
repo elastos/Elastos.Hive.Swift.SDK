@@ -113,7 +113,7 @@ public class OneDriveDrive: HiveDriveHandle {
                                      parameters: params,
                                      encoding: JSONEncoding.default,
                                      headers: OneDriveHttpHeader.headers(self.authHelper),
-                                     avalidCode: 201, self.authHelper)
+                                     avalidCode: statusCode.created.rawValue, self.authHelper)
                     }
                     .done { jsonData in
                         let dirId = jsonData["id"].stringValue
@@ -191,7 +191,7 @@ public class OneDriveDrive: HiveDriveHandle {
                                      method: .put, parameters: nil,
                                      encoding: JSONEncoding.default,
                                      headers: OneDriveHttpHeader.headers(self.authHelper),
-                                     avalidCode: 201, self.authHelper)
+                                     avalidCode: statusCode.created.rawValue, self.authHelper)
                     }
                     .done { jsonData in
                         let fileId = jsonData["id"].stringValue
