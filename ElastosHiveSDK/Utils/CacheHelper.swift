@@ -146,7 +146,24 @@ class CacheHelper: NSObject {
         }
     }
 
-    class func clearCacheAll() {
+    class func clearCache(_ account: DriveType, _ path: String) {
+        let cachePath0 = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + "copy-" + path
+        let cachePath1 = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + path
+        let fileManager: FileManager = FileManager.default
+        let exist0 = fileManager.fileExists(atPath: cachePath0)
+        let exist1 = fileManager.fileExists(atPath: cachePath1)
+        if exist0 {
+            do {
+                try fileManager.removeItem(atPath: cachePath0)
+            }
+            catch {}
+        }
+        if exist1 {
+            do {
+                try fileManager.removeItem(atPath: cachePath1)
+            }
+            catch {}
+        }
 
     }
 

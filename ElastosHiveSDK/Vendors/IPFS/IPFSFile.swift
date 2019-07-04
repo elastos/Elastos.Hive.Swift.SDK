@@ -370,5 +370,9 @@ internal class IPFSFile: HiveFileHandle {
     override func close() {
         cursor = 0
         finish = false
+        let uid = (self.authHelper as! IPFSAuthHelper).param.uid
+        let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+        let cacheUrl = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_READ.rawValue + "?uid=" + uid + "&path=" + path
+        _ = CacheHelper.discardCache(.hiveIPFS, cacheUrl.md5)
     }
 }

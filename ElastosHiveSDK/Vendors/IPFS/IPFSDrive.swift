@@ -231,6 +231,9 @@ internal class IPFSDrive: HiveDriveHandle {
                         fileHandle.lastInfo = fileInfo
                         fileHandle.pathName = atPath
                         fileHandle.drive = self
+                        let pathName = ("/" + PathExtracter(atPath).baseNamePart()).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+                        let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_READ.rawValue + "?uid=" + uid + "&path=" + pathName
+                        _ = CacheHelper.clearCache(.hiveIPFS, url.md5)
                         resolver.fulfill(fileHandle)
                         handleBy.didSucceed(fileHandle)
                     }

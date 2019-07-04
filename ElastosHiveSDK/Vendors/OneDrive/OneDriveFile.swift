@@ -371,5 +371,7 @@ internal class OneDriveFile: HiveFileHandle {
     override func close() {
         cursor = 0
         finish = false
+        let url = OneDriveURL(pathName, "content").compose()
+        _ = CacheHelper.discardCache(.oneDrive, url.md5)
     }
 }
