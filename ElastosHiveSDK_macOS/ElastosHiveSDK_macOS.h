@@ -1,10 +1,4 @@
-//
-//  ElastosHiveSDK_macOS.h
-//  ElastosHiveSDK_macOS
-//
-//  Created by 李爱红 on 2019/7/1.
-//  Copyright © 2019 org.elastos. All rights reserved.
-//
+
 
 #import <Cocoa/Cocoa.h>
 

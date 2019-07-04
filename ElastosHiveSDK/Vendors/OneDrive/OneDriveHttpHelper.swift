@@ -17,7 +17,7 @@ class OneDriveHttpHelper: NSObject {
                               encoding: encoding,
                               headers: headers)
                 .responseJSON { dataResponse in
-                    guard dataResponse.response?.statusCode != 401 else {
+                    guard dataResponse.response?.statusCode != statusCode.unauthorized.rawValue else {
                         (authHelper as! OneDriveAuthHelper).token?.expiredTime = ""
                         KeyChainStore.writeback((authHelper as! OneDriveAuthHelper).token!,
                                                 (authHelper as! OneDriveAuthHelper).authEntry,
@@ -32,7 +32,7 @@ class OneDriveHttpHelper: NSObject {
                         return
                     }
                     var jsonData = JSON(dataResponse.result.value as Any)
-                    if avalidCode == 202 {
+                    if avalidCode == statusCode.accepted.rawValue {
                         jsonData = JSON(dataResponse.response?.allHeaderFields as Any)
                     }
                     resolver.fulfill(jsonData)
@@ -50,7 +50,7 @@ class OneDriveHttpHelper: NSObject {
                              method: method,
                              headers: headers)
                 .responseJSON { dataResponse in
-                    guard dataResponse.response?.statusCode != 401 else {
+                    guard dataResponse.response?.statusCode != statusCode.unauthorized.rawValue else {
                         (authHelper as! OneDriveAuthHelper).token?.expiredTime = ""
                         KeyChainStore.writeback((authHelper as! OneDriveAuthHelper).token!,
                                                 (authHelper as! OneDriveAuthHelper).authEntry,
@@ -128,7 +128,7 @@ class OneDriveHttpHelper: NSObject {
                                   headers: OneDriveHttpHeader.headers(authHelper))
                     .responseData { dataResponse in
                         let jsonStr = String(data: dataResponse.data!, encoding: .utf8) ?? ""
-                        guard dataResponse.response?.statusCode != 401 else {
+                        guard dataResponse.response?.statusCode != statusCode.unauthorized.rawValue else {
                             (authHelper as! OneDriveAuthHelper).token?.expiredTime = ""
                             KeyChainStore.writeback((authHelper as! OneDriveAuthHelper).token!,
                                                     (authHelper as! OneDriveAuthHelper).authEntry,
@@ -137,7 +137,7 @@ class OneDriveHttpHelper: NSObject {
                             resolver.reject(error)
                             return
                         }
-                        guard dataResponse.response?.statusCode != 302 else{
+                        guard dataResponse.response?.statusCode != statusCode.redirect_url.rawValue else{
                             let jsonData = JSON(dataResponse.result.value as Any)
                             let url = jsonData["Location"].stringValue
                             pollingDowloadresult(url)

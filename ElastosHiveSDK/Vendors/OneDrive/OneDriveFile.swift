@@ -114,7 +114,7 @@ internal class OneDriveFile: HiveFileHandle {
                                  parameters: params,
                                  encoding: JSONEncoding.default,
                                  headers: OneDriveHttpHeader.headers(self.authHelper),
-                                 avalidCode: 202, self.authHelper)
+                                 avalidCode: statusCode.accepted.rawValue, self.authHelper)
                 }
                 .then{ jsonData -> HivePromise<HiveVoid> in
                     let urlString = jsonData["Location"].stringValue
@@ -149,7 +149,7 @@ internal class OneDriveFile: HiveFileHandle {
                                  parameters: nil,
                                  encoding: JSONEncoding.default,
                                  headers: OneDriveHttpHeader.headers(self.authHelper),
-                                 avalidCode: 204, self.authHelper)
+                                 avalidCode: statusCode.delete.rawValue, self.authHelper)
                 }
                 .done{ jsonData in
                     self.pathName = ""
@@ -344,7 +344,7 @@ internal class OneDriveFile: HiveFileHandle {
                                 to: url,
                                 method: .put,
                                 headers: headers,
-                                avalidCode: 201,
+                                avalidCode: statusCode.created.rawValue,
                                 self.authHelper)
                 }
                 .done{ jsonData in
