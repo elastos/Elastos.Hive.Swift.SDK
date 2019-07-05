@@ -86,10 +86,9 @@ internal class OneDriveClient: HiveClientHandle {
                     Log.d(TAG(), "Acquired client information from remote drive: %s", clientInfo.debugDescription);
                 }
                 .catch { error in
-                    let error = HiveError.failue(des: error.localizedDescription)
-                    Log.e(TAG(), "Acquire last client information failed: %s", error.localizedDescription)
+                    Log.e(TAG(), "Acquire last client information failed: %s", HiveError.des(error as! HiveError))
                     resolver.reject(error)
-                    handleBy.runError(error)
+                    handleBy.runError(error as! HiveError)
             }
         }
         return promise
@@ -134,10 +133,9 @@ internal class OneDriveClient: HiveClientHandle {
                     Log.d(TAG(), "Acquired default drive instance succeeded: %s", dirHandle.debugDescription);
                 }
                 .catch { error in
-                    let error = HiveError.failue(des: error.localizedDescription)
-                    Log.e(TAG(), "Acquiring default drive instance failed: %s", error.localizedDescription)
+                    Log.e(TAG(), "Acquiring default drive instance failed: %s", HiveError.des(error as! HiveError))
                     resolver.reject(error)
-                    handleBy.runError(error)
+                    handleBy.runError(error as! HiveError)
             }
         }
         return promise

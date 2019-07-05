@@ -259,8 +259,7 @@ internal class IPFSFile: HiveFileHandle {
             let cachePath = cacheUrl.md5
             let file = CacheHelper.checkCacheFileIsExist(.hiveIPFS, cachePath)
             if file {
-                let length = CacheHelper.writeCache(.hiveIPFS, cachePath, data: withData, cursor)
-                cursor += UInt64(length)
+                let length = CacheHelper.writeCache(.hiveIPFS, cachePath, data: withData, 0, true)
                 resolver.fulfill(length)
                 handleBy.didSucceed(length)
                 return
@@ -273,8 +272,7 @@ internal class IPFSFile: HiveFileHandle {
                 }
                 .done{ data in
                     _ = CacheHelper.saveCache(.hiveIPFS, cachePath, data: data)
-                    let length = CacheHelper.writeCache(.hiveIPFS, cachePath, data: withData, self.cursor)
-                    self.cursor += UInt64(length)
+                    let length = CacheHelper.writeCache(.hiveIPFS, cachePath, data: withData, 0, true)
                     Log.d(TAG(), "writeData succeed")
                     resolver.fulfill(length)
                     handleBy.didSucceed(length)
@@ -300,8 +298,7 @@ internal class IPFSFile: HiveFileHandle {
             let cachePath = cacheUrl.md5
             let file = CacheHelper.checkCacheFileIsExist(.hiveIPFS, cachePath)
             if file {
-                let length = CacheHelper.writeCache(.hiveIPFS, cachePath, data: withData, position)
-                cursor += UInt64(length)
+                let length = CacheHelper.writeCache(.hiveIPFS, cachePath, data: withData, position, false)
                 resolver.fulfill(length)
                 handleBy.didSucceed(length)
                 return
@@ -314,8 +311,7 @@ internal class IPFSFile: HiveFileHandle {
                 }
                 .done{ data in
                     _ = CacheHelper.saveCache(.hiveIPFS, cachePath, data: data)
-                    let length = CacheHelper.writeCache(.hiveIPFS, cachePath, data: withData, position)
-                    self.cursor += UInt64(length)
+                    let length = CacheHelper.writeCache(.hiveIPFS, cachePath, data: withData, position, false)
                     Log.d(TAG(), "writeData succeed")
                     resolver.fulfill(length)
                     handleBy.didSucceed(length)

@@ -51,7 +51,7 @@ internal class OneDriveFile: HiveFileHandle {
                 .catch{ error in
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
-                    Log.e(TAG(), "Acquiring last file info failed: %s", error.localizedDescription)
+                    Log.e(TAG(), "Acquiring last file info failed: %s", HiveError.des(error as! HiveError))
             }
         }
         return promise
@@ -86,7 +86,7 @@ internal class OneDriveFile: HiveFileHandle {
                 .catch{ error in
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
-                    Log.e(TAG(), error.localizedDescription)
+                    Log.e(TAG(), HiveError.des(error as! HiveError))
             }
         }
         return promise
@@ -128,7 +128,7 @@ internal class OneDriveFile: HiveFileHandle {
                 .catch{ error in
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
-                    Log.e(TAG(),"Copying this file to %s failed", error.localizedDescription)
+                    Log.e(TAG(),"Copying this file to %s failed", HiveError.des(error as! HiveError))
             }
         }
         return promise
@@ -163,7 +163,7 @@ internal class OneDriveFile: HiveFileHandle {
                 .catch{ error in
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
-                    Log.e(TAG(), "Deleting the file item falied: %s", error.localizedDescription)
+                    Log.e(TAG(), "Deleting the file item falied: %s", HiveError.des(error as! HiveError))
             }
         }
         return promise
@@ -209,7 +209,7 @@ internal class OneDriveFile: HiveFileHandle {
                     handleBy.didSucceed(readData)
                 }
                 .catch{ error in
-                    Log.e(TAG(), "readData falied: %s", error.localizedDescription)
+                    Log.e(TAG(), "readData falied: %s", HiveError.des(error as! HiveError))
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
             }
@@ -247,7 +247,7 @@ internal class OneDriveFile: HiveFileHandle {
                     handleBy.didSucceed(readData)
                 }
                 .catch{ error in
-                    Log.e(TAG(), "readData falied: %s", error.localizedDescription)
+                    Log.e(TAG(), "readData falied: %s", HiveError.des(error as! HiveError))
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
             }
@@ -266,7 +266,7 @@ internal class OneDriveFile: HiveFileHandle {
             let cachePath = url.md5
             let file = CacheHelper.checkCacheFileIsExist(.oneDrive, cachePath)
             if file {
-                let length = CacheHelper.writeCache(.oneDrive, cachePath, data: withData, cursor)
+                let length = CacheHelper.writeCache(.oneDrive, cachePath, data: withData, 0, true)
                 cursor += UInt64(length)
                 resolver.fulfill(length)
                 handleBy.didSucceed(length)
@@ -278,14 +278,13 @@ internal class OneDriveFile: HiveFileHandle {
                 }
                 .done{ jsonData in
                     _ = CacheHelper.saveCache(.oneDrive, cachePath, data: jsonData)
-                    let length = CacheHelper.writeCache(.oneDrive, cachePath, data: withData, self.cursor)
-                    self.cursor += UInt64(length)
+                    let length = CacheHelper.writeCache(.oneDrive, cachePath, data: withData, 0, true)
                     Log.d(TAG(), "writeData succeed")
                     resolver.fulfill(length)
                     handleBy.didSucceed(length)
                 }
                 .catch{ error in
-                    Log.e(TAG(), "writeData falied: %s", error.localizedDescription)
+                    Log.e(TAG(), "writeData falied: %s", HiveError.des(error as! HiveError))
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
             }
@@ -304,8 +303,7 @@ internal class OneDriveFile: HiveFileHandle {
             let cachePath = url.md5
             let file = CacheHelper.checkCacheFileIsExist(.oneDrive, cachePath)
             if file {
-                let length = CacheHelper.writeCache(.oneDrive, cachePath, data: withData, position)
-                cursor += UInt64(length)
+                let length = CacheHelper.writeCache(.oneDrive, cachePath, data: withData, position, false)
                 resolver.fulfill(length)
                 handleBy.didSucceed(length)
                 return
@@ -316,14 +314,13 @@ internal class OneDriveFile: HiveFileHandle {
                 }
                 .done{ jsonData in
                     _ = CacheHelper.saveCache(.oneDrive, cachePath, data: jsonData)
-                    let length = CacheHelper.writeCache(.oneDrive, cachePath, data: withData, self.cursor)
-                    self.cursor += UInt64(length)
+                    let length = CacheHelper.writeCache(.oneDrive, cachePath, data: withData, self.cursor, false)
                     Log.d(TAG(), "writeData succeed")
                     resolver.fulfill(length)
                     handleBy.didSucceed(length)
                 }
                 .catch{ error in
-                    Log.e(TAG(), "writeData falied: %s", error.localizedDescription)
+                    Log.e(TAG(), "writeData falied: %s", HiveError.des(error as! HiveError))
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
             }
@@ -349,12 +346,13 @@ internal class OneDriveFile: HiveFileHandle {
                 }
                 .done{ jsonData in
                     CacheHelper.uploadCache(.oneDrive, url.md5)
+                    self.cursor = 0
+                    self.finish = false
                     Log.d(TAG(), "writeData succeed")
                     resolver.fulfill(HiveVoid())
                 }
                 .catch{ error in
-                    let error = HiveError.failue(des: error.localizedDescription)
-                    Log.e(TAG(), "writeData falied: %s", error.localizedDescription)
+                    Log.e(TAG(), "writeData falied: %s", HiveError.des(error as! HiveError))
                     resolver.reject(error)
             }
         }
@@ -369,9 +367,6 @@ internal class OneDriveFile: HiveFileHandle {
     }
 
     override func close() {
-        cursor = 0
-        finish = false
-        let url = OneDriveURL(pathName, "content").compose()
-        _ = CacheHelper.discardCache(.oneDrive, url.md5)
+        self.discardData()
     }
 }

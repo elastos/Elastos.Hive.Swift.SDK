@@ -4,26 +4,14 @@ import XCTest
 @testable import ElastosHiveSDK
 
 
-class HiveOneDriveClient: XCTestCase,Authenticator {
+class HiveOneDriveClient: XCTestCase {
 
-    func requestAuthentication(_ requestURL: String) -> Bool {
-        let scops = ["Files.ReadWrite","offline_access"]
-        let scopStr = scops.joined(separator: " ")
-        let authViewController: AuthWebViewController = AuthWebViewController()
-        DispatchQueue.main.sync {
-            let rootViewController = UIApplication.shared.keyWindow?.rootViewController
-            rootViewController!.present(authViewController, animated: true, completion: nil)
-            authViewController.loadRequest("31c2dacc-80e0-47e1-afac-faac093a739c", REDIRECT_URI, "code", scopStr)
-        }
-        return true
-    }
     var hiveClient: HiveClientHandle?
     var hiveParam: DriveParameter?
     var lock: XCTestExpectation?
-    let timeout: Double = 600.0
+    let timeout: Double = 100.0
 
     override func setUp() {
-
         hiveParam = DriveParameter.createForOneDrive("31c2dacc-80e0-47e1-afac-faac093a739c", "Files.ReadWrite%20offline_access", REDIRECT_URI)
         HiveClientHandle.createInstance(hiveParam!)
         hiveClient = HiveClientHandle.sharedInstance(type: .oneDrive)
@@ -32,59 +20,98 @@ class HiveOneDriveClient: XCTestCase,Authenticator {
     override func tearDown() {
     }
 
-    func test1_Login() {
-        lock = XCTestExpectation(description: "wait for test1_Login")
+    func testLogin() {
+        // 1. Test nonarm login
+        lock = XCTestExpectation(description: "wait for test nonarm login.")
+        OneDriveCommon().login(lock!, hiveClient: self.hiveClient!)
 
-        let globalQueue = DispatchQueue.global()
-        globalQueue.async {
-            do {
-                _ = try self.hiveClient?.login(self as Authenticator)
+        // 2. Test repeat login
+        lock = XCTestExpectation(description: "wait for test repeat login.")
+        OneDriveCommon().login(lock!, hiveClient: self.hiveClient!)
+    }
+
+    func testLastUpdatedInfo() {
+        // 1. Test lastUdateInfo after login
+        lock = XCTestExpectation(description: "wait for test login.")
+        //    anyway login
+        OneDriveCommon().login(lock!, hiveClient: self.hiveClient!)
+        lock = XCTestExpectation(description: "wait for test lastUpateInfo after login.")
+        self.hiveClient?.lastUpdatedInfo()
+            .done{ clientInfo in
+                XCTAssertNotNil(clientInfo)
                 self.lock?.fulfill()
-            }catch {
+            }
+            .catch{ error in
+                XCTFail()
+                self.lock?.fulfill()
+        }
+        wait(for: [lock!], timeout: timeout)
+
+        // 2. Test lastUdateInfo after logout
+        lock = XCTestExpectation(description: "wait for test logout.")
+        // logout
+        OneDriveCommon().logOut(lock!, hiveClient: self.hiveClient!)
+
+        lock = XCTestExpectation(description: "wait for test lastUdateInfo after logout.")
+        self.hiveClient?.lastUpdatedInfo()
+            .done{ clientInfo in
                 XCTFail()
                 self.lock?.fulfill()
             }
+            .catch{ error in
+                let des = HiveError.des(error as! HiveError)
+                XCTAssertEqual(des, "Please login first")
+                self.lock?.fulfill()
+        }
+    }
+
+    func testDefaultDriveHandle() {
+
+        // 1. Test defaultDriveHandle after login
+        lock = XCTestExpectation(description: "wait for test login.")
+        //    anyway login
+        OneDriveCommon().login(lock!, hiveClient: self.hiveClient!)
+
+        lock = XCTestExpectation(description: "wait for test defaultDriveHandle after login.")
+        self.hiveClient?.defaultDriveHandle()
+            .done{ drive in
+                XCTAssertNotNil(drive)
+                self.lock?.fulfill()
+            }
+            .catch{ error in
+                XCTFail()
+                self.lock?.fulfill()
         }
         wait(for: [lock!], timeout: timeout)
-    }
 
-    func test2_lastUpdatedInfo() {
-        lock = XCTestExpectation(description: "wait for test2_lastUpdatedInfo")
-        self.hiveClient?.lastUpdatedInfo().done({ (clientInfo) in
-            XCTAssertNotNil(clientInfo)
-            self.lock?.fulfill()
-        }).catch({ (error) in
-            XCTFail()
-            self.lock?.fulfill()
-        })
-        wait(for: [lock!], timeout: timeout)
-    }
+        // 2. Test defaultDriveHandle after logout
+        lock = XCTestExpectation(description: "wait for test logout.")
+        // logout
+        OneDriveCommon().logOut(lock!, hiveClient: self.hiveClient!)
 
-    func test3_defaultDriveHandle() {
-        lock = XCTestExpectation(description: "wait for test3_defaultDriveHandle")
-        self.hiveClient?.defaultDriveHandle().done({ (drive) in
-            XCTAssertNotNil(drive)
-            self.lock?.fulfill()
-        }).catch({ (error) in
-            XCTFail()
-            self.lock?.fulfill()
-        })
-        wait(for: [lock!], timeout: timeout)
-    }
-
-    func test4_logout() {
-        lock = XCTestExpectation(description: "wait for test4_logout")
-        let globalQueue = DispatchQueue.global()
-        globalQueue.async {
-            do{
-                _ = try self.hiveClient?.logout()
-                self.lock?.fulfill()
-            }catch{
+        lock = XCTestExpectation(description: "wait for test defaultDriveHandle after logout.")
+        self.hiveClient?.defaultDriveHandle()
+            .done{ clientInfo in
                 XCTFail()
                 self.lock?.fulfill()
             }
+            .catch{ error in
+                let des = HiveError.des(error as! HiveError)
+                XCTAssertEqual(des, "Please login first")
+                self.lock?.fulfill()
         }
-        wait(for: [lock!], timeout: timeout)
+    }
+
+    func testLogout() {
+        // 1. Test nonarm logout
+        lock = XCTestExpectation(description: "wait for test nonarm login.")
+        OneDriveCommon().login(lock!, hiveClient: self.hiveClient!)
+        lock = XCTestExpectation(description: "wait for test nonarm logout.")
+        OneDriveCommon().logOut(lock!, hiveClient: self.hiveClient!)
+
+        // 2. Test without login
+        lock = XCTestExpectation(description: "wait for test without login.")
+        OneDriveCommon().logOut(lock!, hiveClient: self.hiveClient!)
     }
 
 }
