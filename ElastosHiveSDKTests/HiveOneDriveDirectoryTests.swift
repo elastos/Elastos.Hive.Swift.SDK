@@ -3,19 +3,8 @@
 import XCTest
 @testable import ElastosHiveSDK
 
-class HiveOneDriveDirectoryTests: XCTestCase,Authenticator {
+class HiveOneDriveDirectoryTests: XCTestCase {
 
-    func requestAuthentication(_ requestURL: String) -> Bool {
-        let scops = ["Files.ReadWrite","offline_access"]
-        let scopStr = scops.joined(separator: " ")
-        let authViewController: AuthWebViewController = AuthWebViewController()
-        DispatchQueue.main.sync {
-            let rootViewController = UIApplication.shared.keyWindow?.rootViewController
-            rootViewController!.present(authViewController, animated: true, completion: nil)
-            authViewController.loadRequest("31c2dacc-80e0-47e1-afac-faac093a739c", REDIRECT_URI, "code", scopStr)
-        }
-        return true
-    }
     var hiveClient: HiveClientHandle?
     var hiveParam: DriveParameter?
     var lock: XCTestExpectation?
@@ -31,202 +20,352 @@ class HiveOneDriveDirectoryTests: XCTestCase,Authenticator {
     override func tearDown() {
     }
 
-    func testA_Login() {
-        lock = XCTestExpectation(description: "wait for test1_Login")
+    func testLastUpdatedInfo() {
+        //    login
+        lock = XCTestExpectation(description: "wait for test login.")
+        OneDriveCommon().login(lock!, hiveClient: self.hiveClient!)
 
-        let globalQueue = DispatchQueue.global()
-        globalQueue.async {
-            do {
-                _ = try self.hiveClient?.login(self as Authenticator)
+        // 1. get an exisiting file lastUpdateInfo
+        lock = XCTestExpectation(description: "get an exisiting file lastUpdateInfo")
+        self.hiveClient?.defaultDriveHandle()
+            .then{ drive -> HivePromise<HiveDirectoryHandle> in
+                return drive.rootDirectoryHandle()
+            }.then{ directory -> HivePromise<HiveDirectoryInfo> in
+                return directory.lastUpdatedInfo()
+            }.done{ directoryInfo in
+                XCTAssertNotNil(directoryInfo)
                 self.lock?.fulfill()
-            }catch {
+            }.catch{ error in
                 XCTFail()
                 self.lock?.fulfill()
-            }
         }
         wait(for: [lock!], timeout: timeout)
     }
 
-    func testB_lastUpdatedInfo() {
-        lock = XCTestExpectation(description: "wait for test2_lastUpdatedInfo")
-        self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
-            return drive.rootDirectoryHandle()
-        }).then({ (directory) -> HivePromise<HiveDirectoryInfo> in
-            return directory.lastUpdatedInfo()
-        }).done({ (directoryInfo) in
-            XCTAssertNotNil(directoryInfo)
-            self.lock?.fulfill()
-        }).catch({ (error) in
-            XCTFail()
-            self.lock?.fulfill()
-        })
-        wait(for: [lock!], timeout: timeout)
-    }
+    func testCreateDirectory() {
+        //    login
+        lock = XCTestExpectation(description: "wait for test login.")
+        OneDriveCommon().login(lock!, hiveClient: self.hiveClient!)
 
-    func testC_createDirectory() {
-
+        // 1. nonarm create
         timeTest = Timestamp.getTimeAtNow()
-        lock = XCTestExpectation(description: "wait for test3_createDirectory")
-        self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
-            return drive.rootDirectoryHandle()
-        }).then({ (directory) -> HivePromise<HiveDirectoryHandle> in
-            return directory.createDirectory(withName: "测试\(timeTest!)")
-        }).done({ (directory) in
-            XCTAssertNotNil(directory)
-            self.lock?.fulfill()
-        }).catch({ (error) in
-            XCTFail()
-            self.lock?.fulfill()
-        })
+        lock = XCTestExpectation(description: "wait for nonarm create")
+        self.hiveClient?.defaultDriveHandle()
+            .then{ drive -> HivePromise<HiveDirectoryHandle> in
+                return drive.rootDirectoryHandle()
+            }.then{ directory -> HivePromise<HiveDirectoryHandle> in
+                return directory.createDirectory(withName: "od_createD_\(timeTest!)")
+            }.done{ directory in
+                XCTAssertNotNil(directory.directoryId)
+                self.lock?.fulfill()
+            }.catch{ error in
+                XCTFail()
+                self.lock?.fulfill()
+        }
+        wait(for: [lock!], timeout: timeout)
+
+        // 2. create same name directory
+        lock = XCTestExpectation(description: "wait for create same name directory")
+        self.hiveClient?.defaultDriveHandle()
+            .then{ drive -> HivePromise<HiveDirectoryHandle> in
+                return drive.rootDirectoryHandle()
+            }.then{ directory -> HivePromise<HiveDirectoryHandle> in
+                return directory.createDirectory(withName: "od_createD_\(timeTest!)")
+            }.done{ directory in
+                XCTFail()
+                self.lock?.fulfill()
+            }.catch{ error in
+                let des = HiveError.des(error as! HiveError)
+                XCTAssertEqual(des, "An item with the same name already exists under the parent")
+                self.lock?.fulfill()
+        }
         wait(for: [lock!], timeout: timeout)
     }
 
-    func testD_directoryHandle() {
+    func testDirectoryHandle() {
+        //    login
+        lock = XCTestExpectation(description: "wait for test login.")
+        OneDriveCommon().login(lock!, hiveClient: self.hiveClient!)
+        //   create directory
+        timeTest = Timestamp.getTimeAtNow()
+        lock = XCTestExpectation(description: "wait for test create directory.")
+        OneDriveCommon().creatDirectoryWithName(lock!, hiveClient: self.hiveClient!, timeTest!)
 
-        lock = XCTestExpectation(description: "wait for test4_directoryHandle")
-        self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
-            return drive.rootDirectoryHandle()
-        }).then({ (directory) -> HivePromise<HiveDirectoryHandle> in
-            return directory.directoryHandle(atName: "测试\(timeTest!)")
-        }).done({ (directory) in
-            XCTAssertNotNil(directory)
-            self.lock?.fulfill()
-        }).catch({ (error) in
-            XCTFail()
-            self.lock?.fulfill()
-        })
+        //   1. get existing path directory
+        lock = XCTestExpectation(description: "wait for get existing path directory.")
+        self.hiveClient?.defaultDriveHandle()
+            .then{ drive -> HivePromise<HiveDirectoryHandle> in
+                return drive.rootDirectoryHandle()
+            }.then{ directory -> HivePromise<HiveDirectoryHandle> in
+                return directory.directoryHandle(atName: "od_createD_\(timeTest!)")
+            }.done{ directory in
+                XCTAssertNotNil(directory.directoryId)
+                self.lock?.fulfill()
+            }.catch{ error in
+                XCTFail()
+                self.lock?.fulfill()
+        }
+        wait(for: [lock!], timeout: timeout)
+
+        // 2. get non-existing path directory
+        lock = XCTestExpectation(description: "wait for get non-existing path directory.")
+        self.hiveClient?.defaultDriveHandle()
+            .then{ drive -> HivePromise<HiveDirectoryHandle> in
+                return drive.rootDirectoryHandle()
+            }.then{ directory -> HivePromise<HiveDirectoryHandle> in
+                return directory.directoryHandle(atName: "od_createD_\(timeTest!)_2")
+            }.done{ directory in
+                XCTFail()
+                self.lock?.fulfill()
+            }.catch{ error in
+                let des = HiveError.des(error as! HiveError)
+                XCTAssertEqual(des, "Item does not exist")
+                self.lock?.fulfill()
+        }
         wait(for: [lock!], timeout: timeout)
     }
 
-    func testE_createFile() {
-        lock = XCTestExpectation(description: "wait for test5_createFile")
-        self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
-            return drive.rootDirectoryHandle()
-        }).then({ (directory) -> HivePromise<HiveFileHandle> in
-            directory.createFile(withName: "creat_file\(timeTest!)")
-        }).done({ (file) in
-            XCTAssertNotNil(file)
-            self.lock?.fulfill()
-        }).catch({ (error) in
-            XCTFail()
-            self.lock?.fulfill()
-        })
+    func testCreateFile() {
+        //    login
+        lock = XCTestExpectation(description: "wait for test login.")
+        OneDriveCommon().login(lock!, hiveClient: self.hiveClient!)
+        // 1. create nanorm file
+        timeTest = Timestamp.getTimeAtNow()
+        lock = XCTestExpectation(description: "wait for create nanorm file")
+        self.hiveClient?.defaultDriveHandle()
+            .then{ drive -> HivePromise<HiveDirectoryHandle> in
+                return drive.rootDirectoryHandle()
+            }.then{ directory -> HivePromise<HiveFileHandle> in
+                directory.createFile(withName: "od_createF_\(timeTest!)")
+            }.done{ file in
+                XCTAssertNotNil(file)
+                self.lock?.fulfill()
+            }.catch{ error in
+                XCTFail()
+                self.lock?.fulfill()
+        }
+        wait(for: [lock!], timeout: timeout)
+
+        // 2. create repleate file
+        lock = XCTestExpectation(description: "wait for create repleate file")
+        self.hiveClient?.defaultDriveHandle()
+            .then{ drive -> HivePromise<HiveDirectoryHandle> in
+                return drive.rootDirectoryHandle()
+            }.then{ directory -> HivePromise<HiveFileHandle> in
+                directory.createFile(withName: "od_createF_\(timeTest!)")
+            }.done{ file in
+                XCTFail()
+                self.lock?.fulfill()
+            }.catch{ error in
+                let des = HiveError.des(error as! HiveError)
+                XCTAssertEqual(des, "An item with the same name already exists under the parent")
+                self.lock?.fulfill()
+        }
         wait(for: [lock!], timeout: timeout)
     }
 
-    func testF_fileHandle() {
+    func testFileHandle() {
+        //    login
+        lock = XCTestExpectation(description: "wait for test login.")
+        OneDriveCommon().login(lock!, hiveClient: self.hiveClient!)
 
-        lock = XCTestExpectation(description: "wait for test6_fileHandle")
-        self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
-            return drive.rootDirectoryHandle()
-        }).then({ (directory) -> HivePromise<HiveFileHandle> in
-            return directory.fileHandle(atName: "creat_file\(timeTest!)")
-        }).done({ (file) in
-            XCTAssertNotNil(file)
-            self.lock?.fulfill()
-        }).catch({ (error) in
-            XCTFail()
-            self.lock?.fulfill()
-        })
-        wait(for: [lock!], timeout: timeout)
-    }
-    func testG_getChildren() {
-        lock = XCTestExpectation(description: "wait for test7_getChildren")
-        self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
-            return drive.rootDirectoryHandle()
-        }).then({ (directory) -> HivePromise<HiveDirectoryHandle> in
-            return directory.directoryHandle(atName: "测试\(timeTest!)")
-        }).then({ (directory) -> HivePromise<HiveChildren> in
-            return directory.getChildren()
-        }).done({ (children) in
-            XCTAssertNotNil(children)
-            self.lock?.fulfill()
-        }).catch({ (error) in
-            XCTFail()
-            self.lock?.fulfill()
-        })
-        wait(for: [lock!], timeout: timeout)
-    }
+        // create file
+        timeTest = Timestamp.getTimeAtNow()
+        lock = XCTestExpectation(description: "wait for create file.")
+        OneDriveCommon().createFileWithName(lock!, hiveClient: self.hiveClient!, timeTest!)
 
-    func testH_getChildren() {
-        lock = XCTestExpectation(description: "wait for test7_getChildren")
-        self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
-            return drive.rootDirectoryHandle()
-        }).then({ (directory) -> HivePromise<HiveChildren> in
-            return directory.getChildren()
-        }).done({ (children) in
-            XCTAssertNotNil(children)
-            self.lock?.fulfill()
-        }).catch({ (error) in
-            XCTFail()
-            self.lock?.fulfill()
-        })
+        // 1. get existing path file
+        lock = XCTestExpectation(description: "wait for get existing path file")
+        self.hiveClient?.defaultDriveHandle()
+            .then{ drive -> HivePromise<HiveDirectoryHandle> in
+                return drive.rootDirectoryHandle()
+            }.then{ directory -> HivePromise<HiveFileHandle> in
+                return directory.fileHandle(atName: "od_createF_\(timeTest!)")
+            }.done{ file in
+                XCTAssertNotNil(file)
+                self.lock?.fulfill()
+            }.catch{ error in
+                XCTFail()
+                self.lock?.fulfill()
+        }
+        wait(for: [lock!], timeout: timeout)
+
+        // 2. get non-existing path file
+        lock = XCTestExpectation(description: "wait for get non-existing path file")
+        self.hiveClient?.defaultDriveHandle()
+            .then{ drive -> HivePromise<HiveDirectoryHandle> in
+                return drive.rootDirectoryHandle()
+            }.then{ directory -> HivePromise<HiveFileHandle> in
+                return directory.fileHandle(atName: "od_createF_\(timeTest!)_2")
+            }.done{ file in
+                XCTFail()
+                self.lock?.fulfill()
+            }.catch{ error in
+                let des = HiveError.des(error as! HiveError)
+                XCTAssertEqual(des, "Item does not exist")
+                self.lock?.fulfill()
+        }
         wait(for: [lock!], timeout: timeout)
     }
 
-    func testI_copyTo() {
+    func testGetChildren() {
+        //    login
+        lock = XCTestExpectation(description: "wait for test login.")
+        OneDriveCommon().login(lock!, hiveClient: self.hiveClient!)
 
-        lock = XCTestExpectation(description: "wait for test8_copyTo")
-        self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
-            return drive.createDirectory(withPath: "\(timeTest!)")
-        }).done({ (re) in
-            XCTAssertNotNil(re)
-            self.lock?.fulfill()
-        }).catch({ (err) in
-            XCTFail()
-            self.lock?.fulfill()
-        })
-        wait(for: [lock!], timeout: timeout)
-
-        lock = XCTestExpectation(description: "wait for test8_copyTo")
-        self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
-            return drive.rootDirectoryHandle()
-        }).then({ (directory) -> HivePromise<HiveDirectoryHandle> in
-            return directory.directoryHandle(atName: "测试\(timeTest!)")
-        }).then({ (directory) -> HivePromise<HiveVoid> in
-            return directory.copyTo(newPath: "/\(timeTest!)")
-        }).done({ (re) in
-            self.lock?.fulfill()
-        }).catch({ (err) in
-            XCTFail()
-            self.lock?.fulfill()
-        })
+        //  1. get root children
+        lock = XCTestExpectation(description: "wait for get root children")
+        self.hiveClient?.defaultDriveHandle()
+            .then{ (drive) -> HivePromise<HiveDirectoryHandle> in
+                return drive.rootDirectoryHandle()
+            }.then{ directory -> HivePromise<HiveChildren> in
+                return directory.getChildren()
+            }.done{ children in
+                XCTAssertNotNil(children)
+                self.lock?.fulfill()
+            }.catch{ error in
+                XCTFail()
+                self.lock?.fulfill()
+        }
         wait(for: [lock!], timeout: timeout)
     }
 
-    func testJ_deleteItem() {
+    func testCopyTo() {
+        //    login
+        lock = XCTestExpectation(description: "wait for test login.")
+        OneDriveCommon().login(lock!, hiveClient: self.hiveClient!)
+        //   create directory
+        timeTest = Timestamp.getTimeAtNow()
+        lock = XCTestExpectation(description: "wait for test create directory.")
+        OneDriveCommon().creatDirectoryWithName(lock!, hiveClient: self.hiveClient!, timeTest!)
+        //   create directory 2
+        lock = XCTestExpectation(description: "wait for test create directory.")
+        OneDriveCommon().creatDirectoryWithName(lock!, hiveClient: self.hiveClient!, (timeTest! + "_2"))
 
-        lock = XCTestExpectation(description: "wait for test9_deleteItem")
-        self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
-            return drive.rootDirectoryHandle()
-        }).then({ (directory) -> HivePromise<HiveDirectoryHandle> in
-            return directory.directoryHandle(atName: "测试\(timeTest!)")
-        }).then({ (directory) -> HivePromise<HiveVoid> in
-            return directory.deleteItem()
-        }).done({ (re) in
-            self.lock?.fulfill()
-        }).catch({ (err) in
-            XCTFail()
-            self.lock?.fulfill()
-        })
+        // 1. copy to an exisiting directory
+        lock = XCTestExpectation(description: "wait for copy to an exisiting directory")
+        self.hiveClient?.defaultDriveHandle()
+            .then{ drive -> HivePromise<HiveDirectoryHandle> in
+                return drive.rootDirectoryHandle()
+            }.then{ directory -> HivePromise<HiveDirectoryHandle> in
+                return directory.directoryHandle(atName: "od_createD_\(timeTest!)")
+            }.then{ directory -> HivePromise<HiveVoid> in
+                return directory.copyTo(newPath: "/od_createF_\(timeTest! + "_2")")
+            }.done{ re in
+                self.lock?.fulfill()
+            }.catch{ err in
+                XCTFail()
+                self.lock?.fulfill()
+        }
+        wait(for: [lock!], timeout: timeout)
+
+        //  2. copy to a non-exisiting directory
+        lock = XCTestExpectation(description: "wait for copy to a non-exisiting directory")
+        self.hiveClient?.defaultDriveHandle()
+            .then{ drive -> HivePromise<HiveDirectoryHandle> in
+                return drive.rootDirectoryHandle()
+            }.then{ directory -> HivePromise<HiveDirectoryHandle> in
+                return directory.directoryHandle(atName: "od_createD_\(timeTest!)")
+            }.then{ directory -> HivePromise<HiveVoid> in
+                return directory.copyTo(newPath: "/od_createF_\(timeTest!)")
+            }.done{ re in
+                self.lock?.fulfill()
+            }.catch{ err in
+                XCTFail()
+                self.lock?.fulfill()
+        }
+        wait(for: [lock!], timeout: timeout)
+
+        // 3. repeat copy to
+        lock = XCTestExpectation(description: "wait for repeat copy to")
+        self.hiveClient?.defaultDriveHandle()
+            .then{ drive -> HivePromise<HiveDirectoryHandle> in
+                return drive.rootDirectoryHandle()
+            }.then{ directory -> HivePromise<HiveDirectoryHandle> in
+                return directory.directoryHandle(atName: "od_createD_\(timeTest!)")
+            }.then{ directory -> HivePromise<HiveVoid> in
+                return directory.copyTo(newPath: "/od_createF_\(timeTest! + "_2")")
+            }.done{ re in
+                self.lock?.fulfill()
+            }.catch{ error in
+                let des = HiveError.des(error as! HiveError)
+                XCTAssertEqual(des, "Operation failed")
+                self.lock?.fulfill()
+        }
         wait(for: [lock!], timeout: timeout)
     }
 
-    func testK_moveTo() {
+    func testDeleteItem() {
+        //    login
+        lock = XCTestExpectation(description: "wait for test login.")
+        OneDriveCommon().login(lock!, hiveClient: self.hiveClient!)
+        //   create directory
+        timeTest = Timestamp.getTimeAtNow()
+        lock = XCTestExpectation(description: "wait for test create directory.")
+        OneDriveCommon().creatDirectoryWithName(lock!, hiveClient: self.hiveClient!, timeTest!)
 
-        lock = XCTestExpectation(description: "wait for test10_moveTo")
-        self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
-            return drive.rootDirectoryHandle()
-        }).then({ (directory) -> HivePromise<HiveDirectoryHandle> in
-            return directory.directoryHandle(atName: "/\(timeTest!)/测试\(timeTest!)")
-        }).then({ (directory) -> HivePromise<HiveVoid> in
-            return directory.moveTo(newPath: "/")
-        }).done({ (re) in
-            self.lock?.fulfill()
-        }).catch({ (err) in
-            XCTFail()
-            self.lock?.fulfill()
-        })
+        // 1. delete a exisiting directory
+        lock = XCTestExpectation(description: "wait for delete a exisiting directory")
+        self.hiveClient?.defaultDriveHandle()
+            .then{ drive -> HivePromise<HiveDirectoryHandle> in
+                return drive.rootDirectoryHandle()
+            }.then{ directory -> HivePromise<HiveDirectoryHandle> in
+                return directory.directoryHandle(atName: "od_createD_\(timeTest!)")
+            }.then{ directory -> HivePromise<HiveVoid> in
+                return directory.deleteItem()
+            }.done{ re in
+                self.lock?.fulfill()
+            }.catch{ err in
+                XCTFail()
+                self.lock?.fulfill()
+        }
+        wait(for: [lock!], timeout: timeout)
+    }
+
+    func testMoveTo() {
+        //    login
+        lock = XCTestExpectation(description: "wait for test login.")
+        OneDriveCommon().login(lock!, hiveClient: self.hiveClient!)
+        //   create directory
+        timeTest = Timestamp.getTimeAtNow()
+        lock = XCTestExpectation(description: "wait for test create directory.")
+        OneDriveCommon().creatDirectoryWithName(lock!, hiveClient: self.hiveClient!, timeTest!)
+        //   create directory 2
+        lock = XCTestExpectation(description: "wait for test create directory.")
+        OneDriveCommon().creatDirectoryWithName(lock!, hiveClient: self.hiveClient!, (timeTest! + "_2"))
+
+        //   1. move to an exisiting directory
+        lock = XCTestExpectation(description: "wait for move to an exisiting directory")
+        self.hiveClient?.defaultDriveHandle()
+            .then{ drive -> HivePromise<HiveDirectoryHandle> in
+                return drive.rootDirectoryHandle()
+            }.then{ directory -> HivePromise<HiveDirectoryHandle> in
+                return directory.directoryHandle(atName: "/od_createD_\(timeTest!)")
+            }.then{ directory -> HivePromise<HiveVoid> in
+                return directory.moveTo(newPath: "/od_createD_\(timeTest! + "_2")")
+            }.done{ re in
+                self.lock?.fulfill()
+            }.catch{ err in
+                XCTFail()
+                self.lock?.fulfill()
+        }
+        wait(for: [lock!], timeout: timeout)
+
+        //   1. move to an non-exisiting directory
+        lock = XCTestExpectation(description: "wait for move to an non-exisiting directory")
+        self.hiveClient?.defaultDriveHandle()
+            .then{ drive -> HivePromise<HiveDirectoryHandle> in
+                return drive.rootDirectoryHandle()
+            }.then{ directory -> HivePromise<HiveDirectoryHandle> in
+                return directory.directoryHandle(atName: "/od_createD_\(timeTest! + "_2")/od_createD_\(timeTest!)")
+            }.then{ directory -> HivePromise<HiveVoid> in
+                return directory.moveTo(newPath: "/\(timeTest! + "_2")")
+            }.done{ re in
+                self.lock?.fulfill()
+            }.catch{ err in
+                XCTFail()
+                self.lock?.fulfill()
+        }
         wait(for: [lock!], timeout: timeout)
     }
 }

@@ -27,7 +27,8 @@ class OneDriveHttpHelper: NSObject {
                         return
                     }
                     guard dataResponse.response?.statusCode == avalidCode || dataResponse.response?.statusCode == 200 else{
-                        let error = HiveError.failue(des: dataResponse.toString())
+                        let json = JSON(JSON(dataResponse.result.value as Any)["error"])
+                        let error = HiveError.failue(des: json["message"].stringValue)
                         resolver.reject(error)
                         return
                     }
@@ -61,7 +62,8 @@ class OneDriveHttpHelper: NSObject {
                     }
                     guard dataResponse.response?.statusCode == 200 || dataResponse.response?.statusCode == avalidCode
                         else{
-                            let error = HiveError.failue(des: dataResponse.toString())
+                            let json = JSON(JSON(dataResponse.result.value as Any)["error"])
+                            let error = HiveError.failue(des: json["message"].stringValue)
                             resolver.reject(error)
                             return
                     }
@@ -127,7 +129,6 @@ class OneDriveHttpHelper: NSObject {
                                   encoding: JSONEncoding.default,
                                   headers: OneDriveHttpHeader.headers(authHelper))
                     .responseData { dataResponse in
-                        let jsonStr = String(data: dataResponse.data!, encoding: .utf8) ?? ""
                         guard dataResponse.response?.statusCode != statusCode.unauthorized.rawValue else {
                             (authHelper as! OneDriveAuthHelper).token?.expiredTime = ""
                             KeyChainStore.writeback((authHelper as! OneDriveAuthHelper).token!,
@@ -145,21 +146,20 @@ class OneDriveHttpHelper: NSObject {
                                     let data = dataResponse.data ?? Data()
                                     resolver.fulfill(data)
                                 }.catch{ error in
-                                    let error = HiveError.failue(des: error.localizedDescription)
                                     resolver.reject(error)
                                 }
                             return
                         }
                         guard dataResponse.response?.statusCode == 200 else{
-                            let error = HiveError.failue(des: jsonStr)
+                            let json = JSON(JSON(dataResponse.result.value as Any)["error"])
+                            let error = HiveError.failue(des: json["message"].stringValue)
                             resolver.reject(error)
                             return
                         }
                         let data = dataResponse.data ?? Data()
                         resolver.fulfill(data)
                 }
-                }.catch { err in
-                    let error = HiveError.failue(des: err.localizedDescription)
+                }.catch { error in
                     resolver.reject(error)
             }
         }

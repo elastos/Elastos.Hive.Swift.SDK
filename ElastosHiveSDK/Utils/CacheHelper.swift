@@ -43,7 +43,7 @@ class CacheHelper: NSObject {
         return true
     }
 
-    class func writeCache(_ account: DriveType, _ path: String, data: Data, _ position: UInt64) -> Int32 {
+    class func writeCache(_ account: DriveType, _ path: String, data: Data, _ position: UInt64, _ appendEnd: Bool) -> Int32 {
         let cachePath = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + path
         let cacheDirectory = PathExtracter(cachePath).dirNamePart()
         let fileManager: FileManager = FileManager.default
@@ -80,6 +80,9 @@ class CacheHelper: NSObject {
 
         let writeHandle = FileHandle(forWritingAtPath: copyPath)
         writeHandle?.seek(toFileOffset: position)
+        if appendEnd {
+            writeHandle?.seekToEndOfFile()
+        }
         writeHandle?.write(data)
         return Int32(data.count)
     }

@@ -43,10 +43,9 @@ public class OneDriveDrive: HiveDriveHandle {
                     Log.d(TAG(), "Acquiring last drive information succeeeded (info: %s)", driveInfo.attrDic!.description)
                 }
                 .catch { error in
-                    let error = HiveError.failue(des: error.localizedDescription)
-                    Log.e(TAG(), "Acquireing last drve information falied: %s", error.localizedDescription)
+                    Log.e(TAG(), "Acquireing last drve information falied: %s", HiveError.des(error as! HiveError))
                     resolver.reject(error)
-                    handleBy.runError(error)
+                    handleBy.runError(error as! HiveError)
             }
         }
         return promise
@@ -83,10 +82,9 @@ public class OneDriveDrive: HiveDriveHandle {
                         Log.d(TAG(), "Acquiring root directory instance success")
                     }
                     .catch { error in
-                        let error = HiveError.failue(des: error.localizedDescription)
-                        Log.e(TAG(), "Acquiring root directory instance falied: %s", error.localizedDescription)
+                        Log.e(TAG(), "Acquiring root directory instance falied: %s", HiveError.des(error as! HiveError))
                         resolver.reject(error)
-                        handleBy.runError(error)
+                        handleBy.runError(error as! HiveError)
                 }
             }
             return promise
@@ -129,10 +127,9 @@ public class OneDriveDrive: HiveDriveHandle {
                         Log.d(TAG(), "Directory %s has been created successfully", withPath)
                     }
                     .catch{ error in
-                        let error = HiveError.failue(des: error.localizedDescription)
-                        Log.e(TAG(), "createDirectory falied: %s", error.localizedDescription)
+                        Log.e(TAG(), "createDirectory falied:", HiveError.des(error as! HiveError))
                         resolver.reject(error)
-                        handleBy.runError(error)
+                        handleBy.runError(error as! HiveError)
                 }
             }
             return promise
@@ -168,10 +165,9 @@ public class OneDriveDrive: HiveDriveHandle {
                         Log.d(TAG(), "Acquiring directory %s instance succeeded", atPath)
                     }
                     .catch { error in
-                        let error = HiveError.failue(des: error.localizedDescription)
-                        Log.e(TAG(), "Acquiring directory %s instance failed", atPath, error.localizedDescription)
+                        Log.e(TAG(), "Acquiring directory %s instance failed", atPath, HiveError.des(error as! HiveError))
                         resolver.reject(error)
-                        handleBy.runError(error)
+                        handleBy.runError(error as! HiveError)
                 }
             }
             return promise
@@ -186,8 +182,9 @@ public class OneDriveDrive: HiveDriveHandle {
             let promise = HivePromise<HiveFileHandle> { resolver in
                 self.authHelper.checkExpired()
                     .then { void -> HivePromise<JSON> in
+                        let ecUrl = withPath.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                         return OneDriveHttpHelper
-                            .request(url: OneDriveURL(withPath, "content").compose(),
+                            .request(url:  OneDriveURL.API + "/root:" + "\(ecUrl):/content?@microsoft.graph.conflictBehavior=fail",
                                      method: .put, parameters: nil,
                                      encoding: JSONEncoding.default,
                                      headers: OneDriveHttpHeader.headers(self.authHelper),
@@ -207,10 +204,9 @@ public class OneDriveDrive: HiveDriveHandle {
                         Log.d(TAG(), "File %s on OneDrive has been created.", withPath);
                     }
                     .catch { error in
-                        let error = HiveError.failue(des: error.localizedDescription)
-                        Log.e(TAG(), "Creating file %s on remote OneDrive failed %s", withPath, error.localizedDescription)
+                        Log.e(TAG(), "Creating file %s on remote OneDrive failed %s", withPath, HiveError.des(error as! HiveError))
                         resolver.reject(error)
-                        handleBy.runError(error)
+                        handleBy.runError(error as! HiveError)
                 }
             }
             return promise
@@ -249,10 +245,9 @@ public class OneDriveDrive: HiveDriveHandle {
                         Log.d(TAG(), "Acquiring file %s instance succeeded", atPath)
                     }
                     .catch { error in
-                        let error = HiveError.failue(des: error.localizedDescription)
-                        Log.e(TAG(), "Acquiring file %s instance failed: %s", atPath, error.localizedDescription)
+                        Log.e(TAG(), "Acquiring file %s instance failed: %s", atPath, HiveError.des(error as! HiveError))
                         resolver.reject(error)
-                        handleBy.runError(error)
+                        handleBy.runError(error as! HiveError)
                 }
             }
             return promise
@@ -289,10 +284,9 @@ public class OneDriveDrive: HiveDriveHandle {
                     Log.d(TAG(), "Acquiring item info information succeeeded (info: %s)", itemInfo.attrDic!.description)
                 }
                 .catch { error in
-                    let error = HiveError.failue(des: error.localizedDescription)
-                    Log.e(TAG(), "Acquireing item info information falied: %s", error.localizedDescription)
+                    Log.e(TAG(), "Acquireing item info information falied: %s", HiveError.des(error as! HiveError))
                     resolver.reject(error)
-                    handleBy.runError(error)
+                    handleBy.runError(error as! HiveError)
             }
         }
         return promise

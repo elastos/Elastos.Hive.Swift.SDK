@@ -121,10 +121,9 @@ class IPFSDirectory: HiveDirectoryHandle {
                     handleBy.didSucceed(directoryHandle)
                 }
                 .catch{ error in
-                    let error = HiveError.failue(des: error.localizedDescription)
                     Log.e(TAG(), "directoryHandle falied: %s", error.localizedDescription)
                     resolver.reject(error)
-                    handleBy.runError(error)
+                    handleBy.runError(error as! HiveError)
             }
         }
         return promise

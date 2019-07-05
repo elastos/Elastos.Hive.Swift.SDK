@@ -62,8 +62,9 @@ internal class OneDriveAuthHelper: AuthHelper {
                 encoding: JSONEncoding.default,
                 headers: nil).responseJSON(completionHandler: { dataResponse in
                     guard dataResponse.response?.statusCode == 200 else{
-                        let error = HiveError.failue(des: dataResponse.toString())
-                        Log.e(TAG(), "Logout faild: %s",error.localizedDescription)
+                        let json = JSON(JSON(dataResponse.result.value as Any)["error"])
+                        let error = HiveError.failue(des: json["message"].stringValue)
+                        Log.e(TAG(), "Logout faild: %s", HiveError.des(error))
                         handleBy.runError(error)
                         resolver.reject(error)
                         return
@@ -91,7 +92,7 @@ internal class OneDriveAuthHelper: AuthHelper {
                 Log.d(TAG(), "AuthCode succeed")
                 resolver.fulfill(authCode)
                 }.catch{ error in
-                    Log.e(TAG(), "AuthCode faild: %s",error.localizedDescription)
+                    Log.e(TAG(), "AuthCode faild: %s",HiveError.des(error as! HiveError))
                     resolver.reject(error)
             }
         }
@@ -113,7 +114,7 @@ internal class OneDriveAuthHelper: AuthHelper {
             Alamofire.request(urlRequest).responseJSON(completionHandler: { dataResponse in
                 guard dataResponse.response?.statusCode == 200 else{
                     let error = HiveError.failue(des: dataResponse.toString())
-                    Log.e(TAG(), "AccessToken faild: %s",error.localizedDescription)
+                    Log.e(TAG(), "AccessToken faild: %s",HiveError.des(error))
                     resolver.reject(error)
                     return
                 }
@@ -146,8 +147,9 @@ internal class OneDriveAuthHelper: AuthHelper {
             urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
             Alamofire.request(urlRequest).responseJSON(completionHandler: { dataResponse in
                 guard dataResponse.response?.statusCode == 200 else{
-                    let error = HiveError.failue(des: dataResponse.toString())
-                    Log.e(TAG(), "RefreshToken faild: %s",error.localizedDescription)
+                    let json = JSON(JSON(dataResponse.result.value as Any)["error"])
+                    let error = HiveError.failue(des: json["message"].stringValue)
+                    Log.e(TAG(), "RefreshToken faild: %s",HiveError.des(error))
                     resolver.reject(error)
                     return
                 }
