@@ -74,10 +74,9 @@ internal class IPFSClient: HiveClientHandle {
                     resolver.fulfill(clientInfo)
                 }
                 .catch{ error in
-                    let error = HiveError.failue(des: error.localizedDescription)
-                    Log.e(TAG(), "lastUpdatedInfo falied: %s", error.localizedDescription)
+                    Log.e(TAG(), "lastUpdatedInfo falied: " + HiveError.des(error as! HiveError))
                     resolver.reject(error)
-                    handleBy.runError(error)
+                    handleBy.runError(error as! HiveError)
             }
         }
         return promise
@@ -121,10 +120,9 @@ internal class IPFSClient: HiveClientHandle {
                     handleBy.didSucceed(driveHandle)
                 }
                 .catch{ error in
-                    let error = HiveError.failue(des: error.localizedDescription)
-                    Log.e(TAG(), "defaultDriveHandle falied: %s", error.localizedDescription)
+                    Log.e(TAG(), "defaultDriveHandle falied: " + HiveError.des(error as! HiveError))
                     resolver.reject(error)
-                    handleBy.runError(error)
+                    handleBy.runError(error as! HiveError)
             }
         }
         return promise

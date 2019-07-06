@@ -42,10 +42,9 @@ internal class IPFSDrive: HiveDriveHandle {
                     resolver.fulfill(driveInfo)
                 }
                 .catch{ error in
-                    let error = HiveError.failue(des: error.localizedDescription)
-                    Log.e(TAG(), "lastUpdatedInfo falied: %s", error.localizedDescription)
+                    Log.e(TAG(), "lastUpdatedInfo falied: " + HiveError.des(error as! HiveError))
                     resolver.reject(error)
-                    handleBy.runError(error)
+                    handleBy.runError(error as! HiveError)
             }
         }
         return promise
@@ -79,9 +78,8 @@ internal class IPFSDrive: HiveDriveHandle {
                         handleBy.didSucceed(directoryHandle)
                     }
                     .catch{ error in
-                        let error = HiveError.failue(des: error.localizedDescription)
-                        Log.e(TAG(), "rootDirectoryHandle falied: %s", error.localizedDescription)
-                        handleBy.runError(error)
+                        Log.e(TAG(), "rootDirectoryHandle falied: " + HiveError.des(error as! HiveError))
+                        handleBy.runError(error as! HiveError)
                         resolver.reject(error)
                 }
             }
@@ -119,10 +117,9 @@ internal class IPFSDrive: HiveDriveHandle {
                         resolver.fulfill(directoryHandle)
                         handleBy.didSucceed(directoryHandle)
                     }.catch{ error in
-                        let hiveError = HiveError.failue(des: error.localizedDescription)
-                        Log.e(TAG(), "createDirectory falied: %s", error.localizedDescription)
-                        resolver.reject(hiveError)
-                        handleBy.runError(hiveError)
+                        Log.e(TAG(), "createDirectory falied: " + HiveError.des(error as! HiveError))
+                        resolver.reject(error)
+                        handleBy.runError(error as! HiveError)
                 }
             }
             return promise
@@ -158,10 +155,9 @@ internal class IPFSDrive: HiveDriveHandle {
                         handleBy.didSucceed(directoryHandle)
                     }
                     .catch{ error in
-                        let error = HiveError.failue(des: error.localizedDescription)
-                        Log.e(TAG(), "directoryHandle falied: %s", error.localizedDescription)
+                        Log.e(TAG(), "directoryHandle falied: " + HiveError.des(error as! HiveError))
                         resolver.reject(error)
-                        handleBy.runError(error)
+                        handleBy.runError(error as! HiveError)
                 }
             }
             return promise
@@ -199,10 +195,9 @@ internal class IPFSDrive: HiveDriveHandle {
                         resolver.fulfill(fileHandle)
                     }
                     .catch{ error in
-                        let hiveError = HiveError.failue(des: error.localizedDescription)
-                        Log.e(TAG(), "directoryHandle falied: %s", error.localizedDescription)
-                        handleBy.runError(hiveError)
-                        resolver.reject(hiveError)
+                        Log.e(TAG(), "directoryHandle falied: " + HiveError.des(error as! HiveError))
+                        handleBy.runError(error as! HiveError)
+                        resolver.reject(error)
                 }
             }
             return promise
@@ -238,10 +233,9 @@ internal class IPFSDrive: HiveDriveHandle {
                         handleBy.didSucceed(fileHandle)
                     }
                     .catch{ error in
-                        let error = HiveError.failue(des: error.localizedDescription)
-                        Log.e(TAG(), "fileHandle falied: %s", error.localizedDescription)
+                        Log.e(TAG(), "fileHandle falied: " + HiveError.des(error as! HiveError))
                         resolver.reject(error)
-                        handleBy.runError(error)
+                        handleBy.runError(error as! HiveError)
                 }
             }
             return promise
@@ -272,10 +266,9 @@ internal class IPFSDrive: HiveDriveHandle {
                     handleBy.didSucceed(itemInfo)
                 }
                 .catch{ error in
-                    let error = HiveError.failue(des: error.localizedDescription)
-                    Log.e(TAG(), "getItemInfo falied: %s", error.localizedDescription)
+                    Log.e(TAG(), "getItemInfo falied: " + HiveError.des(error as! HiveError))
                     resolver.reject(error)
-                    handleBy.runError(error)
+                    handleBy.runError(error as! HiveError)
             }
         }
         return promise

@@ -39,10 +39,9 @@ internal class IPFSFile: HiveFileHandle {
                     resolver.fulfill(fileInfo)
                 }
                 .catch{ error in
-                    let error = HiveError.failue(des: error.localizedDescription)
-                    Log.e(TAG(), "lastUpdatedInfo falied: %s", error.localizedDescription)
+                    Log.e(TAG(), "lastUpdatedInfo falied: " + HiveError.des(error as! HiveError))
                     resolver.reject(error)
-                    handleBy.runError(error)
+                    handleBy.runError(error as! HiveError)
             }
         }
         return promise
@@ -71,10 +70,9 @@ internal class IPFSFile: HiveFileHandle {
                     resolver.fulfill(HiveVoid())
                     handleBy.didSucceed(HiveVoid())
                 }.catch{ error in
-                    let hiveError = HiveError.failue(des: error.localizedDescription)
-                    Log.e(TAG(), "moveTo falied: %s", error.localizedDescription)
-                    resolver.reject(hiveError)
-                    handleBy.runError(hiveError)
+                    Log.e(TAG(), "moveTo falied: " + HiveError.des(error as! HiveError))
+                    resolver.reject(error)
+                    handleBy.runError(error as! HiveError)
                 }
         }
         return promise
@@ -95,7 +93,7 @@ internal class IPFSFile: HiveFileHandle {
                 .then{ hash -> HivePromise<JSON> in
                     let uid = (self.authHelper as! IPFSAuthHelper).param.uid
                     let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_CP.rawValue
-                    let dest = newPath.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+                    let dest = (newPath + "/").addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                     let params = ["uid": uid, "source": hash, "dest": dest]
                     return IPFSAPIs.request(url, .post, params)
                 }
@@ -111,10 +109,9 @@ internal class IPFSFile: HiveFileHandle {
                     handleBy.didSucceed(HiveVoid())
                 }
                 .catch{ error in
-                    let hiveError = HiveError.failue(des: error.localizedDescription)
-                    Log.e(TAG(), "copyTo falied: %s", error.localizedDescription)
-                    resolver.reject(hiveError)
-                    handleBy.runError(hiveError)
+                    Log.e(TAG(), "copyTo falied: " + HiveError.des(error as! HiveError))
+                    resolver.reject(error)
+                    handleBy.runError(error as! HiveError)
             }
         }
         return promise
@@ -146,10 +143,9 @@ internal class IPFSFile: HiveFileHandle {
                     handleBy.didSucceed(success)
                 }
                 .catch{ error in
-                    let hiveError = HiveError.failue(des: error.localizedDescription)
-                    Log.e(TAG(), "deleteItem falied: %s", error.localizedDescription)
-                    resolver.reject(hiveError)
-                    handleBy.runError(hiveError)
+                    Log.e(TAG(), "deleteItem falied: " + HiveError.des(error as! HiveError))
+                    resolver.reject(error)
+                    handleBy.runError(error as! HiveError)
             }
         }
         return promise
@@ -198,7 +194,7 @@ internal class IPFSFile: HiveFileHandle {
                     resolver.fulfill(readData)
                     handleBy.didSucceed(readData)
                 }.catch{ error in
-                    Log.e(TAG(), "readData falied: %s", error.localizedDescription)
+                    Log.e(TAG(), "readData falied: " + HiveError.des(error as! HiveError))
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
                 }
@@ -239,7 +235,7 @@ internal class IPFSFile: HiveFileHandle {
                     resolver.fulfill(readData)
                     handleBy.didSucceed(readData)
                 }.catch{ error in
-                    Log.e(TAG(), "readData falied: %s", error.localizedDescription)
+                    Log.e(TAG(), "readData falied: " + HiveError.des(error as! HiveError))
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
                 }
@@ -278,7 +274,7 @@ internal class IPFSFile: HiveFileHandle {
                     handleBy.didSucceed(length)
                 }
                 .catch{ error in
-                    Log.e(TAG(), "writeData falied: %s", error.localizedDescription)
+                    Log.e(TAG(), "writeData falied: " + HiveError.des(error as! HiveError))
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
             }
@@ -317,7 +313,7 @@ internal class IPFSFile: HiveFileHandle {
                     handleBy.didSucceed(length)
                 }
                 .catch{ error in
-                    Log.e(TAG(), "writeData falied: %s", error.localizedDescription)
+                    Log.e(TAG(), "writeData falied: " + HiveError.des(error as! HiveError))
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
             }
@@ -346,9 +342,8 @@ internal class IPFSFile: HiveFileHandle {
                     resolver.fulfill(HiveVoid())
                 }
                 .catch{ error in
-                    let hiveError = HiveError.failue(des: error.localizedDescription)
-                    Log.e(TAG(), "writeData falied: %s", error.localizedDescription)
-                    resolver.reject(hiveError)
+                    Log.e(TAG(), "writeData falied: " + HiveError.des(error as! HiveError))
+                    resolver.reject(error)
             }
         }
         return promise

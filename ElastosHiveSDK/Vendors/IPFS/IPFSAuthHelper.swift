@@ -32,7 +32,7 @@ class IPFSAuthHelper: AuthHelper {
                     Log.d(TAG(), "login succeed")
                 }.catch { (error) in
                     resolver.reject(error)
-                    Log.e(TAG(), "login falied: %s", error.localizedDescription)
+                    Log.e(TAG(), "login falied: " + HiveError.des(error as! HiveError))
             }
         }
         return promise
@@ -67,7 +67,7 @@ class IPFSAuthHelper: AuthHelper {
                     resolver.fulfill(uid)
                 }
                 .catch { error in
-                    let error = HiveError.failue(des: error.localizedDescription)
+                    let error = HiveError.failue(des: HiveError.des(error as! HiveError))
                     resolver.reject(error)
             }
         }
@@ -84,7 +84,7 @@ class IPFSAuthHelper: AuthHelper {
                     resolver.fulfill(peerId)
                 }
                 .catch{ error in
-                    let error = HiveError.failue(des: error.localizedDescription)
+                    let error = HiveError.failue(des: HiveError.des(error as! HiveError))
                     resolver.reject(error)
             }
         }
@@ -100,7 +100,6 @@ class IPFSAuthHelper: AuthHelper {
                     resolver.fulfill(hash)
                 }
                 .catch{ error in
-                    let error = HiveError.failue(des: error.localizedDescription)
                     resolver.reject(error)
             }
         }
@@ -118,7 +117,7 @@ class IPFSAuthHelper: AuthHelper {
                     resolver.fulfill(HiveVoid())
                 }
                 .catch{ error in
-                    let error = HiveError.failue(des: error.localizedDescription)
+                    let error = HiveError.failue(des: HiveError.des(error as! HiveError))
                     resolver.reject(error)
             }
         }
