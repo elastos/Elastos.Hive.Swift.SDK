@@ -46,12 +46,12 @@ internal class OneDriveFile: HiveFileHandle {
                     self.lastInfo = fileInfo
                     handleBy.didSucceed(fileInfo)
                     resolver.fulfill(fileInfo)
-                    Log.d(TAG(), "Acquiring last file information succeeded: %s", fileInfo.description)
+                    Log.d(TAG(), "Acquiring last file information succeeded: " + fileInfo.description)
                 }
                 .catch{ error in
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
-                    Log.e(TAG(), "Acquiring last file info failed: %s", HiveError.des(error as! HiveError))
+                    Log.e(TAG(), "Acquiring last file info failed: " + HiveError.des(error as! HiveError))
             }
         }
         return promise
@@ -163,7 +163,7 @@ internal class OneDriveFile: HiveFileHandle {
                 .catch{ error in
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
-                    Log.e(TAG(), "Deleting the file item falied: %s", HiveError.des(error as! HiveError))
+                    Log.e(TAG(), "Deleting the file item falied: " + HiveError.des(error as! HiveError))
             }
         }
         return promise
@@ -209,7 +209,7 @@ internal class OneDriveFile: HiveFileHandle {
                     handleBy.didSucceed(readData)
                 }
                 .catch{ error in
-                    Log.e(TAG(), "readData falied: %s", HiveError.des(error as! HiveError))
+                    Log.e(TAG(), "readData falied: " + HiveError.des(error as! HiveError))
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
             }
@@ -247,7 +247,7 @@ internal class OneDriveFile: HiveFileHandle {
                     handleBy.didSucceed(readData)
                 }
                 .catch{ error in
-                    Log.e(TAG(), "readData falied: %s", HiveError.des(error as! HiveError))
+                    Log.e(TAG(), "readData falied: " + HiveError.des(error as! HiveError))
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
             }
@@ -284,7 +284,7 @@ internal class OneDriveFile: HiveFileHandle {
                     handleBy.didSucceed(length)
                 }
                 .catch{ error in
-                    Log.e(TAG(), "writeData falied: %s", HiveError.des(error as! HiveError))
+                    Log.e(TAG(), "writeData falied: " + HiveError.des(error as! HiveError))
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
             }
@@ -320,7 +320,7 @@ internal class OneDriveFile: HiveFileHandle {
                     handleBy.didSucceed(length)
                 }
                 .catch{ error in
-                    Log.e(TAG(), "writeData falied: %s", HiveError.des(error as! HiveError))
+                    Log.e(TAG(), "writeData falied: " + HiveError.des(error as! HiveError))
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
             }
@@ -352,7 +352,7 @@ internal class OneDriveFile: HiveFileHandle {
                     resolver.fulfill(HiveVoid())
                 }
                 .catch{ error in
-                    Log.e(TAG(), "writeData falied: %s", HiveError.des(error as! HiveError))
+                    Log.e(TAG(), "writeData falied: " + HiveError.des(error as! HiveError))
                     resolver.reject(error)
             }
         }

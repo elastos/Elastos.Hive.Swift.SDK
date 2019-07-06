@@ -43,7 +43,7 @@ public class OneDriveDrive: HiveDriveHandle {
                     Log.d(TAG(), "Acquiring last drive information succeeeded (info: %s)", driveInfo.attrDic!.description)
                 }
                 .catch { error in
-                    Log.e(TAG(), "Acquireing last drve information falied: %s", HiveError.des(error as! HiveError))
+                    Log.e(TAG(), "Acquireing last drve information falied: " + HiveError.des(error as! HiveError))
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
             }
@@ -82,7 +82,7 @@ public class OneDriveDrive: HiveDriveHandle {
                         Log.d(TAG(), "Acquiring root directory instance success")
                     }
                     .catch { error in
-                        Log.e(TAG(), "Acquiring root directory instance falied: %s", HiveError.des(error as! HiveError))
+                        Log.e(TAG(), "Acquiring root directory instance falied: " + HiveError.des(error as! HiveError))
                         resolver.reject(error)
                         handleBy.runError(error as! HiveError)
                 }
@@ -204,7 +204,7 @@ public class OneDriveDrive: HiveDriveHandle {
                         Log.d(TAG(), "File %s on OneDrive has been created.", withPath);
                     }
                     .catch { error in
-                        Log.e(TAG(), "Creating file %s on remote OneDrive failed %s", withPath, HiveError.des(error as! HiveError))
+                        Log.e(TAG(), "Creating file %s on remote OneDrive failed " + withPath + HiveError.des(error as! HiveError))
                         resolver.reject(error)
                         handleBy.runError(error as! HiveError)
                 }
@@ -245,7 +245,7 @@ public class OneDriveDrive: HiveDriveHandle {
                         Log.d(TAG(), "Acquiring file %s instance succeeded", atPath)
                     }
                     .catch { error in
-                        Log.e(TAG(), "Acquiring file %s instance failed: %s", atPath, HiveError.des(error as! HiveError))
+                        Log.e(TAG(), "Acquiring file %s instance failed: " + atPath + HiveError.des(error as! HiveError))
                         resolver.reject(error)
                         handleBy.runError(error as! HiveError)
                 }
@@ -284,7 +284,7 @@ public class OneDriveDrive: HiveDriveHandle {
                     Log.d(TAG(), "Acquiring item info information succeeeded (info: %s)", itemInfo.attrDic!.description)
                 }
                 .catch { error in
-                    Log.e(TAG(), "Acquireing item info information falied: %s", HiveError.des(error as! HiveError))
+                    Log.e(TAG(), "Acquireing item info information falied: " + HiveError.des(error as! HiveError))
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
             }

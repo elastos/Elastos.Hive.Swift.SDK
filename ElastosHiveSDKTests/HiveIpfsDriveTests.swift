@@ -4,15 +4,12 @@ import XCTest
 @testable import ElastosHiveSDK
 
 
-class HiveIpfsDriveTests: XCTestCase, Authenticator{
-    func requestAuthentication(_ requestURL: String) -> Bool {
-        return true
-    }
+class HiveIpfsDriveTests: XCTestCase {
 
     var hiveClient: HiveClientHandle?
     var hiveParams: DriveParameter?
     var lock: XCTestExpectation?
-    var timeOut: Double = 600.0
+    var timeout: Double = 600.0
 
     override func setUp() {
         hiveParams = DriveParameter.createForIpfsDrive("uid-6516f0c7-d5bb-431a-9f12-1f8d8e923642")
@@ -20,125 +17,304 @@ class HiveIpfsDriveTests: XCTestCase, Authenticator{
         hiveClient = HiveClientHandle.sharedInstance(type: .hiveIPFS)
     }
 
-    func testA_login() {
-        lock = XCTestExpectation(description: "wait for testA_login")
-
-        let globalQueue = DispatchQueue.global()
-        globalQueue.async {
-            do {
-                _ = try self.hiveClient?.login(self as Authenticator)
-                self.lock?.fulfill()
-            }catch {
-                XCTFail()
+    func testLastUpdatedInfo() {
+        // 1. Test lastUdateInfo after login
+        lock = XCTestExpectation(description: "wait for test login.")
+        //    anyway login
+        IpfsCommon().login(lock!, hiveClient: self.hiveClient!)
+        lock = XCTestExpectation(description: "wait for test lastUpateInfo after login.")
+        self.hiveClient?.defaultDriveHandle()
+            .then{ drive -> HivePromise<HiveDriveInfo> in
+                return drive.lastUpdatedInfo()
+            }
+            .done{ clientInfo in
+                XCTAssertNotNil(clientInfo)
                 self.lock?.fulfill()
             }
+            .catch{ error in
+                XCTFail()
+                self.lock?.fulfill()
         }
-        wait(for: [lock!], timeout: timeOut)
+        wait(for: [lock!], timeout: timeout)
+
+        // 2. Test lastUdateInfo after logout
+        lock = XCTestExpectation(description: "wait for test logout.")
+        // logout
+        IpfsCommon().logOut(lock!, hiveClient: self.hiveClient!)
+
+        lock = XCTestExpectation(description: "wait for test lastUdateInfo after logout.")
+        self.hiveClient?.defaultDriveHandle()
+            .then{ drive -> HivePromise<HiveDriveInfo> in
+                return drive.lastUpdatedInfo()
+            }
+            .done{ clientInfo in
+                XCTAssertNotNil(clientInfo)
+                self.lock?.fulfill()
+            }
+            .catch{ error in
+                let des = HiveError.des(error as! HiveError)
+                XCTAssertEqual(des, "Please login first")
+                self.lock?.fulfill()
+        }
     }
 
-    func testB_lastUpdatedInfo() {
-        lock = XCTestExpectation(description: "wait for testB_lastUpdatedInfo")
-        self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDriveInfo> in
-            return drive.lastUpdatedInfo()
-        }).done({ (driveInfo) in
-            XCTAssertNotNil(driveInfo)
-            self.lock?.fulfill()
-        }).catch({ (error) in
-            XCTFail()
-            self.lock?.fulfill()
-        })
-        wait(for: [lock!], timeout: timeOut)
+    func testRootDirectoryHandle() {
+        // 1. Test lastUdateInfo after login
+        lock = XCTestExpectation(description: "wait for test login.")
+        //    anyway login
+        IpfsCommon().login(lock!, hiveClient: self.hiveClient!)
+        lock = XCTestExpectation(description: "wait for test rootDirectoryHandle after login.")
+        self.hiveClient?.defaultDriveHandle()
+            .then{ drive -> HivePromise<HiveDirectoryHandle> in
+                return drive.rootDirectoryHandle()
+            }
+            .done{ directory in
+                XCTAssertNotNil(directory.directoryId)
+                self.lock?.fulfill()
+            }
+            .catch{ error in
+                XCTFail()
+                self.lock?.fulfill()
+        }
+        wait(for: [lock!], timeout: timeout)
+
+        // 2. Test lastUdateInfo after logout
+        lock = XCTestExpectation(description: "wait for test logout.")
+        // logout
+        IpfsCommon().logOut(lock!, hiveClient: self.hiveClient!)
+
+        lock = XCTestExpectation(description: "wait for test rootDirectoryHandle after logout.")
+        self.hiveClient?.defaultDriveHandle()
+            .then{ drive -> HivePromise<HiveDirectoryHandle> in
+                return drive.rootDirectoryHandle()
+            }
+            .done{ directory in
+                XCTAssertNotNil(directory.directoryId)
+                self.lock?.fulfill()
+            }
+            .catch{ error in
+                let des = HiveError.des(error as! HiveError)
+                XCTAssertEqual(des, "Please login first")
+                self.lock?.fulfill()
+        }
     }
 
-    func testC_RootDirectoryHandle() {
-
-        lock = XCTestExpectation(description: "wait for testC_RootDirectoryHandle")
-        self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
-            return drive.rootDirectoryHandle()
-        }).done({ (directory) in
-            XCTAssertNotNil(directory)
-            self.lock?.fulfill()
-        }).catch({ (error) in
-            XCTFail()
-            self.lock?.fulfill()
-        })
-        wait(for: [lock!], timeout: timeOut)
-    }
-
-    func testD_CreateDirectory() {
-
-        lock = XCTestExpectation(description: "wait for testD_CreateDirectory")
+    func testCreateDirectory() {
+        // 1. nonarm create
+        lock = XCTestExpectation(description: "wait for test login.")
+        //    login
+        IpfsCommon().login(lock!, hiveClient: self.hiveClient!)
+        // create nonarm directory
+        lock = XCTestExpectation(description: "wait for create nonarm directory.")
         timeTest = Timestamp.getTimeAtNow()
-        self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
-            return drive.createDirectory(withPath: "/hiveIpfs_Drive_test4_CreateDirectory_\(timeTest!)")
-        }).done({ (directory) in
-            XCTAssertNotNil(directory)
-            self.lock?.fulfill()
-        }).catch({ (error) in
-            XCTFail()
-            self.lock?.fulfill()
-        })
-        wait(for: [lock!], timeout: timeOut)
+        self.hiveClient?.defaultDriveHandle()
+            .then{ drive -> HivePromise<HiveDirectoryHandle> in
+                return drive.createDirectory(withPath: "/ipfs_createD_\(timeTest!)")
+            }.done{ directory in
+                XCTAssertNotNil(directory.directoryId)
+                self.lock?.fulfill()
+            }.catch{ error in
+                XCTFail()
+                self.lock?.fulfill()
+        }
+        wait(for: [lock!], timeout: timeout)
+
+        // 2. create same name directory
+        lock = XCTestExpectation(description: "wait for create same name directory.")
+        self.hiveClient?.defaultDriveHandle().then{ drive -> HivePromise<HiveDirectoryHandle> in
+            return drive.createDirectory(withPath: "/ipfs_createD_\(timeTest!)")
+            }.done{ directory in
+                XCTFail()
+                self.lock?.fulfill()
+            }.catch{ error in
+                let des = HiveError.des(error as! HiveError)
+                XCTAssertEqual(des, "IPFS unsuccessful: 500: file already exists")
+                self.lock?.fulfill()
+        }
+        wait(for: [lock!], timeout: timeout)
     }
 
-    func testE_directoryHandle() {
-        lock = XCTestExpectation(description: "wait for testE_directoryHandle")
-        self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveDirectoryHandle> in
-            return drive.directoryHandle(atPath: "/hiveIpfs_Drive_test4_CreateDirectory_\(timeTest!)")
-        }).done({ (directory) in
-            XCTAssertNotNil(directory)
-            self.lock?.fulfill()
-        }).catch({ (error) in
-            XCTFail()
-            self.lock?.fulfill()
-        })
-        wait(for: [lock!], timeout: timeOut)
-    }
-
-    func testF_createFile() {
+    func testDirectoryHandle() {
+        //      login
+        lock = XCTestExpectation(description: "wait for test login.")
+        IpfsCommon().login(lock!, hiveClient: self.hiveClient!)
+        //    create directory
         timeTest = Timestamp.getTimeAtNow()
-        lock = XCTestExpectation(description: "wait for testF_createFile")
-        self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveFileHandle> in
-            return drive.createFile(withPath: "/hiveIpfs_Drive_test6_createFile_\(timeTest!)")
-        }).done({ (file) in
-            XCTAssertNotNil(file)
-            self.lock?.fulfill()
-        }).catch({ (error) in
-            XCTFail()
-            self.lock?.fulfill()
-        })
-        wait(for: [lock!], timeout: timeOut)
+        lock = XCTestExpectation(description: "wait for test create directory.")
+        IpfsCommon().creatDirectory(lock!, hiveClient: self.hiveClient!, timeTest!)
+        //   1. get existing path directory
+        lock = XCTestExpectation(description: "wait for get existing path directory.")
+        self.hiveClient?.defaultDriveHandle()
+            .then{ drive -> HivePromise<HiveDirectoryHandle> in
+                return drive.directoryHandle(atPath: "/ipfs_createD_\(timeTest!)")
+            }.done{ directory in
+                XCTAssertNotNil(directory.directoryId)
+                self.lock?.fulfill()
+            }.catch{ error in
+                XCTFail()
+                self.lock?.fulfill()
+        }
+        wait(for: [lock!], timeout: timeout)
+
+        // 2. get non-existing path directory
+        lock = XCTestExpectation(description: "wait for get non-existing path directory.")
+        self.hiveClient?.defaultDriveHandle()
+            .then{ drive -> HivePromise<HiveDirectoryHandle> in
+                return drive.directoryHandle(atPath: "/ipfs_createD_\(timeTest!)_2")
+            }.done{ directory in
+                XCTFail()
+                self.lock?.fulfill()
+            }.catch{ error in
+                let des = HiveError.des(error as! HiveError)
+                XCTAssertEqual(des, "IPFS unsuccessful: 500: file does not exist")
+                self.lock?.fulfill()
+        }
+        wait(for: [lock!], timeout: timeout)
     }
 
-    func testG_GetFileHandle() {
+    func testCreateFile() {
+        //     login
+        lock = XCTestExpectation(description: "wait for test login.")
+        IpfsCommon().login(lock!, hiveClient: self.hiveClient!)
 
-        lock = XCTestExpectation(description: "wait for testG_GetFileHandle")
-        self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveFileHandle> in
-            return drive.fileHandle(atPath: "/hiveIpfs_Drive_test6_createFile_\(timeTest!)")
-        }).done({ (file) in
-            XCTAssertNotNil(file)
-            self.lock?.fulfill()
-        }).catch({ (error) in
-            XCTFail()
-            self.lock?.fulfill()
-        })
-        wait(for: [lock!], timeout: timeOut)
+        // 1. create nanorm file
+        timeTest = Timestamp.getTimeAtNow()
+        lock = XCTestExpectation(description: "wait for create nanarm file")
+        self.hiveClient?.defaultDriveHandle()
+            .then{ drive -> HivePromise<HiveFileHandle> in
+                return drive.createFile(withPath: "/ipfs_createF_\(timeTest!)")
+            }.done{ file in
+                XCTAssertNotNil(file.fileId)
+                self.lock?.fulfill()
+            }.catch{ error in
+                XCTFail()
+                self.lock?.fulfill()
+        }
+        wait(for: [lock!], timeout: timeout)
+
+        // 2. create repleate file
+        lock = XCTestExpectation(description: "wait for create repleate file")
+        self.hiveClient?.defaultDriveHandle()
+            .then{ drive -> HivePromise<HiveFileHandle> in
+                return drive.createFile(withPath: "/ipfs_createF_\(timeTest!)")
+            }.done{ file in
+                self.lock?.fulfill()
+            }.catch{ error in
+                XCTFail()
+                self.lock?.fulfill()
+        }
+        wait(for: [lock!], timeout: timeout)
     }
 
-    func testH_getItemInfo() {
+    func testFileHandle() {
+        //     login
+        lock = XCTestExpectation(description: "wait for test login.")
+        IpfsCommon().login(lock!, hiveClient: self.hiveClient!)
 
-        lock = XCTestExpectation(description: "wait for testH_getItemInfo")
-        self.hiveClient?.defaultDriveHandle().then({ (drive) -> HivePromise<HiveItemInfo> in
-            return drive.getItemInfo("/hiveIpfs_Drive_test6_createFile_\(timeTest!)")
-        }).done({ (file) in
-            XCTAssertNotNil(file)
-            self.lock?.fulfill()
-        }).catch({ (error) in
-            XCTFail()
-            self.lock?.fulfill()
-        })
-        wait(for: [lock!], timeout: timeOut)
+        // create a file
+        timeTest = Timestamp.getTimeAtNow()
+        lock = XCTestExpectation(description: "wait for create a file.")
+        IpfsCommon().createFile(lock!, hiveClient: self.hiveClient!, timeTest!)
+        // 1. get a existing file
+        lock = XCTestExpectation(description: "wait for get a existing file")
+        self.hiveClient?.defaultDriveHandle().then{ drive -> HivePromise<HiveFileHandle> in
+            return drive.fileHandle(atPath: "/ipfs_createF_\(timeTest!)")
+            }.done{ file in
+                XCTAssertNotNil(file.fileId)
+                self.lock?.fulfill()
+            }.catch{ error in
+                XCTFail()
+                self.lock?.fulfill()
+        }
+        wait(for: [lock!], timeout: timeout)
+
+        // 2. get a non-existing file
+        lock = XCTestExpectation(description: "wait for get a non-existing file")
+        self.hiveClient?.defaultDriveHandle().then{ drive -> HivePromise<HiveFileHandle> in
+            return drive.fileHandle(atPath: "/ipfs_createF_\(timeTest!)_2")
+            }.done{ file in
+                XCTFail()
+                self.lock?.fulfill()
+            }.catch{ error in
+                let des = HiveError.des(error as! HiveError)
+                XCTAssertEqual(des, "IPFS unsuccessful: 500: file does not exist")
+                self.lock?.fulfill()
+        }
+        wait(for: [lock!], timeout: timeout)
     }
 
+    func testGetItemInfo() {
+        //     login
+        lock = XCTestExpectation(description: "wait for test login.")
+        IpfsCommon().login(lock!, hiveClient: self.hiveClient!)
+
+        //  create a file
+        timeTest = Timestamp.getTimeAtNow()
+        lock = XCTestExpectation(description: "wait for create a file.")
+        IpfsCommon().createFile(lock!, hiveClient: self.hiveClient!, timeTest!)
+
+        // 1. test an existing file getItemInfo
+        lock = XCTestExpectation(description: "wait for test an existing file getItemInfo")
+        self.hiveClient?.defaultDriveHandle()
+            .then{ drive -> HivePromise<HiveItemInfo> in
+                return drive.getItemInfo("/ipfs_createF_\(timeTest!)")
+            }.done{ file in
+                XCTAssertNotNil(file)
+                self.lock?.fulfill()
+            }.catch{ error in
+                XCTFail()
+                self.lock?.fulfill()
+        }
+        wait(for: [lock!], timeout: timeout)
+
+        // 2. get a non-exisiting file getItemInfo
+        lock = XCTestExpectation(description: "wait for test get a non-exisiting file getItemInfo")
+        self.hiveClient?.defaultDriveHandle()
+            .then{ drive -> HivePromise<HiveItemInfo> in
+                return drive.getItemInfo("/ipfs_createF_\(timeTest!)_2")
+            }.done{ file in
+                XCTFail()
+                self.lock?.fulfill()
+            }.catch{ error in
+                let des = HiveError.des(error as! HiveError)
+                XCTAssertEqual(des, "IPFS unsuccessful: 500: file does not exist")
+                self.lock?.fulfill()
+        }
+        wait(for: [lock!], timeout: timeout)
+
+        //  create directory
+        timeTest = Timestamp.getTimeAtNow()
+        lock = XCTestExpectation(description: "wait for test create directory.")
+        IpfsCommon().creatDirectory(lock!, hiveClient: self.hiveClient!, timeTest!)
+
+        // 3. test an existing directory getItemInfo
+        lock = XCTestExpectation(description: "wait for test an existing directory getItemInfo")
+        self.hiveClient?.defaultDriveHandle()
+            .then{ drive -> HivePromise<HiveItemInfo> in
+                return drive.getItemInfo("/ipfs_createD_\(timeTest!)")
+            }.done{ file in
+                XCTAssertNotNil(file)
+                self.lock?.fulfill()
+            }.catch{ error in
+                XCTFail()
+                self.lock?.fulfill()
+        }
+        wait(for: [lock!], timeout: timeout)
+
+        // 4. get a non-exisiting directory getItemInfo
+        lock = XCTestExpectation(description: "wait for test get a non-exisiting directory getItemInfo")
+        self.hiveClient?.defaultDriveHandle()
+            .then{ drive -> HivePromise<HiveItemInfo> in
+                return drive.getItemInfo("/ipfs_createD_\(timeTest!)_2")
+            }.done{ file in
+                XCTFail()
+                self.lock?.fulfill()
+            }.catch{ error in
+                let des = HiveError.des(error as! HiveError)
+                XCTAssertEqual(des, "IPFS unsuccessful: 500: file does not exist")
+                self.lock?.fulfill()
+        }
+        wait(for: [lock!], timeout: timeout)
+    }
 
 }

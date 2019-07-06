@@ -37,10 +37,9 @@ class IPFSDirectory: HiveDirectoryHandle {
                     resolver.fulfill(dirInfo)
                 }
                 .catch{ error in
-                    let error = HiveError.failue(des: error.localizedDescription)
-                    Log.e(TAG(), "lastUpdatedInfo falied: %s", error.localizedDescription)
+                    Log.e(TAG(), "lastUpdatedInfo falied: " + HiveError.des(error as! HiveError))
                     resolver.reject(error)
-                    handleBy.runError(error)
+                    handleBy.runError(error as! HiveError)
             }
         }
         return promise
@@ -56,10 +55,10 @@ class IPFSDirectory: HiveDirectoryHandle {
             if self.pathName == "/" {
                 path = self.pathName + withName
             }
-            path = path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+            let epath = path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_MKDIR.rawValue
             let uid = (authHelper as! IPFSAuthHelper).param.uid
-            let param = ["uid": uid,"path": path]
+            let param = ["uid": uid,"path": epath]
             self.authHelper!.checkExpired()
                 .then{ void -> HivePromise<JSON> in
                     return IPFSAPIs.request(url, .post, param)
@@ -82,10 +81,9 @@ class IPFSDirectory: HiveDirectoryHandle {
                     handleBy.didSucceed(directoryHandle)
                 }
                 .catch{ error in
-                    let hiveError = HiveError.failue(des: error.localizedDescription)
-                    Log.e(TAG(), "createDirectory falied: %s", error.localizedDescription)
-                    resolver.reject(hiveError)
-                    handleBy.runError(hiveError)
+                    Log.e(TAG(), "createDirectory falied: " + HiveError.des(error as! HiveError))
+                    resolver.reject(error)
+                    handleBy.runError(error as! HiveError)
             }
         }
         return promise
@@ -103,8 +101,8 @@ class IPFSDirectory: HiveDirectoryHandle {
             if self.pathName == "/" {
                 path = self.pathName + atName
             }
-            path = path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-            let param = ["uid": uid, "path": path]
+            let epath = path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+            let param = ["uid": uid, "path": epath]
             self.authHelper?.checkExpired()
                 .then{ json -> HivePromise<JSON> in
                     return IPFSAPIs.request(url, .post, param)
@@ -121,7 +119,7 @@ class IPFSDirectory: HiveDirectoryHandle {
                     handleBy.didSucceed(directoryHandle)
                 }
                 .catch{ error in
-                    Log.e(TAG(), "directoryHandle falied: %s", error.localizedDescription)
+                    Log.e(TAG(), "directoryHandle falied: " + HiveError.des(error as! HiveError))
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
             }
@@ -139,10 +137,10 @@ class IPFSDirectory: HiveDirectoryHandle {
             if self.pathName == "/" {
                 path = self.pathName + withName
             }
-            path = path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+            let epath = path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             self.authHelper!.checkExpired()
                 .then{ succeed -> HivePromise<JSON> in
-                    return IPFSAPIs.creatFile(path, self.authHelper!)
+                    return IPFSAPIs.creatFile(epath, self.authHelper!)
                 }
                 .then{ json -> HivePromise<String> in
                     return IPFSAPIs.getHash("/", self.authHelper!)
@@ -162,10 +160,9 @@ class IPFSDirectory: HiveDirectoryHandle {
                     handleBy.didSucceed(fileHandle)
                     resolver.fulfill(fileHandle)
                 }.catch{ error in
-                    let hiveError = HiveError.failue(des: error.localizedDescription)
-                    Log.e(TAG(), "createFile falied: %s", error.localizedDescription)
-                    handleBy.runError(hiveError)
-                    resolver.reject(hiveError)
+                    Log.e(TAG(), "createFile falied: " + HiveError.des(error as! HiveError))
+                    handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise
@@ -183,8 +180,8 @@ class IPFSDirectory: HiveDirectoryHandle {
             if self.pathName == "/" {
                 path = self.pathName + atName
             }
-            path = path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-            let param = ["uid": uid, "path": path]
+            let epath = path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+            let param = ["uid": uid, "path": epath]
             self.authHelper?.checkExpired()
                 .then{ void -> HivePromise<JSON> in
                     return IPFSAPIs.request(url, .post, param)
@@ -201,10 +198,9 @@ class IPFSDirectory: HiveDirectoryHandle {
                     handleBy.didSucceed(fileHandle)
                 }
                 .catch{ error in
-                    let error = HiveError.failue(des: error.localizedDescription)
-                    Log.e(TAG(), "fileHandle falied: %s", error.localizedDescription)
+                    Log.e(TAG(), "fileHandle falied: " + HiveError.des(error as! HiveError))
                     resolver.reject(error)
-                    handleBy.runError(error)
+                    handleBy.runError(error as! HiveError)
             }
         }
         return promise
@@ -231,10 +227,9 @@ class IPFSDirectory: HiveDirectoryHandle {
                     handleBy.didSucceed(children)
                 }
                 .catch{ error in
-                    let error = HiveError.failue(des: error.localizedDescription)
-                    Log.e(TAG(), "getChildren falied: %s", error.localizedDescription)
+                    Log.e(TAG(), "getChildren falied: " + HiveError.des(error as! HiveError))
                     resolver.reject(error)
-                    handleBy.runError(error)
+                    handleBy.runError(error as! HiveError)
             }
         }
         return promise
@@ -248,7 +243,7 @@ class IPFSDirectory: HiveDirectoryHandle {
         let promise = HivePromise<HiveVoid> { resolver in
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_MV.rawValue
             let uid = (authHelper as! IPFSAuthHelper).param.uid
-            let originPath = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+            let originPath = self.pathName
             let dest = newPath.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let params = ["uid": uid,
                           "source": originPath,
@@ -269,10 +264,9 @@ class IPFSDirectory: HiveDirectoryHandle {
                     handleBy.didSucceed(HiveVoid())
                 }
                 .catch{ error in
-                    let hiveError = HiveError.failue(des: error.localizedDescription)
-                    Log.e(TAG(), "moveTo falied: %s", error.localizedDescription)
-                    resolver.reject(hiveError)
-                    handleBy.runError(hiveError)
+                    Log.e(TAG(), "moveTo falied: " + HiveError.des(error as! HiveError))
+                    resolver.reject(error)
+                    handleBy.runError(error as! HiveError)
             }
         }
         return promise
@@ -307,10 +301,9 @@ class IPFSDirectory: HiveDirectoryHandle {
                     resolver.fulfill(HiveVoid())
                     handleBy.didSucceed(HiveVoid())
                 }.catch{ error in
-                    let hiveError = HiveError.failue(des: error.localizedDescription)
-                    Log.e(TAG(), "copyTo falied: %s", error.localizedDescription)
-                    resolver.reject(hiveError)
-                    handleBy.runError(hiveError)
+                    Log.e(TAG(), "copyTo falied: " + HiveError.des(error as! HiveError))
+                    resolver.reject(error)
+                    handleBy.runError(error as! HiveError)
             }
         }
         return promise
@@ -342,10 +335,9 @@ class IPFSDirectory: HiveDirectoryHandle {
                     handleBy.didSucceed(success)
                 }
                 .catch{ error in
-                    let hiveError = HiveError.failue(des: error.localizedDescription)
-                    Log.e(TAG(), "deleteItem falied: %s", error.localizedDescription)
-                    resolver.reject(hiveError)
-                    handleBy.runError(hiveError)
+                    Log.e(TAG(), "deleteItem falied: " + HiveError.des(error as! HiveError))
+                    resolver.reject(error)
+                    handleBy.runError(error as! HiveError)
             }
         }
         return promise

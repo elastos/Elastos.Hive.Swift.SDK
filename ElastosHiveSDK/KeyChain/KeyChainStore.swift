@@ -60,7 +60,7 @@ class KeyChainStore {
         let data = try? JSONSerialization.data(withJSONObject: count, options: [])
         let jsonstring = String(data: data!, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))
         guard jsonstring != nil else {
-            Log.e(TAG(), "Save Key-Value for account :%s", forDrive.rawValue)
+            Log.e(TAG(), "Save Key-Value for account :" + forDrive.rawValue)
             return
         }
         let keychain = KeychainSwift()
@@ -113,7 +113,7 @@ class KeyChainStore {
         let data = try? JSONSerialization.data(withJSONObject: ipfsJson, options: [])
         let jsonstring = String(data: data!, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))
         guard jsonstring != nil else {
-            Log.e(TAG(), "Save Key-Value for account :%s", forDrive.rawValue)
+            Log.e(TAG(), "Save Key-Value for account :" + forDrive.rawValue)
             return
         }
         keychain.set(jsonstring!, forKey: forDrive.rawValue)

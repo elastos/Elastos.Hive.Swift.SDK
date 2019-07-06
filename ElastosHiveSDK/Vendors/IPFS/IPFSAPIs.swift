@@ -17,7 +17,8 @@ class IPFSAPIs {
                               headers: nil)
                 .responseJSON(completionHandler: { dataResponse in
                     guard dataResponse.response?.statusCode == 200 else{
-                        let error = HiveError.failue(des: dataResponse.toString())
+                        let json = JSON(dataResponse.result.value as Any)
+                        let error = HiveError.failue(des: json["Message"].stringValue)
                         resolver.reject(error)
                         return
                     }
@@ -41,7 +42,8 @@ class IPFSAPIs {
                 case .success(let upload, _, _):
                     upload.responseJSON(completionHandler: { dataResponse in
                         guard dataResponse.response?.statusCode == 200 else {
-                            let error = HiveError.failue(des: dataResponse.toString())
+                            let json = JSON(dataResponse.result.value as Any)
+                            let error = HiveError.failue(des: json["Message"].stringValue)
                             resolver.reject(error)
                             return
                         }
@@ -71,7 +73,8 @@ class IPFSAPIs {
                 case .success(let upload, _, _):
                     upload.responseJSON(completionHandler: { dataResponse in
                         guard dataResponse.response?.statusCode == 200 else {
-                            let error = HiveError.failue(des: dataResponse.toString())
+                            let json = JSON(dataResponse.result.value as Any)
+                            let error = HiveError.failue(des: json["Message"].stringValue)
                             resolver.reject(error)
                             return
                         }
@@ -100,7 +103,8 @@ class IPFSAPIs {
                               headers: nil)
                 .responseJSON(completionHandler: { dataResponse in
                     guard dataResponse.response?.statusCode == 200 else {
-                        let error = HiveError.failue(des: dataResponse.toString())
+                        let json = JSON(dataResponse.result.value as Any)
+                        let error = HiveError.failue(des: json["Message"].stringValue)
                         resolver.reject(error)
                         return
                     }
@@ -122,7 +126,8 @@ class IPFSAPIs {
                               headers: nil)
                 .responseJSON(completionHandler: { dataResponse in
                     guard dataResponse.response?.statusCode == 200 else {
-                        let error = HiveError.failue(des: dataResponse.toString())
+                        let json = JSON(dataResponse.result.value as Any)
+                        let error = HiveError.failue(des: json["Message"].stringValue)
                         resolver.reject(error)
                         return
                     }
@@ -145,7 +150,8 @@ class IPFSAPIs {
                                   headers: nil)
                     .responseJSON(completionHandler: { dataResponse in
                         guard dataResponse.response?.statusCode == 200 else {
-                            let error = HiveError.failue(des: dataResponse.toString())
+                            let json = JSON(dataResponse.result.value as Any)
+                            let error = HiveError.failue(des: json["Message"].stringValue)
                             resolver.reject(error)
                             return
                         }
