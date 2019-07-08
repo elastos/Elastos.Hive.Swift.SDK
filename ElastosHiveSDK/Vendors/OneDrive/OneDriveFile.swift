@@ -345,7 +345,6 @@ internal class OneDriveFile: HiveFileHandle {
                                 self.authHelper)
                 }
                 .done{ jsonData in
-                    CacheHelper.uploadCache(.oneDrive, url.md5)
                     self.cursor = 0
                     self.finish = false
                     Log.d(TAG(), "writeData succeed")
@@ -363,7 +362,7 @@ internal class OneDriveFile: HiveFileHandle {
         cursor = 0
         finish = false
         let url = OneDriveURL(pathName, "content").compose()
-        _ = CacheHelper.discardCache(.oneDrive, url.md5)
+        _ = CacheHelper.clearCache(.oneDrive, url.md5)
     }
 
     override func close() {
