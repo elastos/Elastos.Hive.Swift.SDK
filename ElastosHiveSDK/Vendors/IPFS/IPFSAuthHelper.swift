@@ -100,7 +100,23 @@ class IPFSAuthHelper: AuthHelper {
                     resolver.fulfill(hash)
                 }
                 .catch{ error in
-                    resolver.reject(error)
+                    let errorMessage = HiveError.des(error as! HiveError)
+                    if errorMessage == "routing: not found" {
+                        IPFSAPIs.getHash("/", self)
+                            .then{ hash -> HivePromise<HiveVoid> in
+                                IPFSAPIs.publish(hash, self)
+                            }.done{ void  in
+                                self.getHash(peerId)
+                                    .done{ hash in
+                                        resolver.fulfill(hash)
+                                    }.catch{ error in
+                                        resolver.reject(error)
+                                }
+                            }.catch{ error in
+                                resolver.reject(error)
+                        }
+                    }
+
             }
         }
         return promise
