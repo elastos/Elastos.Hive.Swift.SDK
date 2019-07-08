@@ -6,6 +6,8 @@ import Alamofire
 @objc(OneDriveFile)
 internal class OneDriveFile: HiveFileHandle {
     var name: String?
+    public var cTag: String?
+    public var downloadUrl: String?
     var sessionManager = SessionManager()
     var cursor: UInt64 = 0
     var finish: Bool = false
@@ -330,19 +332,42 @@ internal class OneDriveFile: HiveFileHandle {
 
     override func commitData() -> HivePromise<HiveVoid> {
         let promise = HivePromise<HiveVoid> { resolver in
-            let accesstoken = (self.authHelper as! OneDriveAuthHelper).token!.accessToken
-            let url = OneDriveURL(pathName, "content").compose()
-            let headers = ["Authorization": "bearer \(accesstoken)", "Content-Type": "text/plain"]
-            let data = CacheHelper.uploadFile(.oneDrive, url.md5)
+            let accesstoken = (self.authHelper as! OneDriveAuthHelper).token?.accessToken ?? ""
+            let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+            let url = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):\(path):/createUploadSession"
+            let params: Dictionary<String, Any> = ["file": "file",                                                      "@microsoft.graph.conflictBehavior": "fail"]
+            let headers = [
+                OneDriveHttpHeader.ContentType: "application/json;charset=UTF-8",
+                OneDriveHttpHeader.Authorization: "bearer \(accesstoken)",
+                "if-match": self.cTag!]
             self.authHelper.checkExpired()
-                .then{ void -> HivePromise<HiveVoid> in
+                .then{ void -> HivePromise<String> in
                     return OneDriveHttpHelper
-                        .upload(data: data,
-                                to: url,
-                                method: .put,
-                                headers: headers,
-                                avalidCode: statusCode.created.rawValue,
-                                self.authHelper)
+                        .createUploadSession(url: url,
+                                             method: .post,
+                                             parameters: params,
+                                             encoding: JSONEncoding.default,
+                                             headers: headers,
+                                             self.authHelper)
+                }.then{ uploadUrl -> HivePromise<HiveVoid> in
+                    let cacheUrl: String = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):\(path):/content"
+                    let data = CacheHelper.uploadFile(.oneDrive, cacheUrl.md5)
+                    let length = Int64(data.count)
+                    var end = length - 1
+                    if length == 0 {
+                        end = length
+                    }
+                    let headers: Dictionary<String, String> = [
+                        "Content-Type": "application/json;charset=UTF-8",
+                        "Authorization": "bearer \(accesstoken)",
+                        "Content-Length": "\(length)",
+                        "Content-Range": "bytes 0-\(end)/\(length)"]
+                    return OneDriveHttpHelper
+                        .uploadWriteData(data: data,
+                                         to: uploadUrl,
+                                         method: .put,
+                                         headers: headers,
+                                         self.authHelper)
                 }
                 .done{ jsonData in
                     self.cursor = 0
