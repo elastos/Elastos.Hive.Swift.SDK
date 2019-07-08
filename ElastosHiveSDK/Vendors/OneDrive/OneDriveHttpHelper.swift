@@ -42,15 +42,41 @@ class OneDriveHttpHelper: NSObject {
         return promise
     }
 
-    class func upload(data: Data, to: URLConvertible,
-                      method: HTTPMethod = .get,
-                      headers: HTTPHeaders,
-                      avalidCode: Int, _ authHelper: AuthHelper) -> HivePromise<HiveVoid> {
+    class func createUploadSession(url: URLConvertible,
+                                   method: HTTPMethod = .post,
+                                   parameters: Parameters? = nil,
+                                   encoding: ParameterEncoding = JSONEncoding.default,
+                                   headers: HTTPHeaders,
+                                   _ authHelper: AuthHelper) -> HivePromise<String> {
+        let promise = HivePromise<String> { resolver in
+            Alamofire.request(url,
+                              method: method,
+                              parameters: parameters,
+                              encoding: encoding,
+                              headers: headers)
+                .responseJSON { dataResponse in
+                    switch dataResponse.result {
+                    case .success(let re):
+                        let uploadUrl = JSON(re)["uploadUrl"].stringValue
+                        resolver.fulfill(uploadUrl)
+                    case .failure(let error):
+                        resolver.reject(error)
+                    }
+            }
+        }
+        return promise
+    }
+
+    class func uploadWriteData(data: Data, to: URLConvertible,
+                               method: HTTPMethod = .put,
+                               headers: HTTPHeaders,
+                            _ authHelper: AuthHelper) -> HivePromise<HiveVoid> {
         let promise = HivePromise<HiveVoid> { resolver in
-            Alamofire.upload(data, to: to,
+            Alamofire.upload(data,
+                             to: to,
                              method: method,
                              headers: headers)
-                .responseJSON { dataResponse in
+                .responseJSON(completionHandler: { dataResponse in
                     guard dataResponse.response?.statusCode != statusCode.unauthorized.rawValue else {
                         (authHelper as! OneDriveAuthHelper).token?.expiredTime = ""
                         KeyChainStore.writeback((authHelper as! OneDriveAuthHelper).token!,
@@ -60,15 +86,14 @@ class OneDriveHttpHelper: NSObject {
                         resolver.reject(error)
                         return
                     }
-                    guard dataResponse.response?.statusCode == 200 || dataResponse.response?.statusCode == avalidCode
-                        else{
-                            let json = JSON(JSON(dataResponse.result.value as Any)["error"])
-                            let error = HiveError.failue(des: json["message"].stringValue)
-                            resolver.reject(error)
-                            return
+                    guard dataResponse.response?.statusCode == statusCode.created.rawValue || dataResponse.response?.statusCode == statusCode.ok.rawValue else {
+                        let json = JSON(JSON(dataResponse.result.value as Any)["error"])
+                        let error = HiveError.failue(des: json["message"].stringValue)
+                        resolver.reject(error)
+                        return
                     }
                     resolver.fulfill(HiveVoid())
-            }
+            })
         }
         return promise
     }

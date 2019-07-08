@@ -9,7 +9,7 @@ class HiveOneDriveClient: XCTestCase {
     var hiveClient: HiveClientHandle?
     var hiveParam: DriveParameter?
     var lock: XCTestExpectation?
-    let timeout: Double = 100.0
+    let timeout: Double = 600.0
 
     override func setUp() {
         hiveParam = DriveParameter.createForOneDrive("31c2dacc-80e0-47e1-afac-faac093a739c", "Files.ReadWrite%20offline_access", REDIRECT_URI)

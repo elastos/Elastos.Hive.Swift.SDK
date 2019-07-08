@@ -237,6 +237,8 @@ public class OneDriveDrive: HiveDriveHandle {
                         fileHandle.pathName = atPath
                         fileHandle.lastInfo = fileInfo
                         fileHandle.drive = self
+                        fileHandle.cTag = jsonData["cTag"].stringValue
+                        fileHandle.downloadUrl = jsonData["@microsoft.graph.downloadUrl"].stringValue
                         handleBy.didSucceed(fileHandle)
                         resolver.fulfill(fileHandle)
                         let pathName = ("/" + PathExtracter(atPath).baseNamePart())
