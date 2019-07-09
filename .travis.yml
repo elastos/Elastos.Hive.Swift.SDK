@@ -5,21 +5,27 @@ sudo: true
 
 matrix:
   include:
-  - env: DESTINATION=iphoneos
+  - env: TARGET=iOS DESTINATION=iphoneos
 
-  - env: DESTINATION=iphonesimulator
+  - env: TARGET=iOS DESTINATION=iphonesimulator
+
+  - env: TARGET=macOS
 
 install:
   - sudo gem update --system
-  - sudo gem install  -n /usr/local/bin cocoapods
-  - pod repo update
-  - pod install
+  - sudo gem install -n /usr/local/bin cocoapods
+  - travis_retry pod repo update --verbose
+  - pod install --verbose --no-repo-update
 
 script:
   - xcodebuild -showsdks
-  - if [ $DESTINATION == "iphoneos" ]; then
-      xcodebuild -workspace ElastosHiveSDK.xcworkspace -scheme ElastosHiveSDK -configuration Release build;
+  - if [ $TARGET == "macOS" ]; then
+      xcodebuild -workspace ElastosHiveSDK.xcworkspace -scheme ElastosHiveSDK_macOS CODE_SIGNING_REQUIRED=NO;
     else
-      xcodebuild -workspace ElastosHiveSDK.xcworkspace -scheme ElastosHiveSDK -configuration Release -destination 'platform=iOS Simulator,name=iPhone Xs,OS=12.2' build;
+      if [ $DESTINATION == "iphoneos" ]; then
+        xcodebuild -workspace ElastosHiveSDK.xcworkspace -scheme ElastosHiveSDK -configuration Release build;
+      else
+        xcodebuild -workspace ElastosHiveSDK.xcworkspace -scheme ElastosHiveSDK -configuration Release -destination 'platform=iOS Simulator,name=iPhone Xs,OS=12.2' build;
+      fi
     fi
   #- ./docs.sh
