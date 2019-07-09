@@ -30,9 +30,11 @@ internal class IPFSFile: HiveFileHandle {
                 .then{ void -> HivePromise<JSON> in
                     return IPFSAPIs.request(url, .post, params)
                 }
-                .done{ success in
+                .done{ jsonData in
                     Log.d(TAG(), "lastUpdatedInfo succeed")
-                    let dic = [HiveFileInfo.itemId: uid]
+                    let dic = [HiveFileInfo.itemId: uid,
+                               HiveFileInfo.name: PathExtracter(self.pathName).baseNamePart(),
+                               HiveFileInfo.size: String(jsonData["Size"].intValue)]
                     let fileInfo = HiveFileInfo(dic)
                     self.lastInfo = fileInfo
                     handleBy.didSucceed(fileInfo)

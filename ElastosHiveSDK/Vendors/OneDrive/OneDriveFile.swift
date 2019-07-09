@@ -43,7 +43,9 @@ internal class OneDriveFile: HiveFileHandle {
                 }
                 .done{ jsonData in
                     let fileId = jsonData["id"].stringValue
-                    let dic = [HiveFileInfo.itemId: fileId]
+                    let dic = [HiveFileInfo.itemId: fileId,
+                               HiveFileInfo.name: jsonData["name"].stringValue,
+                               HiveFileInfo.size: String(jsonData["size"].intValue)]
                     let fileInfo = HiveFileInfo(dic)
                     self.lastInfo = fileInfo
                     handleBy.didSucceed(fileInfo)
