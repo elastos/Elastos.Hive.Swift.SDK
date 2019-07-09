@@ -68,7 +68,9 @@ internal class IPFSDrive: HiveDriveHandle {
                     }
                     .done{ json in
                         Log.d(TAG(), "rootDirectoryHandle succeed")
-                        let dic = [HiveDirectoryInfo.itemId: uid]
+                        let dic = [HiveDirectoryInfo.itemId: uid,
+                                   HiveDirectoryInfo.name: "/",
+                                   HiveDirectoryInfo.childCount: String(json["Entries"].count)]
                         let directoryInfo = HiveDirectoryInfo(dic)
                         let directoryHandle = IPFSDirectory(directoryInfo, self.authHelper)
                         directoryHandle.lastInfo = directoryInfo
@@ -108,7 +110,9 @@ internal class IPFSDrive: HiveDriveHandle {
                     }.done{ success in
                         Log.d(TAG(), "createDirectory succeed")
                         let uid = (self.authHelper as! IPFSAuthHelper).param.uid
-                        let dic = [HiveDirectoryInfo.itemId: uid]
+                        let dic = [HiveDirectoryInfo.itemId: uid,
+                                   HiveDirectoryInfo.name: PathExtracter(withPath).baseNamePart(),
+                                   HiveDirectoryInfo.childCount: "0"]
                         let directoryInfo = HiveDirectoryInfo(dic)
                         let directoryHandle = IPFSDirectory(directoryInfo, self.authHelper)
                         directoryHandle.lastInfo = directoryInfo
@@ -143,9 +147,11 @@ internal class IPFSDrive: HiveDriveHandle {
                     .then{ void -> HivePromise<JSON> in
                         return IPFSAPIs.request(url, .post, param)
                     }
-                    .done{ success in
+                    .done{ json in
                         Log.d(TAG(), "directoryHandle succeed")
-                        let dic = [HiveDirectoryInfo.itemId: uid]
+                        let dic = [HiveDirectoryInfo.itemId: uid,
+                                   HiveDirectoryInfo.name: PathExtracter(atPath).baseNamePart(),
+                                   HiveDirectoryInfo.childCount:String(json["Blocks"].stringValue)]
                         let directoryInfo = HiveDirectoryInfo(dic)
                         let directoryHandle = IPFSDirectory(directoryInfo, self.authHelper)
                         directoryHandle.lastInfo = directoryInfo
