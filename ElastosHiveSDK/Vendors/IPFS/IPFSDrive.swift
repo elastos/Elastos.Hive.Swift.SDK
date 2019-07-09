@@ -66,7 +66,7 @@ internal class IPFSDrive: HiveDriveHandle {
                     .then{ void -> HivePromise<JSON> in
                         return IPFSAPIs.request(url, .post, params)
                     }
-                    .done{ success in
+                    .done{ json in
                         Log.d(TAG(), "rootDirectoryHandle succeed")
                         let dic = [HiveDirectoryInfo.itemId: uid]
                         let directoryInfo = HiveDirectoryInfo(dic)
@@ -185,7 +185,9 @@ internal class IPFSDrive: HiveDriveHandle {
                     .done{ success in
                         Log.d(TAG(), "createFile succeed")
                         let uid = (self.authHelper as! IPFSAuthHelper).param.uid
-                        let dic = [HiveFileInfo.itemId: uid]
+                        let dic = [HiveFileInfo.itemId: uid,
+                                   HiveFileInfo.name: PathExtracter(withPath).baseNamePart(),
+                                   HiveFileInfo.size: "0"]
                         let fileInfo = HiveFileInfo(dic)
                         let fileHandle = IPFSFile(fileInfo, self.authHelper)
                         fileHandle.pathName = withPath
@@ -218,9 +220,11 @@ internal class IPFSDrive: HiveDriveHandle {
                     .then{ void -> HivePromise<JSON> in
                         return IPFSAPIs.request(url, .post, param)
                     }
-                    .done{ success in
+                    .done{ json in
                         Log.d(TAG(), "fileHandle succeed")
-                        let dic = [HiveFileInfo.itemId: uid]
+                        let dic = [HiveFileInfo.itemId: uid,
+                                   HiveFileInfo.name: PathExtracter(atPath).baseNamePart(),
+                                   HiveFileInfo.size: String(json["Size"].intValue)]
                         let fileInfo = HiveFileInfo(dic)
                         let fileHandle = IPFSFile(fileInfo, self.authHelper)
                         fileHandle.lastInfo = fileInfo
@@ -259,7 +263,7 @@ internal class IPFSDrive: HiveDriveHandle {
                     Log.d(TAG(), "getItemInfo succeed")
                     let dic = [HiveItemInfo.itemId: uid,
                                HiveItemInfo.name: PathExtracter(path).baseNamePart(),
-                               HiveItemInfo.size: jsonData["Size"].stringValue,
+                               HiveItemInfo.size: String(jsonData["Size"].intValue),
                                HiveItemInfo.type: jsonData["Type"].stringValue]
                     let itemInfo = HiveItemInfo(dic)
                     resolver.fulfill(itemInfo)

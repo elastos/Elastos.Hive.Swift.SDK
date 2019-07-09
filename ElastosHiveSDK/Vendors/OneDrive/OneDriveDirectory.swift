@@ -173,7 +173,9 @@ class OneDriveDirectory: HiveDirectoryHandle {
                 }
                 .done{ jsonData in
                     let fileId = jsonData["id"].stringValue
-                    let dic = [HiveFileInfo.itemId: fileId]
+                    let dic = [HiveFileInfo.itemId: fileId,
+                               HiveFileInfo.name: jsonData["name"].stringValue,
+                               HiveFileInfo.size: "0"]
                     let fileInfo = HiveFileInfo(dic)
                     let fileHandle = OneDriveFile(fileInfo, self.authHelper!)
                     fileHandle.name = jsonData["name"].string
@@ -219,7 +221,9 @@ class OneDriveDirectory: HiveDirectoryHandle {
                     }
                     .done{ jsonData in
                         let fileId = jsonData["id"].stringValue
-                        let dic = [HiveFileInfo.itemId: fileId]
+                        let dic = [HiveFileInfo.itemId: fileId,
+                                   HiveFileInfo.name: jsonData["name"].stringValue,
+                                   HiveFileInfo.size: String(jsonData["size"].intValue)]
                         let fileInfo = HiveFileInfo(dic)
                         let fileHandle = OneDriveFile(fileInfo, self.authHelper!)
                         fileHandle.name = jsonData["name"].string

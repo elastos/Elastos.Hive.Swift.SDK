@@ -151,7 +151,9 @@ class IPFSDirectory: HiveDirectoryHandle {
                 .done{ success in
                     Log.d(TAG(), "createFile succeed")
                     let uid = (self.authHelper as! IPFSAuthHelper).param.uid
-                    let dic = [HiveFileInfo.itemId: uid]
+                    let dic = [HiveFileInfo.itemId: uid,
+                               HiveFileInfo.name: PathExtracter(withName).baseNamePart(),
+                               HiveFileInfo.size: "0"]
                     let fileInfo = HiveFileInfo(dic)
                     let fileHandle = IPFSFile(fileInfo, self.authHelper!)
                     fileHandle.pathName = path
@@ -188,7 +190,9 @@ class IPFSDirectory: HiveDirectoryHandle {
                 }
                 .done{ json in
                     Log.d(TAG(), "fileHandle succeed")
-                    let dic = [HiveDirectoryInfo.itemId: uid]
+                    let dic = [HiveFileInfo.itemId: uid,
+                               HiveFileInfo.name: PathExtracter(atName).baseNamePart(),
+                               HiveFileInfo.size: String(json["Size"].intValue)]
                     let fileInfo = HiveFileInfo(dic)
                     let fileHandle = IPFSFile(fileInfo, self.authHelper!)
                     fileHandle.lastInfo = fileInfo
