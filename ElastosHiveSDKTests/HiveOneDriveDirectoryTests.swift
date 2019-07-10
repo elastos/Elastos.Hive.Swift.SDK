@@ -250,7 +250,7 @@ class HiveOneDriveDirectoryTests: XCTestCase {
             }.then{ directory -> HivePromise<HiveDirectoryHandle> in
                 return directory.directoryHandle(atName: "od_createD_\(timeTest!)")
             }.then{ directory -> HivePromise<HiveVoid> in
-                return directory.copyTo(newPath: "/od_createF_\(timeTest! + "_2")")
+                return directory.copyTo(newPath: "/od_createD_\(timeTest! + "_2")")
             }.done{ re in
                 self.lock?.fulfill()
             }.catch{ err in
@@ -267,7 +267,7 @@ class HiveOneDriveDirectoryTests: XCTestCase {
             }.then{ directory -> HivePromise<HiveDirectoryHandle> in
                 return directory.directoryHandle(atName: "od_createD_\(timeTest!)")
             }.then{ directory -> HivePromise<HiveVoid> in
-                return directory.copyTo(newPath: "/od_createF_\(timeTest!)")
+                return directory.copyTo(newPath: "/od_createD_\(timeTest!)")
             }.done{ re in
                 self.lock?.fulfill()
             }.catch{ err in
@@ -284,7 +284,7 @@ class HiveOneDriveDirectoryTests: XCTestCase {
             }.then{ directory -> HivePromise<HiveDirectoryHandle> in
                 return directory.directoryHandle(atName: "od_createD_\(timeTest!)")
             }.then{ directory -> HivePromise<HiveVoid> in
-                return directory.copyTo(newPath: "/od_createF_\(timeTest! + "_2")")
+                return directory.copyTo(newPath: "/od_createD_\(timeTest! + "_2")")
             }.done{ re in
                 self.lock?.fulfill()
             }.catch{ error in
