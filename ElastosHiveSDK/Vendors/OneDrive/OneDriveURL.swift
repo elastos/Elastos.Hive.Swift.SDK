@@ -8,7 +8,8 @@ enum ONEDRIVE_SUB_Url: String {
 
 class OneDriveURL {
     internal static let AUTH = "https://login.microsoftonline.com/common/oauth2/v2.0"
-    internal static let API  = "https://graph.microsoft.com/v1.0/me/drive"
+    internal static let API  = "https://graph.microsoft.com/v1.0/me"
+    internal static let ROOT = "/drive/root"
 
     private let pathName: String
     private let extName : String?
@@ -24,19 +25,19 @@ class OneDriveURL {
 
     func compose() -> String {
         if pathName == "/" && extName == nil {
-            return OneDriveURL.API + "/root"
+            return OneDriveURL.API + OneDriveURL.ROOT
         }
 
         if pathName == "/" && extName != nil {
-            return OneDriveURL.API + "/root/\(extName!)"
+            return OneDriveURL.API + "\(OneDriveURL.ROOT)/\(extName!)"
         }
 
         if pathName != "/" && extName == nil {
             let path = pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-            return OneDriveURL.API + "/root:\(path)"
+            return OneDriveURL.API + "\(OneDriveURL.ROOT):\(path)"
         }
 
         let path = pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-        return OneDriveURL.API + "/root:\(path):/\(extName!)"
+        return OneDriveURL.API + "\(OneDriveURL.ROOT):\(path):/\(extName!)"
     }
 }

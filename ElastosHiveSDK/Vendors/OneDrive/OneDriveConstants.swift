@@ -10,11 +10,9 @@ enum KEYCHAIN_KEY: String {
     case REDIRECTURL    = "redirectURL"
     case SCOPE          = "scope"
     case CLIENT_ID      = "client_id"
-
 }
 
 let AUTHORIZATION_TYPE_CODE = "authorization_code"
-let ONEDRIVE_ROOTDIR     = "/root"
 let TOKEN_INVALID = "The token is invalid, please refresh token"
 
 

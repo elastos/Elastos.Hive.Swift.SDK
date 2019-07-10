@@ -128,10 +128,21 @@ public class HiveDriveHandle: Result, ResourceItem, DirectoryItem {
         return HivePromise<HiveFileHandle>(error: error)
     }
 
+
+    /// Request itemInfo with a path
+    ///
+    /// - Parameter path: The path
+    /// - Returns: The itemInfo
     public func getItemInfo(_ path: String) -> HivePromise<HiveItemInfo> {
         return getItemInfo(path, handleBy: HiveCallback<HiveItemInfo>())
     }
 
+    /// Request itemInfo with a path
+    ///
+    /// - Parameters:
+    ///   - path: The path
+    ///   - handleBy: The result
+    /// - Returns: The itemInfo
     public func getItemInfo(_ path: String, handleBy: HiveCallback<HiveItemInfo>) -> HivePromise<HiveItemInfo>{
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<HiveItemInfo>(error: error)

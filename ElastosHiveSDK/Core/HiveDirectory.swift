@@ -197,7 +197,5 @@ public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem 
     }
 
     /// Close
-    public func close() {
-        // TODO
-    }
+    public func close() {}
 }

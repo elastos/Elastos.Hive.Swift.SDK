@@ -27,14 +27,15 @@ public class OneDriveDrive: HiveDriveHandle {
             self.authHelper.checkExpired()
                 .then { void -> HivePromise<JSON> in
                     return OneDriveHttpHelper
-                        .request(url: OneDriveURL.API + "/root",
+                        .request(url: OneDriveURL.API + OneDriveURL.ROOT,
                                  method: .get,parameters: nil,
                                  encoding: JSONEncoding.default,
                                  headers: OneDriveHttpHeader.headers(self.authHelper),
                                  avalidCode: 200, self.authHelper)
                 }
                 .done { jsonData in
-                    let driId = jsonData["id"].stringValue
+                    let parentReference = JSON(jsonData["parentReference"])
+                    let driId = parentReference["driveId"].stringValue
                     let dic = [HiveDriveInfo.driveId: driId]
                     let driveInfo = HiveDriveInfo(dic)
                     self.lastInfo = driveInfo
@@ -61,7 +62,7 @@ public class OneDriveDrive: HiveDriveHandle {
                 self.authHelper.checkExpired()
                     .then { void -> HivePromise<JSON> in
                         return OneDriveHttpHelper
-                            .request(url: OneDriveURL.API + "/root",
+                            .request(url: OneDriveURL.API + OneDriveURL.ROOT,
                                      method: .get,parameters: nil,
                                      encoding: JSONEncoding.default,
                                      headers: OneDriveHttpHeader.headers(self.authHelper),
@@ -192,7 +193,7 @@ public class OneDriveDrive: HiveDriveHandle {
                     .then { void -> HivePromise<JSON> in
                         let ecUrl = withPath.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                         return OneDriveHttpHelper
-                            .request(url:  OneDriveURL.API + "/root:" + "\(ecUrl):/content?@microsoft.graph.conflictBehavior=fail",
+                            .request(url:  OneDriveURL.API + OneDriveURL.ROOT + ":\(ecUrl):/content?@microsoft.graph.conflictBehavior=fail",
                                      method: .put, parameters: nil,
                                      encoding: JSONEncoding.default,
                                      headers: OneDriveHttpHeader.headers(self.authHelper),
