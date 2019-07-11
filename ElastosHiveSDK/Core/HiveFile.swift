@@ -183,9 +183,9 @@ public class HiveFileHandle: Result, ResourceItem, FileItem {
         return HivePromise<Int32>(error: error)
     }
 
-    ///  Submitsto the remote
+    ///  Submit data to the remote cloud storage.
     ///
-    /// - Returns: Returns `viod` if the login succees, `error` otherwise.
+    /// - Returns: Returns `Void` if the data commit succeed, otherwise return `error`.
     public func commitData() -> HivePromise<HiveVoid> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<HiveVoid>(error: error)
