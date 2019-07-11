@@ -33,7 +33,6 @@ protocol FileItem {
     func deleteItem() -> HivePromise<Void>
     func deleteItem(handleBy: HiveCallback<Void>) -> HivePromise<Void>
 
-    func close()
 }
 
 extension FileItem {

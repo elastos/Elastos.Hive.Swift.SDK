@@ -218,6 +218,4 @@ public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem 
         return HivePromise<Void>(error: error)
     }
 
-    /// Close
-    public func close() {}
 }

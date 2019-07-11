@@ -216,6 +216,4 @@ public class HiveFileHandle: Result, ResourceItem, FileItem {
     /// Discard written Data
     public func discardData() {}
 
-    /// Close
-    public func close() {}
 }
