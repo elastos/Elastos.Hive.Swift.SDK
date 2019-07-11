@@ -20,10 +20,10 @@ internal class OneDriveAuthHelper: AuthHelper {
     }
 
     override func loginAsync(_ authenticator: Authenticator, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
+        token = KeyChainStore.restoreToken(.oneDrive)
         guard token == nil else {
             let promise = HivePromise<HiveVoid> { resolver in
                 Log.d(TAG(), "OneDrive already logined")
-                token = KeyChainStore.restoreToken(.oneDrive)
                 authEntry = KeyChainStore.restoreAuthEntry(.oneDrive)!
                 let padding = HiveVoid()
                 handleBy.didSucceed(padding)
@@ -167,7 +167,7 @@ internal class OneDriveAuthHelper: AuthHelper {
     }
     
     private func isExpired() -> Bool {
-        return token == nil || token!.isExpired()
+        return token!.isExpired()
     }
 
     override func checkExpired() -> HivePromise<HiveVoid> {

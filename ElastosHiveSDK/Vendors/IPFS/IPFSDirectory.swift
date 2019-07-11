@@ -198,7 +198,7 @@ class IPFSDirectory: HiveDirectoryHandle {
                     Log.d(TAG(), "fileHandle succeed")
                     let dic = [HiveFileInfo.itemId: uid,
                                HiveFileInfo.name: PathExtracter(atName).baseNamePart(),
-                               HiveFileInfo.size: String(json["Size"].intValue)]
+                               HiveFileInfo.size: String(json["Size"].uInt64Value)]
                     let fileInfo = HiveFileInfo(dic)
                     let fileHandle = IPFSFile(fileInfo, self.authHelper!)
                     fileHandle.lastInfo = fileInfo

@@ -27,10 +27,10 @@ internal class OneDriveFile: HiveFileHandle {
 
     override func lastUpdatedInfo(handleBy: HiveCallback<HiveFileInfo>) -> HivePromise<HiveFileInfo> {
         let promise = HivePromise<HiveFileInfo> { resolver in
-            var url = OneDriveURL.API + "/root"
+            var url = OneDriveURL.API + OneDriveURL.ROOT
             if self.pathName != "/" {
                 let ecurl = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-                url  = OneDriveURL.API + "/root:\(ecurl)"
+                url  = OneDriveURL.API + "\(OneDriveURL.ROOT):\(ecurl)"
             }
             self.authHelper.checkExpired()
                 .then{ viod -> HivePromise<JSON> in
@@ -45,7 +45,7 @@ internal class OneDriveFile: HiveFileHandle {
                     let fileId = jsonData["id"].stringValue
                     let dic = [HiveFileInfo.itemId: fileId,
                                HiveFileInfo.name: jsonData["name"].stringValue,
-                               HiveFileInfo.size: String(jsonData["size"].intValue)]
+                               HiveFileInfo.size: String(jsonData["size"].int64Value)]
                     let fileInfo = HiveFileInfo(dic)
                     self.lastInfo = fileInfo
                     handleBy.didSucceed(fileInfo)
@@ -68,7 +68,7 @@ internal class OneDriveFile: HiveFileHandle {
     override func moveTo(newPath: String, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
         let promise = HivePromise<HiveVoid>{ resolver in
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-            let url = (OneDriveURL.API) + (ONEDRIVE_ROOTDIR) + ":" + path
+            let url = (OneDriveURL.API) + (OneDriveURL.ROOT) + ":" + path
             let params: Dictionary<String, Any> = [
                 "parentReference": ["path": "/drive/root:" + newPath],
                 "name": self.name!,
@@ -103,9 +103,9 @@ internal class OneDriveFile: HiveFileHandle {
     override func copyTo(newPath: String, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
         let promise = HivePromise<HiveVoid>{ resolver in
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-            var url = OneDriveURL.API + ONEDRIVE_ROOTDIR + ":" + path + ":/copy"
+            var url = OneDriveURL.API + OneDriveURL.ROOT + ":" + path + ":/copy"
             if newPath == "/" {
-                url = OneDriveURL.API + ONEDRIVE_ROOTDIR + "/copy"
+                url = OneDriveURL.API + OneDriveURL.ROOT + "/copy"
             }
             let params: Dictionary<String, Any> = [
                 "parentReference" : ["path": "/drive/root:\(newPath)"],
@@ -145,7 +145,7 @@ internal class OneDriveFile: HiveFileHandle {
     override func deleteItem(handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
         let promise = HivePromise<HiveVoid>{ resolver in
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-            let url: String = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):/\(path)"
+            let url: String = "\(OneDriveURL.API)\(OneDriveURL.ROOT):/\(path)"
             self.authHelper.checkExpired()
                 .then{ void -> HivePromise<JSON> in
                     return OneDriveHttpHelper
@@ -186,7 +186,7 @@ internal class OneDriveFile: HiveFileHandle {
                 return
             }
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-            let url: String = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):\(path):/content"
+            let url: String = "\(OneDriveURL.API)\(OneDriveURL.ROOT):\(path):/content"
             let cachePath = url.md5
             let file = CacheHelper.checkCacheFileIsExist(.oneDrive, cachePath)
             if file {
@@ -228,7 +228,7 @@ internal class OneDriveFile: HiveFileHandle {
     override func readData(_ length: Int, _ position: UInt64, handleBy: HiveCallback<Data>) -> HivePromise<Data> {
         let promise = HivePromise<Data> { resolver in
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-            let url: String = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):\(path):/content"
+            let url: String = "\(OneDriveURL.API)\(OneDriveURL.ROOT):\(path):/content"
             let cachePath = url.md5
             let file = CacheHelper.checkCacheFileIsExist(.oneDrive, cachePath)
             if file {
@@ -266,7 +266,7 @@ internal class OneDriveFile: HiveFileHandle {
     override func writeData(withData: Data, handleBy: HiveCallback<Int32>) -> HivePromise<Int32> {
         let promise = HivePromise<Int32> { resolver in
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-            let url: String = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):\(path):/content"
+            let url: String = "\(OneDriveURL.API)\(OneDriveURL.ROOT):\(path):/content"
             let cachePath = url.md5
             let file = CacheHelper.checkCacheFileIsExist(.oneDrive, cachePath)
             if file {
@@ -303,7 +303,7 @@ internal class OneDriveFile: HiveFileHandle {
     override func writeData(withData: Data, _ position: UInt64, handleBy: HiveCallback<Int32>) -> HivePromise<Int32> {
         let promise = HivePromise<Int32> { resolver in
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-            let url: String = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):\(path):/content"
+            let url: String = "\(OneDriveURL.API)\(OneDriveURL.ROOT):\(path):/content"
             let cachePath = url.md5
             let file = CacheHelper.checkCacheFileIsExist(.oneDrive, cachePath)
             if file {
@@ -336,7 +336,7 @@ internal class OneDriveFile: HiveFileHandle {
         let promise = HivePromise<HiveVoid> { resolver in
             let accesstoken = (self.authHelper as! OneDriveAuthHelper).token?.accessToken ?? ""
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-            let url = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):\(path):/createUploadSession"
+            let url = "\(OneDriveURL.API)\(OneDriveURL.ROOT):\(path):/createUploadSession"
             let params: Dictionary<String, Any> = ["file": "file",                                                      "@microsoft.graph.conflictBehavior": "fail"]
             let headers = [
                 OneDriveHttpHeader.ContentType: "application/json;charset=UTF-8",
@@ -352,7 +352,7 @@ internal class OneDriveFile: HiveFileHandle {
                                              headers: headers,
                                              self.authHelper)
                 }.then{ uploadUrl -> HivePromise<HiveVoid> in
-                    let cacheUrl: String = "\(OneDriveURL.API)\(ONEDRIVE_ROOTDIR):\(path):/content"
+                    let cacheUrl: String = "\(OneDriveURL.API)\(OneDriveURL.ROOT):\(path):/content"
                     let data = CacheHelper.uploadFile(.oneDrive, cacheUrl.md5)
                     let length = Int64(data.count)
                     var end = length - 1

@@ -70,14 +70,12 @@ internal class OneDriveClient: HiveClientHandle {
                                  avalidCode: 200, self.authHelper)
                 }
                 .done { jsonData in
-                    let owner = JSON(jsonData["owner"])
-                    let user = JSON(owner["user"])
                     let dic = [
-                        HiveClientInfo.userId: user["id"].stringValue,
-                        HiveClientInfo.name: "",
-                        HiveClientInfo.email: user["email"].stringValue,
-                        HiveClientInfo.phoneNo: user["phone"].stringValue,
-                        HiveClientInfo.region: user["region"].stringValue
+                        HiveClientInfo.userId: jsonData["id"].stringValue,
+                        HiveClientInfo.name: jsonData["displayName"].stringValue,
+                        HiveClientInfo.email: jsonData["email"].stringValue,
+                        HiveClientInfo.phoneNo: jsonData["mobilePhone"].stringValue,
+                        HiveClientInfo.region: jsonData["officeLocation"].stringValue
                     ]
                     let clientInfo = HiveClientInfo(dic)
                     handleBy.didSucceed(clientInfo)
@@ -117,7 +115,7 @@ internal class OneDriveClient: HiveClientHandle {
             self.authHelper.checkExpired()
                 .then { void -> HivePromise<JSON> in
                     return OneDriveHttpHelper
-                        .request(url: OneDriveURL.API + "/root",
+                        .request(url: OneDriveURL.API + OneDriveURL.ROOT,
                                  method: .get,parameters: nil,
                                  encoding: JSONEncoding.default,
                                  headers: OneDriveHttpHeader.headers(self.authHelper),

@@ -6,7 +6,7 @@ import ElastosHiveSDK
 class OneDriveCommon:XCTestCase, Authenticator {
 
     func requestAuthentication(_ requestURL: String) -> Bool {
-        let scops = ["Files.ReadWrite","offline_access"]
+        let scops = ["Files.ReadWrite","offline_access","User.Read", "User.ReadWrite"]
         let scopStr = scops.joined(separator: " ")
         let authViewController: AuthWebViewController = AuthWebViewController()
         DispatchQueue.main.sync {
