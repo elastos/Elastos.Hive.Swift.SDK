@@ -49,28 +49,28 @@ internal class IPFSFile: HiveFileHandle {
         return promise
     }
 
-    override func moveTo(newPath: String) -> HivePromise<HiveVoid> {
-        return moveTo(newPath: newPath, handleBy: HiveCallback<HiveVoid>())
+    override func moveTo(newPath: String) -> HivePromise<Void> {
+        return moveTo(newPath: newPath, handleBy: HiveCallback<Void>())
     }
 
-    override func moveTo(newPath: String, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
-        let promise = HivePromise<HiveVoid> { resolver in
+    override func moveTo(newPath: String, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+        let promise = HivePromise<Void> { resolver in
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_MV.rawValue
             let uid = (authHelper as! IPFSAuthHelper).param.uid
             let originPath = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let dest = newPath.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let params = ["uid": uid, "source": originPath, "dest": dest]
 
-            self.authHelper.checkExpired().then{ HiveVoid -> HivePromise<JSON> in
+            self.authHelper.checkExpired().then{ Void -> HivePromise<JSON> in
                 return IPFSAPIs.request(url, .post, params)
                 }.then{ json -> HivePromise<String> in
                     return IPFSAPIs.getHash("/", self.authHelper)
-                }.then{ hash -> HivePromise<HiveVoid> in
+                }.then{ hash -> HivePromise<Void> in
                     return IPFSAPIs.publish(hash, self.authHelper)
                 }.done{ success in
                     Log.d(TAG(), "moveTo succeed")
-                    resolver.fulfill(HiveVoid())
-                    handleBy.didSucceed(HiveVoid())
+                    resolver.fulfill(Void())
+                    handleBy.didSucceed(Void())
                 }.catch{ error in
                     Log.e(TAG(), "moveTo falied: " + HiveError.des(error as! HiveError))
                     resolver.reject(error)
@@ -80,12 +80,12 @@ internal class IPFSFile: HiveFileHandle {
         return promise
     }
 
-    override func copyTo(newPath: String) -> HivePromise<HiveVoid> {
-        return copyTo(newPath: newPath, handleBy: HiveCallback<HiveVoid>())
+    override func copyTo(newPath: String) -> HivePromise<Void> {
+        return copyTo(newPath: newPath, handleBy: HiveCallback<Void>())
     }
 
-    override func copyTo(newPath: String, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
-        let promise = HivePromise<HiveVoid> { resolver in
+    override func copyTo(newPath: String, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+        let promise = HivePromise<Void> { resolver in
 
             let originPath = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             self.authHelper.checkExpired()
@@ -102,13 +102,13 @@ internal class IPFSFile: HiveFileHandle {
                 .then{ json -> HivePromise<String> in
                     return IPFSAPIs.getHash("/", self.authHelper)
                 }
-                .then{ hash -> HivePromise<HiveVoid> in
+                .then{ hash -> HivePromise<Void> in
                     return IPFSAPIs.publish(hash, self.authHelper)
                 }
                 .done{ success in
                     Log.d(TAG(), "copyTo succeed")
-                    resolver.fulfill(HiveVoid())
-                    handleBy.didSucceed(HiveVoid())
+                    resolver.fulfill(Void())
+                    handleBy.didSucceed(Void())
                 }
                 .catch{ error in
                     Log.e(TAG(), "copyTo falied: " + HiveError.des(error as! HiveError))
@@ -119,12 +119,12 @@ internal class IPFSFile: HiveFileHandle {
         return promise
     }
 
-    override func deleteItem() -> HivePromise<HiveVoid> {
-        return deleteItem(handleBy: HiveCallback<HiveVoid>())
+    override func deleteItem() -> HivePromise<Void> {
+        return deleteItem(handleBy: HiveCallback<Void>())
     }
 
-    override func deleteItem(handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
-        let promise = HivePromise<HiveVoid> { resolver in
+    override func deleteItem(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+        let promise = HivePromise<Void> { resolver in
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_RM.rawValue
             let uid = (authHelper as! IPFSAuthHelper).param.uid
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
@@ -136,7 +136,7 @@ internal class IPFSFile: HiveFileHandle {
                 .then{ json -> HivePromise<String> in
                     return IPFSAPIs.getHash("/", self.authHelper)
                 }
-                .then{ hash -> HivePromise<HiveVoid> in
+                .then{ hash -> HivePromise<Void> in
                     return IPFSAPIs.publish(hash, self.authHelper)
                 }
                 .done{ success in
@@ -323,24 +323,24 @@ internal class IPFSFile: HiveFileHandle {
         return promise
     }
 
-    override func commitData() -> HivePromise<HiveVoid> {
-        let promise = HivePromise<HiveVoid> { resolver in
+    override func commitData() -> HivePromise<Void> {
+        let promise = HivePromise<Void> { resolver in
             let uid = (self.authHelper as! IPFSAuthHelper).param.uid
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_READ.rawValue + "?uid=" + uid + "&path=" + path
             let data = CacheHelper.uploadFile(.hiveIPFS, url.md5)
-            self.authHelper.checkExpired().then{ succeed -> HivePromise<HiveVoid> in
+            self.authHelper.checkExpired().then{ succeed -> HivePromise<Void> in
                 return IPFSAPIs.writeData(path, data, self.authHelper)
                 }
                 .then{ success -> HivePromise<String> in
                     return IPFSAPIs.getHash("/", self.authHelper)
                 }
-                .then{ hash -> HivePromise<HiveVoid> in
+                .then{ hash -> HivePromise<Void> in
                     return IPFSAPIs.publish(hash, self.authHelper)
                 }
                 .done{ success in
                     Log.d(TAG(), "writeData succeed")
-                    resolver.fulfill(HiveVoid())
+                    resolver.fulfill(Void())
                 }
                 .catch{ error in
                     Log.e(TAG(), "writeData falied: " + HiveError.des(error as! HiveError))

@@ -246,7 +246,7 @@ class HiveIpfsDirectoryTests: XCTestCase {
                 return drive.rootDirectoryHandle()
             }.then{ directory -> HivePromise<HiveDirectoryHandle> in
                 return directory.directoryHandle(atName: "ipfs_createD_\(timeTest!)")
-            }.then{ directory -> HivePromise<HiveVoid> in
+            }.then{ directory -> HivePromise<Void> in
                 return directory.copyTo(newPath: "/ipfs_createF_\(timeTest! + "_2")")
             }.done{ re in
                 self.lock?.fulfill()
@@ -263,7 +263,7 @@ class HiveIpfsDirectoryTests: XCTestCase {
                 return drive.rootDirectoryHandle()
             }.then{ directory -> HivePromise<HiveDirectoryHandle> in
                 return directory.directoryHandle(atName: "ipfs_createD_\(timeTest!)")
-            }.then{ directory -> HivePromise<HiveVoid> in
+            }.then{ directory -> HivePromise<Void> in
                 return directory.copyTo(newPath: "/ipfs_createF_\(timeTest!)")
             }.done{ re in
                 self.lock?.fulfill()
@@ -280,7 +280,7 @@ class HiveIpfsDirectoryTests: XCTestCase {
                 return drive.rootDirectoryHandle()
             }.then{ directory -> HivePromise<HiveDirectoryHandle> in
                 return directory.directoryHandle(atName: "ipfs_createD_\(timeTest!)")
-            }.then{ directory -> HivePromise<HiveVoid> in
+            }.then{ directory -> HivePromise<Void> in
                 return directory.copyTo(newPath: "/ipfs_createF_\(timeTest! + "_2")")
             }.done{ re in
                 XCTFail()
@@ -308,7 +308,7 @@ class HiveIpfsDirectoryTests: XCTestCase {
                 return drive.rootDirectoryHandle()
             }.then{ directory -> HivePromise<HiveDirectoryHandle> in
                 return directory.directoryHandle(atName: "ipfs_createD_\(timeTest!)")
-            }.then{ directory -> HivePromise<HiveVoid> in
+            }.then{ directory -> HivePromise<Void> in
                 return directory.deleteItem()
             }.done{ re in
                 self.lock?.fulfill()
@@ -338,7 +338,7 @@ class HiveIpfsDirectoryTests: XCTestCase {
                 return drive.rootDirectoryHandle()
             }.then{ directory -> HivePromise<HiveDirectoryHandle> in
                 return directory.directoryHandle(atName: "/ipfs_createD_\(timeTest!)")
-            }.then{ directory -> HivePromise<HiveVoid> in
+            }.then{ directory -> HivePromise<Void> in
                 return directory.moveTo(newPath: "/ipfs_createD_\(timeTest! + "_2")")
             }.done{ re in
                 self.lock?.fulfill()
@@ -355,7 +355,7 @@ class HiveIpfsDirectoryTests: XCTestCase {
                 return drive.rootDirectoryHandle()
             }.then{ directory -> HivePromise<HiveDirectoryHandle> in
                 return directory.directoryHandle(atName: "/ipfs_createD_\(timeTest! + "_2")/ipfs_createD_\(timeTest!)")
-            }.then{ directory -> HivePromise<HiveVoid> in
+            }.then{ directory -> HivePromise<Void> in
                 return directory.moveTo(newPath: "/\(timeTest! + "_2")")
             }.done{ re in
                 self.lock?.fulfill()

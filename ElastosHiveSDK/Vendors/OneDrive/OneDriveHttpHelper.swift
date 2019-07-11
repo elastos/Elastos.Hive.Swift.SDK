@@ -70,8 +70,8 @@ class OneDriveHttpHelper: NSObject {
     class func uploadWriteData(data: Data, to: URLConvertible,
                                method: HTTPMethod = .put,
                                headers: HTTPHeaders,
-                            _ authHelper: AuthHelper) -> HivePromise<HiveVoid> {
-        let promise = HivePromise<HiveVoid> { resolver in
+                            _ authHelper: AuthHelper) -> HivePromise<Void> {
+        let promise = HivePromise<Void> { resolver in
             Alamofire.upload(data,
                              to: to,
                              method: method,
@@ -92,14 +92,14 @@ class OneDriveHttpHelper: NSObject {
                         resolver.reject(error)
                         return
                     }
-                    resolver.fulfill(HiveVoid())
+                    resolver.fulfill(Void())
             })
         }
         return promise
     }
 
-    class func pollingCopyresult(_ url: String) -> HivePromise<HiveVoid> {
-        let promise = HivePromise<HiveVoid> { resolver in
+    class func pollingCopyresult(_ url: String) -> HivePromise<Void> {
+        let promise = HivePromise<Void> { resolver in
             Alamofire.request(url,
                               method: .get,
                               parameters: nil, encoding: JSONEncoding.default, headers: nil)
@@ -107,7 +107,7 @@ class OneDriveHttpHelper: NSObject {
                     let jsonData = JSON(dataResponse.result.value as Any)
                     let stat = jsonData["status"].stringValue
                     if stat == "completed" {
-                        resolver.fulfill(HiveVoid())
+                        resolver.fulfill(Void())
                         return
                     }else if stat == "failed" {
                         let error = HiveError.failue(des: "Operation failed")
@@ -115,7 +115,7 @@ class OneDriveHttpHelper: NSObject {
                         return
                     }else {
                         self.pollingCopyresult(url).done{ (void) in
-                            resolver.fulfill(HiveVoid())
+                            resolver.fulfill(Void())
                             }.catch{ (error) in
                                 resolver.reject(error)
                         }

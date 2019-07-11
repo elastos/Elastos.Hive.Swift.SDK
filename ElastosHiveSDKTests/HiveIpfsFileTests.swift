@@ -79,7 +79,7 @@ class HiveIpfsFileTests: XCTestCase {
         self.hiveClient?.defaultDriveHandle()
             .then{ drive -> HivePromise<HiveFileHandle> in
                 return drive.fileHandle(atPath: "/ipfs_createF_\(timeTest!)")
-            }.then{ file -> HivePromise<HiveVoid> in
+            }.then{ file -> HivePromise<Void> in
                 return file.copyTo(newPath: "/ipfs_createD_\(timeTest!)")
             }.done{ re in
                 self.lock?.fulfill()
@@ -94,7 +94,7 @@ class HiveIpfsFileTests: XCTestCase {
         self.hiveClient?.defaultDriveHandle()
             .then{ drive -> HivePromise<HiveFileHandle> in
                 return drive.fileHandle(atPath: "/ipfs_createF_\(timeTest!)")
-            }.then{ file -> HivePromise<HiveVoid> in
+            }.then{ file -> HivePromise<Void> in
                 return file.copyTo(newPath: "/ipfs_createD_\(timeTest!)_non")
             }.done{ re in
                 XCTFail()
@@ -109,7 +109,7 @@ class HiveIpfsFileTests: XCTestCase {
         self.hiveClient?.defaultDriveHandle()
             .then{ drive -> HivePromise<HiveFileHandle> in
                 return drive.fileHandle(atPath: "/ipfs_createF_\(timeTest!)")
-            }.then{ file -> HivePromise<HiveVoid> in
+            }.then{ file -> HivePromise<Void> in
                 return file.copyTo(newPath: "/ipfs_createD_\(timeTest!)")
             }.done{ re in
                 XCTFail()
@@ -135,7 +135,7 @@ class HiveIpfsFileTests: XCTestCase {
         self.hiveClient?.defaultDriveHandle()
             .then{ drive -> HivePromise<HiveFileHandle> in
                 return drive.fileHandle(atPath: "/ipfs_createF_\(timeTest!)")
-            }.then{ file -> HivePromise<HiveVoid> in
+            }.then{ file -> HivePromise<Void> in
                 return file.deleteItem()
             }.done{ re in
                 self.lock?.fulfill()
@@ -164,7 +164,7 @@ class HiveIpfsFileTests: XCTestCase {
         self.hiveClient?.defaultDriveHandle()
             .then{ drive -> HivePromise<HiveFileHandle> in
                 return drive.fileHandle(atPath: "/ipfs_createF_\(timeTest!)")
-            }.then{ file -> HivePromise<HiveVoid> in
+            }.then{ file -> HivePromise<Void> in
                 return file.moveTo(newPath: "/ipfs_createD_\(timeTest!)")
             }.done{ re in
                 self.lock?.fulfill()
@@ -179,7 +179,7 @@ class HiveIpfsFileTests: XCTestCase {
         self.hiveClient?.defaultDriveHandle()
             .then{ drive -> HivePromise<HiveFileHandle> in
                 return drive.fileHandle(atPath: "/ipfs_createD_\(timeTest!)/ipfs_createF_\(timeTest!)")
-            }.then{ file -> HivePromise<HiveVoid> in
+            }.then{ file -> HivePromise<Void> in
                 return file.moveTo(newPath: "/ipfs_createD_\(timeTest!)_non/ipfs_createF_\(timeTest!)")
             }.done{ re in
                 XCTFail()
@@ -219,7 +219,7 @@ class HiveIpfsFileTests: XCTestCase {
             }.then{ length -> HivePromise<Int32> in
                 (fl?.writeData(withData: data2!))!
             }
-            .then{ length -> HivePromise<HiveVoid> in
+            .then{ length -> HivePromise<Void> in
                 return (fl?.commitData())!
             }.then{ void -> HivePromise<Data> in
                 return (fl?.readData(le1! + le2!))!
@@ -262,7 +262,7 @@ class HiveIpfsFileTests: XCTestCase {
                 return file.writeData(withData: data1!, 0)
             }.then{ length -> HivePromise<Int32> in
                 return fl!.writeData(withData: data2!, 30)
-            }.then{ length -> HivePromise<HiveVoid> in
+            }.then{ length -> HivePromise<Void> in
                 return (fl?.commitData())!
             }.then{ void -> HivePromise<Data> in
                 return (fl?.readData(le1! + le2!))!

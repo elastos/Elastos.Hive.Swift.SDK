@@ -5,8 +5,8 @@ import Alamofire
 
 class IPFSAPIs {
 
-    class func publish(_ hash: String, _ authHelper: AuthHelper) -> HivePromise<HiveVoid> {
-        let promise = HivePromise<HiveVoid> { resolver in
+    class func publish(_ hash: String, _ authHelper: AuthHelper) -> HivePromise<Void> {
+        let promise = HivePromise<Void> { resolver in
             let uid = (authHelper as! IPFSAuthHelper).param.uid
             let params = ["uid": uid, "path": hash]
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_NAME_PUBLISH.rawValue
@@ -22,7 +22,7 @@ class IPFSAPIs {
                         resolver.reject(error)
                         return
                     }
-                    resolver.fulfill(HiveVoid())
+                    resolver.fulfill(Void())
                 })
         }
         return promise
@@ -61,8 +61,8 @@ class IPFSAPIs {
         return promise
     }
 
-    class func writeData(_ path: String, _ withData: Data, _ authHelper: AuthHelper) -> HivePromise<HiveVoid> {
-        let promise = HivePromise<HiveVoid> { resolver in
+    class func writeData(_ path: String, _ withData: Data, _ authHelper: AuthHelper) -> HivePromise<Void> {
+        let promise = HivePromise<Void> { resolver in
             let uid = (authHelper as! IPFSAuthHelper).param.uid
             let params = ["uid": uid, "path": path, "file": "file", "create": "true"]
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_WRITE.rawValue + "?" + params.queryString
@@ -78,7 +78,7 @@ class IPFSAPIs {
                             resolver.reject(error)
                             return
                         }
-                        resolver.fulfill(HiveVoid())
+                        resolver.fulfill(Void())
                     })
                     break
                 case .failure(let error):

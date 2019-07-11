@@ -95,7 +95,6 @@
 		11D26F7E22CA3B8800E4099A /* HiveFileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110744C722C0D19F0076529D /* HiveFileInfo.swift */; };
 		11D26F7F22CA3B8800E4099A /* HiveChildren.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1183CEAE22AF4BFE00796951 /* HiveChildren.swift */; };
 		11D26F8022CA3B8800E4099A /* HiveItemInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1183CEB022AF4C1300796951 /* HiveItemInfo.swift */; };
-		11D26F8122CA3B8800E4099A /* HiveVoid.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39CB4C62292878100535E43 /* HiveVoid.swift */; };
 		11D26F8222CA3B8800E4099A /* HiveCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39CB4BE2292854000535E43 /* HiveCallback.swift */; };
 		11D26F8322CA3B8800E4099A /* ResourceItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113629AC22C4678A00C6DCCC /* ResourceItem.swift */; };
 		11D26F8422CA3B8800E4099A /* DirectoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D45CB122C4661B002CA60D /* DirectoryItem.swift */; };
@@ -159,7 +158,6 @@
 		A39CB4B822927DB900535E43 /* HiveDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39CB4B322927DB900535E43 /* HiveDirectory.swift */; };
 		A39CB4BD22927DF100535E43 /* OneDriveDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39CB4BC22927DF100535E43 /* OneDriveDirectory.swift */; };
 		A39CB4BF2292854000535E43 /* HiveCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39CB4BE2292854000535E43 /* HiveCallback.swift */; };
-		A39CB4C72292878100535E43 /* HiveVoid.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39CB4C62292878100535E43 /* HiveVoid.swift */; };
 		A39CB4D12292E5FA00535E43 /* OneDriveURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39CB4D02292E5F900535E43 /* OneDriveURL.swift */; };
 		A39CB4D52292FF1600535E43 /* AuthCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39CB4D42292FF1600535E43 /* AuthCode.swift */; };
 		A3CC8DAB226D99FC00EE80D0 /* SimpleAuthServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CC8DAA226D99FB00EE80D0 /* SimpleAuthServer.swift */; };
@@ -280,7 +278,6 @@
 		A39CB4B322927DB900535E43 /* HiveDirectory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HiveDirectory.swift; path = Core/HiveDirectory.swift; sourceTree = "<group>"; };
 		A39CB4BC22927DF100535E43 /* OneDriveDirectory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OneDriveDirectory.swift; path = Vendors/OneDrive/OneDriveDirectory.swift; sourceTree = "<group>"; };
 		A39CB4BE2292854000535E43 /* HiveCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HiveCallback.swift; path = Core/HiveCallback.swift; sourceTree = "<group>"; };
-		A39CB4C62292878100535E43 /* HiveVoid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HiveVoid.swift; path = Core/HiveVoid.swift; sourceTree = "<group>"; };
 		A39CB4D02292E5F900535E43 /* OneDriveURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OneDriveURL.swift; path = Vendors/OneDrive/OneDriveURL.swift; sourceTree = "<group>"; };
 		A39CB4D42292FF1600535E43 /* AuthCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AuthCode.swift; path = Core/AuthCode.swift; sourceTree = "<group>"; };
 		A3CC8DAA226D99FB00EE80D0 /* SimpleAuthServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SimpleAuthServer.swift; path = Vendors/OneDrive/SimpleAuthServer.swift; sourceTree = "<group>"; };
@@ -508,7 +505,6 @@
 				110744C722C0D19F0076529D /* HiveFileInfo.swift */,
 				1183CEAE22AF4BFE00796951 /* HiveChildren.swift */,
 				1183CEB022AF4C1300796951 /* HiveItemInfo.swift */,
-				A39CB4C62292878100535E43 /* HiveVoid.swift */,
 				A39CB4BE2292854000535E43 /* HiveCallback.swift */,
 				113629AC22C4678A00C6DCCC /* ResourceItem.swift */,
 				11D45CB122C4661B002CA60D /* DirectoryItem.swift */,
@@ -1019,7 +1015,6 @@
 				11D26F7122CA3B8800E4099A /* OAuthEntry.swift in Sources */,
 				11D26F6422CA3B7700E4099A /* OneDriveHttpHelper.swift in Sources */,
 				11D26F7022CA3B8200E4099A /* HiveError.swift in Sources */,
-				11D26F8122CA3B8800E4099A /* HiveVoid.swift in Sources */,
 				11D26F8022CA3B8800E4099A /* HiveItemInfo.swift in Sources */,
 				11D26F5F22CA3B7700E4099A /* OneDriveAuthHelper.swift in Sources */,
 				11D26F8722CA3B8800E4099A /* DriveParameter.swift in Sources */,
@@ -1082,7 +1077,6 @@
 				A39C49C122539D3B0027BDF9 /* DropboxDrive.swift in Sources */,
 				A39C499F22539C9C0027BDF9 /* HiveFile.swift in Sources */,
 				A39C49A022539C9C0027BDF9 /* HiveDrive.swift in Sources */,
-				A39CB4C72292878100535E43 /* HiveVoid.swift in Sources */,
 				A3FD3C9622800C320031413A /* DropboxClient.swift in Sources */,
 				110744BE22C0CD2D0076529D /* HiveDriveInfo.swift in Sources */,
 				A3003F3E22C1039B00A341C4 /* IPFSFile.swift in Sources */,

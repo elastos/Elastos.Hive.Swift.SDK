@@ -105,7 +105,7 @@ internal class IPFSDrive: HiveDriveHandle {
                     return IPFSAPIs.request(url, .post, param)
                     }.then{ json -> HivePromise<String> in
                         return IPFSAPIs.getHash("/", self.authHelper)
-                    }.then{  hash -> HivePromise<HiveVoid>  in
+                    }.then{  hash -> HivePromise<Void>  in
                         return IPFSAPIs.publish(hash, self.authHelper)
                     }.done{ success in
                         Log.d(TAG(), "createDirectory succeed")
@@ -185,7 +185,7 @@ internal class IPFSDrive: HiveDriveHandle {
                     .then{ json -> HivePromise<String> in
                         return IPFSAPIs.getHash("/", self.authHelper)
                     }
-                    .then{ hash -> HivePromise<HiveVoid> in
+                    .then{ hash -> HivePromise<Void> in
                         return IPFSAPIs.publish(hash, self.authHelper)
                     }
                     .done{ success in

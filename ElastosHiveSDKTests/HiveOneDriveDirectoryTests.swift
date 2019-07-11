@@ -249,7 +249,7 @@ class HiveOneDriveDirectoryTests: XCTestCase {
                 return drive.rootDirectoryHandle()
             }.then{ directory -> HivePromise<HiveDirectoryHandle> in
                 return directory.directoryHandle(atName: "od_createD_\(timeTest!)")
-            }.then{ directory -> HivePromise<HiveVoid> in
+            }.then{ directory -> HivePromise<Void> in
                 return directory.copyTo(newPath: "/od_createD_\(timeTest! + "_2")")
             }.done{ re in
                 self.lock?.fulfill()
@@ -266,7 +266,7 @@ class HiveOneDriveDirectoryTests: XCTestCase {
                 return drive.rootDirectoryHandle()
             }.then{ directory -> HivePromise<HiveDirectoryHandle> in
                 return directory.directoryHandle(atName: "od_createD_\(timeTest!)")
-            }.then{ directory -> HivePromise<HiveVoid> in
+            }.then{ directory -> HivePromise<Void> in
                 return directory.copyTo(newPath: "/od_createD_\(timeTest!)")
             }.done{ re in
                 self.lock?.fulfill()
@@ -283,7 +283,7 @@ class HiveOneDriveDirectoryTests: XCTestCase {
                 return drive.rootDirectoryHandle()
             }.then{ directory -> HivePromise<HiveDirectoryHandle> in
                 return directory.directoryHandle(atName: "od_createD_\(timeTest!)")
-            }.then{ directory -> HivePromise<HiveVoid> in
+            }.then{ directory -> HivePromise<Void> in
                 return directory.copyTo(newPath: "/od_createD_\(timeTest! + "_2")")
             }.done{ re in
                 self.lock?.fulfill()
@@ -311,7 +311,7 @@ class HiveOneDriveDirectoryTests: XCTestCase {
                 return drive.rootDirectoryHandle()
             }.then{ directory -> HivePromise<HiveDirectoryHandle> in
                 return directory.directoryHandle(atName: "od_createD_\(timeTest!)")
-            }.then{ directory -> HivePromise<HiveVoid> in
+            }.then{ directory -> HivePromise<Void> in
                 return directory.deleteItem()
             }.done{ re in
                 self.lock?.fulfill()
@@ -341,7 +341,7 @@ class HiveOneDriveDirectoryTests: XCTestCase {
                 return drive.rootDirectoryHandle()
             }.then{ directory -> HivePromise<HiveDirectoryHandle> in
                 return directory.directoryHandle(atName: "/od_createD_\(timeTest!)")
-            }.then{ directory -> HivePromise<HiveVoid> in
+            }.then{ directory -> HivePromise<Void> in
                 return directory.moveTo(newPath: "/od_createD_\(timeTest! + "_2")")
             }.done{ re in
                 self.lock?.fulfill()
@@ -358,7 +358,7 @@ class HiveOneDriveDirectoryTests: XCTestCase {
                 return drive.rootDirectoryHandle()
             }.then{ directory -> HivePromise<HiveDirectoryHandle> in
                 return directory.directoryHandle(atName: "/od_createD_\(timeTest! + "_2")/od_createD_\(timeTest!)")
-            }.then{ directory -> HivePromise<HiveVoid> in
+            }.then{ directory -> HivePromise<Void> in
                 return directory.moveTo(newPath: "/\(timeTest! + "_2")")
             }.done{ re in
                 self.lock?.fulfill()
