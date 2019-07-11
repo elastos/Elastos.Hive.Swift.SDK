@@ -421,13 +421,4 @@ class OneDriveDirectory: HiveDirectoryHandle {
         return promise
     }
 
-    override func close() {
-        self.name = nil
-        self.drive = nil
-        self.directoryId = ""
-        self.pathName = ""
-        self.lastInfo = nil
-        self.authHelper = nil
-    }
-
 }

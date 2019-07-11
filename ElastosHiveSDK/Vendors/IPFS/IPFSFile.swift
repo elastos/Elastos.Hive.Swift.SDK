@@ -381,7 +381,4 @@ internal class IPFSFile: HiveFileHandle {
         _ = CacheHelper.clearCache(.hiveIPFS, cacheUrl.md5)
     }
 
-    override func close() {
-        discardData()
-    }
 }

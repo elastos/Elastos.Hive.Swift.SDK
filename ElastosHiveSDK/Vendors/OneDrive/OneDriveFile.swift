@@ -414,7 +414,4 @@ internal class OneDriveFile: HiveFileHandle {
         _ = CacheHelper.clearCache(.oneDrive, url.md5)
     }
 
-    override func close() {
-        self.discardData()
-    }
 }
