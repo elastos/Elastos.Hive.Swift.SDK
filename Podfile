@@ -1,8 +1,8 @@
 # Uncomment the next line to define a global platform for your project
 def import_pods
   pod 'Swifter', '~> 1.4.6'
-  pod 'Alamofire'
-  pod 'PromiseKit'
+  pod 'Alamofire','4.8.2'
+  pod 'PromiseKit','6.9'
 end
 
 target :ElastosHiveSDK do
