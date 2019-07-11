@@ -14,7 +14,7 @@ public class HiveFileInfo: AttributeMap {
 
     /// Create a `HiveFileInfo` instance
     ///
-    /// - Parameter dict: The dictionary with the `itemId`、`name` and `size` key-value
+    /// - Parameter dict: The dictionary with the `itemId`, `name` and `size` key-value
     override init(_ dict: Dictionary<String, String>) {
         super.init(dict)
     }

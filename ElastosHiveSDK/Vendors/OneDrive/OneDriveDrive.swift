@@ -243,7 +243,7 @@ public class OneDriveDrive: HiveDriveHandle {
                         let fileId = jsonData["id"].stringValue
                         let dic = [HiveFileInfo.itemId: fileId,
                                    HiveFileInfo.name: jsonData["name"].stringValue,
-                                   HiveFileInfo.size: String(jsonData["size"].intValue)]
+                                   HiveFileInfo.size: String(jsonData["size"].uInt64Value)]
                         let fileInfo = HiveFileInfo(dic)
                         let fileHandle = OneDriveFile(fileInfo, self.authHelper)
                         fileHandle.name = jsonData["name"].stringValue
@@ -291,7 +291,7 @@ public class OneDriveDrive: HiveDriveHandle {
                     }
                     let dic = [HiveItemInfo.itemId: jsonData["id"].stringValue,
                                HiveItemInfo.name: jsonData["name"].stringValue,
-                               HiveItemInfo.size: jsonData["size"].stringValue,
+                               HiveItemInfo.size: String(jsonData["size"].int64Value),
                                HiveItemInfo.type: type]
                     let itemInfo = HiveItemInfo(dic)
                     resolver.fulfill(itemInfo)

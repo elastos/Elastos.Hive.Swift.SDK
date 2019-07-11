@@ -1,44 +1,8 @@
 import Foundation
 import PromiseKit
 
-protocol DirectoryItem {
-
-    /*
-    // for drive
-    func createDirectory(withPath: String) -> HivePromise<HiveDirectoryHandle>
-    func createDirectory(withPath: String, handleBy: HiveCallback<HiveDirectoryHandle>)
-        -> HivePromise<HiveDirectoryHandle>
-
-    func directoryHandle(atPath: String) -> HivePromise<HiveDirectoryHandle>
-    func directoryHandle(atPath: String, handleBy: HiveCallback<HiveDirectoryHandle>)
-        -> HivePromise<HiveDirectoryHandle>
-
-    func createFile(withPath: String) -> HivePromise<HiveFileHandle>
-    func createFile(withPath: String, handleBy: HiveCallback<HiveFileHandle>)
-        -> HivePromise<HiveFileHandle>
-
-    func fileHandle(atPath: String) -> HivePromise<HiveFileHandle>
-    func fileHandle(atPath: String, handleBy: HiveCallback<HiveFileHandle>)
-        -> HivePromise<HiveFileHandle>
-
-    // for directory
-    func createDirectory(withName: String) -> HivePromise<HiveDirectoryHandle>
-    func createDirectory(withName: String, handleBy: HiveCallback<HiveDirectoryHandle>)
-        -> HivePromise<HiveDirectoryHandle>
-
-    func directoryHandle(atName: String) -> HivePromise<HiveDirectoryHandle>
-    func directoryHandle(atName: String, handleBy: HiveCallback<HiveDirectoryHandle>)
-        -> HivePromise<HiveDirectoryHandle>
-
-    func createFile(withName: String) -> HivePromise<HiveFileHandle>
-    func createFile(withName: String, handleBy: HiveCallback<HiveFileHandle>)
-        -> HivePromise<HiveFileHandle>
-
-    func fileHandle(atName: String) -> HivePromise<HiveFileHandle>
-    func fileHandle(atName: String, handleBy: HiveCallback<HiveFileHandle>)
-        -> HivePromise<HiveFileHandle>
- */
-}
+/// In order to implement the optional protocol, protocol extension is adopted.
+protocol DirectoryItem {}
 
 extension DirectoryItem{
     public func createDirectory(withPath: String) -> HivePromise<HiveDirectoryHandle> {

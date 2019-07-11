@@ -3,7 +3,7 @@ import Foundation
 ///  The `HiveClientInfo` object is a property bag for ClientInfo information.
 public class HiveClientInfo: AttributeMap {
 
-    /// The unique identifier of the item within the Drive
+    /// The unique identifier for the user.
     public static let userId: String = "UserId"
 
 
@@ -26,7 +26,7 @@ public class HiveClientInfo: AttributeMap {
 
     /// Create a `HiveClientInfo` instance
     ///
-    /// - Parameter dict: The dictionary with the `name`、`email`、`phoneNo` and `region` key-value
+    /// - Parameter dict: The dictionary with the `name`, `email`, `phoneNo` and `region` key-value
     override init(_ dict: Dictionary<String, String>) {
         super.init(dict)
     }

@@ -18,7 +18,7 @@ public class HiveChildren: Result {
             }
             let dic = [HiveItemInfo.itemId: it["id"].stringValue,
                        HiveItemInfo.name: it["name"].stringValue,
-                       HiveItemInfo.size: it["size"].stringValue,
+                       HiveItemInfo.size: String(it["size"].int64Value),
                        HiveItemInfo.type: type]
             let item = HiveItemInfo(dic)
             children.append(item)

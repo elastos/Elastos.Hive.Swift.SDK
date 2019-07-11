@@ -17,7 +17,7 @@ public class HiveItemInfo: AttributeMap {
 
     /// Create a `HiveItemInfo` instance
     ///
-    /// - Parameter dict: The dictionary with the `itemId`、`name`、`type` and `size` key-value
+    /// - Parameter dict: The dictionary with the `itemId`, `name`, `type` and `size` key-value
     override init(_ dict: Dictionary<String, String>) {
         super.init(dict)
     }

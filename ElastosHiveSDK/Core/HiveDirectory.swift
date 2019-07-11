@@ -32,7 +32,7 @@ public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem 
 
     /// Latst update for `HiveDirectory` subclasses
     ///
-    /// - Returns: Returns the last update info for the sbclasses
+    /// - Returns: Returns the last update info for the subclasses
     public func lastUpdatedInfo() -> HivePromise<resourceType> {
         return lastUpdatedInfo(handleBy: HiveCallback<HiveDirectoryHandle.resourceType>())
     }
@@ -40,7 +40,7 @@ public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem 
     /// Latst update for `HiveDirectory` subclasses
     ///
     /// - Parameter handleBy: The result
-    /// - Returns: Returns the last update info for the sbclasses
+    /// - Returns: Returns the last update info for the subclasses
     public func lastUpdatedInfo(handleBy: HiveCallback<resourceType>) -> HivePromise<resourceType> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<HiveDirectoryInfo>(error: error)
@@ -145,7 +145,7 @@ public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem 
     /// Current directory move to the new path
     ///
     /// - Parameter newPath: The new path with the directory
-    /// - Returns: Returns `true` if the move succees, `false` otherwise.
+    /// - Returns: Returns `HiveVoid` if the move succees, `HiveError` otherwise.
     public func moveTo(newPath: String) -> HivePromise<HiveVoid> {
         return moveTo(newPath: newPath, handleBy: HiveCallback<HiveVoid>())
     }
@@ -155,7 +155,7 @@ public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem 
     /// - Parameters:
     ///   - newPath: The new path with the directory
     ///   - handleBy: The result
-    /// - Returns: Returns `true` if the move succees, `false` otherwise.
+    /// - Returns: Returns `HiveVoid` if the move succees, `HiveError` otherwise.
     public func moveTo(newPath: String, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<HiveVoid>(error: error)
@@ -164,7 +164,7 @@ public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem 
     /// Current directory copy to the new path
     ///
     /// - Parameter newPath: The new path to copy
-    /// - Returns: Returns `true` if the copy succees, `false` otherwise.
+    /// - Returns: Returns `HiveVoid` if the copy succees, `HiveError` otherwise.
     public func copyTo(newPath: String) -> HivePromise<HiveVoid> {
         return copyTo(newPath: newPath, handleBy: HiveCallback<HiveVoid>())
     }
@@ -174,7 +174,7 @@ public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem 
     /// - Parameters:
     ///   - newPath: The new path to copy
     ///   - handleBy: The result
-    /// - Returns: Returns `true` if the copy succees, `false` otherwise.
+    /// - Returns: Returns `HiveVoid` if the copy succees, `HiveError` otherwise.
     public func copyTo(newPath: String, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<HiveVoid>(error: error)
@@ -182,7 +182,7 @@ public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem 
 
     /// Delete the current directory
     ///
-    /// - Returns: Returns `true` if the delete succees, `false` otherwise.
+    /// - Returns: Returns `HiveVoid` if the delete succees, `HiveError` otherwise.
     public func deleteItem() -> HivePromise<HiveVoid> {
         return deleteItem(handleBy: HiveCallback<HiveVoid>())
     }
@@ -190,7 +190,7 @@ public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem 
     /// Delete the current directory
     ///
     /// - Parameter handleBy: The result
-    /// - Returns: Returns `true` if the delete succees, `false` otherwise.
+    /// - Returns: Returns `HiveVoid` if the delete succees, `HiveError` otherwise.
     public func deleteItem(handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<HiveVoid>(error: error)

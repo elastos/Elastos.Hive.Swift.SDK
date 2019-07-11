@@ -6,7 +6,7 @@ import Foundation
 /// @see https://dev.onedrive.com/README.htm for more information.
 public class OAuthEntry {
 
-    /// clientId for OneDrive registered with Microsoft Account.
+    /// ClientId for OneDrive registered with Microsoft Account.
     /// @see https://dev.onedrive.com/auth/msa_oauth.htm for registration information.
     let clientId: String
 

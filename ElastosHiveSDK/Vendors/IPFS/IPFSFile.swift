@@ -34,7 +34,7 @@ internal class IPFSFile: HiveFileHandle {
                     Log.d(TAG(), "lastUpdatedInfo succeed")
                     let dic = [HiveFileInfo.itemId: uid,
                                HiveFileInfo.name: PathExtracter(self.pathName).baseNamePart(),
-                               HiveFileInfo.size: String(jsonData["Size"].intValue)]
+                               HiveFileInfo.size: String(jsonData["Size"].uInt64Value)]
                     let fileInfo = HiveFileInfo(dic)
                     self.lastInfo = fileInfo
                     handleBy.didSucceed(fileInfo)
@@ -61,7 +61,7 @@ internal class IPFSFile: HiveFileHandle {
             let dest = newPath.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let params = ["uid": uid, "source": originPath, "dest": dest]
 
-            self.authHelper.checkExpired().then{ void -> HivePromise<JSON> in
+            self.authHelper.checkExpired().then{ HiveVoid -> HivePromise<JSON> in
                 return IPFSAPIs.request(url, .post, params)
                 }.then{ json -> HivePromise<String> in
                     return IPFSAPIs.getHash("/", self.authHelper)
