@@ -12,22 +12,22 @@ class IPFSAuthHelper: AuthHelper {
         super.init()
     }
 
-    override func loginAsync(_ authenticator: Authenticator) -> HivePromise<HiveVoid> {
-        return loginAsync(authenticator, handleBy: HiveCallback<HiveVoid>())
+    override func loginAsync(_ authenticator: Authenticator) -> HivePromise<Void> {
+        return loginAsync(authenticator, handleBy: HiveCallback<Void>())
     }
 
-    override func loginAsync(_ authenticator: Authenticator, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
-        let promise = HivePromise<HiveVoid> { resolver in
+    override func loginAsync(_ authenticator: Authenticator, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+        let promise = HivePromise<Void> { resolver in
             self.checkExpired().then { padding -> HivePromise<String> in
                 return self.getUID(self)
                 }.then { (uid) -> HivePromise<String> in
                     return self.getPeerId(uid)
                 }.then { (peerId) -> HivePromise<String> in
                     return self.getHash(peerId)
-                }.then { (hash) -> HivePromise<HiveVoid> in
+                }.then { (hash) -> HivePromise<Void> in
                     return self.logIn(hash)
                 }.done { padding in
-                    let padding = HiveVoid();
+                    let padding = Void();
                     resolver.fulfill(padding)
                     Log.d(TAG(), "login succeed")
                 }.catch { (error) in
@@ -38,16 +38,16 @@ class IPFSAuthHelper: AuthHelper {
         return promise
     }
 
-    override func logoutAsync() -> HivePromise<HiveVoid> {
-        return logoutAsync(handleBy: HiveCallback<HiveVoid>())
+    override func logoutAsync() -> HivePromise<Void> {
+        return logoutAsync(handleBy: HiveCallback<Void>())
     }
 
-    override func logoutAsync(handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
+    override func logoutAsync(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
         let error = HiveError.failue(des: "TODO")
-        return HivePromise<HiveVoid>(error: error)
+        return HivePromise<Void>(error: error)
     }
 
-    override func checkExpired() -> HivePromise<HiveVoid> {
+    override func checkExpired() -> HivePromise<Void> {
         return IPFSURL.validURL()
     }
 
@@ -103,7 +103,7 @@ class IPFSAuthHelper: AuthHelper {
                     let errorMessage = HiveError.des(error as! HiveError)
                     if errorMessage == "routing: not found" {
                         IPFSAPIs.getHash("/", self)
-                            .then{ hash -> HivePromise<HiveVoid> in
+                            .then{ hash -> HivePromise<Void> in
                                 IPFSAPIs.publish(hash, self)
                             }.done{ void  in
                                 self.getHash(peerId)
@@ -122,15 +122,15 @@ class IPFSAuthHelper: AuthHelper {
         return promise
     }
 
-    private func logIn(_ hash: String) -> HivePromise<HiveVoid> {
-        let promise = HivePromise<HiveVoid> { resolver in
+    private func logIn(_ hash: String) -> HivePromise<Void> {
+        let promise = HivePromise<Void> { resolver in
             let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_UID_LOGIN.rawValue
             let uid = KeyChainStore.restoreUid(.hiveIPFS)
             param.uid = uid
             let param = ["uid": uid, "hash": hash]
             IPFSAPIs.request(url, .post, param)
                 .done{ json in
-                    resolver.fulfill(HiveVoid())
+                    resolver.fulfill(Void())
                 }
                 .catch{ error in
                     let error = HiveError.failue(des: HiveError.des(error as! HiveError))

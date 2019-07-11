@@ -15,26 +15,26 @@ internal class OneDriveAuthHelper: AuthHelper {
         self.authEntry = authEntry
     }
 
-    override func loginAsync(_ authenticator: Authenticator) -> HivePromise<HiveVoid> {
-        return loginAsync(authenticator, handleBy: HiveCallback<HiveVoid>())
+    override func loginAsync(_ authenticator: Authenticator) -> HivePromise<Void> {
+        return loginAsync(authenticator, handleBy: HiveCallback<Void>())
     }
 
-    override func loginAsync(_ authenticator: Authenticator, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
+    override func loginAsync(_ authenticator: Authenticator, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
         token = KeyChainStore.restoreToken(.oneDrive)
         guard token == nil else {
-            let promise = HivePromise<HiveVoid> { resolver in
+            let promise = HivePromise<Void> { resolver in
                 Log.d(TAG(), "OneDrive already logined")
                 authEntry = KeyChainStore.restoreAuthEntry(.oneDrive)!
-                let padding = HiveVoid()
+                let padding = Void()
                 handleBy.didSucceed(padding)
                 resolver.fulfill(padding)
             }
             return promise
         }
 
-        let promise = HivePromise<HiveVoid> { resolver in
+        let promise = HivePromise<Void> { resolver in
             self.acquireAuthCode(authenticator)
-                .then { authCode -> HivePromise<HiveVoid>  in
+                .then { authCode -> HivePromise<Void>  in
                     return self.acquireAccessToken(authCode)
                 }.done { padding in
                     Log.d(TAG(), "Login succeed")
@@ -49,12 +49,12 @@ internal class OneDriveAuthHelper: AuthHelper {
         return promise
     }
 
-    override func logoutAsync() -> HivePromise<HiveVoid> {
-        return logoutAsync(handleBy: HiveCallback<HiveVoid>())
+    override func logoutAsync() -> HivePromise<Void> {
+        return logoutAsync(handleBy: HiveCallback<Void>())
     }
 
-    override func logoutAsync(handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
-        let promise = HivePromise<HiveVoid> { resolver in
+    override func logoutAsync(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+        let promise = HivePromise<Void> { resolver in
             Alamofire.request(OneDriveURL.AUTH + ONEDRIVE_SUB_Url.ONEDRIVE_LOGOUT.rawValue + "?post_logout_redirect_uri=\(authEntry.redirectURL)",
                 method: .get,
                 parameters: nil,
@@ -71,7 +71,7 @@ internal class OneDriveAuthHelper: AuthHelper {
                     Log.d(TAG(), "Logout succeed")
                     self.token = nil
                     KeyChainStore.removeback(authEntry: self.authEntry, forDrive: .oneDrive)
-                    let padding = HiveVoid()
+                    let padding = Void()
                     handleBy.didSucceed(padding)
                     resolver.fulfill(padding)
                 })
@@ -98,8 +98,8 @@ internal class OneDriveAuthHelper: AuthHelper {
         return promise
     }
 
-    private func acquireAccessToken(_ authCode: String) -> HivePromise<HiveVoid> {
-        let promise = HivePromise<HiveVoid> { resolver in
+    private func acquireAccessToken(_ authCode: String) -> HivePromise<Void> {
+        let promise = HivePromise<Void> { resolver in
             let params: Dictionary<String, Any> = [
                 "client_id" : self.authEntry.clientId,
                 "code" : authCode,
@@ -125,14 +125,14 @@ internal class OneDriveAuthHelper: AuthHelper {
                 self.token?.expiredIn = jsonData[KEYCHAIN_KEY.EXPIRES_IN.rawValue].int64Value
                 self.token?.expiredTime = Timestamp.getTimeAfter(time: self.token!.expiredIn)
                 KeyChainStore.writeback(self.token!, self.authEntry, .oneDrive)
-                resolver.fulfill(HiveVoid())
+                resolver.fulfill(Void())
             })
         }
         return promise
     }
 
-    private func refreshToken() -> HivePromise<HiveVoid> {
-        let promise = HivePromise<HiveVoid> {  resolver in
+    private func refreshToken() -> HivePromise<Void> {
+        let promise = HivePromise<Void> {  resolver in
             let params: Dictionary<String, Any> = [
                 "client_id" : self.authEntry.clientId,
                 "scope" : self.authEntry.scope,
@@ -160,7 +160,7 @@ internal class OneDriveAuthHelper: AuthHelper {
                 self.token?.expiredIn = jsonData[KEYCHAIN_KEY.EXPIRES_IN.rawValue].int64Value
                 self.token?.expiredTime = Timestamp.getTimeAfter(time: self.token!.expiredIn)
                 KeyChainStore.writeback(self.token!, self.authEntry, .oneDrive)
-                resolver.fulfill(HiveVoid())
+                resolver.fulfill(Void())
             })
         }
         return promise
@@ -170,17 +170,17 @@ internal class OneDriveAuthHelper: AuthHelper {
         return token!.isExpired()
     }
 
-    override func checkExpired() -> HivePromise<HiveVoid> {
-        let promise = HivePromise<HiveVoid> { resolver in
+    override func checkExpired() -> HivePromise<Void> {
+        let promise = HivePromise<Void> { resolver in
             guard !isExpired() else {
                 _ = refreshToken().done{ authToken in
-                    resolver.fulfill(HiveVoid())
+                    resolver.fulfill(Void())
                     }.catch{ error in
                         resolver.reject(error)
                 }
                 return
             }
-            resolver.fulfill(HiveVoid())
+            resolver.fulfill(Void())
         }
         return promise
     }

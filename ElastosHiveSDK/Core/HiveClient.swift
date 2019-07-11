@@ -62,12 +62,12 @@ public class HiveClientHandle: Result, ResourceItem{
     ///
     /// - Parameter Authenticator: authenticator instance,
     ///   implement related delegate for authorization
-    /// - Returns:  Returns `HiveVoid` if the login succees, `HiveError` otherwise.
+    /// - Returns:  Returns `Void` if the login succees, `HiveError` otherwise.
     public func login(_ authenticator: Authenticator) throws {}
 
     /// Logout with account
     ///
-    /// - Returns: Returns `HiveVoid` if the logout succees, `HiveError` otherwise.
+    /// - Returns: Returns `Void` if the logout succees, `HiveError` otherwise.
     public func logout() throws {}
 
     /// Last update for HiveClientHandle subclasses

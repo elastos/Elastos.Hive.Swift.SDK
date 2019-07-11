@@ -61,12 +61,12 @@ internal class OneDriveFile: HiveFileHandle {
         return promise
     }
 
-    override func moveTo(newPath: String) -> HivePromise<HiveVoid> {
-        return moveTo(newPath: newPath, handleBy: HiveCallback<HiveVoid>())
+    override func moveTo(newPath: String) -> HivePromise<Void> {
+        return moveTo(newPath: newPath, handleBy: HiveCallback<Void>())
     }
 
-    override func moveTo(newPath: String, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
-        let promise = HivePromise<HiveVoid>{ resolver in
+    override func moveTo(newPath: String, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+        let promise = HivePromise<Void>{ resolver in
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let url = (OneDriveURL.API) + (OneDriveURL.ROOT) + ":" + path
             let params: Dictionary<String, Any> = [
@@ -84,8 +84,8 @@ internal class OneDriveFile: HiveFileHandle {
                 }
                 .done{ jsonData in
                     self.pathName = newPath + self.name!
-                    resolver.fulfill(HiveVoid())
-                    handleBy.didSucceed(HiveVoid())
+                    resolver.fulfill(Void())
+                    handleBy.didSucceed(Void())
                 }
                 .catch{ error in
                     resolver.reject(error)
@@ -96,12 +96,12 @@ internal class OneDriveFile: HiveFileHandle {
         return promise
     }
 
-    override func copyTo(newPath: String) -> HivePromise<HiveVoid> {
-        return copyTo(newPath: newPath, handleBy: HiveCallback<HiveVoid>())
+    override func copyTo(newPath: String) -> HivePromise<Void> {
+        return copyTo(newPath: newPath, handleBy: HiveCallback<Void>())
     }
 
-    override func copyTo(newPath: String, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
-        let promise = HivePromise<HiveVoid>{ resolver in
+    override func copyTo(newPath: String, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+        let promise = HivePromise<Void>{ resolver in
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             var url = OneDriveURL.API + OneDriveURL.ROOT + ":" + path + ":/copy"
             if newPath == "/" {
@@ -120,13 +120,13 @@ internal class OneDriveFile: HiveFileHandle {
                                  headers: OneDriveHttpHeader.headers(self.authHelper),
                                  avalidCode: statusCode.accepted.rawValue, self.authHelper)
                 }
-                .then{ jsonData -> HivePromise<HiveVoid> in
+                .then{ jsonData -> HivePromise<Void> in
                     let urlString = jsonData["Location"].stringValue
                     return OneDriveHttpHelper.pollingCopyresult(urlString)
                 }
                 .done{ void in
-                    resolver.fulfill(HiveVoid())
-                    handleBy.didSucceed(HiveVoid())
+                    resolver.fulfill(Void())
+                    handleBy.didSucceed(Void())
                     Log.d(TAG(), "Copying this file to %s succeeded", newPath)
                 }
                 .catch{ error in
@@ -138,12 +138,12 @@ internal class OneDriveFile: HiveFileHandle {
         return promise
     }
 
-    override func deleteItem() -> HivePromise<HiveVoid> {
-        return deleteItem(handleBy: HiveCallback<HiveVoid>())
+    override func deleteItem() -> HivePromise<Void> {
+        return deleteItem(handleBy: HiveCallback<Void>())
     }
 
-    override func deleteItem(handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
-        let promise = HivePromise<HiveVoid>{ resolver in
+    override func deleteItem(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+        let promise = HivePromise<Void>{ resolver in
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let url: String = "\(OneDriveURL.API)\(OneDriveURL.ROOT):/\(path)"
             self.authHelper.checkExpired()
@@ -160,8 +160,8 @@ internal class OneDriveFile: HiveFileHandle {
                     self.drive = nil
                     self.fileId = ""
                     self.lastInfo = nil
-                    resolver.fulfill(HiveVoid())
-                    handleBy.didSucceed(HiveVoid())
+                    resolver.fulfill(Void())
+                    handleBy.didSucceed(Void())
                     Log.d(TAG(), "Deleting the file item succeeded")
                 }
                 .catch{ error in
@@ -332,8 +332,8 @@ internal class OneDriveFile: HiveFileHandle {
         return promise
     }
 
-    override func commitData() -> HivePromise<HiveVoid> {
-        let promise = HivePromise<HiveVoid> { resolver in
+    override func commitData() -> HivePromise<Void> {
+        let promise = HivePromise<Void> { resolver in
             let accesstoken = (self.authHelper as! OneDriveAuthHelper).token?.accessToken ?? ""
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let url = "\(OneDriveURL.API)\(OneDriveURL.ROOT):\(path):/createUploadSession"
@@ -351,7 +351,7 @@ internal class OneDriveFile: HiveFileHandle {
                                              encoding: JSONEncoding.default,
                                              headers: headers,
                                              self.authHelper)
-                }.then{ uploadUrl -> HivePromise<HiveVoid> in
+                }.then{ uploadUrl -> HivePromise<Void> in
                     let cacheUrl: String = "\(OneDriveURL.API)\(OneDriveURL.ROOT):\(path):/content"
                     let data = CacheHelper.uploadFile(.oneDrive, cacheUrl.md5)
                     let length = Int64(data.count)
@@ -375,7 +375,7 @@ internal class OneDriveFile: HiveFileHandle {
                     self.cursor = 0
                     self.finish = false
                     Log.d(TAG(), "writeData succeed")
-                    resolver.fulfill(HiveVoid())
+                    resolver.fulfill(Void())
                 }
                 .catch{ error in
                     Log.e(TAG(), "writeData falied: " + HiveError.des(error as! HiveError))

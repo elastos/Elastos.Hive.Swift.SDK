@@ -79,7 +79,7 @@ class HiveOneDriveFileTests: XCTestCase {
         self.hiveClient?.defaultDriveHandle()
             .then{ drive -> HivePromise<HiveFileHandle> in
                 return drive.fileHandle(atPath: "/od_createF_\(timeTest!)")
-            }.then{ file -> HivePromise<HiveVoid> in
+            }.then{ file -> HivePromise<Void> in
                 return file.copyTo(newPath: "/od_createD_\(timeTest!)")
             }.done{ re in
                 self.lock?.fulfill()
@@ -94,7 +94,7 @@ class HiveOneDriveFileTests: XCTestCase {
         self.hiveClient?.defaultDriveHandle()
             .then{ drive -> HivePromise<HiveFileHandle> in
                 return drive.fileHandle(atPath: "/od_createF_\(timeTest!)")
-            }.then{ file -> HivePromise<HiveVoid> in
+            }.then{ file -> HivePromise<Void> in
                 return file.copyTo(newPath: "/od_createD_\(timeTest!)_non")
             }.done{ re in
                 XCTAssertTrue(true)
@@ -110,7 +110,7 @@ class HiveOneDriveFileTests: XCTestCase {
         self.hiveClient?.defaultDriveHandle()
             .then{ drive -> HivePromise<HiveFileHandle> in
                 return drive.fileHandle(atPath: "/od_createF_\(timeTest!)")
-            }.then{ file -> HivePromise<HiveVoid> in
+            }.then{ file -> HivePromise<Void> in
                 return file.copyTo(newPath: "/od_createD_\(timeTest!)")
             }.done{ re in
                 XCTFail()
@@ -138,7 +138,7 @@ class HiveOneDriveFileTests: XCTestCase {
         self.hiveClient?.defaultDriveHandle()
             .then{ drive -> HivePromise<HiveFileHandle> in
                 return drive.fileHandle(atPath: "/od_createF_\(timeTest!)")
-            }.then{ file -> HivePromise<HiveVoid> in
+            }.then{ file -> HivePromise<Void> in
                 return file.deleteItem()
             }.done{ re in
                 self.lock?.fulfill()
@@ -167,7 +167,7 @@ class HiveOneDriveFileTests: XCTestCase {
         self.hiveClient?.defaultDriveHandle()
             .then{ drive -> HivePromise<HiveFileHandle> in
                 return drive.fileHandle(atPath: "/od_createF_\(timeTest!)")
-            }.then{ file -> HivePromise<HiveVoid> in
+            }.then{ file -> HivePromise<Void> in
                 return file.moveTo(newPath: "/od_createD_\(timeTest!)")
             }.done{ re in
                 self.lock?.fulfill()
@@ -182,7 +182,7 @@ class HiveOneDriveFileTests: XCTestCase {
         self.hiveClient?.defaultDriveHandle()
             .then{ drive -> HivePromise<HiveFileHandle> in
                 return drive.fileHandle(atPath: "/od_createF_\(timeTest!)")
-            }.then{ file -> HivePromise<HiveVoid> in
+            }.then{ file -> HivePromise<Void> in
                 return file.moveTo(newPath: "/od_createD_\(timeTest!)_non")
             }.done{ re in
                 self.lock?.fulfill()
@@ -221,7 +221,7 @@ class HiveOneDriveFileTests: XCTestCase {
             }.then{ length -> HivePromise<Int32> in
                 (fl?.writeData(withData: data2!))!
             }
-            .then{ length -> HivePromise<HiveVoid> in
+            .then{ length -> HivePromise<Void> in
                 return (fl?.commitData())!
             }.then{ void -> HivePromise<Data> in
                 return (fl?.readData(le1! + le2!))!
@@ -264,7 +264,7 @@ class HiveOneDriveFileTests: XCTestCase {
                 return file.writeData(withData: data1!, 0)
             }.then{ length -> HivePromise<Int32> in
                 return fl!.writeData(withData: data2!, 30)
-            }.then{ length -> HivePromise<HiveVoid> in
+            }.then{ length -> HivePromise<Void> in
                 return (fl?.commitData())!
             }.then{ void -> HivePromise<Data> in
                 return (fl?.readData(le1! + le2!))!

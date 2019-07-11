@@ -50,9 +50,9 @@ public class HiveFileHandle: Result, ResourceItem, FileItem {
     /// Current File move to new path
     ///
     /// - Parameter newPath: The new path with the file
-    /// - Returns: Returns `HiveVoid` if the move succees, `HiveError` otherwise.
-    public func moveTo(newPath: String) -> HivePromise<HiveVoid> {
-        return moveTo(newPath: newPath, handleBy: HiveCallback<HiveVoid>())
+    /// - Returns: Returns `Void` if the move succees, `HiveError` otherwise.
+    public func moveTo(newPath: String) -> HivePromise<Void> {
+        return moveTo(newPath: newPath, handleBy: HiveCallback<Void>())
     }
 
     /// Current File move to the new path
@@ -60,18 +60,18 @@ public class HiveFileHandle: Result, ResourceItem, FileItem {
     /// - Parameters:
     ///   - newPath: The new path with the file
     ///   - handleBy: The result
-    /// - Returns: Returns `HiveVoid` if the move succees, `HiveError` otherwise.
-    public func moveTo(newPath: String, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
+    /// - Returns: Returns `Void` if the move succees, `HiveError` otherwise.
+    public func moveTo(newPath: String, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
         let error = HiveError.failue(des: "Dummy")
-        return HivePromise<HiveVoid>(error: error)
+        return HivePromise<Void>(error: error)
     }
 
     /// Current file copy to the new path
     ///
     /// - Parameter newPath: The path to copy
-    /// - Returns: Returns `HiveVoid` if the copy succees, `HiveError` otherwise.
-    public func copyTo(newPath: String) -> HivePromise<HiveVoid> {
-        return copyTo(newPath: newPath, handleBy: HiveCallback<HiveVoid>())
+    /// - Returns: Returns `Void` if the copy succees, `HiveError` otherwise.
+    public func copyTo(newPath: String) -> HivePromise<Void> {
+        return copyTo(newPath: newPath, handleBy: HiveCallback<Void>())
     }
 
     /// Current file copy to the new path
@@ -79,26 +79,26 @@ public class HiveFileHandle: Result, ResourceItem, FileItem {
     /// - Parameters:
     ///   - newPath: The path to copy
     ///   - handleBy: The result
-    /// - Returns: Returns `HiveVoid` if the copy succees, `HiveError` otherwise.
-    public func copyTo(newPath: String, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
+    /// - Returns: Returns `Void` if the copy succees, `HiveError` otherwise.
+    public func copyTo(newPath: String, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
         let error = HiveError.failue(des: "Dummy")
-        return HivePromise<HiveVoid>(error: error)
+        return HivePromise<Void>(error: error)
     }
 
     /// Delete the current file
     ///
-    /// - Returns: Returns `HiveVoid` if the delete succees, `HiveError` otherwise.
-    public func deleteItem() -> HivePromise<HiveVoid> {
-        return deleteItem(handleBy: HiveCallback<HiveVoid>())
+    /// - Returns: Returns `Void` if the delete succees, `HiveError` otherwise.
+    public func deleteItem() -> HivePromise<Void> {
+        return deleteItem(handleBy: HiveCallback<Void>())
     }
 
     /// Delete the current file
     ///
     /// - Parameter handleBy: The result
-    /// - Returns: Returns `HiveVoid` if the delete succees, `HiveError` otherwise.
-    public func deleteItem(handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
+    /// - Returns: Returns `Void` if the delete succees, `HiveError` otherwise.
+    public func deleteItem(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
         let error = HiveError.failue(des: "Dummy")
-        return HivePromise<HiveVoid>(error: error)
+        return HivePromise<Void>(error: error)
     }
 
     /// Read data of specified length in sequence
@@ -185,10 +185,10 @@ public class HiveFileHandle: Result, ResourceItem, FileItem {
 
     ///  Submit data to the remote cloud storage.
     ///
-    /// - Returns: Returns `HiveVoid` if the data commit succeed, `HiveError` otherwise.
-    public func commitData() -> HivePromise<HiveVoid> {
+    /// - Returns: Returns `Void` if the data commit succeed, `HiveError` otherwise.
+    public func commitData() -> HivePromise<Void> {
         let error = HiveError.failue(des: "Dummy")
-        return HivePromise<HiveVoid>(error: error)
+        return HivePromise<Void>(error: error)
     }
 
     /// Discard written Data

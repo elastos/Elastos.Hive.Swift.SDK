@@ -288,12 +288,12 @@ class OneDriveDirectory: HiveDirectoryHandle {
         return promise
     }
 
-    override func moveTo(newPath: String) -> HivePromise<HiveVoid> {
-        return moveTo(newPath: newPath, handleBy: HiveCallback<HiveVoid>())
+    override func moveTo(newPath: String) -> HivePromise<Void> {
+        return moveTo(newPath: newPath, handleBy: HiveCallback<Void>())
     }
 
-    override func moveTo(newPath: String, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
-        let promise = HivePromise<HiveVoid>{ resolver in
+    override func moveTo(newPath: String, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+        let promise = HivePromise<Void>{ resolver in
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let url = "\(OneDriveURL.API)\(OneDriveURL.ROOT):\(path)"
             let params: Dictionary<String, Any> = [
@@ -310,8 +310,8 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                  avalidCode: 200, self.authHelper!)
                 }
                 .done{ jsonData in
-                    resolver.fulfill(HiveVoid())
-                    handleBy.didSucceed(HiveVoid())
+                    resolver.fulfill(Void())
+                    handleBy.didSucceed(Void())
                 }
                 .catch{ error in
                     Log.e(TAG(), "Moving this directory to %s failed: " + newPath + HiveError.des(error as! HiveError))
@@ -322,12 +322,12 @@ class OneDriveDirectory: HiveDirectoryHandle {
         return promise
     }
 
-    override func copyTo(newPath: String) -> HivePromise<HiveVoid> {
-        return copyTo(newPath: newPath, handleBy: HiveCallback<HiveVoid>())
+    override func copyTo(newPath: String) -> HivePromise<Void> {
+        return copyTo(newPath: newPath, handleBy: HiveCallback<Void>())
     }
 
-    override func copyTo(newPath: String, handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
-        let promise = HivePromise<HiveVoid>{ resolver in
+    override func copyTo(newPath: String, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+        let promise = HivePromise<Void>{ resolver in
             let path = ("/" + self.pathName).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             var url = OneDriveURL.API + OneDriveURL.ROOT + ":" + path + ":/copy"
             if newPath == "/" {
@@ -346,13 +346,13 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                  headers: OneDriveHttpHeader.headers(self.authHelper!),
                                  avalidCode: statusCode.accepted.rawValue, self.authHelper!)
                 }
-                .then{ jsonData -> HivePromise<HiveVoid> in
+                .then{ jsonData -> HivePromise<Void> in
                     let urlString = jsonData["Location"].stringValue
                     return OneDriveHttpHelper.pollingCopyresult(urlString)
                 }
                 .done{ void in
-                    resolver.fulfill(HiveVoid())
-                    handleBy.didSucceed(HiveVoid())
+                    resolver.fulfill(Void())
+                    handleBy.didSucceed(Void())
                     Log.d(TAG(), "copyTo this directory to %s succeeded", newPath)
                 }
                 .catch{ error in
@@ -364,12 +364,12 @@ class OneDriveDirectory: HiveDirectoryHandle {
         return promise
     }
 
-    override func deleteItem() -> HivePromise<HiveVoid> {
-        return deleteItem(handleBy: HiveCallback<HiveVoid>())
+    override func deleteItem() -> HivePromise<Void> {
+        return deleteItem(handleBy: HiveCallback<Void>())
     }
 
-    override func deleteItem(handleBy: HiveCallback<HiveVoid>) -> HivePromise<HiveVoid> {
-        let promise = HivePromise<HiveVoid>{ resolver in
+    override func deleteItem(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+        let promise = HivePromise<Void>{ resolver in
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let url: String = "\(OneDriveURL.API)\(OneDriveURL.ROOT):/\(path)"
             self.authHelper!.checkExpired()
@@ -386,8 +386,8 @@ class OneDriveDirectory: HiveDirectoryHandle {
                     self.drive = nil
                     self.directoryId = ""
                     self.lastInfo = nil
-                    resolver.fulfill(HiveVoid())
-                    handleBy.didSucceed(HiveVoid())
+                    resolver.fulfill(Void())
+                    handleBy.didSucceed(Void())
                     Log.e(TAG(), "Delete the directory item succeeded")
                 }
                 .catch{ error in

@@ -86,7 +86,7 @@ class OneDriveCommon:XCTestCase, Authenticator {
             }.then{ file -> HivePromise<Int32> in
                 fl = file
                 return file.writeData(withData: data!, 0)
-            }.then{ length -> HivePromise<HiveVoid> in
+            }.then{ length -> HivePromise<Void> in
                 return (fl?.commitData())!
             }.done{ data in
                 lock.fulfill()
