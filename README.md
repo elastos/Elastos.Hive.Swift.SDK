@@ -11,6 +11,27 @@ Elastos Hive Swift Framework is a set of Swift APIs as well as an uniform layer 
 - Hive IPFS/Cluster
 - ownCloud  on WebDav (Not supported yet)
 
+## Table of Contents  
+  
+- [Elastos Hive Swift Framework](#elastos-hive-swift-framework)  
+   - [Summary](#summary)  
+   - [Table of Contents](#table-of-contents)  
+   - [Build from source](#build-from-source)  
+   - [Tests](#tests)  
+   - [CocoaPods](#cocoaPods)  
+   - [How-to use APIs](#how-to-use-APIs)  
+   		- [HiveClient class:](#hiveClient-class:)
+   		- [HiveDrive class:](#hiveDrive-class:)
+   		- [HiveDirectory class:](#hiveDirectory-class:)
+   		- [HiveFile calss:](#hiveFile-calss:)
+   - [License](#license)  
+   - [Build Docs](#build-docs)
+   		- [1. Swift APIs Docs](#1.-swift-apis-docs)
+   		- [2. Object-C APIs Docs](#2.-object-c-apis-docs)
+   - [Thanks](#thanks)
+   - [Contributing](#contributing)
+   - [License](#license)
+
 ## Build from source
 
 Use the following commands to download and build source code:
@@ -56,219 +77,228 @@ $ pod install
 
 ## How-to use APIs
 
-### Making a Client
+### HiveClient class:
+
+ firstly，**Making a Client：**
 
 ```
 let hiveParam = DriveParameter.createForOneDrive("31c2dacc-80e0-47e1-afac-faac093a739c", "Files.ReadWrite%20offline_access", REDIRECT_URI)
 HiveClientHandle.createInstance(hiveParam!)
 hiveClient = HiveClientHandle.sharedInstance(type: .oneDrive)
 ```
-**Login**
+then，**Login**
 
 ```
 try hiveClient.login(self as Authenticator)
 ```
 
-**Note:** please implement Authenticator protocol
+**Note:** please implement Authenticator protocol.
+Networking in ElastosHiveSDK is done asynchronously except for login and logout. 
 
-**Get a default drive**
+finaly，**Get a default drive**
 
 ```
 hiveClient.defaultDriveHandle()
-            .done{ drive in
-            // drive
-            }
-            .catch{ error in
-            // error
-           }
+          .done{ drive in
+              // drive
+         }.catch{ error in
+             // error
+        }
 ```
-You can  use the drive create file or directory with path:
+You can  use the drive create file or directory with path,etc:
 
-**create directory with path**
+
+### HiveDrive class:
+
+**1. create directory with path**
 
 ```
 hiveClient.defaultDriveHandle()
           .then{ drive -> HivePromise<HiveDirectoryHandle> in
-               return drive.createDirectory(withPath: "/od_createD_001")
+              return drive.createDirectory(withPath: "/od_createD_001")
          }.done{ directory in
-            // directory
+              // directory
          }.catch{ error in
-            // error
+             // error
          }
 ```
 
-**create file with path**
+**2. create file with path**
 
 ```
 hiveClient.defaultDriveHandle()
           .then{ drive -> HivePromise<HiveFileHandle> in
-               return drive.createFile(withPath: "/od_createF_001")
+              return drive.createFile(withPath: "/od_createF_002")
          }.done{ file in
-			// file
+			    // file
          }.catch{ error in
-			// error
+			   // error
          }
 ```
 You can  use the drive get a file 、directory or getItemInfo at a path:
 
-**get a file with path**
+**3. get a file with path**
 
 ```
 hiveClient.defaultDriveHandle()
 			.then{ drive -> HivePromise<HiveFileHandle> in
-            return drive.fileHandle(atPath: "/od_createF_001")
+              return drive.fileHandle(atPath: "/od_createF_003")
          }.done{ file in
-			// file
+			    // file
          }.catch{ error in
-			// error
+			   // error
         }
 ```
 
-**get a directory with path**
+**4. get a directory with path**
 
 ```
 hiveClient.defaultDriveHandle()
           .then{ drive -> HivePromise<HiveDirectoryHandle> in
-                return drive.directoryHandle(atPath: "/od_createD_001)
+              return drive.directoryHandle(atPath: "/od_createD_004)
          }.done{ directory in
-			// directory
+			    // directory
          }.catch{ error in
-			// error
+			  // error
          }
 ```
 
-**get itemInfo with path**
+**5. get itemInfo with path**
 
 ```
 hiveClient.defaultDriveHandle()
           .then{ drive -> HivePromise<HiveItemInfo> in
-                return drive.getItemInfo("/od_createF_001")
+              return drive.getItemInfo("/od_createF_005")
          }.done{ itemInfo in
-           // file itemInfo
+              // file itemInfo
         }.catch{ error in
-          // error
+             // error
         }
 ```
 
-You can use directory instance operate method in OneDriveDirectory class.
+You can use directory instance operate method in HiveDirectory class.
 
-###**HiveDirectory class:**
+### HiveDirectory class:
 
 You can create directory or file with a name in HiveDirectory class.
 
-**create directory with name**
+**1. create directory with name**
 
 ```
-directory.createDirectory(withName: "od_createD_002")
+directory.createDirectory(withName: "od_createD_001")
         }.done{ directory in
+             // directory
         }.catch{ error in
+        	 // error
         }
 ```
 
-**create file with name**
+**2. create file with name**
 
 ```
 directory.createFile(withName: "od_createF_002")
         }.done{ file in
+        		// file
         }.catch{ error in
+        	 // error
         }
 ```
-**copy to a new path**
+**3. copy to a new path**
 
 ```
-directory.copyTo(newPath: "/od_createD_002")
-        }.done{ re in
-         // succeed
-        }.catch{ err in
-         // error
-        }
-```
-
-**move to a new path**
-
-```
-directory.moveTo(newPath: "/od_createD_003")
-        }.done{ re in
-          // succeed
-        }.catch{ err in
-         // error
+directory.copyTo(newPath: "/od_createD_003")
+        }.done{ succeed in
+            // succeed
+        }.catch{ error in
+           // error
         }
 ```
 
-**delete**
+**4. move to a new path**
+
+```
+directory.moveTo(newPath: "/od_createD_004")
+        }.done{ succeed in
+            // succeed
+        }.catch{ error in
+           // error
+        }
+```
+
+**5. delete**
 
 ```
 directory.deleteItem()
-        }.done{ re in
-         // succeed
-        }.catch{ err in
-         // error
+        }.done{ succeed in
+            // succeed
+        }.catch{ error in
+           // error
         }
 ```
 ### HiveFile calss:
 You can move 、copy、 delete、read and write in HiveFile class.
 
-**copy to a new path**
+**1. copy to a new path**
 
 ```
-file.copyTo(newPath: "/od_createD_004")
-   }.done{ re in
-      // succeed
-   }.catch{ err in
-     // error
+file.copyTo(newPath: "/od_createD_001")
+   }.done{ succeed in
+       // succeed
+   }.catch{ error in
+      // error
    }
 ```
 
-**file delete**
+**2. file delete**
 
 ```
 file.deleteItem()
-   }.done{ re in
-    // succeed
-   }.catch{ err in
-    // error
+   }.done{ succeed in
+       // succeed
+   }.catch{ error in
+      // error
    }
 ```
-**move to a new path**
+**3. move to a new path**
 
 ```
-file.moveTo(newPath: "/od_createD_004")
-   }.done{ re in
-     // succeed
-  }.catch{ err in
-    // error
+file.moveTo(newPath: "/od_createD_003")
+   }.done{ succeed in
+       // succeed
+  }.catch{ error in
+      // error
   }
 ```
 
-**write data:**
+**4. write data:**
 
 Invoking writeData(withData: data) api writes local caches and invoke commitData() api will submitsto the remote.
 
-Invoke writeData(withData: Data, _ position: UInt64) api will insert the written data at the position.
+Invoke writeData(withData: Data, _ position: UInt64) api will insert the written data at the specified position.
 
 ```
 file.writeData(withData: data)
     .then{ length -> HivePromise<HiveVoid> in
-       return (file.commitData())
+        return (file.commitData())
    }.done{ data in
-     // succeed
-  }.catch{ er in
-     // error
+       // succeed
+  }.catch{ error in
+      // error
   }
 ```
 
-**read data:**
+**5. read data:**
 
-Invoking readData(_ length: Int) api read data of a given length sequentially.
+Invoking readData(_ length: Int) api read data of a specified length sequentially.
 
-Invoke readData(_ length: Int, _ position: UInt64) api read data of a given length form the given position.
+Invoke readData(_ length: Int, _ position: UInt64) api read data of a specified length form the specified position.
 
 ```
 file.readData(length)
    }.done{ data in
-     // succeed
+       // succeed
   }.catch{ error in
-    // error
+      // error
   }
 ```
 
@@ -280,15 +310,11 @@ Run following script command to generate swift APIs document with appledoc tool:
 
 ```shell
 $ ./docs.sh
-
+$ cd docs
 ```
+Open index.html in the docs folder
 
-About How to install appledoc, please refer to following github repository:
 
-```
-https://github.com/tomaz/appledoc
-
-```
 
 ### 2. Object-C APIs Docs
 
