@@ -67,7 +67,7 @@ When all the tests succeed, the diamonds will turn green and show check marks.
 The distribution would be published to CocoaPods platform. So, the simple way to use **ElastosHiveSDK.framework** is just to add the following line to your **Podfile**:
 
 ```
-  pod 'ElastosHiveSDK'
+$ pod 'ElastosHiveSDK'
 ```
 
 Then run the command below to install it before open your Xcode workspace:
@@ -79,30 +79,35 @@ $ pod install
 
 ### HiveClient class
 
- firstly，**Making a Client：**
+ Firstly，**Making a Client：**
+ 
+**Note：** Create different clients with specified parameters.If you want to create an Onedrive client, create an Onedrive parameter.
+ exc:
+ 
+ Replace the 'afd3d647-a8b7-4723-bf9d-1b832f43b881','Files.ReadWrite%20offline_access','http://localhost:12345' with your ClientId, scope, redirectURL.
 
 ```
-let hiveParam = DriveParameter.createForOneDrive("31c2dacc-80e0-47e1-afac-faac093a739c", "Files.ReadWrite%20offline_access", REDIRECT_URI)
+let hiveParam = DriveParameter.createForOneDrive("afd3d647-a8b7-4723-bf9d-1b832f43b881", "Files.ReadWrite%20offline_access", "http://localhost:12345")
 HiveClientHandle.createInstance(hiveParam!)
 hiveClient = HiveClientHandle.sharedInstance(type: .oneDrive)
 ```
-then，**Login**
+Then，**Login：** All interfaces need to be logged in before they can be invoked except getVersion interface. Networking in ElastosHiveSDK is done asynchronously except for login and logout. 
 
 ```
 try hiveClient.login(self as Authenticator)
 ```
 
-**Note:** please implement Authenticator protocol.
-Networking in ElastosHiveSDK is done asynchronously except for login and logout. 
+**Note：** please implement Authenticator protocol.
 
-finaly，**Get a default drive**
+
+Finaly，**Get a default drive**
 
 ```
 hiveClient.defaultDriveHandle()
           .done{ drive in
-              // drive
+             // drive
          }.catch{ error in
-             // error
+            // error
         }
 ```
 You can  use the drive create file or directory with path,etc:
@@ -130,9 +135,9 @@ hiveClient.defaultDriveHandle()
           .then{ drive -> HivePromise<HiveFileHandle> in
               return drive.createFile(withPath: "/od_createF_002")
          }.done{ file in
-			    // file
+			 // file
          }.catch{ error in
-			   // error
+			 // error
          }
 ```
 You can  use the drive get a file 、directory or getItemInfo at a path:
@@ -141,12 +146,12 @@ You can  use the drive get a file 、directory or getItemInfo at a path:
 
 ```
 hiveClient.defaultDriveHandle()
-			.then{ drive -> HivePromise<HiveFileHandle> in
-              return drive.fileHandle(atPath: "/od_createF_003")
+		  .then{ drive -> HivePromise<HiveFileHandle> in
+            return drive.fileHandle(atPath: "/od_createF_003")
          }.done{ file in
-			    // file
+			 // file
          }.catch{ error in
-			   // error
+			// error
         }
 ```
 
@@ -157,9 +162,9 @@ hiveClient.defaultDriveHandle()
           .then{ drive -> HivePromise<HiveDirectoryHandle> in
               return drive.directoryHandle(atPath: "/od_createD_004)
          }.done{ directory in
-			    // directory
+			 // directory
          }.catch{ error in
-			  // error
+			 // error
          }
 ```
 
@@ -170,9 +175,9 @@ hiveClient.defaultDriveHandle()
           .then{ drive -> HivePromise<HiveItemInfo> in
               return drive.getItemInfo("/od_createF_005")
          }.done{ itemInfo in
-              // file itemInfo
+             // file itemInfo
         }.catch{ error in
-             // error
+            // error
         }
 ```
 
@@ -187,9 +192,9 @@ You can create directory or file with a name in HiveDirectory class.
 ```
 directory.createDirectory(withName: "od_createD_001")
         }.done{ directory in
-             // directory
+            // directory
         }.catch{ error in
-        	 // error
+        	// error
         }
 ```
 
@@ -198,9 +203,9 @@ directory.createDirectory(withName: "od_createD_001")
 ```
 directory.createFile(withName: "od_createF_002")
         }.done{ file in
-        		// file
+        	// file
         }.catch{ error in
-        	 // error
+          // error
         }
 ```
 **3. copy to a new path**
