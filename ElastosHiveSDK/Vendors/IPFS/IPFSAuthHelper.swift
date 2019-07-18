@@ -49,7 +49,6 @@ class IPFSAuthHelper: AuthHelper {
                 }.then { (hash) -> HivePromise<Void> in
                     return self.logIn(hash)
                 }.done { padding in
-                    let padding = Void();
                     resolver.fulfill(padding)
                     Log.d(TAG(), "login succeed")
                 }.catch { (error) in

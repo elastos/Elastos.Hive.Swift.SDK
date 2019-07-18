@@ -47,9 +47,8 @@ internal class OneDriveAuthHelper: AuthHelper {
             let promise = HivePromise<Void> { resolver in
                 Log.d(TAG(), "OneDrive already logined")
                 authEntry = KeyChainStore.restoreAuthEntry(.oneDrive)!
-                let padding = Void()
-                handleBy.didSucceed(padding)
-                resolver.fulfill(padding)
+                handleBy.didSucceed(Void())
+                resolver.fulfill(Void())
             }
             return promise
         }
@@ -93,9 +92,8 @@ internal class OneDriveAuthHelper: AuthHelper {
                     Log.d(TAG(), "Logout succeed")
                     self.token = nil
                     KeyChainStore.removeback(authEntry: self.authEntry, forDrive: .oneDrive)
-                    let padding = Void()
-                    handleBy.didSucceed(padding)
-                    resolver.fulfill(padding)
+                    handleBy.didSucceed(Void())
+                    resolver.fulfill(Void())
                 })
         }
         return promise
