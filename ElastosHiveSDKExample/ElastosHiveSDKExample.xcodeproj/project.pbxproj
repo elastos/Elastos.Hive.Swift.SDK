@@ -1,0 +1,412 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		112F1F6D22E02552001706DB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112F1F6C22E02551001706DB /* AppDelegate.swift */; };
+		112F1F6F22E02552001706DB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112F1F6E22E02552001706DB /* ViewController.swift */; };
+		112F1F7222E02552001706DB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 112F1F7022E02552001706DB /* Main.storyboard */; };
+		112F1F7422E02553001706DB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 112F1F7322E02553001706DB /* Assets.xcassets */; };
+		112F1F7722E02553001706DB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 112F1F7522E02553001706DB /* LaunchScreen.storyboard */; };
+		5C3F21D217091E9239FA6B2B /* Pods_ElastosHiveSDKExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2555957D144D66A334BB3B39 /* Pods_ElastosHiveSDKExample.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		112F1F6922E02551001706DB /* ElastosHiveSDKExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ElastosHiveSDKExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		112F1F6C22E02551001706DB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		112F1F6E22E02552001706DB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		112F1F7122E02552001706DB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		112F1F7322E02553001706DB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		112F1F7622E02553001706DB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		112F1F7822E02553001706DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2555957D144D66A334BB3B39 /* Pods_ElastosHiveSDKExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ElastosHiveSDKExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E1CBE52F5AE5BD2BEA60FB8C /* Pods-ElastosHiveSDKExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDKExample.debug.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDKExample/Pods-ElastosHiveSDKExample.debug.xcconfig"; sourceTree = "<group>"; };
+		FFE179460538C92CE3164DD5 /* Pods-ElastosHiveSDKExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDKExample.release.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDKExample/Pods-ElastosHiveSDKExample.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		112F1F6622E02551001706DB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5C3F21D217091E9239FA6B2B /* Pods_ElastosHiveSDKExample.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		112F1F6022E02551001706DB = {
+			isa = PBXGroup;
+			children = (
+				112F1F6B22E02551001706DB /* ElastosHiveSDKExample */,
+				112F1F6A22E02551001706DB /* Products */,
+				F2EA5795B484232B30C10A99 /* Pods */,
+				2D5B34F33990B0131EDDE471 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		112F1F6A22E02551001706DB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				112F1F6922E02551001706DB /* ElastosHiveSDKExample.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		112F1F6B22E02551001706DB /* ElastosHiveSDKExample */ = {
+			isa = PBXGroup;
+			children = (
+				112F1F6C22E02551001706DB /* AppDelegate.swift */,
+				112F1F6E22E02552001706DB /* ViewController.swift */,
+				112F1F7022E02552001706DB /* Main.storyboard */,
+				112F1F7322E02553001706DB /* Assets.xcassets */,
+				112F1F7522E02553001706DB /* LaunchScreen.storyboard */,
+				112F1F7822E02553001706DB /* Info.plist */,
+			);
+			path = ElastosHiveSDKExample;
+			sourceTree = "<group>";
+		};
+		2D5B34F33990B0131EDDE471 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2555957D144D66A334BB3B39 /* Pods_ElastosHiveSDKExample.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F2EA5795B484232B30C10A99 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E1CBE52F5AE5BD2BEA60FB8C /* Pods-ElastosHiveSDKExample.debug.xcconfig */,
+				FFE179460538C92CE3164DD5 /* Pods-ElastosHiveSDKExample.release.xcconfig */,
+			);
+			name = Pods;
+			path = ../Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		112F1F6822E02551001706DB /* ElastosHiveSDKExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 112F1F7B22E02553001706DB /* Build configuration list for PBXNativeTarget "ElastosHiveSDKExample" */;
+			buildPhases = (
+				8EB721E7440F325E1D07A640 /* [CP] Check Pods Manifest.lock */,
+				112F1F6522E02551001706DB /* Sources */,
+				112F1F6622E02551001706DB /* Frameworks */,
+				112F1F6722E02551001706DB /* Resources */,
+				81D81BD8C009CF4EFF7044B3 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ElastosHiveSDKExample;
+			productName = ElastosHiveSDKExample;
+			productReference = 112F1F6922E02551001706DB /* ElastosHiveSDKExample.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		112F1F6122E02551001706DB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1020;
+				LastUpgradeCheck = 1020;
+				ORGANIZATIONNAME = elastos;
+				TargetAttributes = {
+					112F1F6822E02551001706DB = {
+						CreatedOnToolsVersion = 10.2.1;
+					};
+				};
+			};
+			buildConfigurationList = 112F1F6422E02551001706DB /* Build configuration list for PBXProject "ElastosHiveSDKExample" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 112F1F6022E02551001706DB;
+			productRefGroup = 112F1F6A22E02551001706DB /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				112F1F6822E02551001706DB /* ElastosHiveSDKExample */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		112F1F6722E02551001706DB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				112F1F7722E02553001706DB /* LaunchScreen.storyboard in Resources */,
+				112F1F7422E02553001706DB /* Assets.xcassets in Resources */,
+				112F1F7222E02552001706DB /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		81D81BD8C009CF4EFF7044B3 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ElastosHiveSDKExample/Pods-ElastosHiveSDKExample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ElastosHiveSDKExample/Pods-ElastosHiveSDKExample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ElastosHiveSDKExample/Pods-ElastosHiveSDKExample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8EB721E7440F325E1D07A640 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ElastosHiveSDKExample-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		112F1F6522E02551001706DB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				112F1F6F22E02552001706DB /* ViewController.swift in Sources */,
+				112F1F6D22E02552001706DB /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		112F1F7022E02552001706DB /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				112F1F7122E02552001706DB /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		112F1F7522E02553001706DB /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				112F1F7622E02553001706DB /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		112F1F7922E02553001706DB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		112F1F7A22E02553001706DB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		112F1F7C22E02553001706DB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E1CBE52F5AE5BD2BEA60FB8C /* Pods-ElastosHiveSDKExample.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = LFU7T9UYL5;
+				INFOPLIST_FILE = ElastosHiveSDKExample/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = elastos.ElastosHiveSDKExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		112F1F7D22E02553001706DB /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FFE179460538C92CE3164DD5 /* Pods-ElastosHiveSDKExample.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = LFU7T9UYL5;
+				INFOPLIST_FILE = ElastosHiveSDKExample/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = elastos.ElastosHiveSDKExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		112F1F6422E02551001706DB /* Build configuration list for PBXProject "ElastosHiveSDKExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				112F1F7922E02553001706DB /* Debug */,
+				112F1F7A22E02553001706DB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		112F1F7B22E02553001706DB /* Build configuration list for PBXNativeTarget "ElastosHiveSDKExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				112F1F7C22E02553001706DB /* Debug */,
+				112F1F7D22E02553001706DB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 112F1F6122E02551001706DB /* Project object */;
+}
