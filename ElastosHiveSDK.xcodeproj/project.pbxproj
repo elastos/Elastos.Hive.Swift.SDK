@@ -6,6 +6,20 @@
 	objectVersion = 51;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		112F1F5B22E01499001706DB /* ElastosHiveSDKFramework */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 112F1F5C22E01499001706DB /* Build configuration list for PBXAggregateTarget "ElastosHiveSDKFramework" */;
+			buildPhases = (
+				112F1F5F22E014A7001706DB /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = ElastosHiveSDKFramework;
+			productName = ElastosHiveSDKFramework;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		0D94ED2D06BBCAE410D0273C /* Pods_ElastosHiveSDKTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DB068EABA0DB13AB595055A /* Pods_ElastosHiveSDKTests.framework */; };
 		110744BA22BF2B600076529D /* AttributeMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110744B922BF2B600076529D /* AttributeMap.swift */; };
@@ -726,6 +740,9 @@
 				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = org.elastos;
 				TargetAttributes = {
+					112F1F5B22E01499001706DB = {
+						CreatedOnToolsVersion = 10.2.1;
+					};
 					11379428227ED9AD004A1F65 = {
 						CreatedOnToolsVersion = 10.2;
 					};
@@ -763,6 +780,7 @@
 				11379428227ED9AD004A1F65 /* ElastosHiveSDKTests */,
 				1176BF2E229CE8F600240EDF /* TestHost */,
 				11D26F3B22CA3B3300E4099A /* ElastosHiveSDK_macOS */,
+				112F1F5B22E01499001706DB /* ElastosHiveSDKFramework */,
 			);
 		};
 /* End PBXProject section */
@@ -818,6 +836,23 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ElastosHiveSDKTests/Pods-ElastosHiveSDKTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		112F1F5F22E014A7001706DB /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "FMK_NAME=${PROJECT_NAME}\nINSTALL_DIR=${SRCROOT}/'Products'/${FMK_NAME}'.framework'\nWRK_DIR=${BUILD_DIR}\nDEVICE_DIR=${WRK_DIR}'/Release-iphoneos'/${FMK_NAME}'.framework'\nSIMULATOR_DIR=${WRK_DIR}'/Release-iphonesimulator'/${FMK_NAME}'.framework'\nxcodebuild -workspace ${FMK_NAME}\".xcworkspace\" -scheme ${FMK_NAME} OTHER_CFLAGS=\"-fembed-bitcode\" -configuration \"Release\" -sdk iphoneos -arch arm64 clean build -UseModernBuildSystem=NO || exit 1\nxcodebuild -workspace ${FMK_NAME}\".xcworkspace\" -scheme ${FMK_NAME} OTHER_CFLAGS=\"-fembed-bitcode\" -configuration \"Release\" -sdk iphonesimulator -arch x86_64 clean build -UseModernBuildSystem=NO || exit 1\n# Cleaning the oldest.\nif [ -d \"${INSTALL_DIR}\" ]\nthen\nrm -rf \"${INSTALL_DIR}\"\nfi\nmkdir -p \"${INSTALL_DIR}\"\ncp -R \"${DEVICE_DIR}/\" \"${INSTALL_DIR}/\"\ncp -R \"${SIMULATOR_DIR}/Modules/${FMK_NAME}.swiftmodule/\" \"${INSTALL_DIR}/Modules/${FMK_NAME}.swiftmodule/\"\nlipo -create \"${DEVICE_DIR}/${FMK_NAME}\" \"${SIMULATOR_DIR}/${FMK_NAME}\" -output \"${INSTALL_DIR}/${FMK_NAME}\"\nrm -r \"${WRK_DIR}\"\nopen \"${INSTALL_DIR}\"\n";
 		};
 		2A1FD9C428F9205650B62218 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1141,6 +1176,24 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		112F1F5D22E01499001706DB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = LFU7T9UYL5;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		112F1F5E22E01499001706DB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = LFU7T9UYL5;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		11379432227ED9AD004A1F65 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2368C8CBAE94193EAF7DB87D /* Pods-ElastosHiveSDKTests.debug.xcconfig */;
@@ -1473,6 +1526,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		112F1F5C22E01499001706DB /* Build configuration list for PBXAggregateTarget "ElastosHiveSDKFramework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				112F1F5D22E01499001706DB /* Debug */,
+				112F1F5E22E01499001706DB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		11379431227ED9AD004A1F65 /* Build configuration list for PBXNativeTarget "ElastosHiveSDKTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
