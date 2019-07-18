@@ -23,4 +23,10 @@
 import Foundation
 
 public class SdkVersion {
+
+    static func getVersion () -> String {
+        let infoDictionary = JSON(Bundle.main.infoDictionary as Any)
+        let sdkVersion = infoDictionary["CFBundleShortVersionString"].stringValue
+        return sdkVersion
+    }
 }

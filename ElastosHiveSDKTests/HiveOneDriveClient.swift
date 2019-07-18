@@ -114,4 +114,9 @@ class HiveOneDriveClient: XCTestCase {
         OneDriveCommon().logOut(lock!, hiveClient: self.hiveClient!)
     }
 
+    func testVersion() {
+        let veision = self.hiveClient!.getVersion()
+        XCTAssertEqual(veision, "0.1")
+    }
+
 }

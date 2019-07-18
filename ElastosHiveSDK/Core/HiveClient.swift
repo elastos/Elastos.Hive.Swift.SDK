@@ -123,4 +123,12 @@ public class HiveClientHandle: Result, ResourceItem{
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<HiveDriveHandle>(error: error)
     }
+
+    /// Returns ElastosHiveSDK's version.
+    ///
+    /// - Returns: Returns ElastosHiveSDK's version.
+    public func getVersion() -> String {
+        return SdkVersion.getVersion()
+    }
+
 }
