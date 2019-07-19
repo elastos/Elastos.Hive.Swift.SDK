@@ -12,7 +12,7 @@ class OneDriveCommon:XCTestCase, Authenticator {
         DispatchQueue.main.sync {
             let rootViewController = UIApplication.shared.keyWindow?.rootViewController
             rootViewController!.present(authViewController, animated: true, completion: nil)
-            authViewController.loadRequest("31c2dacc-80e0-47e1-afac-faac093a739c", REDIRECT_URI, "code", scopStr)
+            authViewController.loadRequest("afd3d647-a8b7-4723-bf9d-1b832f43b881", REDIRECT_URI, "code", scopStr)
         }
         return true
     }
