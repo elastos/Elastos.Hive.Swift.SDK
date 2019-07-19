@@ -24,9 +24,9 @@ import Foundation
 import Alamofire
 import PromiseKit
 
-@inline(__always) private func TAG() -> String { return "IPFSAuthHelper" }
+@inline(__always) private func TAG() -> String { return "IPFSRpcHelper" }
 
-class IPFSAuthHelper: AuthHelper {
+class IPFSRpcHelper: AuthHelper {
     let param: IPFSParameter
 
     init(_ param: IPFSParameter) {
@@ -50,6 +50,7 @@ class IPFSAuthHelper: AuthHelper {
                     return self.logIn(hash)
                 }.done { padding in
                     resolver.fulfill(padding)
+                    self.param.islogin = true
                     Log.d(TAG(), "login succeed")
                 }.catch { (error) in
                     resolver.reject(error)
@@ -69,7 +70,7 @@ class IPFSAuthHelper: AuthHelper {
     }
 
     override func checkExpired() -> HivePromise<Void> {
-        return IPFSURL.validURL()
+        return IPFSURL.validURL(param)
     }
 
     private func getUID(_ authHelper: AuthHelper) -> HivePromise<String> {
@@ -81,7 +82,7 @@ class IPFSAuthHelper: AuthHelper {
             return promise
         }
         let promise = HivePromise<String> { resolver in
-            let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_UID_NEW.rawValue
+            let url = param.entry.rpcAddrs[validIp] + HIVE_SUB_Url.IPFS_UID_NEW.rawValue
             IPFSAPIs.request(url, .post, nil)
                 .done { jsonData in
                     let uid = jsonData["uid"].stringValue
@@ -97,7 +98,7 @@ class IPFSAuthHelper: AuthHelper {
 
     private func getPeerId(_ uid: String) -> HivePromise<String> {
         let promise = HivePromise<String> { resolver in
-            let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_UID_INFO.rawValue
+            let url = param.entry.rpcAddrs[validIp] + HIVE_SUB_Url.IPFS_UID_INFO.rawValue
             let param = ["uid": uid]
             IPFSAPIs.request(url, .post, param)
                 .done{ jsonData in
@@ -114,7 +115,7 @@ class IPFSAuthHelper: AuthHelper {
 
     private func getHash(_ peerId: String) -> HivePromise<String> {
         let promise = HivePromise<String> { resolver in
-            let url = URL_POOL[validIp] + "/api/v0/name/resolve" + "?" + "arg=" + peerId
+            let url = param.entry.rpcAddrs[validIp] + "/api/v0/name/resolve" + "?" + "arg=" + peerId
             IPFSAPIs.request(url, .get, nil)
                 .done{ jsonData in
                     let hash = jsonData["Path"].stringValue
@@ -137,7 +138,9 @@ class IPFSAuthHelper: AuthHelper {
                                 resolver.reject(error)
                         }
                     }
-
+                    else {
+                        resolver.reject(error)
+                    }
             }
         }
         return promise
@@ -145,9 +148,9 @@ class IPFSAuthHelper: AuthHelper {
 
     private func logIn(_ hash: String) -> HivePromise<Void> {
         let promise = HivePromise<Void> { resolver in
-            let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_UID_LOGIN.rawValue
+            let url = param.entry.rpcAddrs[validIp] + HIVE_SUB_Url.IPFS_UID_LOGIN.rawValue
             let uid = KeyChainStore.restoreUid(.hiveIPFS)
-            param.uid = uid
+            param.entry.uid = uid
             let param = ["uid": uid, "hash": hash]
             IPFSAPIs.request(url, .post, param)
                 .done{ json in

@@ -2,6 +2,12 @@
 import XCTest
 import ElastosHiveSDK
 
+let addrs = [
+    "http://52.83.119.110:9095",
+    "http://52.83.159.189:9095",
+    "http://3.16.202.140:9095",
+    "http://18.217.147.205:9095",
+    "http://18.219.53.133:9095"]
 class IpfsCommon: XCTestCase, Authenticator {
     func requestAuthentication(_ requestURL: String) -> Bool {
         return true

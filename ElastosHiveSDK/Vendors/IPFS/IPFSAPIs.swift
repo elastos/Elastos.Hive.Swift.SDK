@@ -29,9 +29,9 @@ class IPFSAPIs {
 
     class func publish(_ hash: String, _ authHelper: AuthHelper) -> HivePromise<Void> {
         let promise = HivePromise<Void> { resolver in
-            let uid = (authHelper as! IPFSAuthHelper).param.uid
+            let uid = (authHelper as! IPFSRpcHelper).param.entry.uid
+            let url = (authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp] + HIVE_SUB_Url.IPFS_NAME_PUBLISH.rawValue
             let params = ["uid": uid, "path": hash]
-            let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_NAME_PUBLISH.rawValue
             Alamofire.request(url,
                               method: .post,
                               parameters: params,
@@ -52,9 +52,9 @@ class IPFSAPIs {
 
     class func creatFile(_ path: String, _ authHelper: AuthHelper) -> HivePromise<JSON> {
         let promise = HivePromise<JSON> { resolver in
-            let uid = (authHelper as! IPFSAuthHelper).param.uid
+            let uid = (authHelper as! IPFSRpcHelper).param.entry.uid
             let params = ["uid": uid, "path": path,"file": "file", "create": "true", "truncate": "true"]
-            let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_WRITE.rawValue + "?" + params.queryString
+            let url = (authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp] + HIVE_SUB_Url.IPFS_FILES_WRITE.rawValue + "?" + params.queryString
             let str = ""
             let ipfsdata = str.data(using: .utf8)
             Alamofire.upload(multipartFormData: { data in
@@ -85,9 +85,9 @@ class IPFSAPIs {
 
     class func writeData(_ path: String, _ withData: Data, _ authHelper: AuthHelper) -> HivePromise<Void> {
         let promise = HivePromise<Void> { resolver in
-            let uid = (authHelper as! IPFSAuthHelper).param.uid
+            let uid = (authHelper as! IPFSRpcHelper).param.entry.uid
             let params = ["uid": uid, "path": path, "file": "file", "create": "true"]
-            let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_WRITE.rawValue + "?" + params.queryString
+            let url = (authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp] + HIVE_SUB_Url.IPFS_FILES_WRITE.rawValue + "?" + params.queryString
             Alamofire.upload(multipartFormData: { data in
                 data.append(withData, withName: "file", fileName: "file", mimeType: "text/plain")
             }, to: url, encodingCompletion: { result in
@@ -115,8 +115,8 @@ class IPFSAPIs {
 
     class func getHash(_ path: String, _ authHelper: AuthHelper) -> HivePromise<String> {
         let promise = HivePromise<String> { resolver in
-            let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
-            let uid = (authHelper as! IPFSAuthHelper).param.uid
+            let url = (authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
+            let uid = (authHelper as! IPFSRpcHelper).param.entry.uid
             let params = ["uid": uid, "path": path]
             Alamofire.request(url,
                               method: .post,
