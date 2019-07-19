@@ -81,23 +81,26 @@ $ pod install
 
  Firstly，**Making a Client：**
  
-**Note：** Create different clients with specified parameters.If you want to create an Onedrive client, create an Onedrive parameter.
- exc:
- 
- Replace the 'afd3d647-a8b7-4723-bf9d-1b832f43b881','Files.ReadWrite%20offline_access','http://localhost:12345' with your ClientId, scope, redirectURL.
+Create different clients with specified parameters.
+
+a.g. :
+
+Create a client for Onedrive.
 
 ```
-let hiveParam = DriveParameter.createForOneDrive("afd3d647-a8b7-4723-bf9d-1b832f43b881", "Files.ReadWrite%20offline_access", "http://localhost:12345")
+let hiveParam = DriveParameter.createForOneDrive(YOUR-CLIENT-ID, YOUR-SCOPE, YOUR-REIRECTURL)
 HiveClientHandle.createInstance(hiveParam!)
 hiveClient = HiveClientHandle.sharedInstance(type: .oneDrive)
 ```
-Then，**Login：** All interfaces need to be logged in before they can be invoked except getVersion interface. Networking in ElastosHiveSDK is done asynchronously except for login and logout. 
+Then，**Login：** 
+
+All interfaces need to be logged in before they can be invoked except getVersion interface. Networking in ElastosHiveSDK is done asynchronously except for login and logout. 
+
+**Note：** Please implement Authenticator protocol.
 
 ```
 try hiveClient.login(self as Authenticator)
 ```
-
-**Note：** please implement Authenticator protocol.
 
 
 Finaly，**Get a default drive**
@@ -110,7 +113,7 @@ hiveClient.defaultDriveHandle()
             // error
         }
 ```
-You can  use the drive create file or directory with path,etc:
+Then, you can  use the **drive** operate files and directories with path,etc:
 
 
 ### HiveDrive class
@@ -140,9 +143,10 @@ hiveClient.defaultDriveHandle()
 			 // error
          }
 ```
-You can  use the drive get a file 、directory or getItemInfo at a path:
 
 **3. get a file with path**
+
+You can  use the **drive** get a file 、directory or getItemInfo at a path:
 
 ```
 hiveClient.defaultDriveHandle()
@@ -180,8 +184,6 @@ hiveClient.defaultDriveHandle()
             // error
         }
 ```
-
-You can use directory instance operate method in HiveDirectory class.
 
 ### HiveDirectory class
 
