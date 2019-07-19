@@ -3,14 +3,14 @@ import XCTest
 @testable import ElastosHiveSDK
 
 class HiveIpfsDriveClient: XCTestCase {
-
     var hiveClient: HiveClientHandle?
     var hiveParams: DriveParameter?
     var lock: XCTestExpectation?
     var timeout: Double = 600.0
 
     override func setUp() {
-        hiveParams = DriveParameter.createForIpfsDrive("uid-6516f0c7-d5bb-431a-9f12-1f8d8e923642")
+        let rpcAddrs = IPFSEntry("uid-6516f0c7-d5bb-431a-9f12-1f8d8e923642", addrs)
+        hiveParams = DriveParameter.createForIpfsDrive(rpcAddrs)
         HiveClientHandle.createInstance(hiveParams!)
         hiveClient = HiveClientHandle.sharedInstance(type: .hiveIPFS)
     }

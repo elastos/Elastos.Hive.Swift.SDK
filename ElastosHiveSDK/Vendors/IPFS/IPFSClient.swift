@@ -29,10 +29,10 @@ import Alamofire
 @objc(IPFSClient)
 internal class IPFSClient: HiveClientHandle {
     private static var clientInstance: HiveClientHandle?
-    private let authHelper: IPFSAuthHelper
+    private let authHelper: IPFSRpcHelper
 
     private init(param: IPFSParameter){
-        self.authHelper = IPFSAuthHelper(param)
+        self.authHelper = IPFSRpcHelper(param)
         super.init(.hiveIPFS)
     }
 
@@ -59,7 +59,7 @@ internal class IPFSClient: HiveClientHandle {
     }
 
     override func logout() throws {
-        self.authHelper.param.uid = ""
+        self.authHelper.param.islogin = false
     }
 
     override func lastUpdatedInfo() -> HivePromise<HiveClientInfo> {
@@ -68,15 +68,15 @@ internal class IPFSClient: HiveClientHandle {
 
     override func lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>) -> HivePromise<HiveClientInfo> {
         let promise = HivePromise<HiveClientInfo> { resolver in
-            let uid = self.authHelper.param.uid
-            guard uid != "" else {
+            guard self.authHelper.param.islogin else {
                 Log.d(TAG(), "Please login first")
                 let error = HiveError.failue(des: "Please login first")
                 resolver.reject(error)
                 handleBy.runError(error)
                 return
             }
-            let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
+            let uid = self.authHelper.param.entry.uid
+            let url = authHelper.param.entry.rpcAddrs[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
             let path = "/".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let params = ["uid": uid, "path": path]
             self.authHelper.checkExpired()
@@ -110,21 +110,21 @@ internal class IPFSClient: HiveClientHandle {
 
     override func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> HivePromise<HiveDriveHandle> {
         let promise = HivePromise<HiveDriveHandle>{ resolver in
-            let uid = self.authHelper.param.uid
-            guard uid != "" else {
+            guard self.authHelper.param.islogin else {
                 Log.d(TAG(), "Please login first")
                 let error = HiveError.failue(des: "Please login first")
                 resolver.reject(error)
                 handleBy.runError(error)
                 return
             }
+            let uid = self.authHelper.param.entry.uid
             guard IPFSDrive.hiveDriveInstance == nil else {
                 let hdHandle = IPFSDrive.sharedInstance()
                 handleBy.didSucceed(hdHandle)
                 resolver.fulfill(hdHandle)
                 return
             }
-            let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_LS.rawValue
+            let url = authHelper.param.entry.rpcAddrs[validIp] + HIVE_SUB_Url.IPFS_FILES_LS.rawValue
             let path = "/".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let param = ["uid": uid, "path": path]
 

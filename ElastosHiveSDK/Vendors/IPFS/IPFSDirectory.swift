@@ -42,8 +42,8 @@ class IPFSDirectory: HiveDirectoryHandle {
 
     override func lastUpdatedInfo(handleBy: HiveCallback<HiveDirectoryInfo>) -> HivePromise<HiveDirectoryInfo> {
         let promise = HivePromise<HiveDirectoryInfo> { resolver in
-            let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
-            let uid = (self.authHelper as! IPFSAuthHelper).param.uid
+            let url = (authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
+            let uid = (self.authHelper as! IPFSRpcHelper).param.entry.uid
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let params = ["uid": uid, "path": path]
             self.authHelper?.checkExpired()
@@ -80,8 +80,8 @@ class IPFSDirectory: HiveDirectoryHandle {
                 path = self.pathName + withName
             }
             let epath = path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-            let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_MKDIR.rawValue
-            let uid = (authHelper as! IPFSAuthHelper).param.uid
+            let url = (authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp] + HIVE_SUB_Url.IPFS_FILES_MKDIR.rawValue
+            let uid = (authHelper as! IPFSRpcHelper).param.entry.uid
             let param = ["uid": uid,"path": epath]
             self.authHelper!.checkExpired()
                 .then{ void -> HivePromise<JSON> in
@@ -121,8 +121,8 @@ class IPFSDirectory: HiveDirectoryHandle {
 
     override func directoryHandle(atName: String, handleBy: HiveCallback<HiveDirectoryHandle>) -> HivePromise<HiveDirectoryHandle> {
         let promise = HivePromise<HiveDirectoryHandle> { resolver in
-            let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
-            let uid = (self.authHelper as! IPFSAuthHelper).param.uid
+            let url = (authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
+            let uid = (self.authHelper as! IPFSRpcHelper).param.entry.uid
             var path = self.pathName + "/" + atName
             if self.pathName == "/" {
                 path = self.pathName + atName
@@ -178,7 +178,7 @@ class IPFSDirectory: HiveDirectoryHandle {
                 }
                 .done{ success in
                     Log.d(TAG(), "createFile succeed")
-                    let uid = (self.authHelper as! IPFSAuthHelper).param.uid
+                    let uid = (self.authHelper as! IPFSRpcHelper).param.entry.uid
                     let dic = [HiveFileInfo.itemId: uid,
                                HiveFileInfo.name: PathExtracter(withName).baseNamePart(),
                                HiveFileInfo.size: "0"]
@@ -204,8 +204,8 @@ class IPFSDirectory: HiveDirectoryHandle {
 
     override func fileHandle(atName: String, handleBy: HiveCallback<HiveFileHandle>) -> HivePromise<HiveFileHandle> {
         let promise = HivePromise<HiveFileHandle> { resolver in
-            let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
-            let uid = (self.authHelper as! IPFSAuthHelper).param.uid
+            let url = (authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
+            let uid = (self.authHelper as! IPFSRpcHelper).param.entry.uid
             var path = self.pathName + "/" + atName
             if self.pathName == "/" {
                 path = self.pathName + atName
@@ -244,8 +244,8 @@ class IPFSDirectory: HiveDirectoryHandle {
 
     override func getChildren(handleBy: HiveCallback<HiveChildren>) -> HivePromise<HiveChildren> {
         let promise = HivePromise<HiveChildren> { resolver in
-            let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_LS.rawValue
-            let uid = (self.authHelper as! IPFSAuthHelper).param.uid
+            let url = (authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp] + HIVE_SUB_Url.IPFS_FILES_LS.rawValue
+            let uid = (self.authHelper as! IPFSRpcHelper).param.entry.uid
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let param = ["uid": uid, "path": path]
             self.authHelper?.checkExpired()
@@ -273,8 +273,8 @@ class IPFSDirectory: HiveDirectoryHandle {
 
     override func moveTo(newPath: String, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
         let promise = HivePromise<Void> { resolver in
-            let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_MV.rawValue
-            let uid = (authHelper as! IPFSAuthHelper).param.uid
+            let url = (authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp] + HIVE_SUB_Url.IPFS_FILES_MV.rawValue
+            let uid = (authHelper as! IPFSRpcHelper).param.entry.uid
             let originPath = self.pathName
             let dest = newPath.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let params = ["uid": uid,
@@ -317,8 +317,8 @@ class IPFSDirectory: HiveDirectoryHandle {
                     return IPFSAPIs.getHash(originPath, self.authHelper!)
                 }
                 .then{ hash -> HivePromise<JSON> in
-                    let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_CP.rawValue
-                    let uid = (self.authHelper as! IPFSAuthHelper).param.uid
+                    let url = (self.authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp] + HIVE_SUB_Url.IPFS_FILES_CP.rawValue
+                    let uid = (self.authHelper as! IPFSRpcHelper).param.entry.uid
                     let params = ["uid": uid, "source": hash, "dest": newPath]
                     return IPFSAPIs.request(url, .post, params)
                 }
@@ -347,8 +347,8 @@ class IPFSDirectory: HiveDirectoryHandle {
 
     override func deleteItem(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
         let promise = HivePromise<Void> { resolver in
-            let url = URL_POOL[validIp] + HIVE_SUB_Url.IPFS_FILES_RM.rawValue
-            let uid = (authHelper as! IPFSAuthHelper).param.uid
+            let url = (authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp] + HIVE_SUB_Url.IPFS_FILES_RM.rawValue
+            let uid = (authHelper as! IPFSRpcHelper).param.entry.uid
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let params = ["uid": uid, "path": path, "recursive": true] as [String : Any]
             self.authHelper?.checkExpired()

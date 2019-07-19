@@ -40,21 +40,15 @@ internal enum HIVE_SUB_Url: String {
     case IPFS_VERSION = "/version"
 }
 internal let KEYCHAIN_IPFS_UID  = "last_uid"
-internal var URL_POOL = [
-    "http://52.83.119.110:9095",
-    "http://52.83.159.189:9095",
-    "http://3.16.202.140:9095",
-    "http://18.217.147.205:9095",
-    "http://18.219.53.133:9095"]
 internal var validIp = 0
 
 class IPFSURL {
 
-    class func validURL() -> HivePromise<Void> {
+    class func validURL(_ parameter: IPFSParameter) -> HivePromise<Void> {
         let promise = HivePromise<Void> { resolver in
             let uid = KeyChainStore.restoreUid(.hiveIPFS)
             if uid == "" {
-                validUseNewUID(URL_POOL[validIp], { (url) in
+                validUseNewUID(parameter, { (url) in
                     if url == "" {
                         resolver.reject(HiveError.failue(des: "ALL URLS ARE INVALID"))
                     }else {
@@ -63,7 +57,7 @@ class IPFSURL {
                 })
             }
             else {
-                validUseStat(URL_POOL[validIp], uid, { (url) in
+                validUseStat(parameter, { (url) in
                     if url == "" {
                         resolver.reject(HiveError.failue(des: "ALL URLS ARE INVALID"))
                     }else {
@@ -75,9 +69,9 @@ class IPFSURL {
         return promise
     }
 
-    class func validUseNewUID(_ url: String, _ result: @escaping (_ validUrl: String) -> Void) {
+    class func validUseNewUID(_ parameter: IPFSParameter, _ result: @escaping (_ validUrl: String) -> Void) {
 
-        var currentUrl = url
+        var currentUrl = parameter.entry.rpcAddrs[validIp]
         let fullUrl = currentUrl + HIVE_SUB_Url.IPFS_UID_NEW.rawValue
         Alamofire.request(fullUrl,
                           method: .post,
@@ -87,12 +81,12 @@ class IPFSURL {
             .responseJSON { (dataResponse) in
                 if dataResponse.response?.statusCode != 200 {
                     validIp += 1
-                    if validIp > URL_POOL.count - 1 {
+                    if validIp > parameter.entry.rpcAddrs.count - 1 {
                         currentUrl = ""
                         validIp = 0
                         return
                     }
-                    validUseNewUID(URL_POOL[validIp], result)
+                    validUseNewUID(parameter, result)
                 }
                 let json = JSON(dataResponse.result.value as Any)
                 KeyChainStore.writebackForIpfs(.hiveIPFS, json["UID"].stringValue)
@@ -100,9 +94,10 @@ class IPFSURL {
         }
     }
 
-    class func validUseStat(_ url: String, _ uid: String, _ result: @escaping (_ validUrl: String) -> Void) {
+    class func validUseStat(_ parameter: IPFSParameter, _ result: @escaping (_ validUrl: String) -> Void) {
 
-        var currentUrl = url
+        var currentUrl = parameter.entry.rpcAddrs[validIp]
+        let uid = parameter.entry.uid
         let fullUrl = currentUrl + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
         let param = ["uid": uid,"path": "/"]
         Alamofire.request(fullUrl,
@@ -113,13 +108,13 @@ class IPFSURL {
             .responseJSON(completionHandler: { (dataResponse) in
                 if dataResponse.response?.statusCode != 200 || dataResponse.result.isFailure {
                     validIp += 1
-                    if validIp > URL_POOL.count - 1 {
+                    if validIp > parameter.entry.rpcAddrs.count - 1 {
                         currentUrl = ""
                         validIp = 0
                         result(currentUrl)
                         return
                     }
-                    validUseStat(URL_POOL[validIp], uid, result)
+                    validUseStat(parameter, result)
                     return
                 }
                 result(currentUrl)

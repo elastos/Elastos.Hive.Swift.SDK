@@ -45,7 +45,6 @@ public class HiveClientInfo: AttributeMap {
     /// The office location in the user's place of business.
     public static let region: String = "Region"
 
-
     /// Create a `HiveClientInfo` instance
     ///
     /// - Parameter dict: The dictionary with the `name`, `email`, `phoneNo` and `region` key-value

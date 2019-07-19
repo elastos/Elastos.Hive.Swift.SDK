@@ -12,7 +12,8 @@ class HiveIpfsDriveTests: XCTestCase {
     var timeout: Double = 600.0
 
     override func setUp() {
-        hiveParams = DriveParameter.createForIpfsDrive("uid-6516f0c7-d5bb-431a-9f12-1f8d8e923642")
+        let rpcAddrs = IPFSEntry("uid-6516f0c7-d5bb-431a-9f12-1f8d8e923642", addrs)
+        hiveParams = DriveParameter.createForIpfsDrive(rpcAddrs)
         HiveClientHandle.createInstance(hiveParams!)
         hiveClient = HiveClientHandle.sharedInstance(type: .hiveIPFS)
     }

@@ -49,7 +49,7 @@ public class DriveParameter: NSObject {
     ///
     /// - Parameter uid: a unique UID. The UID can be used to identify endpoints in communication.
     /// - Returns: Returns parameter instance.
-    public static func createForIpfsDrive(_ uid: String) -> DriveParameter {
-        return IPFSParameter(uid)
+    public static func createForIpfsDrive(_ entry: IPFSEntry) -> DriveParameter {
+        return IPFSParameter(entry)
     }
 }
