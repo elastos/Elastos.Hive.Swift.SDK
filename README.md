@@ -1,7 +1,7 @@
 Elastos Hive Swift Framework
 =============================
 
-[![Build Status](https://travis-ci.org/elastos/Elastos.NET.Hive.Swift.SDK.svg?)](https://travis-ci.org/elastos/Elastos.NET.Hive.Swift.SDK)
+[![Build Status](https://travis-ci.com/elastos/Elastos.NET.Hive.Swift.SDK.svg?)](https://travis-ci.com/elastos/Elastos.NET.Hive.Swift.SDK)
 
 ## Summary
 
