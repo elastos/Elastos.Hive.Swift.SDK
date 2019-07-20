@@ -27,17 +27,17 @@ import Foundation
 class CacheHelper: NSObject {
 
     class func checkCacheFileIsExist(_ account:DriveType, _ path: String) -> Bool {
-        let cachePath = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + path
-        let fileManager: FileManager = FileManager.default
-        let isExist = fileManager.fileExists(atPath: cachePath)
+        let cachePath: String = "\(NSHomeDirectory())/Library/Caches/\(account.rawValue)/\(path)"
+        let fileManager = FileManager.default
+        let isExist: Bool = fileManager.fileExists(atPath: cachePath)
         return isExist
     }
 
     class func saveCache(_ account: DriveType, _ path: String, data: Data) -> Bool {
-        let cachePath = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + path
-        let cacheDirectory = PathExtracter(cachePath).dirNamePart()
-        let fileManager: FileManager = FileManager.default
-        let exist = fileManager.fileExists(atPath: cacheDirectory)
+        let cachePath: String = "\(NSHomeDirectory())/Library/Caches/\(account.rawValue)/\(path)"
+        let cacheDirectory: String = PathExtracter(cachePath).dirNamePart()
+        let fileManager = FileManager.default
+        let exist: Bool = fileManager.fileExists(atPath: cacheDirectory)
         if (!exist) {
             do {
                 try fileManager.createDirectory(atPath: cacheDirectory, withIntermediateDirectories: true, attributes: nil)
@@ -47,9 +47,9 @@ class CacheHelper: NSObject {
                 return false
             }
         }
-        let existFile = fileManager.fileExists(atPath: cachePath)
+        let existFile: Bool = fileManager.fileExists(atPath: cachePath)
         if !existFile {
-            let isSuccess = fileManager.createFile(atPath: cachePath, contents: nil, attributes: nil)
+            let isSuccess: Bool = fileManager.createFile(atPath: cachePath, contents: nil, attributes: nil)
             guard isSuccess else {
                 Log.e(TAG(), "create \(cachePath) failed")
                 return false
@@ -66,10 +66,10 @@ class CacheHelper: NSObject {
     }
 
     class func writeCache(_ account: DriveType, _ path: String, data: Data, _ position: UInt64, _ appendEnd: Bool) -> Int32 {
-        let cachePath = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + path
-        let cacheDirectory = PathExtracter(cachePath).dirNamePart()
-        let fileManager: FileManager = FileManager.default
-        let cacheExist = fileManager.fileExists(atPath: cacheDirectory)
+        let cachePath: String = "\(NSHomeDirectory())/Library/Caches/\(account.rawValue)/\(path)"
+        let cacheDirectory: String = PathExtracter(cachePath).dirNamePart()
+        let fileManager = FileManager.default
+        let cacheExist: Bool = fileManager.fileExists(atPath: cacheDirectory)
         if (!cacheExist) {
             do {
                 try fileManager.createDirectory(atPath: cacheDirectory, withIntermediateDirectories: true, attributes: nil)
@@ -80,7 +80,7 @@ class CacheHelper: NSObject {
             }
         }
 
-        let existFile = fileManager.fileExists(atPath: cachePath)
+        let existFile: Bool = fileManager.fileExists(atPath: cachePath)
         if !existFile {
             let isSuccess = fileManager.createFile(atPath: cachePath, contents: nil, attributes: nil)
             guard isSuccess else {
@@ -89,22 +89,22 @@ class CacheHelper: NSObject {
             }
         }
 
-        let writeHandle = FileHandle(forWritingAtPath: cachePath)
-        writeHandle?.seek(toFileOffset: position)
+        let writeHandle: FileHandle = FileHandle(forWritingAtPath: cachePath)!
+        writeHandle.seek(toFileOffset: position)
         if appendEnd {
-            writeHandle?.seekToEndOfFile()
+            writeHandle.seekToEndOfFile()
         }
-        writeHandle?.write(data)
+        writeHandle.write(data)
         return Int32(data.count)
     }
 
     class func readCache(_ account: DriveType, _ path: String, _ position: UInt64, _ length: Int) -> Data {
-        let cachePath = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + path
+        let cachePath: String = "\(NSHomeDirectory())/Library/Caches/\(account.rawValue)/\(path)"
         let fileManager = FileManager.default
-        let exist = fileManager.fileExists(atPath: cachePath)
+        let exist: Bool = fileManager.fileExists(atPath: cachePath)
         if (exist) {
             do {
-                let readHandler = FileHandle(forReadingAtPath: cachePath)
+                let readHandler = FileHandle(forReadingAtPath: cachePath)!
                 let attributes = try fileManager.attributesOfItem(atPath: cachePath)
                 let fileSize = attributes[FileAttributeKey.size] as! UInt64
                 var dt = Data()
@@ -112,17 +112,17 @@ class CacheHelper: NSObject {
                     Log.d(TAG(), "read finished")
                     return Data()
                 }
-                readHandler?.seek(toFileOffset: position)
+                readHandler.seek(toFileOffset: position)
                 if fileSize <= length {
-                    dt = readHandler?.readDataToEndOfFile() ?? Data()
+                    dt = readHandler.readDataToEndOfFile()
                 }
                 else {
                     if fileSize >= position + UInt64(length)
                     {
-                        dt = (readHandler?.readData(ofLength: length))!
+                        dt = (readHandler.readData(ofLength: length))
                     }
                     else{
-                        dt = (readHandler?.readDataToEndOfFile())!
+                        dt = (readHandler.readDataToEndOfFile())
                     }
                 }
                 return dt
@@ -135,23 +135,23 @@ class CacheHelper: NSObject {
     }
 
     class func uploadFile(_ account: DriveType, _ path: String) -> Data  {
-        let copyPath = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + path
+        let copyPath: String = "\(NSHomeDirectory())/Library/Caches/\(account.rawValue)/\(path)"
         let fileManager = FileManager.default
-        let exist = fileManager.fileExists(atPath: copyPath)
+        let exist: Bool = fileManager.fileExists(atPath: copyPath)
         if (exist) {
-            let readHandler = FileHandle(forReadingAtPath: copyPath)
-            var dt = Data()
-            readHandler?.seek(toFileOffset: 0)
-            dt = (readHandler?.readDataToEndOfFile())!
+            let readHandler = FileHandle(forReadingAtPath: copyPath)!
+            var dt: Data = Data()
+            readHandler.seek(toFileOffset: 0)
+            dt = (readHandler.readDataToEndOfFile())
             return dt
         }
         else { return Data() }
     }
 
     class func clearCache(_ account: DriveType, _ path: String) {
-        let cachePath = NSHomeDirectory() + "/Library/Caches/" + account.rawValue + "/" + path
-        let fileManager: FileManager = FileManager.default
-        let exist = fileManager.fileExists(atPath: cachePath)
+        let cachePath: String = "\(NSHomeDirectory())/Library/Caches/\(account.rawValue)/\(path)"
+        let fileManager = FileManager.default
+        let exist: Bool = fileManager.fileExists(atPath: cachePath)
         if exist {
             do {
                 try fileManager.removeItem(atPath: cachePath)

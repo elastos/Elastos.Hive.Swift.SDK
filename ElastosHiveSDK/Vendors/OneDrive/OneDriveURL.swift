@@ -47,19 +47,19 @@ class OneDriveURL {
 
     func compose() -> String {
         if pathName == "/" && extName == nil {
-            return OneDriveURL.API + OneDriveURL.ROOT
+            return "\(OneDriveURL.API)\(OneDriveURL.ROOT)"
         }
 
         if pathName == "/" && extName != nil {
-            return OneDriveURL.API + "\(OneDriveURL.ROOT)/\(extName!)"
+            return "\(OneDriveURL.API)\(OneDriveURL.ROOT)/\(extName!)"
         }
 
         if pathName != "/" && extName == nil {
-            let path = pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-            return OneDriveURL.API + "\(OneDriveURL.ROOT):\(path)"
+            let path: String = pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+            return "\(OneDriveURL.API)\(OneDriveURL.ROOT):\(path)"
         }
 
-        let path = pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-        return OneDriveURL.API + "\(OneDriveURL.ROOT):\(path):/\(extName!)"
+        let path: String = pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+        return "\(OneDriveURL.API)\(OneDriveURL.ROOT):\(path):/\(extName!)"
     }
 }

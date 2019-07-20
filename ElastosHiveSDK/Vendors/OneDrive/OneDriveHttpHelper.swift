@@ -31,7 +31,7 @@ class OneDriveHttpHelper: NSObject {
                        encoding: ParameterEncoding = URLEncoding.default,
                        headers: HTTPHeaders, avalidCode: Int,
                        _ authHelper: AuthHelper) -> HivePromise<JSON> {
-        let promise = HivePromise<JSON> { resolver in
+        let promise: HivePromise = HivePromise<JSON> { resolver in
             Alamofire.request(url, method: method,
                               parameters: parameters,
                               encoding: encoding,
@@ -42,17 +42,18 @@ class OneDriveHttpHelper: NSObject {
                         KeyChainStore.writeback((authHelper as! OneDriveAuthHelper).token!,
                                                 (authHelper as! OneDriveAuthHelper).authEntry,
                                                 .oneDrive)
-                        let error = HiveError.failue(des: TOKEN_INVALID)
+                        let error: HiveError = HiveError.failue(des: TOKEN_INVALID)
                         resolver.reject(error)
                         return
                     }
                     guard dataResponse.response?.statusCode == avalidCode || dataResponse.response?.statusCode == 200 else{
-                        let json = JSON(JSON(dataResponse.result.value as Any)["error"])
-                        let error = HiveError.failue(des: json["message"].stringValue)
+                        let responsejson: JSON = JSON(dataResponse.result.value as Any)
+                        let errorjson: JSON = JSON(responsejson["error"])
+                        let error: HiveError = HiveError.failue(des: errorjson["message"].stringValue)
                         resolver.reject(error)
                         return
                     }
-                    var jsonData = JSON(dataResponse.result.value as Any)
+                    var jsonData: JSON = JSON(dataResponse.result.value as Any)
                     if avalidCode == statusCode.accepted.rawValue {
                         jsonData = JSON(dataResponse.response?.allHeaderFields as Any)
                     }
@@ -68,7 +69,7 @@ class OneDriveHttpHelper: NSObject {
                                    encoding: ParameterEncoding = JSONEncoding.default,
                                    headers: HTTPHeaders,
                                    _ authHelper: AuthHelper) -> HivePromise<String> {
-        let promise = HivePromise<String> { resolver in
+        let promise: HivePromise = HivePromise<String> { resolver in
             Alamofire.request(url,
                               method: method,
                               parameters: parameters,
@@ -77,7 +78,7 @@ class OneDriveHttpHelper: NSObject {
                 .responseJSON { dataResponse in
                     switch dataResponse.result {
                     case .success(let re):
-                        let uploadUrl = JSON(re)["uploadUrl"].stringValue
+                        let uploadUrl: String = JSON(re)["uploadUrl"].stringValue
                         resolver.fulfill(uploadUrl)
                     case .failure(let error):
                         resolver.reject(error)
@@ -91,7 +92,7 @@ class OneDriveHttpHelper: NSObject {
                                method: HTTPMethod = .put,
                                headers: HTTPHeaders,
                             _ authHelper: AuthHelper) -> HivePromise<Void> {
-        let promise = HivePromise<Void> { resolver in
+        let promise: HivePromise = HivePromise<Void> { resolver in
             Alamofire.upload(data,
                              to: to,
                              method: method,
@@ -102,13 +103,13 @@ class OneDriveHttpHelper: NSObject {
                         KeyChainStore.writeback((authHelper as! OneDriveAuthHelper).token!,
                                                 (authHelper as! OneDriveAuthHelper).authEntry,
                                                 .oneDrive)
-                        let error = HiveError.failue(des: TOKEN_INVALID)
+                        let error: HiveError = HiveError.failue(des: TOKEN_INVALID)
                         resolver.reject(error)
                         return
                     }
                     guard dataResponse.response?.statusCode == statusCode.created.rawValue || dataResponse.response?.statusCode == statusCode.ok.rawValue else {
-                        let json = JSON(JSON(dataResponse.result.value as Any)["error"])
-                        let error = HiveError.failue(des: json["message"].stringValue)
+                        let json: JSON = JSON(JSON(dataResponse.result.value as Any)["error"])
+                        let error: HiveError = HiveError.failue(des: json["message"].stringValue)
                         resolver.reject(error)
                         return
                     }
@@ -119,18 +120,18 @@ class OneDriveHttpHelper: NSObject {
     }
 
     class func pollingCopyresult(_ url: String) -> HivePromise<Void> {
-        let promise = HivePromise<Void> { resolver in
+        let promise: HivePromise = HivePromise<Void> { resolver in
             Alamofire.request(url,
                               method: .get,
                               parameters: nil, encoding: JSONEncoding.default, headers: nil)
                 .responseJSON { (dataResponse) in
-                    let jsonData = JSON(dataResponse.result.value as Any)
-                    let stat = jsonData["status"].stringValue
+                    let jsonData: JSON = JSON(dataResponse.result.value as Any)
+                    let stat: String = jsonData["status"].stringValue
                     if stat == "completed" {
                         resolver.fulfill(Void())
                         return
                     }else if stat == "failed" {
-                        let error = HiveError.failue(des: "Operation failed")
+                        let error: HiveError = HiveError.failue(des: "Operation failed")
                         resolver.reject(error)
                         return
                     }else {
@@ -146,20 +147,20 @@ class OneDriveHttpHelper: NSObject {
     }
 
     class func pollingDowloadresult(_ url: String) -> HivePromise<Data> {
-        let promise = HivePromise<Data> { resolver in
+        let promise: HivePromise = HivePromise<Data> { resolver in
             Alamofire.request(url,
                               method: .get,
                               parameters: nil,
                               encoding: JSONEncoding.default,
                               headers: nil)
                 .responseJSON { dataResponse in
-                    let jsonStr = String(data: dataResponse.data!, encoding: .utf8) ?? ""
+                    let jsonStr: String = String(data: dataResponse.data!, encoding: .utf8) ?? ""
                     guard dataResponse.response?.statusCode == 200 else{
-                        let error = HiveError.failue(des: jsonStr)
+                        let error: HiveError = HiveError.failue(des: jsonStr)
                         resolver.reject(error)
                         return
                     }
-                    let data = dataResponse.data ?? Data()
+                    let data: Data = dataResponse.data ?? Data()
                     resolver.fulfill(data)
             }
         }
@@ -167,7 +168,7 @@ class OneDriveHttpHelper: NSObject {
     }
 
     class func getRemoteFile(authHelper: AuthHelper, url: String) -> HivePromise<Data> {
-        let promise = HivePromise<Data> {resolver in
+        let promise: HivePromise = HivePromise<Data> {resolver in
             _ = authHelper.checkExpired().done { result in
                 Alamofire.request(url, method: .get,
                                   parameters: nil,
@@ -179,16 +180,16 @@ class OneDriveHttpHelper: NSObject {
                             KeyChainStore.writeback((authHelper as! OneDriveAuthHelper).token!,
                                                     (authHelper as! OneDriveAuthHelper).authEntry,
                                                     .oneDrive)
-                            let error = HiveError.failue(des: TOKEN_INVALID)
+                            let error: HiveError = HiveError.failue(des: TOKEN_INVALID)
                             resolver.reject(error)
                             return
                         }
                         guard dataResponse.response?.statusCode != statusCode.redirect_url.rawValue else{
-                            let jsonData = JSON(dataResponse.result.value as Any)
-                            let url = jsonData["Location"].stringValue
+                            let jsonData: JSON = JSON(dataResponse.result.value as Any)
+                            let url: String = jsonData["Location"].stringValue
                             pollingDowloadresult(url)
                                 .done{ data in
-                                    let data = dataResponse.data ?? Data()
+                                    let data: Data = dataResponse.data ?? Data()
                                     resolver.fulfill(data)
                                 }.catch{ error in
                                     resolver.reject(error)
@@ -196,12 +197,12 @@ class OneDriveHttpHelper: NSObject {
                             return
                         }
                         guard dataResponse.response?.statusCode == 200 else{
-                            let json = JSON(JSON(dataResponse.result.value as Any)["error"])
-                            let error = HiveError.failue(des: json["message"].stringValue)
+                            let json: JSON = JSON(JSON(dataResponse.result.value as Any)["error"])
+                            let error: HiveError = HiveError.failue(des: json["message"].stringValue)
                             resolver.reject(error)
                             return
                         }
-                        let data = dataResponse.data ?? Data()
+                        let data: Data = dataResponse.data ?? Data()
                         resolver.fulfill(data)
                 }
                 }.catch { error in

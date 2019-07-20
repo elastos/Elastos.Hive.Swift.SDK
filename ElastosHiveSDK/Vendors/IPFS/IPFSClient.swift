@@ -49,7 +49,7 @@ internal class IPFSClient: HiveClientHandle {
     }
 
     override func login(_ authenticator: Authenticator) throws {
-        let promise =  self.authHelper.loginAsync(authenticator)
+        let promise: HivePromise =  self.authHelper.loginAsync(authenticator)
         do {
             _ = try (promise.wait())
             _ = defaultDriveHandle()
@@ -67,7 +67,7 @@ internal class IPFSClient: HiveClientHandle {
     }
 
     override func lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>) -> HivePromise<HiveClientInfo> {
-        let promise = HivePromise<HiveClientInfo> { resolver in
+        let promise: HivePromise = HivePromise<HiveClientInfo> { resolver in
             guard self.authHelper.param.islogin else {
                 Log.d(TAG(), "Please login first")
                 let error = HiveError.failue(des: "Please login first")
@@ -75,28 +75,28 @@ internal class IPFSClient: HiveClientHandle {
                 handleBy.runError(error)
                 return
             }
-            let uid = self.authHelper.param.entry.uid
-            let url = authHelper.param.entry.rpcAddrs[validIp] + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
+            let uid: String = self.authHelper.param.entry.uid
+            let url: String = "\(authHelper.param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_STAT.rawValue)"
             let path = "/".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-            let params = ["uid": uid, "path": path]
+            let params: Dictionary<String, String> = ["uid": uid, "path": path]
             self.authHelper.checkExpired()
                 .then{ void -> HivePromise<JSON> in
                     return IPFSAPIs.request(url, .post, params)
                 }
                 .done{ json in
                     Log.d(TAG(), "lastUpdatedInfo succeed")
-                    let dic = [HiveClientInfo.email: "",
+                    let dic: Dictionary<String, String> = [HiveClientInfo.email: "",
                                HiveClientInfo.name: "",
                                HiveClientInfo.phoneNo: "",
                                HiveClientInfo.region: "",
                                HiveClientInfo.userId: uid]
-                    let clientInfo = HiveClientInfo(dic)
+                    let clientInfo: HiveClientInfo = HiveClientInfo(dic)
                     self.lastInfo = clientInfo
                     handleBy.didSucceed(clientInfo)
                     resolver.fulfill(clientInfo)
                 }
                 .catch{ error in
-                    Log.e(TAG(), "lastUpdatedInfo falied: " + HiveError.des(error as! HiveError))
+                    Log.e(TAG(), "lastUpdatedInfo falied: \(HiveError.des(error as! HiveError))")
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
             }
@@ -109,7 +109,7 @@ internal class IPFSClient: HiveClientHandle {
     }
 
     override func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> HivePromise<HiveDriveHandle> {
-        let promise = HivePromise<HiveDriveHandle>{ resolver in
+        let promise: HivePromise = HivePromise<HiveDriveHandle>{ resolver in
             guard self.authHelper.param.islogin else {
                 Log.d(TAG(), "Please login first")
                 let error = HiveError.failue(des: "Please login first")
@@ -119,14 +119,14 @@ internal class IPFSClient: HiveClientHandle {
             }
             let uid = self.authHelper.param.entry.uid
             guard IPFSDrive.hiveDriveInstance == nil else {
-                let hdHandle = IPFSDrive.sharedInstance()
+                let hdHandle: IPFSDrive = IPFSDrive.sharedInstance()
                 handleBy.didSucceed(hdHandle)
                 resolver.fulfill(hdHandle)
                 return
             }
-            let url = authHelper.param.entry.rpcAddrs[validIp] + HIVE_SUB_Url.IPFS_FILES_LS.rawValue
-            let path = "/".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-            let param = ["uid": uid, "path": path]
+            let url: String = "\(authHelper.param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_LS.rawValue)"
+            let path: String = "/".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+            let param: Dictionary<String, String> = ["uid": uid, "path": path]
 
             self.authHelper.checkExpired()
                 .then{ viod -> HivePromise<JSON> in
@@ -134,15 +134,15 @@ internal class IPFSClient: HiveClientHandle {
                 }
                 .done{ json in
                     Log.d(TAG(), "defaultDriveHandle succeed")
-                    let dic = [HiveDriveInfo.driveId: uid]
-                    let driveInfo = HiveDriveInfo(dic)
-                    let driveHandle = IPFSDrive(driveInfo, self.authHelper)
+                    let dic: Dictionary<String, String> = [HiveDriveInfo.driveId: uid]
+                    let driveInfo: HiveDriveInfo = HiveDriveInfo(dic)
+                    let driveHandle: IPFSDrive = IPFSDrive(driveInfo, self.authHelper)
                     driveHandle.lastInfo = driveInfo
                     resolver.fulfill(driveHandle)
                     handleBy.didSucceed(driveHandle)
                 }
                 .catch{ error in
-                    Log.e(TAG(), "defaultDriveHandle falied: " + HiveError.des(error as! HiveError))
+                    Log.e(TAG(), "defaultDriveHandle falied: \(HiveError.des(error as! HiveError))")
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
             }

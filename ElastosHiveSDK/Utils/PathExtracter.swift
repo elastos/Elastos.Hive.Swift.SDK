@@ -36,7 +36,7 @@ class PathExtracter {
     func dirNamePart() -> String {
         let index = path.range(of: "/", options: .backwards)?.lowerBound
         let str = index.map(path.prefix(upTo:)) ?? ""
-        return String(str + "/")
+        return "\(str)/"
     }
 
     /*

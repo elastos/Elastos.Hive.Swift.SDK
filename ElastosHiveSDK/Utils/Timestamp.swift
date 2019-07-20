@@ -44,7 +44,7 @@ class Timestamp {
     }
 
     class func isAfter(_ timeStemp: String) -> Bool {
-        let currentTime = getTimeAtNow()
+        let currentTime: String = getTimeAtNow()
         return currentTime > timeStemp;
     }
 }
