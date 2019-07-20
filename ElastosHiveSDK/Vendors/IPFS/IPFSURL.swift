@@ -45,7 +45,7 @@ internal var validIp = 0
 class IPFSURL {
 
     class func validURL(_ parameter: IPFSParameter) -> HivePromise<Void> {
-        let promise = HivePromise<Void> { resolver in
+        let promise: HivePromise = HivePromise<Void> { resolver in
             let uid = KeyChainStore.restoreUid(.hiveIPFS)
             if uid == "" {
                 validUseNewUID(parameter, { (url) in

@@ -53,7 +53,7 @@ internal class OneDriveAuthHelper: AuthHelper {
             return promise
         }
 
-        let promise = HivePromise<Void> { resolver in
+        let promise: HivePromise = HivePromise<Void> { resolver in
             self.acquireAuthCode(authenticator)
                 .then { authCode -> HivePromise<Void>  in
                     return self.acquireAccessToken(authCode)
@@ -62,7 +62,7 @@ internal class OneDriveAuthHelper: AuthHelper {
                     handleBy.didSucceed(padding)
                     resolver.fulfill(padding)
                 }.catch { error in
-                    Log.e(TAG(), "Login faild: " + HiveError.des(error as! HiveError))
+                    Log.e(TAG(), "Login faild: \(HiveError.des(error as! HiveError))")
                     handleBy.runError(error as! HiveError)
                     resolver.reject(error)
             }
@@ -75,16 +75,18 @@ internal class OneDriveAuthHelper: AuthHelper {
     }
 
     override func logoutAsync(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
-        let promise = HivePromise<Void> { resolver in
-            Alamofire.request(OneDriveURL.AUTH + ONEDRIVE_SUB_Url.ONEDRIVE_LOGOUT.rawValue + "?post_logout_redirect_uri=\(authEntry.redirectURL)",
+        let promise: HivePromise = HivePromise<Void> { resolver in
+            let url: String = "\(OneDriveURL.AUTH)\(ONEDRIVE_SUB_Url.ONEDRIVE_LOGOUT.rawValue)?post_logout_redirect_uri=\(authEntry.redirectURL)"
+
+            Alamofire.request(url,
                 method: .get,
                 parameters: nil,
                 encoding: JSONEncoding.default,
                 headers: nil).responseJSON(completionHandler: { dataResponse in
                     guard dataResponse.response?.statusCode == 200 else{
-                        let json = JSON(JSON(dataResponse.result.value as Any)["error"])
-                        let error = HiveError.failue(des: json["message"].stringValue)
-                        Log.e(TAG(), "Logout faild: " + HiveError.des(error))
+                        let json: JSON = JSON(JSON(dataResponse.result.value as Any)["error"])
+                        let error: HiveError = HiveError.failue(des: json["message"].stringValue)
+                        Log.e(TAG(), "Logout faild: \(HiveError.des(error))")
                         handleBy.runError(error)
                         resolver.reject(error)
                         return
@@ -100,10 +102,10 @@ internal class OneDriveAuthHelper: AuthHelper {
     }
 
     private func acquireAuthCode(_ authenticator: Authenticator) -> HivePromise<String> {
-        let promise = HivePromise<String> { resolver in
-            let redirecturl = authEntry.redirectURL
-            let startIndex = redirecturl.index(redirecturl.startIndex, offsetBy: 17)
-            let endIndex =  redirecturl.index(redirecturl.startIndex, offsetBy: redirecturl.count)
+        let promise: HivePromise = HivePromise<String> { resolver in
+            let redirecturl: String = authEntry.redirectURL
+            let startIndex: String.Index = redirecturl.index(redirecturl.startIndex, offsetBy: 17)
+            let endIndex: String.Index =  redirecturl.index(redirecturl.startIndex, offsetBy: redirecturl.count)
             let port = UInt16(redirecturl[startIndex..<endIndex])
             server.startRun(port!)
             _ = authenticator.requestAuthentication(redirecturl)
@@ -111,7 +113,7 @@ internal class OneDriveAuthHelper: AuthHelper {
                 Log.d(TAG(), "AuthCode succeed")
                 resolver.fulfill(authCode)
                 }.catch{ error in
-                    Log.e(TAG(), "AuthCode faild: " + HiveError.des(error as! HiveError))
+                    Log.e(TAG(), "AuthCode faild: \(HiveError.des(error as! HiveError))")
                     resolver.reject(error)
             }
         }
@@ -119,26 +121,27 @@ internal class OneDriveAuthHelper: AuthHelper {
     }
 
     private func acquireAccessToken(_ authCode: String) -> HivePromise<Void> {
-        let promise = HivePromise<Void> { resolver in
+        let promise: HivePromise = HivePromise<Void> { resolver in
             let params: Dictionary<String, Any> = [
                 "client_id" : self.authEntry.clientId,
                 "code" : authCode,
                 "grant_type" : AUTHORIZATION_TYPE_CODE,
                 "redirect_uri" : self.authEntry.redirectURL
             ]
-            var urlRequest = URLRequest(url: URL(string: OneDriveURL.AUTH + ONEDRIVE_SUB_Url.ONEDRIVE_TOKEN.rawValue)!)
+            let url = "\(OneDriveURL.AUTH)\(ONEDRIVE_SUB_Url.ONEDRIVE_TOKEN.rawValue)"
+            var urlRequest = URLRequest(url: URL(string: url)!)
             urlRequest.httpMethod = "POST"
             urlRequest.httpBody = params.queryString.data(using: String.Encoding.utf8)
             urlRequest.setValue(OneDriveHttpHeader.ContentTypeValue, forHTTPHeaderField: OneDriveHttpHeader.ContentType)
             Alamofire.request(urlRequest).responseJSON(completionHandler: { dataResponse in
                 guard dataResponse.response?.statusCode == 200 else{
-                    let error = HiveError.failue(des: dataResponse.toString())
-                    Log.e(TAG(), "AccessToken faild: " + HiveError.des(error))
+                    let error: HiveError = HiveError.failue(des: dataResponse.toString())
+                    Log.e(TAG(), "AccessToken faild: \(HiveError.des(error))")
                     resolver.reject(error)
                     return
                 }
                 Log.d(TAG(), "AccessToken succeed")
-                let jsonData =  JSON(dataResponse.result.value as Any)
+                let jsonData: JSON =  JSON(dataResponse.result.value as Any)
                 self.token = AuthToken()
                 self.token?.accessToken = jsonData[KEYCHAIN_KEY.ACCESS_TOKEN.rawValue].stringValue
                 self.token?.refreshToken = jsonData[KEYCHAIN_KEY.REDIRECTURL.rawValue].stringValue
@@ -152,7 +155,7 @@ internal class OneDriveAuthHelper: AuthHelper {
     }
 
     private func refreshToken() -> HivePromise<Void> {
-        let promise = HivePromise<Void> {  resolver in
+        let promise: HivePromise = HivePromise<Void> {  resolver in
             let params: Dictionary<String, Any> = [
                 "client_id" : self.authEntry.clientId,
                 "scope" : self.authEntry.scope,
@@ -168,12 +171,12 @@ internal class OneDriveAuthHelper: AuthHelper {
                 guard dataResponse.response?.statusCode == 200 else{
                     let json = JSON(JSON(dataResponse.result.value as Any)["error"])
                     let error = HiveError.failue(des: json["message"].stringValue)
-                    Log.e(TAG(), "RefreshToken faild: " + HiveError.des(error))
+                    Log.e(TAG(), "RefreshToken faild: \(HiveError.des(error))")
                     resolver.reject(error)
                     return
                 }
                 Log.d(TAG(), "RefreshToken succeed")
-                let jsonData = JSON(dataResponse.result.value as Any)
+                let jsonData: JSON = JSON(dataResponse.result.value as Any)
                 self.token = AuthToken()
                 self.token?.accessToken = jsonData[KEYCHAIN_KEY.ACCESS_TOKEN.rawValue].stringValue
                 self.token?.refreshToken = jsonData[KEYCHAIN_KEY.REDIRECTURL.rawValue].stringValue
@@ -191,7 +194,7 @@ internal class OneDriveAuthHelper: AuthHelper {
     }
 
     override func checkExpired() -> HivePromise<Void> {
-        let promise = HivePromise<Void> { resolver in
+        let promise: HivePromise = HivePromise<Void> { resolver in
             guard !isExpired() else {
                 _ = refreshToken().done{ authToken in
                     resolver.fulfill(Void())

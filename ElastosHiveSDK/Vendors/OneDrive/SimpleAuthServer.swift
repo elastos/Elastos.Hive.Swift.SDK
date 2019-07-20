@@ -34,13 +34,13 @@ internal class SimpleAuthServer: NSObject {
     }
     
     func getCode() -> HivePromise<String> {
-        let promise = HivePromise<String>{ resolver in
+        let promise: HivePromise = HivePromise<String>{ resolver in
             httpServer[""] = { request in
                 guard request.queryParams.count > 0 || request.queryParams[0].0 != "code" else {
                     resolver.reject(HiveError.failue(des: "failed"))
                     return HttpResponse.ok(.json("nil" as AnyObject))
                 }
-                let authCode = request.queryParams[0].1
+                let authCode: String = request.queryParams[0].1
                 resolver.fulfill(authCode)
                 return HttpResponse.ok(.json("nil" as AnyObject))
             }

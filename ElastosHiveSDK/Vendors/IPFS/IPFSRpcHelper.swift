@@ -39,7 +39,7 @@ class IPFSRpcHelper: AuthHelper {
     }
 
     override func loginAsync(_ authenticator: Authenticator, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
-        let promise = HivePromise<Void> { resolver in
+        let promise: HivePromise = HivePromise<Void> { resolver in
             self.checkExpired().then { padding -> HivePromise<String> in
                 return self.getUID(self)
                 }.then { (uid) -> HivePromise<String> in
@@ -54,7 +54,7 @@ class IPFSRpcHelper: AuthHelper {
                     Log.d(TAG(), "login succeed")
                 }.catch { (error) in
                     resolver.reject(error)
-                    Log.e(TAG(), "login falied: " + HiveError.des(error as! HiveError))
+                    Log.e(TAG(), "login falied: \(HiveError.des(error as! HiveError))")
             }
         }
         return promise
@@ -74,15 +74,15 @@ class IPFSRpcHelper: AuthHelper {
     }
 
     private func getUID(_ authHelper: AuthHelper) -> HivePromise<String> {
-        let uid = KeyChainStore.restoreUid(.hiveIPFS)
+        let uid: String = KeyChainStore.restoreUid(.hiveIPFS)
         guard uid == "" else {
-            let promise = HivePromise<String> { resolver in
+            let promise: HivePromise = HivePromise<String> { resolver in
                 resolver.fulfill(uid)
             }
             return promise
         }
-        let promise = HivePromise<String> { resolver in
-            let url = param.entry.rpcAddrs[validIp] + HIVE_SUB_Url.IPFS_UID_NEW.rawValue
+        let promise: HivePromise = HivePromise<String> { resolver in
+            let url: String = "\(param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_UID_NEW.rawValue)"
             IPFSAPIs.request(url, .post, nil)
                 .done { jsonData in
                     let uid = jsonData["uid"].stringValue
@@ -97,9 +97,9 @@ class IPFSRpcHelper: AuthHelper {
     }
 
     private func getPeerId(_ uid: String) -> HivePromise<String> {
-        let promise = HivePromise<String> { resolver in
-            let url = param.entry.rpcAddrs[validIp] + HIVE_SUB_Url.IPFS_UID_INFO.rawValue
-            let param = ["uid": uid]
+        let promise: HivePromise = HivePromise<String> { resolver in
+            let url: String = "\(param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_UID_INFO.rawValue)"
+            let param: Dictionary<String, String> = ["uid": uid]
             IPFSAPIs.request(url, .post, param)
                 .done{ jsonData in
                     let peerId = jsonData["PeerID"].stringValue
@@ -114,15 +114,15 @@ class IPFSRpcHelper: AuthHelper {
     }
 
     private func getHash(_ peerId: String) -> HivePromise<String> {
-        let promise = HivePromise<String> { resolver in
-            let url = param.entry.rpcAddrs[validIp] + "/api/v0/name/resolve" + "?" + "arg=" + peerId
+        let promise: HivePromise = HivePromise<String> { resolver in
+            let url: String = "\(param.entry.rpcAddrs[validIp])/api/v0/name/resolve?arg=\(peerId)"
             IPFSAPIs.request(url, .get, nil)
                 .done{ jsonData in
                     let hash = jsonData["Path"].stringValue
                     resolver.fulfill(hash)
                 }
                 .catch{ error in
-                    let errorMessage = HiveError.des(error as! HiveError)
+                    let errorMessage: String = HiveError.des(error as! HiveError)
                     if errorMessage == "routing: not found" {
                         IPFSAPIs.getHash("/", self)
                             .then{ hash -> HivePromise<Void> in
@@ -147,11 +147,11 @@ class IPFSRpcHelper: AuthHelper {
     }
 
     private func logIn(_ hash: String) -> HivePromise<Void> {
-        let promise = HivePromise<Void> { resolver in
-            let url = param.entry.rpcAddrs[validIp] + HIVE_SUB_Url.IPFS_UID_LOGIN.rawValue
-            let uid = KeyChainStore.restoreUid(.hiveIPFS)
+        let promise: HivePromise = HivePromise<Void> { resolver in
+            let url: String = "\(param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_UID_LOGIN.rawValue)"
+            let uid: String = KeyChainStore.restoreUid(.hiveIPFS)
             param.entry.uid = uid
-            let param = ["uid": uid, "hash": hash]
+            let param: Dictionary<String, String> = ["uid": uid, "hash": hash]
             IPFSAPIs.request(url, .post, param)
                 .done{ json in
                     resolver.fulfill(Void())

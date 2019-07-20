@@ -72,11 +72,11 @@ internal class OneDriveClient: HiveClientHandle {
     }
 
     override func lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>) -> HivePromise<HiveClientInfo> {
-        let promise = HivePromise<HiveClientInfo> { resolver in
+        let promise: HivePromise = HivePromise<HiveClientInfo> { resolver in
             let token = (self.authHelper as! OneDriveAuthHelper).token
             guard token != nil else {
                 Log.d(TAG(), "Please login first")
-                let error = HiveError.failue(des: "Please login first")
+                let error: HiveError = HiveError.failue(des: "Please login first")
                 resolver.reject(error)
                 handleBy.runError(error)
                 return
@@ -99,14 +99,13 @@ internal class OneDriveClient: HiveClientHandle {
                         HiveClientInfo.phoneNo: jsonData["mobilePhone"].stringValue,
                         HiveClientInfo.region: jsonData["officeLocation"].stringValue
                     ]
-                    let clientInfo = HiveClientInfo(dic)
+                    let clientInfo: HiveClientInfo = HiveClientInfo(dic)
                     handleBy.didSucceed(clientInfo)
                     resolver.fulfill(clientInfo)
-
-                    Log.d(TAG(), "Acquired client information from remote drive: " + clientInfo.debugDescription);
+                    Log.d(TAG(), "Acquired client information from remote drive: \(clientInfo.debugDescription)");
                 }
                 .catch { error in
-                    Log.e(TAG(), "Acquire last client information failed: " + HiveError.des(error as! HiveError))
+                    Log.e(TAG(), "Acquire last client information failed: \(HiveError.des(error as! HiveError))")
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
             }
@@ -119,7 +118,7 @@ internal class OneDriveClient: HiveClientHandle {
     }
 
     override func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> HivePromise<HiveDriveHandle> {
-        let promise = HivePromise<HiveDriveHandle> { resolver in
+        let promise: HivePromise = HivePromise<HiveDriveHandle> { resolver in
             let token = (self.authHelper as! OneDriveAuthHelper).token
             guard token != nil else {
                 Log.d(TAG(), "Please login first")
@@ -144,16 +143,16 @@ internal class OneDriveClient: HiveClientHandle {
                                  avalidCode: 200, self.authHelper)
                 }
                 .done { jsonData in
-                    let driveId = jsonData["id"].stringValue
-                    let dic = [HiveDriveInfo.driveId: driveId]
-                    let driveInfo = HiveDriveInfo(dic)
-                    let dirHandle = OneDriveDrive(driveInfo, self.authHelper)
+                    let driveId: String = jsonData["id"].stringValue
+                    let dic: Dictionary<String, String> = [HiveDriveInfo.driveId: driveId]
+                    let driveInfo: HiveDriveInfo = HiveDriveInfo(dic)
+                    let dirHandle: OneDriveDrive = OneDriveDrive(driveInfo, self.authHelper)
                     dirHandle.lastInfo = driveInfo
                     resolver.fulfill(dirHandle)
-                    Log.d(TAG(), "Acquired default drive instance succeeded: " +  dirHandle.debugDescription);
+                    Log.d(TAG(), "Acquired default drive instance succeeded: \(dirHandle.debugDescription)");
                 }
                 .catch { error in
-                    Log.e(TAG(), "Acquiring default drive instance failed: " +  HiveError.des(error as! HiveError))
+                    Log.e(TAG(), "Acquiring default drive instance failed: \(HiveError.des(error as! HiveError))")
                     resolver.reject(error)
                     handleBy.runError(error as! HiveError)
             }
