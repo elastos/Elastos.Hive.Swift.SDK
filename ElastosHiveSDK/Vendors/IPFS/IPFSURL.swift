@@ -41,83 +41,44 @@ internal enum HIVE_SUB_Url: String {
 }
 internal let KEYCHAIN_IPFS_UID  = "last_uid"
 internal var validIp = 0
+internal var isValid: Bool = false
 
 class IPFSURL {
-
     class func validURL(_ parameter: IPFSParameter) -> HivePromise<Void> {
         let promise: HivePromise = HivePromise<Void> { resolver in
-            let uid = KeyChainStore.restoreUid(.hiveIPFS)
-            if uid == "" {
-                validUseNewUID(parameter, { (url) in
-                    if url == "" {
-                        resolver.reject(HiveError.failue(des: "ALL URLS ARE INVALID"))
-                    }else {
-                        resolver.fulfill(Void())
-                    }
-                })
+            guard !isValid else {
+                resolver.fulfill(Void())
+                return
             }
-            else {
-                validUseStat(parameter, { (url) in
-                    if url == "" {
-                        resolver.reject(HiveError.failue(des: "ALL URLS ARE INVALID"))
-                    }else {
-                        resolver.fulfill(Void())
-                    }
-                })
-            }
+            validUseVersion(parameter, { succeed in
+                resolver.fulfill(Void())
+            })
         }
         return promise
     }
 
-    class func validUseNewUID(_ parameter: IPFSParameter, _ result: @escaping (_ validUrl: String) -> Void) {
+    class func validUseVersion(_ parameter: IPFSParameter, _ result: @escaping (_ re: Bool) -> Void) {
 
-        var currentUrl = parameter.entry.rpcAddrs[validIp]
-        let fullUrl = currentUrl + HIVE_SUB_Url.IPFS_UID_NEW.rawValue
+        let currentUrl = parameter.entry.rpcAddrs[validIp]
+        let fullUrl = currentUrl + HIVE_SUB_Url.IPFS_VERSION.rawValue
         Alamofire.request(fullUrl,
-                          method: .post,
+                          method: .get,
                           parameters: nil,
                           encoding: JSONEncoding.default,
                           headers: nil)
             .responseJSON { (dataResponse) in
-                if dataResponse.response?.statusCode != 200 {
-                    validIp += 1
+                if dataResponse.response?.statusCode == 404 || dataResponse.response?.statusCode == NSURLErrorTimedOut {
+                    isValid = false
+                    validIp = validIp + 1
                     if validIp > parameter.entry.rpcAddrs.count - 1 {
-                        currentUrl = ""
                         validIp = 0
-                        return
                     }
-                    validUseNewUID(parameter, result)
+                    validUseVersion(parameter, result)
+                    return
                 }
-                let json = JSON(dataResponse.result.value as Any)
-                KeyChainStore.writebackForIpfs(.hiveIPFS, json["UID"].stringValue)
-                result(currentUrl)
+                isValid = true
+                result(true)
         }
     }
 
-    class func validUseStat(_ parameter: IPFSParameter, _ result: @escaping (_ validUrl: String) -> Void) {
-
-        var currentUrl = parameter.entry.rpcAddrs[validIp]
-        let uid = parameter.entry.uid
-        let fullUrl = currentUrl + HIVE_SUB_Url.IPFS_FILES_STAT.rawValue
-        let param = ["uid": uid,"path": "/"]
-        Alamofire.request(fullUrl,
-                          method: .post,
-                          parameters: param,
-                          encoding: URLEncoding.queryString,
-                          headers: nil)
-            .responseJSON(completionHandler: { (dataResponse) in
-                if dataResponse.response?.statusCode != 200 || dataResponse.result.isFailure {
-                    validIp += 1
-                    if validIp > parameter.entry.rpcAddrs.count - 1 {
-                        currentUrl = ""
-                        validIp = 0
-                        result(currentUrl)
-                        return
-                    }
-                    validUseStat(parameter, result)
-                    return
-                }
-                result(currentUrl)
-            })
-    }
 }
