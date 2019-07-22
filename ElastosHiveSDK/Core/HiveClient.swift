@@ -28,9 +28,16 @@ public typealias HivePromise = Promise
 @objc(HiveClient)
 public class HiveClientHandle: Result, ResourceItem{
 
+    /// HiveClientInfo
     public typealias resourceType = HiveClientInfo
+
+    /// The HiveDrive type
     public let driveType: DriveType
+
+    /// The unique identifier for the user.
     public var handleId: String?
+
+    /// The HiveClient info
     public var lastInfo: HiveClientInfo?
 
     /// Creates an instance with the specified `driveType`.

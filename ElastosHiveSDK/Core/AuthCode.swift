@@ -22,8 +22,12 @@
 
 import Foundation
 
+/// After the application is authorized by the user,will acquire the authCode
+/// Uses authCode to acquire accessToken
+/// @see https://dev.onedrive.com/auth/msa_oauth.htm for registration information.
 class AuthCode: Result {
 
+    /// The authorization code you received in the authorized authentication request.
     public final var authCode: String
     init(_ authCode: String) {
         self.authCode = authCode

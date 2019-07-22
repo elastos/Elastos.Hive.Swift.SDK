@@ -26,12 +26,22 @@ import PromiseKit
 @objc(HiveFile)
 public class HiveFileHandle: Result, ResourceItem, FileItem {
 
+    /// HiveFileInfo
     public typealias resourceType = HiveFileInfo
+
+    /// The current drive
     public var drive: HiveDriveHandle?
+
+    /// The unique identifier of the file within the Drive.
     public var fileId: String
+
+    /// The name of the file.
     public var pathName: String
+
+    /// The HiveFile info
     public var lastInfo: HiveFileInfo?
 
+    /// The `AuthHelper` instance of the subclasses
     var authHelper: AuthHelper
 
     /// Creates an instance with the specified `info` and `authHelper`.

@@ -26,9 +26,16 @@ import PromiseKit
 @objc(HiveDrive)
 public class HiveDriveHandle: Result, ResourceItem, DirectoryItem {
 
+    /// HiveDriveInfo
     public typealias resourceType = HiveDriveInfo
+
+    /// The HiveDrive type
     public var driveType: DriveType
+
+    /// The drive id
     public var handleId: String?
+
+    /// The HiveDrive info
     public var lastInfo: HiveDriveInfo
 
     ///  Creates an instance with the specified `driveType` and `info`.

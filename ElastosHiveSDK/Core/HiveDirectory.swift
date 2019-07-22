@@ -26,11 +26,22 @@ import PromiseKit
 @objc(HiveDirectory)
 public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem {
     
+    /// HiveDirectoryInfo
     public typealias resourceType = HiveDirectoryInfo
+
+    /// The current drive
     public var drive: HiveDriveHandle?
+
+    /// The unique identifier of the directory within the Drive.
     public var directoryId: String
+
+    /// The name of the directory
     public var pathName: String
+
+    /// The HiveDirectory info
     public var lastInfo: HiveDirectoryInfo?
+
+    /// The `AuthHelper` instance of the subclasses
     internal var authHelper: AuthHelper?
 
     /// Creates an instance with the specified `info` and `authHelper`.
