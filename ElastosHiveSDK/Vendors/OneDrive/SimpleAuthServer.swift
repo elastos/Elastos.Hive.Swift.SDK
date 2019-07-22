@@ -33,15 +33,15 @@ internal class SimpleAuthServer: NSObject {
         try? httpServer.start(port as in_port_t)
     }
     
-    func getCode() -> HivePromise<String> {
-        let promise: HivePromise = HivePromise<String>{ resolver in
+    func getCode() -> HivePromise<AuthCode> {
+        let promise: HivePromise = HivePromise<AuthCode>{ resolver in
             httpServer[""] = { request in
                 guard request.queryParams.count > 0 || request.queryParams[0].0 != "code" else {
                     resolver.reject(HiveError.failue(des: "failed"))
                     return HttpResponse.ok(.json("nil" as AnyObject))
                 }
-                let authCode: String = request.queryParams[0].1
-                resolver.fulfill(authCode)
+                let auth: AuthCode = AuthCode(request.queryParams[0].1)
+                resolver.fulfill(auth)
                 return HttpResponse.ok(.json("nil" as AnyObject))
             }
         }
