@@ -109,9 +109,9 @@ internal class OneDriveAuthHelper: AuthHelper {
             let port = UInt16(redirecturl[startIndex..<endIndex])
             server.startRun(port!)
             _ = authenticator.requestAuthentication(redirecturl)
-            server.getCode().done{ authCode in
+            server.getCode().done{ auth in
                 Log.d(TAG(), "AuthCode succeed")
-                resolver.fulfill(authCode)
+                resolver.fulfill(auth.authCode)
                 }.catch{ error in
                     Log.e(TAG(), "AuthCode faild: \(HiveError.des(error as! HiveError))")
                     resolver.reject(error)
