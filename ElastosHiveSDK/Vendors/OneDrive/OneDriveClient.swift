@@ -100,6 +100,7 @@ internal class OneDriveClient: HiveClientHandle {
                         HiveClientInfo.region: jsonData["officeLocation"].stringValue
                     ]
                     let clientInfo: HiveClientInfo = HiveClientInfo(dic)
+                    self.handleId = jsonData["id"].stringValue
                     handleBy.didSucceed(clientInfo)
                     resolver.fulfill(clientInfo)
                     Log.d(TAG(), "Acquired client information from remote drive: \(clientInfo.debugDescription)");
