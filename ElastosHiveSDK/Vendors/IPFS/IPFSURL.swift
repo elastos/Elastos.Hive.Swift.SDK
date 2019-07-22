@@ -58,7 +58,9 @@ class IPFSURL {
     }
 
     class func validUseVersion(_ parameter: IPFSParameter, _ result: @escaping (_ re: Bool) -> Void) {
-
+        if validIp >= parameter.entry.rpcAddrs.count {
+            validIp = 0
+        }
         let currentUrl = parameter.entry.rpcAddrs[validIp]
         let fullUrl = currentUrl + HIVE_SUB_Url.IPFS_VERSION.rawValue
         Alamofire.request(fullUrl,
