@@ -78,25 +78,24 @@ internal class OneDriveAuthHelper: AuthHelper {
         let promise: HivePromise = HivePromise<Void> { resolver in
             let url: String = "\(OneDriveURL.AUTH)\(ONEDRIVE_SUB_Url.ONEDRIVE_LOGOUT.rawValue)?post_logout_redirect_uri=\(authEntry.redirectURL)"
 
-            Alamofire.request(url,
-                method: .get,
-                parameters: nil,
-                encoding: JSONEncoding.default,
-                headers: nil).responseJSON(completionHandler: { dataResponse in
-                    guard dataResponse.response?.statusCode == 200 else{
-                        let json: JSON = JSON(JSON(dataResponse.result.value as Any)["error"])
-                        let error: HiveError = HiveError.failue(des: json["message"].stringValue)
-                        Log.e(TAG(), "Logout faild: \(HiveError.des(error))")
-                        handleBy.runError(error)
-                        resolver.reject(error)
-                        return
-                    }
+            OneDriveAPIs.request(url: url,
+                                       method: .get,
+                                       parameters: nil,
+                                       encoding: JSONEncoding.default,
+                                       headers: nil,
+                                       avalidCode: 200, self)
+                .done { jsonData in
                     Log.d(TAG(), "Logout succeed")
                     self.token = nil
                     KeyChainStore.removeback(authEntry: self.authEntry, forDrive: .oneDrive)
                     handleBy.didSucceed(Void())
                     resolver.fulfill(Void())
-                })
+                }
+                .catch { error in
+                    Log.e(TAG(), "Logout faild: \(HiveError.des(error as! HiveError))")
+                    resolver.reject(error)
+                    handleBy.runError(error as! HiveError)
+            }
         }
         return promise
     }

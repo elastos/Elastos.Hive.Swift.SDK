@@ -49,7 +49,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
             }
             self.authHelper!.checkExpired()
                 .then{ void -> HivePromise<JSON> in
-                    return OneDriveHttpHelper
+                    return OneDriveAPIs
                         .request(url: url, method: .get,
                                  parameters: nil,
                                  encoding: JSONEncoding.default,
@@ -95,7 +95,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                 }
                 self.authHelper!.checkExpired()
                     .then{ void -> HivePromise<JSON> in
-                        return OneDriveHttpHelper
+                        return OneDriveAPIs
                             .request(url: url,
                                      method: .post,
                                      parameters: params,
@@ -147,7 +147,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                 let url: String = OneDriveURL.API + "\(OneDriveURL.ROOT):\(ecUrl)"
                 self.authHelper!.checkExpired()
                     .then{ void -> HivePromise<JSON> in
-                        return OneDriveHttpHelper
+                        return OneDriveAPIs
                             .request(url: url, method: .get,
                                      parameters: nil,
                                      encoding: JSONEncoding.default,
@@ -195,7 +195,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
             let url: String = OneDriveURL.API + "\(OneDriveURL.ROOT):\(ecUrl):/content?@microsoft.graph.conflictBehavior=fail"
             self.authHelper!.checkExpired()
                 .then{ void -> HivePromise<JSON> in
-                    return OneDriveHttpHelper
+                    return OneDriveAPIs
                         .request(url: url, method: .put,
                                  parameters: nil,
                                  encoding: JSONEncoding.default,
@@ -243,7 +243,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                 let url: String = OneDriveURL.API + "\(OneDriveURL.ROOT):\(ecUrl)"
                 self.authHelper!.checkExpired()
                     .then{ void -> HivePromise<JSON> in
-                        return OneDriveHttpHelper
+                        return OneDriveAPIs
                             .request(url: url, method: .get,
                                      parameters: nil,
                                      encoding: JSONEncoding.default,
@@ -289,7 +289,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
             }
             self.authHelper!.checkExpired()
                 .then{ void -> HivePromise<JSON> in
-                    return OneDriveHttpHelper
+                    return OneDriveAPIs
                         .request(url: url, method: .get,
                                  parameters: nil,
                                  encoding: JSONEncoding.default,
@@ -326,7 +326,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                 "@microsoft.graph.conflictBehavior": "fail"]
             self.authHelper!.checkExpired()
                 .then{ void -> HivePromise<JSON> in
-                    return OneDriveHttpHelper
+                    return OneDriveAPIs
                         .request(url: url, method: .patch,
                                  parameters: params,
                                  encoding: JSONEncoding.default,
@@ -364,7 +364,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                 "@microsoft.graph.conflictBehavior": "fail"]
             self.authHelper!.checkExpired()
                 .then{ void -> HivePromise<JSON> in
-                    return OneDriveHttpHelper
+                    return OneDriveAPIs
                         .request(url: url, method: .post,
                                  parameters: params,
                                  encoding: JSONEncoding.default,
@@ -373,7 +373,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                 }
                 .then{ jsonData -> HivePromise<Void> in
                     let urlString: String = jsonData["Location"].stringValue
-                    return OneDriveHttpHelper.pollingCopyresult(urlString)
+                    return OneDriveAPIs.pollingCopyresult(urlString)
                 }
                 .done{ void in
                     resolver.fulfill(Void())
@@ -399,7 +399,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
             let url: String = "\(OneDriveURL.API)\(OneDriveURL.ROOT):/\(path)"
             self.authHelper!.checkExpired()
                 .then{ void -> HivePromise<JSON> in
-                    return OneDriveHttpHelper
+                    return OneDriveAPIs
                         .request(url: url, method: .delete,
                                  parameters: nil,
                                  encoding: JSONEncoding.default,

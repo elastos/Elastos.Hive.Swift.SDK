@@ -48,7 +48,7 @@ public class OneDriveDrive: HiveDriveHandle {
         let promise: HivePromise = HivePromise<HiveDriveInfo> { resolver in
             self.authHelper.checkExpired()
                 .then { void -> HivePromise<JSON> in
-                    return OneDriveHttpHelper
+                    return OneDriveAPIs
                         .request(url:"\(OneDriveURL.API)\(OneDriveURL.ROOT)",
                                  method: .get,parameters: nil,
                                  encoding: JSONEncoding.default,
@@ -83,7 +83,7 @@ public class OneDriveDrive: HiveDriveHandle {
             let promise: HivePromise = HivePromise<HiveDirectoryHandle> { resolver in
                 self.authHelper.checkExpired()
                     .then { void -> HivePromise<JSON> in
-                        return OneDriveHttpHelper
+                        return OneDriveAPIs
                             .request(url: "\(OneDriveURL.API)\(OneDriveURL.ROOT)",
                                      method: .get,parameters: nil,
                                      encoding: JSONEncoding.default,
@@ -130,7 +130,7 @@ public class OneDriveDrive: HiveDriveHandle {
                 let url = OneDriveURL(path, "children").compose()
                 self.authHelper.checkExpired()
                     .then { void -> HivePromise<JSON> in
-                        return OneDriveHttpHelper
+                        return OneDriveAPIs
                             .request(url: url,
                                      method: .post,
                                      parameters: params,
@@ -171,7 +171,7 @@ public class OneDriveDrive: HiveDriveHandle {
             let promise: HivePromise = HivePromise<HiveDirectoryHandle> { resolver in
                 self.authHelper.checkExpired()
                     .then { void -> HivePromise<JSON> in
-                        return OneDriveHttpHelper
+                        return OneDriveAPIs
                             .request(url: OneDriveURL(atPath).compose(),
                                      method: .get, parameters: nil,
                                      encoding: JSONEncoding.default,
@@ -213,7 +213,7 @@ public class OneDriveDrive: HiveDriveHandle {
                 self.authHelper.checkExpired()
                     .then { void -> HivePromise<JSON> in
                         let ecUrl = withPath.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-                        return OneDriveHttpHelper
+                        return OneDriveAPIs
                             .request(url: "\(OneDriveURL.API)\(OneDriveURL.ROOT):\(ecUrl):/content?@microsoft.graph.conflictBehavior=fail",
                                      method: .put, parameters: nil,
                                      encoding: JSONEncoding.default,
@@ -253,7 +253,7 @@ public class OneDriveDrive: HiveDriveHandle {
             let promise: HivePromise = HivePromise<HiveFileHandle> { resolver in
                 self.authHelper.checkExpired()
                     .then { void -> HivePromise<JSON> in
-                        return OneDriveHttpHelper
+                        return OneDriveAPIs
                             .request(url: OneDriveURL(atPath).compose(),
                                      method: .get, parameters: nil,
                                      encoding: JSONEncoding.default,
@@ -297,7 +297,7 @@ public class OneDriveDrive: HiveDriveHandle {
         let promise: HivePromise = HivePromise<HiveItemInfo> { resolver in
             self.authHelper.checkExpired()
                 .then { void -> HivePromise<JSON> in
-                    return OneDriveHttpHelper
+                    return OneDriveAPIs
                         .request(url: OneDriveURL(path).compose(),
                                  method: .get,parameters: nil,
                                  encoding: JSONEncoding.default,

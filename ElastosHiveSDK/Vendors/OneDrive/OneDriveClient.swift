@@ -84,7 +84,7 @@ internal class OneDriveClient: HiveClientHandle {
             
             self.authHelper.checkExpired()
                 .then { void -> HivePromise<JSON> in
-                    return OneDriveHttpHelper
+                    return OneDriveAPIs
                         .request(url: OneDriveURL.API,
                                  method: .get,parameters: nil,
                                  encoding: JSONEncoding.default,
@@ -136,7 +136,7 @@ internal class OneDriveClient: HiveClientHandle {
             }
             self.authHelper.checkExpired()
                 .then { void -> HivePromise<JSON> in
-                    return OneDriveHttpHelper
+                    return OneDriveAPIs
                         .request(url: OneDriveURL.API + OneDriveURL.ROOT,
                                  method: .get,parameters: nil,
                                  encoding: JSONEncoding.default,

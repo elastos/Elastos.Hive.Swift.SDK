@@ -82,7 +82,7 @@
 		11D26F6122CA3B7700E4099A /* OneDriveDrive.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C49AD22539CD10027BDF9 /* OneDriveDrive.swift */; };
 		11D26F6222CA3B7700E4099A /* OneDriveDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39CB4BC22927DF100535E43 /* OneDriveDirectory.swift */; };
 		11D26F6322CA3B7700E4099A /* OneDriveFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C49AF22539CD10027BDF9 /* OneDriveFile.swift */; };
-		11D26F6422CA3B7700E4099A /* OneDriveHttpHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573ED22C48A4200F85419 /* OneDriveHttpHelper.swift */; };
+		11D26F6422CA3B7700E4099A /* OneDriveAPIs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573ED22C48A4200F85419 /* OneDriveAPIs.swift */; };
 		11D26F6522CA3B7700E4099A /* SimpleAuthServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CC8DAA226D99FB00EE80D0 /* SimpleAuthServer.swift */; };
 		11D26F6622CA3B7700E4099A /* OneDriveConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3743ADC2265743400C9493E /* OneDriveConstants.swift */; };
 		11D26F6722CA3B7700E4099A /* OneDriveParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3743AD4226570B200C9493E /* OneDriveParameter.swift */; };
@@ -123,7 +123,7 @@
 		11D26F8D22CE06E300E4099A /* OneDriveCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D26F8C22CE06E300E4099A /* OneDriveCommon.swift */; };
 		11D45CB222C4661C002CA60D /* DirectoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D45CB122C4661B002CA60D /* DirectoryItem.swift */; };
 		11E573EC22C46E7D00F85419 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573EB22C46E7D00F85419 /* Result.swift */; };
-		11E573EE22C48A4200F85419 /* OneDriveHttpHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573ED22C48A4200F85419 /* OneDriveHttpHelper.swift */; };
+		11E573EE22C48A4200F85419 /* OneDriveAPIs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573ED22C48A4200F85419 /* OneDriveAPIs.swift */; };
 		11E573FE22C4C33400F85419 /* DictionaryExtenson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FA22C4C33400F85419 /* DictionaryExtenson.swift */; };
 		11E573FF22C4C33400F85419 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FB22C4C33400F85419 /* StringExtension.swift */; };
 		11E5740022C4C33400F85419 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FD22C4C33400F85419 /* SwiftyJSON.swift */; };
@@ -239,7 +239,7 @@
 		11D26F8C22CE06E300E4099A /* OneDriveCommon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneDriveCommon.swift; sourceTree = "<group>"; };
 		11D45CB122C4661B002CA60D /* DirectoryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DirectoryItem.swift; path = Core/DirectoryItem.swift; sourceTree = "<group>"; };
 		11E573EB22C46E7D00F85419 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Result.swift; path = Core/Result.swift; sourceTree = "<group>"; };
-		11E573ED22C48A4200F85419 /* OneDriveHttpHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OneDriveHttpHelper.swift; path = Vendors/OneDrive/OneDriveHttpHelper.swift; sourceTree = "<group>"; };
+		11E573ED22C48A4200F85419 /* OneDriveAPIs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OneDriveAPIs.swift; path = Vendors/OneDrive/OneDriveAPIs.swift; sourceTree = "<group>"; };
 		11E573FA22C4C33400F85419 /* DictionaryExtenson.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryExtenson.swift; sourceTree = "<group>"; };
 		11E573FB22C4C33400F85419 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		11E573FD22C4C33400F85419 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
@@ -577,7 +577,7 @@
 				A39C49AD22539CD10027BDF9 /* OneDriveDrive.swift */,
 				A39CB4BC22927DF100535E43 /* OneDriveDirectory.swift */,
 				A39C49AF22539CD10027BDF9 /* OneDriveFile.swift */,
-				11E573ED22C48A4200F85419 /* OneDriveHttpHelper.swift */,
+				11E573ED22C48A4200F85419 /* OneDriveAPIs.swift */,
 				A3CC8DAA226D99FB00EE80D0 /* SimpleAuthServer.swift */,
 				A3743ADC2265743400C9493E /* OneDriveConstants.swift */,
 				A3743AD4226570B200C9493E /* OneDriveParameter.swift */,
@@ -1053,7 +1053,7 @@
 				11D26F4922CA3B5A00E4099A /* TegKeychainConstants.swift in Sources */,
 				11D26F4E22CA3B6000E4099A /* NativeParameter.swift in Sources */,
 				11D26F7122CA3B8800E4099A /* OAuthEntry.swift in Sources */,
-				11D26F6422CA3B7700E4099A /* OneDriveHttpHelper.swift in Sources */,
+				11D26F6422CA3B7700E4099A /* OneDriveAPIs.swift in Sources */,
 				11D26F7022CA3B8200E4099A /* HiveError.swift in Sources */,
 				11D26F8022CA3B8800E4099A /* HiveItemInfo.swift in Sources */,
 				11D26F5F22CA3B7700E4099A /* OneDriveAuthHelper.swift in Sources */,
@@ -1128,7 +1128,7 @@
 				A39CB4D12292E5FA00535E43 /* OneDriveURL.swift in Sources */,
 				A3003F3C22C1039B00A341C4 /* IPFSURL.swift in Sources */,
 				11D45CB222C4661C002CA60D /* DirectoryItem.swift in Sources */,
-				11E573EE22C48A4200F85419 /* OneDriveHttpHelper.swift in Sources */,
+				11E573EE22C48A4200F85419 /* OneDriveAPIs.swift in Sources */,
 				A35C619522C8530300343CA1 /* DataResponse.swift in Sources */,
 				A3EC496622954DB600CC4546 /* NullEntry.swift in Sources */,
 				113629B722C467E900C6DCCC /* KeychainSwift.swift in Sources */,
