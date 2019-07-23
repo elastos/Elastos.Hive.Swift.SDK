@@ -1,4 +1,4 @@
 #!/bin/sh
 
 sudo gem install jazzy
-jazzy --min-acl internal
+jazzy --min-acl public
