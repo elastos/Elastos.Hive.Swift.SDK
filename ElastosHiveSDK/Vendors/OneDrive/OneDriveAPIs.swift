@@ -23,13 +23,14 @@
 import Foundation
 import Alamofire
 
-class OneDriveHttpHelper: NSObject {
+class OneDriveAPIs: NSObject {
 
     class func request(url: URLConvertible,
                        method: HTTPMethod = .get,
                        parameters: Parameters? = nil,
                        encoding: ParameterEncoding = URLEncoding.default,
-                       headers: HTTPHeaders, avalidCode: Int,
+                       headers: HTTPHeaders? = nil,
+                       avalidCode: Int,
                        _ authHelper: AuthHelper) -> HivePromise<JSON> {
         let promise: HivePromise = HivePromise<JSON> { resolver in
             Alamofire.request(url, method: method,
