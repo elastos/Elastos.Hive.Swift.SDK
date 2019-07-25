@@ -36,28 +36,5 @@ public class DriveParameter: NSObject {
 
     /// The cache path
     public var keyStorePath: String = ""
-
-    /*
-
-    /// Creates an instance of the specific `OneDriveParameter` type.
-    ///
-    /// - Parameters:
-    ///   - entry: The OAuthEntry for onedrive
-    ///   - storePath: The cache path for onedrive
-    /// - Returns:Returns onedrive parameter instance
-    public static func createForOneDrive(_ entry: OAuthEntry, _ storePath: String) -> DriveParameter {
-        return OneDriveParameter(entry, storePath)
-    }
-
-    /// Creates an instance of the specific `IPFSParameter` type.
-    ///
-    /// - Parameters:
-    ///   - entry: The OAuthEntry for ipfs
-    ///   - storePath: The cache path for ipfs
-    /// - Returns: Returns ipfs parameter instance
-    public static func createForIpfsDrive(_ entry: IPFSEntry, _ storePath: String) -> DriveParameter {
-        return IPFSParameter(entry, storePath)
-    }
-   */
     
 }
