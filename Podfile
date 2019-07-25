@@ -5,13 +5,10 @@ def import_pods
   pod 'PromiseKit'
 end
 
-use_frameworks!
 
-workspace 'ElastosHiveSDK'
 
 target :ElastosHiveSDK do
-project 'ElastosHiveSDK.xcodeproj'
-
+use_frameworks!
   platform :ios, '9.0'
   import_pods
   target 'ElastosHiveSDKTests' do
@@ -31,9 +28,3 @@ end
   import_pods
 end
 
-
-#####################example
-target 'ElastosHiveSDKExample' do
-  project 'ElastosHiveSDKExample/ElastosHiveSDKExample.xcodeproj'
-  import_pods
-end
