@@ -88,7 +88,8 @@ a.g. :
 Create a client for Onedrive.
 
 ```
-let hiveParam = DriveParameter.createForOneDrive(YOUR-CLIENT-ID, YOUR-SCOPE, YOUR-REIRECTURL)
+let outhEnty = OAuthEntry(YOUR-CLIENT-ID, YOUR-SCOPE, YOUR-REIRECTURL)
+hiveParam = OneDriveParameter(outhEnty, YOUR-STORE-PATH)
 HiveClientHandle.createInstance(hiveParam!)
 hiveClient = HiveClientHandle.sharedInstance(type: .oneDrive)
 ```

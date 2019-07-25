@@ -30,9 +30,11 @@ import Alamofire
 internal class IPFSClient: HiveClientHandle {
     private static var clientInstance: HiveClientHandle?
     private let authHelper: IPFSRpcHelper
+    private var param: IPFSParameter
 
     private init(param: IPFSParameter){
         self.authHelper = IPFSRpcHelper(param)
+        self.param = param
         super.init(.hiveIPFS)
     }
 
@@ -120,6 +122,7 @@ internal class IPFSClient: HiveClientHandle {
             let uid = self.authHelper.param.entry.uid
             guard IPFSDrive.hiveDriveInstance == nil else {
                 let hdHandle: IPFSDrive = IPFSDrive.sharedInstance()
+                hdHandle.param = self.param
                 handleBy.didSucceed(hdHandle)
                 resolver.fulfill(hdHandle)
                 return
@@ -137,6 +140,7 @@ internal class IPFSClient: HiveClientHandle {
                     let dic: Dictionary<String, String> = [HiveDriveInfo.driveId: uid]
                     let driveInfo: HiveDriveInfo = HiveDriveInfo(dic)
                     let driveHandle: IPFSDrive = IPFSDrive(driveInfo, self.authHelper)
+                    driveHandle.param = self.param
                     driveHandle.lastInfo = driveInfo
                     resolver.fulfill(driveHandle)
                     handleBy.didSucceed(driveHandle)

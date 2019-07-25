@@ -24,11 +24,11 @@ import Foundation
 
 @objc(OneDriveParameter)
 public class OneDriveParameter: DriveParameter {
-    internal typealias authEntryType = OAuthEntry
     private let authEntry: OAuthEntry
-
-    public init(_ clientId: String, _ scope: String, _ redirectURL: String) {
-        self.authEntry = OAuthEntry(clientId, scope, redirectURL)
+    public init(_ entry: OAuthEntry, _ storePath: String) {
+        self.authEntry = entry
+        super.init()
+        self.keyStorePath = storePath
     }
 
     public override func driveType() -> DriveType {

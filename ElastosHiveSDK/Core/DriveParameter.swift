@@ -34,22 +34,30 @@ public class DriveParameter: NSObject {
         return DriveType.oneDrive
     }
 
+    /// The cache path
+    public var keyStorePath: String = ""
+
+    /*
+
     /// Creates an instance of the specific `OneDriveParameter` type.
     ///
     /// - Parameters:
-    ///   - clientId: ClientId for OneDrive registered with Microsoft Account.
-    ///   - scope: Scopes to be used for OneDrive registered with Microsoft Account.
-    ///   - redirectUrl: Redirect URL for OneDrive.
-    /// - Returns: Returns parameter instance
-    public static func createForOneDrive(_ clientId: String, _ scope: String, _ redirectUrl: String) -> DriveParameter {
-        return OneDriveParameter(clientId, scope, redirectUrl)
+    ///   - entry: The OAuthEntry for onedrive
+    ///   - storePath: The cache path for onedrive
+    /// - Returns:Returns onedrive parameter instance
+    public static func createForOneDrive(_ entry: OAuthEntry, _ storePath: String) -> DriveParameter {
+        return OneDriveParameter(entry, storePath)
     }
 
     /// Creates an instance of the specific `IPFSParameter` type.
     ///
-    /// - Parameter uid: a unique UID. The UID can be used to identify endpoints in communication.
-    /// - Returns: Returns parameter instance.
-    public static func createForIpfsDrive(_ entry: IPFSEntry) -> DriveParameter {
-        return IPFSParameter(entry)
+    /// - Parameters:
+    ///   - entry: The OAuthEntry for ipfs
+    ///   - storePath: The cache path for ipfs
+    /// - Returns: Returns ipfs parameter instance
+    public static func createForIpfsDrive(_ entry: IPFSEntry, _ storePath: String) -> DriveParameter {
+        return IPFSParameter(entry, storePath)
     }
+   */
+    
 }
