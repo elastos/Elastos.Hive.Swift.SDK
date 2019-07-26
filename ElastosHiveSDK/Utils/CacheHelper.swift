@@ -26,21 +26,20 @@ import Foundation
 
 class CacheHelper: NSObject {
 
-    class func checkCacheFileIsExist(_ account:DriveType, _ path: String) -> Bool {
-        let cachePath: String = "\(NSHomeDirectory())/Library/Caches/\(account.rawValue)/\(path)"
+    class func checkCacheFileIsExist(_ cacheFilePath: String, _ path: String) -> Bool {
+        let cachePath: String = "\(cacheFilePath)/\(path)"
         let fileManager = FileManager.default
         let isExist: Bool = fileManager.fileExists(atPath: cachePath)
         return isExist
     }
 
-    class func saveCache(_ account: DriveType, _ path: String, data: Data) -> Bool {
-        let cachePath: String = "\(NSHomeDirectory())/Library/Caches/\(account.rawValue)/\(path)"
-        let cacheDirectory: String = PathExtracter(cachePath).dirNamePart()
+    class func saveCache(_ cacheFilePath: String, _ path: String, data: Data) -> Bool {
+        let cachePath: String = "\(cacheFilePath)/\(path)"
         let fileManager = FileManager.default
-        let exist: Bool = fileManager.fileExists(atPath: cacheDirectory)
+        let exist: Bool = fileManager.fileExists(atPath: cacheFilePath)
         if (!exist) {
             do {
-                try fileManager.createDirectory(atPath: cacheDirectory, withIntermediateDirectories: true, attributes: nil)
+                try fileManager.createDirectory(atPath: cacheFilePath, withIntermediateDirectories: true, attributes: nil)
             }
             catch{
                 Log.e(TAG(), "create \(cachePath) error: \(error.localizedDescription)")
@@ -65,14 +64,13 @@ class CacheHelper: NSObject {
         return true
     }
 
-    class func writeCache(_ account: DriveType, _ path: String, data: Data, _ position: UInt64, _ appendEnd: Bool) -> Int32 {
-        let cachePath: String = "\(NSHomeDirectory())/Library/Caches/\(account.rawValue)/\(path)"
-        let cacheDirectory: String = PathExtracter(cachePath).dirNamePart()
+    class func writeCache(_ cacheFilePath: String, _ path: String, data: Data, _ position: UInt64, _ appendEnd: Bool) -> Int32 {
+        let cachePath: String = "\(cacheFilePath)/\(path)"
         let fileManager = FileManager.default
-        let cacheExist: Bool = fileManager.fileExists(atPath: cacheDirectory)
+        let cacheExist: Bool = fileManager.fileExists(atPath: cacheFilePath)
         if (!cacheExist) {
             do {
-                try fileManager.createDirectory(atPath: cacheDirectory, withIntermediateDirectories: true, attributes: nil)
+                try fileManager.createDirectory(atPath: cacheFilePath, withIntermediateDirectories: true, attributes: nil)
             }
             catch{
                 Log.e(TAG(), "create \(cachePath) error: \(error.localizedDescription)")
@@ -98,8 +96,8 @@ class CacheHelper: NSObject {
         return Int32(data.count)
     }
 
-    class func readCache(_ account: DriveType, _ path: String, _ position: UInt64, _ length: Int) -> Data {
-        let cachePath: String = "\(NSHomeDirectory())/Library/Caches/\(account.rawValue)/\(path)"
+    class func readCache(_ cacheFilePath: String, _ path: String, _ position: UInt64, _ length: Int) -> Data {
+        let cachePath: String = "\(cacheFilePath)/\(path)"
         let fileManager = FileManager.default
         let exist: Bool = fileManager.fileExists(atPath: cachePath)
         if (exist) {
@@ -134,8 +132,8 @@ class CacheHelper: NSObject {
         else { return Data() }
     }
 
-    class func uploadFile(_ account: DriveType, _ path: String) -> Data  {
-        let copyPath: String = "\(NSHomeDirectory())/Library/Caches/\(account.rawValue)/\(path)"
+    class func uploadFile(_ cacheFilePath: String, _ path: String) -> Data  {
+        let copyPath: String = "\(cacheFilePath)/\(path)"
         let fileManager = FileManager.default
         let exist: Bool = fileManager.fileExists(atPath: copyPath)
         if (exist) {
@@ -148,8 +146,8 @@ class CacheHelper: NSObject {
         else { return Data() }
     }
 
-    class func clearCache(_ account: DriveType, _ path: String) {
-        let cachePath: String = "\(NSHomeDirectory())/Library/Caches/\(account.rawValue)/\(path)"
+    class func clearCache(_ cacheFilePath: String, _ path: String) {
+        let cachePath: String = "\(cacheFilePath)/\(path)"
         let fileManager = FileManager.default
         let exist: Bool = fileManager.fileExists(atPath: cachePath)
         if exist {

@@ -30,9 +30,11 @@ import Alamofire
 internal class OneDriveClient: HiveClientHandle {
     private static var clientInstance: HiveClientHandle?
     private let authHelper: AuthHelper
+    private let param: OneDriveParameter
 
     private init(_ param: OneDriveParameter) {
         self.authHelper = OneDriveAuthHelper(param.getAuthEntry())
+        self.param = param
         super.init(DriveType.oneDrive)
     }
 
@@ -130,6 +132,7 @@ internal class OneDriveClient: HiveClientHandle {
             }
             guard OneDriveDrive.oneDriveInstance == nil else {
                 let handle = OneDriveDrive.sharedInstance()
+                handle.param = self.param
                 handleBy.didSucceed(handle)
                 resolver.fulfill(handle)
                 return
@@ -147,10 +150,11 @@ internal class OneDriveClient: HiveClientHandle {
                     let driveId: String = jsonData["id"].stringValue
                     let dic: Dictionary<String, String> = [HiveDriveInfo.driveId: driveId]
                     let driveInfo: HiveDriveInfo = HiveDriveInfo(dic)
-                    let dirHandle: OneDriveDrive = OneDriveDrive(driveInfo, self.authHelper)
-                    dirHandle.lastInfo = driveInfo
-                    resolver.fulfill(dirHandle)
-                    Log.d(TAG(), "Acquired default drive instance succeeded: \(dirHandle.debugDescription)");
+                    let driHandle: OneDriveDrive = OneDriveDrive(driveInfo, self.authHelper)
+                    driHandle.param = self.param
+                    driHandle.lastInfo = driveInfo
+                    resolver.fulfill(driHandle)
+                    Log.d(TAG(), "Acquired default drive instance succeeded: \(driHandle.debugDescription)");
                 }
                 .catch { error in
                     Log.e(TAG(), "Acquiring default drive instance failed: \(HiveError.des(error as! HiveError))")

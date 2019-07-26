@@ -29,6 +29,8 @@ import PromiseKit
 public class OneDriveDrive: HiveDriveHandle {
     private var authHelper: OneDriveAuthHelper
     internal static var oneDriveInstance: HiveDriveHandle?
+    var param: OneDriveParameter?
+
 
     init(_ info: HiveDriveInfo, _ authHelper: AuthHelper) {
         self.authHelper = authHelper as! OneDriveAuthHelper
@@ -277,7 +279,7 @@ public class OneDriveDrive: HiveDriveHandle {
                         resolver.fulfill(fileHandle)
                         let pathName = "/\(PathExtracter(atPath).baseNamePart())"
                         let url: String = OneDriveURL(pathName, "content").compose()
-                        _ = CacheHelper.clearCache(.oneDrive, url.md5)
+                        _ = CacheHelper.clearCache(self.param!.keyStorePath, url.md5)
                         Log.d(TAG(), "Acquiring file %s instance succeeded: \(atPath)")
                     }
                     .catch { error in

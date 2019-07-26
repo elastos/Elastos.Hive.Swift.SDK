@@ -8,12 +8,13 @@ class HiveIpfsDriveTests: XCTestCase {
 
     var hiveClient: HiveClientHandle?
     var hiveParams: DriveParameter?
+    let rpcAddrs: IPFSEntry = IPFSEntry("uid-1a5304b5-6b34-4e15-b88d-9f89dcf03eae", addrs)
+    let store: String = "\(NSHomeDirectory())/Library/Caches/ipfs"
     var lock: XCTestExpectation?
     var timeout: Double = 600.0
 
     override func setUp() {
-        let rpcAddrs = IPFSEntry("uid-1a5304b5-6b34-4e15-b88d-9f89dcf03eae", addrs)
-        hiveParams = DriveParameter.createForIpfsDrive(rpcAddrs)
+        hiveParams = IPFSParameter(rpcAddrs,store)
         HiveClientHandle.createInstance(hiveParams!)
         hiveClient = HiveClientHandle.sharedInstance(type: .hiveIPFS)
     }

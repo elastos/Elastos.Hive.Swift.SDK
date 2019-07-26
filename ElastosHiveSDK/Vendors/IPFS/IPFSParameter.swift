@@ -24,7 +24,6 @@ import Foundation
 
 @objc(IPFSParameter)
 public class IPFSParameter: DriveParameter {
-    internal typealias authEntryType = NullEntry
     var entry: IPFSEntry
     var islogin: Bool = false
 
@@ -36,9 +35,11 @@ public class IPFSParameter: DriveParameter {
         return NullEntry()
     }
 
-    public init(_ entry: IPFSEntry) {
+    public init(_ entry: IPFSEntry, _ storePath: String) {
         self.entry = entry
         super.init()
+        self.keyStorePath = storePath
         KeyChainStore.writebackForIpfs(.hiveIPFS, entry.uid)
     }
+
 }

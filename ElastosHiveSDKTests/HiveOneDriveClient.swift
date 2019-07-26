@@ -8,11 +8,13 @@ class HiveOneDriveClient: XCTestCase {
 
     var hiveClient: HiveClientHandle?
     var hiveParam: DriveParameter?
+    let outhEnty: OAuthEntry = OAuthEntry("afd3d647-a8b7-4723-bf9d-1b832f43b881", "User.Read Files.ReadWrite.All offline_access", REDIRECT_URI)
+    let store: String = "\(NSHomeDirectory())/Library/Caches/onedrive"
     var lock: XCTestExpectation?
-    let timeout: Double = 600.0
+    let timeout: Double = 100.0
 
     override func setUp() {
-        hiveParam = DriveParameter.createForOneDrive("afd3d647-a8b7-4723-bf9d-1b832f43b881", "User.Read Files.ReadWrite.All offline_access", REDIRECT_URI)
+        hiveParam = OneDriveParameter(outhEnty, store)
         HiveClientHandle.createInstance(hiveParam!)
         hiveClient = HiveClientHandle.sharedInstance(type: .oneDrive)
     }
@@ -28,6 +30,7 @@ class HiveOneDriveClient: XCTestCase {
         // 2. Test repeat login
         lock = XCTestExpectation(description: "wait for test repeat login.")
         OneDriveCommon().login(lock!, hiveClient: self.hiveClient!)
+
     }
 
     func testLastUpdatedInfo() {
