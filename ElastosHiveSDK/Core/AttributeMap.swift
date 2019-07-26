@@ -36,4 +36,8 @@ public class AttributeMap: Result {
     public func getValue(_ key: String) -> String {
         return self.attrDic![key] ?? ""
     }
+
+    public func hasKey(_ key: String) -> Bool {
+        return self.attrDic?.index(forKey: key) != nil
+    }
 }
