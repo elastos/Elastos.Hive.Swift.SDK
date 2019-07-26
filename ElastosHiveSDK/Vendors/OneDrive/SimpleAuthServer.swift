@@ -28,6 +28,9 @@ import Swifter
 
 internal class SimpleAuthServer: NSObject {
     private let httpServer: HttpServer = HttpServer()
+    static let sharedInstance = SimpleAuthServer()
+    
+    private override init() {}
 
     func startRun(_ port: UInt16) {
         try? httpServer.start(port as in_port_t)

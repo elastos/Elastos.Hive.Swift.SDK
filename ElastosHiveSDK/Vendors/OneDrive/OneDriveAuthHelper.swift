@@ -30,7 +30,7 @@ import Alamofire
 @objc(OneDriveAuthHelper)
 internal class OneDriveAuthHelper: AuthHelper {
     var token: AuthToken?
-    let server = SimpleAuthServer()
+    let server = SimpleAuthServer.sharedInstance
     var authEntry: OAuthEntry
 
     init(_ authEntry: OAuthEntry) {
