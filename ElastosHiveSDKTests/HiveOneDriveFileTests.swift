@@ -38,7 +38,9 @@ class HiveOneDriveFileTests: XCTestCase {
             }.then{ file -> HivePromise<HiveFileInfo> in
                 return file.lastUpdatedInfo()
             }.done{ fileInfo in
-                XCTAssertNotNil(fileInfo)
+                XCTAssertNotNil(fileInfo.getValue(HiveFileInfo.itemId))
+                XCTAssertNotNil(fileInfo.getValue(HiveFileInfo.name))
+                XCTAssertNotNil(fileInfo.getValue(HiveFileInfo.size))
                 self.lock?.fulfill()
             }.catch{ error in
                 XCTFail()

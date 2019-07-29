@@ -7,7 +7,7 @@ class HiveIpfsFileTests: XCTestCase {
 
     var hiveClient: HiveClientHandle?
     var hiveParams: DriveParameter?
-    let rpcAddrs: IPFSEntry = IPFSEntry("uid-1a5304b5-6b34-4e15-b88d-9f89dcf03eae", addrs)
+    let rpcAddrs: IPFSEntry = IPFSEntry("uid-283744b9-57e7-4af7-b5b0-7957f80c6349", addrs)
     let store: String = "\(NSHomeDirectory())/Library/Caches/ipfs"
     var lock: XCTestExpectation?
     var timeout: Double = 600.0
@@ -38,7 +38,9 @@ class HiveIpfsFileTests: XCTestCase {
             }.then{ file -> HivePromise<HiveFileInfo> in
                 return file.lastUpdatedInfo()
             }.done{ fileInfo in
-                XCTAssertNotNil(fileInfo)
+                XCTAssertNotNil(fileInfo.getValue(HiveFileInfo.itemId))
+                XCTAssertNotNil(fileInfo.getValue(HiveFileInfo.name))
+                XCTAssertNotNil(fileInfo.getValue(HiveFileInfo.size))
                 self.lock?.fulfill()
             }.catch{ error in
                 XCTFail()

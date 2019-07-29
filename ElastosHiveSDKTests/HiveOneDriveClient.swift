@@ -41,7 +41,11 @@ class HiveOneDriveClient: XCTestCase {
         lock = XCTestExpectation(description: "wait for test lastUpateInfo after login.")
         self.hiveClient?.lastUpdatedInfo()
             .done{ clientInfo in
-                XCTAssertNotNil(clientInfo)
+                XCTAssertNotNil(clientInfo.getValue(HiveClientInfo.name))
+                XCTAssertNotNil(clientInfo.getValue(HiveClientInfo.email))
+                XCTAssertNotNil(clientInfo.getValue(HiveClientInfo.phoneNo))
+                XCTAssertNotNil(clientInfo.getValue(HiveClientInfo.region))
+                XCTAssertNotNil(clientInfo.getValue(HiveClientInfo.userId))
                 self.lock?.fulfill()
             }
             .catch{ error in
@@ -78,7 +82,10 @@ class HiveOneDriveClient: XCTestCase {
         lock = XCTestExpectation(description: "wait for test defaultDriveHandle after login.")
         self.hiveClient?.defaultDriveHandle()
             .done{ drive in
-                XCTAssertNotNil(drive)
+                XCTAssertEqual(drive.driveType, DriveType.oneDrive)
+                XCTAssertNotNil(drive.handleId)
+                XCTAssertNotNil(drive.lastInfo)
+                XCTAssertNotNil(drive.lastInfo.getValue(HiveDriveInfo.driveId))
                 self.lock?.fulfill()
             }
             .catch{ error in

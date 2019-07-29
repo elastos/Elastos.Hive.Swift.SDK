@@ -8,7 +8,7 @@ class HiveIpfsDriveTests: XCTestCase {
 
     var hiveClient: HiveClientHandle?
     var hiveParams: DriveParameter?
-    let rpcAddrs: IPFSEntry = IPFSEntry("uid-1a5304b5-6b34-4e15-b88d-9f89dcf03eae", addrs)
+    let rpcAddrs: IPFSEntry = IPFSEntry("uid-283744b9-57e7-4af7-b5b0-7957f80c6349", addrs)
     let store: String = "\(NSHomeDirectory())/Library/Caches/ipfs"
     var lock: XCTestExpectation?
     var timeout: Double = 600.0
@@ -29,8 +29,8 @@ class HiveIpfsDriveTests: XCTestCase {
             .then{ drive -> HivePromise<HiveDriveInfo> in
                 return drive.lastUpdatedInfo()
             }
-            .done{ clientInfo in
-                XCTAssertNotNil(clientInfo)
+            .done{ driveInfo in
+                XCTAssertNotNil(driveInfo.getValue(HiveDriveInfo.driveId))
                 self.lock?.fulfill()
             }
             .catch{ error in
@@ -49,8 +49,8 @@ class HiveIpfsDriveTests: XCTestCase {
             .then{ drive -> HivePromise<HiveDriveInfo> in
                 return drive.lastUpdatedInfo()
             }
-            .done{ clientInfo in
-                XCTAssertNotNil(clientInfo)
+            .done{ driveInfo in
+                XCTAssertNotNil(driveInfo.getValue(HiveDriveInfo.driveId))
                 self.lock?.fulfill()
             }
             .catch{ error in
@@ -72,6 +72,13 @@ class HiveIpfsDriveTests: XCTestCase {
             }
             .done{ directory in
                 XCTAssertNotNil(directory.directoryId)
+                XCTAssertNotNil(directory.drive)
+                XCTAssertNotNil(directory.pathName)
+                XCTAssertNotNil(directory.authHelper)
+                XCTAssertNotNil(directory.lastInfo)
+                XCTAssertNotNil(directory.lastInfo?.getValue(HiveDirectoryInfo.itemId))
+                XCTAssertNotNil(directory.lastInfo?.getValue(HiveDirectoryInfo.name))
+                XCTAssertNotNil(directory.lastInfo?.getValue(HiveDirectoryInfo.childCount))
                 self.lock?.fulfill()
             }
             .catch{ error in
@@ -92,6 +99,13 @@ class HiveIpfsDriveTests: XCTestCase {
             }
             .done{ directory in
                 XCTAssertNotNil(directory.directoryId)
+                XCTAssertNotNil(directory.drive)
+                XCTAssertNotNil(directory.pathName)
+                XCTAssertNotNil(directory.authHelper)
+                XCTAssertNotNil(directory.lastInfo)
+                XCTAssertNotNil(directory.lastInfo?.getValue(HiveDirectoryInfo.itemId))
+                XCTAssertNotNil(directory.lastInfo?.getValue(HiveDirectoryInfo.name))
+                XCTAssertNotNil(directory.lastInfo?.getValue(HiveDirectoryInfo.childCount))
                 self.lock?.fulfill()
             }
             .catch{ error in
@@ -114,6 +128,13 @@ class HiveIpfsDriveTests: XCTestCase {
                 return drive.createDirectory(withPath: "/ipfs_createD_\(timeTest!)")
             }.done{ directory in
                 XCTAssertNotNil(directory.directoryId)
+                XCTAssertNotNil(directory.drive)
+                XCTAssertNotNil(directory.pathName)
+                XCTAssertNotNil(directory.authHelper)
+                XCTAssertNotNil(directory.lastInfo)
+                XCTAssertNotNil(directory.lastInfo?.getValue(HiveDirectoryInfo.itemId))
+                XCTAssertNotNil(directory.lastInfo?.getValue(HiveDirectoryInfo.name))
+                XCTAssertNotNil(directory.lastInfo?.getValue(HiveDirectoryInfo.childCount))
                 self.lock?.fulfill()
             }.catch{ error in
                 XCTFail()
@@ -151,6 +172,13 @@ class HiveIpfsDriveTests: XCTestCase {
                 return drive.directoryHandle(atPath: "/ipfs_createD_\(timeTest!)")
             }.done{ directory in
                 XCTAssertNotNil(directory.directoryId)
+                XCTAssertNotNil(directory.drive)
+                XCTAssertNotNil(directory.pathName)
+                XCTAssertNotNil(directory.authHelper)
+                XCTAssertNotNil(directory.lastInfo)
+                XCTAssertNotNil(directory.lastInfo?.getValue(HiveDirectoryInfo.itemId))
+                XCTAssertNotNil(directory.lastInfo?.getValue(HiveDirectoryInfo.name))
+                XCTAssertNotNil(directory.lastInfo?.getValue(HiveDirectoryInfo.childCount))
                 self.lock?.fulfill()
             }.catch{ error in
                 XCTFail()
@@ -187,6 +215,13 @@ class HiveIpfsDriveTests: XCTestCase {
                 return drive.createFile(withPath: "/ipfs_createF_\(timeTest!)")
             }.done{ file in
                 XCTAssertNotNil(file.fileId)
+                XCTAssertNotNil(file.drive)
+                XCTAssertNotNil(file.pathName)
+                XCTAssertNotNil(file.authHelper)
+                XCTAssertNotNil(file.lastInfo)
+                XCTAssertNotNil(file.lastInfo?.getValue(HiveFileInfo.itemId))
+                XCTAssertNotNil(file.lastInfo?.getValue(HiveFileInfo.name))
+                XCTAssertNotNil(file.lastInfo?.getValue(HiveFileInfo.size))
                 self.lock?.fulfill()
             }.catch{ error in
                 XCTFail()
@@ -223,6 +258,13 @@ class HiveIpfsDriveTests: XCTestCase {
             return drive.fileHandle(atPath: "/ipfs_createF_\(timeTest!)")
             }.done{ file in
                 XCTAssertNotNil(file.fileId)
+                XCTAssertNotNil(file.drive)
+                XCTAssertNotNil(file.pathName)
+                XCTAssertNotNil(file.authHelper)
+                XCTAssertNotNil(file.lastInfo)
+                XCTAssertNotNil(file.lastInfo?.getValue(HiveFileInfo.itemId))
+                XCTAssertNotNil(file.lastInfo?.getValue(HiveFileInfo.name))
+                XCTAssertNotNil(file.lastInfo?.getValue(HiveFileInfo.size))
                 self.lock?.fulfill()
             }.catch{ error in
                 XCTFail()
@@ -261,7 +303,10 @@ class HiveIpfsDriveTests: XCTestCase {
             .then{ drive -> HivePromise<HiveItemInfo> in
                 return drive.getItemInfo("/ipfs_createF_\(timeTest!)")
             }.done{ file in
-                XCTAssertNotNil(file)
+                XCTAssertNotNil(file.getValue(HiveItemInfo.itemId))
+                XCTAssertNotNil(file.getValue(HiveItemInfo.name))
+                XCTAssertNotNil(file.getValue(HiveItemInfo.type))
+                XCTAssertNotNil(file.getValue(HiveItemInfo.size))
                 self.lock?.fulfill()
             }.catch{ error in
                 XCTFail()
@@ -295,7 +340,10 @@ class HiveIpfsDriveTests: XCTestCase {
             .then{ drive -> HivePromise<HiveItemInfo> in
                 return drive.getItemInfo("/ipfs_createD_\(timeTest!)")
             }.done{ file in
-                XCTAssertNotNil(file)
+                XCTAssertNotNil(file.getValue(HiveItemInfo.itemId))
+                XCTAssertNotNil(file.getValue(HiveItemInfo.name))
+                XCTAssertNotNil(file.getValue(HiveItemInfo.type))
+                XCTAssertNotNil(file.getValue(HiveItemInfo.size))
                 self.lock?.fulfill()
             }.catch{ error in
                 XCTFail()

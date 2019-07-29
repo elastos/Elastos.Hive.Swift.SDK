@@ -5,7 +5,7 @@ import XCTest
 class HiveIpfsDriveClient: XCTestCase {
     var hiveClient: HiveClientHandle?
     var hiveParams: DriveParameter?
-    let rpcAddrs: IPFSEntry = IPFSEntry("uid-1a5304b5-6b34-4e15-b88d-9f89dcf03eae", addrs)
+    let rpcAddrs: IPFSEntry = IPFSEntry("uid-283744b9-57e7-4af7-b5b0-7957f80c6349", addrs)
     let store: String = "\(NSHomeDirectory())/Library/Caches/ipfs"
     var lock: XCTestExpectation?
     var timeout: Double = 600.0
@@ -34,7 +34,11 @@ class HiveIpfsDriveClient: XCTestCase {
         lock = XCTestExpectation(description: "wait for test lastUpateInfo after login.")
         self.hiveClient?.lastUpdatedInfo()
             .done{ clientInfo in
-                XCTAssertNotNil(clientInfo)
+                XCTAssertNotNil(clientInfo.getValue(HiveClientInfo.name))
+                XCTAssertNotNil(clientInfo.getValue(HiveClientInfo.email))
+                XCTAssertNotNil(clientInfo.getValue(HiveClientInfo.phoneNo))
+                XCTAssertNotNil(clientInfo.getValue(HiveClientInfo.region))
+                XCTAssertNotNil(clientInfo.getValue(HiveClientInfo.userId))
                 self.lock?.fulfill()
             }
             .catch{ error in
@@ -71,7 +75,10 @@ class HiveIpfsDriveClient: XCTestCase {
         lock = XCTestExpectation(description: "wait for test defaultDriveHandle after login.")
         self.hiveClient?.defaultDriveHandle()
             .done{ drive in
-                XCTAssertNotNil(drive)
+                XCTAssertEqual(drive.driveType, DriveType.hiveIPFS)
+                XCTAssertNotNil(drive.handleId)
+                XCTAssertNotNil(drive.lastInfo)
+                XCTAssertNotNil(drive.lastInfo.getValue(HiveDriveInfo.driveId))
                 self.lock?.fulfill()
             }
             .catch{ error in

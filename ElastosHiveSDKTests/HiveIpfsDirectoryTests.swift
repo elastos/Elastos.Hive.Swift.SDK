@@ -7,7 +7,7 @@ class HiveIpfsDirectoryTests: XCTestCase {
 
     var hiveClient: HiveClientHandle?
     var hiveParams: DriveParameter?
-    let rpcAddrs: IPFSEntry = IPFSEntry("uid-1a5304b5-6b34-4e15-b88d-9f89dcf03eae", addrs)
+    let rpcAddrs: IPFSEntry = IPFSEntry("uid-283744b9-57e7-4af7-b5b0-7957f80c6349", addrs)
     let store: String = "\(NSHomeDirectory())/Library/Caches/ipfs"
     var lock: XCTestExpectation?
     var timeout: Double = 600.0
@@ -34,7 +34,9 @@ class HiveIpfsDirectoryTests: XCTestCase {
             }.then{ directory -> HivePromise<HiveDirectoryInfo> in
                 return directory.lastUpdatedInfo()
             }.done{ directoryInfo in
-                XCTAssertNotNil(directoryInfo)
+                XCTAssertNotNil(directoryInfo.getValue(HiveDirectoryInfo.itemId))
+                XCTAssertNotNil(directoryInfo.getValue(HiveDirectoryInfo.name))
+                XCTAssertNotNil(directoryInfo.getValue(HiveDirectoryInfo.childCount))
                 self.lock?.fulfill()
             }.catch{ error in
                 XCTFail()
@@ -58,6 +60,13 @@ class HiveIpfsDirectoryTests: XCTestCase {
                 return directory.createDirectory(withName: "od_createD_\(timeTest!)")
             }.done{ directory in
                 XCTAssertNotNil(directory.directoryId)
+                XCTAssertNotNil(directory.drive)
+                XCTAssertNotNil(directory.pathName)
+                XCTAssertNotNil(directory.authHelper)
+                XCTAssertNotNil(directory.lastInfo)
+                XCTAssertNotNil(directory.lastInfo?.getValue(HiveDirectoryInfo.itemId))
+                XCTAssertNotNil(directory.lastInfo?.getValue(HiveDirectoryInfo.name))
+                XCTAssertNotNil(directory.lastInfo?.getValue(HiveDirectoryInfo.childCount))
                 self.lock?.fulfill()
             }.catch{ error in
                 XCTFail()
@@ -101,6 +110,13 @@ class HiveIpfsDirectoryTests: XCTestCase {
                 return directory.directoryHandle(atName: "ipfs_createD_\(timeTest!)")
             }.done{ directory in
                 XCTAssertNotNil(directory.directoryId)
+                XCTAssertNotNil(directory.drive)
+                XCTAssertNotNil(directory.pathName)
+                XCTAssertNotNil(directory.authHelper)
+                XCTAssertNotNil(directory.lastInfo)
+                XCTAssertNotNil(directory.lastInfo?.getValue(HiveDirectoryInfo.itemId))
+                XCTAssertNotNil(directory.lastInfo?.getValue(HiveDirectoryInfo.name))
+                XCTAssertNotNil(directory.lastInfo?.getValue(HiveDirectoryInfo.childCount))
                 self.lock?.fulfill()
             }.catch{ error in
                 XCTFail()
@@ -139,7 +155,14 @@ class HiveIpfsDirectoryTests: XCTestCase {
             }.then{ directory -> HivePromise<HiveFileHandle> in
                 directory.createFile(withName: "ipfs_createF_\(timeTest!)")
             }.done{ file in
-                XCTAssertNotNil(file)
+                XCTAssertNotNil(file.fileId)
+                XCTAssertNotNil(file.drive)
+                XCTAssertNotNil(file.pathName)
+                XCTAssertNotNil(file.authHelper)
+                XCTAssertNotNil(file.lastInfo)
+                XCTAssertNotNil(file.lastInfo?.getValue(HiveFileInfo.itemId))
+                XCTAssertNotNil(file.lastInfo?.getValue(HiveFileInfo.name))
+                XCTAssertNotNil(file.lastInfo?.getValue(HiveFileInfo.size))
                 self.lock?.fulfill()
             }.catch{ error in
                 XCTFail()
@@ -181,7 +204,14 @@ class HiveIpfsDirectoryTests: XCTestCase {
             }.then{ directory -> HivePromise<HiveFileHandle> in
                 return directory.fileHandle(atName: "ipfs_createF_\(timeTest!)")
             }.done{ file in
-                XCTAssertNotNil(file)
+                XCTAssertNotNil(file.fileId)
+                XCTAssertNotNil(file.drive)
+                XCTAssertNotNil(file.pathName)
+                XCTAssertNotNil(file.authHelper)
+                XCTAssertNotNil(file.lastInfo)
+                XCTAssertNotNil(file.lastInfo?.getValue(HiveFileInfo.itemId))
+                XCTAssertNotNil(file.lastInfo?.getValue(HiveFileInfo.name))
+                XCTAssertNotNil(file.lastInfo?.getValue(HiveFileInfo.size))
                 self.lock?.fulfill()
             }.catch{ error in
                 XCTFail()
