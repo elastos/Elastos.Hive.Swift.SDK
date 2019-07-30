@@ -30,8 +30,8 @@ class HiveOneDriveTests: XCTestCase {
             .then{ drive -> HivePromise<HiveDriveInfo> in
                 return drive.lastUpdatedInfo()
             }
-            .done{ clientInfo in
-                XCTAssertNotNil(clientInfo)
+            .done{ driveInfo in
+                XCTAssertNotNil(driveInfo.getValue(HiveDriveInfo.driveId))
                 self.lock?.fulfill()
             }
             .catch{ error in
@@ -50,8 +50,8 @@ class HiveOneDriveTests: XCTestCase {
             .then{ drive -> HivePromise<HiveDriveInfo> in
                 return drive.lastUpdatedInfo()
             }
-            .done{ clientInfo in
-                XCTAssertNotNil(clientInfo)
+            .done{ driveInfo in
+                XCTAssertNotNil(driveInfo.getValue(HiveDriveInfo.driveId))
                 self.lock?.fulfill()
             }
             .catch{ error in
@@ -73,6 +73,13 @@ class HiveOneDriveTests: XCTestCase {
             }
             .done{ directory in
                 XCTAssertNotNil(directory.directoryId)
+                XCTAssertNotNil(directory.drive)
+                XCTAssertNotNil(directory.pathName)
+                XCTAssertNotNil(directory.authHelper)
+                XCTAssertNotNil(directory.lastInfo)
+                XCTAssertNotNil(directory.lastInfo?.getValue(HiveDirectoryInfo.itemId))
+                XCTAssertNotNil(directory.lastInfo?.getValue(HiveDirectoryInfo.name))
+                XCTAssertNotNil(directory.lastInfo?.getValue(HiveDirectoryInfo.childCount))
                 self.lock?.fulfill()
             }
             .catch{ error in
@@ -93,6 +100,13 @@ class HiveOneDriveTests: XCTestCase {
             }
             .done{ directory in
                 XCTAssertNotNil(directory.directoryId)
+                XCTAssertNotNil(directory.drive)
+                XCTAssertNotNil(directory.pathName)
+                XCTAssertNotNil(directory.authHelper)
+                XCTAssertNotNil(directory.lastInfo)
+                XCTAssertNotNil(directory.lastInfo?.getValue(HiveDirectoryInfo.itemId))
+                XCTAssertNotNil(directory.lastInfo?.getValue(HiveDirectoryInfo.name))
+                XCTAssertNotNil(directory.lastInfo?.getValue(HiveDirectoryInfo.childCount))
                 self.lock?.fulfill()
             }
             .catch{ error in
@@ -115,6 +129,13 @@ class HiveOneDriveTests: XCTestCase {
                 return drive.createDirectory(withPath: "/od_createD_\(timeTest!)")
             }.done{ directory in
                 XCTAssertNotNil(directory.directoryId)
+                XCTAssertNotNil(directory.drive)
+                XCTAssertNotNil(directory.pathName)
+                XCTAssertNotNil(directory.authHelper)
+                XCTAssertNotNil(directory.lastInfo)
+                XCTAssertNotNil(directory.lastInfo?.getValue(HiveDirectoryInfo.itemId))
+                XCTAssertNotNil(directory.lastInfo?.getValue(HiveDirectoryInfo.name))
+                XCTAssertNotNil(directory.lastInfo?.getValue(HiveDirectoryInfo.childCount))
                 self.lock?.fulfill()
             }.catch{ error in
                 XCTFail()
@@ -152,6 +173,13 @@ class HiveOneDriveTests: XCTestCase {
                 return drive.directoryHandle(atPath: "/od_createD_\(timeTest!)")
             }.done{ directory in
                 XCTAssertNotNil(directory.directoryId)
+                XCTAssertNotNil(directory.drive)
+                XCTAssertNotNil(directory.pathName)
+                XCTAssertNotNil(directory.authHelper)
+                XCTAssertNotNil(directory.lastInfo)
+                XCTAssertNotNil(directory.lastInfo?.getValue(HiveDirectoryInfo.itemId))
+                XCTAssertNotNil(directory.lastInfo?.getValue(HiveDirectoryInfo.name))
+                XCTAssertNotNil(directory.lastInfo?.getValue(HiveDirectoryInfo.childCount))
                 self.lock?.fulfill()
             }.catch{ error in
                 XCTFail()
@@ -188,6 +216,13 @@ class HiveOneDriveTests: XCTestCase {
                 return drive.createFile(withPath: "/od_createF_\(timeTest!)")
             }.done{ file in
                 XCTAssertNotNil(file.fileId)
+                XCTAssertNotNil(file.drive)
+                XCTAssertNotNil(file.pathName)
+                XCTAssertNotNil(file.authHelper)
+                XCTAssertNotNil(file.lastInfo)
+                XCTAssertNotNil(file.lastInfo?.getValue(HiveFileInfo.itemId))
+                XCTAssertNotNil(file.lastInfo?.getValue(HiveFileInfo.name))
+                XCTAssertNotNil(file.lastInfo?.getValue(HiveFileInfo.size))
                 self.lock?.fulfill()
             }.catch{ error in
                 XCTFail()
@@ -226,6 +261,13 @@ class HiveOneDriveTests: XCTestCase {
             return drive.fileHandle(atPath: "/od_createF_\(timeTest!)")
             }.done{ file in
                 XCTAssertNotNil(file.fileId)
+                XCTAssertNotNil(file.drive)
+                XCTAssertNotNil(file.pathName)
+                XCTAssertNotNil(file.authHelper)
+                XCTAssertNotNil(file.lastInfo)
+                XCTAssertNotNil(file.lastInfo?.getValue(HiveFileInfo.itemId))
+                XCTAssertNotNil(file.lastInfo?.getValue(HiveFileInfo.name))
+                XCTAssertNotNil(file.lastInfo?.getValue(HiveFileInfo.size))
                 self.lock?.fulfill()
             }.catch{ error in
                 XCTFail()
@@ -264,7 +306,10 @@ class HiveOneDriveTests: XCTestCase {
             .then{ drive -> HivePromise<HiveItemInfo> in
                 return drive.getItemInfo("/od_createF_\(timeTest!)")
             }.done{ file in
-                XCTAssertNotNil(file)
+                XCTAssertNotNil(file.getValue(HiveItemInfo.itemId))
+                XCTAssertNotNil(file.getValue(HiveItemInfo.name))
+                XCTAssertNotNil(file.getValue(HiveItemInfo.type))
+                XCTAssertNotNil(file.getValue(HiveItemInfo.size))
                 self.lock?.fulfill()
             }.catch{ error in
                 XCTFail()
@@ -298,7 +343,10 @@ class HiveOneDriveTests: XCTestCase {
             .then{ drive -> HivePromise<HiveItemInfo> in
                 return drive.getItemInfo("/od_createD_\(timeTest!)")
             }.done{ file in
-                XCTAssertNotNil(file)
+                XCTAssertNotNil(file.getValue(HiveItemInfo.itemId))
+                XCTAssertNotNil(file.getValue(HiveItemInfo.name))
+                XCTAssertNotNil(file.getValue(HiveItemInfo.type))
+                XCTAssertNotNil(file.getValue(HiveItemInfo.size))
                 self.lock?.fulfill()
             }.catch{ error in
                 XCTFail()
