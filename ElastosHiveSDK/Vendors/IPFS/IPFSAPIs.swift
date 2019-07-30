@@ -31,7 +31,7 @@ class IPFSAPIs {
         let promise: HivePromise = HivePromise<Void> { resolver in
             let uid: String = (authHelper as! IPFSRpcHelper).param.entry.uid
             let url: String = "\((authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_NAME_PUBLISH.rawValue)"
-            let params: [String: String] = ["uid": uid, "path": hash]
+            let params: [String: String] = ["uid": uid, "path": hash, "lifetime": "720h"]
             Alamofire.request(url,
                               method: .post,
                               parameters: params,
