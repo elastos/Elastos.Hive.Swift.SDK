@@ -103,6 +103,7 @@ internal class OneDriveClient: HiveClientHandle {
                     ]
                     let clientInfo: HiveClientInfo = HiveClientInfo(dic)
                     self.handleId = jsonData["id"].stringValue
+                    self.lastInfo = clientInfo
                     handleBy.didSucceed(clientInfo)
                     resolver.fulfill(clientInfo)
                     Log.d(TAG(), "Acquired client information from remote drive: \(clientInfo.debugDescription)");
