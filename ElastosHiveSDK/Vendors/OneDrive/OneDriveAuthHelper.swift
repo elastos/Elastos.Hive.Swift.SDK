@@ -106,8 +106,13 @@ internal class OneDriveAuthHelper: AuthHelper {
             let startIndex: String.Index = redirecturl.index(redirecturl.startIndex, offsetBy: 17)
             let endIndex: String.Index =  redirecturl.index(redirecturl.startIndex, offsetBy: redirecturl.count)
             let port = UInt16(redirecturl[startIndex..<endIndex])
+            let client_id: String = authEntry.clientId
+            let scope: String = authEntry.scope
+            let param = "client_id=\(client_id)&scope=\(scope)&response_type=code&redirect_uri=\(redirecturl)".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+
+            let url = "\(OneDriveURL.AUTH)/\(ONEDRIVE_SUB_Url.ONEDRIVE_AUTHORIZE.rawValue)?\(param)"
             server.startRun(port!)
-            _ = authenticator.requestAuthentication(redirecturl)
+            _ = authenticator.requestAuthentication(url)
             server.getCode().done{ auth in
                 Log.d(TAG(), "AuthCode succeed")
                 resolver.fulfill(auth.authCode)
