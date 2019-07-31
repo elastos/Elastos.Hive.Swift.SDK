@@ -26,7 +26,7 @@ import PromiseKit
 
 @inline(__always) private func TAG() -> String { return "OneDriveDrive" }
 
-public class OneDriveDrive: HiveDriveHandle {
+ class OneDriveDrive: HiveDriveHandle {
     private var authHelper: OneDriveAuthHelper
     internal static var oneDriveInstance: HiveDriveHandle?
     var param: OneDriveParameter?
