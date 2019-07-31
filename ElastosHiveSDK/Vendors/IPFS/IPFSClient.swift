@@ -99,8 +99,8 @@ internal class IPFSClient: HiveClientHandle {
                 }
                 .catch{ error in
                     Log.e(TAG(), "lastUpdatedInfo falied: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise
@@ -115,8 +115,8 @@ internal class IPFSClient: HiveClientHandle {
             guard self.authHelper.param.islogin else {
                 Log.d(TAG(), "Please login first")
                 let error = HiveError.failue(des: "Please login first")
-                resolver.reject(error)
                 handleBy.runError(error)
+                resolver.reject(error)
                 return
             }
             let uid = self.authHelper.param.entry.uid
@@ -142,13 +142,13 @@ internal class IPFSClient: HiveClientHandle {
                     let driveHandle: IPFSDrive = IPFSDrive(driveInfo, self.authHelper)
                     driveHandle.param = self.param
                     driveHandle.lastInfo = driveInfo
-                    resolver.fulfill(driveHandle)
                     handleBy.didSucceed(driveHandle)
+                    resolver.fulfill(driveHandle)
                 }
                 .catch{ error in
                     Log.e(TAG(), "defaultDriveHandle falied: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise

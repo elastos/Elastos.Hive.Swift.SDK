@@ -75,8 +75,8 @@ internal class OneDriveFile: HiveFileHandle {
                     Log.d(TAG(), "Acquiring last file information succeeded: \(fileInfo.description)")
                 }
                 .catch{ error in
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
                     Log.e(TAG(), "Acquiring last file info failed: \(HiveError.des(error as! HiveError))")
             }
         }
@@ -107,13 +107,13 @@ internal class OneDriveFile: HiveFileHandle {
                 .done{ jsonData in
                     Log.d(TAG(), "Moving this file to \(newPath) succeeded.")
                     self.pathName = newPath + self.name!
-                    resolver.fulfill(Void())
                     handleBy.didSucceed(Void())
+                    resolver.fulfill(Void())
                 }
                 .catch{ error in
                     Log.e(TAG(),"Moving this file to \(newPath) failed: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise
@@ -149,13 +149,13 @@ internal class OneDriveFile: HiveFileHandle {
                 }
                 .done{ void in
                     Log.d(TAG(), "Copying this file to \(newPath) succeeded.")
-                    resolver.fulfill(Void())
                     handleBy.didSucceed(Void())
+                    resolver.fulfill(Void())
                 }
                 .catch{ error in
                     Log.e(TAG(),"Copying this file to \(newPath) failed: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise
@@ -183,13 +183,13 @@ internal class OneDriveFile: HiveFileHandle {
                     self.drive = nil
                     self.fileId = ""
                     self.lastInfo = nil
-                    resolver.fulfill(Void())
                     handleBy.didSucceed(Void())
+                    resolver.fulfill(Void())
                     Log.d(TAG(), "Deleting the file item succeeded")
                 }
                 .catch{ error in
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
                     Log.e(TAG(), "Deleting the file item falied: \(HiveError.des(error as! HiveError))")
             }
         }
@@ -204,8 +204,8 @@ internal class OneDriveFile: HiveFileHandle {
         let promise: HivePromise = HivePromise<Data> { resolver in
             if finish == true {
                 Log.e(TAG(), "The file has been read finished")
-                resolver.fulfill(Data())
                 handleBy.didSucceed(Data())
+                resolver.fulfill(Data())
                 return
             }
             let path: String = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
@@ -215,8 +215,8 @@ internal class OneDriveFile: HiveFileHandle {
             if file {
                 let data: Data = CacheHelper.readCache((drive as! OneDriveDrive).param!.keyStorePath, cacheName, cursor, length)
                 cursor += UInt64(data.count)
-                resolver.fulfill(data)
                 handleBy.didSucceed(data)
+                resolver.fulfill(data)
                 if data.count == 0 {
                     cursor = 0
                     finish = true
@@ -232,13 +232,13 @@ internal class OneDriveFile: HiveFileHandle {
                     let readData: Data = CacheHelper.readCache((self.drive as! OneDriveDrive).param!.keyStorePath, cacheName, self.cursor, length)
                     self.cursor += UInt64(readData.count)
                     Log.d(TAG(), "readData succeed")
-                    resolver.fulfill(readData)
                     handleBy.didSucceed(readData)
+                    resolver.fulfill(readData)
                 }
                 .catch{ error in
                     Log.e(TAG(), "readData falied: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise
@@ -270,13 +270,13 @@ internal class OneDriveFile: HiveFileHandle {
                     let readData: Data = CacheHelper.readCache((self.drive as! OneDriveDrive).param!.keyStorePath, cacheName, self.cursor, length)
                     self.cursor += UInt64(readData.count)
                     Log.d(TAG(), "readData succeed")
-                    resolver.fulfill(readData)
                     handleBy.didSucceed(readData)
+                    resolver.fulfill(readData)
                 }
                 .catch{ error in
                     Log.e(TAG(), "readData falied: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise
@@ -295,8 +295,8 @@ internal class OneDriveFile: HiveFileHandle {
             if file {
                 let length: Int32 = CacheHelper.writeCache((drive as! OneDriveDrive).param!.keyStorePath, cacheName, data: withData, 0, true)
                 cursor += UInt64(length)
-                resolver.fulfill(length)
                 handleBy.didSucceed(length)
+                resolver.fulfill(length)
                 return
             }
             self.authHelper.checkExpired()
@@ -307,13 +307,13 @@ internal class OneDriveFile: HiveFileHandle {
                     _ = CacheHelper.saveCache((self.drive as! OneDriveDrive).param!.keyStorePath, cacheName, data: jsonData)
                     let length: Int32 = CacheHelper.writeCache((self.drive as! OneDriveDrive).param!.keyStorePath, cacheName, data: withData, 0, true)
                     Log.d(TAG(), "writeData succeed")
-                    resolver.fulfill(length)
                     handleBy.didSucceed(length)
+                    resolver.fulfill(length)
                 }
                 .catch{ error in
                     Log.e(TAG(), "writeData falied: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise
@@ -331,8 +331,8 @@ internal class OneDriveFile: HiveFileHandle {
             let file: Bool = CacheHelper.checkCacheFileIsExist((drive as! OneDriveDrive).param!.keyStorePath, cachePath)
             if file {
                 let length: Int32 = CacheHelper.writeCache((drive as! OneDriveDrive).param!.keyStorePath, cachePath, data: withData, position, false)
-                resolver.fulfill(length)
                 handleBy.didSucceed(length)
+                resolver.fulfill(length)
                 return
             }
             self.authHelper.checkExpired()
@@ -343,13 +343,13 @@ internal class OneDriveFile: HiveFileHandle {
                     _ = CacheHelper.saveCache((self.drive as! OneDriveDrive).param!.keyStorePath, cachePath, data: jsonData)
                     let length: Int32 = CacheHelper.writeCache((self.drive as! OneDriveDrive).param!.keyStorePath, cachePath, data: withData, self.cursor, false)
                     Log.d(TAG(), "writeData succeed")
-                    resolver.fulfill(length)
                     handleBy.didSucceed(length)
+                    resolver.fulfill(length)
                 }
                 .catch{ error in
                     Log.e(TAG(), "writeData falied: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise
