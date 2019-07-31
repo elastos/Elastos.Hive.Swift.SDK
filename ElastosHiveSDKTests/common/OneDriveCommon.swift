@@ -6,13 +6,11 @@ import ElastosHiveSDK
 class OneDriveCommon:XCTestCase, Authenticator {
 
     func requestAuthentication(_ requestURL: String) -> Bool {
-        let scops = ["Files.ReadWrite","offline_access","User.Read", "User.ReadWrite"]
-        let scopStr = scops.joined(separator: " ")
         let authViewController: AuthWebViewController = AuthWebViewController()
         DispatchQueue.main.sync {
             let rootViewController = UIApplication.shared.keyWindow?.rootViewController
             rootViewController!.present(authViewController, animated: true, completion: nil)
-            authViewController.loadRequest("afd3d647-a8b7-4723-bf9d-1b832f43b881", REDIRECT_URI, "code", scopStr)
+            authViewController.loadRequest(requestURL)
         }
         return true
     }

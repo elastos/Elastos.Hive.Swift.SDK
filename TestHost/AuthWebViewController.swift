@@ -32,23 +32,15 @@ public class AuthWebViewController: UIViewController, WKUIDelegate, WKNavigation
         super.viewWillAppear(animated)
     }
     
-    public func loadRequest(_ clientId: String, _ redirectUri: String, _ responseType: String, _ scope: String){
-        let authURLRequest: URLRequest = getOneDriveAuthonURL(clientId, redirectUri, responseType, scope)
+    public func loadRequest(_ requestURL: String){
+        let authURLRequest: URLRequest = getOneDriveAuthonURL(requestURL)
         self.initialRequest = authURLRequest
         self.webView?.load(self.initialRequest!)
     }
-    private func getOneDriveAuthonURL(_ clientId: String, _ redirectUri: String, _ responseType: String, _ scope: String)-> URLRequest {
+    private func getOneDriveAuthonURL(_ requestURL: String)-> URLRequest {
         
-        let params = [
-            "client_id" : clientId,
-            "scope" : scope,
-            "redirect_uri" : redirectUri,
-            "response_type" : responseType
-        ]
-        let authRootURL: String = AUTH_URL
-        let paramString = params.queryString
-        var urlComponents: URLComponents = URLComponents(url: URL(string: authRootURL)!, resolvingAgainstBaseURL: false)!
-        urlComponents.query = paramString
+        let url = URL(string: requestURL)
+        let urlComponents: URLComponents = URLComponents(url: url!, resolvingAgainstBaseURL: false)!
         var request: URLRequest = URLRequest(url: urlComponents.url!)
         request.httpMethod = "GET"
         return request
