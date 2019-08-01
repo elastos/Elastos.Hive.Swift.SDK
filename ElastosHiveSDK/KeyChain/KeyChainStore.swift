@@ -38,10 +38,10 @@ class KeyChainStore {
         let json = JSON(dict as Any)
 
         let token = AuthToken()
-        token.accessToken = json["access_token"].stringValue
-        token.refreshToken = json["refresh_token"].stringValue
-        token.expiredTime = json["expiredTime"].stringValue
-        token.expiredIn = json["expires_in"].int64Value
+        token.accessToken = json[KEYCHAIN_KEY.ACCESS_TOKEN.rawValue].stringValue
+        token.refreshToken = json[KEYCHAIN_KEY.REFRESH_TOKEN.rawValue].stringValue
+        token.expiredTime = json[KEYCHAIN_KEY.EXPIRED_TIME.rawValue].stringValue
+        token.expiredIn = json[KEYCHAIN_KEY.EXPIRES_IN.rawValue].int64Value
         if token.accessToken == "" {
             return nil
         }
