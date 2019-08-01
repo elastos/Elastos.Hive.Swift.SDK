@@ -64,8 +64,8 @@ internal class IPFSFile: HiveFileHandle {
                 }
                 .catch{ error in
                     Log.e(TAG(), "lastUpdatedInfo falied: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise
@@ -91,12 +91,12 @@ internal class IPFSFile: HiveFileHandle {
                     return IPFSAPIs.publish(hash, self.authHelper)
                 }.done{ success in
                     Log.d(TAG(), "moveTo succeed")
-                    resolver.fulfill(Void())
                     handleBy.didSucceed(Void())
+                    resolver.fulfill(Void())
                 }.catch{ error in
                     Log.e(TAG(), "moveTo falied: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
                 }
         }
         return promise
@@ -129,13 +129,13 @@ internal class IPFSFile: HiveFileHandle {
                 }
                 .done{ success in
                     Log.d(TAG(), "copyTo succeed")
-                    resolver.fulfill(Void())
                     handleBy.didSucceed(Void())
+                    resolver.fulfill(Void())
                 }
                 .catch{ error in
                     Log.e(TAG(), "copyTo falied: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise
@@ -163,13 +163,13 @@ internal class IPFSFile: HiveFileHandle {
                 }
                 .done{ success in
                     Log.d(TAG(), "deleteItem succeed")
-                    resolver.fulfill(success)
                     handleBy.didSucceed(success)
+                    resolver.fulfill(success)
                 }
                 .catch{ error in
                     Log.e(TAG(), "deleteItem falied: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise
@@ -183,8 +183,8 @@ internal class IPFSFile: HiveFileHandle {
         let promise: HivePromise = HivePromise<Data> { resolver in
             if finish {
                 Log.e(TAG(), "The file has been read finished")
-                resolver.fulfill(Data())
                 handleBy.didSucceed(Data())
+                resolver.fulfill(Data())
                 return
             }
             let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid
@@ -213,12 +213,12 @@ internal class IPFSFile: HiveFileHandle {
                     }
                     self.cursor = self.cursor + UInt64(readData.count)
                     Log.d(TAG(), "readData succeed")
-                    resolver.fulfill(readData)
                     handleBy.didSucceed(readData)
+                    resolver.fulfill(readData)
                 }.catch{ error in
                     Log.e(TAG(), "readData falied: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
                 }
         }
         return promise
@@ -238,8 +238,8 @@ internal class IPFSFile: HiveFileHandle {
             if file {
                 let data: Data = CacheHelper.readCache((drive as! IPFSDrive).param!.keyStorePath, cachePath, position, length)
                 cursor += UInt64(data.count)
-                resolver.fulfill(data)
                 handleBy.didSucceed(data)
+                resolver.fulfill(data)
                 return
             }
             self.authHelper.checkExpired().then{ void -> HivePromise<Data> in
@@ -252,12 +252,12 @@ internal class IPFSFile: HiveFileHandle {
                         self.cursor += UInt64(readData.count)
                     }
                     Log.d(TAG(), "readData succeed")
-                    resolver.fulfill(readData)
                     handleBy.didSucceed(readData)
+                    resolver.fulfill(readData)
                 }.catch{ error in
                     Log.e(TAG(), "readData falied: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
                 }
         }
         return promise
@@ -276,8 +276,8 @@ internal class IPFSFile: HiveFileHandle {
             let file: Bool = CacheHelper.checkCacheFileIsExist((drive as! IPFSDrive).param!.keyStorePath, cachePath)
             if file {
                 let length = CacheHelper.writeCache((drive as! IPFSDrive).param!.keyStorePath, cachePath, data: withData, 0, true)
-                resolver.fulfill(length)
                 handleBy.didSucceed(length)
+                resolver.fulfill(length)
                 return
             }
             let url: String = (authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp] + HIVE_SUB_Url.IPFS_FILES_READ.rawValue
@@ -290,13 +290,13 @@ internal class IPFSFile: HiveFileHandle {
                     _ = CacheHelper.saveCache((self.drive as! IPFSDrive).param!.keyStorePath, cachePath, data: data)
                     let length = CacheHelper.writeCache((self.drive as! IPFSDrive).param!.keyStorePath, cachePath, data: withData, 0, true)
                     Log.d(TAG(), "writeData succeed")
-                    resolver.fulfill(length)
                     handleBy.didSucceed(length)
+                    resolver.fulfill(length)
                 }
                 .catch{ error in
                     Log.e(TAG(), "writeData falied: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise
@@ -315,8 +315,8 @@ internal class IPFSFile: HiveFileHandle {
             let file: Bool = CacheHelper.checkCacheFileIsExist((drive as! IPFSDrive).param!.keyStorePath, cachePath)
             if file {
                 let length = CacheHelper.writeCache((drive as! IPFSDrive).param!.keyStorePath, cachePath, data: withData, position, false)
-                resolver.fulfill(length)
                 handleBy.didSucceed(length)
+                resolver.fulfill(length)
                 return
             }
             let url: String = "\((authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_READ.rawValue)"
@@ -329,13 +329,13 @@ internal class IPFSFile: HiveFileHandle {
                     _ = CacheHelper.saveCache((self.drive as! IPFSDrive).param!.keyStorePath, cachePath, data: data)
                     let length = CacheHelper.writeCache((self.drive as! IPFSDrive).param!.keyStorePath, cachePath, data: withData, position, false)
                     Log.d(TAG(), "writeData succeed")
-                    resolver.fulfill(length)
                     handleBy.didSucceed(length)
+                    resolver.fulfill(length)
                 }
                 .catch{ error in
                     Log.e(TAG(), "writeData falied: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise

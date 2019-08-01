@@ -93,8 +93,8 @@ internal class OneDriveAuthHelper: AuthHelper {
                 }
                 .catch { error in
                     Log.e(TAG(), "Logout faild: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise

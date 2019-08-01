@@ -66,8 +66,8 @@ internal class IPFSDrive: HiveDriveHandle {
                 }
                 .catch{ error in
                     Log.e(TAG(), "lastUpdatedInfo falied: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise
@@ -99,8 +99,8 @@ internal class IPFSDrive: HiveDriveHandle {
                         directoryHandle.lastInfo = directoryInfo
                         directoryHandle.pathName = "/"
                         directoryHandle.drive = self
-                        resolver.fulfill(directoryHandle)
                         handleBy.didSucceed(directoryHandle)
+                        resolver.fulfill(directoryHandle)
                     }
                     .catch{ error in
                         Log.e(TAG(), "rootDirectoryHandle falied: \(HiveError.des(error as! HiveError))")
@@ -141,12 +141,12 @@ internal class IPFSDrive: HiveDriveHandle {
                         directoryHandle.lastInfo = directoryInfo
                         directoryHandle.pathName = withPath
                         directoryHandle.drive = self
-                        resolver.fulfill(directoryHandle)
                         handleBy.didSucceed(directoryHandle)
+                        resolver.fulfill(directoryHandle)
                     }.catch{ error in
                         Log.e(TAG(), "createDirectory falied: \(HiveError.des(error as! HiveError))")
-                        resolver.reject(error)
                         handleBy.runError(error as! HiveError)
+                        resolver.reject(error)
                 }
             }
             return promise
@@ -180,13 +180,13 @@ internal class IPFSDrive: HiveDriveHandle {
                         directoryHandle.lastInfo = directoryInfo
                         directoryHandle.pathName = atPath
                         directoryHandle.drive = self
-                        resolver.fulfill(directoryHandle)
                         handleBy.didSucceed(directoryHandle)
+                        resolver.fulfill(directoryHandle)
                     }
                     .catch{ error in
                         Log.e(TAG(), "directoryHandle falied: \(HiveError.des(error as! HiveError))")
-                        resolver.reject(error)
                         handleBy.runError(error as! HiveError)
+                        resolver.reject(error)
                 }
             }
             return promise
@@ -262,13 +262,13 @@ internal class IPFSDrive: HiveDriveHandle {
                         let pathName: String = "/\(PathExtracter(atPath).baseNamePart()).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)"
                         let url: String = "\((self.authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_READ.rawValue)?uid=\(uid)&path=\(pathName)"
                         _ = CacheHelper.clearCache(self.param!.keyStorePath, url.md5)
-                        resolver.fulfill(fileHandle)
                         handleBy.didSucceed(fileHandle)
+                        resolver.fulfill(fileHandle)
                     }
                     .catch{ error in
                         Log.e(TAG(), "fileHandle falied: \(HiveError.des(error as! HiveError))")
-                        resolver.reject(error)
                         handleBy.runError(error as! HiveError)
+                        resolver.reject(error)
                 }
             }
             return promise
@@ -295,13 +295,13 @@ internal class IPFSDrive: HiveDriveHandle {
                                HiveItemInfo.size: String(jsonData["Size"].uInt64Value),
                                HiveItemInfo.type: jsonData["Type"].stringValue]
                     let itemInfo: HiveItemInfo = HiveItemInfo(dic)
-                    resolver.fulfill(itemInfo)
                     handleBy.didSucceed(itemInfo)
+                    resolver.fulfill(itemInfo)
                 }
                 .catch{ error in
                     Log.e(TAG(), "getItemInfo falied: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise

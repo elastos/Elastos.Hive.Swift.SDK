@@ -69,8 +69,8 @@ public class OneDriveDrive: HiveDriveHandle {
                 }
                 .catch { error in
                     Log.e(TAG(), "Acquireing last drve information falied: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise
@@ -157,8 +157,8 @@ public class OneDriveDrive: HiveDriveHandle {
                     }
                     .catch{ error in
                         Log.e(TAG(), "createDirectory falied: \(HiveError.des(error as! HiveError))")
-                        resolver.reject(error)
                         handleBy.runError(error as! HiveError)
+                        resolver.reject(error)
                 }
             }
             return promise
@@ -198,8 +198,8 @@ public class OneDriveDrive: HiveDriveHandle {
                     }
                     .catch { error in
                         Log.e(TAG(), "Acquiring directory %s instance failed: \(atPath)\(HiveError.des(error as! HiveError))")
-                        resolver.reject(error)
                         handleBy.runError(error as! HiveError)
+                        resolver.reject(error)
                 }
             }
             return promise
@@ -239,8 +239,8 @@ public class OneDriveDrive: HiveDriveHandle {
                     }
                     .catch { error in
                         Log.e(TAG(), "Creating file %s on remote OneDrive failed: \(withPath)\(HiveError.des(error as! HiveError))")
-                        resolver.reject(error)
                         handleBy.runError(error as! HiveError)
+                        resolver.reject(error)
                 }
             }
             return promise
@@ -275,17 +275,17 @@ public class OneDriveDrive: HiveDriveHandle {
                         fileHandle.drive = self
                         fileHandle.cTag = jsonData["cTag"].stringValue
                         fileHandle.downloadUrl = jsonData["@microsoft.graph.downloadUrl"].stringValue
-                        handleBy.didSucceed(fileHandle)
-                        resolver.fulfill(fileHandle)
                         let pathName = "/\(PathExtracter(atPath).baseNamePart())"
                         let url: String = OneDriveURL(pathName, "content").compose()
                         _ = CacheHelper.clearCache(self.param!.keyStorePath, url.md5)
+                        handleBy.didSucceed(fileHandle)
+                        resolver.fulfill(fileHandle)
                         Log.d(TAG(), "Acquiring file %s instance succeeded: \(atPath)")
                     }
                     .catch { error in
                         Log.e(TAG(), "Acquiring file %s instance failed: \(atPath)\(HiveError.des(error as! HiveError))")
-                        resolver.reject(error)
                         handleBy.runError(error as! HiveError)
+                        resolver.reject(error)
                 }
             }
             return promise
@@ -317,14 +317,14 @@ public class OneDriveDrive: HiveDriveHandle {
                                HiveItemInfo.size: String(jsonData["size"].int64Value),
                                HiveItemInfo.type: type]
                     let itemInfo: HiveItemInfo = HiveItemInfo(dic)
-                    resolver.fulfill(itemInfo)
                     handleBy.didSucceed(itemInfo)
+                    resolver.fulfill(itemInfo)
                     Log.d(TAG(), "Acquiring item info information succeeeded (info: \(itemInfo.attrDic!.description)")
                 }
                 .catch { error in
                     Log.e(TAG(), "Acquireing item info information falied: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise

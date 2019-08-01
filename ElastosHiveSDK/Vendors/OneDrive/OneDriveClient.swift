@@ -110,8 +110,8 @@ internal class OneDriveClient: HiveClientHandle {
                 }
                 .catch { error in
                     Log.e(TAG(), "Acquire last client information failed: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise
@@ -154,13 +154,14 @@ internal class OneDriveClient: HiveClientHandle {
                     let driHandle: OneDriveDrive = OneDriveDrive(driveInfo, self.authHelper)
                     driHandle.param = self.param
                     driHandle.lastInfo = driveInfo
+                    handleBy.didSucceed(driHandle)
                     resolver.fulfill(driHandle)
                     Log.d(TAG(), "Acquired default drive instance succeeded: \(driHandle.debugDescription)");
                 }
                 .catch { error in
                     Log.e(TAG(), "Acquiring default drive instance failed: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise

@@ -70,8 +70,8 @@ class OneDriveDirectory: HiveDirectoryHandle {
                 }
                 .catch{ error in
                     Log.e(TAG(), "Acquiring directory last info falied: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise
@@ -125,8 +125,8 @@ class OneDriveDirectory: HiveDirectoryHandle {
                     }
                     .catch{ error in
                         Log.e(TAG(), "Creating directory %s failed: \(withName)\(HiveError.des(error as! HiveError))")
-                        resolver.reject(error)
                         handleBy.runError(error as! HiveError)
+                        resolver.reject(error)
                 }
             }
             return promise
@@ -174,8 +174,8 @@ class OneDriveDirectory: HiveDirectoryHandle {
                     }
                     .catch{ error in
                         Log.e(TAG(), "Acquiring subdirectory %s handle falied: \(atName)\(HiveError.des(error as! HiveError))")
-                        resolver.reject(error)
                         handleBy.runError(error as! HiveError)
+                        resolver.reject(error)
                 }
             }
             return promise
@@ -221,8 +221,8 @@ class OneDriveDirectory: HiveDirectoryHandle {
                 }
                 .catch{ error in
                     Log.e(TAG(), "Creating file %s falied: \(withName)\(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise
@@ -269,8 +269,8 @@ class OneDriveDirectory: HiveDirectoryHandle {
                     }
                     .catch{ error in
                         Log.e(TAG(), "Acquiring file %s handle falied: \(atName)\(HiveError.des(error as! HiveError))")
-                        resolver.reject(error)
                         handleBy.runError(error as! HiveError)
+                        resolver.reject(error)
                 }
             }
             return promise
@@ -305,8 +305,8 @@ class OneDriveDirectory: HiveDirectoryHandle {
                 }
                 .catch{ error in
                     Log.e(TAG(), "Acquiring children infos under this directory falied: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise
@@ -334,14 +334,14 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                  avalidCode: 200, self.authHelper!)
                 }
                 .done{ jsonData in
-                    resolver.fulfill(Void())
                     handleBy.didSucceed(Void())
+                    resolver.fulfill(Void())
                     Log.e(TAG(), "Moving this directory to %s succeeded: \(newPath)")
                 }
                 .catch{ error in
                     Log.e(TAG(), "Moving this directory to %s failed: \(newPath)\(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise
@@ -376,14 +376,14 @@ class OneDriveDirectory: HiveDirectoryHandle {
                     return OneDriveAPIs.pollingCopyresult(urlString)
                 }
                 .done{ void in
-                    resolver.fulfill(Void())
                     handleBy.didSucceed(Void())
+                    resolver.fulfill(Void())
                     Log.d(TAG(), "copyTo this directory to %s succeeded: \(newPath)")
                 }
                 .catch{ error in
                     Log.e(TAG(), "Copying this directory to %s falied: \(newPath)\(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise
@@ -411,14 +411,14 @@ class OneDriveDirectory: HiveDirectoryHandle {
                     self.drive = nil
                     self.directoryId = ""
                     self.lastInfo = nil
-                    resolver.fulfill(Void())
                     handleBy.didSucceed(Void())
+                    resolver.fulfill(Void())
                     Log.e(TAG(), "Delete the directory item succeeded")
                 }
                 .catch{ error in
                     Log.e(TAG(), "Delete this directory item failed: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise

@@ -62,8 +62,8 @@ class IPFSDirectory: HiveDirectoryHandle {
                 }
                 .catch{ error in
                     Log.e(TAG(), "lastUpdatedInfo falied: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise
@@ -103,13 +103,13 @@ class IPFSDirectory: HiveDirectoryHandle {
                     directoryHandle.lastInfo = directoryInfo
                     directoryHandle.pathName = path
                     directoryHandle.drive = self.drive
-                    resolver.fulfill(directoryHandle)
                     handleBy.didSucceed(directoryHandle)
+                    resolver.fulfill(directoryHandle)
                 }
                 .catch{ error in
                     Log.e(TAG(), "createDirectory falied: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise
@@ -143,13 +143,13 @@ class IPFSDirectory: HiveDirectoryHandle {
                     directoryHandle.lastInfo = directoryInfo
                     directoryHandle.pathName = path
                     directoryHandle.drive = self.drive
-                    resolver.fulfill(directoryHandle)
                     handleBy.didSucceed(directoryHandle)
+                    resolver.fulfill(directoryHandle)
                 }
                 .catch{ error in
                     Log.e(TAG(), "directoryHandle falied: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise
@@ -226,13 +226,13 @@ class IPFSDirectory: HiveDirectoryHandle {
                     fileHandle.lastInfo = fileInfo
                     fileHandle.pathName = path
                     fileHandle.drive = self.drive
-                    resolver.fulfill(fileHandle)
                     handleBy.didSucceed(fileHandle)
+                    resolver.fulfill(fileHandle)
                 }
                 .catch{ error in
                     Log.e(TAG(), "fileHandle falied: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise
@@ -255,13 +255,13 @@ class IPFSDirectory: HiveDirectoryHandle {
                 .done{ void in
                     Log.d(TAG(), "getChildren succeed")
                     let children = HiveChildren()
-                    resolver.fulfill(children)
                     handleBy.didSucceed(children)
+                    resolver.fulfill(children)
                 }
                 .catch{ error in
                     Log.e(TAG(), "getChildren falied: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise
@@ -292,13 +292,13 @@ class IPFSDirectory: HiveDirectoryHandle {
                 }
                 .done{ void in
                     Log.d(TAG(), "moveTo succeed")
-                    resolver.fulfill(Void())
                     handleBy.didSucceed(Void())
+                    resolver.fulfill(Void())
                 }
                 .catch{ error in
                     Log.e(TAG(), "moveTo falied: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise
@@ -330,12 +330,12 @@ class IPFSDirectory: HiveDirectoryHandle {
                 }
                 .done{ success in
                     Log.d(TAG(), "copyTo succeed")
-                    resolver.fulfill(Void())
                     handleBy.didSucceed(Void())
+                    resolver.fulfill(Void())
                 }.catch{ error in
                     Log.e(TAG(), "copyTo falied: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise
@@ -363,13 +363,13 @@ class IPFSDirectory: HiveDirectoryHandle {
                 }
                 .done{ success in
                     Log.d(TAG(), "deleteItem succeed")
-                    resolver.fulfill(success)
                     handleBy.didSucceed(success)
+                    resolver.fulfill(success)
                 }
                 .catch{ error in
                     Log.e(TAG(), "deleteItem falied: \(HiveError.des(error as! HiveError))")
-                    resolver.reject(error)
                     handleBy.runError(error as! HiveError)
+                    resolver.reject(error)
             }
         }
         return promise
