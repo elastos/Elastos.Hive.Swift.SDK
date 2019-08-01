@@ -51,15 +51,14 @@ import PromiseKit
             self.authHelper.checkExpired()
                 .then { void -> HivePromise<JSON> in
                     return OneDriveAPIs
-                        .request(url:"\(OneDriveURL.API)\(OneDriveURL.ROOT)",
+                        .request(url:"\(OneDriveURL.API)",
                                  method: .get,parameters: nil,
                                  encoding: JSONEncoding.default,
                                  headers: OneDriveHttpHeader.headers(self.authHelper),
                                  avalidCode: 200, self.authHelper)
                 }
                 .done { jsonData in
-                    let parentReference: JSON = JSON(jsonData["parentReference"])
-                    let driId: String = parentReference["driveId"].stringValue
+                    let driId: String = jsonData["id"].stringValue
                     let dic: Dictionary<String, String> = [HiveDriveInfo.driveId: driId]
                     let driveInfo: HiveDriveInfo = HiveDriveInfo(dic)
                     self.lastInfo = driveInfo
