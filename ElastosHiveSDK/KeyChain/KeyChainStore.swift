@@ -41,7 +41,7 @@ class KeyChainStore {
         token.accessToken = json["access_token"].stringValue
         token.refreshToken = json["refresh_token"].stringValue
         token.expiredTime = json["expiredTime"].stringValue
-        token.expiredIn = json["expiredIn"].int64Value
+        token.expiredIn = json["expires_in"].int64Value
         if token.accessToken == "" {
             return nil
         }
