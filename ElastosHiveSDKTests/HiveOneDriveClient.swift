@@ -33,6 +33,38 @@ class HiveOneDriveClient: XCTestCase {
 
     }
 
+    func testExpired() {
+        // 1. login
+        lock = XCTestExpectation(description: "wait for test nonarm login.")
+        OneDriveCommon().login(lock!, hiveClient: self.hiveClient!)
+        // 2. set expired 24小时之后
+        let token: AuthToken = KeyChainStore.restoreToken(.oneDrive)!
+        let time = 60 * 60 * 24 + Int(token.expiredTime)!
+        token.expiredTime = String(time)
+        KeyChainStore.writeback(token, outhEnty, .oneDrive)
+
+        // 3. login again
+        lock = XCTestExpectation(description: "wait for test nonarm login.")
+        OneDriveCommon().login(lock!, hiveClient: self.hiveClient!)
+
+        // 4. check refresh token
+        lock = XCTestExpectation(description: "wait for test lastUpateInfo after login.")
+        self.hiveClient?.lastUpdatedInfo()
+            .done{ clientInfo in
+                XCTAssertNotNil(clientInfo.getValue(HiveClientInfo.name))
+                XCTAssertNotNil(clientInfo.getValue(HiveClientInfo.email))
+                XCTAssertNotNil(clientInfo.getValue(HiveClientInfo.phoneNo))
+                XCTAssertNotNil(clientInfo.getValue(HiveClientInfo.region))
+                XCTAssertNotNil(clientInfo.getValue(HiveClientInfo.userId))
+                self.lock?.fulfill()
+            }
+            .catch{ error in
+                XCTFail()
+                self.lock?.fulfill()
+        }
+        wait(for: [lock!], timeout: timeout)
+    }
+
     func testLastUpdatedInfo() {
         // 1. Test lastUdateInfo after login
         lock = XCTestExpectation(description: "wait for test login.")
