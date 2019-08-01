@@ -37,13 +37,13 @@ class HiveOneDriveClient: XCTestCase {
         // 1. login
         lock = XCTestExpectation(description: "wait for test nonarm login.")
         OneDriveCommon().login(lock!, hiveClient: self.hiveClient!)
-        // 2. set expired 24小时之后
+        // 2. set expired after 24h
         let token: AuthToken = KeyChainStore.restoreToken(.oneDrive)!
         let time = 60 * 60 * 24 + Int(token.expiredTime)!
         token.expiredTime = String(time)
         KeyChainStore.writeback(token, outhEnty, .oneDrive)
 
-        // 3. login again
+        // 3. login again to get expired expiredTime
         lock = XCTestExpectation(description: "wait for test nonarm login.")
         OneDriveCommon().login(lock!, hiveClient: self.hiveClient!)
 
