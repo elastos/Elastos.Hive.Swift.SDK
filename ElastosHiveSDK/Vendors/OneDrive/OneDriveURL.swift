@@ -30,8 +30,8 @@ enum ONEDRIVE_SUB_Url: String {
 
 class OneDriveURL {
     internal static let AUTH = "https://login.microsoftonline.com/common/oauth2/v2.0"
-    internal static let API  = "https://graph.microsoft.com/v1.0/me"
-    internal static let ROOT = "/drive/root"
+    internal static let API  = "https://graph.microsoft.com/v1.0/me/drive"
+    internal static let ROOT = "/root"
 
     private let pathName: String
     private let extName : String?
