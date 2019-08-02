@@ -183,7 +183,7 @@ internal class OneDriveAuthHelper: AuthHelper {
                 let jsonData: JSON = JSON(dataResponse.result.value as Any)
                 self.token = AuthToken()
                 self.token?.accessToken = jsonData[KEYCHAIN_KEY.ACCESS_TOKEN.rawValue].stringValue
-                self.token?.refreshToken = jsonData[KEYCHAIN_KEY.REDIRECTURL.rawValue].stringValue
+                self.token?.refreshToken = jsonData[KEYCHAIN_KEY.REFRESH_TOKEN.rawValue].stringValue
                 self.token?.expiredIn = jsonData[KEYCHAIN_KEY.EXPIRES_IN.rawValue].int64Value
                 self.token?.expiredTime = Timestamp.getTimeAfter(time: self.token!.expiredIn)
                 KeyChainStore.writeback(self.token!, self.authEntry, .oneDrive)
