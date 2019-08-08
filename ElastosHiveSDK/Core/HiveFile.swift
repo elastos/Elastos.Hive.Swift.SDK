@@ -220,6 +220,15 @@ public class HiveFileHandle: Result, ResourceItem, FileItem {
     /// - Returns: Returns `Void` if the data commit succeed, `HiveError` otherwise.
     public func commitData() -> HivePromise<Void> {
         let error = HiveError.failue(des: "Dummy")
+        return commitData(handleBy: HiveCallback())
+    }
+
+    /// Submit data to the remote cloud storage.
+    ///
+    /// - Parameter handleBy: The result
+    /// - Returns: Returns `Void` if the data commit succeed, `HiveError` otherwise.
+    public func commitData(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+        let error = HiveError.failue(des: "Dummy")
         return HivePromise<Void>(error: error)
     }
 

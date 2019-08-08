@@ -69,6 +69,10 @@ extension FileItem {
     }
 
     public func commitData() -> HivePromise<Void>{
+        return commitData(handleBy: HiveCallback<Void>())
+    }
+
+    public func commitData(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<Void>(error: error)
     }
