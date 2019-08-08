@@ -342,6 +342,10 @@ internal class IPFSFile: HiveFileHandle {
     }
 
     override func commitData() -> HivePromise<Void> {
+        return commitData(handleBy: HiveCallback<Void>())
+    }
+
+    override func commitData(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
         let promise: HivePromise = HivePromise<Void> { resolver in
             let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid
             let path: String = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
@@ -358,10 +362,12 @@ internal class IPFSFile: HiveFileHandle {
                 }
                 .done{ success in
                     Log.d(TAG(), "writeData succeed")
+                    handleBy.didSucceed(Void())
                     resolver.fulfill(Void())
                 }
                 .catch{ error in
                     Log.e(TAG(), "writeData falied: \(HiveError.des(error as! HiveError))")
+                    handleBy.runError(error as! HiveError)
                     resolver.reject(error)
             }
         }
