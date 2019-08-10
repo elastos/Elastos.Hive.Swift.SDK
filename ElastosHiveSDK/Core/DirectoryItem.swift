@@ -21,7 +21,6 @@
  */
 
 import Foundation
-import PromiseKit
 
 /// In order to implement the optional protocol, protocol extension is adopted.
 protocol DirectoryItem {}

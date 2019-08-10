@@ -21,8 +21,6 @@
  */
 
 import Foundation
-import Alamofire
-import PromiseKit
 
 @inline(__always) private func TAG() -> String { return "IPFSDirectory" }
 

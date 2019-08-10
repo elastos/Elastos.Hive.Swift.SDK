@@ -21,7 +21,6 @@
  */
 
 import Foundation
-import Alamofire
 
 class OneDriveAPIs: NSObject {
 

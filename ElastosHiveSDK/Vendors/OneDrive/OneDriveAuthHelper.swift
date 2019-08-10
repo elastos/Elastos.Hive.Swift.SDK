@@ -21,9 +21,6 @@
  */
 
 import Foundation
-import Swifter
-import PromiseKit
-import Alamofire
 
 @inline(__always) private func TAG() -> String { return "OneDriveAuthHelper" }
 

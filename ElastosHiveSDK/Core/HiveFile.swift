@@ -21,7 +21,6 @@
  */
 
 import Foundation
-import PromiseKit
 
 @objc(HiveFile)
 public class HiveFileHandle: Result, ResourceItem, FileItem {

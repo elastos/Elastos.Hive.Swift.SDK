@@ -21,7 +21,6 @@
  */
 
 import Foundation
-import PromiseKit
 
 @objc(HiveDirectory)
 public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem {

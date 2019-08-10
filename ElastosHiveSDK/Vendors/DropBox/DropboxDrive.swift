@@ -21,7 +21,6 @@
  */
 
 import Foundation
-import PromiseKit
 
 @objc(DropboxDrive)
 internal class DropboxDrive: HiveDriveHandle {

@@ -21,7 +21,6 @@
  */
 
 import Foundation
-import PromiseKit
 
 @objc(DropboxClient)
 internal class DropboxClient: HiveClientHandle {

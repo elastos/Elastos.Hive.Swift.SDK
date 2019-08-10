@@ -21,7 +21,6 @@
  */
 
 import Foundation
-import PromiseKit
 
 @objc(NativeDrive)
 internal class NativeDrive: HiveDriveHandle {

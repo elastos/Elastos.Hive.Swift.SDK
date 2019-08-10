@@ -21,7 +21,6 @@
  */
 
 import Foundation
-import PromiseKit
 
 protocol FileItem {
     func moveTo(newPath: String) -> HivePromise<Void>
