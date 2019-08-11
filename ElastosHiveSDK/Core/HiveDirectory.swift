@@ -66,14 +66,14 @@ public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem 
     ///
     /// - Returns: Returns the last update info for the subclasses
     public func lastUpdatedInfo() -> HivePromise<resourceType> {
-        return lastUpdatedInfo(handleBy: HiveCallback<HiveDirectoryHandle.resourceType>())
+        return lastUpdatedInfo(handleBy: nil)
     }
 
     /// Latst update for `HiveDirectory` subclasses
     ///
     /// - Parameter handleBy: The result
     /// - Returns: Returns the last update info for the subclasses
-    public func lastUpdatedInfo(handleBy: HiveCallback<resourceType>) -> HivePromise<resourceType> {
+    public func lastUpdatedInfo(handleBy: ((HiveCallback<resourceType>) -> Void)?) -> HivePromise<resourceType> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<HiveDirectoryInfo>(error: error)
     }
@@ -83,7 +83,7 @@ public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem 
     /// - Parameter withName: The name with the create directory.
     /// - Returns: Returns a directory for subclassees
     public func createDirectory(withName: String) -> HivePromise<HiveDirectoryHandle> {
-        return createDirectory(withName: withName, handleBy: HiveCallback<HiveDirectoryHandle>())
+        return createDirectory(withName: withName, handleBy: nil)
     }
 
     /// Create a directory
@@ -92,7 +92,7 @@ public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem 
     ///   - withName: The name with the create directory
     ///   - handleBy: The result
     /// - Returns: Returns a directory for subclasses
-    public func createDirectory(withName: String, handleBy: HiveCallback<HiveDirectoryHandle>) ->
+    public func createDirectory(withName: String, handleBy: ((HiveCallback<HiveDirectoryHandle>) -> Void)?) ->
         HivePromise<HiveDirectoryHandle> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<HiveDirectoryHandle>(error: error)
@@ -103,7 +103,7 @@ public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem 
     /// - Parameter atName: The name with the request directory
     /// - Returns: Returns a directory with the given name for subclassses
     public func directoryHandle(atName: String) -> HivePromise<HiveDirectoryHandle> {
-        return directoryHandle(atName: atName, handleBy: HiveCallback<HiveDirectoryHandle>())
+        return directoryHandle(atName: atName, handleBy: nil)
     }
 
     /// Request a directory with the current directory
@@ -112,7 +112,7 @@ public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem 
     ///   - atName: The name with the request directory
     ///   - handleBy: The result
     /// - Returns: Returns a directory with the given name for subclasses
-    public func directoryHandle(atName: String, handleBy: HiveCallback<HiveDirectoryHandle>) ->
+    public func directoryHandle(atName: String, handleBy: ((HiveCallback<HiveDirectoryHandle>) -> Void)?) ->
         HivePromise<HiveDirectoryHandle> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<HiveDirectoryHandle>(error: error)
@@ -123,7 +123,7 @@ public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem 
     /// - Parameter withName: The name with the create file
     /// - Returns: Returns a file with the given name for subclasses
     public func createFile(withName: String) -> HivePromise<HiveFileHandle> {
-        return createFile(withName: withName, handleBy: HiveCallback<HiveFileHandle>())
+        return createFile(withName: withName, handleBy: nil)
     }
 
     /// Create a file with the current directory
@@ -132,7 +132,7 @@ public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem 
     ///   - withName: The name with the create file
     ///   - handleBy: The result
     /// - Returns: Returns a file with the given name for subclasses
-    public func createFile(withName: String, handleBy: HiveCallback<HiveFileHandle>) ->
+    public func createFile(withName: String, handleBy: ((HiveCallback<HiveFileHandle>) -> Void)?) ->
         HivePromise<HiveFileHandle> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<HiveFileHandle>(error: error)
@@ -143,7 +143,7 @@ public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem 
     /// - Parameter atName: The name with the request file
     /// - Returns: Returns a file with the given name for subclasses
     public func fileHandle(atName: String) -> HivePromise<HiveFileHandle> {
-        return fileHandle(atName: atName, handleBy: HiveCallback<HiveFileHandle>())
+        return fileHandle(atName: atName, handleBy: nil)
     }
 
     /// Requst a file with the current directory
@@ -152,7 +152,7 @@ public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem 
     ///   - atName: The name with the request file
     ///   - handleBy: The result
     /// - Returns: Resturns a file with the given name for subclasses
-    public func fileHandle(atName: String, handleBy: HiveCallback<HiveFileHandle>) ->
+    public func fileHandle(atName: String, handleBy: ((HiveCallback<HiveFileHandle>) -> Void)?) ->
         HivePromise<HiveFileHandle> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<HiveFileHandle>(error: error)
@@ -162,14 +162,14 @@ public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem 
     ///
     /// - Returns: Returns list for current directory
     public func getChildren() -> HivePromise<HiveChildren> {
-        return getChildren(handleBy: HiveCallback<HiveChildren>())
+        return getChildren(handleBy: nil)
     }
 
     /// List for current directory
     ///
     /// - Parameter handleBy: The result
     /// - Returns: Resturns children for current directory
-    public func getChildren(handleBy: HiveCallback<HiveChildren>) -> HivePromise<HiveChildren> {
+    public func getChildren(handleBy: ((HiveCallback<HiveChildren>) -> Void)?) -> HivePromise<HiveChildren> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<HiveChildren>(error: error)
     }
@@ -179,7 +179,7 @@ public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem 
     /// - Parameter newPath: The new path with the directory
     /// - Returns: Returns `Void` if the move succees, `HiveError` otherwise.
     public func moveTo(newPath: String) -> HivePromise<Void> {
-        return moveTo(newPath: newPath, handleBy: HiveCallback<Void>())
+        return moveTo(newPath: newPath, handleBy: nil)
     }
 
     /// Current directory move to the new path
@@ -188,7 +188,7 @@ public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem 
     ///   - newPath: The new path with the directory
     ///   - handleBy: The result
     /// - Returns: Returns `Void` if the move succees, `HiveError` otherwise.
-    public func moveTo(newPath: String, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+    public func moveTo(newPath: String, handleBy: ((HiveCallback<Void>) -> Void)?) -> HivePromise<Void> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<Void>(error: error)
     }
@@ -198,7 +198,7 @@ public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem 
     /// - Parameter newPath: The new path to copy
     /// - Returns: Returns `Void` if the copy succees, `HiveError` otherwise.
     public func copyTo(newPath: String) -> HivePromise<Void> {
-        return copyTo(newPath: newPath, handleBy: HiveCallback<Void>())
+        return copyTo(newPath: newPath, handleBy: nil)
     }
 
     /// Current directory copy to the new path
@@ -207,7 +207,7 @@ public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem 
     ///   - newPath: The new path to copy
     ///   - handleBy: The result
     /// - Returns: Returns `Void` if the copy succees, `HiveError` otherwise.
-    public func copyTo(newPath: String, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+    public func copyTo(newPath: String, handleBy: ((HiveCallback<Void>) -> Void)?) -> HivePromise<Void> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<Void>(error: error)
     }
@@ -216,14 +216,14 @@ public class HiveDirectoryHandle: Result, ResourceItem, FileItem, DirectoryItem 
     ///
     /// - Returns: Returns `Void` if the delete succees, `HiveError` otherwise.
     public func deleteItem() -> HivePromise<Void> {
-        return deleteItem(handleBy: HiveCallback<Void>())
+        return deleteItem(handleBy: nil)
     }
 
     /// Delete the current directory
     ///
     /// - Parameter handleBy: The result
     /// - Returns: Returns `Void` if the delete succees, `HiveError` otherwise.
-    public func deleteItem(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+    public func deleteItem(handleBy: ((HiveCallback<Void>) -> Void)?) -> HivePromise<Void> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<Void>(error: error)
     }

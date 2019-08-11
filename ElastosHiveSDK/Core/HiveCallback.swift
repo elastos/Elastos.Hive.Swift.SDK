@@ -22,9 +22,14 @@
 
 import Foundation
 
-open class HiveCallback<T> {
-    public init() {}
+//open class HiveCallback<T> {
+//    public init() {}
+//
+//    open func didSucceed(_ result: T) -> Void {}
+//    open func runError(_ error: HiveError) -> Void {}
+//}
 
-    open func didSucceed(_ result: T) -> Void {}
-    open func runError(_ error: HiveError) -> Void {}
+public enum HiveCallback<T> {
+    case success(T)
+    case failure(HiveError)
 }

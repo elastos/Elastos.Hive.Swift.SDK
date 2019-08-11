@@ -40,10 +40,10 @@ import Foundation
     }
 
     override public func lastUpdatedInfo() -> HivePromise<HiveDriveInfo> {
-        return lastUpdatedInfo(handleBy: HiveCallback<HiveDriveInfo>())
+        return lastUpdatedInfo(handleBy: nil)
     }
 
-    override public func lastUpdatedInfo(handleBy: HiveCallback<HiveDriveInfo>) -> HivePromise<HiveDriveInfo> {
+    override public func lastUpdatedInfo(handleBy: ((HiveCallback<HiveDriveInfo>) -> Void)?) -> HivePromise<HiveDriveInfo> {
         return HivePromise<HiveDriveInfo> { resolver in
             self.authHelper.checkExpired().then { void -> HivePromise<JSON> in
                 return OneDriveAPIs.request(url:"\(OneDriveURL.API)",
@@ -56,23 +56,26 @@ import Foundation
                 let dict:  Dictionary<String, String> = [HiveDriveInfo.driveId: driId]
                 let driveInfo: HiveDriveInfo = HiveDriveInfo(dict)
                 self.lastInfo = driveInfo
-
-                handleBy.didSucceed(driveInfo)
+                if handleBy != nil {
+                    handleBy!(.success(driveInfo))
+                }
                 resolver.fulfill(driveInfo)
                 Log.d(TAG(), "Acquiring last drive information succeeeded (info: \(driveInfo.attrDic!.description)")
             }.catch { error in
                 Log.e(TAG(), "Acquiring last drive information falied: \(HiveError.des(error as! HiveError))")
-                handleBy.runError(error as! HiveError)
+                if handleBy != nil {
+                    handleBy!(.failure(error as! HiveError))
+                }
                 resolver.reject(error)
             }
         }
     }
 
     override public func rootDirectoryHandle() -> HivePromise<HiveDirectoryHandle> {
-        return rootDirectoryHandle(handleBy: HiveCallback<HiveDirectoryHandle>())
+        return rootDirectoryHandle(handleBy: nil)
     }
 
-    override public func rootDirectoryHandle(handleBy: HiveCallback<HiveDirectoryHandle>)  -> HivePromise<HiveDirectoryHandle> {
+    override public func rootDirectoryHandle(handleBy: ((HiveCallback<HiveDirectoryHandle>) -> Void)?)  -> HivePromise<HiveDirectoryHandle> {
         return HivePromise<HiveDirectoryHandle> { resolver in
             self.authHelper.checkExpired().then { void -> HivePromise<JSON> in
                 return OneDriveAPIs.request(url: "\(OneDriveURL.API)\(OneDriveURL.ROOT)",
@@ -93,23 +96,26 @@ import Foundation
                 dirHandle.pathName = "/"
                 dirHandle.drive = self
                 dirHandle.lastInfo = dirInfo
-
-                handleBy.didSucceed(dirHandle)
+                if handleBy != nil {
+                    handleBy!(.success(dirHandle))
+                }
                 resolver.fulfill(dirHandle)
                 Log.d(TAG(), "Acquiring root directory instance success")
             }.catch { error in
                 Log.e(TAG(), "Acquiring root directory instance falied: \(HiveError.des(error as! HiveError))")
-                handleBy.runError(error as! HiveError)
+                if handleBy != nil {
+                    handleBy!(.failure(error as! HiveError))
+                }
                 resolver.reject(error)
             }
         }
     }
 
     override public func createDirectory(withPath: String) -> HivePromise<HiveDirectoryHandle> {
-        return createDirectory(withPath: withPath, handleBy: HiveCallback<HiveDirectoryHandle>())
+        return createDirectory(withPath: withPath, handleBy: nil)
     }
 
-    override public func createDirectory(withPath: String, handleBy: HiveCallback<HiveDirectoryHandle>) -> HivePromise<HiveDirectoryHandle> {
+    override public func createDirectory(withPath: String, handleBy: ((HiveCallback<HiveDirectoryHandle>) -> Void)?) -> HivePromise<HiveDirectoryHandle> {
         return HivePromise<HiveDirectoryHandle> { resolver in
             let params: Dictionary<String, Any> = [
                     "name": PathExtracter(withPath).baseNamePart(),
@@ -137,23 +143,26 @@ import Foundation
                 dirHandle.pathName = withPath
                 dirHandle.drive = self
                 dirHandle.lastInfo = dirInfo
-
-                handleBy.didSucceed(dirHandle)
+                if handleBy != nil {
+                    handleBy!(.success(dirHandle))
+                }
                 resolver.fulfill(dirHandle)
                 Log.d(TAG(), "Directory %s has been created successfully: \(withPath)")
             }.catch{ error in
                 Log.e(TAG(), "createDirectory falied: \(HiveError.des(error as! HiveError))")
-                handleBy.runError(error as! HiveError)
+                if handleBy != nil {
+                    handleBy!(.failure(error as! HiveError))
+                }
                 resolver.reject(error)
             }
         }
     }
 
     override public func directoryHandle(atPath: String) -> HivePromise<HiveDirectoryHandle> {
-        return directoryHandle(atPath: atPath, handleBy: HiveCallback<HiveDirectoryHandle>())
+        return directoryHandle(atPath: atPath, handleBy: nil)
     }
 
-    override public func directoryHandle(atPath: String, handleBy: HiveCallback<HiveDirectoryHandle>) -> HivePromise<HiveDirectoryHandle> {
+    override public func directoryHandle(atPath: String, handleBy: ((HiveCallback<HiveDirectoryHandle>) -> Void)?) -> HivePromise<HiveDirectoryHandle> {
         return HivePromise<HiveDirectoryHandle> { resolver in
             self.authHelper.checkExpired().then { void -> HivePromise<JSON> in
                 return OneDriveAPIs.request(url: OneDriveURL(atPath).compose(),
@@ -174,23 +183,26 @@ import Foundation
                 dirHandle.pathName = atPath
                 dirHandle.drive = self
                 dirHandle.lastInfo = dirInfo
-
-                handleBy.didSucceed(dirHandle)
+                if handleBy != nil {
+                    handleBy!(.success(dirHandle))
+                }
                 resolver.fulfill(dirHandle)
                 Log.d(TAG(), "Acquiring directory %s instance succeeded: \(atPath)")
             }.catch { error in
                 Log.e(TAG(), "Acquiring directory %s instance failed: \(atPath)\(HiveError.des(error as! HiveError))")
-                handleBy.runError(error as! HiveError)
+                if handleBy != nil {
+                    handleBy!(.failure(error as! HiveError))
+                }
                 resolver.reject(error)
             }
         }
     }
 
     override public func createFile(withPath: String) -> HivePromise<HiveFileHandle> {
-        return createFile(withPath: withPath, handleBy: HiveCallback<HiveFileHandle>())
+        return createFile(withPath: withPath, handleBy: nil)
     }
 
-    override public func createFile(withPath: String, handleBy: HiveCallback<HiveFileHandle>) -> HivePromise<HiveFileHandle> {
+    override public func createFile(withPath: String, handleBy: ((HiveCallback<HiveFileHandle>) -> Void)?) -> HivePromise<HiveFileHandle> {
         return HivePromise<HiveFileHandle> { resolver in
             self.authHelper.checkExpired().then { void -> HivePromise<JSON> in
                 let ecUrl = withPath.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
@@ -211,23 +223,26 @@ import Foundation
                 fileHandle.pathName = withPath
                 fileHandle.lastInfo = fileInfo
                 fileHandle.drive = self
-
-                handleBy.didSucceed(fileHandle)
+                if handleBy != nil {
+                    handleBy!(.success(fileHandle))
+                }
                 resolver.fulfill(fileHandle)
                 Log.d(TAG(), "File %s on OneDrive has been created: \(withPath)");
             }.catch { error in
                 Log.e(TAG(), "Creating file %s on remote OneDrive failed: \(withPath)\(HiveError.des(error as! HiveError))")
-                handleBy.runError(error as! HiveError)
+                if handleBy != nil {
+                    handleBy!(.failure(error as! HiveError))
+                }
                 resolver.reject(error)
             }
         }
     }
 
     override public func fileHandle(atPath: String) -> HivePromise<HiveFileHandle> {
-        return fileHandle(atPath: atPath, handleBy: HiveCallback<HiveFileHandle>())
+        return fileHandle(atPath: atPath, handleBy: nil)
     }
 
-    override public func fileHandle(atPath: String, handleBy: HiveCallback<HiveFileHandle>) -> HivePromise<HiveFileHandle> {
+    override public func fileHandle(atPath: String, handleBy: ((HiveCallback<HiveFileHandle>) -> Void)?) -> HivePromise<HiveFileHandle> {
         return HivePromise<HiveFileHandle> { resolver in
             self.authHelper.checkExpired().then { void -> HivePromise<JSON> in
                 return OneDriveAPIs.request(url: OneDriveURL(atPath).compose(),
@@ -252,23 +267,26 @@ import Foundation
                 let pathName = "/\(PathExtracter(atPath).baseNamePart())"
                 let url: String = OneDriveURL(pathName, "content").compose()
                 _ = CacheHelper.clearCache(self.param!.keyStorePath, url.md5)
-
-                handleBy.didSucceed(fileHandle)
+                if handleBy != nil {
+                    handleBy!(.success(fileHandle))
+                }
                 resolver.fulfill(fileHandle)
                 Log.d(TAG(), "Acquiring file %s instance succeeded: \(atPath)")
             }.catch { error in
                 Log.e(TAG(), "Acquiring file %s instance failed: \(atPath)\(HiveError.des(error as! HiveError))")
-                handleBy.runError(error as! HiveError)
+                if handleBy != nil {
+                    handleBy!(.failure(error as! HiveError))
+                }
                 resolver.reject(error)
             }
         }
     }
 
     public override func getItemInfo(_ path: String) -> HivePromise<HiveItemInfo> {
-        return getItemInfo(path, handleBy: HiveCallback<HiveItemInfo>())
+        return getItemInfo(path, handleBy: nil)
     }
 
-    public override func getItemInfo(_ path: String, handleBy: HiveCallback<HiveItemInfo>) -> HivePromise<HiveItemInfo> {
+    public override func getItemInfo(_ path: String, handleBy: ((HiveCallback<HiveItemInfo>) -> Void)?) -> HivePromise<HiveItemInfo> {
         return HivePromise<HiveItemInfo> { resolver in
             self.authHelper.checkExpired().then { void -> HivePromise<JSON> in
                 return OneDriveAPIs.request(url: OneDriveURL(path).compose(),
@@ -285,13 +303,16 @@ import Foundation
                             HiveItemInfo.size: String(jsonData["size"].int64Value),
                             HiveItemInfo.type: type]
                 let itemInfo: HiveItemInfo = HiveItemInfo(dic)
-
-                handleBy.didSucceed(itemInfo)
+                if handleBy != nil {
+                    handleBy!(.success(itemInfo))
+                }
                 resolver.fulfill(itemInfo)
                 Log.d(TAG(), "Acquiring item info information succeeeded (info: \(itemInfo.attrDic!.description)")
             }.catch { error in
                 Log.e(TAG(), "Acquireing item info information falied: \(HiveError.des(error as! HiveError))")
-                handleBy.runError(error as! HiveError)
+                if handleBy != nil {
+                    handleBy!(.failure(error as! HiveError))
+                }
                 resolver.reject(error)
             }
         }

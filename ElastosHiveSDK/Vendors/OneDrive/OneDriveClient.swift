@@ -68,16 +68,18 @@ internal class OneDriveClient: HiveClientHandle {
     }
 
     override func lastUpdatedInfo() -> HivePromise<HiveClientInfo> {
-        return lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>())
+        return lastUpdatedInfo(handleBy: nil)
     }
 
-    override func lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>) -> HivePromise<HiveClientInfo> {
+    override func lastUpdatedInfo(handleBy: ((HiveCallback<HiveClientInfo>) -> Void)?) -> HivePromise<HiveClientInfo> {
         return HivePromise<HiveClientInfo> { resolver in
             let token = (self.authHelper as! OneDriveAuthHelper).token
             guard token != nil else {
                 Log.d(TAG(), "Client has not logined yet, please login first.")
                 let error = HiveError.failue(des: "Please login first")
-                handleBy.runError(error)
+                if handleBy != nil {
+                    handleBy!(.failure(error))
+                }
                 resolver.reject(error)
                 return
             }
@@ -99,36 +101,43 @@ internal class OneDriveClient: HiveClientHandle {
                 let clientInfo: HiveClientInfo = HiveClientInfo(dict)
                 self.handleId = jsonData["id"].stringValue
                 self.lastInfo = clientInfo
-
-                handleBy.didSucceed(clientInfo)
+                if handleBy != nil {
+                    handleBy!(.success(clientInfo))
+                }
                 resolver.fulfill(clientInfo)
                 Log.d(TAG(), "Acquired client information from remote drive: \(clientInfo.debugDescription)");
             }.catch { error in
                 Log.e(TAG(), "Acquire last client information failed: \(HiveError.des(error as! HiveError))")
-                handleBy.runError(error as! HiveError)
+                if handleBy != nil {
+                    handleBy!(.failure(error as! HiveError))
+                }
                 resolver.reject(error)
             }
         }
     }
 
     override func defaultDriveHandle() -> HivePromise<HiveDriveHandle> {
-        return defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>())
+        return defaultDriveHandle(handleBy: nil)
     }
 
-    override func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> HivePromise<HiveDriveHandle> {
+    override func defaultDriveHandle(handleBy: ((HiveCallback<HiveDriveHandle>) -> Void)?) -> HivePromise<HiveDriveHandle> {
         return HivePromise<HiveDriveHandle> { resolver in
             let token = (self.authHelper as! OneDriveAuthHelper).token
             guard token != nil else {
                 Log.d(TAG(), "Client has not logined yet, please login first.")
                 let error = HiveError.failue(des: "Please login first")
-                handleBy.runError(error)
+                if handleBy != nil {
+                    handleBy!(.failure(error))
+                }
                 resolver.reject(error)
                 return
             }
             guard OneDriveDrive.oneDriveInstance == nil else {
                 let handle = OneDriveDrive.sharedInstance()
                 handle.param = self.param
-                handleBy.didSucceed(handle)
+                if handleBy != nil {
+                    handleBy!(.success(handle))
+                }
                 resolver.fulfill(handle)
                 return
             }
@@ -147,13 +156,17 @@ internal class OneDriveClient: HiveClientHandle {
 
                 driveHandle.param = self.param
                 driveHandle.lastInfo = driveInfo
-                handleBy.didSucceed(driveHandle)
+                if handleBy != nil {
+                    handleBy!(.success(driveHandle))
+                }
                 resolver.fulfill(driveHandle)
 
                 Log.d(TAG(), "Acquired default drive instance succeeded: \(driveHandle.debugDescription)");
             }.catch { error in
                 Log.e(TAG(), "Acquiring default drive instance failed: \(HiveError.des(error as! HiveError))")
-                handleBy.runError(error as! HiveError)
+                if handleBy != nil {
+                    handleBy!(.failure(error as! HiveError))
+                }
                 resolver.reject(error)
             }
         }

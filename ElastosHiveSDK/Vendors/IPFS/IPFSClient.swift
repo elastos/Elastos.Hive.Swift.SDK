@@ -63,16 +63,18 @@ internal class IPFSClient: HiveClientHandle {
     }
 
     override func lastUpdatedInfo() -> HivePromise<HiveClientInfo> {
-        return lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>())
+        return lastUpdatedInfo(handleBy: nil)
     }
 
-    override func lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>) -> HivePromise<HiveClientInfo> {
+    override func lastUpdatedInfo(handleBy: ((HiveCallback<HiveClientInfo>) -> Void)?) -> HivePromise<HiveClientInfo> {
         let promise: HivePromise = HivePromise<HiveClientInfo> { resolver in
             guard self.authHelper.param.islogin else {
                 Log.d(TAG(), "Please login first")
                 let error = HiveError.failue(des: "Please login first")
+                if handleBy != nil {
+                    handleBy!(.failure(error))
+                }
                 resolver.reject(error)
-                handleBy.runError(error)
                 return
             }
             let uid: String = self.authHelper.param.entry.uid
@@ -92,12 +94,16 @@ internal class IPFSClient: HiveClientHandle {
                                HiveClientInfo.userId: uid]
                     let clientInfo: HiveClientInfo = HiveClientInfo(dic)
                     self.lastInfo = clientInfo
-                    handleBy.didSucceed(clientInfo)
+                    if handleBy != nil {
+                        handleBy!(.success(clientInfo))
+                    }
                     resolver.fulfill(clientInfo)
                 }
                 .catch{ error in
                     Log.e(TAG(), "lastUpdatedInfo falied: \(HiveError.des(error as! HiveError))")
-                    handleBy.runError(error as! HiveError)
+                    if handleBy != nil {
+                        handleBy!(.failure(error as! HiveError))
+                    }
                     resolver.reject(error)
             }
         }
@@ -105,15 +111,17 @@ internal class IPFSClient: HiveClientHandle {
     }
 
     override func defaultDriveHandle() -> HivePromise<HiveDriveHandle> {
-        return defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>())
+        return defaultDriveHandle(handleBy: nil)
     }
 
-    override func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> HivePromise<HiveDriveHandle> {
+    override func defaultDriveHandle(handleBy: ((HiveCallback<HiveDriveHandle>) -> Void)?) -> HivePromise<HiveDriveHandle> {
         let promise: HivePromise = HivePromise<HiveDriveHandle>{ resolver in
             guard self.authHelper.param.islogin else {
                 Log.d(TAG(), "Please login first")
                 let error = HiveError.failue(des: "Please login first")
-                handleBy.runError(error)
+                if handleBy != nil {
+                    handleBy!(.failure(error))
+                }
                 resolver.reject(error)
                 return
             }
@@ -121,7 +129,9 @@ internal class IPFSClient: HiveClientHandle {
             guard IPFSDrive.hiveDriveInstance == nil else {
                 let hdHandle: IPFSDrive = IPFSDrive.sharedInstance()
                 hdHandle.param = self.param
-                handleBy.didSucceed(hdHandle)
+                if handleBy != nil {
+                    handleBy!(.success(hdHandle))
+                }
                 resolver.fulfill(hdHandle)
                 return
             }
@@ -140,12 +150,16 @@ internal class IPFSClient: HiveClientHandle {
                     let driveHandle: IPFSDrive = IPFSDrive(driveInfo, self.authHelper)
                     driveHandle.param = self.param
                     driveHandle.lastInfo = driveInfo
-                    handleBy.didSucceed(driveHandle)
+                    if handleBy != nil {
+                        handleBy!(.success(driveHandle))
+                    }
                     resolver.fulfill(driveHandle)
                 }
                 .catch{ error in
                     Log.e(TAG(), "defaultDriveHandle falied: \(HiveError.des(error as! HiveError))")
-                    handleBy.runError(error as! HiveError)
+                    if handleBy != nil {
+                        handleBy!(.failure(error as! HiveError))
+                    }
                     resolver.reject(error)
             }
         }

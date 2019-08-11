@@ -66,14 +66,14 @@ public class HiveFileHandle: Result, ResourceItem, FileItem {
     ///
     /// - Returns: Returns the parent path of the subclasses
     public func lastUpdatedInfo() -> HivePromise<resourceType> {
-        return lastUpdatedInfo(handleBy: HiveCallback<HiveFileHandle.resourceType>())
+        return lastUpdatedInfo(handleBy: nil)
     }
 
     /// Latst update for `HiveFile` subclasses
     ///
     /// - Parameter handleBy: The result
     /// - Returns: Returns the parent path of the subclasses
-    public func lastUpdatedInfo(handleBy: HiveCallback<resourceType>) -> HivePromise<resourceType> {
+    public func lastUpdatedInfo(handleBy: ((HiveCallback<resourceType>) -> Void)?) -> HivePromise<resourceType> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<HiveFileInfo>(error: error)
     }
@@ -83,7 +83,7 @@ public class HiveFileHandle: Result, ResourceItem, FileItem {
     /// - Parameter newPath: The new path with the file
     /// - Returns: Returns `Void` if the move succees, `HiveError` otherwise.
     public func moveTo(newPath: String) -> HivePromise<Void> {
-        return moveTo(newPath: newPath, handleBy: HiveCallback<Void>())
+        return moveTo(newPath: newPath, handleBy: nil)
     }
 
     /// Current File move to the new path
@@ -92,7 +92,7 @@ public class HiveFileHandle: Result, ResourceItem, FileItem {
     ///   - newPath: The new path with the file
     ///   - handleBy: The result
     /// - Returns: Returns `Void` if the move succees, `HiveError` otherwise.
-    public func moveTo(newPath: String, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+    public func moveTo(newPath: String, handleBy: ((HiveCallback<Void>) -> Void)?) -> HivePromise<Void> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<Void>(error: error)
     }
@@ -102,7 +102,7 @@ public class HiveFileHandle: Result, ResourceItem, FileItem {
     /// - Parameter newPath: The path to copy
     /// - Returns: Returns `Void` if the copy succees, `HiveError` otherwise.
     public func copyTo(newPath: String) -> HivePromise<Void> {
-        return copyTo(newPath: newPath, handleBy: HiveCallback<Void>())
+        return copyTo(newPath: newPath, handleBy: nil)
     }
 
     /// Current file copy to the new path
@@ -111,7 +111,7 @@ public class HiveFileHandle: Result, ResourceItem, FileItem {
     ///   - newPath: The path to copy
     ///   - handleBy: The result
     /// - Returns: Returns `Void` if the copy succees, `HiveError` otherwise.
-    public func copyTo(newPath: String, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+    public func copyTo(newPath: String, handleBy: ((HiveCallback<Void>) -> Void)?) -> HivePromise<Void> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<Void>(error: error)
     }
@@ -120,14 +120,14 @@ public class HiveFileHandle: Result, ResourceItem, FileItem {
     ///
     /// - Returns: Returns `Void` if the delete succees, `HiveError` otherwise.
     public func deleteItem() -> HivePromise<Void> {
-        return deleteItem(handleBy: HiveCallback<Void>())
+        return deleteItem(handleBy: nil)
     }
 
     /// Delete the current file
     ///
     /// - Parameter handleBy: The result
     /// - Returns: Returns `Void` if the delete succees, `HiveError` otherwise.
-    public func deleteItem(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+    public func deleteItem(handleBy: ((HiveCallback<Void>) -> Void)?) -> HivePromise<Void> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<Void>(error: error)
     }
@@ -137,7 +137,7 @@ public class HiveFileHandle: Result, ResourceItem, FileItem {
     /// - Parameter length: Length of each read
     /// - Returns: Returns data of a given length
     public func readData(_ length: Int) -> HivePromise<Data> {
-        return readData(length, handleBy: HiveCallback<Data>())
+        return readData(length, handleBy: nil)
     }
 
     /// Read data of specified length in sequence
@@ -146,7 +146,7 @@ public class HiveFileHandle: Result, ResourceItem, FileItem {
     ///   - length: Length of each read
     ///   - handleBy: The result
     /// - Returns: Returns data of a given length
-    public func readData(_ length: Int, handleBy: HiveCallback<Data>) -> HivePromise<Data> {
+    public func readData(_ length: Int, handleBy: ((HiveCallback<Data>) -> Void)?) -> HivePromise<Data> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<Data>(error: error)
     }
@@ -158,7 +158,7 @@ public class HiveFileHandle: Result, ResourceItem, FileItem {
     ///   - position: Start reading position
     /// - Returns: Returns the specified length of the specified location
     public func readData(_ length: Int, _ position: UInt64) -> HivePromise<Data> {
-        return readData(length, position, handleBy: HiveCallback<Data>())
+        return readData(length, position, handleBy: nil)
     }
 
     /// Read data of specified length form the specified position
@@ -168,7 +168,7 @@ public class HiveFileHandle: Result, ResourceItem, FileItem {
     ///   - position: Start reading position
     ///   - handleBy: The result
     /// - Returns: Returns the specified length of the specified location
-    public func readData(_ length: Int, _ position: UInt64, handleBy: HiveCallback<Data>) -> HivePromise<Data> {
+    public func readData(_ length: Int, _ position: UInt64, handleBy: ((HiveCallback<Data>) -> Void)?) -> HivePromise<Data> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<Data>(error: error)
     }
@@ -178,7 +178,7 @@ public class HiveFileHandle: Result, ResourceItem, FileItem {
     /// - Parameter withData: The data to be written
     /// - Returns: The length of write data
     public func writeData(withData: Data) -> HivePromise<Int32> {
-        return writeData(withData: withData, handleBy: HiveCallback<Int32>())
+        return writeData(withData: withData, handleBy: nil)
     }
 
     /// Writes local caches in sequence
@@ -187,7 +187,7 @@ public class HiveFileHandle: Result, ResourceItem, FileItem {
     ///   - withData: The data to be written
     ///   - handleBy: The result
     /// - Returns: The length of write data
-    public func writeData(withData: Data, handleBy: HiveCallback<Int32>) -> HivePromise<Int32> {
+    public func writeData(withData: Data, handleBy: ((HiveCallback<Int32>) -> Void)?) -> HivePromise<Int32> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<Int32>(error: error)
     }
@@ -199,7 +199,7 @@ public class HiveFileHandle: Result, ResourceItem, FileItem {
     ///   - position: Start writing position
     /// - Returns: The length of write data
     public func writeData(withData: Data, _ position: UInt64) -> HivePromise<Int32> {
-        return writeData(withData: withData, position, handleBy: HiveCallback<Int32>())
+        return writeData(withData: withData, position, handleBy: nil)
     }
 
     /// Writes local caches in sequence in the specified position
@@ -209,7 +209,7 @@ public class HiveFileHandle: Result, ResourceItem, FileItem {
     ///   - position: Start writing position
     ///   - handleBy: The result
     /// - Returns: The length of write data
-    public func writeData(withData: Data, _ position: UInt64, handleBy: HiveCallback<Int32>) -> HivePromise<Int32> {
+    public func writeData(withData: Data, _ position: UInt64, handleBy: ((HiveCallback<Int32>) -> Void)?) -> HivePromise<Int32> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<Int32>(error: error)
     }
@@ -218,14 +218,14 @@ public class HiveFileHandle: Result, ResourceItem, FileItem {
     ///
     /// - Returns: Returns `Void` if the data commit succeed, `HiveError` otherwise.
     public func commitData() -> HivePromise<Void> {
-        return commitData(handleBy: HiveCallback())
+        return commitData(handleBy: nil)
     }
 
     /// Submit data to the remote cloud storage.
     ///
     /// - Parameter handleBy: The result
     /// - Returns: Returns `Void` if the data commit succeed, `HiveError` otherwise.
-    public func commitData(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+    public func commitData(handleBy: ((HiveCallback<Void>) -> Void)?) -> HivePromise<Void> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<Void>(error: error)
     }

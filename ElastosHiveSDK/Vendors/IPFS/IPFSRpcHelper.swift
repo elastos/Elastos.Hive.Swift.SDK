@@ -33,10 +33,10 @@ class IPFSRpcHelper: AuthHelper {
     }
 
     override func loginAsync(_ authenticator: Authenticator) -> HivePromise<Void> {
-        return loginAsync(authenticator, handleBy: HiveCallback<Void>())
+        return loginAsync(authenticator, handleBy: nil)
     }
 
-    override func loginAsync(_ authenticator: Authenticator, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+    override func loginAsync(_ authenticator: Authenticator, handleBy: ((HiveCallback<Void>) -> Void)?) -> HivePromise<Void> {
         let promise: HivePromise = HivePromise<Void> { resolver in
             self.checkExpired().then { padding -> HivePromise<String> in
                 return self.getUID(self)
@@ -59,10 +59,10 @@ class IPFSRpcHelper: AuthHelper {
     }
 
     override func logoutAsync() -> HivePromise<Void> {
-        return logoutAsync(handleBy: HiveCallback<Void>())
+        return logoutAsync(handleBy: nil)
     }
 
-    override func logoutAsync(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+    override func logoutAsync(handleBy: ((HiveCallback<Void>) -> Void)?) -> HivePromise<Void> {
         let error = HiveError.failue(des: "TODO")
         return HivePromise<Void>(error: error)
     }

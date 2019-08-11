@@ -36,10 +36,10 @@ class OneDriveDirectory: HiveDirectoryHandle {
     }
 
     override func lastUpdatedInfo() -> HivePromise<HiveDirectoryInfo> {
-        return lastUpdatedInfo(handleBy: HiveCallback<HiveDirectoryInfo>())
+        return lastUpdatedInfo(handleBy: nil)
     }
 
-    override func lastUpdatedInfo(handleBy: HiveCallback<HiveDirectoryInfo>) -> HivePromise<HiveDirectoryInfo> {
+    override func lastUpdatedInfo(handleBy: ((HiveCallback<HiveDirectoryInfo>) -> Void)?) -> HivePromise<HiveDirectoryInfo> {
         let promise: HivePromise = HivePromise<HiveDirectoryInfo> { resolver in
             var url: String = "\(OneDriveURL.API)\(OneDriveURL.ROOT)"
             if self.pathName != "/" {
@@ -63,13 +63,17 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                HiveDirectoryInfo.childCount: String(folder["childCount"].intValue)]
                     let directoryInfo: HiveDirectoryInfo = HiveDirectoryInfo(dic)
                     self.lastInfo = directoryInfo
-                    handleBy.didSucceed(directoryInfo)
+                    if handleBy != nil {
+                        handleBy!(.success(directoryInfo))
+                    }
                     resolver.fulfill(directoryInfo)
                     Log.e(TAG(), "Acquire directory last info succeeded: \( directoryInfo.description)")
                 }
                 .catch{ error in
                     Log.e(TAG(), "Acquiring directory last info falied: \(HiveError.des(error as! HiveError))")
-                    handleBy.runError(error as! HiveError)
+                    if handleBy != nil {
+                        handleBy!(.failure(error as! HiveError))
+                    }
                     resolver.reject(error)
             }
         }
@@ -77,10 +81,10 @@ class OneDriveDirectory: HiveDirectoryHandle {
     }
 
     override func createDirectory(withName: String) -> HivePromise<HiveDirectoryHandle> {
-        return createDirectory(withName: withName, handleBy: HiveCallback<HiveDirectoryHandle>())
+        return createDirectory(withName: withName, handleBy: nil)
     }
 
-    override func createDirectory(withName: String, handleBy: HiveCallback<HiveDirectoryHandle>) ->
+    override func createDirectory(withName: String, handleBy: ((HiveCallback<HiveDirectoryHandle>) -> Void)?) ->
         HivePromise<HiveDirectoryHandle> {
             let promise: HivePromise = HivePromise<HiveDirectoryHandle> { resolver in
                 let params: Dictionary<String, Any> = [
@@ -117,14 +121,17 @@ class OneDriveDirectory: HiveDirectoryHandle {
                         dirHandle.pathName = path
                         dirHandle.lastInfo = dirInfo
                         dirHandle.drive = self.drive
-
-                        handleBy.didSucceed(dirHandle)
+                        if handleBy != nil {
+                            handleBy!(.success(dirHandle))
+                        }
                         resolver.fulfill(dirHandle)
                         Log.d(TAG(), "Creating a directory %s under this directory succeeded: \(withName)")
                     }
                     .catch{ error in
                         Log.e(TAG(), "Creating directory %s failed: \(withName)\(HiveError.des(error as! HiveError))")
-                        handleBy.runError(error as! HiveError)
+                        if handleBy != nil {
+                            handleBy!(.failure(error as! HiveError))
+                        }
                         resolver.reject(error)
                 }
             }
@@ -132,10 +139,10 @@ class OneDriveDirectory: HiveDirectoryHandle {
     }
 
     override func directoryHandle(atName: String) -> HivePromise<HiveDirectoryHandle> {
-        return directoryHandle(atName: atName, handleBy: HiveCallback<HiveDirectoryHandle>())
+        return directoryHandle(atName: atName, handleBy: nil)
     }
 
-    override func directoryHandle(atName: String, handleBy: HiveCallback<HiveDirectoryHandle>) ->
+    override func directoryHandle(atName: String, handleBy: ((HiveCallback<HiveDirectoryHandle>) -> Void)?) ->
         HivePromise<HiveDirectoryHandle> {
             let promise = HivePromise<HiveDirectoryHandle> { resolver in
                 var path: String = "\(self.pathName)/\(atName)"
@@ -165,15 +172,18 @@ class OneDriveDirectory: HiveDirectoryHandle {
                         dirHandle.pathName = path
                         dirHandle.lastInfo = dirInfo
                         dirHandle.drive = self.drive
-
-                        handleBy.didSucceed(dirHandle)
+                        if handleBy != nil {
+                            handleBy!(.success(dirHandle))
+                        }
                         resolver.fulfill(dirHandle)
 
                         Log.d(TAG(), "Acquire subdirectory %s handle succeeded: \(atName)")
                     }
                     .catch{ error in
                         Log.e(TAG(), "Acquiring subdirectory %s handle falied: \(atName)\(HiveError.des(error as! HiveError))")
-                        handleBy.runError(error as! HiveError)
+                        if handleBy != nil {
+                            handleBy!(.failure(error as! HiveError))
+                        }
                         resolver.reject(error)
                 }
             }
@@ -181,10 +191,10 @@ class OneDriveDirectory: HiveDirectoryHandle {
     }
 
     override func createFile(withName: String) -> HivePromise<HiveFileHandle> {
-        return createFile(withName: withName, handleBy: HiveCallback<HiveFileHandle>())
+        return createFile(withName: withName, handleBy: nil)
     }
 
-    override func createFile(withName: String, handleBy: HiveCallback<HiveFileHandle>) -> HivePromise<HiveFileHandle> {
+    override func createFile(withName: String, handleBy: ((HiveCallback<HiveFileHandle>) -> Void)?) -> HivePromise<HiveFileHandle> {
         let promise = HivePromise<HiveFileHandle> { resolver in
             var path = "\(self.pathName)/\(withName)"
             if self.pathName == "/" {
@@ -212,15 +222,18 @@ class OneDriveDirectory: HiveDirectoryHandle {
                     fileHandle.pathName = path
                     fileHandle.drive = self.drive
                     fileHandle.lastInfo = fileInfo
-
-                    handleBy.didSucceed(fileHandle)
+                    if handleBy != nil {
+                        handleBy!(.success(fileHandle))
+                    }
                     resolver.fulfill(fileHandle)
 
                     Log.d(TAG(), "Creating a file %s under this directory succeeded: \(withName)")
                 }
                 .catch{ error in
                     Log.e(TAG(), "Creating file %s falied: \(withName)\(HiveError.des(error as! HiveError))")
-                    handleBy.runError(error as! HiveError)
+                    if handleBy != nil {
+                        handleBy!(.failure(error as! HiveError))
+                    }
                     resolver.reject(error)
             }
         }
@@ -228,10 +241,10 @@ class OneDriveDirectory: HiveDirectoryHandle {
     }
 
     override func fileHandle(atName: String) -> HivePromise<HiveFileHandle> {
-        return fileHandle(atName: atName, handleBy: HiveCallback<HiveFileHandle>())
+        return fileHandle(atName: atName, handleBy: nil)
     }
 
-    override func fileHandle(atName: String, handleBy: HiveCallback<HiveFileHandle>) ->
+    override func fileHandle(atName: String, handleBy: ((HiveCallback<HiveFileHandle>) -> Void)?) ->
         HivePromise<HiveFileHandle> {
             let promise = HivePromise<HiveFileHandle> { resolver in
                 var path = "\(self.pathName)/\(atName)"
@@ -260,15 +273,18 @@ class OneDriveDirectory: HiveDirectoryHandle {
                         fileHandle.pathName = path
                         fileHandle.drive = self.drive
                         fileHandle.lastInfo = fileInfo
-
-                        handleBy.didSucceed(fileHandle)
+                        if handleBy != nil {
+                            handleBy!(.success(fileHandle))
+                        }
                         resolver.fulfill(fileHandle)
 
                         Log.d(TAG(), "Acquire file %s handle succeeded: \(atName)")
                     }
                     .catch{ error in
                         Log.e(TAG(), "Acquiring file %s handle falied: \(atName)\(HiveError.des(error as! HiveError))")
-                        handleBy.runError(error as! HiveError)
+                        if handleBy != nil {
+                            handleBy!(.failure(error as! HiveError))
+                        }
                         resolver.reject(error)
                 }
             }
@@ -276,10 +292,10 @@ class OneDriveDirectory: HiveDirectoryHandle {
     }
 
     override func getChildren() -> HivePromise<HiveChildren> {
-        return getChildren(handleBy: HiveCallback<HiveChildren>())
+        return getChildren(handleBy: nil)
     }
 
-    override func getChildren(handleBy: HiveCallback<HiveChildren>) -> HivePromise<HiveChildren> {
+    override func getChildren(handleBy: ((HiveCallback<HiveChildren>) -> Void)?) -> HivePromise<HiveChildren> {
         let promise = HivePromise<HiveChildren> { resolver in
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             var url = "\(OneDriveURL.API)\(OneDriveURL.ROOT):\(path):/children"
@@ -298,13 +314,17 @@ class OneDriveDirectory: HiveDirectoryHandle {
                 .done{ jsonData in
                     let children: HiveChildren = HiveChildren()
                     children.installValue(jsonData["value"], .oneDrive)
-                    handleBy.didSucceed(children)
+                    if handleBy != nil {
+                        handleBy!(.success(children))
+                    }
                     resolver.fulfill(children)
                     Log.e(TAG(), "Acquiring children infos under this directory succeeded:")
                 }
                 .catch{ error in
                     Log.e(TAG(), "Acquiring children infos under this directory falied: \(HiveError.des(error as! HiveError))")
-                    handleBy.runError(error as! HiveError)
+                    if handleBy != nil {
+                        handleBy!(.failure(error as! HiveError))
+                    }
                     resolver.reject(error)
             }
         }
@@ -312,10 +332,10 @@ class OneDriveDirectory: HiveDirectoryHandle {
     }
 
     override func moveTo(newPath: String) -> HivePromise<Void> {
-        return moveTo(newPath: newPath, handleBy: HiveCallback<Void>())
+        return moveTo(newPath: newPath, handleBy: nil)
     }
 
-    override func moveTo(newPath: String, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+    override func moveTo(newPath: String, handleBy: ((HiveCallback<Void>) -> Void)?) -> HivePromise<Void> {
         let promise = HivePromise<Void>{ resolver in
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let url = "\(OneDriveURL.API)\(OneDriveURL.ROOT):\(path)"
@@ -333,13 +353,17 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                  avalidCode: 200, self.authHelper!)
                 }
                 .done{ jsonData in
-                    handleBy.didSucceed(Void())
+                    if handleBy != nil {
+                        handleBy!(.success(Void()))
+                    }
                     resolver.fulfill(Void())
                     Log.e(TAG(), "Moving this directory to %s succeeded: \(newPath)")
                 }
                 .catch{ error in
                     Log.e(TAG(), "Moving this directory to %s failed: \(newPath)\(HiveError.des(error as! HiveError))")
-                    handleBy.runError(error as! HiveError)
+                    if handleBy != nil {
+                        handleBy!(.failure(error as! HiveError))
+                    }
                     resolver.reject(error)
             }
         }
@@ -347,10 +371,10 @@ class OneDriveDirectory: HiveDirectoryHandle {
     }
 
     override func copyTo(newPath: String) -> HivePromise<Void> {
-        return copyTo(newPath: newPath, handleBy: HiveCallback<Void>())
+        return copyTo(newPath: newPath, handleBy: nil)
     }
 
-    override func copyTo(newPath: String, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+    override func copyTo(newPath: String, handleBy: ((HiveCallback<Void>) -> Void)?) -> HivePromise<Void> {
         let promise = HivePromise<Void>{ resolver in
             let path: String = "/\(self.pathName)".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             var url = "\(OneDriveURL.API)\(OneDriveURL.ROOT):\(path):/copy"
@@ -375,13 +399,17 @@ class OneDriveDirectory: HiveDirectoryHandle {
                     return OneDriveAPIs.pollingCopyresult(urlString)
                 }
                 .done{ void in
-                    handleBy.didSucceed(Void())
+                    if handleBy != nil {
+                        handleBy!(.success(Void()))
+                    }
                     resolver.fulfill(Void())
                     Log.d(TAG(), "copyTo this directory to %s succeeded: \(newPath)")
                 }
                 .catch{ error in
                     Log.e(TAG(), "Copying this directory to %s falied: \(newPath)\(HiveError.des(error as! HiveError))")
-                    handleBy.runError(error as! HiveError)
+                    if handleBy != nil {
+                        handleBy!(.failure(error as! HiveError))
+                    }
                     resolver.reject(error)
             }
         }
@@ -389,10 +417,10 @@ class OneDriveDirectory: HiveDirectoryHandle {
     }
 
     override func deleteItem() -> HivePromise<Void> {
-        return deleteItem(handleBy: HiveCallback<Void>())
+        return deleteItem(handleBy: nil)
     }
 
-    override func deleteItem(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+    override func deleteItem(handleBy: ((HiveCallback<Void>) -> Void)?) -> HivePromise<Void> {
         let promise = HivePromise<Void>{ resolver in
             let path = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let url: String = "\(OneDriveURL.API)\(OneDriveURL.ROOT):/\(path)"
@@ -410,13 +438,17 @@ class OneDriveDirectory: HiveDirectoryHandle {
                     self.drive = nil
                     self.directoryId = ""
                     self.lastInfo = nil
-                    handleBy.didSucceed(Void())
+                    if handleBy != nil {
+                        handleBy!(.success(Void()))
+                    }
                     resolver.fulfill(Void())
                     Log.e(TAG(), "Delete the directory item succeeded")
                 }
                 .catch{ error in
                     Log.e(TAG(), "Delete this directory item failed: \(HiveError.des(error as! HiveError))")
-                    handleBy.runError(error as! HiveError)
+                    if handleBy != nil {
+                        handleBy!(.failure(error as! HiveError))
+                    }
                     resolver.reject(error)
             }
         }

@@ -102,14 +102,14 @@ public class HiveClientHandle: Result, ResourceItem{
     ///
     /// - Returns: Returns the latest update information for the subclasses
     public func lastUpdatedInfo() -> HivePromise<resourceType> {
-        return lastUpdatedInfo(handleBy: HiveCallback<resourceType>())
+        return lastUpdatedInfo(handleBy: nil)
     }
 
     /// Last update for HiveClientHandle subclasses
     ///
     /// - Parameter handleBy: the result of returns
     /// - Returns: Returns the latest update information for the subclasses
-    public func lastUpdatedInfo(handleBy: HiveCallback<resourceType>) -> HivePromise<resourceType> {
+    public func lastUpdatedInfo(handleBy: ((HiveCallback<resourceType>) -> Void)?) -> HivePromise<resourceType> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<resourceType>(error: error)
     }
@@ -118,14 +118,14 @@ public class HiveClientHandle: Result, ResourceItem{
     ///
     /// - Returns: Returns singleton instance for subclasses
     public func defaultDriveHandle() -> HivePromise<HiveDriveHandle> {
-        return defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>())
+        return defaultDriveHandle(handleBy: nil)
     }
 
     /// Creates a default HiveDriveHandle for subclasses
     ///
     /// - Parameter handleBy: the result of returns
     /// - Returns: Returns singleton instance for subclasses
-    public func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> HivePromise<HiveDriveHandle> {
+    public func defaultDriveHandle(handleBy: ((HiveCallback<HiveDriveHandle>) -> Void)?) -> HivePromise<HiveDriveHandle> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<HiveDriveHandle>(error: error)
     }

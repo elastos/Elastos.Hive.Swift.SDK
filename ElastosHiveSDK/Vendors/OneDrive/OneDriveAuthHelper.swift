@@ -35,16 +35,18 @@ internal class OneDriveAuthHelper: AuthHelper {
     }
 
     override func loginAsync(_ authenticator: Authenticator) -> HivePromise<Void> {
-        return loginAsync(authenticator, handleBy: HiveCallback<Void>())
+        return loginAsync(authenticator, handleBy: nil)
     }
 
-    override func loginAsync(_ authenticator: Authenticator, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+    override func loginAsync(_ authenticator: Authenticator, handleBy: ((HiveCallback<Void>) -> Void)?) -> HivePromise<Void> {
         token = KeyChainStore.restoreToken(.oneDrive)
         guard token == nil else {
             let promise = HivePromise<Void> { resolver in
                 Log.d(TAG(), "OneDrive already logined")
                 authEntry = KeyChainStore.restoreAuthEntry(.oneDrive)!
-                handleBy.didSucceed(Void())
+                if handleBy != nil {
+                    handleBy!(.success(Void()))
+                }
                 resolver.fulfill(Void())
             }
             return promise
@@ -56,11 +58,15 @@ internal class OneDriveAuthHelper: AuthHelper {
                     return self.acquireAccessToken(authCode)
                 }.done { padding in
                     Log.d(TAG(), "Login succeed")
-                    handleBy.didSucceed(padding)
+                    if handleBy != nil {
+                        handleBy!(.success(padding))
+                    }
                     resolver.fulfill(padding)
                 }.catch { error in
                     Log.e(TAG(), "Login faild: \(HiveError.des(error as! HiveError))")
-                    handleBy.runError(error as! HiveError)
+                    if handleBy != nil {
+                        handleBy!(.failure(error as! HiveError))
+                    }
                     resolver.reject(error)
             }
         }
@@ -68,10 +74,10 @@ internal class OneDriveAuthHelper: AuthHelper {
     }
 
     override func logoutAsync() -> HivePromise<Void> {
-        return logoutAsync(handleBy: HiveCallback<Void>())
+        return logoutAsync(handleBy: nil)
     }
 
-    override func logoutAsync(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+    override func logoutAsync(handleBy: ((HiveCallback<Void>) -> Void)?) -> HivePromise<Void> {
         let promise: HivePromise = HivePromise<Void> { resolver in
             let url: String = "\(OneDriveURL.AUTH)\(ONEDRIVE_SUB_Url.ONEDRIVE_LOGOUT.rawValue)?post_logout_redirect_uri=\(authEntry.redirectURL)"
 
@@ -85,12 +91,16 @@ internal class OneDriveAuthHelper: AuthHelper {
                     Log.d(TAG(), "Logout succeed")
                     self.token = nil
                     KeyChainStore.removeback(authEntry: self.authEntry, forDrive: .oneDrive)
-                    handleBy.didSucceed(Void())
+                    if handleBy != nil {
+                        handleBy!(.success(Void()))
+                    }
                     resolver.fulfill(Void())
                 }
                 .catch { error in
                     Log.e(TAG(), "Logout faild: \(HiveError.des(error as! HiveError))")
-                    handleBy.runError(error as! HiveError)
+                    if handleBy != nil {
+                        handleBy!(.failure(error as! HiveError))
+                    }
                     resolver.reject(error)
             }
         }

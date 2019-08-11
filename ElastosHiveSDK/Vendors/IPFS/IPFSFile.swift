@@ -38,10 +38,10 @@ internal class IPFSFile: HiveFileHandle {
     }
 
     override func lastUpdatedInfo() -> HivePromise<HiveFileInfo> {
-        return lastUpdatedInfo(handleBy: HiveCallback<HiveFileInfo>())
+        return lastUpdatedInfo(handleBy: nil)
     }
 
-    override func lastUpdatedInfo(handleBy: HiveCallback<HiveFileInfo>) -> HivePromise<HiveFileInfo> {
+    override func lastUpdatedInfo(handleBy: ((HiveCallback<HiveFileInfo>) -> Void)?) -> HivePromise<HiveFileInfo> {
         let promise: HivePromise = HivePromise<HiveFileInfo> { resolver in
             let url: String = "\((authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_STAT.rawValue)"
             let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid
@@ -58,12 +58,16 @@ internal class IPFSFile: HiveFileHandle {
                                HiveFileInfo.size: String(jsonData["Size"].uInt64Value)]
                     let fileInfo: HiveFileInfo = HiveFileInfo(dic)
                     self.lastInfo = fileInfo
-                    handleBy.didSucceed(fileInfo)
+                    if handleBy != nil {
+                        handleBy!(.success(fileInfo))
+                    }
                     resolver.fulfill(fileInfo)
                 }
                 .catch{ error in
                     Log.e(TAG(), "lastUpdatedInfo falied: \(HiveError.des(error as! HiveError))")
-                    handleBy.runError(error as! HiveError)
+                    if handleBy != nil {
+                        handleBy!(.failure(error as! HiveError))
+                    }
                     resolver.reject(error)
             }
         }
@@ -71,10 +75,10 @@ internal class IPFSFile: HiveFileHandle {
     }
 
     override func moveTo(newPath: String) -> HivePromise<Void> {
-        return moveTo(newPath: newPath, handleBy: HiveCallback<Void>())
+        return moveTo(newPath: newPath, handleBy: nil)
     }
 
-    override func moveTo(newPath: String, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+    override func moveTo(newPath: String, handleBy: ((HiveCallback<Void>) -> Void)?) -> HivePromise<Void> {
         let promise: HivePromise = HivePromise<Void> { resolver in
             let url: String = "\((authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_MV.rawValue)"
             let uid: String = (authHelper as! IPFSRpcHelper).param.entry.uid
@@ -90,11 +94,15 @@ internal class IPFSFile: HiveFileHandle {
                     return IPFSAPIs.publish(hash, self.authHelper)
                 }.done{ success in
                     Log.d(TAG(), "moveTo succeed")
-                    handleBy.didSucceed(Void())
+                    if handleBy != nil {
+                        handleBy!(.success(Void()))
+                    }
                     resolver.fulfill(Void())
                 }.catch{ error in
                     Log.e(TAG(), "moveTo falied: \(HiveError.des(error as! HiveError))")
-                    handleBy.runError(error as! HiveError)
+                    if handleBy != nil {
+                        handleBy!(.failure(error as! HiveError))
+                    }
                     resolver.reject(error)
                 }
         }
@@ -102,10 +110,10 @@ internal class IPFSFile: HiveFileHandle {
     }
 
     override func copyTo(newPath: String) -> HivePromise<Void> {
-        return copyTo(newPath: newPath, handleBy: HiveCallback<Void>())
+        return copyTo(newPath: newPath, handleBy: nil)
     }
 
-    override func copyTo(newPath: String, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+    override func copyTo(newPath: String, handleBy: ((HiveCallback<Void>) -> Void)?) -> HivePromise<Void> {
         let promise: HivePromise = HivePromise<Void> { resolver in
 
             let originPath: String = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
@@ -128,12 +136,16 @@ internal class IPFSFile: HiveFileHandle {
                 }
                 .done{ success in
                     Log.d(TAG(), "copyTo succeed")
-                    handleBy.didSucceed(Void())
+                    if handleBy != nil {
+                        handleBy!(.success(Void()))
+                    }
                     resolver.fulfill(Void())
                 }
                 .catch{ error in
                     Log.e(TAG(), "copyTo falied: \(HiveError.des(error as! HiveError))")
-                    handleBy.runError(error as! HiveError)
+                    if handleBy != nil {
+                        handleBy!(.failure(error as! HiveError))
+                    }
                     resolver.reject(error)
             }
         }
@@ -141,10 +153,10 @@ internal class IPFSFile: HiveFileHandle {
     }
 
     override func deleteItem() -> HivePromise<Void> {
-        return deleteItem(handleBy: HiveCallback<Void>())
+        return deleteItem(handleBy: nil)
     }
 
-    override func deleteItem(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+    override func deleteItem(handleBy: ((HiveCallback<Void>) -> Void)?) -> HivePromise<Void> {
         let promise: HivePromise = HivePromise<Void> { resolver in
             let url: String = "\((authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_RM.rawValue)"
             let uid: String = (authHelper as! IPFSRpcHelper).param.entry.uid
@@ -162,12 +174,16 @@ internal class IPFSFile: HiveFileHandle {
                 }
                 .done{ success in
                     Log.d(TAG(), "deleteItem succeed")
-                    handleBy.didSucceed(success)
+                    if handleBy != nil {
+                        handleBy!(.success(success))
+                    }
                     resolver.fulfill(success)
                 }
                 .catch{ error in
                     Log.e(TAG(), "deleteItem falied: \(HiveError.des(error as! HiveError))")
-                    handleBy.runError(error as! HiveError)
+                    if handleBy != nil {
+                        handleBy!(.failure(error as! HiveError))
+                    }
                     resolver.reject(error)
             }
         }
@@ -175,14 +191,16 @@ internal class IPFSFile: HiveFileHandle {
     }
 
     override func readData(_ length: Int) -> HivePromise<Data> {
-        return readData(length, handleBy: HiveCallback<Data>())
+        return readData(length, handleBy: nil)
     }
 
-    override func readData(_ length: Int, handleBy: HiveCallback<Data>) -> HivePromise<Data> {
+    override func readData(_ length: Int, handleBy: ((HiveCallback<Data>) -> Void)?) -> HivePromise<Data> {
         let promise: HivePromise = HivePromise<Data> { resolver in
             if finish {
                 Log.e(TAG(), "The file has been read finished")
-                handleBy.didSucceed(Data())
+                if handleBy != nil {
+                    handleBy!(.success(Data()))
+                }
                 resolver.fulfill(Data())
                 return
             }
@@ -195,7 +213,9 @@ internal class IPFSFile: HiveFileHandle {
                 let data: Data = CacheHelper.readCache((drive as! IPFSDrive).param!.keyStorePath, cachePath, cursor, length)
                 cursor = cursor + UInt64(data.count)
                 resolver.fulfill(data)
-                handleBy.didSucceed(data)
+                if handleBy != nil {
+                    handleBy!(.success(data))
+                }
                 if data.count == 0 {
                     cursor = 0
                     finish = true
@@ -212,11 +232,15 @@ internal class IPFSFile: HiveFileHandle {
                     }
                     self.cursor = self.cursor + UInt64(readData.count)
                     Log.d(TAG(), "readData succeed")
-                    handleBy.didSucceed(readData)
+                    if handleBy != nil {
+                        handleBy!(.success(readData))
+                    }
                     resolver.fulfill(readData)
                 }.catch{ error in
                     Log.e(TAG(), "readData falied: \(HiveError.des(error as! HiveError))")
-                    handleBy.runError(error as! HiveError)
+                    if handleBy != nil {
+                        handleBy!(.failure(error as! HiveError))
+                    }
                     resolver.reject(error)
                 }
         }
@@ -224,10 +248,10 @@ internal class IPFSFile: HiveFileHandle {
     }
 
     override func readData(_ length: Int, _ position: UInt64) -> HivePromise<Data> {
-       return readData(length, position, handleBy: HiveCallback<Data>())
+       return readData(length, position, handleBy: nil)
     }
 
-    override func readData(_ length: Int, _ position: UInt64, handleBy: HiveCallback<Data>) -> HivePromise<Data> {
+    override func readData(_ length: Int, _ position: UInt64, handleBy: ((HiveCallback<Data>) -> Void)?) -> HivePromise<Data> {
         let promise: HivePromise = HivePromise<Data> { resolver in
             let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid
             let path: String = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
@@ -237,7 +261,9 @@ internal class IPFSFile: HiveFileHandle {
             if file {
                 let data: Data = CacheHelper.readCache((drive as! IPFSDrive).param!.keyStorePath, cachePath, position, length)
                 cursor += UInt64(data.count)
-                handleBy.didSucceed(data)
+                if handleBy != nil {
+                    handleBy!(.success(data))
+                }
                 resolver.fulfill(data)
                 return
             }
@@ -251,11 +277,15 @@ internal class IPFSFile: HiveFileHandle {
                         self.cursor += UInt64(readData.count)
                     }
                     Log.d(TAG(), "readData succeed")
-                    handleBy.didSucceed(readData)
+                    if handleBy != nil {
+                        handleBy!(.success(readData))
+                    }
                     resolver.fulfill(readData)
                 }.catch{ error in
                     Log.e(TAG(), "readData falied: \(HiveError.des(error as! HiveError))")
-                    handleBy.runError(error as! HiveError)
+                    if handleBy != nil {
+                        handleBy!(.failure(error as! HiveError))
+                    }
                     resolver.reject(error)
                 }
         }
@@ -263,10 +293,10 @@ internal class IPFSFile: HiveFileHandle {
     }
 
     override func writeData(withData: Data) -> HivePromise<Int32> {
-        return writeData(withData: withData, handleBy: HiveCallback<Int32>())
+        return writeData(withData: withData, handleBy: nil)
     }
 
-    override func writeData(withData: Data, handleBy: HiveCallback<Int32>) -> HivePromise<Int32> {
+    override func writeData(withData: Data, handleBy: ((HiveCallback<Int32>) -> Void)?) -> HivePromise<Int32> {
         let promise: HivePromise = HivePromise<Int32> { resolver in
             let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid
             let path: String = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
@@ -275,7 +305,9 @@ internal class IPFSFile: HiveFileHandle {
             let file: Bool = CacheHelper.checkCacheFileIsExist((drive as! IPFSDrive).param!.keyStorePath, cachePath)
             if file {
                 let length = CacheHelper.writeCache((drive as! IPFSDrive).param!.keyStorePath, cachePath, data: withData, 0, true)
-                handleBy.didSucceed(length)
+                if handleBy != nil {
+                    handleBy!(.success(length))
+                }
                 resolver.fulfill(length)
                 return
             }
@@ -289,12 +321,16 @@ internal class IPFSFile: HiveFileHandle {
                     _ = CacheHelper.saveCache((self.drive as! IPFSDrive).param!.keyStorePath, cachePath, data: data)
                     let length = CacheHelper.writeCache((self.drive as! IPFSDrive).param!.keyStorePath, cachePath, data: withData, 0, true)
                     Log.d(TAG(), "writeData succeed")
-                    handleBy.didSucceed(length)
+                    if handleBy != nil {
+                        handleBy!(.success(length))
+                    }
                     resolver.fulfill(length)
                 }
                 .catch{ error in
                     Log.e(TAG(), "writeData falied: \(HiveError.des(error as! HiveError))")
-                    handleBy.runError(error as! HiveError)
+                    if handleBy != nil {
+                        handleBy!(.failure(error as! HiveError))
+                    }
                     resolver.reject(error)
             }
         }
@@ -302,10 +338,10 @@ internal class IPFSFile: HiveFileHandle {
     }
 
     override func writeData(withData: Data, _ position: UInt64) -> HivePromise<Int32> {
-        return writeData(withData: withData, position, handleBy: HiveCallback<Int32>())
+        return writeData(withData: withData, position, handleBy: nil)
     }
 
-    override func writeData(withData: Data, _ position: UInt64, handleBy: HiveCallback<Int32>) -> HivePromise<Int32> {
+    override func writeData(withData: Data, _ position: UInt64, handleBy: ((HiveCallback<Int32>) -> Void)?) -> HivePromise<Int32> {
         let promise: HivePromise = HivePromise<Int32> { resolver in
             let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid
             let path: String = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
@@ -314,7 +350,9 @@ internal class IPFSFile: HiveFileHandle {
             let file: Bool = CacheHelper.checkCacheFileIsExist((drive as! IPFSDrive).param!.keyStorePath, cachePath)
             if file {
                 let length = CacheHelper.writeCache((drive as! IPFSDrive).param!.keyStorePath, cachePath, data: withData, position, false)
-                handleBy.didSucceed(length)
+                if handleBy != nil {
+                    handleBy!(.success(length))
+                }
                 resolver.fulfill(length)
                 return
             }
@@ -328,12 +366,16 @@ internal class IPFSFile: HiveFileHandle {
                     _ = CacheHelper.saveCache((self.drive as! IPFSDrive).param!.keyStorePath, cachePath, data: data)
                     let length = CacheHelper.writeCache((self.drive as! IPFSDrive).param!.keyStorePath, cachePath, data: withData, position, false)
                     Log.d(TAG(), "writeData succeed")
-                    handleBy.didSucceed(length)
+                    if handleBy != nil {
+                        handleBy!(.success(length))
+                    }
                     resolver.fulfill(length)
                 }
                 .catch{ error in
                     Log.e(TAG(), "writeData falied: \(HiveError.des(error as! HiveError))")
-                    handleBy.runError(error as! HiveError)
+                    if handleBy != nil {
+                        handleBy!(.failure(error as! HiveError))
+                    }
                     resolver.reject(error)
             }
         }
@@ -341,10 +383,10 @@ internal class IPFSFile: HiveFileHandle {
     }
 
     override func commitData() -> HivePromise<Void> {
-        return commitData(handleBy: HiveCallback<Void>())
+        return commitData(handleBy: nil)
     }
 
-    override func commitData(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+    override func commitData(handleBy: ((HiveCallback<Void>) -> Void)?) -> HivePromise<Void> {
         let promise: HivePromise = HivePromise<Void> { resolver in
             let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid
             let path: String = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
@@ -361,12 +403,16 @@ internal class IPFSFile: HiveFileHandle {
                 }
                 .done{ success in
                     Log.d(TAG(), "writeData succeed")
-                    handleBy.didSucceed(Void())
+                    if handleBy != nil {
+                        handleBy!(.success(Void()))
+                    }
                     resolver.fulfill(Void())
                 }
                 .catch{ error in
                     Log.e(TAG(), "writeData falied: \(HiveError.des(error as! HiveError))")
-                    handleBy.runError(error as! HiveError)
+                    if handleBy != nil {
+                        handleBy!(.failure(error as! HiveError))
+                    }
                     resolver.reject(error)
             }
         }

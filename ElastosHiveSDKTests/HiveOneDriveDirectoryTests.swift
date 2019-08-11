@@ -45,6 +45,21 @@ class HiveOneDriveDirectoryTests: XCTestCase {
         wait(for: [lock!], timeout: timeout)
     }
 
+    func testCallback() {
+        //    login
+        lock = XCTestExpectation(description: "wait for test login.")
+        OneDriveCommon().login(lock!, hiveClient: self.hiveClient!)
+
+        // 1. nonarm create
+        timeTest = Timestamp.getTimeAtNow()
+        lock = XCTestExpectation(description: "wait for nonarm create")
+        self.hiveClient?.defaultDriveHandle(handleBy: { hdHandle in
+            print(hdHandle)
+            self.lock?.fulfill()
+        })
+        wait(for: [lock!], timeout: timeout)
+    }
+
     func testCreateDirectory() {
         //    login
         lock = XCTestExpectation(description: "wait for test login.")

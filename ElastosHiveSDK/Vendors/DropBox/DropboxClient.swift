@@ -43,19 +43,19 @@ internal class DropboxClient: HiveClientHandle {
     }
 
     override func lastUpdatedInfo() -> HivePromise<HiveClientInfo> {
-        return lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>())
+        return lastUpdatedInfo(handleBy: nil)
     }
 
-    override func lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>) -> HivePromise<HiveClientInfo> {
+    override func lastUpdatedInfo(handleBy: ((HiveCallback<HiveClientInfo>) -> Void)?) -> HivePromise<HiveClientInfo> {
         let error = HiveError.failue(des: "TODO")
         return HivePromise<HiveClientInfo>(error: error)
     }
 
     override func defaultDriveHandle() -> HivePromise<HiveDriveHandle> {
-        return defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>())
+        return defaultDriveHandle(handleBy: nil)
     }
 
-    override func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> HivePromise<HiveDriveHandle> {
+    override func defaultDriveHandle(handleBy: ((HiveCallback<HiveDriveHandle>) -> Void)?) -> HivePromise<HiveDriveHandle> {
         let error = HiveError.failue(des: "TODO")
         return HivePromise<HiveDriveHandle>(error: error)
     }

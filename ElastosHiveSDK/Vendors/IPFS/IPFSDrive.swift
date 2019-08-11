@@ -41,10 +41,10 @@ internal class IPFSDrive: HiveDriveHandle {
     }
 
     override func lastUpdatedInfo() -> HivePromise<HiveDriveInfo> {
-        return lastUpdatedInfo(handleBy: HiveCallback<HiveDriveInfo>())
+        return lastUpdatedInfo(handleBy: nil)
     }
 
-    override func lastUpdatedInfo(handleBy: HiveCallback<HiveDriveInfo>) -> HivePromise<HiveDriveInfo> {
+    override func lastUpdatedInfo(handleBy: ((HiveCallback<HiveDriveInfo>) -> Void)?) -> HivePromise<HiveDriveInfo> {
         let promise: HivePromise = HivePromise<HiveDriveInfo> { resolver in
             let url: String = "\((authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_STAT.rawValue)"
             let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid
@@ -59,12 +59,16 @@ internal class IPFSDrive: HiveDriveHandle {
                     let dic: Dictionary<String, String> = [HiveDriveInfo.driveId: uid]
                     let driveInfo: HiveDriveInfo = HiveDriveInfo(dic)
                     self.lastInfo = driveInfo
-                    handleBy.didSucceed(driveInfo)
+                    if handleBy != nil {
+                        handleBy!(.success(driveInfo))
+                    }
                     resolver.fulfill(driveInfo)
                 }
                 .catch{ error in
                     Log.e(TAG(), "lastUpdatedInfo falied: \(HiveError.des(error as! HiveError))")
-                    handleBy.runError(error as! HiveError)
+                    if handleBy != nil {
+                        handleBy!(.failure(error as! HiveError))
+                    }
                     resolver.reject(error)
             }
         }
@@ -72,10 +76,10 @@ internal class IPFSDrive: HiveDriveHandle {
     }
 
     override func rootDirectoryHandle() -> HivePromise<HiveDirectoryHandle> {
-        return rootDirectoryHandle(handleBy: HiveCallback<HiveDirectoryHandle>())
+        return rootDirectoryHandle(handleBy: nil)
     }
 
-    override func rootDirectoryHandle(handleBy: HiveCallback<HiveDirectoryHandle>) ->
+    override func rootDirectoryHandle(handleBy: ((HiveCallback<HiveDirectoryHandle>) -> Void)?) ->
         HivePromise<HiveDirectoryHandle> {
             let promise: HivePromise = HivePromise<HiveDirectoryHandle> { resolver in
                 let url: String = "\((authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_LS.rawValue)"
@@ -97,12 +101,16 @@ internal class IPFSDrive: HiveDriveHandle {
                         directoryHandle.lastInfo = directoryInfo
                         directoryHandle.pathName = "/"
                         directoryHandle.drive = self
-                        handleBy.didSucceed(directoryHandle)
+                        if handleBy != nil {
+                            handleBy!(.success(directoryHandle))
+                        }
                         resolver.fulfill(directoryHandle)
                     }
                     .catch{ error in
                         Log.e(TAG(), "rootDirectoryHandle falied: \(HiveError.des(error as! HiveError))")
-                        handleBy.runError(error as! HiveError)
+                        if handleBy != nil {
+                            handleBy!(.failure(error as! HiveError))
+                        }
                         resolver.reject(error)
                 }
             }
@@ -111,10 +119,10 @@ internal class IPFSDrive: HiveDriveHandle {
 
     override func createDirectory(withPath: String) -> HivePromise<HiveDirectoryHandle> {
         return createDirectory(withPath: withPath,
-                               handleBy: HiveCallback<HiveDirectoryHandle>())
+                               handleBy: nil)
     }
 
-    override func createDirectory(withPath: String, handleBy: HiveCallback<HiveDirectoryHandle>) ->
+    override func createDirectory(withPath: String, handleBy: ((HiveCallback<HiveDirectoryHandle>) -> Void)?) ->
         HivePromise<HiveDirectoryHandle> {
             let promise: HivePromise = HivePromise<HiveDirectoryHandle> { resolver in
                 let url: String = "\((authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_MKDIR.rawValue)"
@@ -139,11 +147,15 @@ internal class IPFSDrive: HiveDriveHandle {
                         directoryHandle.lastInfo = directoryInfo
                         directoryHandle.pathName = withPath
                         directoryHandle.drive = self
-                        handleBy.didSucceed(directoryHandle)
+                        if handleBy != nil {
+                            handleBy!(.success(directoryHandle))
+                        }
                         resolver.fulfill(directoryHandle)
                     }.catch{ error in
                         Log.e(TAG(), "createDirectory falied: \(HiveError.des(error as! HiveError))")
-                        handleBy.runError(error as! HiveError)
+                        if handleBy != nil {
+                            handleBy!(.failure(error as! HiveError))
+                        }
                         resolver.reject(error)
                 }
             }
@@ -152,10 +164,10 @@ internal class IPFSDrive: HiveDriveHandle {
 
     override func directoryHandle(atPath: String) -> HivePromise<HiveDirectoryHandle> {
         return directoryHandle(atPath: atPath,
-                               handleBy: HiveCallback<HiveDirectoryHandle>())
+                               handleBy: nil)
     }
 
-    override func directoryHandle(atPath: String, handleBy: HiveCallback<HiveDirectoryHandle>) ->
+    override func directoryHandle(atPath: String, handleBy: ((HiveCallback<HiveDirectoryHandle>) -> Void)?) ->
         HivePromise<HiveDirectoryHandle> {
 
             let promise: HivePromise = HivePromise<HiveDirectoryHandle> { resolver in
@@ -178,12 +190,16 @@ internal class IPFSDrive: HiveDriveHandle {
                         directoryHandle.lastInfo = directoryInfo
                         directoryHandle.pathName = atPath
                         directoryHandle.drive = self
-                        handleBy.didSucceed(directoryHandle)
+                        if handleBy != nil {
+                            handleBy!(.success(directoryHandle))
+                        }
                         resolver.fulfill(directoryHandle)
                     }
                     .catch{ error in
                         Log.e(TAG(), "directoryHandle falied: \(HiveError.des(error as! HiveError))")
-                        handleBy.runError(error as! HiveError)
+                        if handleBy != nil {
+                            handleBy!(.failure(error as! HiveError))
+                        }
                         resolver.reject(error)
                 }
             }
@@ -192,10 +208,10 @@ internal class IPFSDrive: HiveDriveHandle {
 
     override func createFile(withPath: String) -> HivePromise<HiveFileHandle> {
         return createFile(withPath: withPath,
-                          handleBy: HiveCallback<HiveFileHandle>())
+                          handleBy: nil)
     }
 
-    override func createFile(withPath: String, handleBy: HiveCallback<HiveFileHandle>) ->
+    override func createFile(withPath: String, handleBy: ((HiveCallback<HiveFileHandle>) -> Void)?) ->
         HivePromise<HiveFileHandle> {
             let path: String = withPath.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let promise: HivePromise = HivePromise<HiveFileHandle> { resolver in
@@ -220,12 +236,16 @@ internal class IPFSDrive: HiveDriveHandle {
                         fileHandle.pathName = withPath
                         fileHandle.lastInfo = fileInfo
                         fileHandle.drive = self
-                        handleBy.didSucceed(fileHandle)
+                        if handleBy != nil {
+                            handleBy!(.success(fileHandle))
+                        }
                         resolver.fulfill(fileHandle)
                     }
                     .catch{ error in
                         Log.e(TAG(), "directoryHandle falied: \(HiveError.des(error as! HiveError))")
-                        handleBy.runError(error as! HiveError)
+                        if handleBy != nil {
+                            handleBy!(.failure(error as! HiveError))
+                        }
                         resolver.reject(error)
                 }
             }
@@ -233,10 +253,10 @@ internal class IPFSDrive: HiveDriveHandle {
     }
 
     override func fileHandle(atPath: String) -> HivePromise<HiveFileHandle> {
-        return fileHandle(atPath: atPath, handleBy: HiveCallback<HiveFileHandle>())
+        return fileHandle(atPath: atPath, handleBy: nil)
     }
 
-    override func fileHandle(atPath: String, handleBy: HiveCallback<HiveFileHandle>) ->
+    override func fileHandle(atPath: String, handleBy: ((HiveCallback<HiveFileHandle>) -> Void)?) ->
         HivePromise<HiveFileHandle> {
             let promise: HivePromise = HivePromise<HiveFileHandle> { resolver in
                 let url: String = "\((authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_STAT.rawValue)"
@@ -260,12 +280,16 @@ internal class IPFSDrive: HiveDriveHandle {
                         let pathName: String = "/\(PathExtracter(atPath).baseNamePart()).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)"
                         let url: String = "\((self.authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_READ.rawValue)?uid=\(uid)&path=\(pathName)"
                         _ = CacheHelper.clearCache(self.param!.keyStorePath, url.md5)
-                        handleBy.didSucceed(fileHandle)
+                        if handleBy != nil {
+                            handleBy!(.success(fileHandle))
+                        }
                         resolver.fulfill(fileHandle)
                     }
                     .catch{ error in
                         Log.e(TAG(), "fileHandle falied: \(HiveError.des(error as! HiveError))")
-                        handleBy.runError(error as! HiveError)
+                        if handleBy != nil {
+                            handleBy!(.failure(error as! HiveError))
+                        }
                         resolver.reject(error)
                 }
             }
@@ -273,10 +297,10 @@ internal class IPFSDrive: HiveDriveHandle {
     }
 
     override func getItemInfo(_ path: String) -> HivePromise<HiveItemInfo> {
-        return getItemInfo(path, handleBy: HiveCallback<HiveItemInfo>())
+        return getItemInfo(path, handleBy: nil)
     }
 
-    override func getItemInfo(_ path: String, handleBy: HiveCallback<HiveItemInfo>) -> HivePromise<HiveItemInfo> {
+    override func getItemInfo(_ path: String, handleBy: ((HiveCallback<HiveItemInfo>) -> Void)?) -> HivePromise<HiveItemInfo> {
         let promise: HivePromise = HivePromise<HiveItemInfo> { resolver in
             let url: String = "\((authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_STAT.rawValue)"
             let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid
@@ -293,12 +317,16 @@ internal class IPFSDrive: HiveDriveHandle {
                                HiveItemInfo.size: String(jsonData["Size"].uInt64Value),
                                HiveItemInfo.type: jsonData["Type"].stringValue]
                     let itemInfo: HiveItemInfo = HiveItemInfo(dic)
-                    handleBy.didSucceed(itemInfo)
+                    if handleBy != nil {
+                        handleBy!(.success(itemInfo))
+                    }
                     resolver.fulfill(itemInfo)
                 }
                 .catch{ error in
                     Log.e(TAG(), "getItemInfo falied: \(HiveError.des(error as! HiveError))")
-                    handleBy.runError(error as! HiveError)
+                    if handleBy != nil {
+                        handleBy!(.failure(error as! HiveError))
+                    }
                     resolver.reject(error)
             }
         }

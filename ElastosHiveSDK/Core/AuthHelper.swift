@@ -31,7 +31,7 @@ internal class AuthHelper: NSObject {
     ///   implement related delegate for authorization
     /// - Returns:  Returns `Void` if the login succees, `HiveError` otherwise.
     func loginAsync(_ authenticator: Authenticator) -> HivePromise<Void> {
-        return loginAsync(authenticator, handleBy: HiveCallback<Void>())
+        return loginAsync(authenticator, handleBy: nil)
     }
     
     /// Login async with authenticator
@@ -40,7 +40,7 @@ internal class AuthHelper: NSObject {
     ///   implement related delegate for authorization
     /// - Parameter handleBy: The result of returns
     /// - Returns:  Returns `Void` if the login succees, `HiveError` otherwise.
-    func loginAsync(_ authenticator: Authenticator, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+    func loginAsync(_ authenticator: Authenticator, handleBy: ((HiveCallback<Void>) -> Void)?) -> HivePromise<Void> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<Void>(error: error)
     }
@@ -49,13 +49,13 @@ internal class AuthHelper: NSObject {
     ///
     /// - Returns:  Returns `Void` if the logout succees, `HiveError` otherwise.
     func logoutAsync() -> HivePromise<Void> {
-        return logoutAsync(handleBy: HiveCallback<Void>())
+        return logoutAsync(handleBy: nil)
     }
 
     /// logout with account
     ///
     /// - Returns:  Returns `Void` if the logout succees, `HiveError` otherwise.
-    func logoutAsync(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+    func logoutAsync(handleBy: ((HiveCallback<Void>) -> Void)?) -> HivePromise<Void> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<Void>(error: error)
     }

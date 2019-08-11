@@ -27,72 +27,72 @@ protocol DirectoryItem {}
 
 extension DirectoryItem{
     public func createDirectory(withPath: String) -> HivePromise<HiveDirectoryHandle> {
-        return createDirectory(withPath: withPath, handleBy: HiveCallback<HiveDirectoryHandle>())
+        return createDirectory(withPath: withPath, handleBy: nil)
     }
-    public func createDirectory(withPath: String, handleBy: HiveCallback<HiveDirectoryHandle>)
+    public func createDirectory(withPath: String, handleBy: ((HiveCallback<HiveDirectoryHandle>) -> Void)?)
         -> HivePromise<HiveDirectoryHandle>{
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<HiveDirectoryHandle>(error: error)
     }
 
     public func directoryHandle(atPath: String) -> HivePromise<HiveDirectoryHandle>{
-        return directoryHandle(atPath: atPath, handleBy: HiveCallback<HiveDirectoryHandle>())
+        return directoryHandle(atPath: atPath, handleBy: nil)
     }
-    public func directoryHandle(atPath: String, handleBy: HiveCallback<HiveDirectoryHandle>)
+    public func directoryHandle(atPath: String, handleBy: ((HiveCallback<HiveDirectoryHandle>) -> Void)?)
         -> HivePromise<HiveDirectoryHandle>{
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<HiveDirectoryHandle>(error: error)
     }
 
     public func createFile(withPath: String) -> HivePromise<HiveFileHandle>{
-        return createFile(withPath: withPath, handleBy: HiveCallback<HiveFileHandle>())
+        return createFile(withPath: withPath, handleBy: nil)
     }
-    public func createFile(withPath: String, handleBy: HiveCallback<HiveFileHandle>)
+    public func createFile(withPath: String, handleBy: ((HiveCallback<HiveFileHandle>) -> Void)?)
         -> HivePromise<HiveFileHandle>{
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<HiveFileHandle>(error: error)
     }
 
     public func fileHandle(atPath: String) -> HivePromise<HiveFileHandle>{
-        return fileHandle(atPath: atPath, handleBy: HiveCallback<HiveFileHandle>())
+        return fileHandle(atPath: atPath, handleBy: nil)
     }
-    public func fileHandle(atPath: String, handleBy: HiveCallback<HiveFileHandle>)
+    public func fileHandle(atPath: String, handleBy: ((HiveCallback<HiveFileHandle>) -> Void)?)
         -> HivePromise<HiveFileHandle>{
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<HiveFileHandle>(error: error)
     }
 
     public func createDirectory(withName: String) -> HivePromise<HiveDirectoryHandle>{
-        return createDirectory(withName: withName, handleBy: HiveCallback<HiveDirectoryHandle>())
+        return createDirectory(withName: withName, handleBy: nil)
     }
-    public func createDirectory(withName: String, handleBy: HiveCallback<HiveDirectoryHandle>)
+    public func createDirectory(withName: String, handleBy: ((HiveCallback<HiveDirectoryHandle>) -> Void)?)
         -> HivePromise<HiveDirectoryHandle>{
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<HiveDirectoryHandle>(error: error)
     }
 
     public func directoryHandle(atName: String) -> HivePromise<HiveDirectoryHandle>{
-        return directoryHandle(atName: atName, handleBy: HiveCallback<HiveDirectoryHandle>())
+        return directoryHandle(atName: atName, handleBy: nil)
     }
-    public func directoryHandle(atName: String, handleBy: HiveCallback<HiveDirectoryHandle>)
+    public func directoryHandle(atName: String, handleBy: ((HiveCallback<HiveDirectoryHandle>) -> Void)?)
         -> HivePromise<HiveDirectoryHandle>{
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<HiveDirectoryHandle>(error: error)
     }
 
     public func createFile(withName: String) -> HivePromise<HiveFileHandle>{
-        return createFile(withName: withName, handleBy: HiveCallback<HiveFileHandle>())
+        return createFile(withName: withName, handleBy: nil)
     }
-    public func createFile(withName: String, handleBy: HiveCallback<HiveFileHandle>)
+    public func createFile(withName: String, handleBy: ((HiveCallback<HiveFileHandle>) -> Void)?)
         -> HivePromise<HiveFileHandle>{
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<HiveFileHandle>(error: error)
     }
 
     public func fileHandle(atName: String) -> HivePromise<HiveFileHandle>{
-        return fileHandle(atName: atName, handleBy: HiveCallback<HiveFileHandle>())
+        return fileHandle(atName: atName, handleBy: nil)
     }
-    public func fileHandle(atName: String, handleBy: HiveCallback<HiveFileHandle>)
+    public func fileHandle(atName: String, handleBy: ((HiveCallback<HiveFileHandle>) -> Void)?)
         -> HivePromise<HiveFileHandle>{
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<HiveFileHandle>(error: error)
