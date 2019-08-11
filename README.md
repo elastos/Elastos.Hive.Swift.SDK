@@ -43,6 +43,12 @@ $ pod install
 $ open -a Xcode ElastosHiveSDK.xcworkspace
 ```
 
+**Note:** Different versions of cocoapods will lead to compilation errors. Please keep the latest version. Use the following commands to update cocoapods
+
+```
+sudo gem install cocoapods
+```
+
 Then use the **Apple Xcode** to build ElastosHiveSDK target and generate **ElastosHiveSDK.framework**.
 
 ## Tests
