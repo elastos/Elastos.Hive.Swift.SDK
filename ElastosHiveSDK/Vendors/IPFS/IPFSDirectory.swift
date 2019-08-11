@@ -255,7 +255,7 @@ class IPFSDirectory: HiveDirectoryHandle {
                 .done{ json in
                     Log.d(TAG(), "getChildren succeed")
                     let children = HiveChildren()
-                    children.installValue(json["Entries"])
+                    children.installValue(json["Entries"], .hiveIPFS)
                     handleBy.didSucceed(children)
                     resolver.fulfill(children)
                 }

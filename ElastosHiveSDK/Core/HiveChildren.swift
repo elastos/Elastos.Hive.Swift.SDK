@@ -29,18 +29,33 @@ public class HiveChildren: Result {
         children = []
     }
 
-    func installValue(_ jsonData: JSON) {
+    func installValue(_ jsonData: JSON, _ type: DriveType) {
+        var name = "name"
+        var id = "id"
+        var folder = "folder"
+        var size = "size"
+
+        switch type {
+        case .nativeStorage: break
+        case .oneDrive: break
+        case .hiveIPFS:
+            name = "Name"
+            id = "Id"
+            folder = "Type"
+            size = "Size"
+        case .dropBox: break
+        case .ownCloud:break
+        }
         let childrenData = jsonData.arrayValue
-        print(childrenData)
         for it in childrenData {
-            let folder = it["folder"].stringValue
+            let folder = it[folder].stringValue
             var type = folder
             if folder == "" {
                 type = "file"
             }
-            let dic = [HiveItemInfo.itemId: it["id"].stringValue,
-                       HiveItemInfo.name: it["name"].stringValue,
-                       HiveItemInfo.size: String(it["size"].int64Value),
+            let dic = [HiveItemInfo.itemId: it[id].stringValue,
+                       HiveItemInfo.name: it[name].stringValue,
+                       HiveItemInfo.size: String(it[size].int64Value),
                        HiveItemInfo.type: type]
             let item = HiveItemInfo(dic)
             children.append(item)
