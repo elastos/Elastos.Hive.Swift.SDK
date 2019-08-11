@@ -21,7 +21,6 @@
  */
 
 import Foundation
-import PromiseKit
 
 public typealias HivePromise = Promise
 

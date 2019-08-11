@@ -21,7 +21,6 @@
  */
 
 import Foundation
-import Alamofire
 
 internal enum HIVE_SUB_Url: String {
     case IPFS_UID_NEW = "/api/v0/uid/new"

@@ -21,7 +21,6 @@
  */
 
 import Foundation
-import Alamofire
 
 @inline(__always) private func TAG() -> String { return "IPFSFile" }
 

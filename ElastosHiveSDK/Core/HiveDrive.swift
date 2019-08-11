@@ -21,7 +21,6 @@
  */
 
 import Foundation
-import PromiseKit
 
 @objc(HiveDrive)
 public class HiveDriveHandle: Result, ResourceItem, DirectoryItem {

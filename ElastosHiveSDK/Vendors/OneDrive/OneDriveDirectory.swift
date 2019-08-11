@@ -21,8 +21,7 @@
  */
 
 import Foundation
-import PromiseKit
-import Alamofire
+
 @inline(__always) private func TAG() -> String { return "OneDriveDirectory" }
 
 class OneDriveDirectory: HiveDirectoryHandle {

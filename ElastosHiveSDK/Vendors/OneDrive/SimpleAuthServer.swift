@@ -21,7 +21,6 @@
  */
 
 import Foundation
-import PromiseKit
 import Swifter
 
 @inline(__always) private func TAG() -> String { return "SimpleAuthServer" }

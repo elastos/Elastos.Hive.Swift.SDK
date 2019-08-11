@@ -21,7 +21,6 @@
  */
 
 import Foundation
-import PromiseKit
 
 @objc(NativeClient)
 internal class NativeClient: HiveClientHandle {

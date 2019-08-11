@@ -21,7 +21,6 @@
  */
 
 import Foundation
-import PromiseKit
 
 public protocol ResourceItem {
     associatedtype resourceType

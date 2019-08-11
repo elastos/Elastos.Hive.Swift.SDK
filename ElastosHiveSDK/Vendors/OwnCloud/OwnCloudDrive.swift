@@ -21,7 +21,6 @@
  */
 
 import Foundation
-import PromiseKit
 
 @objc(OwnCloudDrive)
 internal class OwnCloudDrive: HiveDriveHandle {

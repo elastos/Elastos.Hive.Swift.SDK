@@ -21,7 +21,6 @@
  */
 
 import Foundation
-import PromiseKit
 
 @objc(OwnCloudClient)
 internal class OwnCloudClient: HiveClientHandle {
