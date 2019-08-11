@@ -250,9 +250,10 @@ class IPFSDirectory: HiveDirectoryHandle {
                 .then{ void -> HivePromise<JSON> in
                     return IPFSAPIs.request(url, .post, param)
                 }
-                .done{ void in
+                .done{ json in
                     Log.d(TAG(), "getChildren succeed")
                     let children = HiveChildren()
+                    children.installValue(json["Entries"], .hiveIPFS)
                     handleBy.didSucceed(children)
                     resolver.fulfill(children)
                 }

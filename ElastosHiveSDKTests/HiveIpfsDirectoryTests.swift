@@ -57,7 +57,7 @@ class HiveIpfsDirectoryTests: XCTestCase {
             .then{ drive -> HivePromise<HiveDirectoryHandle> in
                 return drive.rootDirectoryHandle()
             }.then{ directory -> HivePromise<HiveDirectoryHandle> in
-                return directory.createDirectory(withName: "od_createD_\(timeTest!)")
+                return directory.createDirectory(withName: "ipfs_createD_\(timeTest!)")
             }.done{ directory in
                 XCTAssertNotNil(directory.directoryId)
                 XCTAssertNotNil(directory.drive)
@@ -80,7 +80,7 @@ class HiveIpfsDirectoryTests: XCTestCase {
             .then{ drive -> HivePromise<HiveDirectoryHandle> in
                 return drive.rootDirectoryHandle()
             }.then{ directory -> HivePromise<HiveDirectoryHandle> in
-                return directory.createDirectory(withName: "od_createD_\(timeTest!)")
+                return directory.createDirectory(withName: "ipfs_createD_\(timeTest!)")
             }.done{ directory in
                 XCTFail()
                 self.lock?.fulfill()

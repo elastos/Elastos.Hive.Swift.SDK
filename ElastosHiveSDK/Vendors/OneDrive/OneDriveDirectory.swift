@@ -297,7 +297,7 @@ class OneDriveDirectory: HiveDirectoryHandle {
                 }
                 .done{ jsonData in
                     let children: HiveChildren = HiveChildren()
-                    children.installValue(jsonData)
+                    children.installValue(jsonData["value"], .oneDrive)
                     handleBy.didSucceed(children)
                     resolver.fulfill(children)
                     Log.e(TAG(), "Acquiring children infos under this directory succeeded:")

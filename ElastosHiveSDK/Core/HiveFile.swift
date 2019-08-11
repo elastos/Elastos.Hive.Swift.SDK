@@ -218,7 +218,6 @@ public class HiveFileHandle: Result, ResourceItem, FileItem {
     ///
     /// - Returns: Returns `Void` if the data commit succeed, `HiveError` otherwise.
     public func commitData() -> HivePromise<Void> {
-        let error = HiveError.failue(des: "Dummy")
         return commitData(handleBy: HiveCallback())
     }
 
