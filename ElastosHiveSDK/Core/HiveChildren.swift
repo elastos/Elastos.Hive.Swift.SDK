@@ -30,7 +30,7 @@ public class HiveChildren: Result {
     }
 
     func installValue(_ jsonData: JSON) {
-        let childrenData = jsonData["value"].arrayValue
+        let childrenData = jsonData.arrayValue
         print(childrenData)
         for it in childrenData {
             let folder = it["folder"].stringValue
