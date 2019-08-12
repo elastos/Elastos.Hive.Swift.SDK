@@ -37,7 +37,7 @@ class IPFSRpcHelper: AuthHelper {
     }
 
     override func loginAsync(_ authenticator: Authenticator, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
-        let promise: HivePromise = HivePromise<Void> { resolver in
+        return HivePromise<Void> { resolver in
             self.checkExpired().then { padding -> HivePromise<String> in
                 return self.getUID(self)
                 }.then { (uid) -> HivePromise<String> in
@@ -55,7 +55,6 @@ class IPFSRpcHelper: AuthHelper {
                     Log.e(TAG(), "login falied: \(HiveError.des(error as! HiveError))")
             }
         }
-        return promise
     }
 
     override func logoutAsync() -> HivePromise<Void> {
@@ -74,12 +73,11 @@ class IPFSRpcHelper: AuthHelper {
     private func getUID(_ authHelper: AuthHelper) -> HivePromise<String> {
         let uid: String = KeyChainStore.restoreUid(.hiveIPFS)
         guard uid == "" else {
-            let promise: HivePromise = HivePromise<String> { resolver in
+            return HivePromise<String> { resolver in
                 resolver.fulfill(uid)
             }
-            return promise
         }
-        let promise: HivePromise = HivePromise<String> { resolver in
+        return HivePromise<String> { resolver in
             let url: String = "\(param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_UID_NEW.rawValue)"
             IPFSAPIs.request(url, .post, nil)
                 .done { jsonData in
@@ -91,11 +89,10 @@ class IPFSRpcHelper: AuthHelper {
                     resolver.reject(error)
             }
         }
-        return promise
     }
 
     private func getPeerId(_ uid: String) -> HivePromise<String> {
-        let promise: HivePromise = HivePromise<String> { resolver in
+        return HivePromise<String> { resolver in
             let url: String = "\(param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_UID_INFO.rawValue)"
             let param: Dictionary<String, String> = ["uid": uid]
             IPFSAPIs.request(url, .post, param)
@@ -108,11 +105,10 @@ class IPFSRpcHelper: AuthHelper {
                     resolver.reject(error)
             }
         }
-        return promise
     }
 
     private func getHash(_ peerId: String) -> HivePromise<String> {
-        let promise: HivePromise = HivePromise<String> { resolver in
+        return HivePromise<String> { resolver in
             let url: String = "\(param.entry.rpcAddrs[validIp])/api/v0/name/resolve?arg=\(peerId)"
             IPFSAPIs.request(url, .get, nil)
                 .done{ jsonData in
@@ -141,11 +137,10 @@ class IPFSRpcHelper: AuthHelper {
                     }
             }
         }
-        return promise
     }
 
     private func logIn(_ hash: String) -> HivePromise<Void> {
-        let promise: HivePromise = HivePromise<Void> { resolver in
+        return HivePromise<Void> { resolver in
             let url: String = "\(param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_UID_LOGIN.rawValue)"
             let uid: String = KeyChainStore.restoreUid(.hiveIPFS)
             param.entry.uid = uid
@@ -159,7 +154,6 @@ class IPFSRpcHelper: AuthHelper {
                     resolver.reject(error)
             }
         }
-        return promise
     }
 
 }

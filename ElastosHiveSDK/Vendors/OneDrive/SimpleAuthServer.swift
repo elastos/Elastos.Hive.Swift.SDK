@@ -36,7 +36,7 @@ internal class SimpleAuthServer: NSObject {
     }
     
     func getCode() -> HivePromise<AuthCode> {
-        let promise: HivePromise = HivePromise<AuthCode>{ resolver in
+        return HivePromise<AuthCode>{ resolver in
             httpServer[""] = { request in
                 guard request.queryParams.count > 0 || request.queryParams[0].0 != "code" else {
                     resolver.reject(HiveError.failue(des: "failed"))
@@ -47,7 +47,6 @@ internal class SimpleAuthServer: NSObject {
                 return HttpResponse.ok(.json("nil" as AnyObject))
             }
         }
-        return promise
     }
 
     func stop() {

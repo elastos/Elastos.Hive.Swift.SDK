@@ -41,16 +41,15 @@ internal class OneDriveAuthHelper: AuthHelper {
     override func loginAsync(_ authenticator: Authenticator, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
         token = KeyChainStore.restoreToken(.oneDrive)
         guard token == nil else {
-            let promise = HivePromise<Void> { resolver in
+            return HivePromise<Void> { resolver in
                 Log.d(TAG(), "OneDrive already logined")
                 authEntry = KeyChainStore.restoreAuthEntry(.oneDrive)!
                 handleBy.didSucceed(Void())
                 resolver.fulfill(Void())
             }
-            return promise
         }
 
-        let promise: HivePromise = HivePromise<Void> { resolver in
+        return HivePromise<Void> { resolver in
             self.acquireAuthCode(authenticator)
                 .then { authCode -> HivePromise<Void>  in
                     return self.acquireAccessToken(authCode)
@@ -64,7 +63,6 @@ internal class OneDriveAuthHelper: AuthHelper {
                     resolver.reject(error)
             }
         }
-        return promise
     }
 
     override func logoutAsync() -> HivePromise<Void> {
@@ -72,7 +70,7 @@ internal class OneDriveAuthHelper: AuthHelper {
     }
 
     override func logoutAsync(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
-        let promise: HivePromise = HivePromise<Void> { resolver in
+        return HivePromise<Void> { resolver in
             let url: String = "\(OneDriveURL.AUTH)\(ONEDRIVE_SUB_Url.ONEDRIVE_LOGOUT.rawValue)?post_logout_redirect_uri=\(authEntry.redirectURL)"
 
             OneDriveAPIs.request(url: url,
@@ -94,11 +92,10 @@ internal class OneDriveAuthHelper: AuthHelper {
                     resolver.reject(error)
             }
         }
-        return promise
     }
 
     private func acquireAuthCode(_ authenticator: Authenticator) -> HivePromise<String> {
-        let promise: HivePromise = HivePromise<String> { resolver in
+        return HivePromise<String> { resolver in
             let redirecturl: String = authEntry.redirectURL
             let startIndex: String.Index = redirecturl.index(redirecturl.startIndex, offsetBy: 17)
             let endIndex: String.Index =  redirecturl.index(redirecturl.startIndex, offsetBy: redirecturl.count)
@@ -118,11 +115,10 @@ internal class OneDriveAuthHelper: AuthHelper {
                     resolver.reject(error)
             }
         }
-        return promise
     }
 
     private func acquireAccessToken(_ authCode: String) -> HivePromise<Void> {
-        let promise: HivePromise = HivePromise<Void> { resolver in
+        return HivePromise<Void> { resolver in
             let params: Dictionary<String, Any> = [
                 "client_id" : self.authEntry.clientId,
                 "code" : authCode,
@@ -152,11 +148,10 @@ internal class OneDriveAuthHelper: AuthHelper {
                 resolver.fulfill(Void())
             })
         }
-        return promise
     }
 
     private func refreshToken() -> HivePromise<Void> {
-        let promise: HivePromise = HivePromise<Void> {  resolver in
+        return HivePromise<Void> {  resolver in
             let params: Dictionary<String, Any> = [
                 "client_id" : self.authEntry.clientId,
                 "scope" : self.authEntry.scope,
@@ -187,7 +182,6 @@ internal class OneDriveAuthHelper: AuthHelper {
                 resolver.fulfill(Void())
             })
         }
-        return promise
     }
     
     private func isExpired() -> Bool {
@@ -195,7 +189,7 @@ internal class OneDriveAuthHelper: AuthHelper {
     }
 
     override func checkExpired() -> HivePromise<Void> {
-        let promise: HivePromise = HivePromise<Void> { resolver in
+        return HivePromise<Void> { resolver in
             guard !isExpired() else {
                 _ = refreshToken().done{ authToken in
                     resolver.fulfill(Void())
@@ -206,6 +200,5 @@ internal class OneDriveAuthHelper: AuthHelper {
             }
             resolver.fulfill(Void())
         }
-        return promise
     }
 }
