@@ -36,7 +36,6 @@ enum KEYCHAIN_KEY: String {
 let AUTHORIZATION_TYPE_CODE = "authorization_code"
 let TOKEN_INVALID = "The token is invalid, please refresh token"
 
-
 enum statusCode: Int {
     typealias RawValue = Int
     case ok  = 200
@@ -45,6 +44,4 @@ enum statusCode: Int {
     case delete = 204
     case redirect_url = 302
     case unauthorized  = 401
-
 }
-
