@@ -209,6 +209,8 @@ class OneDriveDirectory: HiveDirectoryHandle {
                     let fileInfo: HiveFileInfo = HiveFileInfo(dic)
                     let fileHandle: OneDriveFile = OneDriveFile(fileInfo, self.authHelper!)
                     fileHandle.name = jsonData["name"].string
+                    fileHandle.cTag = jsonData["cTag"].stringValue
+                    fileHandle.downloadUrl = jsonData["@microsoft.graph.downloadUrl"].stringValue
                     fileHandle.pathName = path
                     fileHandle.drive = self.drive
                     fileHandle.lastInfo = fileInfo
@@ -256,6 +258,8 @@ class OneDriveDirectory: HiveDirectoryHandle {
                                    HiveFileInfo.size: String(jsonData["size"].int64Value)]
                         let fileInfo: HiveFileInfo = HiveFileInfo(dic)
                         let fileHandle: OneDriveFile = OneDriveFile(fileInfo, self.authHelper!)
+                        fileHandle.cTag = jsonData["cTag"].stringValue
+                        fileHandle.downloadUrl = jsonData["@microsoft.graph.downloadUrl"].stringValue
                         fileHandle.name = jsonData["name"].string
                         fileHandle.pathName = path
                         fileHandle.drive = self.drive
