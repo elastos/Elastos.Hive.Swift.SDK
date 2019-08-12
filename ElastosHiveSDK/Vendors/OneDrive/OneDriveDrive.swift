@@ -206,7 +206,8 @@ import Foundation
                             HiveFileInfo.size: "0"]
                 let fileInfo: HiveFileInfo = HiveFileInfo(dic)
                 let fileHandle: OneDriveFile = OneDriveFile(fileInfo, self.authHelper)
-
+                fileHandle.cTag = jsonData["cTag"].stringValue
+                fileHandle.downloadUrl = jsonData["@microsoft.graph.downloadUrl"].stringValue
                 fileHandle.name = jsonData["name"].stringValue
                 fileHandle.pathName = withPath
                 fileHandle.lastInfo = fileInfo
