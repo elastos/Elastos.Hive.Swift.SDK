@@ -52,7 +52,6 @@ internal class OneDriveClient: HiveClientHandle {
         let promise = self.authHelper.loginAsync(authenticator)
         do {
             _ = try (promise.wait())
-            _ = defaultDriveHandle() 
         } catch  {
             throw error
         }
