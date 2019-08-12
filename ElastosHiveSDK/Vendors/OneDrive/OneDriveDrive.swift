@@ -52,14 +52,13 @@ import Foundation
                              headers: OneDriveHttpHeader.headers(self.authHelper),
                              avalidCode: 200, self.authHelper)
             }.done { jsonData in
-                let driId: String = jsonData["id"].stringValue
-                let dict:  Dictionary<String, String> = [HiveDriveInfo.driveId: driId]
+                let dict:  Dictionary<String, String> = [HiveDriveInfo.driveId: jsonData["id"].stringValue]
                 let driveInfo: HiveDriveInfo = HiveDriveInfo(dict)
                 self.lastInfo = driveInfo
 
+                Log.d(TAG(), "Acquiring last drive information succeeeded (info: \(driveInfo.attrDic!.description)")
                 handleBy.didSucceed(driveInfo)
                 resolver.fulfill(driveInfo)
-                Log.d(TAG(), "Acquiring last drive information succeeeded (info: \(driveInfo.attrDic!.description)")
             }.catch { error in
                 Log.e(TAG(), "Acquiring last drive information falied: \(HiveError.des(error as! HiveError))")
                 handleBy.runError(error as! HiveError)
@@ -76,17 +75,17 @@ import Foundation
         return HivePromise<HiveDirectoryHandle> { resolver in
             self.authHelper.checkExpired().then { void -> HivePromise<JSON> in
                 return OneDriveAPIs.request(url: "\(OneDriveURL.API)\(OneDriveURL.ROOT)",
-                             method: .get,parameters: nil,
-                             encoding: JSONEncoding.default,
-                             headers: OneDriveHttpHeader.headers(self.authHelper),
-                             avalidCode: 200, self.authHelper)
+                            method: .get,parameters: nil,
+                            encoding: JSONEncoding.default,
+                            headers: OneDriveHttpHeader.headers(self.authHelper),
+                            avalidCode: 200, self.authHelper)
             }.done { jsonData in
-                let dirId: String = jsonData["id"].stringValue
                 let folder: JSON = JSON(jsonData["folder"])
-                let dic: Dictionary<String, String> = [HiveDirectoryInfo.itemId: dirId,
-                           HiveDirectoryInfo.name: "/",
-                           HiveDirectoryInfo.childCount: String(folder["childCount"].intValue)]
-                let dirInfo: HiveDirectoryInfo = HiveDirectoryInfo(dic)
+                let dict: Dictionary<String, String> = [
+                            HiveDirectoryInfo.itemId: jsonData["id"].stringValue,
+                            HiveDirectoryInfo.name: "/",
+                            HiveDirectoryInfo.childCount: String(folder["childCount"].intValue)]
+                let dirInfo: HiveDirectoryInfo = HiveDirectoryInfo(dict)
                 let dirHandle: OneDriveDirectory = OneDriveDirectory(dirInfo, self.authHelper)
 
                 dirHandle.name = jsonData["id"].stringValue
@@ -94,9 +93,9 @@ import Foundation
                 dirHandle.drive = self
                 dirHandle.lastInfo = dirInfo
 
+                Log.d(TAG(), "Acquiring root directory instance success")
                 handleBy.didSucceed(dirHandle)
                 resolver.fulfill(dirHandle)
-                Log.d(TAG(), "Acquiring root directory instance success")
             }.catch { error in
                 Log.e(TAG(), "Acquiring root directory instance falied: \(HiveError.des(error as! HiveError))")
                 handleBy.runError(error as! HiveError)
@@ -126,11 +125,11 @@ import Foundation
                             headers: OneDriveHttpHeader.headers(self.authHelper),
                             avalidCode: statusCode.created.rawValue, self.authHelper)
             }.done { jsonData in
-                let dirId: String = jsonData["id"].stringValue
-                let dic: Dictionary<String, String> = [HiveDirectoryInfo.itemId: dirId,
+                let dict: Dictionary<String, String> = [
+                            HiveDirectoryInfo.itemId: jsonData["id"].stringValue,
                             HiveDirectoryInfo.name: jsonData["name"].stringValue,
                             HiveDirectoryInfo.childCount: "0"]
-                let dirInfo: HiveDirectoryInfo = HiveDirectoryInfo(dic)
+                let dirInfo: HiveDirectoryInfo = HiveDirectoryInfo(dict)
                 let dirHandle: OneDriveDirectory = OneDriveDirectory(dirInfo, self.authHelper)
 
                 dirHandle.name = jsonData["name"].string
@@ -138,9 +137,9 @@ import Foundation
                 dirHandle.drive = self
                 dirHandle.lastInfo = dirInfo
 
+                Log.d(TAG(), "Directory %s has been created successfully: \(withPath)")
                 handleBy.didSucceed(dirHandle)
                 resolver.fulfill(dirHandle)
-                Log.d(TAG(), "Directory %s has been created successfully: \(withPath)")
             }.catch{ error in
                 Log.e(TAG(), "createDirectory falied: \(HiveError.des(error as! HiveError))")
                 handleBy.runError(error as! HiveError)
@@ -162,12 +161,12 @@ import Foundation
                             headers: OneDriveHttpHeader.headers(self.authHelper),
                             avalidCode: 200, self.authHelper)
             }.done { jsonData in
-                let dirId: String = jsonData["id"].stringValue
                 let folder: JSON = JSON(jsonData["folder"])
-                let dic: Dictionary<String, String> = [HiveDirectoryInfo.itemId: dirId,
+                let dict: Dictionary<String, String> = [
+                            HiveDirectoryInfo.itemId: jsonData["id"].stringValue,
                             HiveDirectoryInfo.name: jsonData["name"].stringValue,
                             HiveDirectoryInfo.childCount: String(folder["childCount"].intValue)]
-                let dirInfo: HiveDirectoryInfo = HiveDirectoryInfo(dic)
+                let dirInfo: HiveDirectoryInfo = HiveDirectoryInfo(dict)
                 let dirHandle: OneDriveDirectory = OneDriveDirectory(dirInfo, self.authHelper)
 
                 dirHandle.name = jsonData["name"].stringValue
@@ -175,9 +174,9 @@ import Foundation
                 dirHandle.drive = self
                 dirHandle.lastInfo = dirInfo
 
+                Log.d(TAG(), "Acquiring directory %s instance succeeded: \(atPath)")
                 handleBy.didSucceed(dirHandle)
                 resolver.fulfill(dirHandle)
-                Log.d(TAG(), "Acquiring directory %s instance succeeded: \(atPath)")
             }.catch { error in
                 Log.e(TAG(), "Acquiring directory %s instance failed: \(atPath)\(HiveError.des(error as! HiveError))")
                 handleBy.runError(error as! HiveError)
@@ -200,12 +199,13 @@ import Foundation
                             headers: OneDriveHttpHeader.headers(self.authHelper),
                             avalidCode: statusCode.created.rawValue, self.authHelper)
             }.done { jsonData in
-                let fileId: String = jsonData["id"].stringValue
-                let dic: Dictionary<String, String> = [HiveFileInfo.itemId: fileId,
+                let dict: Dictionary<String, String> = [
+                            HiveFileInfo.itemId: jsonData["id"].stringValue,
                             HiveFileInfo.name: jsonData["name"].stringValue,
                             HiveFileInfo.size: "0"]
-                let fileInfo: HiveFileInfo = HiveFileInfo(dic)
+                let fileInfo: HiveFileInfo = HiveFileInfo(dict)
                 let fileHandle: OneDriveFile = OneDriveFile(fileInfo, self.authHelper)
+
                 fileHandle.cTag = jsonData["cTag"].stringValue
                 fileHandle.downloadUrl = jsonData["@microsoft.graph.downloadUrl"].stringValue
                 fileHandle.name = jsonData["name"].stringValue
@@ -213,9 +213,9 @@ import Foundation
                 fileHandle.lastInfo = fileInfo
                 fileHandle.drive = self
 
+                Log.d(TAG(), "File %s on OneDrive has been created: \(withPath)");
                 handleBy.didSucceed(fileHandle)
                 resolver.fulfill(fileHandle)
-                Log.d(TAG(), "File %s on OneDrive has been created: \(withPath)");
             }.catch { error in
                 Log.e(TAG(), "Creating file %s on remote OneDrive failed: \(withPath)\(HiveError.des(error as! HiveError))")
                 handleBy.runError(error as! HiveError)
@@ -237,11 +237,11 @@ import Foundation
                             headers: OneDriveHttpHeader.headers(self.authHelper),
                             avalidCode: 200, self.authHelper)
             }.done { jsonData in
-                let fileId: String = jsonData["id"].stringValue
-                let dic: Dictionary<String, String> = [HiveFileInfo.itemId: fileId,
-                           HiveFileInfo.name: jsonData["name"].stringValue,
-                           HiveFileInfo.size: String(jsonData["size"].uInt64Value)]
-                let fileInfo: HiveFileInfo = HiveFileInfo(dic)
+                let dict: Dictionary<String, String> = [
+                            HiveFileInfo.itemId: jsonData["id"].stringValue,
+                            HiveFileInfo.name: jsonData["name"].stringValue,
+                            HiveFileInfo.size: String(jsonData["size"].uInt64Value)]
+                let fileInfo: HiveFileInfo = HiveFileInfo(dict)
                 let fileHandle: OneDriveFile = OneDriveFile(fileInfo, self.authHelper)
 
                 fileHandle.name = jsonData["name"].stringValue
@@ -254,9 +254,9 @@ import Foundation
                 let url: String = OneDriveURL(pathName, "content").compose()
                 _ = CacheHelper.clearCache(self.param!.keyStorePath, url.md5)
 
+                Log.d(TAG(), "Acquiring file %s instance succeeded: \(atPath)")
                 handleBy.didSucceed(fileHandle)
                 resolver.fulfill(fileHandle)
-                Log.d(TAG(), "Acquiring file %s instance succeeded: \(atPath)")
             }.catch { error in
                 Log.e(TAG(), "Acquiring file %s instance failed: \(atPath)\(HiveError.des(error as! HiveError))")
                 handleBy.runError(error as! HiveError)
@@ -278,20 +278,19 @@ import Foundation
                             headers: OneDriveHttpHeader.headers(self.authHelper),
                             avalidCode: 200, self.authHelper)
             }.done { jsonData in
-                let file: String = jsonData["file"].stringValue
-                let type: String  = file != "" ? "file": "directory"
-                let dic: Dictionary<String, String> = [
+                let type: String  = jsonData["file"].stringValue != "" ? "file": "directory"
+                let dict: Dictionary<String, String> = [
                             HiveItemInfo.itemId: jsonData["id"].stringValue,
                             HiveItemInfo.name: jsonData["name"].stringValue,
                             HiveItemInfo.size: String(jsonData["size"].int64Value),
                             HiveItemInfo.type: type]
-                let itemInfo: HiveItemInfo = HiveItemInfo(dic)
+                let itemInfo: HiveItemInfo = HiveItemInfo(dict)
 
+                Log.d(TAG(), "Acquiring item info information succeeeded (info: \(itemInfo.attrDic!.description)")
                 handleBy.didSucceed(itemInfo)
                 resolver.fulfill(itemInfo)
-                Log.d(TAG(), "Acquiring item info information succeeeded (info: \(itemInfo.attrDic!.description)")
             }.catch { error in
-                Log.e(TAG(), "Acquireing item info information falied: \(HiveError.des(error as! HiveError))")
+                Log.e(TAG(), "Acquiring item info information failed: \(HiveError.des(error as! HiveError))")
                 handleBy.runError(error as! HiveError)
                 resolver.reject(error)
             }

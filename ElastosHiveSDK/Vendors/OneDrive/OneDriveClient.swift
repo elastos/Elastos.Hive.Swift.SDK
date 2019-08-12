@@ -83,7 +83,7 @@ internal class OneDriveClient: HiveClientHandle {
             
             self.authHelper.checkExpired().then { void -> HivePromise<JSON> in
                 return OneDriveAPIs.request(url: OneDriveURL.API,
-                             method: .get,parameters: nil,
+                             method: .get, parameters: nil,
                              encoding: JSONEncoding.default,
                              headers: OneDriveHttpHeader.headers(self.authHelper),
                              avalidCode: 200, self.authHelper)
@@ -93,15 +93,14 @@ internal class OneDriveClient: HiveClientHandle {
                     HiveClientInfo.name:    jsonData["displayName"].stringValue,
                     HiveClientInfo.email:   jsonData["email"].stringValue,
                     HiveClientInfo.phoneNo: jsonData["mobilePhone"].stringValue,
-                    HiveClientInfo.region:  jsonData["officeLocation"].stringValue
-                ]
+                    HiveClientInfo.region:  jsonData["officeLocation"].stringValue]
                 let clientInfo: HiveClientInfo = HiveClientInfo(dict)
                 self.handleId = jsonData["id"].stringValue
                 self.lastInfo = clientInfo
 
+                Log.d(TAG(), "Acquired client information from remote drive: \(clientInfo.debugDescription)");
                 handleBy.didSucceed(clientInfo)
                 resolver.fulfill(clientInfo)
-                Log.d(TAG(), "Acquired client information from remote drive: \(clientInfo.debugDescription)");
             }.catch { error in
                 Log.e(TAG(), "Acquire last client information failed: \(HiveError.des(error as! HiveError))")
                 handleBy.runError(error as! HiveError)
@@ -127,6 +126,7 @@ internal class OneDriveClient: HiveClientHandle {
             guard OneDriveDrive.oneDriveInstance == nil else {
                 let handle = OneDriveDrive.sharedInstance()
                 handle.param = self.param
+
                 handleBy.didSucceed(handle)
                 resolver.fulfill(handle)
                 return
@@ -139,17 +139,16 @@ internal class OneDriveClient: HiveClientHandle {
                              headers: OneDriveHttpHeader.headers(self.authHelper),
                              avalidCode: 200, self.authHelper)
             }.done { jsonData in
-                let driveId: String = jsonData["id"].stringValue
-                let dic: Dictionary<String, String> = [HiveDriveInfo.driveId: driveId]
-                let driveInfo: HiveDriveInfo = HiveDriveInfo(dic)
+                let dict: Dictionary<String, String> = [HiveDriveInfo.driveId: jsonData["id"].stringValue]
+                let driveInfo: HiveDriveInfo = HiveDriveInfo(dict)
                 let driveHandle: OneDriveDrive = OneDriveDrive(driveInfo, self.authHelper)
 
                 driveHandle.param = self.param
                 driveHandle.lastInfo = driveInfo
-                handleBy.didSucceed(driveHandle)
-                resolver.fulfill(driveHandle)
 
                 Log.d(TAG(), "Acquired default drive instance succeeded: \(driveHandle.debugDescription)");
+                handleBy.didSucceed(driveHandle)
+                resolver.fulfill(driveHandle)
             }.catch { error in
                 Log.e(TAG(), "Acquiring default drive instance failed: \(HiveError.des(error as! HiveError))")
                 handleBy.runError(error as! HiveError)
