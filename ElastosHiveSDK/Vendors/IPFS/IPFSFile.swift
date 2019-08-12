@@ -42,7 +42,7 @@ internal class IPFSFile: HiveFileHandle {
     }
 
     override func lastUpdatedInfo(handleBy: HiveCallback<HiveFileInfo>) -> HivePromise<HiveFileInfo> {
-        let promise: HivePromise = HivePromise<HiveFileInfo> { resolver in
+        return HivePromise<HiveFileInfo> { resolver in
             let url: String = "\((authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_STAT.rawValue)"
             let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid
             let path: String = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
@@ -67,7 +67,6 @@ internal class IPFSFile: HiveFileHandle {
                     resolver.reject(error)
             }
         }
-        return promise
     }
 
     override func moveTo(newPath: String) -> HivePromise<Void> {
@@ -75,7 +74,7 @@ internal class IPFSFile: HiveFileHandle {
     }
 
     override func moveTo(newPath: String, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
-        let promise: HivePromise = HivePromise<Void> { resolver in
+        return HivePromise<Void> { resolver in
             let url: String = "\((authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_MV.rawValue)"
             let uid: String = (authHelper as! IPFSRpcHelper).param.entry.uid
             let originPath: String = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
@@ -98,7 +97,6 @@ internal class IPFSFile: HiveFileHandle {
                     resolver.reject(error)
                 }
         }
-        return promise
     }
 
     override func copyTo(newPath: String) -> HivePromise<Void> {
@@ -106,7 +104,7 @@ internal class IPFSFile: HiveFileHandle {
     }
 
     override func copyTo(newPath: String, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
-        let promise: HivePromise = HivePromise<Void> { resolver in
+        return HivePromise<Void> { resolver in
 
             let originPath: String = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             self.authHelper.checkExpired()
@@ -137,7 +135,6 @@ internal class IPFSFile: HiveFileHandle {
                     resolver.reject(error)
             }
         }
-        return promise
     }
 
     override func deleteItem() -> HivePromise<Void> {
@@ -145,7 +142,7 @@ internal class IPFSFile: HiveFileHandle {
     }
 
     override func deleteItem(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
-        let promise: HivePromise = HivePromise<Void> { resolver in
+        return HivePromise<Void> { resolver in
             let url: String = "\((authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_RM.rawValue)"
             let uid: String = (authHelper as! IPFSRpcHelper).param.entry.uid
             let path: String = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
@@ -171,7 +168,6 @@ internal class IPFSFile: HiveFileHandle {
                     resolver.reject(error)
             }
         }
-        return promise
     }
 
     override func readData(_ length: Int) -> HivePromise<Data> {
@@ -179,7 +175,7 @@ internal class IPFSFile: HiveFileHandle {
     }
 
     override func readData(_ length: Int, handleBy: HiveCallback<Data>) -> HivePromise<Data> {
-        let promise: HivePromise = HivePromise<Data> { resolver in
+        return HivePromise<Data> { resolver in
             if finish {
                 Log.e(TAG(), "The file has been read finished")
                 handleBy.didSucceed(Data())
@@ -220,7 +216,6 @@ internal class IPFSFile: HiveFileHandle {
                     resolver.reject(error)
                 }
         }
-        return promise
     }
 
     override func readData(_ length: Int, _ position: UInt64) -> HivePromise<Data> {
@@ -228,7 +223,7 @@ internal class IPFSFile: HiveFileHandle {
     }
 
     override func readData(_ length: Int, _ position: UInt64, handleBy: HiveCallback<Data>) -> HivePromise<Data> {
-        let promise: HivePromise = HivePromise<Data> { resolver in
+        return HivePromise<Data> { resolver in
             let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid
             let path: String = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let url: String = "\((authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_READ.rawValue)?uid=\(uid)&path=\(path)"
@@ -259,7 +254,6 @@ internal class IPFSFile: HiveFileHandle {
                     resolver.reject(error)
                 }
         }
-        return promise
     }
 
     override func writeData(withData: Data) -> HivePromise<Int32> {
@@ -267,7 +261,7 @@ internal class IPFSFile: HiveFileHandle {
     }
 
     override func writeData(withData: Data, handleBy: HiveCallback<Int32>) -> HivePromise<Int32> {
-        let promise: HivePromise = HivePromise<Int32> { resolver in
+        return HivePromise<Int32> { resolver in
             let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid
             let path: String = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let cacheUrl: String = "\((authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_READ.rawValue)?uid=\(uid)&path=\(path)"
@@ -298,7 +292,6 @@ internal class IPFSFile: HiveFileHandle {
                     resolver.reject(error)
             }
         }
-        return promise
     }
 
     override func writeData(withData: Data, _ position: UInt64) -> HivePromise<Int32> {
@@ -306,7 +299,7 @@ internal class IPFSFile: HiveFileHandle {
     }
 
     override func writeData(withData: Data, _ position: UInt64, handleBy: HiveCallback<Int32>) -> HivePromise<Int32> {
-        let promise: HivePromise = HivePromise<Int32> { resolver in
+        return HivePromise<Int32> { resolver in
             let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid
             let path: String = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let cacheUrl: String = "\((authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_READ.rawValue)?uid=\(uid)&path=\(path)"
@@ -337,7 +330,6 @@ internal class IPFSFile: HiveFileHandle {
                     resolver.reject(error)
             }
         }
-        return promise
     }
 
     override func commitData() -> HivePromise<Void> {
@@ -345,7 +337,7 @@ internal class IPFSFile: HiveFileHandle {
     }
 
     override func commitData(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
-        let promise: HivePromise = HivePromise<Void> { resolver in
+        return HivePromise<Void> { resolver in
             let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid
             let path: String = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let url: String = "\((authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_READ.rawValue)?uid=\(uid)&path=\(path)"
@@ -370,7 +362,6 @@ internal class IPFSFile: HiveFileHandle {
                     resolver.reject(error)
             }
         }
-        return promise
     }
 
     override func discardData() {

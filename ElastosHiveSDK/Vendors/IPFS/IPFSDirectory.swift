@@ -39,7 +39,7 @@ class IPFSDirectory: HiveDirectoryHandle {
     }
 
     override func lastUpdatedInfo(handleBy: HiveCallback<HiveDirectoryInfo>) -> HivePromise<HiveDirectoryInfo> {
-        let promise: HivePromise = HivePromise<HiveDirectoryInfo> { resolver in
+        return HivePromise<HiveDirectoryInfo> { resolver in
             let url: String = "\((authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_STAT.rawValue)"
             let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid
             let path: String = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
@@ -64,7 +64,6 @@ class IPFSDirectory: HiveDirectoryHandle {
                     resolver.reject(error)
             }
         }
-        return promise
     }
 
     override func createDirectory(withName: String) -> HivePromise<HiveDirectoryHandle> {
@@ -72,7 +71,7 @@ class IPFSDirectory: HiveDirectoryHandle {
     }
 
     override func createDirectory(withName: String, handleBy: HiveCallback<HiveDirectoryHandle>) -> HivePromise<HiveDirectoryHandle> {
-        let promise: HivePromise = HivePromise<HiveDirectoryHandle> { resolver in
+        return HivePromise<HiveDirectoryHandle> { resolver in
             var path: String = "\(self.pathName)/\(withName)"
             if self.pathName == "/" {
                 path = "\(self.pathName)\(withName)"
@@ -110,7 +109,6 @@ class IPFSDirectory: HiveDirectoryHandle {
                     resolver.reject(error)
             }
         }
-        return promise
     }
 
     override func directoryHandle(atName: String) -> HivePromise<HiveDirectoryHandle> {
@@ -118,7 +116,7 @@ class IPFSDirectory: HiveDirectoryHandle {
     }
 
     override func directoryHandle(atName: String, handleBy: HiveCallback<HiveDirectoryHandle>) -> HivePromise<HiveDirectoryHandle> {
-        let promise: HivePromise = HivePromise<HiveDirectoryHandle> { resolver in
+        return HivePromise<HiveDirectoryHandle> { resolver in
             let url: String = "\((authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_STAT.rawValue)"
             let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid
             var path: String = "\(self.pathName)/\(atName)"
@@ -150,7 +148,6 @@ class IPFSDirectory: HiveDirectoryHandle {
                     resolver.reject(error)
             }
         }
-        return promise
     }
 
     override func createFile(withName: String) -> HivePromise<HiveFileHandle> {
@@ -158,7 +155,7 @@ class IPFSDirectory: HiveDirectoryHandle {
     }
 
     override func createFile(withName: String, handleBy: HiveCallback<HiveFileHandle>) -> HivePromise<HiveFileHandle> {
-        let promise: HivePromise = HivePromise<HiveFileHandle> { resolver in
+        return HivePromise<HiveFileHandle> { resolver in
             var path: String = "\(self.pathName)/\(withName)"
             if self.pathName == "/" {
                 path = "\(self.pathName)\(withName)"
@@ -193,7 +190,6 @@ class IPFSDirectory: HiveDirectoryHandle {
                     resolver.reject(error)
             }
         }
-        return promise
     }
 
     override func fileHandle(atName: String) -> HivePromise<HiveFileHandle> {
@@ -201,7 +197,7 @@ class IPFSDirectory: HiveDirectoryHandle {
     }
 
     override func fileHandle(atName: String, handleBy: HiveCallback<HiveFileHandle>) -> HivePromise<HiveFileHandle> {
-        let promise: HivePromise = HivePromise<HiveFileHandle> { resolver in
+        return HivePromise<HiveFileHandle> { resolver in
             let url: String = "\((authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_STAT.rawValue)"
             let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid
             var path: String = "\(self.pathName)/\(atName)"
@@ -233,7 +229,6 @@ class IPFSDirectory: HiveDirectoryHandle {
                     resolver.reject(error)
             }
         }
-        return promise
     }
 
     override func getChildren() -> HivePromise<HiveChildren> {
@@ -241,7 +236,7 @@ class IPFSDirectory: HiveDirectoryHandle {
     }
 
     override func getChildren(handleBy: HiveCallback<HiveChildren>) -> HivePromise<HiveChildren> {
-        let promise: HivePromise = HivePromise<HiveChildren> { resolver in
+        return HivePromise<HiveChildren> { resolver in
             let url: String = "\((authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_LS.rawValue)"
             let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid
             let path: String = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
@@ -263,7 +258,6 @@ class IPFSDirectory: HiveDirectoryHandle {
                     resolver.reject(error)
             }
         }
-        return promise
     }
 
     override func moveTo(newPath: String) -> HivePromise<Void> {
@@ -271,7 +265,7 @@ class IPFSDirectory: HiveDirectoryHandle {
     }
 
     override func moveTo(newPath: String, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
-        let promise: HivePromise = HivePromise<Void> { resolver in
+        return HivePromise<Void> { resolver in
             let url: String = "\((authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_MV.rawValue)"
             let uid: String = (authHelper as! IPFSRpcHelper).param.entry.uid
             let originPath: String = self.pathName
@@ -300,7 +294,6 @@ class IPFSDirectory: HiveDirectoryHandle {
                     resolver.reject(error)
             }
         }
-        return promise
     }
 
     override func copyTo(newPath: String) -> HivePromise<Void> {
@@ -308,7 +301,7 @@ class IPFSDirectory: HiveDirectoryHandle {
     }
 
     override func copyTo(newPath: String, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
-        let promise: HivePromise = HivePromise<Void> { resolver in
+        return HivePromise<Void> { resolver in
             let originPath: String = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let newPath: String = newPath.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             self.authHelper?.checkExpired()
@@ -337,7 +330,6 @@ class IPFSDirectory: HiveDirectoryHandle {
                     resolver.reject(error)
             }
         }
-        return promise
     }
 
     override func deleteItem() -> HivePromise<Void> {
@@ -345,7 +337,7 @@ class IPFSDirectory: HiveDirectoryHandle {
     }
 
     override func deleteItem(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
-        let promise: HivePromise = HivePromise<Void> { resolver in
+        return HivePromise<Void> { resolver in
             let url: String = "\((authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_RM.rawValue)"
             let uid: String = (authHelper as! IPFSRpcHelper).param.entry.uid
             let path: String = self.pathName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
@@ -371,7 +363,6 @@ class IPFSDirectory: HiveDirectoryHandle {
                     resolver.reject(error)
             }
         }
-        return promise
     }
 
 }

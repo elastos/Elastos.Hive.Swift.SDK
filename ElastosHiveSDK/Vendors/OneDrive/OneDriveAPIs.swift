@@ -31,7 +31,7 @@ class OneDriveAPIs: NSObject {
                        headers: HTTPHeaders? = nil,
                        avalidCode: Int,
                        _ authHelper: AuthHelper) -> HivePromise<JSON> {
-        let promise: HivePromise = HivePromise<JSON> { resolver in
+        return HivePromise<JSON> { resolver in
             Alamofire.request(url, method: method,
                               parameters: parameters,
                               encoding: encoding,
@@ -60,7 +60,6 @@ class OneDriveAPIs: NSObject {
                     resolver.fulfill(jsonData)
             }
         }
-        return promise
     }
 
     class func createUploadSession(url: URLConvertible,
@@ -69,7 +68,7 @@ class OneDriveAPIs: NSObject {
                                    encoding: ParameterEncoding = JSONEncoding.default,
                                    headers: HTTPHeaders,
                                    _ authHelper: AuthHelper) -> HivePromise<String> {
-        let promise: HivePromise = HivePromise<String> { resolver in
+        return HivePromise<String> { resolver in
             Alamofire.request(url,
                               method: method,
                               parameters: parameters,
@@ -85,14 +84,13 @@ class OneDriveAPIs: NSObject {
                     }
             }
         }
-        return promise
     }
 
     class func uploadWriteData(data: Data, to: URLConvertible,
                                method: HTTPMethod = .put,
                                headers: HTTPHeaders,
                             _ authHelper: AuthHelper) -> HivePromise<Void> {
-        let promise: HivePromise = HivePromise<Void> { resolver in
+        return HivePromise<Void> { resolver in
             Alamofire.upload(data,
                              to: to,
                              method: method,
@@ -116,11 +114,10 @@ class OneDriveAPIs: NSObject {
                     resolver.fulfill(Void())
             })
         }
-        return promise
     }
 
     class func pollingCopyresult(_ url: String) -> HivePromise<Void> {
-        let promise: HivePromise = HivePromise<Void> { resolver in
+        return HivePromise<Void> { resolver in
             Alamofire.request(url,
                               method: .get,
                               parameters: nil, encoding: JSONEncoding.default, headers: nil)
@@ -143,11 +140,10 @@ class OneDriveAPIs: NSObject {
                     }
             }
         }
-        return promise
     }
 
     class func pollingDowloadresult(_ url: String) -> HivePromise<Data> {
-        let promise: HivePromise = HivePromise<Data> { resolver in
+        return HivePromise<Data> { resolver in
             Alamofire.request(url,
                               method: .get,
                               parameters: nil,
@@ -164,11 +160,10 @@ class OneDriveAPIs: NSObject {
                     resolver.fulfill(data)
             }
         }
-        return promise
     }
 
     class func getRemoteFile(authHelper: AuthHelper, url: String) -> HivePromise<Data> {
-        let promise: HivePromise = HivePromise<Data> {resolver in
+        return HivePromise<Data> {resolver in
             _ = authHelper.checkExpired().done { result in
                 Alamofire.request(url, method: .get,
                                   parameters: nil,
@@ -209,7 +204,6 @@ class OneDriveAPIs: NSObject {
                     resolver.reject(error)
             }
         }
-        return promise
     }
 
 }

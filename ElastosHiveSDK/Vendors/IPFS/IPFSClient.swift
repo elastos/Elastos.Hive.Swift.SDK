@@ -67,7 +67,7 @@ internal class IPFSClient: HiveClientHandle {
     }
 
     override func lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>) -> HivePromise<HiveClientInfo> {
-        let promise: HivePromise = HivePromise<HiveClientInfo> { resolver in
+        return HivePromise<HiveClientInfo> { resolver in
             guard self.authHelper.param.islogin else {
                 Log.d(TAG(), "Please login first")
                 let error = HiveError.failue(des: "Please login first")
@@ -101,7 +101,6 @@ internal class IPFSClient: HiveClientHandle {
                     resolver.reject(error)
             }
         }
-        return promise
     }
 
     override func defaultDriveHandle() -> HivePromise<HiveDriveHandle> {
@@ -109,7 +108,7 @@ internal class IPFSClient: HiveClientHandle {
     }
 
     override func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> HivePromise<HiveDriveHandle> {
-        let promise: HivePromise = HivePromise<HiveDriveHandle>{ resolver in
+        return HivePromise<HiveDriveHandle>{ resolver in
             guard self.authHelper.param.islogin else {
                 Log.d(TAG(), "Please login first")
                 let error = HiveError.failue(des: "Please login first")
@@ -149,6 +148,5 @@ internal class IPFSClient: HiveClientHandle {
                     resolver.reject(error)
             }
         }
-        return promise
     }
 }
