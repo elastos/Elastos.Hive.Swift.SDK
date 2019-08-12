@@ -30,36 +30,39 @@ public class HiveChildren: Result {
     }
 
     func installValue(_ jsonData: JSON, _ type: DriveType) {
-        var name = "name"
-        var id = "id"
-        var folder = "folder"
-        var size = "size"
-
+        let childrenData = jsonData.arrayValue
         switch type {
         case .nativeStorage: break
-        case .oneDrive: break
+        case .oneDrive:
+            for it in childrenData {
+                let folder = JSON(it["folder"])
+                var type = "folder"
+                if folder["childCount"].stringValue == "" {
+                    type = "file"
+                }
+                let dic = [HiveItemInfo.itemId: it["id"].stringValue,
+                           HiveItemInfo.name: it["name"].stringValue,
+                           HiveItemInfo.size: String(it["size"].int64Value),
+                           HiveItemInfo.type: type]
+                let item = HiveItemInfo(dic)
+                children.append(item)
+            }
         case .hiveIPFS:
-            name = "Name"
-            id = "Id"
-            folder = "Type"
-            size = "Size"
+            for it in childrenData {
+                let folder = it["Type"].stringValue
+                var type = "folder"
+                if folder == "1" {
+                    type = "file"
+                }
+                let dic = [HiveItemInfo.itemId: it["Id"].stringValue,
+                           HiveItemInfo.name: it["Name"].stringValue,
+                           HiveItemInfo.size: String(it["Size"].int64Value),
+                           HiveItemInfo.type: type]
+                let item = HiveItemInfo(dic)
+                children.append(item)
+            }
         case .dropBox: break
         case .ownCloud:break
         }
-        let childrenData = jsonData.arrayValue
-        for it in childrenData {
-            let folder = it[folder].stringValue
-            var type = folder
-            if folder == "" {
-                type = "file"
-            }
-            let dic = [HiveItemInfo.itemId: it[id].stringValue,
-                       HiveItemInfo.name: it[name].stringValue,
-                       HiveItemInfo.size: String(it[size].int64Value),
-                       HiveItemInfo.type: type]
-            let item = HiveItemInfo(dic)
-            children.append(item)
-        }
-
     }
 }
