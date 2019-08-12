@@ -52,7 +52,6 @@ internal class IPFSClient: HiveClientHandle {
         let promise: HivePromise =  self.authHelper.loginAsync(authenticator)
         do {
             _ = try (promise.wait())
-            _ = defaultDriveHandle()
         } catch  {
             throw error
         }
