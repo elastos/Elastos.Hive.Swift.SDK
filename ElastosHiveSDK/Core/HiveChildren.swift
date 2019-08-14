@@ -36,7 +36,7 @@ public class HiveChildren: Result {
         case .oneDrive:
             for it in childrenData {
                 let folder = JSON(it["folder"])
-                var type = "folder"
+                var type = "directory"
                 if folder["childCount"].stringValue == "" {
                     type = "file"
                 }
@@ -50,7 +50,7 @@ public class HiveChildren: Result {
         case .hiveIPFS:
             for it in childrenData {
                 let folder = it["Type"].stringValue
-                var type = "folder"
+                var type = "directory"
                 if folder == "1" {
                     type = "file"
                 }
