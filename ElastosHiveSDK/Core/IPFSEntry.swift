@@ -30,8 +30,13 @@ public class IPFSEntry {
 
     /// Ipfs address
     let rpcAddrs: Array<String>
-    public init(_ uid: String?, _ rpcAddrs: Array<String>) {
+    public init(_ uid: String, _ rpcAddrs: Array<String>) {
         self.uid = uid
+        self.rpcAddrs = rpcAddrs
+    }
+
+    public init(_ rpcAddrs: Array<String>) {
+        self.uid = nil
         self.rpcAddrs = rpcAddrs
     }
 }
