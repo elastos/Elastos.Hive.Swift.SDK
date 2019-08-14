@@ -47,7 +47,7 @@ internal class IPFSDrive: HiveDriveHandle {
     override func lastUpdatedInfo(handleBy: HiveCallback<HiveDriveInfo>) -> HivePromise<HiveDriveInfo> {
         return HivePromise<HiveDriveInfo> { resolver in
             let url: String = "\((authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_STAT.rawValue)"
-            let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid
+            let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid!
             let path: String = "/".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let params: Dictionary<String, String> = ["uid": uid, "path": path]
             self.authHelper.checkExpired()
@@ -78,7 +78,7 @@ internal class IPFSDrive: HiveDriveHandle {
         HivePromise<HiveDirectoryHandle> {
             return HivePromise<HiveDirectoryHandle> { resolver in
                 let url: String = "\((authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_LS.rawValue)"
-                let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid
+                let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid!
                 let path: String = "/".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                 let params: Dictionary<String, String> = ["uid": uid, "path": path]
 
@@ -116,7 +116,7 @@ internal class IPFSDrive: HiveDriveHandle {
         HivePromise<HiveDirectoryHandle> {
             return HivePromise<HiveDirectoryHandle> { resolver in
                 let url: String = "\((authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_MKDIR.rawValue)"
-                let uid: String = (authHelper as! IPFSRpcHelper).param.entry.uid
+                let uid: String = (authHelper as! IPFSRpcHelper).param.entry.uid!
                 let path: String = withPath.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                 let param: Dictionary<String, String> = ["uid": uid,"path": path]
 
@@ -128,7 +128,7 @@ internal class IPFSDrive: HiveDriveHandle {
                         return IPFSAPIs.publish(hash, self.authHelper)
                     }.done{ success in
                         Log.d(TAG(), "createDirectory succeed")
-                        let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid
+                        let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid!
                         let dic: Dictionary<String, String> = [HiveDirectoryInfo.itemId: uid,
                                    HiveDirectoryInfo.name: PathExtracter(withPath).baseNamePart(),
                                    HiveDirectoryInfo.childCount: "0"]
@@ -157,7 +157,7 @@ internal class IPFSDrive: HiveDriveHandle {
 
             return HivePromise<HiveDirectoryHandle> { resolver in
                 let url:String = "\((authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_STAT.rawValue)"
-                let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid
+                let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid!
                 let path: String = atPath.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                 let param: Dictionary<String, String> = ["uid": uid, "path": path]
 
@@ -207,7 +207,7 @@ internal class IPFSDrive: HiveDriveHandle {
                     }
                     .done{ success in
                         Log.d(TAG(), "createFile succeed")
-                        let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid
+                        let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid!
                         let dic: Dictionary<String, String> = [HiveFileInfo.itemId: uid,
                                    HiveFileInfo.name: PathExtracter(withPath).baseNamePart(),
                                    HiveFileInfo.size: "0"]
@@ -235,7 +235,7 @@ internal class IPFSDrive: HiveDriveHandle {
         HivePromise<HiveFileHandle> {
             return HivePromise<HiveFileHandle> { resolver in
                 let url: String = "\((authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_STAT.rawValue)"
-                let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid
+                let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid!
                 let path: String = atPath.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                 let param: Dictionary<String, String> = ["uid": uid, "path": path]
                 self.authHelper.checkExpired()
@@ -273,7 +273,7 @@ internal class IPFSDrive: HiveDriveHandle {
     override func getItemInfo(_ path: String, handleBy: HiveCallback<HiveItemInfo>) -> HivePromise<HiveItemInfo> {
         let promise: HivePromise = HivePromise<HiveItemInfo> { resolver in
             let url: String = "\((authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_STAT.rawValue)"
-            let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid
+            let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid!
             let path: String = path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let param: Dictionary<String, String> = ["uid": uid, "path": path]
             self.authHelper.checkExpired()

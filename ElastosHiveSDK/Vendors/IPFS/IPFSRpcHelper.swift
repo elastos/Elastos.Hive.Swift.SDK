@@ -47,10 +47,12 @@ class IPFSRpcHelper: AuthHelper {
                 }.then { (hash) -> HivePromise<Void> in
                     return self.logIn(hash)
                 }.done { padding in
+                    
                     resolver.fulfill(padding)
                     self.param.islogin = true
                     Log.d(TAG(), "login succeed")
                 }.catch { (error) in
+                    KeyChainStore.writebackForIpfs(.hiveIPFS, self.param.entry.uid!)
                     resolver.reject(error)
                     Log.e(TAG(), "login falied: \(HiveError.des(error as! HiveError))")
             }
@@ -71,18 +73,26 @@ class IPFSRpcHelper: AuthHelper {
     }
 
     private func getUID(_ authHelper: AuthHelper) -> HivePromise<String> {
-        let uid: String = KeyChainStore.restoreUid(.hiveIPFS)
-        guard uid == "" else {
+        var uid = param.entry.uid
+        guard uid == nil else {
             return HivePromise<String> { resolver in
-                resolver.fulfill(uid)
+                resolver.fulfill(uid!)
             }
         }
+        uid = KeyChainStore.restoreUid(.hiveIPFS)
+        guard uid == "" else {
+            return HivePromise<String> { resolver in
+                resolver.fulfill(uid!)
+            }
+        }
+
         return HivePromise<String> { resolver in
             let url: String = "\(param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_UID_NEW.rawValue)"
             IPFSAPIs.request(url, .post, nil)
                 .done { jsonData in
-                    let uid = jsonData["uid"].stringValue
-                    resolver.fulfill(uid)
+                    uid = jsonData["uid"].stringValue
+                    self.param.entry.uid = uid
+                    resolver.fulfill(uid!)
                 }
                 .catch { error in
                     let error = HiveError.failue(des: HiveError.des(error as! HiveError))
