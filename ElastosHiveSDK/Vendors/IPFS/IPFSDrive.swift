@@ -274,8 +274,8 @@ internal class IPFSDrive: HiveDriveHandle {
         let promise: HivePromise = HivePromise<HiveItemInfo> { resolver in
             let url: String = "\((authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_STAT.rawValue)"
             let uid: String = (self.authHelper as! IPFSRpcHelper).param.entry.uid!
-            let path: String = path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-            let param: Dictionary<String, String> = ["uid": uid, "path": path]
+            let epath: String = path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+            let param: Dictionary<String, String> = ["uid": uid, "path": epath]
             self.authHelper.checkExpired()
                 .then{ void -> HivePromise<JSON> in
                     return IPFSAPIs.request(url, .post, param)
