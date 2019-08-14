@@ -8,7 +8,7 @@ class HiveIpfsDriveTests: XCTestCase {
 
     var hiveClient: HiveClientHandle?
     var hiveParams: DriveParameter?
-    let rpcAddrs: IPFSEntry = IPFSEntry(nil, addrs)
+    let rpcAddrs: IPFSEntry = IPFSEntry(addrs)
     let store: String = "\(NSHomeDirectory())/Library/Caches/ipfs"
     var lock: XCTestExpectation?
     var timeout: Double = 600.0
