@@ -46,13 +46,12 @@ class IPFSRpcHelper: AuthHelper {
                     return self.getHash(peerId)
                 }.then { (hash) -> HivePromise<Void> in
                     return self.logIn(hash)
-                }.done { padding in
-                    
+                }.done { padding in                    
+                    KeyChainStore.writebackForIpfs(.hiveIPFS, self.param.entry.uid!)
                     resolver.fulfill(padding)
                     self.param.islogin = true
                     Log.d(TAG(), "login succeed")
                 }.catch { (error) in
-                    KeyChainStore.writebackForIpfs(.hiveIPFS, self.param.entry.uid!)
                     resolver.reject(error)
                     Log.e(TAG(), "login falied: \(HiveError.des(error as! HiveError))")
             }
