@@ -74,7 +74,7 @@ internal class IPFSClient: HiveClientHandle {
                 handleBy.runError(error)
                 return
             }
-            let uid: String = self.authHelper.param.entry.uid
+            let uid: String = self.authHelper.param.entry.uid!
             let url: String = "\(authHelper.param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_STAT.rawValue)"
             let path = "/".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             let params: Dictionary<String, String> = ["uid": uid, "path": path]
@@ -115,7 +115,7 @@ internal class IPFSClient: HiveClientHandle {
                 resolver.reject(error)
                 return
             }
-            let uid = self.authHelper.param.entry.uid
+            let uid = self.authHelper.param.entry.uid!
             guard IPFSDrive.hiveDriveInstance == nil else {
                 let hdHandle: IPFSDrive = IPFSDrive.sharedInstance()
                 hdHandle.param = self.param

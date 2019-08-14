@@ -39,7 +39,6 @@ public class IPFSParameter: DriveParameter {
         self.entry = entry
         super.init()
         self.keyStorePath = storePath
-        KeyChainStore.writebackForIpfs(.hiveIPFS, entry.uid)
     }
 
 }
