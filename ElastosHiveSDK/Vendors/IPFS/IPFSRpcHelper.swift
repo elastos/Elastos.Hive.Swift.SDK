@@ -81,6 +81,7 @@ class IPFSRpcHelper: AuthHelper {
         uid = KeyChainStore.restoreUid(.hiveIPFS)
         guard uid == "" else {
             return HivePromise<String> { resolver in
+                self.param.entry.uid = uid
                 resolver.fulfill(uid!)
             }
         }
@@ -151,8 +152,7 @@ class IPFSRpcHelper: AuthHelper {
     private func logIn(_ hash: String) -> HivePromise<Void> {
         return HivePromise<Void> { resolver in
             let url: String = "\(param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_UID_LOGIN.rawValue)"
-            let uid: String = KeyChainStore.restoreUid(.hiveIPFS)
-            param.entry.uid = uid
+            let uid: String = param.entry.uid!
             let param: Dictionary<String, String> = ["uid": uid, "hash": hash]
             IPFSAPIs.request(url, .post, param)
                 .done{ json in
