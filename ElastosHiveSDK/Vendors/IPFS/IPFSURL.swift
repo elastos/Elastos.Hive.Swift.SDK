@@ -68,7 +68,7 @@ class IPFSURL {
                           encoding: JSONEncoding.default,
                           headers: nil)
             .responseJSON { (dataResponse) in
-                if dataResponse.response?.statusCode == 404 || dataResponse.response?.statusCode == NSURLErrorTimedOut {
+                if dataResponse.response?.statusCode == 404 || dataResponse.response?.statusCode == nil {
                     isValid = false
                     validIp = validIp + 1
                     if validIp > parameter.entry.rpcAddrs.count - 1 {
