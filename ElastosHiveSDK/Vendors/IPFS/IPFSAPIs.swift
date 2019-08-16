@@ -37,7 +37,7 @@ class IPFSAPIs {
                               encoding: URLEncoding.queryString,
                               headers: nil)
                 .responseJSON(completionHandler: { dataResponse in
-                    if dataResponse.response?.statusCode == 404 || dataResponse.response?.statusCode == NSURLErrorTimedOut {
+                    if dataResponse.response?.statusCode == 404 || dataResponse.response?.statusCode == nil {
                         isValid = false
                         validIp = validIp + 1
                         let error = HiveError.failue(des: "Network timeouot.")
@@ -69,7 +69,7 @@ class IPFSAPIs {
                 switch result {
                 case .success(let upload, _, _):
                     upload.responseJSON(completionHandler: { dataResponse in
-                        if dataResponse.response?.statusCode == 404 || dataResponse.response?.statusCode == NSURLErrorTimedOut {
+                        if dataResponse.response?.statusCode == 404 || dataResponse.response?.statusCode == nil {
                             isValid = false
                             validIp = validIp + 1
                             let error = HiveError.failue(des: "Network timeouot.")
@@ -106,7 +106,7 @@ class IPFSAPIs {
                 switch result {
                 case .success(let upload, _, _):
                     upload.responseJSON(completionHandler: { dataResponse in
-                        if dataResponse.response?.statusCode == 404 || dataResponse.response?.statusCode == NSURLErrorTimedOut {
+                        if dataResponse.response?.statusCode == 404 || dataResponse.response?.statusCode == nil {
                             isValid = false
                             validIp = validIp + 1
                             let error = HiveError.failue(des: "Network timeouot.")
@@ -142,7 +142,7 @@ class IPFSAPIs {
                               encoding: URLEncoding.queryString,
                               headers: nil)
                 .responseJSON(completionHandler: { dataResponse in
-                    if dataResponse.response?.statusCode == 404 || dataResponse.response?.statusCode == NSURLErrorTimedOut {
+                    if dataResponse.response?.statusCode == 404 || dataResponse.response?.statusCode == nil {
                         isValid = false
                         validIp = validIp + 1
                         let error = HiveError.failue(des: "Network timeouot.")
@@ -172,7 +172,7 @@ class IPFSAPIs {
                               encoding: URLEncoding.queryString,
                               headers: nil)
                 .responseJSON(completionHandler: { dataResponse in
-                    if dataResponse.response?.statusCode == 404 || dataResponse.response?.statusCode == NSURLErrorTimedOut {
+                    if dataResponse.response?.statusCode == 404 || dataResponse.response?.statusCode == nil {
                         isValid = false
                         validIp = validIp + 1
                         let error = HiveError.failue(des: "Network timeouot.")
@@ -203,7 +203,7 @@ class IPFSAPIs {
                                   encoding: URLEncoding.queryString,
                                   headers: nil)
                     .responseJSON(completionHandler: { dataResponse in
-                        if dataResponse.response?.statusCode == 404 || dataResponse.response?.statusCode == NSURLErrorTimedOut {
+                        if dataResponse.response?.statusCode == 404 || dataResponse.response?.statusCode == nil {
                             isValid = false
                             validIp = validIp + 1
                             let error = HiveError.failue(des: "Network timeouot.")
