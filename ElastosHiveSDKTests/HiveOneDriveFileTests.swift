@@ -242,6 +242,50 @@ class HiveOneDriveFileTests: XCTestCase {
         wait(for: [lock!], timeout: timeout)
     }
 
+    func testWriteDataWithZero() {
+        //    login
+        lock = XCTestExpectation(description: "wait for test login.")
+        OneDriveCommon().login(lock!, hiveClient: self.hiveClient!)
+
+        // create  a file
+        timeTest = Timestamp.getTimeAtNow()
+        lock = XCTestExpectation(description: "wait for test create file.")
+        OneDriveCommon().createFile(lock!, hiveClient: self.hiveClient!, timeTest!)
+
+        // write
+        lock = XCTestExpectation(description: "wait for write.")
+        var fl: HiveFileHandle? = nil
+        let data1 = "".data(using: .utf8)
+        let data2 = "".data(using: .utf8)
+        let le1 = data1?.count
+        let le2 = data2?.count
+
+        self.hiveClient?.defaultDriveHandle()
+            .then{ drive -> HivePromise<HiveFileHandle> in
+                return drive.fileHandle(atPath: "/od_createF_\(timeTest!)")
+            }.then{ file -> HivePromise<Int32> in
+                fl = file
+                return file.writeData(withData: data1!)
+            }.then{ length -> HivePromise<Int32> in
+                (fl?.writeData(withData: data2!))!
+            }
+            .then{ length -> HivePromise<Void> in
+                return (fl?.commitData())!
+            }.then{ void -> HivePromise<Data> in
+                return (fl?.readData(le1! + le2!))!
+            }.then{ void -> HivePromise<Data> in
+                return (fl?.readData(22, 29))!
+            }
+            .done{ data in
+                XCTAssertEqual(data.count,le2!)
+                self.lock?.fulfill()
+            }.catch{ er in
+                XCTFail()
+                self.lock?.fulfill()
+        }
+        wait(for: [lock!], timeout: timeout)
+    }
+
     func testWriteWithPosition() {
         //    login
         lock = XCTestExpectation(description: "wait for test login.")
