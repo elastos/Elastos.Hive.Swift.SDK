@@ -30,27 +30,25 @@ public class HiveClientHandle: Result, ResourceItem{
     /// HiveClientInfo
     public typealias resourceType = HiveClientInfo
 
-    /// The HiveDrive type
+    /// The type of storage drive with which this client is connecting.
     public let driveType: DriveType
 
-    /// The unique identifier for the user.
+    /// The ID of this client handle.
     public var handleId: String?
 
-    /// The HiveClient info
+    /// The last client infomation that cached in local device.
     public var lastInfo: HiveClientInfo?
 
-    /// Creates an instance with the specified `driveType`.
-    ///
-    /// - Parameter driveType: The `DriveType` instance
     internal init(_ driveType: DriveType) {
         self.driveType = driveType
     }
 
-    /// Creates an instance with the specific `OneDriveParameter`,
-    /// `DropBoxParameter`, `OwnCloudParameter`, 'IPFSParameter' and 'NativeParameter'.
-    ///
-    /// - Parameter param: Client singleton type & requred param,
-    ///   for example: use a OneDriveParameter will create OneDriveClient singleton
+    /// Create an singleton instance of client handle with specific parameter.
+    /// The parameter should be the inherited object of `OneDriveParameter`,
+    /// `IPFSParameter`.
+    /// Each storage drive type only can have one singleton instance of client
+    /// handle.
+    /// - Parameter param: The parameters used to create client singleton.
     public static func createInstance(_ param: DriveParameter) {
         let type: DriveType = param.driveType()
         switch type {
@@ -67,10 +65,13 @@ public class HiveClientHandle: Result, ResourceItem{
         }
     }
 
-    /// Returns a spacific HiveClient singleton
+    /// Acquire a singleton instance of client handle with specific drive type.
+    /// This function should be callbed in the following of `createInstace` API.
+    /// Otherwise, it would return `nil` value.
     ///
-    /// - Parameter type: will returns type
-    /// - Returns: return a HiveClient singleton
+    /// - Parameter type: The drive type used to get client instance.
+    /// - Returns: A valid singleton instance of client handle, or `nil` if
+    /// `createInstance` has not been called.
     public static func sharedInstance(type: DriveType) -> HiveClientHandle? {
         switch type {
         case .nativeStorage:
@@ -86,7 +87,10 @@ public class HiveClientHandle: Result, ResourceItem{
         }
     }
 
-    /// Login with account
+    /// Login into the remote cloud storage service with user's authorization.
+    /// With client instance handle acquired, developers should call this function
+    /// to have user's authorization. Therefore, the other functions could be called
+    /// under that permission.
     ///
     /// - Parameter Authenticator: authenticator instance,
     ///   implement related delegate for authorization
