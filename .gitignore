@@ -8,3 +8,7 @@ xcuserdata
 /Podfile.lock
 /Products
 /ElastosHiveSDK.xcworkspace
+
+/node_modules
+/package-lock.json
+

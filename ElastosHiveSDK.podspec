@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   s.description  = 'Elastos hive ios sdk framework distribution.'
   s.homepage     = "https://www.elastos.org"
   s.license      = { :type => "MIT", :file => "ElastosCarrier-framework/LICENSE" }
-  s.author       = { "carrier-dev" => "release@elastos.org" }
+  s.author       = { "hive-dev" => "release@elastos.org" }
   s.platform     = :ios, "9.0"
   s.ios.deployment_target = "9.0"
   s.source       = { :git=> "https://github.com/elastos/Elastos.NET.Hive.Swift.SDK/releases/download/release-v1.0.0/ElastosHive-framework.zip", :tag => s.version }
