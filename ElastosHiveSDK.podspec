@@ -14,13 +14,13 @@ Pod::Spec.new do |s|
   s.swift_version = '4.2'
   s.description  = 'Elastos hive ios sdk framework distribution.'
   s.homepage     = "https://www.elastos.org"
-  s.license      = { :type => "MIT", :file => "ElastosCarrier-framework/LICENSE" }
-  s.author       = { "carrier-dev" => "release@elastos.org" }
+  s.license      = { :type => "MIT", :file => "ElastosHiveSDK-framework/LICENSE" }
+  s.author       = { "Hive-dev" => "release@elastos.org" }
   s.platform     = :ios, "9.0"
   s.ios.deployment_target = "9.0"
-  s.source       = { :git=> "https://github.com/elastos/Elastos.NET.Hive.Swift.SDK/releases/download/release-v0.5.0/ElastosHive-framework.zip", :tag => s.version }
-  s.vendored_frameworks = 'ElastosHive-framework/*.framework'
-  s.source_files = 'ElastosHive-framework/ElastosHiveSDK.framework/**/*.h'
+  s.source       = { :git=> "https://github.com/elastos/Elastos.NET.Hive.Swift.SDK/releases/download/release-v0.5.0/ElastosHiveSDK-framework.zip", :tag => s.version }
+  s.vendored_frameworks = 'ElastosHiveSDK-framework/*.framework'
+  s.source_files = 'ElastosHiveSDK-framework/ElastosHiveSDK.framework/**/*.h'
 
 
 end
