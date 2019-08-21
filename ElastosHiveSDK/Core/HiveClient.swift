@@ -22,10 +22,11 @@
 
 import Foundation
 
+/// An alias global type of `Promise` represented in Elastos Hive SDK.
 public typealias HivePromise = Promise
 
 /// The class representing the handle of specific client to consume remote
-/// cloud storage service, which currently includes `OneDrive` and `Hive IPFS`.
+/// cloud storage service, which currently support `OneDrive` and `Hive IPFS`.
 @objc(HiveClient)
 public class HiveClientHandle: Result, ResourceItem{
 
@@ -127,7 +128,6 @@ public class HiveClientHandle: Result, ResourceItem{
     /// Acquire the default drive handle of this client, which is the singleton
     /// instance of drive handle.
     ///
-    /// - Returns: Returns singleton instance for subclasses
     /// - Returns: The promise of the default drive handle.
     public func defaultDriveHandle() -> HivePromise<HiveDriveHandle> {
         return defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>())

@@ -22,19 +22,19 @@
 
 import Foundation
 
+/// An abstract class that would include all configuration to remote cloud storage
+/// service. User should use it's inherited class, such as `OneDriveParameter`,
+/// `IPFSParameter` instead of `DriveParameter` itself.
 @objc(DriveParameter)
-
-/// Configuration Paramsters for the ElastosHiveSDK.
 public class DriveParameter: NSObject {
 
-    /// Returns a type, default `oneDrive`
+    /// Get the drive type of remote cloud storage.
     ///
-    /// - Returns: Returns a type, default `oneDrive`
+    /// - Returns: The type of target drive with type value in `DriveType`.
     public func driveType() -> DriveType {
         return DriveType.oneDrive
     }
 
-    /// The cache path
+    /// The peristent path used to cache credential information [Not used yet].
     public var keyStorePath: String = ""
-    
 }
