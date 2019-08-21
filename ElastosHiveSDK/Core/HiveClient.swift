@@ -24,33 +24,34 @@ import Foundation
 
 public typealias HivePromise = Promise
 
+/// The class representing the handle of specific client to consume remote
+/// cloud storage service, which currently includes `OneDrive` and `Hive IPFS`.
 @objc(HiveClient)
 public class HiveClientHandle: Result, ResourceItem{
 
-    /// HiveClientInfo
+    /// This resourceType refers to `HiveClientInfo`.
     public typealias resourceType = HiveClientInfo
 
-    /// The HiveDrive type
+    /// The type of storage drive with which this client is connecting.
     public let driveType: DriveType
 
-    /// The unique identifier for the user.
+    /// The ID of this client handle.
     public var handleId: String?
 
-    /// The HiveClient info
+    /// The last client infomation that cached in local device.
     public var lastInfo: HiveClientInfo?
 
-    /// Creates an instance with the specified `driveType`.
-    ///
-    /// - Parameter driveType: The `DriveType` instance
     internal init(_ driveType: DriveType) {
         self.driveType = driveType
     }
 
-    /// Creates an instance with the specific `OneDriveParameter`,
-    /// `DropBoxParameter`, `OwnCloudParameter`, 'IPFSParameter' and 'NativeParameter'.
-    ///
-    /// - Parameter param: Client singleton type & requred param,
-    ///   for example: use a OneDriveParameter will create OneDriveClient singleton
+    /// Create a singleton instance of client handle to the specific backend
+    /// of cloud storage service.
+    /// Each type of storage service only can have a singleton instance of client
+    /// handle.
+    /// - Parameter param: The parameters used to create client singleton, and
+    ///   should be the inherited object of `OneDriveParameter` and `IPFSParameter`
+    ///   currently.
     public static func createInstance(_ param: DriveParameter) {
         let type: DriveType = param.driveType()
         switch type {
@@ -67,10 +68,13 @@ public class HiveClientHandle: Result, ResourceItem{
         }
     }
 
-    /// Returns a spacific HiveClient singleton
+    /// Acquire a singleton instance of client handle with specific drive type.
+    /// This function should be called in the following context after calling
+    /// `createInstace` API. Otherwise, it would return the value of`nil`.
     ///
-    /// - Parameter type: will returns type
-    /// - Returns: return a HiveClient singleton
+    /// - Parameter type: The drive type used to get client instance.
+    /// - Returns: A valid singleton instance of client handle, or `nil` if
+    /// `createInstance` has not been called.
     public static func sharedInstance(type: DriveType) -> HiveClientHandle? {
         switch type {
         case .nativeStorage:
@@ -86,45 +90,54 @@ public class HiveClientHandle: Result, ResourceItem{
         }
     }
 
-    /// Login with account
+    /// Login into the remote cloud storage service with user's authorization.
+    /// With client instance handle, developers should call this method to acquire
+    /// user's authorization at first. Therefore, the other methods would be allowed
+    /// to call under the permission.
     ///
-    /// - Parameter Authenticator: authenticator instance,
-    ///   implement related delegate for authorization
-    /// - Returns:  Returns `Void` if the login succees, `HiveError` otherwise.
+    /// - Parameter Authenticator: The implementation class implemented delegated
+    ///             by upper application to handle authorization and authentication
+    /// - Throws:  `HiveError`
     public func login(_ authenticator: Authenticator) throws {}
 
-    /// Logout with account
+    /// Logout from remote cloud storage service. All authorization data cached
+    /// local would be deleted and all derived instances of this client, such as
+    /// drive handle and directory as well as file handles would become invalid.
     ///
-    /// - Returns: Returns `Void` if the logout succees, `HiveError` otherwise.
+    /// - Throws: `HiveError`
     public func logout() throws {}
 
-    /// Last update for HiveClientHandle subclasses
+    /// Get the last remote information about this client handle.
     ///
     /// - Returns: Returns the latest update information for the subclasses
     public func lastUpdatedInfo() -> HivePromise<resourceType> {
         return lastUpdatedInfo(handleBy: HiveCallback<resourceType>())
     }
 
-    /// Last update for HiveClientHandle subclasses
+    /// Get the last remote information about this client handle and invoke the
+    /// delegate callback of upper application.
     ///
-    /// - Parameter handleBy: the result of returns
-    /// - Returns: Returns the latest update information for the subclasses
+    /// - Parameter handleBy: The delegate callback defined by upper application.
+    /// - Returns: The promise of last remote information about this client.
     public func lastUpdatedInfo(handleBy: HiveCallback<resourceType>) -> HivePromise<resourceType> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<resourceType>(error: error)
     }
 
-    /// Creates a default HiveDriveHandle for subclasses
+    /// Acquire the default drive handle of this client, which is the singleton
+    /// instance of drive handle.
     ///
     /// - Returns: Returns singleton instance for subclasses
+    /// - Returns: The promise of the default drive handle.
     public func defaultDriveHandle() -> HivePromise<HiveDriveHandle> {
         return defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>())
     }
 
-    /// Creates a default HiveDriveHandle for subclasses
+    /// Acquire the default drive handle of this client and invoke the delegate
+    /// callback defined by upper application.
     ///
-    /// - Parameter handleBy: the result of returns
-    /// - Returns: Returns singleton instance for subclasses
+    /// - Parameter handleBy: The delegate callback defined by upper application.
+    /// - Returns: The promise of the default drive handle.
     public func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> HivePromise<HiveDriveHandle> {
         let error = HiveError.failue(des: "Dummy")
         return HivePromise<HiveDriveHandle>(error: error)
