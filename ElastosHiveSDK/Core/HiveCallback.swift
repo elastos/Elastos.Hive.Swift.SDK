@@ -22,9 +22,22 @@
 
 import Foundation
 
+/// A base class inherited by upper application to define the routine to handle the
+/// situation of failure or success when resovling the promise object.
 open class HiveCallback<T> {
+
+    /// The contructor.
     public init() {}
 
+    /// The routine method that would be invoked when resolving the promise
+    /// object with type of `T` succeed.
+    /// - Parameter result: The object contained by the promise object
+    /// - Returns: Void
     open func didSucceed(_ result: T) -> Void {}
+
+    /// The routine method that would be invoked when resolving the promise
+    /// object fails.
+    /// - Parameter error: The specific error handle show the failure description of
+    ///             resolving the promise object.
     open func runError(_ error: HiveError) -> Void {}
 }

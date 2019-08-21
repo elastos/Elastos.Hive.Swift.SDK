@@ -22,7 +22,14 @@
 
 import Foundation
 
-/// `Authenticator` is a protocol to use for grant authorization.
+/// The protocol used by application to define a delegate to grant authorization
+/// so as to access data on remote cloud storage platforms with permission.
 public protocol Authenticator {
+
+    /// To request authorization with specific request url.
+    /// - Parameter requestURL: The request url address to make request for
+    ///             Authorization.
+    /// - Returns: The value of true means authorization has been granted.
+    ///            Otherwise, authorization process failed or aborted.
     func requestAuthentication(_ requestURL: String) -> Bool
 }
