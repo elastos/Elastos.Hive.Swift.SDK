@@ -22,7 +22,7 @@
 
 import Foundation
 
-public protocol ResourceItem {
+internal protocol ResourceItem {
     associatedtype resourceType
 
     func lastUpdatedInfo() -> HivePromise<resourceType>

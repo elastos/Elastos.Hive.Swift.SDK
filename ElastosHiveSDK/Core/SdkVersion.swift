@@ -22,5 +22,5 @@
 
 import Foundation
 
-public class SdkVersion {
+internal class SdkVersion {
 }
