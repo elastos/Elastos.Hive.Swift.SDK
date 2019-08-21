@@ -22,12 +22,21 @@
 
 import Foundation
 
+/// The enum type representing all remote storage backend.
 public enum DriveType: String {
-    public typealias RawValue = String
 
-    case nativeStorage  = "nativeStorage"
+    /// Native storage
+    case nativeStorage  = "Native"
+
+    /// OneDrive storage backend
     case oneDrive       = "OneDrive"
+
+    /// Hive IPFS distributed storage backend
     case hiveIPFS       = "IPFS"
+
+    /// Dropbox storage backend
     case dropBox        = "DropBox"
+
+    /// OneCloud storage backend
     case ownCloud       = "ownCloud"
 }

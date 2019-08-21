@@ -22,5 +22,9 @@
 
 import Foundation
 
+/// An empty class to represent result type contained by promise object.
+/// SDK defines custom classes inherted `Result` to represent data in
+/// promise object.
+/// Applications don't need to use this class directly.
 public class Result: NSObject {
 }
