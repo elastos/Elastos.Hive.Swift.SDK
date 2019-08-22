@@ -22,8 +22,6 @@
 
 import Foundation
 
-///  The `AuthToken` object is a property bag for storing information needed to make authentication requests.
-///  @see https://dev.onedrive.com/auth/readme.htm.
 class AuthToken: NSObject {
 
     ///  The length of the access token expires
