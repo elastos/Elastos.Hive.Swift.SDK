@@ -22,7 +22,7 @@
 
 import Foundation
 
-/// An alias global type of `Promise` represented in Elastos Hive SDK.
+/// An alias global type of `Promise`.
 public typealias HivePromise = Promise
 
 /// The class representing the handle of specific client to consume remote
@@ -110,7 +110,7 @@ public class HiveClientHandle: Result, ResourceItem{
 
     /// Get the last remote information about this client handle.
     ///
-    /// - Returns: Returns the latest update information for the subclasses
+    /// - Returns: The promise of last remote information about this client.
     public func lastUpdatedInfo() -> HivePromise<resourceType> {
         return lastUpdatedInfo(handleBy: HiveCallback<resourceType>())
     }
