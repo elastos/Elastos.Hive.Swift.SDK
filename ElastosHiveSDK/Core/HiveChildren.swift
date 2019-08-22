@@ -22,10 +22,23 @@
 
 import Foundation
 
+/// A class representing the result object with the call to `getChildren`
+/// method of `HiveDirectoryHandle` object.
+///
+/// An example to iterate all property value of items of `children` object:
+/// ```swift
+/// var values: Array<HiveItemInfo> = children.children
+/// for value in values {
+///     let itemId:String = value.getValue(HiveItemInfo.itemId)
+///     let name:  String = value.getValue(HiveItemInfo.name)
+/// }
+/// ```
 public class HiveChildren: Result {
+
+    /// The container object in the array of `HiveItemInfo` object.
     public var children: Array<HiveItemInfo>
 
-    public override init() {
+    override init() {
         children = []
     }
 
