@@ -22,21 +22,28 @@
 
 import Foundation
 
-///  The `HiveFileInfo` object is a property bag for ClientInfo information.
+/// A class representing the hive file information.
+/// Notice that all values of properties are immutable. The property
+/// value could be empty string if it is undefined.
+///
+/// An example to get property values of `fileInfo` object:
+/// ```swift
+/// let itemId:String = fileInfo.getValue(HiveFileInfo.itemId)
+/// let name: String  = fileInfo.getValue(HiveFileInfo.name)
+/// let size: String  = fileInfo.getValue(HiveFileInfo.size)
+/// ```
+///
 public class HiveFileInfo: AttributeMap {
     
-    /// The unique identifier of the file within the Drive.
+    /// The property key name of item ID.
     public static let itemId: String = "ItemId"
     
-    /// The name of the item (filename and extension)
+    /// The property key name of file name with no path included.
     public static let name:   String = "Name"
 
-    /// Size of the item in bytes
+    /// The property key name of file size.
     public static let size:   String = "Size"
 
-    /// Create a `HiveFileInfo` instance
-    ///
-    /// - Parameter dict: The dictionary with the `itemId`, `name` and `size` key-value
     override init(_ dict: Dictionary<String, String>) {
         super.init(dict)
     }

@@ -22,24 +22,48 @@
 
 import Foundation
 
-///  The `HiveItemInfo` object is a property bag for ClientInfo information.
+/// A class representing properties of item in the form of directory or file
+/// handle.
+///
+/// The example to get the property values of `itemInfo` object:
+/// ```swift
+/// let itemId: String
+/// let name  : String
+/// let type  : String
+/// let size  : String
+///
+/// itemId = itemInfo.getValue(HiveItemInfo.itemId)
+/// name   = itemInfo.getValue(HiveItemInfo.name)
+/// if itemInfo.hasKey(HiveItemInfo.type) {
+///     type = itemInfo.getValue(HiveItemInfo.type)
+/// } else {
+///     type = ""
+/// }
+/// if itemInfo.hasKey(HiveItemInfo.size) {
+///     size = itemInfo.getValue(HiveItemInfo.size)
+/// } else {
+///     size = "0"
+/// }
+/// ```
+///
 public class HiveItemInfo: AttributeMap {
 
-    /// The unique identifier of the item within the Drive.
+    /// The property key name of item ID. The value of itemId would be mandatory.
     public static let itemId: String = "itemId"
 
-    /// The name of the item (filename and extension)
-    public static let name:   String = "name"
+    /// The property key name of item name. If the item is directory item, then
+    /// the value of name could be directory name, otherwise, the value of name
+    /// would be file name. The value of name would be mandatory.
+    public static let name:   String = "Name"
 
-    /// The item type is `file` or `directory`
-    public static let type:   String = "type"
+    /// The property key name of item type. If the item is directory name, the
+    /// type value would be `directory`, otherwise, the type value would be `file`.
+    public static let type:   String = "Type"
 
-    /// Size of the item in bytes
-    public static let size:   String = "size"
+    /// The property key name of item size. If the item is directory name, the
+    /// size value would be `0`, otherwise, the size vaue would be file size.
+    public static let size:   String = "Size"
 
-    /// Create a `HiveItemInfo` instance
-    ///
-    /// - Parameter dict: The dictionary with the `itemId`, `name`, `type` and `size` key-value
     override init(_ dict: Dictionary<String, String>) {
         super.init(dict)
     }

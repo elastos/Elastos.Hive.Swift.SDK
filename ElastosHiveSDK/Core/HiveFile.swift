@@ -22,32 +22,27 @@
 
 import Foundation
 
+/// The class representing the file handle to specific remote cloud storage backend.
 @objc(HiveFile)
 public class HiveFileHandle: Result, ResourceItem, FileItem {
 
-    /// HiveFileInfo
+    /// This resourceType refers to `HiveFileInfo`
     public typealias resourceType = HiveFileInfo
 
-    /// The current drive
+    /// The drive handle to which this file handle belongs
     public var drive: HiveDriveHandle?
 
-    /// The unique identifier of the file within the Drive.
+    /// The ID of this file handle.
     public var fileId: String
 
-    /// The name of the file.
+    /// The full path name of this file.
     public var pathName: String
 
-    /// The HiveFile info
+    /// The last file infomation that cached in local.
     public var lastInfo: HiveFileInfo?
 
-    /// The `AuthHelper` instance of the subclasses
     var authHelper: AuthHelper
 
-    /// Creates an instance with the specified `info` and `authHelper`.
-    ///
-    /// - Parameters:
-    ///   - info: The `HiveFileInfo` instance.
-    ///   - authHelper: The `AuthHelper` instance
     init(_ info: HiveFileInfo, _ authHelper: AuthHelper) {
         self.lastInfo = info
         self.authHelper = authHelper
@@ -55,182 +50,197 @@ public class HiveFileHandle: Result, ResourceItem, FileItem {
         self.pathName = ""
     }
     
-    /// Parent path
+    /// Get the full path name of parent directory.
     ///
-    /// - Returns: Returns the parent path of the subclasses
+    /// - Returns: the full path of parent directory
     public func parentPathName() -> String {
         return ""
     }
 
-    /// Latst update for `HiveFile` subclasses
+    /// Get the last remote information about this file.
     ///
-    /// - Returns: Returns the parent path of the subclasses
+    /// - Returns: The promise of last remote information about this file.
     public func lastUpdatedInfo() -> HivePromise<resourceType> {
         return lastUpdatedInfo(handleBy: HiveCallback<HiveFileHandle.resourceType>())
     }
 
-    /// Latst update for `HiveFile` subclasses
+    /// Get the last remote information about this file and invoke the delegate
+    /// callback of upper application.
     ///
-    /// - Parameter handleBy: The result
-    /// - Returns: Returns the parent path of the subclasses
+    /// - Parameter handleBy: The delegate callback defined by upper application.
+    /// - Returns: The promise of last remote information about this file.
     public func lastUpdatedInfo(handleBy: HiveCallback<resourceType>) -> HivePromise<resourceType> {
-        let error = HiveError.failue(des: "Dummy")
-        return HivePromise<HiveFileInfo>(error: error)
+        return HivePromise<HiveFileInfo>(error: HiveError.failue(des: "Dummy"))
     }
 
-    /// Current File move to new path
+    /// Move the current file specified by this handle to the new directory
+    /// in same remote cloud strage backend.
+    /// If target path `newPath` is a directory name, then the file would
+    /// move to under the target directory. If the target path is a file path name,
+    /// then current file would move to be the file with target path `newPath`.
     ///
-    /// - Parameter newPath: The new path with the file
-    /// - Returns: Returns `Void` if the move succees, `HiveError` otherwise.
+    /// - Parameter newPath: The target path name to move this file.
+    /// - Returns: The promise of result of file moving.
     public func moveTo(newPath: String) -> HivePromise<Void> {
         return moveTo(newPath: newPath, handleBy: HiveCallback<Void>())
     }
 
-    /// Current File move to the new path
+    /// Move the current file specified by this handle to the new directory
+    /// in same remote cloud strage backend and invoke the delegate callback.
+    /// If target path `newPath` is a directory name, then the file would
+    /// move to under the target directory. If the target path is a file path name,
+    /// then current file would move to be the file with target path `newPath`.
     ///
-    /// - Parameters:
-    ///   - newPath: The new path with the file
-    ///   - handleBy: The result
-    /// - Returns: Returns `Void` if the move succees, `HiveError` otherwise.
+    /// - Parameter newPath: The target path name to move this file.
+    /// - Parameter handleBy: The delegate callback defined by upper application.
+    /// - Returns: The promise of result of file moving.
     public func moveTo(newPath: String, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
-        let error = HiveError.failue(des: "Dummy")
-        return HivePromise<Void>(error: error)
+        return HivePromise<Void>(error: HiveError.failue(des: "Dummy"))
     }
 
-    /// Current file copy to the new path
+    /// Copy the current file specified by this handle to the new target path
+    /// in same remote cloud strage backend.
+    /// If target path `newPath` is a directory name, then the file would be
+    /// copied to under that target directory. If target path is a file path name,
+    /// then current file would be copied to be the file with target path `newPath`.
     ///
-    /// - Parameter newPath: The path to copy
-    /// - Returns: Returns `Void` if the copy succees, `HiveError` otherwise.
+    /// - Parameter newPath: The target path name to copy this file.
+    /// - Returns: The promise of result of file copying.
     public func copyTo(newPath: String) -> HivePromise<Void> {
         return copyTo(newPath: newPath, handleBy: HiveCallback<Void>())
     }
 
-    /// Current file copy to the new path
+    /// Copy the current file specified by this handle to the new target path
+    /// in same remote cloud strage backend and invoke the delegate callback.
+    /// If target path `newPath` is a directory name, then the file would be
+    /// copied to under that target directory. If target path is a file path name,
+    /// then current file would be copied to be the file with target path `newPath`.
     ///
-    /// - Parameters:
-    ///   - newPath: The path to copy
-    ///   - handleBy: The result
-    /// - Returns: Returns `Void` if the copy succees, `HiveError` otherwise.
+    /// - Parameter newPath: The target path name to copy this file.
+    /// - Parameter handleBy: The delegate callback defined by upper application.
+    /// - Returns: The promise of result of file copying.
     public func copyTo(newPath: String, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
-        let error = HiveError.failue(des: "Dummy")
-        return HivePromise<Void>(error: error)
+        return HivePromise<Void>(error: HiveError.failue(des: "Dummy"))
     }
 
-    /// Delete the current file
+    /// Delete the file item from remote cloud storage backend. After deletion,
+    /// this file handle would become invalid and should not be referenced later.
     ///
-    /// - Returns: Returns `Void` if the delete succees, `HiveError` otherwise.
+    /// - Returns: The promise of result for file deletion.
     public func deleteItem() -> HivePromise<Void> {
         return deleteItem(handleBy: HiveCallback<Void>())
     }
 
-    /// Delete the current file
+    /// Delete the file item from remote cloud storage backend and then invoke
+    /// the delegate callback. After deletion, this file handle would become
+    /// invalid and should not be referenced later.
     ///
-    /// - Parameter handleBy: The result
-    /// - Returns: Returns `Void` if the delete succees, `HiveError` otherwise.
+    /// - Parameter handleBy: The delegate callback defined by upper application.
+    /// - Returns: The promise of result for file deletion.
     public func deleteItem(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
-        let error = HiveError.failue(des: "Dummy")
-        return HivePromise<Void>(error: error)
+        return HivePromise<Void>(error: HiveError.failue(des: "Dummy"))
     }
 
-    /// Read data of specified length in sequence
+    /// Read the specific length of data from this file.
     ///
-    /// - Parameter length: Length of each read
-    /// - Returns: Returns data of a given length
+    /// - Parameter length: The given length of data to read.
+    /// - Returns: The promise of data read.
     public func readData(_ length: Int) -> HivePromise<Data> {
         return readData(length, handleBy: HiveCallback<Data>())
     }
 
-    /// Read data of specified length in sequence
+    /// Read the specific length of data from this file and invoke the delegate
+    /// callback defined by upper application.
     ///
-    /// - Parameters:
-    ///   - length: Length of each read
-    ///   - handleBy: The result
-    /// - Returns: Returns data of a given length
+    /// - Parameter length: The given length of data to read.
+    /// - Parameter handleBy: The delegate callback defined by upper application.
+    /// - Returns: The promise of data read.
     public func readData(_ length: Int, handleBy: HiveCallback<Data>) -> HivePromise<Data> {
-        let error = HiveError.failue(des: "Dummy")
-        return HivePromise<Data>(error: error)
+        return HivePromise<Data>(error: HiveError.failue(des: "Dummy"))
     }
 
-    /// Read data of specified length form the specified position
+    /// Read the specific length of data with offset position from this file.
     ///
-    /// - Parameters:
-    ///   - length: Length of specified read
-    ///   - position: Start reading position
-    /// - Returns: Returns the specified length of the specified location
+    /// - Parameter length: The given length of data to read.
+    /// - Parameter position: The offset position from which to read data.
+    /// - Returns: The promise of data read.
     public func readData(_ length: Int, _ position: UInt64) -> HivePromise<Data> {
         return readData(length, position, handleBy: HiveCallback<Data>())
     }
 
-    /// Read data of specified length form the specified position
+    /// Read the specific length of data with offset position from this file.
     ///
-    /// - Parameters:
-    ///   - length: Length of specified read
-    ///   - position: Start reading position
-    ///   - handleBy: The result
-    /// - Returns: Returns the specified length of the specified location
+    /// - Parameter length: The given length of data to read.
+    /// - Parameter position: The offset position from which to read data.
+    /// - Parameter handleBy: The delegate callback defined by upper application.
+    /// - Returns: The promise of data read.
     public func readData(_ length: Int, _ position: UInt64, handleBy: HiveCallback<Data>) -> HivePromise<Data> {
-        let error = HiveError.failue(des: "Dummy")
-        return HivePromise<Data>(error: error)
+        return HivePromise<Data>(error: HiveError.failue(des: "Dummy"))
     }
 
-    /// Writes local caches in sequence
-    ///
-    /// - Parameter withData: The data to be written
-    /// - Returns: The length of write data
+    /// Write specific data to this file.
+    /// To be noticed that the data just has been written into local file.
+    /// After finishing writing, `commitData` method should be called so
+    /// as to synchrize the written data into remote cloud storage.
+    /// - Parameter withData: The data to be written into file.
+    /// - Returns: The promise of length value of written data.
     public func writeData(withData: Data) -> HivePromise<Int32> {
         return writeData(withData: withData, handleBy: HiveCallback<Int32>())
     }
 
-    /// Writes local caches in sequence
+    /// Write specific data to this file.
+    /// To be noticed that the data just has been written into local file.
+    /// After finishing writing, `commitData` method should be called so
+    /// as to synchrize the written data into remote cloud storage.
     ///
-    /// - Parameters:
-    ///   - withData: The data to be written
-    ///   - handleBy: The result
-    /// - Returns: The length of write data
+    /// - Parameter withData: The data to be written into file.
+    /// - Parameter handleBy: The delegate callback defined by upper application.
+    /// - Returns: The promise of length value of written data.
     public func writeData(withData: Data, handleBy: HiveCallback<Int32>) -> HivePromise<Int32> {
-        let error = HiveError.failue(des: "Dummy")
-        return HivePromise<Int32>(error: error)
+        return HivePromise<Int32>(error: HiveError.failue(des: "Dummy"))
     }
 
-    /// Writes local caches in sequence in the specified position
+    /// Write specific data with start position to this file.
+    /// To be noticed that the data just has been written into local file.
+    /// After finishing writing, `commitData` method should be called so
+    /// as to synchrize the written data into remote cloud storage.
     ///
-    /// - Parameters:
-    ///   - withData: The data to be written
-    ///   - position: Start writing position
-    /// - Returns: The length of write data
+    /// - Parameter withData: The data to be written into file.
+    /// - Parameter position: The position of data from which to read.
+    /// - Returns: The promise of length value of written data.
     public func writeData(withData: Data, _ position: UInt64) -> HivePromise<Int32> {
         return writeData(withData: withData, position, handleBy: HiveCallback<Int32>())
     }
 
-    /// Writes local caches in sequence in the specified position
+    /// Write specific data with start position to this file.
+    /// To be noticed that the data just has been written into local file.
+    /// After finishing writing, `commitData` method should be called so
+    /// as to synchrize the written data into remote cloud storage.
     ///
-    /// - Parameters:
-    ///   - withData: The data to be written
-    ///   - position: Start writing position
-    ///   - handleBy: The result
-    /// - Returns: The length of write data
+    /// - Parameter withData: The data to be written into file.
+    /// - Parameter position: The position of data from which to read.
+    /// - Parameter handleBy: The delegate callback defined by upper application.
+    /// - Returns: The promise of length value of written data.
     public func writeData(withData: Data, _ position: UInt64, handleBy: HiveCallback<Int32>) -> HivePromise<Int32> {
-        let error = HiveError.failue(des: "Dummy")
-        return HivePromise<Int32>(error: error)
+        return HivePromise<Int32>(error: HiveError.failue(des: "Dummy"))
     }
 
-    ///  Submit data to the remote cloud storage.
+    /// Commit the written file to sync it to remote cloud storage backend.
     ///
-    /// - Returns: Returns `Void` if the data commit succeed, `HiveError` otherwise.
+    /// - Returns: The promise of result of file moving.
     public func commitData() -> HivePromise<Void> {
         return commitData(handleBy: HiveCallback())
     }
 
-    /// Submit data to the remote cloud storage.
+    /// Commit the written file to sync it to remote cloud storage backend.
     ///
-    /// - Parameter handleBy: The result
-    /// - Returns: Returns `Void` if the data commit succeed, `HiveError` otherwise.
+    /// - Parameter handleBy: The delegate callback defined by upper application.
+    /// - Returns: The promise of result of file moving.
     public func commitData(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
-        let error = HiveError.failue(des: "Dummy")
-        return HivePromise<Void>(error: error)
+        return HivePromise<Void>(error: HiveError.failue(des: "Dummy"))
     }
 
-    /// Discard written Data
+    /// Discard all written data in local, which means cancel all result of
+    /// `writeData` method.
     public func discardData() {}
-
 }
