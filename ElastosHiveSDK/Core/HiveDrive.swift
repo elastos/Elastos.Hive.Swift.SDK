@@ -22,157 +22,146 @@
 
 import Foundation
 
+/// The class representing the handle of drive to remote cloud storage service,
+/// which currently support `OneDrive` and `Hive IPFS`.
 @objc(HiveDrive)
 public class HiveDriveHandle: Result, ResourceItem, DirectoryItem {
 
-    /// HiveDriveInfo
+    /// This resourceType refers to `HiveDriveInfo`.
     public typealias resourceType = HiveDriveInfo
 
-    /// The HiveDrive type
+    /// The type name of this drive.
     public var driveType: DriveType
 
-    /// The drive id
+    /// The drive Id of this drive handle.
     public var handleId: String?
 
-    /// The HiveDrive info
+    /// The last drive infomation that cached in local device.
     public var lastInfo: HiveDriveInfo
 
-    ///  Creates an instance with the specified `driveType` and `info`.
-    ///
-    /// - Parameters:
-    ///   - driveType: The `DriveType`
-    ///   - info: The `HiveDriveInfo` instance
     internal init(_ driveType: DriveType, _ info: HiveDriveInfo) {
         self.driveType = driveType
         self.lastInfo = info
         self.handleId = lastInfo.attrDic![HiveDriveInfo.driveId]
     }
 
-    /// Creates a root directory.
-    ///
-    /// - Returns: Returns a root directory of the subclasses
+    /// Acquire root directory handle of this drive.
+    /// - Returns: The promise of the root directory handle.
     public func rootDirectoryHandle() -> HivePromise<HiveDirectoryHandle> {
         return rootDirectoryHandle(handleBy: HiveCallback<HiveDirectoryHandle>())
     }
 
-    /// Creates a root directory.
-    ///
-    /// - Parameter handleBy: The result of returns
-    /// - Returns: Returns a root directory of the subclasses
+    /// Acquire root directory handle of this drive and invoke the delegate callback
+    /// defined by upper application.
+    /// - Parameter handleBy: The delegate callback defined by upper application.
+    /// - Returns: The promise of the root directory handle.
     public func rootDirectoryHandle(handleBy: HiveCallback<HiveDirectoryHandle>) -> HivePromise<HiveDirectoryHandle> {
-        let error = HiveError.failue(des: "Dummy")
-        return HivePromise<HiveDirectoryHandle>(error: error)
+        return HivePromise<HiveDirectoryHandle>(error: HiveError.failue(des: "Dummy"))
     }
 
-    /// Last update for HiveDrive subclasses
+    /// Get the last remote information about this drive handle.
     ///
-    /// - Returns: Returns the latest update information for the subclasses
+    /// - Returns: The promise of last remote information about this drive or exception.
     public func lastUpdatedInfo() -> HivePromise<resourceType> {
         return lastUpdatedInfo(handleBy: HiveCallback<HiveDriveHandle.resourceType>())
     }
 
-    /// Last update for HiveDrive subclasses
+    /// Get the last remote information about this drive handle and invoke the
+    /// delegate callback of upper application.
     ///
-    /// - Parameter handleBy: The result of the returns
-    /// - Returns: Returns the latest update information for the subclasses
+    /// - Parameter handleBy: The delegate callback defined by upper application.
+    /// - Returns: The promise of last remote information about this drive or exception.
     public func lastUpdatedInfo(handleBy: HiveCallback<resourceType>) -> HivePromise<resourceType> {
-        let error = HiveError.failue(des: "Dummy")
-        return HivePromise<resourceType>(error: error)
+        return HivePromise<resourceType>(error: HiveError.failue(des: "Dummy"))
     }
 
-    /// Create a directory with a path
+    /// Create a directory with specific path name.
     ///
-    /// - Parameter withPath: The path of the directory
-    /// - Returns: Returns a directory instance
+    /// - Parameter withPath: The path name of the directory to create.
+    /// - Returns: The promise of the created directory handle or exception.
     public func createDirectory(withPath: String) -> HivePromise<HiveDirectoryHandle> {
         return createDirectory(withPath: withPath, handleBy: HiveCallback<HiveDirectoryHandle>())
     }
 
-    /// Create a directory with a path
+    /// Create a directory with specific path name and invoke the delegate callback of upper
+    /// application.
     ///
-    /// - Parameters:
-    ///   - withPath: The path of the directory
-    ///   - handleBy: The result of the returns
-    /// - Returns: Returns a directory instance
+    /// - Parameter withPath: The path name of the directory to create.
+    /// - Parameter handleBy: The delegate callback defined by upper application.
+    /// - Returns: The promise of the created directory handle or exception.
     public func createDirectory(withPath: String, handleBy: HiveCallback<HiveDirectoryHandle>) -> HivePromise<HiveDirectoryHandle> {
-        let error = HiveError.failue(des: "Dummy")
-        return HivePromise<HiveDirectoryHandle>(error: error)
+        return HivePromise<HiveDirectoryHandle>(error: HiveError.failue(des: "Dummy"))
     }
 
-    /// Request a directory with a path
+    /// Acquire a directory handle with specific path name.
     ///
-    /// - Parameter atPath: The path of the directory
-    /// - Returns: Returns a directory for the given path of the subclasses
+    /// - Parameter withPath: The directory path name.
+    /// - Returns: The promise of acquired directory handle or exception.
     public func directoryHandle(atPath: String) -> HivePromise<HiveDirectoryHandle> {
         return directoryHandle(atPath: atPath, handleBy: HiveCallback<HiveDirectoryHandle>())
     }
 
-    /// Request a directory with a path
+    /// Acquire a directory handle with specific path name and invoke the delegate
+    /// callback of upper application.
     ///
-    /// - Parameters:
-    ///   - atPath: The path
-    ///   - handleBy: The result
-    /// - Returns: Returns a directory for the given path of the subclasses
+    /// - Parameter withPath: The directory path name.
+    /// - Parameter handleBy: The delegate callback defined by upper application.
+    /// - Returns: The promise of the acquired directory handle or exception.
     public func directoryHandle(atPath: String, handleBy: HiveCallback<HiveDirectoryHandle>) -> HivePromise<HiveDirectoryHandle> {
-        let error = HiveError.failue(des: "Dummy")
-        return HivePromise<HiveDirectoryHandle>(error: error)
+        return HivePromise<HiveDirectoryHandle>(error: HiveError.failue(des: "Dummy"))
     }
 
-    /// Create a file with a path
+    /// Create a new file with specific file name.
     ///
-    /// - Parameter withPath: The path
-    /// - Returns: Returns a file instance of the subclasses
+    /// - Parameter withPath: The path name of file to create
+    /// - Returns: The promise of the created file handle or exception.
     public func createFile(withPath: String) -> HivePromise<HiveFileHandle> {
         return createFile(withPath: withPath, handleBy: HiveCallback<HiveFileHandle>())
     }
 
-    /// Create a file with a path
+    /// Create a new file with specific file name and invoke the delegate callback
+    /// of upper application.
     ///
-    /// - Parameters:
-    ///   - withPath: The path
-    ///   - handleBy: The resutl
-    /// - Returns: Returns a file instance of the subclasses
+    /// - Parameter withPath: The path name of file to create
+    /// - Parameter handleBy: The delegate callback defined by upper application.
+    /// - Returns: The promise of the created file handle or exception.
     public func createFile(withPath: String, handleBy: HiveCallback<HiveFileHandle>) -> HivePromise<HiveFileHandle> {
-        let error = HiveError.failue(des: "Dummy")
-        return HivePromise<HiveFileHandle>(error: error)
+        return HivePromise<HiveFileHandle>(error: HiveError.failue(des: "Dummy"))
     }
 
-    /// Request a file with a path
+    /// Acquire file handle with specific file name.
     ///
-    /// - Parameter atPath: The path
-    /// - Returns: Returns a file with for the given path of the subclasses
+    /// - Parameter withPath: The path name of file to create
+    /// - Returns: The promise of the file handle or exception.
     public func fileHandle(atPath: String) -> HivePromise<HiveFileHandle> {
         return fileHandle(atPath: atPath, handleBy: HiveCallback<HiveFileHandle>())
     }
 
-    /// Request a file with a path
+    /// Acquire file handle with specific file name and invoke the delegate callback
+    /// of upper application.
     ///
-    /// - Parameters:
-    ///   - atPath: The path
-    ///   - handleBy: The result
-    /// - Returns: Returns a file with for the given path of the subclasses
+    /// - Parameter withPath: The path name of file to create
+    /// - Parameter handleBy: The delegate callback defined by upper application
+    /// - Returns: The promise of the file handle or exception.
     public func fileHandle(atPath: String, handleBy: HiveCallback<HiveFileHandle>) -> HivePromise<HiveFileHandle> {
-        let error = HiveError.failue(des: "Dummy")
-        return HivePromise<HiveFileHandle>(error: error)
+        return HivePromise<HiveFileHandle>(error: HiveError.failue(des: "Dummy"))
     }
 
-
-    /// Request itemInfo with a path
+    /// Acquire information of item (directory or file) with specific name.
     ///
-    /// - Parameter path: The path
-    /// - Returns: The itemInfo
+    /// - Parameter path: The path name of file or directory item
+    /// - Returns: The promise of the item info or exception.
     public func getItemInfo(_ path: String) -> HivePromise<HiveItemInfo> {
         return getItemInfo(path, handleBy: HiveCallback<HiveItemInfo>())
     }
 
-    /// Request itemInfo with a path
+    /// Acquire information of item (directory or file) with specific name and invoke
+    /// the delegate callback defined by upper application.
     ///
-    /// - Parameters:
-    ///   - path: The path
-    ///   - handleBy: The result
-    /// - Returns: The itemInfo
+    /// - Parameter path: The path name of file or directory item
+    /// - Parameter handleBy: The delegate callback defined by upper application
+    /// - Returns: The promise of the item info or exception.
     public func getItemInfo(_ path: String, handleBy: HiveCallback<HiveItemInfo>) -> HivePromise<HiveItemInfo>{
-        let error = HiveError.failue(des: "Dummy")
-        return HivePromise<HiveItemInfo>(error: error)
+        return HivePromise<HiveItemInfo>(error: HiveError.failue(des: "Dummy"))
     }
 }
