@@ -35,7 +35,7 @@ import Foundation
 ///
 public class HiveFileInfo: AttributeMap {
     
-    /// The property key name of item ID.
+    /// The property key name of item ID. The value to this property should be mandatory.
     public static let itemId: String = "ItemId"
     
     /// The property key name of file name with no path included.
