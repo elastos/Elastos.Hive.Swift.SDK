@@ -22,15 +22,20 @@
 
 import Foundation
 
-///  The `HiveDriveInfo` object is a property bag for ClientInfo information.
+/// A class representing the hive drive information.
+/// Notice that all values of property names are immutable. The property
+/// value could be empty string if it is undefined except for drive ID.
+///
+/// An example to get property values of `driveInfo` object.
+/// ```swift
+/// let driveId:String = driveInfo.getValue(HiveDriveInfo.driveId)
+/// ```
+///
 public class HiveDriveInfo: AttributeMap {
 
-    /// The unique identifier of the drive.
+    /// The property key name of drive ID. The value of drive id should be mandatory.
     public static let driveId: String = "DriveId"
 
-    /// Create a `HiveDriveInfo` instance
-    ///
-    /// - Parameter dict: The dictionary with the `driveId` key-value
     override init(_ dict: Dictionary<String, String>) {
         super.init(dict)
     }
