@@ -22,21 +22,28 @@
 
 import Foundation
 
-///  The `HiveDirectoryInfo` object is a property bag for ClientInfo information.
+/// A class representing the hive directory information.
+/// Notice that all values of property names are immutable. The property
+/// value could be empty string if it is undefined except for drive ID.
+///
+/// An example to get property values of `directoryInfo` object.
+/// ```swift
+/// let itemId:String = directoryInfo.getValue(HiveDirectoryInfo.itemId)
+/// let name:  String = directoryInfo.getValue(HiveDirectoryInfo.name)
+/// let childCount: String = directoryInfo.getValue(HiveDirectoryInfo.childCount)
+/// ```
+///
 public class HiveDirectoryInfo: AttributeMap {
     
-    /// The unique identifier of the directory within the Drive.
+    /// The property key name of directory item Id.
     public static let itemId: String = "ItemId"
 
-    /// The name of the item (filename and extension)
+    /// The property key name of directory name.
     public static let name: String = "Name"
 
-    /// Collection containing Item objects for the immediate children of Item.
+    /// The property key name of child count of subdirectories and files under the directory.
     public static let childCount: String = "ChildCount"
 
-    /// Create a `HiveDirectoryInfo` instance
-    ///
-    /// - Parameter dict: The dictionary with the `itemId`, `name` and `childCount` key-value
     override init(_ dict: Dictionary<String, String>) {
         super.init(dict)
     }
