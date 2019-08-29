@@ -121,8 +121,7 @@ public class HiveClientHandle: Result, ResourceItem{
     /// - Parameter handleBy: The delegate callback defined by upper application.
     /// - Returns: The promise of last remote information about this client.
     public func lastUpdatedInfo(handleBy: HiveCallback<resourceType>) -> HivePromise<resourceType> {
-        let error = HiveError.failue(des: "Dummy")
-        return HivePromise<resourceType>(error: error)
+        return HivePromise<resourceType>(error: HiveError.failue(des: "Dummy"))
     }
 
     /// Acquire the default drive handle of this client, which is the singleton
@@ -139,7 +138,6 @@ public class HiveClientHandle: Result, ResourceItem{
     /// - Parameter handleBy: The delegate callback defined by upper application.
     /// - Returns: The promise of the default drive handle.
     public func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> HivePromise<HiveDriveHandle> {
-        let error = HiveError.failue(des: "Dummy")
-        return HivePromise<HiveDriveHandle>(error: error)
+        return HivePromise<HiveDriveHandle>(error: HiveError.failue(des: "Dummy"))
     }
 }
