@@ -23,21 +23,18 @@
 import Foundation
 
 class AuthToken: NSObject {
+    var expiredIn: Int64
+    var accessToken: String
+    var refreshToken: String
+    var expiredTime: String
 
-    ///  The length of the access token expires
-    var expiredIn: Int64 = 0
+    override init() {
+        self.expiredIn = 0
+        self.accessToken = ""
+        self.refreshToken = ""
+        self.expiredTime = ""
+    }
 
-    ///  The access token for the user.
-    var accessToken: String = ""
-
-    /// The refresh token to when refreshing the access token.
-    var refreshToken: String = ""
-
-    ///  The time stamp indicating when the access token expires
-    var expiredTime: String = ""
-
-    /// Check access token isExpired
-    /// - Returns:  Returns `true` if expired, `false` otherwise.
     func isExpired() -> Bool {
         return Timestamp.isAfter(expiredTime)
     }
