@@ -22,21 +22,28 @@
 
 import Foundation
 
+/// A class representing a set of properties.
 public class AttributeMap: Result {
-
-    ///  The `AttributeMap` object is a property bag for itemInfo information.
     var attrDic: Dictionary<String, String>?
+
     init(_ dic: Dictionary<String, String>) {
         self.attrDic = dic
     }
 
-    /// Get itemInfo value for key
+    /// Acquire value by specific key
     ///
-    /// - Returns: Returns the value information for the itemInfo
+    /// - Parameter key: The specific key
+    /// - Returns: The value of specific key.
     public func getValue(_ key: String) -> String {
         return self.attrDic![key] ?? ""
     }
 
+    /// Check whether the key is existed in property set
+    ///
+    /// - Parameter key: The specific key
+    /// - Returns: Whether the key is existed in property set.
+    ///     Returns the value of `true` in case that the key is in the property
+    ///     set, otherwise, return false.
     public func hasKey(_ key: String) -> Bool {
         return self.attrDic?.index(forKey: key) != nil
     }

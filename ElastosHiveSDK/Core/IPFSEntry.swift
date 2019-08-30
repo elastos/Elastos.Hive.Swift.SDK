@@ -22,19 +22,27 @@
 
 import Foundation
 
-/// Configuration for the ipfs params
+/// An entry class to connect with IPFS storage network
 public class IPFSEntry {
 
-    /// A unique UID. The UID can be used to identify endpoints in communication.
+    /// The UID representing user ID.
     var uid: String?
 
-    /// Ipfs address
+    /// The array of address of Hive IPFS nodes which provides IPFS service.
     let rpcAddrs: Array<String>
+
+    /// The constructor with UID value
+    ///
+    /// - Parameter uid: The UID value
+    /// - Parameter rpcAddrs: The array of addresses of IPFS nodes.
     public init(_ uid: String, _ rpcAddrs: Array<String>) {
         self.uid = uid
         self.rpcAddrs = rpcAddrs
     }
 
+    /// The constructor with UID value
+    ///
+    /// - Parameter rpcAddrs: The array of addresses of IPFS nodes.
     public init(_ rpcAddrs: Array<String>) {
         self.uid = nil
         self.rpcAddrs = rpcAddrs

@@ -25,7 +25,7 @@ import Foundation
 /// The enum type representing all remote storage backend.
 public enum DriveType: String {
 
-    /// Native storage
+    /// Native storage (Not supported yet)
     case nativeStorage  = "Native"
 
     /// OneDrive storage backend
@@ -34,9 +34,9 @@ public enum DriveType: String {
     /// Hive IPFS distributed storage backend
     case hiveIPFS       = "IPFS"
 
-    /// Dropbox storage backend
+    /// Dropbox storage backend (Not supported yet)
     case dropBox        = "DropBox"
 
-    /// OneCloud storage backend
+    /// OneCloud storage backend (Not supported yet)
     case ownCloud       = "ownCloud"
 }
