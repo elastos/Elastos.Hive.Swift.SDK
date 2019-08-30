@@ -22,5 +22,7 @@
 
 import Foundation
 
+/// A null entry reserved for internal use.
+/// Applications don't need to use this class directly.
 public class NullEntry {
 }
