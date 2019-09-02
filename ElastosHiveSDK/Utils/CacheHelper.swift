@@ -157,4 +157,22 @@ class CacheHelper: NSObject {
             catch {}
         }
     }
+
+    class func clearCache(_ cacheFilePath: String) {
+
+        let enumerator = FileManager.default.enumerator(atPath: cacheFilePath);
+        while let element = enumerator?.nextObject() as? String {
+            if(enumerator?.fileAttributes?[FileAttributeKey.type] as! FileAttributeType == FileAttributeType.typeRegular){
+                //this is a file
+                do {
+                    try FileManager.default.removeItem(atPath: "\(cacheFilePath)/\(element)")
+                }catch {
+                    Log.e(TAG(), "remove \(cacheFilePath)/\(element) failed")
+                }
+            }
+            else if(enumerator?.fileAttributes?[FileAttributeKey.type] as! FileAttributeType == FileAttributeType.typeDirectory){
+                //this is a sub-directory
+            }
+        }
+    }
 }

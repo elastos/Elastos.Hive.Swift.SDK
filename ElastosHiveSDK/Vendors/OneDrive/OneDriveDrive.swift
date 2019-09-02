@@ -250,9 +250,7 @@ import Foundation
                 fileHandle.drive = self
                 fileHandle.cTag = jsonData["cTag"].stringValue
                 fileHandle.downloadUrl = jsonData["@microsoft.graph.downloadUrl"].stringValue
-                let pathName = "/\(PathExtracter(atPath).baseNamePart())"
-                let url: String = OneDriveURL(pathName, "content").compose()
-                _ = CacheHelper.clearCache(self.param!.keyStorePath, url.md5)
+                _ = CacheHelper.clearCache(self.param!.keyStorePath)
 
                 Log.d(TAG(), "Acquiring file %s instance succeeded: \(atPath)")
                 handleBy.didSucceed(fileHandle)
