@@ -254,7 +254,7 @@ internal class IPFSDrive: HiveDriveHandle {
                         fileHandle.drive = self
                         let pathName: String = "/\(PathExtracter(atPath).baseNamePart()).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)"
                         let url: String = "\((self.authHelper as! IPFSRpcHelper).param.entry.rpcAddrs[validIp])\(HIVE_SUB_Url.IPFS_FILES_READ.rawValue)?uid=\(uid)&path=\(pathName)"
-                        _ = CacheHelper.clearCache(self.param!.keyStorePath, url.md5)
+                        _ = CacheHelper.clearCache(self.param!.keyStorePath)
                         handleBy.didSucceed(fileHandle)
                         resolver.fulfill(fileHandle)
                     }

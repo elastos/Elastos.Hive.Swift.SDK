@@ -220,8 +220,11 @@ class IPFSDirectory: HiveDirectoryHandle {
                     fileHandle.lastInfo = fileInfo
                     fileHandle.pathName = path
                     fileHandle.drive = self.drive
+                    let drive = self.drive as! IPFSDrive
+                    _ = CacheHelper.clearCache(drive.param!.keyStorePath)
                     handleBy.didSucceed(fileHandle)
                     resolver.fulfill(fileHandle)
+
                 }
                 .catch{ error in
                     Log.e(TAG(), "fileHandle falied: \(HiveError.des(error as! HiveError))")
