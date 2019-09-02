@@ -246,6 +246,8 @@ class OneDriveDirectory: HiveDirectoryHandle {
                 fileHandle.pathName = path
                 fileHandle.drive = self.drive
                 fileHandle.lastInfo = fileInfo
+                let drive = self.drive as! OneDriveDrive
+                _ = CacheHelper.clearCache(drive.param!.keyStorePath)
 
                 Log.d(TAG(), "Acquire file %s handle succeeded: \(atName)")
                 handleBy.didSucceed(fileHandle)
