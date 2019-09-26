@@ -1,3 +1,13 @@
+09/26/2019 Li Aihong liaihong@elastos.org
+
+**version 0.5.1**, main changes to previous version:
+
+```markdown
+- Update swift version and support for swift5.1
+- Adapt Xcode11.
+- Optimize cache with downloadUrl.
+```
+
 08/16/2019 Li Aihong liaihong@elastos.org
 
 **version 0.5.0**, main changes to previous version:
