@@ -1,3 +1,11 @@
+11/19/2019 Li Aihong liaihong@elastos.org
+
+**version 0.5.2**, main changes to previous version:
+
+```markdown
+- Adapt Xcode11.2.1
+```
+
 09/26/2019 Li Aihong liaihong@elastos.org
 
 **version 0.5.1**, main changes to previous version:
