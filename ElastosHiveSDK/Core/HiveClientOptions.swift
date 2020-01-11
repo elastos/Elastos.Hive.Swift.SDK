@@ -29,7 +29,7 @@ public class HiveClientOptions: NSObject {
         self._authenticator = authenticator
     }
 
-    func buildClient() -> HiveClientHandle {
-        return IPFSClientHandle(self)
+    func buildClient() -> HiveClientHandle? {
+        return nil
     }
 }

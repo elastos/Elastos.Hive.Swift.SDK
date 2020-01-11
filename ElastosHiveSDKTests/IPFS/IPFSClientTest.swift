@@ -7,8 +7,14 @@ class IPFSClientTest: XCTestCase {
     private var options: IPFSClientOptions?
 
     func testCreateInstance() {
-        let client = HiveClientHandle.createInstance(withOptions: options!)
-        XCTAssertNotNil(client)
+        do {
+            let client: HiveClientHandle = try HiveClientHandle.createInstance(withOptions: options!)
+            XCTAssertNotNil(client)
+        } catch HiveError.failue {
+            XCTFail()
+        } catch {
+            XCTFail()
+        }
     }
 
     override func setUp() {
@@ -19,17 +25,18 @@ class IPFSClientTest: XCTestCase {
                 .build()
 
             XCTAssertNotNil(options)
-            XCTAssertTrue(options?.rpcNodes.count ?? 0 > 0)
+            XCTAssertTrue(options!.rpcNodes.count > 0)
         } catch HiveError.invalidatedBuilder  {
             XCTFail()
         } catch HiveError.insufficientParameters {
             XCTFail()
         } catch HiveError.failue  {
             XCTFail()
+        } catch {
+            XCTFail()
         }
     }
 
-    override func tearDown() {
-    }
+    override func tearDown() {}
 }
 

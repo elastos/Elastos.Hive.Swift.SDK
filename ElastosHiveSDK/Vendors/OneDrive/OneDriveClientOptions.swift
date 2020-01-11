@@ -36,7 +36,7 @@ public class OneDriveClientOptions: HiveClientOptions {
         }
     }
 
-    override func buildClient() -> HiveClientHandle {
+    override func buildClient() -> HiveClientHandle? {
         return OneDriveClientHandle(self)
     }
 }

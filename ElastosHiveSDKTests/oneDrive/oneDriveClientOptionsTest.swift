@@ -31,13 +31,34 @@ class oneDriveClientOptionsTest: XCTestCase {
             XCTFail()
         } catch HiveError.failue  {
             XCTFail()
+        } catch {
+            XCTFail()
         }
     }
 
     func testBuildWithoutClientId() {
         do {
-            let _ = try OneDriveClientOptionsBuilder()
+            _ = try OneDriveClientOptionsBuilder()
                 .withRedirectUrl(REDIRECT_URL)
+                .withAuthenticator(FakeAuthenticator())
+                .withStorePath(using: STORE_PATH)
+                .build()
+
+        } catch HiveError.invalidatedBuilder {
+            XCTFail()
+        } catch HiveError.insufficientParameters {
+            XCTAssertTrue(true)
+        } catch HiveError.failue {
+            XCTFail()
+        } catch {
+            XCTFail()
+        }
+    }
+
+    func testBuildWithoutRedirectUrl() {
+        do {
+            _ = try OneDriveClientOptionsBuilder()
+                .withClientId(CLIENT_ID)
                 .withAuthenticator(FakeAuthenticator())
                 .withStorePath(using: STORE_PATH)
                 .build()
@@ -49,52 +70,36 @@ class oneDriveClientOptionsTest: XCTestCase {
             XCTAssertTrue(true)
         } catch HiveError.failue  {
             XCTFail()
-        }
-    }
-
-    func testBuildWithoutRedirectUrl() {
-        do {
-            let _ = try OneDriveClientOptionsBuilder()
-            .withClientId(CLIENT_ID)
-            .withAuthenticator(FakeAuthenticator())
-            .withStorePath(using: STORE_PATH)
-            .build()
-
-            XCTFail()
-        } catch HiveError.invalidatedBuilder  {
-            XCTFail()
-        } catch HiveError.insufficientParameters {
-            XCTAssertTrue(true)
-        } catch HiveError.failue  {
+        } catch {
             XCTFail()
         }
     }
 
     func testBuildWithoutAuthenticator() {
         do {
-            let _ = try OneDriveClientOptionsBuilder()
-            .withClientId(CLIENT_ID)
-            .withRedirectUrl(REDIRECT_URL)
-            .withStorePath(using: STORE_PATH)
-            .build()
+            _ = try OneDriveClientOptionsBuilder()
+                .withClientId(CLIENT_ID)
+                .withRedirectUrl(REDIRECT_URL)
+                .withStorePath(using: STORE_PATH)
+                .build()
 
             XCTFail()
         } catch HiveError.invalidatedBuilder  {
             XCTFail()
         } catch HiveError.insufficientParameters {
             XCTAssertTrue(true)
-        } catch HiveError.failue  {
+        } catch {
             XCTFail()
         }
     }
 
     func testBuildWithoutStorePath() {
         do {
-            let _ = try OneDriveClientOptionsBuilder()
-            .withClientId(CLIENT_ID)
-            .withRedirectUrl(REDIRECT_URL)
-            .withAuthenticator(FakeAuthenticator())
-            .build()
+            _ = try OneDriveClientOptionsBuilder()
+                .withClientId(CLIENT_ID)
+                .withRedirectUrl(REDIRECT_URL)
+                .withAuthenticator(FakeAuthenticator())
+                .build()
 
             XCTFail()
         } catch HiveError.invalidatedBuilder  {
@@ -103,12 +108,11 @@ class oneDriveClientOptionsTest: XCTestCase {
             XCTAssertTrue(true)
         } catch HiveError.failue  {
             XCTFail()
+        } catch {
+            XCTFail()
         }
     }
 
-    override func setUp() {
-    }
-
-    override func tearDown() {
-    }
+    override func setUp() {}
+    override func tearDown() {}
 }
