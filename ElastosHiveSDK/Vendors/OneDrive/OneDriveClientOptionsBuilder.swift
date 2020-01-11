@@ -1,10 +1,12 @@
 import Foundation
 
-public class OneDriveClientOptionsBuilder {
+@objc(OneDriveClientOptionsBuilder)
+public class OneDriveClientOptionsBuilder: NSObject {
     private var options: OneDriveClientOptions?
 
-    public init() {
+    public override init() {
         options = OneDriveClientOptions()
+        super.init()
     }
 
     public func withClientId(_ clientId: String) -> OneDriveClientOptionsBuilder {
@@ -13,7 +15,7 @@ public class OneDriveClientOptionsBuilder {
     }
 
     public func withRedirectUrl(_ redirectUrl: String) -> OneDriveClientOptionsBuilder {
-        options?.setRedirectURL(redirectUrl)
+        options?.setRedirectUrl(redirectUrl)
         return self
     }
 
@@ -28,20 +30,24 @@ public class OneDriveClientOptionsBuilder {
     }
 
     public func build() throws -> OneDriveClientOptions {
-        guard options?.clientId != nil else {
-            // TODO;
+        guard let _ = options else {
+            throw HiveError.invalidatedBuilder(des: "Invalidated builder")
         }
 
-        guard options?.redirectURL != nil else {
-            // TODO
+        guard options?.clientId != nil else {
+            throw HiveError.insufficientParameters(des: "Missing clientId")
+        }
+
+        guard options?.redirectUrl != nil else {
+            throw HiveError.insufficientParameters(des: "Missing redirectUrl")
         }
 
         guard options?.storePath != nil else {
-            // TODO
+            throw HiveError.insufficientParameters(des: "Missing storePath")
         }
 
         guard options?.authenicator != nil else {
-            // TODO
+            throw HiveError.insufficientParameters(des: "Missing authenticator delegate")
         }
 
         let _options: OneDriveClientOptions = self.options!

@@ -1,5 +1,6 @@
 import Foundation
 
+@objc(IPFSClinetOptions)
 public class IPFSClientOptions: HiveClientOptions {
     private var _rpcNodes: Array<IPFSRpcNode>
 
@@ -17,7 +18,7 @@ public class IPFSClientOptions: HiveClientOptions {
         }
     }
 
-    override func buildClient(_ options: HiveClientOptions) throws -> HiveClientHandle {
-        return IPFSClientHandle(options)
+    override func buildClient() -> HiveClientHandle {
+        return IPFSClientHandle(self)
     }
 }
