@@ -15,10 +15,6 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
         return self as FilesProtocol
     }
 
-    public override func asIPFS() -> IPFSProtocol? {
-        return nil
-    }
-
     public override func asKeyValues() -> KeyValuesProtocol? {
         return self as KeyValuesProtocol
     }
