@@ -1,6 +1,6 @@
 import Foundation
 
-@objc(HiveClient)
+@objc(HiveClientOptions)
 public class HiveClientOptions: NSObject {
     private var _storePath: String?
     private var _authenticator: Authenticator?
@@ -29,7 +29,7 @@ public class HiveClientOptions: NSObject {
         self._authenticator = authenticator
     }
 
-    internal func buildClient(_ options: HiveClientOptions) throws -> HiveClientHandle {
-        return IPFSClientHandle(options)
+    func buildClient() -> HiveClientHandle {
+        return IPFSClientHandle(self)
     }
 }
