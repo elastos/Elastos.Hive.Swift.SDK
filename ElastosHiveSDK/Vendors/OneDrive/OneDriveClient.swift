@@ -6,9 +6,16 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
     }
 
     public override func connect() throws {
+        // TODO:
     }
 
     public override func disconnect() {
+        // TODO:
+    }
+
+    public override func isConnected() -> Bool {
+        // TODO:
+        return false
     }
 
     public override func asFiles() -> FilesProtocol? {
