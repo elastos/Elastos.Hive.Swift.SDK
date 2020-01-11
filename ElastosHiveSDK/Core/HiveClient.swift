@@ -9,6 +9,9 @@ public class HiveClientHandle: NSObject {
 
     public func connect() throws {}
     public func disconnect() {}
+    public func isConnected() -> Bool {
+        return false
+    }
 
     public func asFiles() -> FilesProtocol? {
         return nil
