@@ -1,159 +1,137 @@
-/*
- * Copyright (c) 2019 Elastos Foundation
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
-
 import Foundation
 
-@inline(__always) private func TAG() -> String { return "OneDriveClient" }
-
-@objc(OneDriveClient)
-internal class OneDriveClient: HiveClientHandle {
-    private static var clientInstance: HiveClientHandle?
-    private let authHelper: AuthHelper
-    private let param: OneDriveParameter
-
-    private init(_ param: OneDriveParameter) {
-        self.authHelper = OneDriveAuthHelper(param.getAuthEntry())
-        self.param = param
-        super.init(DriveType.oneDrive)
+class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
+    init(_ options: HiveClientOptions) {
+        // TODO:
     }
 
-    public static func createInstance(_ param: OneDriveParameter) {
-        if clientInstance == nil {
-            let client: OneDriveClient = OneDriveClient(param)
-            clientInstance = client as HiveClientHandle
-            Log.d(TAG(), "OneDrive Client singleton instance created")
-        }
+    public override func connect() throws {
     }
 
-    public static func sharedInstance() -> HiveClientHandle? {
-        return clientInstance
+    public override func disconnect() {
     }
 
-    override func login(_ authenticator: Authenticator) throws {
-        let promise = self.authHelper.loginAsync(authenticator)
-        do {
-            _ = try (promise.wait())
-        } catch  {
-            throw error
-        }
+    public override func asFiles() -> FilesProtocol? {
+        return self as FilesProtocol
     }
 
-    override func logout() throws {
-        let promise = self.authHelper.logoutAsync()
-        do {
-            _ = try (promise.wait())
-        } catch {
-            throw error;
-        }
+    public override func asIPFS() -> IPFSProtocol? {
+        return nil
     }
 
-    override func lastUpdatedInfo() -> HivePromise<HiveClientInfo> {
-        return lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>())
+    public override func asKeyValues() -> KeyValuesProtocol? {
+        return self as KeyValuesProtocol
     }
 
-    override func lastUpdatedInfo(handleBy: HiveCallback<HiveClientInfo>) -> HivePromise<HiveClientInfo> {
-        return HivePromise<HiveClientInfo> { resolver in
-            let token = (self.authHelper as! OneDriveAuthHelper).token
-            guard token != nil else {
-                Log.d(TAG(), "Client has not logined yet, please login first.")
-                let error = HiveError.failue(des: "Please login first")
-                handleBy.runError(error)
-                resolver.reject(error)
-                return
-            }
-            
-            self.authHelper.checkExpired().then { void -> HivePromise<JSON> in
-                return OneDriveAPIs.request(url: OneDriveURL.API,
-                             method: .get, parameters: nil,
-                             encoding: JSONEncoding.default,
-                             headers: OneDriveHttpHeader.headers(self.authHelper),
-                             avalidCode: 200, self.authHelper)
-            }.done { jsonData in
-                let dict = [
-                    HiveClientInfo.userId:  jsonData["id"].stringValue,
-                    HiveClientInfo.name:    jsonData["displayName"].stringValue,
-                    HiveClientInfo.email:   jsonData["email"].stringValue,
-                    HiveClientInfo.phoneNo: jsonData["mobilePhone"].stringValue,
-                    HiveClientInfo.region:  jsonData["officeLocation"].stringValue]
-                let clientInfo: HiveClientInfo = HiveClientInfo(dict)
-                self.handleId = jsonData["id"].stringValue
-                self.lastInfo = clientInfo
-
-                Log.d(TAG(), "Acquired client information from remote drive: \(clientInfo.debugDescription)");
-                handleBy.didSucceed(clientInfo)
-                resolver.fulfill(clientInfo)
-            }.catch { error in
-                Log.e(TAG(), "Acquire last client information failed: \(HiveError.des(error as! HiveError))")
-                handleBy.runError(error as! HiveError)
-                resolver.reject(error)
-            }
-        }
+    public func putString(_ data: String, asRemoteFile: String) -> HivePromise<Void> {
+        putString(data, asRemoteFile: asRemoteFile, handler: HiveCallback<Void>())
     }
 
-    override func defaultDriveHandle() -> HivePromise<HiveDriveHandle> {
-        return defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>())
+    public func putString(_ data: String, asRemoteFile: String, handler: HiveCallback<Void>) -> HivePromise<Void> {
+        return HivePromise<Void>(error: HiveError.failue(des: "Not implemented"))
     }
 
-    override func defaultDriveHandle(handleBy: HiveCallback<HiveDriveHandle>) -> HivePromise<HiveDriveHandle> {
-        return HivePromise<HiveDriveHandle> { resolver in
-            let token = (self.authHelper as! OneDriveAuthHelper).token
-            guard token != nil else {
-                Log.d(TAG(), "Client has not logined yet, please login first.")
-                let error = HiveError.failue(des: "Please login first")
-                handleBy.runError(error)
-                resolver.reject(error)
-                return
-            }
-            guard OneDriveDrive.oneDriveInstance == nil else {
-                let handle = OneDriveDrive.sharedInstance()
-                handle.param = self.param
+    public func putData(_ data: Data, asRemoteFile: String) -> HivePromise<Void> {
+        return putData(data, asRemoteFile: asRemoteFile, handler: HiveCallback<Void>())
+    }
 
-                handleBy.didSucceed(handle)
-                resolver.fulfill(handle)
-                return
-            }
+    public func putData(_ data: Data, asRemoteFile: String, handler: HiveCallback<Void>) -> HivePromise<Void> {
+        return HivePromise<Void>(error: HiveError.failue(des: "Not implemented"))
+    }
 
-            self.authHelper.checkExpired().then { void -> HivePromise<JSON> in
-                return OneDriveAPIs.request(url: OneDriveURL.API + OneDriveURL.ROOT,
-                             method: .get,parameters: nil,
-                             encoding: JSONEncoding.default,
-                             headers: OneDriveHttpHeader.headers(self.authHelper),
-                             avalidCode: 200, self.authHelper)
-            }.done { jsonData in
-                let dict: Dictionary<String, String> = [HiveDriveInfo.driveId: jsonData["id"].stringValue]
-                let driveInfo: HiveDriveInfo = HiveDriveInfo(dict)
-                let driveHandle: OneDriveDrive = OneDriveDrive(driveInfo, self.authHelper)
+    public func putDataFromFile(_ fileHandle: FileHandle, asRemoteFile: String) -> HivePromise<Void> {
+        return putDataFromFile(fileHandle, asRemoteFile: asRemoteFile, handler: HiveCallback<Void>())
+    }
 
-                driveHandle.param = self.param
-                driveHandle.lastInfo = driveInfo
+    public func putDataFromFile(_ fileHandle: FileHandle, asRemoteFile: String, handler: HiveCallback<Void>) -> HivePromise<Void> {
+        return HivePromise<Void>(error: HiveError.failue(des: "Not implemented"))
+    }
 
-                Log.d(TAG(), "Acquired default drive instance succeeded: \(driveHandle.debugDescription)");
-                handleBy.didSucceed(driveHandle)
-                resolver.fulfill(driveHandle)
-            }.catch { error in
-                Log.e(TAG(), "Acquiring default drive instance failed: \(HiveError.des(error as! HiveError))")
-                handleBy.runError(error as! HiveError)
-                resolver.reject(error)
-            }
-        }
+    public func sizeofRemoteFile(_ fileName: String) -> HivePromise<UInt64> {
+        return sizeofRemoteFile(fileName, handler: HiveCallback<UInt64>())
+    }
+
+    public func sizeofRemoteFile(_ fileName: String, handler: HiveCallback<UInt64>) -> HivePromise<UInt64> {
+        return HivePromise<UInt64>(error: HiveError.failue(des: "Not implemented"))
+    }
+
+    public func getString(fromRemoteFile: String) -> HivePromise<String> {
+        return getString(fromRemoteFile: fromRemoteFile, handler: HiveCallback<String>())
+    }
+
+    public func getString(fromRemoteFile: String, handler: HiveCallback<String>) -> HivePromise<String> {
+        return HivePromise<String>(error: HiveError.failue(des: "Not implemented"))
+    }
+
+    public func getData(fromRemoteFile: String) -> HivePromise<Data> {
+        return getData(fromRemoteFile: fromRemoteFile, handler: HiveCallback<Data>())
+    }
+
+    public func getData(fromRemoteFile: String, handler: HiveCallback<Data>) -> HivePromise<Data> {
+        return HivePromise<Data>(error: HiveError.failue(des: "Not implemented"))
+    }
+
+    public func getDataToTargetFile(fromRemoteFile: String, targetFile: FileHandle) -> HivePromise<Void> {
+        return getDataToTargetFile(fromRemoteFile: fromRemoteFile, targetFile: targetFile, handler: HiveCallback<Void>())
+    }
+
+    public func getDataToTargetFile(fromRemoteFile: String, targetFile: FileHandle, handler: HiveCallback<Void>) -> HivePromise<Void> {
+        return HivePromise<Void>(error: HiveError.failue(des: "Not implemented"))
+    }
+
+    public func deleteRemoteFile(_ fileName: String) -> HivePromise<Void> {
+        return deleteRemoteFile(fileName, handler: HiveCallback<Void>())
+    }
+
+    public func deleteRemoteFile(_ fileName: String, handler: HiveCallback<Void>) -> HivePromise<Void> {
+        return HivePromise<Void>(error: HiveError.failue(des: "Not implemented"))
+    }
+
+    public func putValue(_ aValue: String, forKey: String) -> HivePromise<Void> {
+        return putValue(aValue, forKey: forKey,  handler: HiveCallback<Void>())
+    }
+
+    public func putValue(_ aValue: String, forKey: String, handler: HiveCallback<Void>) -> HivePromise<Void> {
+        return HivePromise<Void>(error: HiveError.failue(des: "Not implemented"))
+    }
+
+    public func putValue(_ aValue: Data, forKey: String) -> HivePromise<Void> {
+        return putValue(aValue, forKey: forKey,  handler: HiveCallback<Void>())
+    }
+
+    public func putValue(_ aValue: Data, forKey: String, handler: HiveCallback<Void>) -> HivePromise<Void> {
+        return HivePromise<Void>(error: HiveError.failue(des: "Not implemented"))
+    }
+
+    public func setValue(_ newValue: String, forKey: String) -> HivePromise<Void> {
+        return setValue(newValue, forKey: forKey, handler: HiveCallback<Void>())
+    }
+
+    public func setValue(_ newValue: String, forKey: String, handler: HiveCallback<Void>) -> HivePromise<Void> {
+        return HivePromise<Void>(error: HiveError.failue(des: "Not implemented"))
+    }
+
+    public func setValue(_ newValue: Data, forKey: String) -> HivePromise<Void> {
+        return setValue(newValue, forKey: forKey, handler:  HiveCallback<Void>())
+    }
+
+    public func setValue(_ newValue: Data, forKey: String, handler: HiveCallback<Void>) -> HivePromise<Void> {
+        return HivePromise<Void>(error: HiveError.failue(des: "Not implemented"))
+    }
+
+    public func values(ofKey: String) -> HivePromise<ValueList> {
+        return values(ofKey: ofKey, handler: HiveCallback<ValueList>())
+    }
+
+    public func values(ofKey: String, handler: HiveCallback<ValueList>) -> HivePromise<ValueList> {
+        return HivePromise<ValueList>(error: HiveError.failue(des: "Not implemented"))
+    }
+
+    public func deleteValues(forKey: String) -> HivePromise<Void> {
+        return deleteValues(forKey: forKey, handler: HiveCallback<Void>())
+    }
+
+    public func deleteValues(forKey: String, handler: HiveCallback<Void>) -> HivePromise<Void> {
+        return HivePromise<Void>(error: HiveError.failue(des: "Not implemented"))
     }
 }
