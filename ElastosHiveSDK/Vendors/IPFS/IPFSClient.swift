@@ -11,16 +11,8 @@ class IPFSClientHandle: HiveClientHandle, IPFSProtocol {
     public override func disconnect() {
     }
 
-    public override func asFiles() -> FilesProtocol? {
-        return nil
-    }
-
     public override func asIPFS() -> IPFSProtocol? {
         return self as IPFSProtocol?
-    }
-
-    public override func asKeyValues() -> KeyValuesProtocol? {
-        return nil
     }
 
     public func putString(_ data: String) -> HivePromise<Hash> {
