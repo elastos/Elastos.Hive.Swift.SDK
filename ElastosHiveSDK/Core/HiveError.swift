@@ -28,7 +28,7 @@ public enum HiveError: Error {
 
 extension HiveError {
 
-    static func des(_ error: HiveError) -> String{
+    static func des(_ error: HiveError) -> String {
         switch error {
         case .failue(let err):
             return err ?? "Operation failed"
