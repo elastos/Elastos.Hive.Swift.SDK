@@ -15,8 +15,14 @@ class oneDriveClientTest: XCTestCase {
     }
 
     func testCreateInstance() {
-        let client = HiveClientHandle.createInstance(withOptions: options!)
-        XCTAssertNotNil(client)
+        do {
+            let client = try HiveClientHandle.createInstance(withOptions: options!)
+            XCTAssertNotNil(client)
+        } catch HiveError.failue {
+            XCTFail()
+        } catch {
+            XCTFail()
+        }
     }
 
     override func setUp() {
@@ -39,9 +45,10 @@ class oneDriveClientTest: XCTestCase {
             XCTFail()
         } catch HiveError.failue  {
             XCTFail()
+        } catch {
+            XCTFail()
         }
     }
 
-    override func tearDown() {
-    }
+    override func tearDown() {}
 }

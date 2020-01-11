@@ -36,7 +36,7 @@ class oneDriveClientProtocolTest: XCTestCase {
             XCTAssertNotNil(options.authenicator)
             XCTAssertNotNil(options.storePath)
 
-            client = HiveClientHandle.createInstance(withOptions: options)
+            client = try HiveClientHandle.createInstance(withOptions: options)
             XCTAssertNotNil(client)
 
             try client?.connect()
@@ -47,6 +47,8 @@ class oneDriveClientProtocolTest: XCTestCase {
         } catch HiveError.insufficientParameters {
             XCTFail()
         } catch HiveError.failue  {
+            XCTFail()
+        } catch {
             XCTFail()
         }
     }

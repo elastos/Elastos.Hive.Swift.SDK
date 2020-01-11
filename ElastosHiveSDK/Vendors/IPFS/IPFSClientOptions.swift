@@ -18,7 +18,7 @@ public class IPFSClientOptions: HiveClientOptions {
         }
     }
 
-    override func buildClient() -> HiveClientHandle {
+    override func buildClient() -> HiveClientHandle? {
         return IPFSClientHandle(self)
     }
 }
