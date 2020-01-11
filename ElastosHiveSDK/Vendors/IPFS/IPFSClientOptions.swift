@@ -1,6 +1,6 @@
 import Foundation
 
-@objc(IPFSClinetOptions)
+@objc(IPFSClientOptions)
 public class IPFSClientOptions: HiveClientOptions {
     private var _rpcNodes: Array<IPFSRpcNode>
 
