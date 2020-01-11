@@ -4,8 +4,7 @@ public typealias HivePromise = Promise
 
 @objc(HiveClient)
 public class HiveClientHandle: NSObject {
-    override init() {
-    }
+    override init() {}
 
     public func connect() throws {}
     public func disconnect() {}
@@ -25,7 +24,12 @@ public class HiveClientHandle: NSObject {
         return nil
     }
 
-    public static func createInstance(withOptions: HiveClientOptions) -> HiveClientHandle {
-        return withOptions.buildClient()
+    public static func createInstance(withOptions: HiveClientOptions) throws -> HiveClientHandle {
+        let client = withOptions.buildClient()
+        guard client != nil else {
+            throw HiveError.failue(des: "Not implemented")
+        }
+
+        return client!
     }
 }

@@ -1,7 +1,7 @@
 import XCTest
 @testable import ElastosHiveSDK
 
-class IPFSClientOptions: XCTestCase {
+class IPFSClientOptionsTest: XCTestCase {
     private let STORE_PATH = "fakePath"
 
     func testBuild() {
@@ -20,6 +20,8 @@ class IPFSClientOptions: XCTestCase {
             XCTFail()
         } catch HiveError.failue  {
             XCTFail()
+        } catch {
+            XCTFail()
         }
     }
 
@@ -35,6 +37,8 @@ class IPFSClientOptions: XCTestCase {
         } catch HiveError.insufficientParameters {
             XCTAssertTrue(true)
         } catch HiveError.failue  {
+            XCTFail()
+        } catch {
             XCTFail()
         }
     }
@@ -52,13 +56,12 @@ class IPFSClientOptions: XCTestCase {
             XCTAssertTrue(true)
         } catch HiveError.failue  {
             XCTFail()
+        } catch {
+            XCTFail()
         }
     }
 
-    override func setUp() {
-    }
-
-    override func tearDown() {
-    }
+    override func setUp() {}
+    override func tearDown() {}
 }
 

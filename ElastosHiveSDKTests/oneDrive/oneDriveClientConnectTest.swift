@@ -18,9 +18,10 @@ class oneDriveClientConnectTest: XCTestCase {
         XCTAssertFalse(client!.isConnected())
         do {
             try client?.connect()
-
-            XCTAssertTrue(client.isConnected())
+            XCTAssertTrue(client!.isConnected())
         } catch HiveError.failue {
+            XCTFail()
+        } catch {
             XCTFail()
         }
     }
@@ -40,7 +41,7 @@ class oneDriveClientConnectTest: XCTestCase {
             XCTAssertNotNil(options.authenicator)
             XCTAssertNotNil(options.storePath)
 
-            client = HiveClientHandle.createInstance(withOptions: options)
+            client = try HiveClientHandle.createInstance(withOptions: options)
             XCTAssertNotNil(client)
 
         } catch HiveError.invalidatedBuilder  {
@@ -49,8 +50,9 @@ class oneDriveClientConnectTest: XCTestCase {
             XCTFail()
         } catch HiveError.failue  {
             XCTFail()
+        } catch {
+            XCTFail()
         }
-        
     }
 
     override func tearDown() {
