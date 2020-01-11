@@ -1,12 +1,7 @@
 import Foundation
 
-public class Hash: Result {
+public class Hash {
     private let _value: String
-
-    override init() {
-        self._value = ""
-        super.init()
-    }
 
     init(_ value: String) {
         self._value = value

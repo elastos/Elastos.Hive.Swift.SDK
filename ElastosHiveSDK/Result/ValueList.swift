@@ -1,4 +1,4 @@
 import Foundation
 
-public class ValueList: Result {
+public class ValueList {
 }

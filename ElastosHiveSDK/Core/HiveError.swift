@@ -23,15 +23,19 @@
 import Foundation
 
 public enum HiveError: Error {
+    case insufficientParameters(des: String?)
+    case invalidatedBuilder(des: String?)
     case failue(des: String?)
 }
 
+/*
 extension HiveError {
 
-    static func des(_ error: HiveError) -> String {
+    static func description(_ error: HiveError) -> String {
         switch error {
         case .failue(let err):
             return err ?? "Operation failed"
         }
     }
 }
+*/
