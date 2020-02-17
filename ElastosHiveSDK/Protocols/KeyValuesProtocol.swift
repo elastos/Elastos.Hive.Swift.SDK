@@ -13,8 +13,8 @@ public protocol KeyValuesProtocol {
     func setValue(_ newValue: Data, forKey: String) -> HivePromise<Void>
     func setValue(_ newValue: Data, forKey: String, handler: HiveCallback<Void>) -> HivePromise<Void>
 
-    func values(ofKey: String) -> HivePromise<ValueList>
-    func values(ofKey: String, handler: HiveCallback<ValueList>) -> HivePromise<ValueList>
+    func values(ofKey: String) -> HivePromise<[Data]>
+    func values(ofKey: String, handler: HiveCallback<[Data]>) -> HivePromise<[Data]>
 
     func deleteValues(forKey: String) -> HivePromise<Void>
     func deleteValues(forKey: String, handler: HiveCallback<Void>) -> HivePromise<Void>
