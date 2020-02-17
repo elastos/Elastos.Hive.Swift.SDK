@@ -459,25 +459,24 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
         let total = data.count
         let dataLength = calcuLength(data)
         let strbytes = spliteBytes(data, dataLength)
-        let strData = self.byteArrayToData(bytes: strbytes)
+        let strData = byteArrayToData(bytes: strbytes)
         arr.append(strData)
         let remainingDataLength = total - (dataLength + 4)
         if remainingDataLength <= 0 {
             return arr
         }
-        let remainingData = [UInt8](data[(dataLength + 4)..<remainingDataLength])
+        let remainingData = [UInt8](data[(dataLength + 4)..<data.count])
         return createValueResult(arr, remainingData)
     }
     
     private func calcuLength(_ data: [UInt8]) -> Int {
         let tmp = [UInt8](data[0..<4])
-        let tmpData = byteArrayToData(bytes: tmp)
-        let tmpstr = String(data: tmpData, encoding: .utf8)!
-        return Int(tmpstr)!
+        return byteArrayToInt(bytes: tmp)
     }
     
     private func spliteBytes(_ data: [UInt8], _ length: Int) -> [UInt8] {
-        let tmp = [UInt8](data[4..<length])
+        let end = length + 3
+        let tmp = [UInt8](data[3..<end])
         return tmp
     }
     
