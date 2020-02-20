@@ -42,11 +42,13 @@ let ONE_DRIVE_API_BASE_URL: String  = "https://graph.microsoft.com/v1.0/me/drive
 let AUTHORIZE: String = "authorize"
 let LOGOUT: String = "/logout"
 let TOKEN: String = "/token"
-//let ROOT: String = "/root"
 let APP_ROOT: String = "special/approot"
-
+let FILES_ROOT_PATH  = "/Files"
 let DEFAULT_REDIRECT_URL: String = "localhost"
 let DEFAULT_REDIRECT_PORT: Int = 12345
+
+let ONEDRIVE_CONFIG = "onedrive.json"
+let IPFS_CONFIG = "ipfs.json"
 
 let GRANT_TYPE_GET_TOKEN: String = "authorization_code"
 let GRANT_TYPE_REFRESH_TOKEN: String = "refresh_token"

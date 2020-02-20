@@ -24,7 +24,7 @@ class IPFSApis: NSObject {
                         resolver.reject(error)
                         return
                     }
-                    var json = JSON(dataResponse.result.value as Any)
+                    let json = JSON(dataResponse.result.value as Any)
                     resolver.fulfill(json)
                 })
         }

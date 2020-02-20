@@ -34,16 +34,16 @@ internal class OneDriveAuthHelper: ConnectHelper {
     var clientId: String
     var scope: String
     var redirectUrl: String
-    var persistentStorePath: String
     var token: AuthToken?
     let server = SimpleAuthServer.sharedInstance
     var connectState: Bool = false
+    var persistent: Persistent
     
     init(_ clientId: String, _ scope: String, _ redirectUrl: String, _ persistentStorePath: String) {
         self.clientId = clientId
         self.scope = scope
         self.redirectUrl = redirectUrl
-        self.persistentStorePath = persistentStorePath
+        self.persistent = AuthInfoStoreImpl(persistentStorePath)
     }
 
     override func connectAsync(authenticator: Authenticator? = nil) -> HivePromise<Void> {
@@ -51,29 +51,8 @@ internal class OneDriveAuthHelper: ConnectHelper {
     }
 
     override func connectAsync(authenticator: Authenticator? = nil, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
-        // todo: store
         return HivePromise<Void> { resolver in
-            self.acquireAuthCode(authenticator!)
-                .then { authCode -> HivePromise<Void>  in
-                    return self.acquireAccessToken(authCode)
-                }.done { padding in
-                    Log.d(TAG(), "Login succeed")
-                    handleBy.didSucceed(padding)
-                    resolver.fulfill(padding)
-                }.catch { error in
-                    handleBy.runError(error as! HiveError)
-                    resolver.reject(error)
-            }
-        }
-    }
-
-    override func logoutAsync() -> HivePromise<Void> {
-        return logoutAsync(handleBy: HiveCallback<Void>())
-    }
-    
-    override func logoutAsync(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
-        return HivePromise<Void> { resolver in
-            return _ = self.logoutAsync_().done { _ in
+            self.do_login(authenticator!).done { _ in
                 handleBy.didSucceed(Void())
                 resolver.fulfill(Void())
             }.catch { error in
@@ -82,7 +61,7 @@ internal class OneDriveAuthHelper: ConnectHelper {
             }
         }
     }
-    
+
     func disconnect() {
         return connectState = false
     }
@@ -105,14 +84,58 @@ internal class OneDriveAuthHelper: ConnectHelper {
         }
     }
     
-    private func login(_ authenticator: Authenticator) throws -> HivePromise<Void> {
-        return HivePromise<Void>(error: HiveError.failue(des: "Not implemented"))
+    private func do_login(_ authenticator: Authenticator) -> HivePromise<Void> {
+        connectState = false
+        tryRestoreToken()
+        if token != nil {
+            if !(token!.isExpired()) {
+                connectState = true
+            }
+            return refreshToken()
+        }
+        
+        return HivePromise<Void> { resolver in
+            self.acquireAuthCode(authenticator)
+                .then { authCode -> HivePromise<Void>  in
+                    return self.acquireAccessToken(authCode)
+                }.done { _ in
+                    self.connectState = true
+                    Log.d(TAG(), "Login succeed")
+                    resolver.fulfill(Void())
+                }.catch { error in
+                    self.connectState = false
+                    resolver.reject(error)
+            }
+        }
     }
     
     private func tryRestoreToken() {
-        //TODO:
+        let json = JSON(persistent.parseFrom())
+        var refreshToken = ""
+        var accessToken = ""
+        var expiresAt = -1
+        
+        if (json[refreshTokenKey] != "") {
+            refreshToken = json[refreshTokenKey].stringValue
+        }
+        if (json[accessTokenKey] != "") {
+            accessToken = json[accessTokenKey].stringValue
+        }
+        if (json[expireAtKey] != "") {
+            expiresAt = json[expireAtKey].intValue
+        }
+        if refreshToken != "" && accessToken != "" && expiresAt > 0 {
+            self.token = AuthToken(refreshToken, accessToken, expiresAt)
+        }
     }
     
+    private func sotre(_ json: JSON) {
+        let exTime = Int(Date().timeIntervalSince1970) + json[expireAtKey].intValue
+        token = AuthToken(json[refreshTokenKey].stringValue, json[accessTokenKey].stringValue, exTime)
+        let dict = [clientIdKey: clientId, refreshTokenKey: token!.refreshToken, accessTokenKey: token!.accessToken, expireAtKey: token!.expiredTime]
+        persistent.upateContent(dict)
+    }
+
     private func acquireAuthCode(_ authenticator: Authenticator) -> HivePromise<String> {
         return HivePromise<String> { resolver in
             let startIndex: String.Index = redirectUrl.index(redirectUrl.startIndex, offsetBy: 17)
@@ -152,8 +175,8 @@ internal class OneDriveAuthHelper: ConnectHelper {
                     return
                 }
                 Log.d(TAG(), "AccessToken succeed")
-//                let jsonData: JSON =  JSON(dataResponse.result.value as Any)
-//              TODO: save info
+                let json: JSON =  JSON(dataResponse.result.value as Any)
+                self.sotre(json)
                 resolver.fulfill(Void())
             })
         }
@@ -176,13 +199,15 @@ internal class OneDriveAuthHelper: ConnectHelper {
             Alamofire.request(urlRequest).responseJSON(completionHandler: { dataResponse in
                 guard dataResponse.response?.statusCode == 200 else{
                     let json = JSON(JSON(dataResponse.result.value as Any)["error"])
+                    self.connectState = false
                     let error = HiveError.failue(des: json["message"].stringValue)
                     resolver.reject(error)
                     return
                 }
+                self.connectState = true
                 Log.d(TAG(), "RefreshToken succeed")
-//                let jsonData: JSON = JSON(dataResponse.result.value as Any)
-//              TODO: save info
+                let json: JSON = JSON(dataResponse.result.value as Any)
+                self.sotre(json)
                 resolver.fulfill(Void())
             })
         }
