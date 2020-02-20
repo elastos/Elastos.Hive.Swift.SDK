@@ -29,7 +29,7 @@ class OneDriveAPIs: NSObject {
                        parameters: Parameters? = nil,
                        encoding: ParameterEncoding = URLEncoding.default,
                        headers: HTTPHeaders? = nil,
-                       _ authHelper: AuthHelper) -> HivePromise<JSON> {
+                       _ authHelper: ConnectHelper) -> HivePromise<JSON> {
         return HivePromise<JSON> { resolver in
             Alamofire.request(url, method: method,
                               parameters: parameters,
@@ -59,7 +59,7 @@ class OneDriveAPIs: NSObject {
     class func uploadWriteData(data: Data, to: URLConvertible,
                                method: HTTPMethod = .put,
                                headers: HTTPHeaders,
-                            _ authHelper: AuthHelper) -> HivePromise<Void> {
+                            _ authHelper: ConnectHelper) -> HivePromise<Void> {
         return HivePromise<Void> { resolver in
             Alamofire.upload(data,
                              to: to,
@@ -83,9 +83,9 @@ class OneDriveAPIs: NSObject {
         }
     }
 
-    class func getRemoteFile(url: URLConvertible, headers: HTTPHeaders, authHelper: AuthHelper) -> HivePromise<Data> {
+    class func getRemoteFile(url: URLConvertible, headers: HTTPHeaders, authHelper: ConnectHelper) -> HivePromise<Data> {
         return HivePromise<Data> {resolver in
-            _ = authHelper.checkExpired().done { result in
+            _ = authHelper.checkValid().done { result in
                 Alamofire.request(url, method: .get,
                                   parameters: nil,
                                   encoding: JSONEncoding.default,

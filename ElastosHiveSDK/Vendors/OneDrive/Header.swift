@@ -2,9 +2,9 @@
 import Foundation
 
 class Header {
-    private var auther: AuthHelper
+    private var auther: ConnectHelper
     
-    init(_ auther: AuthHelper) {
+    init(_ auther: ConnectHelper) {
         self.auther = auther
     }
     

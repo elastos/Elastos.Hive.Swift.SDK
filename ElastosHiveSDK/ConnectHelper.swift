@@ -23,24 +23,28 @@
 import Foundation
 
 @objc(AuthHelper)
-internal class AuthHelper: NSObject {
-    func loginAsync(_ authenticator: Authenticator) -> HivePromise<Void> {
-        return loginAsync(authenticator, handleBy: HiveCallback<Void>())
+public class ConnectHelper: NSObject {
+    public func connectAsync(authenticator: Authenticator? = nil) -> HivePromise<Void> {
+        return connectAsync(authenticator: authenticator, handleBy: HiveCallback<Void>())
     }
     
-    func loginAsync(_ authenticator: Authenticator, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+    public func connectAsync(authenticator: Authenticator? = nil, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
         return HivePromise<Void>(error: HiveError.failue(des: "Dummy"))
     }
-
-    func logoutAsync() -> HivePromise<Void> {
+    
+    public func logoutAsync() -> HivePromise<Void> {
         return logoutAsync(handleBy: HiveCallback<Void>())
     }
-
-    func logoutAsync(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+    
+    public func logoutAsync(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
         return HivePromise<Void>(error: HiveError.failue(des: "Dummy"))
     }
-
-    func checkExpired() -> HivePromise<Void> {
+    
+    public func checkValid() -> HivePromise<Void> {
+        return checkValid(handleBy: HiveCallback<Void>())
+    }
+    
+    public func checkValid(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
         return HivePromise<Void>(error: HiveError.failue(des: "Dummy"))
     }
 }
