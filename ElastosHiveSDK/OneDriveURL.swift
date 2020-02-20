@@ -1,7 +1,7 @@
 
 import Foundation
 
-class URLUtils {
+class OneDriveURL {
     
     private var _path: String
     init(_ path: String) {
