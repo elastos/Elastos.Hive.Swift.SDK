@@ -9,23 +9,23 @@ class OneDriveURL {
     }
     
     func dirAndFileInfo() -> String {
-        return ONE_DRIVE_API_BASE_URL + APP_ROOT + ":/\(_path)"
+        return ONE_DRIVE_API_BASE_URL + APP_ROOT + FILES_ROOT_PATH + ":/\(_path)"
     }
     
     func deleteItem() -> String {
-        return ONE_DRIVE_API_BASE_URL + APP_ROOT + ":\(_path)"
+        return ONE_DRIVE_API_BASE_URL + APP_ROOT + FILES_ROOT_PATH + ":\(_path)"
     }
     
     func children() -> String {
-        return ONE_DRIVE_API_BASE_URL + APP_ROOT + ":\(_path):/children"
+        return ONE_DRIVE_API_BASE_URL + APP_ROOT + FILES_ROOT_PATH + ":\(_path):/children"
     }
     
     func read() -> String {
-        return ONE_DRIVE_API_BASE_URL + APP_ROOT + ":\(_path):/content"
+        return ONE_DRIVE_API_BASE_URL + APP_ROOT + FILES_ROOT_PATH + ":\(_path):/content"
     }
     
     func write() -> String {
-        return ONE_DRIVE_API_BASE_URL + APP_ROOT + ":\(_path):/content"
+        return ONE_DRIVE_API_BASE_URL + APP_ROOT + FILES_ROOT_PATH + ":\(_path):/content"
     }
     
     func acquireAuthCode() -> String {

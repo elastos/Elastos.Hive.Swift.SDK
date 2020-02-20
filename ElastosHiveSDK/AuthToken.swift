@@ -23,12 +23,12 @@
 import Foundation
 
 class AuthToken: NSObject {
-    var expiredIn: Int64
+    var expiredIn: Int
     var accessToken: String
     var refreshToken: String
     var expiredTime: String
 
-     init(_ refreshToken: String, _ accessToken: String, _ experitime: Int64) {
+     init(_ refreshToken: String, _ accessToken: String, _ experitime: Int) {
         self.expiredIn = experitime
         self.accessToken = accessToken
         self.refreshToken = refreshToken
