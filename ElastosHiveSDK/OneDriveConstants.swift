@@ -44,6 +44,8 @@ let LOGOUT: String = "/logout"
 let TOKEN: String = "/token"
 let APP_ROOT: String = "special/approot"
 let FILES_ROOT_PATH  = "/Files"
+let KEYVALUES_ROOT_PATH = "/KeyValues/"
+
 let DEFAULT_REDIRECT_URL: String = "localhost"
 let DEFAULT_REDIRECT_PORT: Int = 12345
 
