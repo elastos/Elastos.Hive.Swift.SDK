@@ -32,14 +32,6 @@ public class ConnectHelper: NSObject {
         return HivePromise<Void>(error: HiveError.failue(des: "Dummy"))
     }
     
-    public func logoutAsync() -> HivePromise<Void> {
-        return logoutAsync(handleBy: HiveCallback<Void>())
-    }
-    
-    public func logoutAsync(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
-        return HivePromise<Void>(error: HiveError.failue(des: "Dummy"))
-    }
-    
     public func checkValid() -> HivePromise<Void> {
         return checkValid(handleBy: HiveCallback<Void>())
     }

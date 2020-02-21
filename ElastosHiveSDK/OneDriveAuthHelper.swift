@@ -216,23 +216,4 @@ internal class OneDriveAuthHelper: ConnectHelper {
     private func isExpired() -> Bool {
         return token!.isExpired()
     }
-
-    private func logoutAsync_() -> HivePromise<Void> {
-        return HivePromise<Void>{ resolver in
-            let url: String = OneDriveURL(redirectUrl).logout()
-            OneDriveAPIs.request(url: url,
-                                 method: .get,
-                                 parameters: nil,
-                                 encoding: JSONEncoding.default,
-                                 headers: nil,
-                                 self).done { jsonData in
-                    Log.d(TAG(), "Logout succeed")
-                    //   TODO: remove local info
-                    resolver.fulfill(Void())
-            }
-            .catch { error in
-                resolver.reject(error)
-            }
-        }
-    }
 }
