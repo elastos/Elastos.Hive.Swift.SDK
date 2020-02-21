@@ -382,7 +382,8 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
                 let originBytes: [UInt8] = self.dataToByteArray(data: originData)
                 let finalBytes = self.mergeData(bytes1: originBytes, bytes2: mergeBytes)
                 let finalData = self.byteArrayToData(bytes: finalBytes)
-                return self.do_putData(data: finalData, asRemoteFile: forKey)
+                let key = KEYVALUES_ROOT_PATH + forKey
+                return self.do_putData(data: finalData, asRemoteFile: key)
             }
         }
     }
@@ -436,14 +437,16 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
                 let dataBytes = self.dataToByteArray(data: newValue)
                 let finalBytes = self.mergeLengthAndData(data: dataBytes)
                 let data = self.byteArrayToData(bytes: finalBytes)
-                return self.do_putValue(aValue: data, forKey: forKey)
+                let key = KEYVALUES_ROOT_PATH + forKey
+                return self.do_putValue(aValue: data, forKey: key)
             }
         }
     }
     
     private func do_values(ofKey: String) -> HivePromise<[Data]> {
         return HivePromise<[Data]>{ resolver in
-            do_getData(fromRemoteFile: ofKey).done { jsonData in
+            let key = KEYVALUES_ROOT_PATH + ofKey
+            do_getData(fromRemoteFile: key).done { jsonData in
                 let arrayList: Array<Data> = []
                 let valueBytes = self.dataToByteArray(data: jsonData)
                 let result = self.createValueResult(arrayList, valueBytes)
@@ -481,6 +484,7 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
     }
     
     private func do_deleteValues(forKey: String) -> HivePromise<Void> {
-        return do_deleteRemoteFile(fileName: forKey)
+        let key = KEYVALUES_ROOT_PATH + forKey
+        return do_deleteRemoteFile(fileName: key)
     }
 }

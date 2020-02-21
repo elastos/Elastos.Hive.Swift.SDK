@@ -37,7 +37,6 @@ class OneDriveAPIs: NSObject {
                               headers: headers)
                 .responseJSON { dataResponse in
                     guard dataResponse.response?.statusCode != statusCode.unauthorized.rawValue else {
-                        // TODO: save info
                         let error: HiveError = HiveError.failue(des: TOKEN_INVALID)
                         resolver.reject(error)
                         return
