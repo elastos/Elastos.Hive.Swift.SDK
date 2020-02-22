@@ -4,15 +4,15 @@ import Foundation
 public class OneDriveClientOptions: HiveClientOptions {
     private static let APP_FOLDER_SCOPE = "Files.ReadWrite.AppFolder offline_access"
 
-    private let _scope: String = OneDriveClientOptions.APP_FOLDER_SCOPE
+    private let _scope = OneDriveClientOptions.APP_FOLDER_SCOPE
     private var _clientId: String?
     private var _redirectUrl: String?
 
     override init() {}
 
-    public var clientId: String? {
+    public var clientId: String {
         get {
-            return _clientId
+            return _clientId!
         }
     }
 
@@ -20,9 +20,9 @@ public class OneDriveClientOptions: HiveClientOptions {
         self._clientId = clientId
     }
 
-    public var redirectUrl: String? {
+    public var redirectUrl: String {
         get {
-            return _redirectUrl
+            return _redirectUrl!
         }
     }
 
@@ -34,6 +34,14 @@ public class OneDriveClientOptions: HiveClientOptions {
         get {
             return _scope
         }
+    }
+
+    override func checkValid(_ all: Bool) -> Bool {
+        return _clientId != nil && _redirectUrl != nil && super.checkValid(all)
+    }
+
+    func checkValid() -> Bool {
+        return checkValid(true)
     }
 
     override func buildClient() -> HiveClientHandle? {
