@@ -10,6 +10,9 @@ public protocol IPFSProtocol {
     func putDataFromFile(_ fileHandle: FileHandle) -> HivePromise<Hash>
     func putDataFromFile(_ fileHandle: FileHandle, handler: HiveCallback<Hash>) -> HivePromise<Hash>
 
+    func putDataFromInputStream(_ input: InputStream) -> HivePromise<Hash>
+    func putDataFromInputStream(_ input: InputStream, handler: HiveCallback<Hash>) -> HivePromise<Hash>
+
     func sizeofRemoteFile(_ fileName: String) -> HivePromise<UInt64>
     func sizeofRemoteFile(_ fileName: String, handler: HiveCallback<UInt64>) -> HivePromise<UInt64>
 
@@ -21,4 +24,7 @@ public protocol IPFSProtocol {
 
     func getDataToTargetFile(fromRemoteFile: Hash, targetFile: FileHandle) -> HivePromise<Void>
     func getDataToTargetFile(fromRemoteFile: Hash, targetFile: FileHandle, handler: HiveCallback<Void>) -> HivePromise<Void>
+
+    func getDataToOutputStream(fromRemoteFile: Hash, output: OutputStream) -> HivePromise<Void>
+    func getDataToOutputStream(fromRemoteFile: Hash, output: OutputStream, handler: HiveCallback<Void>) -> HivePromise<Void>
 }

@@ -34,23 +34,11 @@ public class OneDriveClientOptionsBuilder: NSObject {
             throw HiveError.invalidatedBuilder(des: "Invalidated builder")
         }
 
-        guard options?.clientId != nil else {
-            throw HiveError.insufficientParameters(des: "Missing clientId")
+        guard !options!.checkValid() else {
+            throw HiveError.insufficientParameters(des: "Imcomplete options fields")
         }
 
-        guard options?.redirectUrl != nil else {
-            throw HiveError.insufficientParameters(des: "Missing redirectUrl")
-        }
-
-        guard options?.storePath != nil else {
-            throw HiveError.insufficientParameters(des: "Missing storePath")
-        }
-
-        guard options?.authenicator != nil else {
-            throw HiveError.insufficientParameters(des: "Missing authenticator delegate")
-        }
-
-        let _options: OneDriveClientOptions = self.options!
+        let _options = self.options!
         self.options = nil
         return _options
     }
