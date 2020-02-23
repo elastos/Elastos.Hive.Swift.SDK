@@ -18,6 +18,14 @@ public class IPFSClientOptions: HiveClientOptions {
         }
     }
 
+    override func checkValid(_ all: Bool) -> Bool {
+        return _rpcNodes.count > 0 && super.checkValid(all)
+    }
+
+    func checkValid() -> Bool {
+        return checkValid(false)
+    }
+
     override func buildClient() -> HiveClientHandle? {
         return IPFSClientHandle(self)
     }

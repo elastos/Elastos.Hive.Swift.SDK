@@ -24,12 +24,8 @@ public class IPFSClientOptionsBuilder: NSObject {
             throw HiveError.invalidatedBuilder(des: "Invalidated builder")
         }
 
-        guard options?.rpcNodes.count ?? 0 > 0 else {
-            throw HiveError.insufficientParameters(des: "Missing IPFS RpcNodes")
-        }
-
-        guard options?.storePath != nil else {
-            throw HiveError.insufficientParameters(des: "Missing store Path")
+        guard options!.checkValid() else {
+            throw HiveError.insufficientParameters(des: "Incomplete IPFSClient Options")
         }
 
         let _options: IPFSClientOptions = self.options!

@@ -9,9 +9,9 @@ public class HiveClientOptions: NSObject {
         super.init()
     }
 
-    public var storePath: String? {
+    public var storePath: String {
         get {
-            return _storePath
+            return _storePath!
         }
     }
 
@@ -31,5 +31,9 @@ public class HiveClientOptions: NSObject {
 
     func buildClient() -> HiveClientHandle? {
         return nil
+    }
+
+    func checkValid(_ all: Bool) -> Bool {
+        return _storePath != nil && (!all || _authenticator != nil)
     }
 }
