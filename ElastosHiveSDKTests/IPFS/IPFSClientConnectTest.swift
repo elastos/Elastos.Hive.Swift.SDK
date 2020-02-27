@@ -3,26 +3,33 @@ import XCTest
 
 class IPFSClientConnectTest: XCTestCase {
     private let STORE_PATH = "fakePath"
-
     private var client: HiveClientHandle?
+    private let IPADDRS: [String] = ["3.133.166.156", "127.0.0.1"]
 
     func testConnect() {
         XCTAssertFalse(client!.isConnected())
-        do {
-            try client?.connect()
-
-            XCTAssertTrue(client!.isConnected())
-        } catch HiveError.failue {
-            XCTFail()
-        } catch {
-            XCTFail()
+        let lock = XCTestExpectation(description: "wait for test connect.")
+        let globalQueue = DispatchQueue.global()
+        globalQueue.async {
+            do {
+                try self.client?.connect()
+                XCTAssertTrue(self.client!.isConnected())
+                lock.fulfill()
+            } catch HiveError.failue {
+                XCTFail()
+            } catch {
+                XCTFail()
+            }
         }
+        self.wait(for: [lock], timeout: 100.0)
+        XCTAssertTrue(client!.isConnected())
     }
 
     override func setUp() {
         do {
             let options = try IPFSClientOptionsBuilder()
-                .appendRpcNode(IPFSRpcNode("127.0.0.1", 12345))
+                .appendRpcNode(IPFSRpcNode("3.133.166.156", 5001))
+                .appendRpcNode(IPFSRpcNode("127.0.0.1", 5001))
                 .withStorePath(using: STORE_PATH)
                 .build()
 

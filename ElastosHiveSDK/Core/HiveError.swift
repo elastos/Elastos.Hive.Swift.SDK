@@ -30,14 +30,21 @@ public enum HiveError: Error {
     case no_rpc_node_available(des: String? = nil)
 }
 
-/*
 extension HiveError {
 
     static func description(_ error: HiveError) -> String {
         switch error {
-        case .failue(let err):
-            return err ?? "Operation failed"
+        case .failue(let des):
+            return des ?? "Operation failed"
+        case .insufficientParameters(let des):
+            return des ?? ""
+        case .invalidatedBuilder(let des):
+            return des ?? ""
+        case .IllegalArgument(let des):
+            return des ?? ""
+        case .no_rpc_node_available(let des):
+            return des ?? ""
         }
     }
 }
-*/
+

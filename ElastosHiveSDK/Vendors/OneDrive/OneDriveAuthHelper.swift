@@ -29,7 +29,7 @@ internal class OneDriveAuthHelper: ConnectHelper {
     let clientIdKey: String = "client_id"
     let accessTokenKey: String = "access_token"
     let refreshTokenKey: String = "refresh_token"
-    let expireAtKey: String = "expires_at"
+    let expireAtKey: String = "expires_in"
     
     var clientId: String
     var scope: String
@@ -85,11 +85,13 @@ internal class OneDriveAuthHelper: ConnectHelper {
     }
     
     private func do_login(_ authenticator: Authenticator) -> HivePromise<Void> {
+        
         connectState = false
         tryRestoreToken()
         if token != nil {
             if !(token!.isExpired()) {
                 connectState = true
+                return HivePromise<Void>()
             }
             return refreshToken()
         }
@@ -115,13 +117,13 @@ internal class OneDriveAuthHelper: ConnectHelper {
         var accessToken = ""
         var expiresAt = -1
         
-        if (json[refreshTokenKey] != "") {
+        if (json[refreshTokenKey].stringValue != "") {
             refreshToken = json[refreshTokenKey].stringValue
         }
-        if (json[accessTokenKey] != "") {
+        if (json[accessTokenKey].stringValue != "") {
             accessToken = json[accessTokenKey].stringValue
         }
-        if (json[expireAtKey] != "") {
+        if (json[expireAtKey].stringValue != "") {
             expiresAt = json[expireAtKey].intValue
         }
         if refreshToken != "" && accessToken != "" && expiresAt > 0 {
@@ -143,7 +145,7 @@ internal class OneDriveAuthHelper: ConnectHelper {
             let port = UInt16(redirectUrl[startIndex..<endIndex])
             let param = "client_id=\(clientId)&scope=\(scope)&response_type=code&redirect_uri=\(redirectUrl)"
 
-            let url = OneDriveURL(param).acquireAuthCode()
+            let url = OneDriveURL.acquireAuthCode(param)
             server.startRun(port!)
             _ = authenticator.requestAuthentication(url)
             server.getCode().done{ auth in
@@ -163,7 +165,7 @@ internal class OneDriveAuthHelper: ConnectHelper {
                 "grant_type" : GRANT_TYPE_GET_TOKEN,
                 "redirect_uri" : redirectUrl
             ]
-            let url = OneDriveURL("").token()
+            let url = OneDriveURL.token()
             var urlRequest = URLRequest(url: URL(string: url)!)
             urlRequest.httpMethod = "POST"
             urlRequest.httpBody = params.queryString.data(using: String.Encoding.utf8)
@@ -191,7 +193,7 @@ internal class OneDriveAuthHelper: ConnectHelper {
                 "refresh_token": self.token!.refreshToken,
                 "grant_type": GRANT_TYPE_REFRESH_TOKEN
             ]
-            let url = OneDriveURL("").token()
+            let url = OneDriveURL.token()
             var urlRequest = URLRequest(url: URL(string: url)!)
             urlRequest.httpMethod = "POST"
             urlRequest.httpBody = params.queryString.data(using: String.Encoding.utf8)
@@ -214,6 +216,14 @@ internal class OneDriveAuthHelper: ConnectHelper {
     }
     
     private func isExpired() -> Bool {
-        return token!.isExpired()
+        if (token == nil || token!.isExpired())
+        {
+            connectState = false
+        }
+        else {
+            connectState = true
+        }
+        return !connectState
     }
 }
+

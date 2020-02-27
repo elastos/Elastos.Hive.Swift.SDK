@@ -2,7 +2,7 @@
 import Foundation
 
 class IPFSRpc: ConnectHelper {
-    private var connectState: Bool = false
+    var connectState: Bool = false
     private var mHiveRpcNodes: Array<IPFSRpcNode>
     
     init(_ hiveRpcNodes: Array<IPFSRpcNode>) {
@@ -27,16 +27,13 @@ class IPFSRpc: ConnectHelper {
     
     public override func checkValid(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
         return HivePromise<Void>{ resolver in
-            let queue = DispatchQueue.global()
-            queue.async {
-                if !self.doCheckValid() {
-                    let error = HiveError.no_rpc_node_available()
-                    handleBy.runError(error)
-                    resolver.reject(error)
-                }
-                handleBy.didSucceed(Void())
-                resolver.fulfill(Void())
+            if !self.doCheckValid() {
+                let error = HiveError.no_rpc_node_available()
+                handleBy.runError(error)
+                resolver.reject(error)
             }
+            handleBy.didSucceed(Void())
+            resolver.fulfill(Void())
         }
     }
     

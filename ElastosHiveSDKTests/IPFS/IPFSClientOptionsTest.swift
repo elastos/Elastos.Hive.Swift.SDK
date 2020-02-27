@@ -2,7 +2,7 @@ import XCTest
 @testable import ElastosHiveSDK
 
 class IPFSClientOptionsTest: XCTestCase {
-    private let STORE_PATH = "fakePath"
+    private let STORE_PATH = "\(NSHomeDirectory())/Library/Caches/ipfs"
 
     func testBuild() {
         do {

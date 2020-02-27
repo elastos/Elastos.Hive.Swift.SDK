@@ -15,7 +15,7 @@ class IPFSClientProtocoTest: XCTestCase {
     override func setUp() {
         do {
            let options = try IPFSClientOptionsBuilder()
-                .appendRpcNode(IPFSRpcNode("127.0.0.1", 12345))
+                .appendRpcNode(IPFSRpcNode("3.133.166.156", 5001))
                 .withStorePath(using: STORE_PATH)
                 .build()
 
@@ -25,8 +25,20 @@ class IPFSClientProtocoTest: XCTestCase {
             client = try HiveClientHandle.createInstance(withOptions: options)
             XCTAssertNotNil(client)
             XCTAssertFalse(client!.isConnected())
-
-            try client!.connect()
+            let lock = XCTestExpectation(description: "wait for test connect.")
+            let globalQueue = DispatchQueue.global()
+            globalQueue.async {
+                do {
+                    try self.client?.connect()
+                    XCTAssertTrue(self.client!.isConnected())
+                    lock.fulfill()
+                } catch HiveError.failue {
+                    XCTFail()
+                } catch {
+                    XCTFail()
+                }
+            }
+            self.wait(for: [lock], timeout: 100.0)
             XCTAssertTrue(client!.isConnected())
 
         } catch HiveError.invalidatedBuilder  {

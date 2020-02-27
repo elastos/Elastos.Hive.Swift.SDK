@@ -4,35 +4,40 @@ import Foundation
 class OneDriveURL {
     
     private var _path: String
-    init(_ path: String) {
-       _path = path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+    
+    init(forPath: String) {
+        _path =  "\(FILES_ROOT_PATH)/\(forPath)".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+    }
+    
+    init(forKey: String) {
+        _path =  "\(KEYVALUES_ROOT_PATH)/\(forKey)".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
     }
     
     func dirAndFileInfo() -> String {
-        return ONE_DRIVE_API_BASE_URL + APP_ROOT + FILES_ROOT_PATH + ":/\(_path)"
+        return ONE_DRIVE_API_BASE_URL + APP_ROOT + ":\(_path)"
     }
     
     func deleteItem() -> String {
-        return ONE_DRIVE_API_BASE_URL + APP_ROOT + FILES_ROOT_PATH + ":\(_path)"
+        return ONE_DRIVE_API_BASE_URL + APP_ROOT + ":\(_path)"
     }
     
-    func children() -> String {
-        return ONE_DRIVE_API_BASE_URL + APP_ROOT + FILES_ROOT_PATH + ":\(_path):/children"
+    class func children() -> String {
+        return ONE_DRIVE_API_BASE_URL + APP_ROOT + ":\(FILES_ROOT_PATH):/children"
     }
     
     func read() -> String {
-        return ONE_DRIVE_API_BASE_URL + APP_ROOT + FILES_ROOT_PATH + ":\(_path):/content"
+        return ONE_DRIVE_API_BASE_URL + APP_ROOT + ":\(_path):/content"
     }
     
     func write() -> String {
-        return ONE_DRIVE_API_BASE_URL + APP_ROOT + FILES_ROOT_PATH + ":\(_path):/content"
+        return ONE_DRIVE_API_BASE_URL + APP_ROOT + ":\(_path):/content"
     }
     
-    func acquireAuthCode() -> String {
-        return ONE_DRIVE_AUTH_BASE_URL + AUTHORIZE + "?\(_path)"
+   class func acquireAuthCode(_ param: String) -> String {
+        return ONE_DRIVE_AUTH_BASE_URL + AUTHORIZE + "?\(param.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!)"
     }
     
-    func token() -> String {
+    class func token() -> String {
         return ONE_DRIVE_AUTH_URL + TOKEN
     }
     

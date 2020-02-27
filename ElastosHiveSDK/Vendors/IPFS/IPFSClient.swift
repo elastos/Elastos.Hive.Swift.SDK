@@ -2,29 +2,36 @@ import Foundation
 
 class IPFSClientHandle: HiveClientHandle, IPFSProtocol {
     private let ipfsRpc: IPFSRpc
+    private var fileHandle: FileHandle?
+    private var outputStream: OutputStream?
+    
     init(_ options: HiveClientOptions) {
         ipfsRpc = IPFSRpc((options as! IPFSClientOptions).rpcNodes)
     }
-
+    
     public override func connect() throws {
-        _ = ipfsRpc.connectAsync()
+        _ = try ipfsRpc.connectAsync().wait()
     }
-
+    
+    override func isConnected() -> Bool {
+        ipfsRpc.connectState
+    }
+    
     public override func disconnect() {
         ipfsRpc.disconnect()
     }
-
+    
     public override func asIPFS() -> IPFSProtocol? {
         return self as IPFSProtocol?
     }
-
+    
     public func putString(_ data: String) -> HivePromise<Hash> {
         return putString(data, handler: HiveCallback<Hash>())
     }
-
+    
     public func putString(_ data: String, handler: HiveCallback<Hash>) -> HivePromise<Hash> {
         HivePromise<Hash>{ resolver in
-             ipfsRpc.checkValid().then { _ -> HivePromise<Hash> in
+            ipfsRpc.checkValid().then { _ -> HivePromise<Hash> in
                 return self.doPutString(data)
             }.done { hash in
                 handler.didSucceed(hash)
@@ -35,11 +42,11 @@ class IPFSClientHandle: HiveClientHandle, IPFSProtocol {
             }
         }
     }
-
+    
     public func putData(_ data: Data) -> HivePromise<Hash> {
         return putData(data, handler: HiveCallback<Hash>())
     }
-
+    
     public func putData(_ data: Data, handler: HiveCallback<Hash>) -> HivePromise<Hash> {
         HivePromise<Hash>{ resolver in
             ipfsRpc.checkValid().then { _ -> HivePromise<Hash> in
@@ -53,11 +60,11 @@ class IPFSClientHandle: HiveClientHandle, IPFSProtocol {
             }
         }
     }
-
+    
     public func putDataFromFile(_ fileHandle: FileHandle) -> HivePromise<Hash> {
         return putDataFromFile(fileHandle, handler: HiveCallback<Hash>())
     }
-
+    
     public func putDataFromFile(_ fileHandle: FileHandle, handler: HiveCallback<Hash>) -> HivePromise<Hash> {
         HivePromise<Hash>{ resolver in
             ipfsRpc.checkValid().then { _ -> HivePromise<Hash> in
@@ -71,20 +78,27 @@ class IPFSClientHandle: HiveClientHandle, IPFSProtocol {
             }
         }
     }
-
-    func putDataFromInputStream(_ input: InputStream) -> Promise<Hash> {
+    
+    public func putDataFromInputStream(_ input: InputStream) -> Promise<Hash> {
         return putDataFromInputStream(input, handler: HiveCallback<Hash>())
     }
-
-    func putDataFromInputStream(_ input: InputStream, handler: HiveCallback<Hash>) -> Promise<Hash> {
-        // TODO:
-        return HivePromise<Hash>(error: HiveError.failue(des: "Not implemented"))
+    
+    public func putDataFromInputStream(_ input: InputStream, handler: HiveCallback<Hash>) -> Promise<Hash> {
+        return HivePromise<Hash>{ resolver in
+            try doPutDataFromInputStream(input).done { hash in
+                handler.didSucceed(hash)
+                resolver.fulfill(hash)
+            }.catch { error in
+                handler.runError(error as! HiveError)
+                resolver.reject(error)
+            }
+        }
     }
-
+    
     public func sizeofRemoteFile(_ cid: String) -> HivePromise<UInt64> {
         return sizeofRemoteFile(cid, handler: HiveCallback<UInt64>())
     }
-
+    
     public func sizeofRemoteFile(_ cid: String, handler: HiveCallback<UInt64>) -> HivePromise<UInt64> {
         HivePromise<UInt64>{ resolver in
             ipfsRpc.checkValid().then { _ -> HivePromise<UInt64> in
@@ -98,11 +112,11 @@ class IPFSClientHandle: HiveClientHandle, IPFSProtocol {
             }
         }
     }
-
+    
     public func getString(fromRemoteFile cid: Hash) -> HivePromise<String> {
         return getString(fromRemoteFile: cid, handler: HiveCallback<String>())
     }
-
+    
     public func getString(fromRemoteFile cid: Hash, handler: HiveCallback<String>) -> HivePromise<String> {
         return HivePromise<String>{ resolver in
             ipfsRpc.checkValid().then { _ -> HivePromise<String> in
@@ -116,11 +130,11 @@ class IPFSClientHandle: HiveClientHandle, IPFSProtocol {
             }
         }
     }
-
+    
     public func getData(fromRemoteFile cid: Hash) -> HivePromise<Data> {
         return getData(fromRemoteFile: cid, handler: HiveCallback<Data>())
     }
-
+    
     public func getData(fromRemoteFile cid: Hash, handler: HiveCallback<Data>) -> HivePromise<Data> {
         return HivePromise<Data>{ resolver in
             ipfsRpc.checkValid().then { _ -> HivePromise<Data> in
@@ -134,15 +148,16 @@ class IPFSClientHandle: HiveClientHandle, IPFSProtocol {
             }
         }
     }
-
+    
     public func getDataToTargetFile(fromRemoteFile cid: Hash, targetFile: FileHandle) -> HivePromise<Void> {
         return getDataToTargetFile(fromRemoteFile: cid, targetFile: targetFile, handler: HiveCallback<Void>())
     }
-
+    
     public func getDataToTargetFile(fromRemoteFile cid: Hash, targetFile: FileHandle, handler: HiveCallback<Void>) -> HivePromise<Void> {
         return HivePromise<Void>{ resolver in
+            self.fileHandle = targetFile
             ipfsRpc.checkValid().then { _ -> HivePromise<Void> in
-                return self.doGetDataToTargetFile(cid, targetFile)
+                return self.doGetDataToTargetFile(cid, self.fileHandle!)
             }.done { _ in
                 handler.didSucceed(Void())
                 resolver.fulfill(Void())
@@ -152,17 +167,28 @@ class IPFSClientHandle: HiveClientHandle, IPFSProtocol {
             }
         }
     }
-
-    func getDataToOutputStream(fromRemoteFile cid: Hash, output: OutputStream) -> Promise<Void> {
+    
+    public func getDataToOutputStream(fromRemoteFile cid: Hash, output: OutputStream) -> HivePromise<Void> {
         return getDataToOutputStream(fromRemoteFile: cid, output: output, handler: HiveCallback<Void>())
     }
-
-    func getDataToOutputStream(fromRemoteFile: Hash, output: OutputStream, handler: HiveCallback<Void>) -> Promise<Void> {
-        // TODO:
-        return HivePromise<Void>(error: HiveError.failue(des: "Not implemented"))
-    }
-
     
+    public func getDataToOutputStream(fromRemoteFile: Hash, output: OutputStream, handler: HiveCallback<Void>) -> HivePromise<Void> {
+        return HivePromise<Void>{ resolver in
+            ipfsRpc.checkValid().then { _ -> HivePromise<Data> in
+                return self.doGetDataToOutputStream(fromRemoteFile: fromRemoteFile, output: output)
+            }.done { data in
+                // TODO: write
+                //               _ = self.outputStream!.write(data: data)
+                handler.didSucceed(Void())
+                resolver.fulfill(Void())
+            }.catch { error in
+                handler.runError(error as! HiveError)
+                resolver.reject(error)
+            }
+        }
+    }
+    
+    //    MARK:- private
     private func doPutString(_ data: String) -> HivePromise<Hash> {
         return doPutData(data.data(using: .utf8)!)
     }
@@ -224,4 +250,38 @@ class IPFSClientHandle: HiveClientHandle, IPFSProtocol {
             }
         }
     }
+    
+    private func doPutDataFromInputStream(_ input: InputStream) throws -> HivePromise<Hash> {
+        var data = Data()
+        input.open()
+        
+        let bufferSize = 1024
+        let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: bufferSize)
+        
+        while input.hasBytesAvailable {
+            let read = input.read(buffer, maxLength: bufferSize)
+            if read < 0 {
+                //Stream error occured
+                throw input.streamError!
+            }
+            else if read == 0 {
+                //EOF
+                break
+            }
+            data.append(buffer, count: read)
+        }
+        do{
+            input.close()
+        }
+        do{
+            buffer.deallocate()
+        }
+        return doPutData(data)
+    }
+    
+    private func doGetDataToOutputStream(fromRemoteFile: Hash, output: OutputStream) -> HivePromise<Data> {
+        return doGetData(fromRemoteFile)
+    }
 }
+
+

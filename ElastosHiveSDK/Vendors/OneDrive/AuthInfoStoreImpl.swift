@@ -25,10 +25,12 @@ class AuthInfoStoreImpl: Persistent {
     func upateContent(_ json: Dictionary<String, Any>) {
         let fileManager = FileManager.default
         let exist: Bool = fileManager.fileExists(atPath: path)
-        if !exist {
-            fileManager.createFile(atPath: path, contents: nil, attributes: nil)
-        }
         do {
+            if !exist {
+                let perpath = path.prefix(path.count - "/onedrive.json".count)
+                try fileManager.createDirectory(atPath: String(perpath), withIntermediateDirectories: true, attributes: nil)
+                fileManager.createFile(atPath: path, contents: nil, attributes: nil)
+            }
             let data = try JSONSerialization.data(withJSONObject: json, options: [])
             try data.write(to: URL(fileURLWithPath: path))
         } catch {

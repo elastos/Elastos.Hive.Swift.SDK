@@ -2,15 +2,21 @@ import XCTest
 @testable import ElastosHiveSDK
 
 class oneDriveClientProtocolTest: XCTestCase {
-    private let CLIENT_ID = "fakeClientId"
+    private let CLIENT_ID = "afd3d647-a8b7-4723-bf9d-1b832f43b881"
     private let REDIRECT_URL = "http://localhost:12345"
-    private let STORE_PATH = "fakePath"
+    private let STORE_PATH = "\(NSHomeDirectory())/Library/Caches/onedrive"
 
     private var client: HiveClientHandle?
     private var filesProtocol: FilesProtocol?
 
     class FakeAuthenticator: Authenticator {
         func requestAuthentication(_ requestURL: String) -> Bool {
+            DispatchQueue.main.sync {
+                let authViewController: AuthWebViewController = AuthWebViewController()
+                let rootViewController = UIApplication.shared.keyWindow?.rootViewController
+                rootViewController!.present(authViewController, animated: true, completion: nil)
+                authViewController.loadRequest(requestURL)
+            }
             return true
         }
     }
@@ -39,7 +45,22 @@ class oneDriveClientProtocolTest: XCTestCase {
             client = try HiveClientHandle.createInstance(withOptions: options)
             XCTAssertNotNil(client)
 
-            try client?.connect()
+            let lock = XCTestExpectation(description: "wait for test connect.")
+            let globalQueue = DispatchQueue.global()
+            globalQueue.async {
+                do {
+                    try self.client?.connect()
+                    XCTAssertTrue(self.client!.isConnected())
+                    lock.fulfill()
+                } catch HiveError.failue {
+                    XCTFail()
+                    lock.fulfill()
+                } catch {
+                    XCTFail()
+                    lock.fulfill()
+                }
+            }
+            self.wait(for: [lock], timeout: 100.0)
             XCTAssertTrue(client!.isConnected())
 
         } catch HiveError.invalidatedBuilder  {
