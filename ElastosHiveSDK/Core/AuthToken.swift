@@ -32,7 +32,7 @@ class AuthToken: NSObject {
         self.expiredIn = experitime
         self.accessToken = accessToken
         self.refreshToken = refreshToken
-        self.expiredTime = ""
+        self.expiredTime = String(experitime)
     }
 
     func isExpired() -> Bool {

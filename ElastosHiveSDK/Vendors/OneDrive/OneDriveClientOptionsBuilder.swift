@@ -34,7 +34,7 @@ public class OneDriveClientOptionsBuilder: NSObject {
             throw HiveError.invalidatedBuilder(des: "Invalidated builder")
         }
 
-        guard !options!.checkValid() else {
+        guard options!.checkValid() else {
             throw HiveError.insufficientParameters(des: "Imcomplete options fields")
         }
 

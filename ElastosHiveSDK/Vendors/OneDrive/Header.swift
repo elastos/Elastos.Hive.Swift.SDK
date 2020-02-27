@@ -10,7 +10,7 @@ class Header {
     
     func plain_headers() -> HTTPHeaders {
         let accesstoken: String = (self.auther as! OneDriveAuthHelper).token?.accessToken ?? ""
-        return ["Content-Type": "text/plain", "Authorization": "bearer \(accesstoken)"]
+        return ["Content-Type": "application/octet-stream", "Authorization": "bearer \(accesstoken)"]
     }
     
     func json_Headers() -> HTTPHeaders {

@@ -3,35 +3,174 @@ import XCTest
 
 class IPFSClientIFPSProtocolTest: XCTestCase {
     private let STORE_PATH = "fakePath"
-
+    
     private var client: HiveClientHandle?
     private var ipfsProtocol: IPFSProtocol?
-
-    func testPutData1() {
-        _ = ipfsProtocol?.putString("testHello")
-        // TODO
+    private let localName = "testHello"
+    private let remoteStringContent = "testHello"
+    private let remoteDataContent = "this is data.".data(using: .utf8)
+    
+    private let cid = "QmaY6wjwnybJgd5F4FD6pPL6h9vjXrGv2BJbxxUC1ojUbQ"
+    private let path = "\(NSHomeDirectory())/Library/Caches/ipfs"
+    
+    func testPutString() {
+        let lock = XCTestExpectation(description: "testPutString")
+        _ = ipfsProtocol?.putString(remoteStringContent).done{ hash in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ error in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 100.0)
     }
-
+    
+    func testPutData() {
+        let lock = XCTestExpectation(description: "")
+        _ = ipfsProtocol?.putData(remoteDataContent!).done{ hash in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ error in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
+    func testPutDataFromFile() {
+        let lock = XCTestExpectation(description: "")
+        let fileManger = FileManager.default
+        let path = "\(NSHomeDirectory())/Library/Caches/\(localName)"
+        if !fileManger.fileExists(atPath: path) {
+            fileManger.createFile(atPath: path, contents: nil, attributes: nil)
+        }
+        let fileHndle: FileHandle = FileHandle(forUpdatingAtPath: path)!
+        fileHndle.write(remoteDataContent!)
+        let readerHndle = FileHandle(forReadingAtPath: path)
+        readerHndle?.seek(toFileOffset: 0)
+        _ = ipfsProtocol?.putDataFromFile(readerHndle!).done{ hash in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ error in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
+    func testPutDataFromInputStream() {
+        let lock = XCTestExpectation(description: "")
+        let input = InputStream.init(data: remoteDataContent!)
+        _ = ipfsProtocol?.putDataFromInputStream(input).done{ hash in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ error in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
+    func testPutSizeofRemoteFile() {
+        let lock = XCTestExpectation(description: "")
+        _ = ipfsProtocol?.sizeofRemoteFile(cid).done{ size in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ error in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
+    func testGetString() {
+        let lock = XCTestExpectation(description: "")
+        _ = ipfsProtocol?.getString(fromRemoteFile: Hash(cid)).done{ str in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ error in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
+    func testGetData() {
+        let lock = XCTestExpectation(description: "")
+        _ = ipfsProtocol?.getData(fromRemoteFile: Hash(cid)).done{ data in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ error in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
+    func testGetDataToTargetFile() {
+        let lock = XCTestExpectation(description: "")
+        let fileManger = FileManager.default
+        let path = "\(NSHomeDirectory())/Library/Caches/testGetDataToTargetFile"
+        if !fileManger.fileExists(atPath: path) {
+            fileManger.createFile(atPath: path, contents: nil, attributes: nil)
+        }
+        let fileHndle: FileHandle = FileHandle(forWritingAtPath: path)!
+        _ = ipfsProtocol?.getDataToTargetFile(fromRemoteFile: Hash(cid), targetFile: fileHndle).done{ size in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ error in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
+    func testGetDataToOutputStream() {
+        let lock = XCTestExpectation(description: "")
+        let output = OutputStream.init()
+        _ = ipfsProtocol?.getDataToOutputStream(fromRemoteFile: Hash(cid), output: output).done{ size in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ error in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
     override func setUp() {
         do {
             let options = try IPFSClientOptionsBuilder()
-                .appendRpcNode(IPFSRpcNode("127.0.0.1", 12345))
+                .appendRpcNode(IPFSRpcNode("3.133.166.156", 5001))
                 .withStorePath(using: STORE_PATH)
                 .build()
-
+            
             XCTAssertNotNil(options)
             XCTAssertTrue(options.rpcNodes.count > 0)
-
+            
             client = try HiveClientHandle.createInstance(withOptions: options)
             XCTAssertNotNil(client)
             XCTAssertFalse(client!.isConnected())
-
-            try client?.connect()
+            
+            let lock = XCTestExpectation(description: "wait for test connect.")
+            let globalQueue = DispatchQueue.global()
+            globalQueue.async {
+                do {
+                    try self.client?.connect()
+                    XCTAssertTrue(self.client!.isConnected())
+                    lock.fulfill()
+                } catch HiveError.failue {
+                    XCTFail()
+                } catch {
+                    XCTFail()
+                }
+            }
+            self.wait(for: [lock], timeout: 100.0)
             XCTAssertTrue(client!.isConnected())
-
+            
             ipfsProtocol = client!.asIPFS()
             XCTAssertNotNil(ipfsProtocol)
-
+            
         } catch HiveError.invalidatedBuilder  {
             XCTFail()
         } catch HiveError.insufficientParameters {
@@ -42,7 +181,7 @@ class IPFSClientIFPSProtocolTest: XCTestCase {
             XCTFail()
         }
     }
-
+    
     override func tearDown() {
         client?.disconnect()
         client = nil

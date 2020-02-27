@@ -2,15 +2,16 @@ import XCTest
 @testable import ElastosHiveSDK
 
 class oneDriveClientOptionsTest: XCTestCase {
-    private let CLIENT_ID = "fakeClientId"
+    private let CLIENT_ID = "afd3d647-a8b7-4723-bf9d-1b832f43b881"
     private let REDIRECT_URL = "http://localhost:12345"
-    private let STORE_PATH = "fakePath"
+    private let STORE_PATH = "\(NSHomeDirectory())/Library/Caches/onedrive"
 
     class FakeAuthenticator: Authenticator {
         func requestAuthentication(_ requestURL: String) -> Bool {
             return true
         }
     }
+    
     func testBuild() {
         do {
             let options = try OneDriveClientOptionsBuilder()

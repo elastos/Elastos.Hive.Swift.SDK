@@ -48,6 +48,28 @@ internal class SimpleAuthServer: NSObject {
             }
         }
     }
+    
+    func getCodeSync() throws -> String {
+        
+        let semaphore: DispatchSemaphore! = DispatchSemaphore(value: 0)
+        var result : String? = nil
+        httpServer[""] = { request in
+            guard request.queryParams.count > 0 || request.queryParams[0].0 != "code" else {
+                semaphore.signal()
+                return HttpResponse.ok(.json("nil" as AnyObject))
+            }
+            result = request.queryParams[0].1
+            semaphore.signal()
+            return HttpResponse.ok(.json("nil" as AnyObject))
+        }
+        
+        semaphore.wait()
+        if result != nil {
+            return result!
+        } else {
+            throw HiveError.failue(des: "failed")
+        }
+    }
 
     func stop() {
         httpServer.stop()

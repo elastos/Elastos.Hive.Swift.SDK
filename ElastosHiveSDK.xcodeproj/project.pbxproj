@@ -54,10 +54,14 @@
 		1103757D23FF96C7004216D0 /* Persistent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103757B23FF96C7004216D0 /* Persistent.swift */; };
 		1104AFEC23F97880004454C3 /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1104AFEB23F97880004454C3 /* Header.swift */; };
 		1104AFED23F97880004454C3 /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1104AFEB23F97880004454C3 /* Header.swift */; };
+		1129C19424052CC500CD77F2 /* Alamofire+Synchronous.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1129C19324052CC500CD77F2 /* Alamofire+Synchronous.swift */; };
+		1129C19524052CC500CD77F2 /* Alamofire+Synchronous.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1129C19324052CC500CD77F2 /* Alamofire+Synchronous.swift */; };
 		1137942E227ED9AD004A1F65 /* ElastosHiveSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A39C496F225399860027BDF9 /* ElastosHiveSDK.framework */; };
 		1147720923F678BD00C7C36F /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1147720823F678BD00C7C36F /* SwiftyJSON.swift */; };
 		1147720A23F678BD00C7C36F /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1147720823F678BD00C7C36F /* SwiftyJSON.swift */; };
 		114FD8402297CF7700467E38 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114FD83F2297CF7600467E38 /* Authenticator.swift */; };
+		11749D9F24082FB1007B8F32 /* OutputStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11749D9E24082FB1007B8F32 /* OutputStream.swift */; };
+		11749DA024082FB1007B8F32 /* OutputStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11749D9E24082FB1007B8F32 /* OutputStream.swift */; };
 		1176BF32229CE8F600240EDF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176BF31229CE8F600240EDF /* AppDelegate.swift */; };
 		1176BF34229CE8F600240EDF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176BF33229CE8F600240EDF /* ViewController.swift */; };
 		1176BF37229CE8F600240EDF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1176BF35229CE8F600240EDF /* Main.storyboard */; };
@@ -139,10 +143,12 @@
 		1103757823FF96BF004216D0 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Log.swift; path = Core/Log.swift; sourceTree = "<group>"; };
 		1103757B23FF96C7004216D0 /* Persistent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Persistent.swift; path = Core/Persistent.swift; sourceTree = "<group>"; };
 		1104AFEB23F97880004454C3 /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Header.swift; path = Vendors/OneDrive/Header.swift; sourceTree = "<group>"; };
+		1129C19324052CC500CD77F2 /* Alamofire+Synchronous.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Alamofire+Synchronous.swift"; sourceTree = "<group>"; };
 		11379429227ED9AD004A1F65 /* ElastosHiveSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ElastosHiveSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1137942D227ED9AD004A1F65 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1147720823F678BD00C7C36F /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		114FD83F2297CF7600467E38 /* Authenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Authenticator.swift; path = Core/Authenticator.swift; sourceTree = "<group>"; };
+		11749D9E24082FB1007B8F32 /* OutputStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputStream.swift; sourceTree = "<group>"; };
 		1176BF2F229CE8F600240EDF /* TestHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1176BF31229CE8F600240EDF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1176BF33229CE8F600240EDF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -281,8 +287,10 @@
 		11E573F922C4C33400F85419 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				1129C19324052CC500CD77F2 /* Alamofire+Synchronous.swift */,
 				11E573FA22C4C33400F85419 /* Dictionary.swift */,
 				11E573FB22C4C33400F85419 /* String.swift */,
+				11749D9E24082FB1007B8F32 /* OutputStream.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -830,6 +838,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1103756823FF966E004216D0 /* SimpleAuthServer.swift in Sources */,
+				1129C19524052CC500CD77F2 /* Alamofire+Synchronous.swift in Sources */,
 				1103752623FE6DB1004216D0 /* AuthInfoStoreImpl.swift in Sources */,
 				11D26F7722CA3B8800E4099A /* HiveClient.swift in Sources */,
 				11D26F8222CA3B8800E4099A /* HiveCallback.swift in Sources */,
@@ -852,6 +861,7 @@
 				1103751D23FD0C82004216D0 /* IPFSURL.swift in Sources */,
 				1103757D23FF96C7004216D0 /* Persistent.swift in Sources */,
 				11D26F4422CA3B4B00E4099A /* Dictionary.swift in Sources */,
+				11749DA024082FB1007B8F32 /* OutputStream.swift in Sources */,
 				1103757423FF96AB004216D0 /* AuthToken.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -890,12 +900,14 @@
 				11E573FE22C4C33400F85419 /* Dictionary.swift in Sources */,
 				11ED682A22FF1078004C17D0 /* ElastosHiveSDK.swift in Sources */,
 				A39C499E22539C9C0027BDF9 /* HiveError.swift in Sources */,
+				1129C19424052CC500CD77F2 /* Alamofire+Synchronous.swift in Sources */,
 				A39CB4BF2292854000535E43 /* HiveCallback.swift in Sources */,
 				A3D9D41A23C97CD7003B602E /* IPFSClientOptionsBuilder.swift in Sources */,
 				A3FD3C81228000EE0031413A /* HiveClient.swift in Sources */,
 				A3D9D40823C86533003B602E /* IPFSClient.swift in Sources */,
 				1103757023FF96A0004216D0 /* LogLevel.swift in Sources */,
 				A3D9D40E23C865E1003B602E /* OneDriveClient.swift in Sources */,
+				11749D9F24082FB1007B8F32 /* OutputStream.swift in Sources */,
 				1103751C23FD0C82004216D0 /* IPFSURL.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1222,6 +1234,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 20200227;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = LFU7T9UYL5;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1254,6 +1267,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 20200227;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = LFU7T9UYL5;
 				DYLIB_COMPATIBILITY_VERSION = 1;
