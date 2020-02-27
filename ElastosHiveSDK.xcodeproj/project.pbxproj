@@ -62,6 +62,7 @@
 		114FD8402297CF7700467E38 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114FD83F2297CF7600467E38 /* Authenticator.swift */; };
 		11749D9F24082FB1007B8F32 /* OutputStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11749D9E24082FB1007B8F32 /* OutputStream.swift */; };
 		11749DA024082FB1007B8F32 /* OutputStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11749D9E24082FB1007B8F32 /* OutputStream.swift */; };
+		11749DA224083D63007B8F32 /* TestResultHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11749DA124083D63007B8F32 /* TestResultHandler.swift */; };
 		1176BF32229CE8F600240EDF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176BF31229CE8F600240EDF /* AppDelegate.swift */; };
 		1176BF34229CE8F600240EDF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176BF33229CE8F600240EDF /* ViewController.swift */; };
 		1176BF37229CE8F600240EDF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1176BF35229CE8F600240EDF /* Main.storyboard */; };
@@ -149,6 +150,7 @@
 		1147720823F678BD00C7C36F /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		114FD83F2297CF7600467E38 /* Authenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Authenticator.swift; path = Core/Authenticator.swift; sourceTree = "<group>"; };
 		11749D9E24082FB1007B8F32 /* OutputStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputStream.swift; sourceTree = "<group>"; };
+		11749DA124083D63007B8F32 /* TestResultHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestResultHandler.swift; sourceTree = "<group>"; };
 		1176BF2F229CE8F600240EDF /* TestHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1176BF31229CE8F600240EDF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1176BF33229CE8F600240EDF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -249,6 +251,7 @@
 				A3D9D42323C99F15003B602E /* oneDrive */,
 				A3D9D42223C99EF7003B602E /* IPFS */,
 				1137942D227ED9AD004A1F65 /* Info.plist */,
+				11749DA124083D63007B8F32 /* TestResultHandler.swift */,
 			);
 			path = ElastosHiveSDKTests;
 			sourceTree = "<group>";
@@ -807,6 +810,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A3D9D43A23C9A024003B602E /* IPFSClientIPFSProtocol.swift in Sources */,
+				11749DA224083D63007B8F32 /* TestResultHandler.swift in Sources */,
 				A3D9D43823C9A024003B602E /* IPFSClientTest.swift in Sources */,
 				11FD703422B89F5100B346AC /* AuthWebViewController.swift in Sources */,
 				A3D9D43923C9A024003B602E /* IPFSClientConnectTest.swift in Sources */,

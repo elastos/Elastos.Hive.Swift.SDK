@@ -39,6 +39,18 @@ class oneDriveKeyValuesProtocolTest: XCTestCase {
         self.wait(for: [lock], timeout: 100.0)
     }
     
+    func test_01_PutValueHandle() {
+        let lock = XCTestExpectation(description: ".")
+        let handle: TestResultHandler = TestResultHandler({ (result: Void) in
+            lock.fulfill()
+        }) { (error) in
+            XCTFail()
+            lock.fulfill()
+        }
+        _ = keyValuesProtocol!.putValue(stringValue, forKey: strKey, handler: handle)
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
     func test_02_PutValue() {
         let lock = XCTestExpectation(description: ".")
         _ = keyValuesProtocol!.putValue(stringValue, forKey: strKey).done{ _ in
@@ -47,6 +59,18 @@ class oneDriveKeyValuesProtocolTest: XCTestCase {
             XCTFail()
             lock.fulfill()
         }
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
+    func test_02_PutValueHandle() {
+        let lock = XCTestExpectation(description: ".")
+        let handle: TestResultHandler = TestResultHandler({ (result: Void) in
+            lock.fulfill()
+        }) { (error) in
+            XCTFail()
+            lock.fulfill()
+        }
+        _ = keyValuesProtocol!.putValue(stringValue, forKey: strKey, handler: handle)
         self.wait(for: [lock], timeout: 100.0)
     }
     
@@ -61,6 +85,18 @@ class oneDriveKeyValuesProtocolTest: XCTestCase {
         self.wait(for: [lock], timeout: 100.0)
     }
     
+    func test_03_PutData2Handle() {
+        let lock = XCTestExpectation(description: ".")
+        let handle: TestResultHandler = TestResultHandler({ (result: Void) in
+            lock.fulfill()
+        }) { (error) in
+            XCTFail()
+            lock.fulfill()
+        }
+        _ = keyValuesProtocol!.putValue(dataValue!, forKey: dataKey, handler: handle)
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
     func test_04_SetValue3() {
         let lock = XCTestExpectation(description: ".")
         _ = keyValuesProtocol!.setValue(setValue!, forKey: dataKey).done{ _ in
@@ -69,6 +105,18 @@ class oneDriveKeyValuesProtocolTest: XCTestCase {
             XCTFail()
             lock.fulfill()
         }
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
+    func test_04_SetValue3Handle() {
+        let lock = XCTestExpectation(description: ".")
+        let handle: TestResultHandler = TestResultHandler({ (result: Void) in
+            lock.fulfill()
+        }) { (error) in
+            XCTFail()
+            lock.fulfill()
+        }
+        _ = keyValuesProtocol!.setValue(setValue!, forKey: dataKey, handler: handle)
         self.wait(for: [lock], timeout: 100.0)
     }
     
@@ -84,6 +132,19 @@ class oneDriveKeyValuesProtocolTest: XCTestCase {
         self.wait(for: [lock], timeout: 100.0)
     }
     
+    func test_05_ValuesHandle() {
+        let lock = XCTestExpectation(description: ".")
+        let handle: TestResultHandler = TestResultHandler({ (result: [Data]) in
+            XCTAssertNotEqual(1, result.count)
+            lock.fulfill()
+        }) { (error) in
+            XCTFail()
+            lock.fulfill()
+        }
+        _ = keyValuesProtocol!.values(ofKey: strKey, handler: handle)
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
     func test_06_DeleteValues() {
         let lock = XCTestExpectation(description: ".")
         _ = keyValuesProtocol!.deleteValues(forKey: dataKey).done{ _ in
@@ -92,6 +153,18 @@ class oneDriveKeyValuesProtocolTest: XCTestCase {
             XCTFail()
             lock.fulfill()
         }
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
+    func test_06_DeleteValuesHandle() {
+        let lock = XCTestExpectation(description: ".")
+        let handle: TestResultHandler = TestResultHandler({ (result: Void) in
+            lock.fulfill()
+        }) { (error) in
+            XCTFail()
+            lock.fulfill()
+        }
+        _ = keyValuesProtocol!.deleteValues(forKey: strKey, handler: handle)
         self.wait(for: [lock], timeout: 100.0)
     }
     
