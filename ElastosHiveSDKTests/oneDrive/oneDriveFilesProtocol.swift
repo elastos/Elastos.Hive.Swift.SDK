@@ -43,6 +43,19 @@ class oneDriveFilesProtocolTest: XCTestCase {
         self.wait(for: [lock], timeout: 100.0)
     }
     
+    func test_01_PutStringHandle() {
+        let lock = XCTestExpectation(description: "testPutString")
+        let handle: TestResultHandler = TestResultHandler({ (result: Void) in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }) { (error) in
+            XCTFail()
+            lock.fulfill()
+        }
+        _ = self.filesProtocol!.putString(remoteStringContent, asRemoteFile: remoteStringName, handler: handle)
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
     func test_02_PutData() {
         let lock = XCTestExpectation(description: "testPutData")
         _ = self.filesProtocol!.putData(remoteDataContent!, asRemoteFile: remoteDataName).done{ _ in
@@ -52,6 +65,19 @@ class oneDriveFilesProtocolTest: XCTestCase {
             XCTFail()
             lock.fulfill()
         }
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
+    func test_02_PutDataHandle() {
+        let lock = XCTestExpectation(description: "testPutData")
+        let handle: TestResultHandler = TestResultHandler({ (result: Void) in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }) { (error) in
+            XCTFail()
+            lock.fulfill()
+        }
+        _ = self.filesProtocol!.putData(remoteDataContent!, asRemoteFile: remoteDataName, handler: handle)
         self.wait(for: [lock], timeout: 100.0)
     }
     
@@ -77,6 +103,29 @@ class oneDriveFilesProtocolTest: XCTestCase {
         self.wait(for: [lock], timeout: 100.0)
     }
     
+    func test_03_PutDataFromFileHandle() {
+        
+        let lock = XCTestExpectation(description: "testPutDataFromFile")
+        let handle: TestResultHandler = TestResultHandler({ (result: Void) in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }) { (error) in
+            XCTFail()
+            lock.fulfill()
+        }
+        let fileManger = FileManager.default
+        let path = "\(NSHomeDirectory())/Library/Caches/\(remoteDataFromFileName)"
+        if !fileManger.fileExists(atPath: path) {
+            fileManger.createFile(atPath: path, contents: nil, attributes: nil)
+        }
+        let fileHndle: FileHandle = FileHandle(forUpdatingAtPath: path)!
+        fileHndle.write(remoteDataFromFileContent!)
+        let readerHndle = FileHandle(forReadingAtPath: path)
+        readerHndle?.seek(toFileOffset: 0)
+        _ = self.filesProtocol!.putDataFromFile(readerHndle!, asRemoteFile: remoteDataFromFileName, handler: handle)
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
     func test_04_PutDataFromInputStream() {
         let lock = XCTestExpectation(description: "testPutDataFromInputStream")
         let input = InputStream.init(data: remoteDataFromInputStreamContent!)
@@ -87,6 +136,20 @@ class oneDriveFilesProtocolTest: XCTestCase {
             XCTFail()
             lock.fulfill()
         }
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
+    func test_04_PutDataFromInputStreamHandle() {
+        let lock = XCTestExpectation(description: "testPutDataFromInputStream")
+        let handle: TestResultHandler = TestResultHandler({ (result: Void) in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }) { (error) in
+            XCTFail()
+            lock.fulfill()
+        }
+        let input = InputStream.init(data: remoteDataFromInputStreamContent!)
+        _ = self.filesProtocol!.putDataFromInputStream(input, asRemoteFile: remoteDataFromInputStreamName, handler: handle)
         self.wait(for: [lock], timeout: 100.0)
     }
     
@@ -103,6 +166,19 @@ class oneDriveFilesProtocolTest: XCTestCase {
         self.wait(for: [lock], timeout: 100.0)
     }
     
+    func test_05_SizeofRemoteFileHandle() {
+        let lock = XCTestExpectation(description: "")
+        let handle: TestResultHandler = TestResultHandler({ (result: UInt64) in
+            XCTAssertEqual(UInt64(self.remoteStringContent.count), result)
+            lock.fulfill()
+        }) { (error) in
+            XCTFail()
+            lock.fulfill()
+        }
+        _ = self.filesProtocol?.sizeofRemoteFile(remoteStringName, handler: handle)
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
     func test_06_GetString() {
         let lock = XCTestExpectation(description: "")
         self.filesProtocol?.getString(fromRemoteFile: remoteStringName).done{ re in
@@ -116,6 +192,19 @@ class oneDriveFilesProtocolTest: XCTestCase {
         self.wait(for: [lock], timeout: 100.0)
     }
     
+    func test_06_GetStringHandle() {
+        let lock = XCTestExpectation(description: "")
+        let handle: TestResultHandler = TestResultHandler({ (result: String) in
+            XCTAssertEqual(self.remoteStringContent, result)
+            lock.fulfill()
+        }) { (error) in
+            XCTFail()
+            lock.fulfill()
+        }
+        _ = self.filesProtocol?.getString(fromRemoteFile: remoteStringName, handler: handle)
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
     func test_07_GetData() {
         let lock = XCTestExpectation(description: "")
         self.filesProtocol?.getData(fromRemoteFile: remoteDataName).done{ re in
@@ -126,6 +215,19 @@ class oneDriveFilesProtocolTest: XCTestCase {
             XCTFail()
             lock.fulfill()
         }
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
+    func test_07_GetDataHandle() {
+        let lock = XCTestExpectation(description: "")
+        let handle: TestResultHandler = TestResultHandler({ (result: Data) in
+            XCTAssertEqual(self.remoteDataContent, result)
+            lock.fulfill()
+        }) { (error) in
+            XCTFail()
+            lock.fulfill()
+        }
+        _ = self.filesProtocol?.getData(fromRemoteFile: remoteDataName, handler: handle)
         self.wait(for: [lock], timeout: 100.0)
     }
     
@@ -149,6 +251,26 @@ class oneDriveFilesProtocolTest: XCTestCase {
         self.wait(for: [lock], timeout: 100.0)
     }
     
+    func test_08_GetDataToTargetFileHandle() {
+        let lock = XCTestExpectation(description: "")
+        let handle: TestResultHandler = TestResultHandler({ (result: UInt64) in
+            XCTAssertEqual(UInt64(self.remoteDataFromFileContent!.count), result)
+            lock.fulfill()
+        }) { (error) in
+            XCTFail()
+            lock.fulfill()
+        }
+        let fileManger = FileManager.default
+        let path = "\(NSHomeDirectory())/Library/Caches/\(remoteDataFromFileName)"
+        if !fileManger.fileExists(atPath: path) {
+            fileManger.createFile(atPath: path, contents: nil, attributes: nil)
+        }
+        let fileHndle: FileHandle = FileHandle(forWritingAtPath: path)!
+        
+        _ = self.filesProtocol?.getDataToTargetFile(fromRemoteFile: remoteDataFromFileName, targetFile: fileHndle, handler: handle)
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
     func test_09_GetDataToOutputStream() {
         let lock = XCTestExpectation(description: "")
         let output = OutputStream.init()
@@ -164,6 +286,21 @@ class oneDriveFilesProtocolTest: XCTestCase {
         self.wait(for: [lock], timeout: 100.0)
     }
     
+    func test_09_GetDataToOutputStreamHandle() {
+        let lock = XCTestExpectation(description: "")
+        let handle: TestResultHandler = TestResultHandler({ (result: UInt64) in
+            // TODO:
+//            XCTAssertEqual(UInt64(self.remoteDataFromInputStreamContent!.count), re)
+            lock.fulfill()
+        }) { (error) in
+            XCTFail()
+            lock.fulfill()
+        }
+        let output = OutputStream.init()
+        _ = self.filesProtocol?.getDataToOutputStream(fromRemoteFile: remoteDataFromInputStreamName, output: output, handler: handle)
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
     func testDeleteRemoteFile() {
         let lock = XCTestExpectation(description: "")
         self.filesProtocol?.deleteRemoteFile(remoteStringName).done{ _ in
@@ -175,6 +312,18 @@ class oneDriveFilesProtocolTest: XCTestCase {
         self.wait(for: [lock], timeout: 100.0)
     }
     
+    func testDeleteRemoteFileHandle() {
+        let lock = XCTestExpectation(description: "")
+        let handle: TestResultHandler = TestResultHandler({ (result: Void) in
+            lock.fulfill()
+        }) { (error) in
+            XCTFail()
+            lock.fulfill()
+        }
+        _ = self.filesProtocol?.deleteRemoteFile(remoteDataName, handler: handle)
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
     func testListRemoteFiles() {
         let lock = XCTestExpectation(description: "")
         self.filesProtocol?.listRemoteFiles().done{ list in
@@ -183,6 +332,18 @@ class oneDriveFilesProtocolTest: XCTestCase {
             XCTFail()
             lock.fulfill()
         }
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
+    func testListRemoteFilesHandle() {
+        let lock = XCTestExpectation(description: "")
+        let handle: TestResultHandler = TestResultHandler({ (result: Array<String>) in
+            lock.fulfill()
+        }) { (error) in
+            XCTFail()
+            lock.fulfill()
+        }
+        _ = self.filesProtocol?.listRemoteFiles(handler: handle)
         self.wait(for: [lock], timeout: 100.0)
     }
     

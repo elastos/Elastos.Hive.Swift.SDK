@@ -25,6 +25,19 @@ class IPFSClientIFPSProtocolTest: XCTestCase {
         self.wait(for: [lock], timeout: 100.0)
     }
     
+    func testPutStringHandle() {
+        let lock = XCTestExpectation(description: "")
+        let handle: TestResultHandler = TestResultHandler({ (result: Hash) in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }) { (error) in
+            XCTFail()
+            lock.fulfill()
+        }
+        _ = ipfsProtocol?.putString(remoteStringContent, handler: handle)
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
     func testPutData() {
         let lock = XCTestExpectation(description: "")
         _ = ipfsProtocol?.putData(remoteDataContent!).done{ hash in
@@ -34,6 +47,19 @@ class IPFSClientIFPSProtocolTest: XCTestCase {
             XCTFail()
             lock.fulfill()
         }
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
+    func testPutDataHandle() {
+        let lock = XCTestExpectation(description: "")
+        let handle: TestResultHandler = TestResultHandler({ (result: Hash) in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }) { (error) in
+            XCTFail()
+            lock.fulfill()
+        }
+        _ = ipfsProtocol?.putData(remoteDataContent!, handler: handle)
         self.wait(for: [lock], timeout: 100.0)
     }
     
@@ -58,6 +84,28 @@ class IPFSClientIFPSProtocolTest: XCTestCase {
         self.wait(for: [lock], timeout: 100.0)
     }
     
+    func testPutDataFromFileHandle() {
+        let lock = XCTestExpectation(description: "")
+        let handle: TestResultHandler = TestResultHandler({ (result: Hash) in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }) { (error) in
+            XCTFail()
+            lock.fulfill()
+        }
+        let fileManger = FileManager.default
+        let path = "\(NSHomeDirectory())/Library/Caches/\(localName)"
+        if !fileManger.fileExists(atPath: path) {
+            fileManger.createFile(atPath: path, contents: nil, attributes: nil)
+        }
+        let fileHndle: FileHandle = FileHandle(forUpdatingAtPath: path)!
+        fileHndle.write(remoteDataContent!)
+        let readerHndle = FileHandle(forReadingAtPath: path)
+        readerHndle?.seek(toFileOffset: 0)
+        _ = ipfsProtocol?.putDataFromFile(readerHndle!, handler: handle)
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
     func testPutDataFromInputStream() {
         let lock = XCTestExpectation(description: "")
         let input = InputStream.init(data: remoteDataContent!)
@@ -68,6 +116,20 @@ class IPFSClientIFPSProtocolTest: XCTestCase {
             XCTFail()
             lock.fulfill()
         }
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
+    func testPutDataFromInputStreamHandle() {
+        let lock = XCTestExpectation(description: "")
+        let handle: TestResultHandler = TestResultHandler({ (result: Hash) in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }) { (error) in
+            XCTFail()
+            lock.fulfill()
+        }
+        let input = InputStream.init(data: remoteDataContent!)
+        _ = ipfsProtocol?.putDataFromInputStream(input, handler: handle)
         self.wait(for: [lock], timeout: 100.0)
     }
     
@@ -83,6 +145,19 @@ class IPFSClientIFPSProtocolTest: XCTestCase {
         self.wait(for: [lock], timeout: 100.0)
     }
     
+    func testPutSizeofRemoteFileHandle() {
+        let lock = XCTestExpectation(description: "")
+        let handle: TestResultHandler = TestResultHandler({ (result: UInt64) in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }) { (error) in
+            XCTFail()
+            lock.fulfill()
+        }
+        _ = ipfsProtocol?.sizeofRemoteFile(cid, handler: handle)
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
     func testGetString() {
         let lock = XCTestExpectation(description: "")
         _ = ipfsProtocol?.getString(fromRemoteFile: Hash(cid)).done{ str in
@@ -95,6 +170,19 @@ class IPFSClientIFPSProtocolTest: XCTestCase {
         self.wait(for: [lock], timeout: 100.0)
     }
     
+    func testGetStringHandle() {
+        let lock = XCTestExpectation(description: "")
+        let handle: TestResultHandler = TestResultHandler({ (result: String) in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }) { (error) in
+            XCTFail()
+            lock.fulfill()
+        }
+        _ = ipfsProtocol?.getString(fromRemoteFile: Hash(cid), handler: handle)
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
     func testGetData() {
         let lock = XCTestExpectation(description: "")
         _ = ipfsProtocol?.getData(fromRemoteFile: Hash(cid)).done{ data in
@@ -104,6 +192,19 @@ class IPFSClientIFPSProtocolTest: XCTestCase {
             XCTFail()
             lock.fulfill()
         }
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
+    func testGetDataHandle() {
+        let lock = XCTestExpectation(description: "")
+        let handle: TestResultHandler = TestResultHandler({ (result: Data) in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }) { (error) in
+            XCTFail()
+            lock.fulfill()
+        }
+        _ = ipfsProtocol?.getData(fromRemoteFile: Hash(cid), handler: handle)
         self.wait(for: [lock], timeout: 100.0)
     }
     
@@ -125,6 +226,25 @@ class IPFSClientIFPSProtocolTest: XCTestCase {
         self.wait(for: [lock], timeout: 100.0)
     }
     
+    func testGetDataToTargetFileHandle() {
+        let lock = XCTestExpectation(description: "")
+        let handle: TestResultHandler = TestResultHandler({ (result: Void) in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }) { (error) in
+            XCTFail()
+            lock.fulfill()
+        }
+        let fileManger = FileManager.default
+        let path = "\(NSHomeDirectory())/Library/Caches/testGetDataToTargetFile"
+        if !fileManger.fileExists(atPath: path) {
+            fileManger.createFile(atPath: path, contents: nil, attributes: nil)
+        }
+        let fileHndle: FileHandle = FileHandle(forWritingAtPath: path)!
+        _ = ipfsProtocol?.getDataToTargetFile(fromRemoteFile: Hash(cid), targetFile: fileHndle, handler: handle)
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
     func testGetDataToOutputStream() {
         let lock = XCTestExpectation(description: "")
         let output = OutputStream.init()
@@ -135,6 +255,20 @@ class IPFSClientIFPSProtocolTest: XCTestCase {
             XCTFail()
             lock.fulfill()
         }
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
+    func testGetDataToOutputStreamHandle() {
+        let lock = XCTestExpectation(description: "")
+        let handle: TestResultHandler = TestResultHandler({ (result: Void) in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }) { (error) in
+            XCTFail()
+            lock.fulfill()
+        }
+        let output = OutputStream.init()
+        _ = ipfsProtocol?.getDataToOutputStream(fromRemoteFile: Hash(cid), output: output, handler: handle)
         self.wait(for: [lock], timeout: 100.0)
     }
     
