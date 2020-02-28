@@ -7,6 +7,12 @@ public class HiveClientHandle: NSObject {
     override init() {}
 
     public func connect() throws {}
+    public func connectAsync() -> HivePromise<Void> {
+        return connectAsync(handler: HiveCallback<Void>())
+    }
+    public func connectAsync(handler: HiveCallback<Void>) -> HivePromise<Void> {
+        return HivePromise<Void>(error: HiveError.failue(des: "Not implemented"))
+    }
     public func disconnect() {}
     public func isConnected() -> Bool {
         return false

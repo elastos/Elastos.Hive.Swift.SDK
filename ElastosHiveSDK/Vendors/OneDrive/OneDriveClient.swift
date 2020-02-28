@@ -21,6 +21,14 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
         _ = try authHelper.connectAsync(authenticator: authenticator).wait()
     }
     
+    public override func connectAsync() -> HivePromise<Void> {
+        return connectAsync(handler: HiveCallback<Void>())
+    }
+    
+    public override func connectAsync(handler: HiveCallback<Void>) -> HivePromise<Void> {
+        return authHelper.connectAsync(authenticator: authenticator)
+    }
+    
     public override func disconnect() {
         authHelper.disconnect()
     }
