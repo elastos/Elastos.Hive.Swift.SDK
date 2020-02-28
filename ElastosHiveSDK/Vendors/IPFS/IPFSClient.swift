@@ -13,6 +13,14 @@ class IPFSClientHandle: HiveClientHandle, IPFSProtocol {
         _ = try ipfsRpc.connectAsync().wait()
     }
     
+    public override func connectAsync() -> HivePromise<Void> {
+        return connectAsync(handler: HiveCallback<Void>())
+    }
+    
+    public override func connectAsync(handler: HiveCallback<Void>) -> HivePromise<Void> {
+        return ipfsRpc.connectAsync()
+    }
+    
     override func isConnected() -> Bool {
         ipfsRpc.connectState
     }
