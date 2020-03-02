@@ -22,10 +22,6 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
     }
     
     public override func connectAsync() -> HivePromise<Void> {
-        return connectAsync(handler: HiveCallback<Void>())
-    }
-    
-    public override func connectAsync(handler: HiveCallback<Void>) -> HivePromise<Void> {
         return authHelper.connectAsync(authenticator: authenticator)
     }
     
@@ -201,10 +197,11 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
             _ = self.authHelper.checkValid().then{ _ -> HivePromise<Data> in
                 return self.doGetDataToOutputStream(fromRemoteFile: fromRemoteFile)
             }.done{ data in
-                // TODO: write
-                //                let size = self.outputStream!.write(data: data)
-                handler.didSucceed(UInt64(0))
-                resolver.fulfill(UInt64(0))
+                self.outputStream?.open()
+                self.writeData(data: data, outputStream: self.outputStream!, maxLengthPerWrite: 1024)
+                self.outputStream?.close()
+                handler.didSucceed(UInt64(data.count))
+                resolver.fulfill(UInt64(data.count))
             }.catch{ error in
                 handler.runError(error as! HiveError)
                 resolver.reject(error)
@@ -593,5 +590,21 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
         let url = OneDriveURL.children()
         let header = Header(self.authHelper).json_Headers()
         return OneDriveAPIs.request(url: url, headers: header)
+    }
+    
+    private func writeData(data: Data, outputStream: OutputStream, maxLengthPerWrite: Int) {
+        let size = data.count
+        data.withUnsafeBytes({(bytes: UnsafePointer<UInt8>) in
+            var bytesWritten = 0
+            while bytesWritten < size {
+                var maxLength = maxLengthPerWrite
+                if size - bytesWritten < maxLengthPerWrite {
+                    maxLength = size - bytesWritten
+                }
+                let n = outputStream.write(bytes.advanced(by: bytesWritten), maxLength: maxLength)
+                bytesWritten += n
+                print(n)
+            }
+        })
     }
 }
