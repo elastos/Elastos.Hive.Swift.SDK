@@ -29,7 +29,10 @@ internal class OneDriveAuthHelper: ConnectHelper {
     let clientIdKey: String = "client_id"
     let accessTokenKey: String = "access_token"
     let refreshTokenKey: String = "refresh_token"
-    let expireAtKey: String = "expires_in"
+    let expireInKey: String = "expires_in"
+    let tokenType: String = "token_type"
+    let expireAtKey: String = "expires_at"
+
     
     var clientId: String
     var scope: String
@@ -132,9 +135,9 @@ internal class OneDriveAuthHelper: ConnectHelper {
     }
     
     private func sotre(_ json: JSON) {
-        let exTime = Int(Date().timeIntervalSince1970) + json[expireAtKey].intValue
+        let exTime = Int(Date().timeIntervalSince1970) + json[expireInKey].intValue
         token = AuthToken(json[refreshTokenKey].stringValue, json[accessTokenKey].stringValue, exTime)
-        let dict = [clientIdKey: clientId, refreshTokenKey: token!.refreshToken, accessTokenKey: token!.accessToken, expireAtKey: token!.expiredTime]
+        let dict = [clientIdKey: clientId, refreshTokenKey: token!.refreshToken, accessTokenKey: token!.accessToken, expireAtKey: token!.expiredTime, tokenType: json[tokenType].stringValue]
         persistent.upateContent(dict)
     }
 
@@ -186,11 +189,15 @@ internal class OneDriveAuthHelper: ConnectHelper {
 
     private func refreshToken() -> HivePromise<Void> {
         return HivePromise<Void> {  resolver in
+            var token = ""
+            if (self.token != nil) {
+                token = self.token!.refreshToken
+            }
             let params: Dictionary<String, Any> = [
                 "client_id" : clientId,
                 "scope" : scope,
                 "redirect_uri" : redirectUrl,
-                "refresh_token": self.token!.refreshToken,
+                "refresh_token": token,
                 "grant_type": GRANT_TYPE_REFRESH_TOKEN
             ]
             let url = OneDriveURL.token()

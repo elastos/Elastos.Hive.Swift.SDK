@@ -545,8 +545,8 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
     }
     
     private func spliteBytes(_ data: [UInt8], _ length: Int) -> [UInt8] {
-        let end = length + 3
-        let tmp = [UInt8](data[3..<end])
+        let end = length + 4
+        let tmp = [UInt8](data[4..<end])
         return tmp
     }
     
