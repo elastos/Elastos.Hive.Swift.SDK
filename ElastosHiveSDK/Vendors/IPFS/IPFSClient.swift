@@ -14,10 +14,6 @@ class IPFSClientHandle: HiveClientHandle, IPFSProtocol {
     }
     
     public override func connectAsync() -> HivePromise<Void> {
-        return connectAsync(handler: HiveCallback<Void>())
-    }
-    
-    public override func connectAsync(handler: HiveCallback<Void>) -> HivePromise<Void> {
         return ipfsRpc.connectAsync()
     }
     
@@ -182,11 +178,13 @@ class IPFSClientHandle: HiveClientHandle, IPFSProtocol {
     
     public func getDataToOutputStream(fromRemoteFile: Hash, output: OutputStream, handler: HiveCallback<Void>) -> HivePromise<Void> {
         return HivePromise<Void>{ resolver in
+            self.outputStream = output
             ipfsRpc.checkValid().then { _ -> HivePromise<Data> in
                 return self.doGetDataToOutputStream(fromRemoteFile: fromRemoteFile, output: output)
             }.done { data in
-                // TODO: write
-                //               _ = self.outputStream!.write(data: data)
+                self.outputStream?.open()
+                self.writeData(data: data, outputStream: self.outputStream!, maxLengthPerWrite: 1024)
+                self.outputStream?.close()
                 handler.didSucceed(Void())
                 resolver.fulfill(Void())
             }.catch { error in
@@ -289,6 +287,22 @@ class IPFSClientHandle: HiveClientHandle, IPFSProtocol {
     
     private func doGetDataToOutputStream(fromRemoteFile: Hash, output: OutputStream) -> HivePromise<Data> {
         return doGetData(fromRemoteFile)
+    }
+    
+    private func writeData(data: Data, outputStream: OutputStream, maxLengthPerWrite: Int) {
+        let size = data.count
+        data.withUnsafeBytes({(bytes: UnsafePointer<UInt8>) in
+            var bytesWritten = 0
+            while bytesWritten < size {
+                var maxLength = maxLengthPerWrite
+                if size - bytesWritten < maxLengthPerWrite {
+                    maxLength = size - bytesWritten
+                }
+                let n = outputStream.write(bytes.advanced(by: bytesWritten), maxLength: maxLength)
+                bytesWritten += n
+                print(n)
+            }
+        })
     }
 }
 

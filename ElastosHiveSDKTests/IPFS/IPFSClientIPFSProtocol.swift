@@ -247,7 +247,7 @@ class IPFSClientIFPSProtocolTest: XCTestCase {
     
     func testGetDataToOutputStream() {
         let lock = XCTestExpectation(description: "")
-        let output = OutputStream.init()
+        let output = OutputStream(toMemory: ())
         _ = ipfsProtocol?.getDataToOutputStream(fromRemoteFile: Hash(cid), output: output).done{ size in
             XCTAssertTrue(true)
             lock.fulfill()
@@ -267,7 +267,7 @@ class IPFSClientIFPSProtocolTest: XCTestCase {
             XCTFail()
             lock.fulfill()
         }
-        let output = OutputStream.init()
+        let output = OutputStream(toMemory: ())
         _ = ipfsProtocol?.getDataToOutputStream(fromRemoteFile: Hash(cid), output: output, handler: handle)
         self.wait(for: [lock], timeout: 100.0)
     }

@@ -273,10 +273,11 @@ class oneDriveFilesProtocolTest: XCTestCase {
     
     func test_09_GetDataToOutputStream() {
         let lock = XCTestExpectation(description: "")
-        let output = OutputStream.init()
+        let output = OutputStream(toMemory: ())
         self.filesProtocol?.getDataToOutputStream(fromRemoteFile: remoteDataFromInputStreamName, output: output).done{ re in
-            // TODO:
-//            XCTAssertEqual(UInt64(self.remoteDataFromInputStreamContent!.count), re)
+            let data: Data = output.property(forKey: Stream.PropertyKey.dataWrittenToMemoryStreamKey)! as! Data
+            XCTAssertEqual(UInt64(self.remoteDataFromInputStreamContent!.count), re)
+            XCTAssertEqual(self.remoteDataFromInputStreamContent!, data)
             lock.fulfill()
         }.catch{ error in
             print(error)
@@ -288,15 +289,16 @@ class oneDriveFilesProtocolTest: XCTestCase {
     
     func test_09_GetDataToOutputStreamHandle() {
         let lock = XCTestExpectation(description: "")
+        let output = OutputStream(toMemory: ())
         let handle: TestResultHandler = TestResultHandler({ (result: UInt64) in
-            // TODO:
-//            XCTAssertEqual(UInt64(self.remoteDataFromInputStreamContent!.count), re)
+            let data: Data = output.property(forKey: Stream.PropertyKey.dataWrittenToMemoryStreamKey)! as! Data
+            XCTAssertEqual(UInt64(self.remoteDataFromInputStreamContent!.count), result)
+            XCTAssertEqual(self.remoteDataFromInputStreamContent!, data)
             lock.fulfill()
         }) { (error) in
             XCTFail()
             lock.fulfill()
         }
-        let output = OutputStream.init()
         _ = self.filesProtocol?.getDataToOutputStream(fromRemoteFile: remoteDataFromInputStreamName, output: output, handler: handle)
         self.wait(for: [lock], timeout: 100.0)
     }
