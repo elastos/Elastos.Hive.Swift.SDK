@@ -18,7 +18,7 @@ class IPFSClientHandle: HiveClientHandle, IPFSProtocol {
     }
     
     override func isConnected() -> Bool {
-        ipfsRpc.connectState
+        return ipfsRpc.connectState
     }
     
     public override func disconnect() {
@@ -34,7 +34,7 @@ class IPFSClientHandle: HiveClientHandle, IPFSProtocol {
     }
     
     public func putString(_ data: String, handler: HiveCallback<Hash>) -> HivePromise<Hash> {
-        HivePromise<Hash>{ resolver in
+        return HivePromise<Hash>{ resolver in
             ipfsRpc.checkValid().then { _ -> HivePromise<Hash> in
                 return self.doPutString(data)
             }.done { hash in
@@ -52,7 +52,7 @@ class IPFSClientHandle: HiveClientHandle, IPFSProtocol {
     }
     
     public func putData(_ data: Data, handler: HiveCallback<Hash>) -> HivePromise<Hash> {
-        HivePromise<Hash>{ resolver in
+        return HivePromise<Hash>{ resolver in
             ipfsRpc.checkValid().then { _ -> HivePromise<Hash> in
                 return self.doPutData(data)
             }.done { hash in
@@ -70,7 +70,7 @@ class IPFSClientHandle: HiveClientHandle, IPFSProtocol {
     }
     
     public func putDataFromFile(_ fileHandle: FileHandle, handler: HiveCallback<Hash>) -> HivePromise<Hash> {
-        HivePromise<Hash>{ resolver in
+        return HivePromise<Hash>{ resolver in
             ipfsRpc.checkValid().then { _ -> HivePromise<Hash> in
                 return self.doPutDataFromFile(fileHandle)
             }.done { hash in
@@ -104,7 +104,7 @@ class IPFSClientHandle: HiveClientHandle, IPFSProtocol {
     }
     
     public func sizeofRemoteFile(_ cid: String, handler: HiveCallback<UInt64>) -> HivePromise<UInt64> {
-        HivePromise<UInt64>{ resolver in
+        return HivePromise<UInt64>{ resolver in
             ipfsRpc.checkValid().then { _ -> HivePromise<UInt64> in
                 return self.doSizeofRemoteFile(cid)
             }.done { size in
@@ -210,7 +210,7 @@ class IPFSClientHandle: HiveClientHandle, IPFSProtocol {
     }
     
     private func doSizeofRemoteFile(_ fileName: String) -> HivePromise<UInt64> {
-        HivePromise<UInt64>{ resolver in
+        return HivePromise<UInt64>{ resolver in
             let url = IPFSURL.sharedInstance.ls(fileName)
             IPFSApis.request(url).done { json in
                 let json = JSON(json["Objects"][fileName])
