@@ -112,6 +112,19 @@
 		A3D9D43F23C9B16D003B602E /* oneDriveKeyValuesProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D9D43D23C9B16D003B602E /* oneDriveKeyValuesProtocol.swift */; };
 		A3D9D44123C9B392003B602E /* OneDriveClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D9D44023C9B392003B602E /* OneDriveClientProtocol.swift */; };
 		A3D9D44323C9BC29003B602E /* IPFSClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D9D44223C9BC29003B602E /* IPFSClientProtocol.swift */; };
+		A3E13E85240E449A002569B1 /* FilesProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D9D41023C9671C003B602E /* FilesProtocol.swift */; };
+		A3E13E86240E449A002569B1 /* IPFSProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D9D40F23C9671C003B602E /* IPFSProtocol.swift */; };
+		A3E13E87240E449A002569B1 /* KeyValuesProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D9D41523C96DA1003B602E /* KeyValuesProtocol.swift */; };
+		A3E13E88240E44C9002569B1 /* Hash.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D9D40323C84E5D003B602E /* Hash.swift */; };
+		A3E13E89240E45AF002569B1 /* IPFSClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D9D40723C86533003B602E /* IPFSClient.swift */; };
+		A3E13E8A240E45AF002569B1 /* IPFSClientOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D9D40923C865D2003B602E /* IPFSClientOptions.swift */; };
+		A3E13E8B240E45AF002569B1 /* IPFSClientOptionsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D9D41923C97CD7003B602E /* IPFSClientOptionsBuilder.swift */; };
+		A3E13E8C240E45AF002569B1 /* IPFSRpcNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D9D41723C973E4003B602E /* IPFSRpcNode.swift */; };
+		A3E13E8D240E45D2002569B1 /* OneDriveClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D9D40C23C865E1003B602E /* OneDriveClient.swift */; };
+		A3E13E8E240E45D2002569B1 /* OneDriveClientOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D9D41D23C99904003B602E /* OneDriveClientOptions.swift */; };
+		A3E13E8F240E45D2002569B1 /* OneDriveClientOptionsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D9D41B23C98151003B602E /* OneDriveClientOptionsBuilder.swift */; };
+		A3E13E90240E45EE002569B1 /* HiveClientOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37F893C23C72B2600F6C11E /* HiveClientOptions.swift */; };
+		A3E13E91240E4609002569B1 /* ValueList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D9D40523C85D27003B602E /* ValueList.swift */; };
 		A3FD3C81228000EE0031413A /* HiveClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FD3C80228000EE0031413A /* HiveClient.swift */; };
 		D11C186DCB4238199CA4FFF2 /* Pods_TestHost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F09DA7DC9D47111E630261C /* Pods_TestHost.framework */; };
 /* End PBXBuildFile section */
@@ -841,31 +854,44 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3E13E89240E45AF002569B1 /* IPFSClient.swift in Sources */,
+				11ED682B22FF1078004C17D0 /* ElastosHiveSDK.swift in Sources */,
+				1147720A23F678BD00C7C36F /* SwiftyJSON.swift in Sources */,
+				A3E13E88240E44C9002569B1 /* Hash.swift in Sources */,
+				1103756E23FF9689004216D0 /* DataResponse.swift in Sources */,
+				A3E13E91240E4609002569B1 /* ValueList.swift in Sources */,
+				11D26F4522CA3B4B00E4099A /* String.swift in Sources */,
+				11749DA024082FB1007B8F32 /* OutputStream.swift in Sources */,
+				11D26F4422CA3B4B00E4099A /* Dictionary.swift in Sources */,
+				A3E13E85240E449A002569B1 /* FilesProtocol.swift in Sources */,
+				A3E13E86240E449A002569B1 /* IPFSProtocol.swift in Sources */,
+				A3E13E87240E449A002569B1 /* KeyValuesProtocol.swift in Sources */,
+				A3E13E8F240E45D2002569B1 /* OneDriveClientOptionsBuilder.swift in Sources */,
+				A3E13E8E240E45D2002569B1 /* OneDriveClientOptions.swift in Sources */,
+				A3E13E8D240E45D2002569B1 /* OneDriveClient.swift in Sources */,
 				1103756823FF966E004216D0 /* SimpleAuthServer.swift in Sources */,
 				1129C19524052CC500CD77F2 /* Alamofire+Synchronous.swift in Sources */,
 				1103752623FE6DB1004216D0 /* AuthInfoStoreImpl.swift in Sources */,
-				11D26F7722CA3B8800E4099A /* HiveClient.swift in Sources */,
-				11D26F8222CA3B8800E4099A /* HiveCallback.swift in Sources */,
 				1103755F23FF964D004216D0 /* OneDriveConstants.swift in Sources */,
-				1147720A23F678BD00C7C36F /* SwiftyJSON.swift in Sources */,
+				1104AFED23F97880004454C3 /* Header.swift in Sources */,
 				1103756B23FF9679004216D0 /* OneDriveAuthHelper.swift in Sources */,
-				11ED682B22FF1078004C17D0 /* ElastosHiveSDK.swift in Sources */,
-				11D26F7022CA3B8200E4099A /* HiveError.swift in Sources */,
-				11D26F4522CA3B4B00E4099A /* String.swift in Sources */,
 				1103756523FF9664004216D0 /* OneDriveURL.swift in Sources */,
-				1103756E23FF9689004216D0 /* DataResponse.swift in Sources */,
+				1103756223FF9659004216D0 /* OneDriveAPIs.swift in Sources */,
+				A3E13E8A240E45AF002569B1 /* IPFSClientOptions.swift in Sources */,
+				A3E13E8B240E45AF002569B1 /* IPFSClientOptionsBuilder.swift in Sources */,
+				A3E13E8C240E45AF002569B1 /* IPFSRpcNode.swift in Sources */,
+				1103751D23FD0C82004216D0 /* IPFSURL.swift in Sources */,
+				1103755C23FF963B004216D0 /* IPFSRpc.swift in Sources */,
 				1103752023FD191E004216D0 /* IPFSApis.swift in Sources */,
+				11D26F7722CA3B8800E4099A /* HiveClient.swift in Sources */,
+				A3E13E90240E45EE002569B1 /* HiveClientOptions.swift in Sources */,
+				11D26F8222CA3B8800E4099A /* HiveCallback.swift in Sources */,
+				11D26F7022CA3B8200E4099A /* HiveError.swift in Sources */,
 				1103757A23FF96BF004216D0 /* Log.swift in Sources */,
 				1103757123FF96A0004216D0 /* LogLevel.swift in Sources */,
 				11D26F7222CA3B8800E4099A /* Authenticator.swift in Sources */,
-				1103755C23FF963B004216D0 /* IPFSRpc.swift in Sources */,
-				1103756223FF9659004216D0 /* OneDriveAPIs.swift in Sources */,
-				1104AFED23F97880004454C3 /* Header.swift in Sources */,
 				1103757723FF96B5004216D0 /* ConnectHelper.swift in Sources */,
-				1103751D23FD0C82004216D0 /* IPFSURL.swift in Sources */,
 				1103757D23FF96C7004216D0 /* Persistent.swift in Sources */,
-				11D26F4422CA3B4B00E4099A /* Dictionary.swift in Sources */,
-				11749DA024082FB1007B8F32 /* OutputStream.swift in Sources */,
 				1103757423FF96AB004216D0 /* AuthToken.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
