@@ -9,7 +9,7 @@ class IPFSClientIFPSProtocolTest: XCTestCase {
     private let localName = "testHello"
     private let remoteStringContent = "testHello"
     private let remoteDataContent = "this is data.".data(using: .utf8)
-    private let IPADDRS: [String] = ["3.133.166.156", "127.0.0.1", "52.83.165.233", "52.83.238.247"]
+    private let IPADDRS: [String] = ["52.83.165.233", "52.83.238.247", "3.133.166.156", "13.59.79.222", "3.133.71.168"]
     private let cid = "QmaY6wjwnybJgd5F4FD6pPL6h9vjXrGv2BJbxxUC1ojUbQ"
     private let path = "\(NSHomeDirectory())/Library/Caches/ipfs"
     
@@ -279,6 +279,7 @@ class IPFSClientIFPSProtocolTest: XCTestCase {
                 .appendRpcNode(IPFSRpcNode(IPADDRS[1], 5001))
                 .appendRpcNode(IPFSRpcNode(IPADDRS[2], 5001))
                 .appendRpcNode(IPFSRpcNode(IPADDRS[3], 5001))
+                .appendRpcNode(IPFSRpcNode(IPADDRS[4], 5001))
                 .withStorePath(using: STORE_PATH)
                 .build()
             
