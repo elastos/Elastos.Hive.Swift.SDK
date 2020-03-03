@@ -4,7 +4,7 @@ import XCTest
 class IPFSClientConnectTest: XCTestCase {
     private let STORE_PATH = "fakePath"
     private var client: HiveClientHandle?
-    private let IPADDRS: [String] = ["3.133.166.156", "127.0.0.1"]
+    private let IPADDRS: [String] = ["3.133.166.156", "127.0.0.1", "52.83.165.233", "52.83.238.247"]
 
     func testConnect() {
         XCTAssertFalse(client!.isConnected())
@@ -28,8 +28,10 @@ class IPFSClientConnectTest: XCTestCase {
     override func setUp() {
         do {
             let options = try IPFSClientOptionsBuilder()
-                .appendRpcNode(IPFSRpcNode("3.133.166.156", 5001))
-                .appendRpcNode(IPFSRpcNode("127.0.0.1", 5001))
+                .appendRpcNode(IPFSRpcNode(IPADDRS[0], 5001))
+                .appendRpcNode(IPFSRpcNode(IPADDRS[1], 5001))
+                .appendRpcNode(IPFSRpcNode(IPADDRS[2], 5001))
+                .appendRpcNode(IPFSRpcNode(IPADDRS[3], 5001))
                 .withStorePath(using: STORE_PATH)
                 .build()
 

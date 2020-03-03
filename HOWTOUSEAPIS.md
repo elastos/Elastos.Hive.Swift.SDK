@@ -2,8 +2,6 @@ How-to use APIs
 =============================
 
 
-### HiveClient class
-
  Firstly，**Making a HiveClientOptions：**
  
 Create different client options with specified parameters.
