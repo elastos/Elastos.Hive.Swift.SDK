@@ -3,7 +3,7 @@ import XCTest
 
 class IPFSClientProtocoTest: XCTestCase {
     private let STORE_PATH = "fakePath"
-
+    private let IPADDRS: [String] = ["52.83.165.233", "52.83.238.247", "3.133.166.156", "13.59.79.222", "3.133.71.168"]
     private var client: HiveClientHandle?
 
     func testAsProtocol() {
@@ -14,8 +14,12 @@ class IPFSClientProtocoTest: XCTestCase {
 
     override func setUp() {
         do {
-           let options = try IPFSClientOptionsBuilder()
-                .appendRpcNode(IPFSRpcNode("3.133.166.156", 5001))
+            let options = try IPFSClientOptionsBuilder()
+                .appendRpcNode(IPFSRpcNode(IPADDRS[0], 5001))
+                .appendRpcNode(IPFSRpcNode(IPADDRS[1], 5001))
+                .appendRpcNode(IPFSRpcNode(IPADDRS[2], 5001))
+                .appendRpcNode(IPFSRpcNode(IPADDRS[3], 5001))
+                .appendRpcNode(IPFSRpcNode(IPADDRS[4], 5001))
                 .withStorePath(using: STORE_PATH)
                 .build()
 
