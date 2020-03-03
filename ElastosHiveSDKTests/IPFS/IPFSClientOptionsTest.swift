@@ -7,7 +7,7 @@ class IPFSClientOptionsTest: XCTestCase {
     func testBuild() {
         do {
             let options = try IPFSClientOptionsBuilder()
-                .appendRpcNode(IPFSRpcNode("127.0.0.1", 10234))
+                .appendRpcNode(IPFSRpcNode("52.83.165.233", 5001))
                 .withStorePath(using: STORE_PATH)
                 .build()
 
@@ -46,7 +46,7 @@ class IPFSClientOptionsTest: XCTestCase {
     func testBuildWithoutStorePath() {
         do {
             let _ = try IPFSClientOptionsBuilder()
-                .appendRpcNode(IPFSRpcNode("127.0.0.1", 1234))
+                .appendRpcNode(IPFSRpcNode("52.83.165.233", 5001))
                 .build()
 
             XCTFail()
