@@ -42,7 +42,7 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
     }
     
     public func putString(_ data: String, asRemoteFile fileName: String) -> HivePromise<Void> {
-        putString(data, asRemoteFile: fileName, handler: HiveCallback<Void>())
+        return putString(data, asRemoteFile: fileName, handler: HiveCallback<Void>())
     }
     
     public func putString(_ data: String, asRemoteFile fileName: String, handler: HiveCallback<Void>) -> HivePromise<Void> {

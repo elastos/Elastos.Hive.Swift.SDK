@@ -23,11 +23,11 @@
 import Foundation
 
 public enum HiveError: Error {
-    case insufficientParameters(des: String? = nil)
-    case invalidatedBuilder(des: String? = nil)
-    case failue(des: String? = nil)
-    case IllegalArgument(des: String? = nil)
-    case no_rpc_node_available(des: String? = nil)
+    case insufficientParameters(des: String?)
+    case invalidatedBuilder(des: String?)
+    case failue(des: String?)
+    case IllegalArgument(des: String?)
+    case no_rpc_node_available(des: String?)
 }
 
 extension HiveError {

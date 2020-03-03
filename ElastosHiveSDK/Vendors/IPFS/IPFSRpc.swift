@@ -28,12 +28,13 @@ class IPFSRpc: ConnectHelper {
     public override func checkValid(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
         return HivePromise<Void>{ resolver in
             if !self.doCheckValid() {
-                let error = HiveError.no_rpc_node_available()
+                let error = HiveError.no_rpc_node_available(des: nil)
                 handleBy.runError(error)
                 resolver.reject(error)
+            } else {
+                handleBy.didSucceed(Void())
+                resolver.fulfill(Void())
             }
-            handleBy.didSucceed(Void())
-            resolver.fulfill(Void())
         }
     }
     
