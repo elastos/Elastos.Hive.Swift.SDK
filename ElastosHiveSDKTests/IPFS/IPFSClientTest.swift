@@ -4,7 +4,6 @@ import XCTest
 class IPFSClientTest: XCTestCase {
     private let STORE_PATH = "\(NSHomeDirectory())/Library/Caches/ipfs"
     private var options: IPFSClientOptions?
-    private let IPADDRS: [String] = ["3.133.166.156", "127.0.0.1"]
 
     func testCreateInstance() {
         do {
@@ -20,7 +19,7 @@ class IPFSClientTest: XCTestCase {
     override func setUp() {
         do {
             options = try IPFSClientOptionsBuilder()
-                .appendRpcNode(IPFSRpcNode("127.0.0.1", 12345))
+                .appendRpcNode(IPFSRpcNode("52.83.165.233", 5001))
                 .withStorePath(using: STORE_PATH)
                 .build()
 
