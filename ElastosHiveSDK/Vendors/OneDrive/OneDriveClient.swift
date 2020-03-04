@@ -48,7 +48,7 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
     public func putString(_ data: String, asRemoteFile fileName: String, handler: HiveCallback<Void>) -> HivePromise<Void> {
         return HivePromise<Void>{ resolver in
             self.authHelper.checkValid().then { _ -> HivePromise<Void> in
-                return self.doPutString(data, OneDriveURL(forPath: fileName).write())
+                return self.doPutString(data, self.fileName(fileName))
             }.done { _ in
                 handler.didSucceed(nullValue)
                 resolver.fulfill(nullValue)
@@ -66,7 +66,7 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
     public func putData(_ data: Data, asRemoteFile fileName: String, handler: HiveCallback<Void>) -> HivePromise<Void> {
         return HivePromise<Void>{ resolver in
             _ = self.authHelper.checkValid().then { _ -> HivePromise<Void> in
-                return self.doPutData(data, OneDriveURL(forPath: fileName).write())
+                return self.doPutData(data, self.fileName(fileName))
             }.done { _ in
                 handler.didSucceed(nullValue)
                 resolver.fulfill(nullValue)
@@ -85,7 +85,7 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
         self.fileHandle = fileHandle
         return HivePromise<Void>{ resolver in
             _ = self.authHelper.checkValid().then { _ -> HivePromise<Void> in
-                return self.doPutDataFromFile(self.fileHandle!, fileName)
+                return self.doPutDataFromFile(self.fileHandle!, self.fileName(fileName))
             }.done{ _ in
                 handler.didSucceed(nullValue)
                 resolver.fulfill(nullValue)
@@ -103,7 +103,7 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
     public func putDataFromInputStream(_ input: InputStream, asRemoteFile fileName: String, handler: HiveCallback<Void>) -> HivePromise<Void> {
         return HivePromise<Void>{ resolver in
             _ = self.authHelper.checkValid().then { _ -> HivePromise<Void> in
-                return try self.doPutDataFromInputStream(input, asRemoteFile: fileName)
+                return try self.doPutDataFromInputStream(input, asRemoteFile: self.fileName(fileName))
             }.done{ _ in
                 handler.didSucceed(nullValue)
                 resolver.fulfill(nullValue)
@@ -121,7 +121,7 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
     public func sizeofRemoteFile(_ fileName: String, handler: HiveCallback<UInt64>) -> HivePromise<UInt64> {
         return HivePromise<UInt64>{ resolver in
             _ = self.authHelper.checkValid().then { _ -> HivePromise<UInt64> in
-                return self.doGetFileSize(fileName)
+                return self.doGetFileSize(self.fileName(fileName))
             }.done{ size in
                 handler.didSucceed(size)
                 resolver.fulfill(size)
@@ -139,7 +139,7 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
     public func getString(fromRemoteFile fileName: String, handler: HiveCallback<String>) -> HivePromise<String> {
         return HivePromise<String>{ resolver in
             _ = self.authHelper.checkValid().then { _ -> HivePromise<String> in
-                return self.doGetString(fileName)
+                return self.doGetString(self.fileName(fileName))
             }.done { data in
                 handler.didSucceed(data)
                 resolver.fulfill(data)
@@ -157,7 +157,7 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
     public func getData(fromRemoteFile fileName: String, handler: HiveCallback<Data>) -> HivePromise<Data> {
         return HivePromise<Data>{ resolver in
             _ = self.authHelper.checkValid().then { _ -> HivePromise<Data> in
-                return self.doGetData(OneDriveURL(forPath: fileName).read())
+                return self.doGetData(self.fileName(fileName))
             }.done{ data in
                 handler.didSucceed(data)
                 resolver.fulfill(data)
@@ -176,7 +176,7 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
         self.fileHandle = targetFile
         return HivePromise<UInt64> { resolver in
             _ = self.authHelper.checkValid().then { _ -> HivePromise<UInt64> in
-                return self.doGetDataToTargetFile(fileName, self.fileHandle!)
+                return self.doGetDataToTargetFile(self.fileName(fileName), self.fileHandle!)
             }.done{ size in
                 handler.didSucceed(size)
                 resolver.fulfill(size)
@@ -195,7 +195,7 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
         self.outputStream = output
         return HivePromise<UInt64> { resolver in
             _ = self.authHelper.checkValid().then{ _ -> HivePromise<Data> in
-                return self.doGetDataToOutputStream(fromRemoteFile: fromRemoteFile)
+                return self.doGetDataToOutputStream(fromRemoteFile: self.fileName(fromRemoteFile))
             }.done{ data in
                 self.outputStream?.open()
                 self.writeData(data: data, outputStream: self.outputStream!, maxLengthPerWrite: 1024)
@@ -216,7 +216,7 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
     public func deleteRemoteFile(_ fileName: String, handler: HiveCallback<Void>) -> HivePromise<Void> {
         return HivePromise<Void>{ resolver in
             _ = self.authHelper.checkValid().then { _ -> HivePromise<JSON> in
-                return self.doDeleteRemoteFile(OneDriveURL(forPath: fileName).deleteItem())
+                return self.doDeleteRemoteFile(self.fileName(fileName))
             }.done{ _ in
                 handler.didSucceed(nullValue)
                 resolver.fulfill(nullValue)
@@ -231,7 +231,7 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
         return listRemoteFiles(handler: HiveCallback<Array<String>>())
     }
     
-    public func listRemoteFiles(handler: HiveCallback<Array<String>>) -> Promise<Array<String>> {
+    public func listRemoteFiles(handler: HiveCallback<Array<String>>) -> HivePromise<Array<String>> {
         return HivePromise<Array<String>> { resolver in
             doListRemoteFiles().done { json in
                 let arr = json["value"].arrayValue
@@ -256,7 +256,7 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
     public func putValue(_ aValue: String, forKey: String, handler: HiveCallback<Void>) -> HivePromise<Void> {
         return HivePromise<Void>{ resolver in
             _ = self.authHelper.checkValid().then { _ -> HivePromise<Void> in
-                return self.doPutValue(aValue, forKey)
+                return self.doPutValue(aValue, self.keyName(forKey))
             }.done{ _ in
                 handler.didSucceed(nullValue)
                 resolver.fulfill(nullValue)
@@ -274,7 +274,7 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
     public func putValue(_ aValue: Data, forKey: String, handler: HiveCallback<Void>) -> HivePromise<Void> {
         return HivePromise<Void>{ resolver in
             _ = self.authHelper.checkValid().then { _ -> HivePromise<Void> in
-                return self.doPutValue(aValue, forKey)
+                return self.doPutValue(aValue, self.keyName(forKey))
             }.done{ _ in
                 handler.didSucceed(nullValue)
                 resolver.fulfill(nullValue)
@@ -292,7 +292,7 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
     public func setValue(_ newValue: String, forKey: String, handler: HiveCallback<Void>) -> HivePromise<Void> {
         return HivePromise<Void>{ resolver in
             _ = self.authHelper.checkValid().then{ _ -> HivePromise<Void> in
-                return self.doSetValue(newValue, forKey)
+                return self.doSetValue(newValue, self.keyName(forKey))
             }.done{ _ in
                 handler.didSucceed(nullValue)
                 resolver.fulfill(nullValue)
@@ -310,7 +310,7 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
     public func setValue(_ newValue: Data, forKey: String, handler: HiveCallback<Void>) -> HivePromise<Void> {
         return HivePromise<Void>{ resolver in
             _ = self.authHelper.checkValid().then{ _ -> HivePromise<Void> in
-                return self.doSetValue(newValue, forKey)
+                return self.doSetValue(newValue, self.keyName(forKey))
             }.done{ _ in
                 handler.didSucceed(nullValue)
                 resolver.fulfill(nullValue)
@@ -328,7 +328,7 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
     public func values(ofKey: String, handler: HiveCallback<[Data]>) -> HivePromise<[Data]> {
         return HivePromise<[Data]> { resolver in
             _ = self.authHelper.checkValid().then{ _ -> HivePromise<[Data]> in
-                return self.doValues(ofKey)
+                return self.doValues(self.keyName(ofKey))
             }.done{ valueList in
                 handler.didSucceed(valueList)
                 resolver.fulfill(valueList)
@@ -346,7 +346,7 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
     public func deleteValues(forKey: String, handler: HiveCallback<Void>) -> HivePromise<Void> {
         return HivePromise<Void> { resolver in
             _ = self.authHelper.checkValid().then{ _ -> HivePromise<JSON> in
-                return self.do_deleteValues(forKey: forKey)
+                return self.doDeleteValues(forKey: self.keyName(forKey))
             }.done{ _ in
                 handler.didSucceed(Void())
                 resolver.fulfill(Void())
@@ -364,26 +364,37 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
     }
     
     private func doPutData(_ data: Data, _ remoteFile: String) -> HivePromise<Void> {
-        var header = Header.init(authHelper).plain_headers()
+        var header = Header.init(authHelper).json_Headers()
         if data.count <= 4 * 1024 * 1024 {
-            return OneDriveAPIs.uploadWriteData(data: data, to: remoteFile, headers: header)
+            return OneDriveAPIs.uploadWriteData(data: data, to: OneDriveURL(forPath: remoteFile).write(), headers: header)
         }
-        header = Header.init(authHelper).json_Headers()
-        let params: Dictionary<String, Any> = ["file": "file",                                                      "@microsoft.graph.conflictBehavior": "fail"]
-        let url = OneDriveURL(forPath: remoteFile).createUploadSession()
         
-        return OneDriveAPIs.createUploadSession(url: url, parameters: params, headers: header).then { uploadUrl -> HivePromise<Void>  in
+        var dir = dirNamePart(remoteFile)
+        var params: Dictionary<String, Any> = [
+            "name": String(dir.suffix(dir.count - 1)),
+            "folder": [: ],
+            "@microsoft.graph.conflictBehavior": "fail"]
+        
+        var url = ONE_DRIVE_API_BASE_URL + APP_ROOT + "/children"
+        if dirNamePart(dir) != "" {
+            dir = String(dir.suffix(dir.count - 1))
+            let ecUrl: String = dir.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+            url = ONE_DRIVE_API_BASE_URL + APP_ROOT + ":\(ecUrl):/children"
+        }
+        
+        return OneDriveAPIs.create_folder(url: url, parameters: params, headers: header).then { _ -> HivePromise<String> in
+            params = ["file": "file",                                                      "@microsoft.graph.conflictBehavior": "fail"]
+            url = OneDriveURL(forPath: remoteFile).createUploadSession()
+            return OneDriveAPIs.createUploadSession(url: url, parameters: params, headers: header)
+        }.then { uploadurl -> HivePromise<Void> in
             let length: Int64 = Int64(data.count)
             header = Header(self.authHelper).upload_Headers(length)
-            return OneDriveAPIs.uploadWriteData(data: data,
-            to: uploadUrl,
-            method: .put,
-            headers: header)
+            return OneDriveAPIs.uploadWriteData(data: data, to: uploadurl, method: .put, headers: header)
         }
     }
     
     private func doPutDataFromFile(_ fileHandle: FileHandle, _ remoteFile: String) -> HivePromise<Void> {
-        return doPutData(fileHandle.readDataToEndOfFile(), OneDriveURL(forPath: remoteFile).write())
+        return doPutData(fileHandle.readDataToEndOfFile(), remoteFile)
     }
     
     private func doGetFileSize(_ remoteFile: String) -> HivePromise<UInt64> {
@@ -417,7 +428,7 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
     private func doGetData(_ remoteFile: String) -> HivePromise<Data> {
         return HivePromise<Data> { resolver in
             let header = Header(self.authHelper).plain_headers()
-            OneDriveAPIs.getRemoteFile(url: remoteFile, headers: header)
+            OneDriveAPIs.getRemoteFile(url: OneDriveURL(forPath: remoteFile).read(), headers: header)
                 .done { jsonData in
                     resolver.fulfill(jsonData)
             }.catch { error in
@@ -432,10 +443,8 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
     
     private func doGetDataToTargetFile(_ remoteFile: String, _ targetFile: FileHandle) -> HivePromise<UInt64> {
         return HivePromise<UInt64> { resolver in
-            let url = OneDriveURL(forPath: remoteFile).read()
             let header = Header(self.authHelper).plain_headers()
-            
-            OneDriveAPIs.getRemoteFile(url: url, headers: header)
+            OneDriveAPIs.getRemoteFile(url: OneDriveURL(forPath: remoteFile).read(), headers: header)
                 .done { jsonData in
                     targetFile.write(jsonData)
                     resolver.fulfill(UInt64(jsonData.count))
@@ -447,7 +456,7 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
     
     private func doDeleteRemoteFile(_ remoteFile: String) -> HivePromise<JSON> {
         let header = Header(self.authHelper).json_Headers()
-        return OneDriveAPIs.request(url: remoteFile, method: .delete, headers: header)
+        return OneDriveAPIs.request(url: OneDriveURL(forPath: remoteFile).deleteItem(), method: .delete, headers: header)
     }
     
     private func doPutValue(_ aValue: String, _ key: String) -> HivePromise<Void> {
@@ -455,13 +464,13 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
     }
     
     private func doPutValue(_ aValue: Data, _ key: String) -> HivePromise<Void> {
-        return doGetData(OneDriveURL(forKey: key).read()).then { originData -> HivePromise<Void> in
+        return doGetData(key).then { originData -> HivePromise<Void> in
             let valueBytes = self.dataToByteArray(data: aValue)
             let mergeBytes: [UInt8] = self.mergeLengthAndData(data: valueBytes)
             let originBytes: [UInt8] = self.dataToByteArray(data: originData)
             let finalBytes = self.mergeData(bytes1: originBytes, bytes2: mergeBytes)
             let finalData = self.byteArrayToData(bytes: finalBytes)
-            return self.doPutData(finalData, OneDriveURL(forKey: key).write())
+            return self.doPutData(finalData, key)
         }
     }
     
@@ -525,7 +534,7 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
     
     private func doValues(_ ofKey: String) -> HivePromise<[Data]> {
         return HivePromise<[Data]>{ resolver in
-            doGetData(OneDriveURL(forKey: ofKey).read()).done { jsonData in
+            doGetData(ofKey).done { jsonData in
                 let arrayList: Array<Data> = []
                 let valueBytes = self.dataToByteArray(data: jsonData)
                 let result = self.createValueResult(arrayList, valueBytes)
@@ -562,8 +571,8 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
         return tmp
     }
     
-    private func do_deleteValues(forKey: String) -> HivePromise<JSON> {
-        return doDeleteRemoteFile(OneDriveURL(forKey: forKey).deleteItem())
+    private func doDeleteValues(forKey: String) -> HivePromise<JSON> {
+        return doDeleteRemoteFile(forKey)
     }
     
     private func doPutDataFromInputStream(_ input: InputStream, asRemoteFile fileName: String) throws -> HivePromise<Void> {
@@ -591,17 +600,30 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
         do{
             buffer.deallocate()
         }
-        return doPutData(data, OneDriveURL(forPath: fileName).write())
+        return doPutData(data, fileName)
     }
     
     private func doGetDataToOutputStream(fromRemoteFile: String) -> HivePromise<Data> {
-        return doGetData(OneDriveURL(forPath: fromRemoteFile).read())
+        return doGetData(fromRemoteFile)
     }
     
     private func doListRemoteFiles() -> HivePromise<JSON> {
-        let url = OneDriveURL.children()
         let header = Header(self.authHelper).json_Headers()
-        return OneDriveAPIs.request(url: url, headers: header)
+        return OneDriveAPIs.request(url: OneDriveURL.children(), headers: header)
+    }
+    
+    private func keyName(_ fileName: String) -> String {
+        return "\(KEYVALUES_ROOT_PATH)/\(fileName)"
+    }
+    
+    private func fileName(_ fileName: String) -> String {
+        return "\(FILES_ROOT_PATH)/\(fileName)"
+    }
+    
+    private func dirNamePart(_ path: String) -> String {
+        let index = path.range(of: "/", options: .backwards)?.lowerBound
+        let str = index.map(path.prefix(upTo:)) ?? ""
+        return "\(str)"
     }
     
     private func writeData(data: Data, outputStream: OutputStream, maxLengthPerWrite: Int) {
