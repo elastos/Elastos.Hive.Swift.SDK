@@ -48,7 +48,7 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
     public func putString(_ data: String, asRemoteFile fileName: String, handler: HiveCallback<Void>) -> HivePromise<Void> {
         return HivePromise<Void>{ resolver in
             self.authHelper.checkValid().then { _ -> HivePromise<Void> in
-                return self.doPutString(data, fileName)
+                return self.doPutString(data, OneDriveURL(forPath: fileName).write())
             }.done { _ in
                 handler.didSucceed(nullValue)
                 resolver.fulfill(nullValue)
@@ -359,29 +359,27 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
     
     //    MARK:- private
     private func doPutString(_ data: String, _ remoteFile: String) -> HivePromise<Void> {
-        var url = OneDriveURL(forPath: remoteFile).write()
-        var header = Header.init(authHelper).plain_headers()
         let data = data.data(using: .utf8)
-        if data!.count <= 4 * 1024 * 1024 {
-            return OneDriveAPIs.uploadWriteData(data: data!, to: url, headers: header)
+        return doPutData(data!, remoteFile)
+    }
+    
+    private func doPutData(_ data: Data, _ remoteFile: String) -> HivePromise<Void> {
+        var header = Header.init(authHelper).plain_headers()
+        if data.count <= 4 * 1024 * 1024 {
+            return OneDriveAPIs.uploadWriteData(data: data, to: remoteFile, headers: header)
         }
         header = Header.init(authHelper).json_Headers()
         let params: Dictionary<String, Any> = ["file": "file",                                                      "@microsoft.graph.conflictBehavior": "fail"]
-        url = OneDriveURL(forPath: remoteFile).createUploadSession()
+        let url = OneDriveURL(forPath: remoteFile).createUploadSession()
         
         return OneDriveAPIs.createUploadSession(url: url, parameters: params, headers: header).then { uploadUrl -> HivePromise<Void>  in
-            let length: Int64 = Int64(data!.count)
+            let length: Int64 = Int64(data.count)
             header = Header(self.authHelper).upload_Headers(length)
-            return OneDriveAPIs.uploadWriteData(data: data!,
+            return OneDriveAPIs.uploadWriteData(data: data,
             to: uploadUrl,
             method: .put,
             headers: header)
         }
-    }
-    
-    private func doPutData(_ data: Data, _ remoteFile: String) -> HivePromise<Void> {
-        let header = Header.init(authHelper).plain_headers()
-        return OneDriveAPIs.uploadWriteData(data: data, to: remoteFile, headers: header)
     }
     
     private func doPutDataFromFile(_ fileHandle: FileHandle, _ remoteFile: String) -> HivePromise<Void> {
