@@ -101,4 +101,49 @@ class OneDriveAPIs: NSObject {
             }
         }
     }
+    
+    class func createUploadSession(url: URLConvertible,
+                                   method: HTTPMethod = .post,
+                                   parameters: Parameters? = nil,
+                                   encoding: ParameterEncoding = JSONEncoding.default,
+                                   headers: HTTPHeaders) -> HivePromise<String> {
+        return HivePromise<String> { resolver in
+            Alamofire.request(url,
+                              method: method,
+                              parameters: parameters,
+                              encoding: encoding,
+                              headers: headers)
+                .responseJSON { dataResponse in
+                    switch dataResponse.result {
+                    case .success(let re):
+                        let uploadUrl: String = JSON(re)["uploadUrl"].stringValue
+                        resolver.fulfill(uploadUrl)
+                    case .failure(let error):
+                        resolver.reject(error)
+                    }
+            }
+        }
+    }
+    
+    class func create_folder(url: URLConvertible,
+                                   method: HTTPMethod = .post,
+                                   parameters: Parameters? = nil,
+                                   encoding: ParameterEncoding = JSONEncoding.default,
+                                   headers: HTTPHeaders) -> HivePromise<JSON> {
+        return HivePromise<JSON> { resolver in
+            Alamofire.request(url,
+                              method: method,
+                              parameters: parameters,
+                              encoding: encoding,
+                              headers: headers)
+                .responseJSON { dataResponse in
+                    switch dataResponse.result {
+                    case .success(let re):
+                        resolver.fulfill(JSON(re))
+                    case .failure(let error):
+                        resolver.reject(error)
+                    }
+            }
+        }
+    }
 }
