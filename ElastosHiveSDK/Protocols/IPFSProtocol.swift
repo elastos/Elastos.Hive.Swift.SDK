@@ -1,5 +1,7 @@
 import Foundation
 
+public typealias Hash = String
+
 public protocol IPFSProtocol {
     func putString(_ data: String) -> HivePromise<Hash>
     func putString(_ data: String, handler: HiveCallback<Hash>) -> HivePromise<Hash>
