@@ -22,19 +22,6 @@
 
 import Foundation
 
-enum STORE_KEY: String {
-    typealias RawValue = String
-    case ACCESS_TOKEN   = "access_token"
-    case REFRESH_TOKEN  = "refresh_token"
-    case EXPIRES_IN     = "expires_in"
-    case EXPIRED_TIME   = "expiredTime"
-    case REDIRECTURL    = "redirectURL"
-    case SCOPE          = "scope"
-    case CLIENT_ID      = "client_id"
-}
-
-let appScope: String = "Files.ReadWrite.AppFolder offline_access"
-
 let ONE_DRIVE_AUTH_URL: String = "https://login.microsoftonline.com/common/oauth2/v2.0"
 let ONE_DRIVE_AUTH_BASE_URL: String = ONE_DRIVE_AUTH_URL+"/"
 let ONE_DRIVE_API_BASE_URL: String  = "https://graph.microsoft.com/v1.0/me/drive/"
@@ -45,9 +32,6 @@ let TOKEN: String = "/token"
 let APP_ROOT: String = "special/approot"
 let FILES_ROOT_PATH  = "/Files"
 let KEYVALUES_ROOT_PATH = "/KeyValues"
-
-let DEFAULT_REDIRECT_URL: String = "localhost"
-let DEFAULT_REDIRECT_PORT: Int = 12345
 
 let ONEDRIVE_CONFIG = "onedrive.json"
 let IPFS_CONFIG = "ipfs.json"

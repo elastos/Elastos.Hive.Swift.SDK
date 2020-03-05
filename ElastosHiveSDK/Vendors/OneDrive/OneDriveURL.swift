@@ -6,11 +6,7 @@ class OneDriveURL {
     private var _path: String
     
     init(forPath: String) {
-        _path =  "\(FILES_ROOT_PATH)/\(forPath)".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-    }
-    
-    init(forKey: String) {
-        _path =  "\(KEYVALUES_ROOT_PATH)/\(forKey)".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+        _path = "\(FILES_ROOT_PATH)/\(forPath)".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
     }
     
     func dirAndFileInfo() -> String {
@@ -31,6 +27,10 @@ class OneDriveURL {
     
     func write() -> String {
         return ONE_DRIVE_API_BASE_URL + APP_ROOT + ":\(_path):/content"
+    }
+    
+    func createUploadSession() -> String {
+        return ONE_DRIVE_API_BASE_URL + APP_ROOT + ":\(_path):/createUploadSession"
     }
     
    class func acquireAuthCode(_ param: String) -> String {
