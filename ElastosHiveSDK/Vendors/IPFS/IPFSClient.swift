@@ -99,11 +99,11 @@ class IPFSClientHandle: HiveClientHandle, IPFSProtocol {
         }
     }
     
-    public func sizeofRemoteFile(_ cid: String) -> HivePromise<UInt64> {
+    public func sizeofRemoteFile(_ cid: Hash) -> HivePromise<UInt64> {
         return sizeofRemoteFile(cid, handler: HiveCallback<UInt64>())
     }
     
-    public func sizeofRemoteFile(_ cid: String, handler: HiveCallback<UInt64>) -> HivePromise<UInt64> {
+    public func sizeofRemoteFile(_ cid: Hash, handler: HiveCallback<UInt64>) -> HivePromise<UInt64> {
         return HivePromise<UInt64>{ resolver in
             ipfsRpc.checkValid().then { _ -> HivePromise<UInt64> in
                 return self.doSizeofRemoteFile(cid)
@@ -209,7 +209,7 @@ class IPFSClientHandle: HiveClientHandle, IPFSProtocol {
         return doPutData(fileHandle.readDataToEndOfFile())
     }
     
-    private func doSizeofRemoteFile(_ fileName: String) -> HivePromise<UInt64> {
+    private func doSizeofRemoteFile(_ fileName: Hash) -> HivePromise<UInt64> {
         return HivePromise<UInt64>{ resolver in
             let url = IPFSURL.sharedInstance.ls(fileName)
             IPFSApis.request(url).done { json in
