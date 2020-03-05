@@ -224,7 +224,7 @@ class IPFSClientHandle: HiveClientHandle, IPFSProtocol {
     
     private func doGetString(_ cid: Hash) -> HivePromise<String> {
         return HivePromise<String>{ rsolver in
-            let url = IPFSURL.sharedInstance.cat(cid.value)
+            let url = IPFSURL.sharedInstance.cat(cid)
             IPFSApis.read(url).done { data in
                 let jsonStr = String(data: data, encoding: .utf8)
                 rsolver.fulfill(jsonStr!)
@@ -236,7 +236,7 @@ class IPFSClientHandle: HiveClientHandle, IPFSProtocol {
     
     private func doGetData(_ cid: Hash) -> HivePromise<Data> {
         return HivePromise<Data>{ rsolver in
-            let url = IPFSURL.sharedInstance.cat(cid.value)
+            let url = IPFSURL.sharedInstance.cat(cid)
             IPFSApis.read(url).done { data in
                 rsolver.fulfill(data)
             }.catch { error in
@@ -247,7 +247,7 @@ class IPFSClientHandle: HiveClientHandle, IPFSProtocol {
     
     private func doGetDataToTargetFile(_ cid: Hash, _ targetFile: FileHandle) -> HivePromise<Void> {
         return HivePromise<Void>{ rsolver in
-            let url = IPFSURL.sharedInstance.cat(cid.value)
+            let url = IPFSURL.sharedInstance.cat(cid)
             IPFSApis.read(url).done { data in
                 targetFile.write(data)
                 rsolver.fulfill(Void())
