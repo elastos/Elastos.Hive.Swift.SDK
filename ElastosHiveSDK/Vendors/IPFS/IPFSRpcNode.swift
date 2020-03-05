@@ -4,15 +4,15 @@ import Foundation
 public class IPFSRpcNode: NSObject {
     private let _ipv4: String
     private let _ipv6: String?
-    private let _port: UInt16
+    private let _port: Int
 
-    public init(_ ipv4: String, _ port: UInt16) {
+    public init(_ ipv4: String, _ port: Int) {
         self._ipv4 = ipv4
         self._port = port
         self._ipv6 = nil
     }
 
-    public convenience init(_ ipv4: String, _ ipv6: String, _ port: UInt16) {
+    public convenience init(_ ipv4: String, _ ipv6: String, _ port: Int) {
         self.init(ipv4, port)
     }
 
@@ -28,7 +28,7 @@ public class IPFSRpcNode: NSObject {
         }
     }
 
-    public var port: UInt16 {
+    public var port: Int {
         get {
             return _port;
         }

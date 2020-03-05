@@ -14,6 +14,13 @@ public class IPFSClientOptionsBuilder: NSObject {
         return self
     }
 
+    public func appendRpcNodes(_ nodes: Array<IPFSRpcNode>) -> IPFSClientOptionsBuilder {
+        for node in nodes {
+            options?.addRpcNode(node)
+        }
+        return self
+    }
+
     public func withStorePath(using path: String) -> IPFSClientOptionsBuilder {
         options?.setStorePath(path)
         return self
