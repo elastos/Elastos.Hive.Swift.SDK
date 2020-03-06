@@ -338,7 +338,7 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
             }
         }
     }
-    
+
     public func deleteValues(forKey: String) -> HivePromise<Void> {
         return deleteValues(forKey: forKey, handler: HiveCallback<Void>())
     }
