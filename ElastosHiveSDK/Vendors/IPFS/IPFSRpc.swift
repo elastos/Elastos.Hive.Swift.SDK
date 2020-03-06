@@ -76,7 +76,7 @@ class IPFSRpc: ConnectHelper {
         connectState = true
     }
     
-    private func checkConnect(_ ip: String?, _ port: UInt16) -> Bool {
+    private func checkConnect(_ ip: String?, _ port: Int) -> Bool {
         guard ip != nil else {
             return false
         }
