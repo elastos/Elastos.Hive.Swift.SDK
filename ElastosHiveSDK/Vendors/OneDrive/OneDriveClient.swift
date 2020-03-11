@@ -432,10 +432,6 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
                 .done { jsonData in
                     resolver.fulfill(jsonData)
             }.catch { error in
-                if HiveError.description(error as! HiveError) == "Item does not exist"{
-                    resolver.fulfill(Data())
-                    return
-                }
                 resolver.reject(error)
             }
         }
