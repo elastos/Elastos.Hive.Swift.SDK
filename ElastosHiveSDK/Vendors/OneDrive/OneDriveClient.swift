@@ -523,7 +523,7 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
             let dataBytes = self.dataToByteArray(data: newValue)
             let finalBytes = self.mergeLengthAndData(data: dataBytes)
             let data = self.byteArrayToData(bytes: finalBytes)
-            self.doPutValue(data, forKey)
+            self.doPutData(data, forKey)
                 .done{ _ in
                     resolver.fulfill(Void())
             }.catch{ error in
