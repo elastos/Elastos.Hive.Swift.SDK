@@ -6,7 +6,7 @@ class OneDriveURL {
     private var _path: String
     
     init(forPath: String) {
-        _path = "\(FILES_ROOT_PATH)/\(forPath)".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+        _path = "\(forPath)".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
     }
     
     func dirAndFileInfo() -> String {
