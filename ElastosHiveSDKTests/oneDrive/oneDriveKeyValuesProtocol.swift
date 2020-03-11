@@ -132,6 +132,22 @@ class oneDriveKeyValuesProtocolTest: XCTestCase {
         self.wait(for: [lock], timeout: 100.0)
     }
     
+    func test_remote_noKey_Values() {
+        let lock = XCTestExpectation(description: ".")
+        _ = keyValuesProtocol!.values(ofKey: "test_remote_noKey_Values").done{ list in
+            XCTFail()
+        }.catch{ error in
+            if HiveError.description(error as! HiveError) == "Item does not exist"{
+                XCTAssertTrue(true)
+            }
+            else {
+                XCTFail()
+            }
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
     func test_05_ValuesHandle() {
         let lock = XCTestExpectation(description: ".")
         let handle: TestResultHandler = TestResultHandler({ (result: [Data]) in
