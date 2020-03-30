@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   s.author       = { "hive-dev" => "release@elastos.org" }
   s.platform     = :ios, "9.0"
   s.ios.deployment_target = "9.0"
-  s.source       = { :git=> "https://github.com/elastos/Elastos.NET.Hive.Swift.SDK/releases/download/release-v1.0.0/ElastosHive-framework.zip", :tag => s.version }
+  s.source       = {'http':'https://github.com/elastos/Elastos.NET.Hive.Swift.SDK/releases/download/release-v1.0.0/ElastosHive-framework.zip'}
   s.vendored_frameworks = 'ElastosHive-framework/*.framework'
   s.source_files = 'ElastosHive-framework/ElastosHiveSDK.framework/**/*.h'
 
