@@ -56,6 +56,7 @@ class IPFSApis: NSObject {
                     })
                     break
                 case .failure(let error):
+                    let error = HiveError.netWork(des: error)
                     resolver.reject(error)
                     break
                 }
