@@ -69,6 +69,7 @@
 		1176BF39229CE8F900240EDF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1176BF38229CE8F900240EDF /* Assets.xcassets */; };
 		1176BF3C229CE8F900240EDF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1176BF3A229CE8F900240EDF /* LaunchScreen.storyboard */; };
 		1176BF43229CEB4F00240EDF /* AuthWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176BF42229CEB4F00240EDF /* AuthWebViewController.swift */; };
+		119D4B67244851A500FE559F /* Pods_TestHost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F09DA7DC9D47111E630261C /* Pods_TestHost.framework */; };
 		11D26F4022CA3B3300E4099A /* ElastosHiveSDK_macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 11D26F3E22CA3B3300E4099A /* ElastosHiveSDK_macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		11D26F4422CA3B4B00E4099A /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FA22C4C33400F85419 /* Dictionary.swift */; };
 		11D26F4522CA3B4B00E4099A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FB22C4C33400F85419 /* String.swift */; };
@@ -122,7 +123,6 @@
 		A3E13E8F240E45D2002569B1 /* OneDriveClientOptionsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D9D41B23C98151003B602E /* OneDriveClientOptionsBuilder.swift */; };
 		A3E13E90240E45EE002569B1 /* HiveClientOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37F893C23C72B2600F6C11E /* HiveClientOptions.swift */; };
 		A3FD3C81228000EE0031413A /* HiveClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FD3C80228000EE0031413A /* HiveClient.swift */; };
-		D11C186DCB4238199CA4FFF2 /* Pods_TestHost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F09DA7DC9D47111E630261C /* Pods_TestHost.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -229,7 +229,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D11C186DCB4238199CA4FFF2 /* Pods_TestHost.framework in Frameworks */,
+				119D4B67244851A500FE559F /* Pods_TestHost.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -982,8 +982,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2368C8CBAE94193EAF7DB87D /* Pods-ElastosHiveSDKTests.debug.xcconfig */;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = LFU7T9UYL5;
+				DEVELOPMENT_TEAM = T4LVNDN76A;
 				INFOPLIST_FILE = ElastosHiveSDKTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1003,8 +1004,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C228C56325B65D63A60C99C8 /* Pods-ElastosHiveSDKTests.release.xcconfig */;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = LFU7T9UYL5;
+				DEVELOPMENT_TEAM = T4LVNDN76A;
 				INFOPLIST_FILE = ElastosHiveSDKTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1027,14 +1029,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = TestHost/TestHost.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = XGJ9J7DHP5;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T4LVNDN76A;
 				INFOPLIST_FILE = TestHost/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = elastos.TestHost;
+				PRODUCT_BUNDLE_IDENTIFIER = org.elastos.TestHost;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1048,14 +1051,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = TestHost/TestHost.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = XGJ9J7DHP5;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T4LVNDN76A;
 				INFOPLIST_FILE = TestHost/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = elastos.TestHost;
+				PRODUCT_BUNDLE_IDENTIFIER = org.elastos.TestHost;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";

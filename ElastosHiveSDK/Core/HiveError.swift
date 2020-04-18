@@ -28,6 +28,7 @@ public enum HiveError: Error {
     case failue(des: String?)
     case IllegalArgument(des: String?)
     case no_rpc_node_available(des: String?)
+    case netWork(des: Error?)
 }
 
 extension HiveError {
@@ -44,6 +45,8 @@ extension HiveError {
             return des ?? ""
         case .no_rpc_node_available(let des):
             return des ?? ""
+        case .netWork(let des):
+            return des.debugDescription ?? ""
         }
     }
 }
