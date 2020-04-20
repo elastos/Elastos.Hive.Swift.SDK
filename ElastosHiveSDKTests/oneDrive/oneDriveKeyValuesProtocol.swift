@@ -136,6 +136,7 @@ class oneDriveKeyValuesProtocolTest: XCTestCase {
         let lock = XCTestExpectation(description: ".")
         _ = keyValuesProtocol!.values(ofKey: "test_remote_noKey_Values").done{ list in
             XCTFail()
+            lock.fulfill()
         }.catch{ error in
             if HiveError.description(error as! HiveError) == "Item does not exist"{
                 XCTAssertTrue(true)
