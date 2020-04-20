@@ -119,6 +119,7 @@ class OneDriveAPIs: NSObject {
                         let uploadUrl: String = JSON(re)["uploadUrl"].stringValue
                         resolver.fulfill(uploadUrl)
                     case .failure(let error):
+                        let error = HiveError.netWork(des: error)
                         resolver.reject(error)
                     }
             }
