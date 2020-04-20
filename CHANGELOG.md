@@ -1,3 +1,11 @@
+04/20/2020 Li Aihong liaihong@trinity-tech.io
+
+**version 1.0.1**, main changes to previous version:
+
+```markdown
+- Fix bug caused by checkValid() synchronization
+```
+
 03/29/2020 Li Aihong liaihong@trinity-tech.io
 
 **version 1.0.0**, main changes to previous version:
