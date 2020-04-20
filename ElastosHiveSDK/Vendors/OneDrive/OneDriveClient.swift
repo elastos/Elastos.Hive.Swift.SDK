@@ -425,6 +425,18 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
         }
     }
     
+    private func doGetDataForKeyvalues(_ remoteFile: String) -> HivePromise<Data> {
+        return HivePromise<Data> { resolver in
+            let header = Header(self.authHelper).plain_headers()
+            OneDriveAPIs.getRemoteFile(url: OneDriveURL(forPath: remoteFile).read(), headers: header)
+                .done { jsonData in
+                    resolver.fulfill(jsonData)
+            }.catch { error in
+                resolver.reject(error)
+            }
+        }
+    }
+
     private func doGetData(_ remoteFile: String) -> HivePromise<Data> {
         return HivePromise<Data> { resolver in
             let header = Header(self.authHelper).plain_headers()
@@ -432,6 +444,10 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
                 .done { jsonData in
                     resolver.fulfill(jsonData)
             }.catch { error in
+                if HiveError.description(error as! HiveError) == "Item does not exist"{
+                    resolver.fulfill(Data())
+                    return
+                }
                 resolver.reject(error)
             }
         }
@@ -530,7 +546,7 @@ class OneDriveClientHandle: HiveClientHandle, FilesProtocol, KeyValuesProtocol {
     
     private func doValues(_ ofKey: String) -> HivePromise<[Data]> {
         return HivePromise<[Data]>{ resolver in
-            doGetData(ofKey).done { jsonData in
+            doGetDataForKeyvalues(ofKey).done { jsonData in
                 let arrayList: Array<Data> = []
                 let valueBytes = self.dataToByteArray(data: jsonData)
                 let result = self.createValueResult(arrayList, valueBytes)
