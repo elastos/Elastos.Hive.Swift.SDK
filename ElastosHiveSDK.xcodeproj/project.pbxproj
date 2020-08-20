@@ -54,6 +54,19 @@
 		1103757D23FF96C7004216D0 /* Persistent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103757B23FF96C7004216D0 /* Persistent.swift */; };
 		1104AFEC23F97880004454C3 /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1104AFEB23F97880004454C3 /* Header.swift */; };
 		1104AFED23F97880004454C3 /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1104AFEB23F97880004454C3 /* Header.swift */; };
+		111D477924ED0C1200B7462B /* VaultAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D477824ED0C1200B7462B /* VaultAuthHelper.swift */; };
+		111D477A24ED0C1200B7462B /* VaultAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D477824ED0C1200B7462B /* VaultAuthHelper.swift */; };
+		111D477D24EE4B3B00B7462B /* VaultClientConnectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D477C24EE4B3B00B7462B /* VaultClientConnectTest.swift */; };
+		111D477F24EE4E2600B7462B /* VaultClientOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D477E24EE4E2600B7462B /* VaultClientOptions.swift */; };
+		111D478024EE4E2600B7462B /* VaultClientOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D477E24EE4E2600B7462B /* VaultClientOptions.swift */; };
+		111D478224EE4EF100B7462B /* VaultClientOptionsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D478124EE4EF100B7462B /* VaultClientOptionsBuilder.swift */; };
+		111D478324EE4EF100B7462B /* VaultClientOptionsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D478124EE4EF100B7462B /* VaultClientOptionsBuilder.swift */; };
+		111D478524EE55FE00B7462B /* VaultClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D478424EE55FE00B7462B /* VaultClient.swift */; };
+		111D478624EE55FE00B7462B /* VaultClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D478424EE55FE00B7462B /* VaultClient.swift */; };
+		111D478824EE57D000B7462B /* VaultConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D478724EE57D000B7462B /* VaultConstants.swift */; };
+		111D478924EE57D000B7462B /* VaultConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D478724EE57D000B7462B /* VaultConstants.swift */; };
+		111D478B24EE810A00B7462B /* VaultURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D478A24EE810A00B7462B /* VaultURL.swift */; };
+		111D478C24EE810A00B7462B /* VaultURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D478A24EE810A00B7462B /* VaultURL.swift */; };
 		1129C19424052CC500CD77F2 /* Alamofire+Synchronous.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1129C19324052CC500CD77F2 /* Alamofire+Synchronous.swift */; };
 		1129C19524052CC500CD77F2 /* Alamofire+Synchronous.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1129C19324052CC500CD77F2 /* Alamofire+Synchronous.swift */; };
 		1137942E227ED9AD004A1F65 /* ElastosHiveSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A39C496F225399860027BDF9 /* ElastosHiveSDK.framework */; };
@@ -153,6 +166,13 @@
 		1103757823FF96BF004216D0 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Log.swift; path = Core/Log.swift; sourceTree = "<group>"; };
 		1103757B23FF96C7004216D0 /* Persistent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Persistent.swift; path = Core/Persistent.swift; sourceTree = "<group>"; };
 		1104AFEB23F97880004454C3 /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Header.swift; path = Vendors/OneDrive/Header.swift; sourceTree = "<group>"; };
+		111D477824ED0C1200B7462B /* VaultAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultAuthHelper.swift; sourceTree = "<group>"; };
+		111D477C24EE4B3B00B7462B /* VaultClientConnectTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultClientConnectTest.swift; sourceTree = "<group>"; };
+		111D477E24EE4E2600B7462B /* VaultClientOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultClientOptions.swift; sourceTree = "<group>"; };
+		111D478124EE4EF100B7462B /* VaultClientOptionsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultClientOptionsBuilder.swift; sourceTree = "<group>"; };
+		111D478424EE55FE00B7462B /* VaultClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultClient.swift; sourceTree = "<group>"; };
+		111D478724EE57D000B7462B /* VaultConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultConstants.swift; sourceTree = "<group>"; };
+		111D478A24EE810A00B7462B /* VaultURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultURL.swift; sourceTree = "<group>"; };
 		1129C19324052CC500CD77F2 /* Alamofire+Synchronous.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Alamofire+Synchronous.swift"; sourceTree = "<group>"; };
 		11379429227ED9AD004A1F65 /* ElastosHiveSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ElastosHiveSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1137942D227ED9AD004A1F65 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -252,11 +272,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		111D477724EBA5B400B7462B /* Vault */ = {
+			isa = PBXGroup;
+			children = (
+				111D477824ED0C1200B7462B /* VaultAuthHelper.swift */,
+				111D477E24EE4E2600B7462B /* VaultClientOptions.swift */,
+				111D478124EE4EF100B7462B /* VaultClientOptionsBuilder.swift */,
+				111D478424EE55FE00B7462B /* VaultClient.swift */,
+				111D478724EE57D000B7462B /* VaultConstants.swift */,
+				111D478A24EE810A00B7462B /* VaultURL.swift */,
+			);
+			name = Vault;
+			path = Vendors/Vault;
+			sourceTree = "<group>";
+		};
+		111D477B24EE4B0700B7462B /* Vault */ = {
+			isa = PBXGroup;
+			children = (
+				111D477C24EE4B3B00B7462B /* VaultClientConnectTest.swift */,
+			);
+			path = Vault;
+			sourceTree = "<group>";
+		};
 		1137942A227ED9AD004A1F65 /* ElastosHiveSDKTests */ = {
 			isa = PBXGroup;
 			children = (
 				A3D9D42323C99F15003B602E /* oneDrive */,
 				A3D9D42223C99EF7003B602E /* IPFS */,
+				111D477B24EE4B0700B7462B /* Vault */,
 				1137942D227ED9AD004A1F65 /* Info.plist */,
 				11749DA124083D63007B8F32 /* TestResultHandler.swift */,
 			);
@@ -419,6 +462,7 @@
 			children = (
 				A39C49B522539CE70027BDF9 /* IPFS */,
 				A39C49AC22539CBE0027BDF9 /* OneDrive */,
+				111D477724EBA5B400B7462B /* Vault */,
 			);
 			name = Vendors;
 			sourceTree = "<group>";
@@ -826,6 +870,7 @@
 				11FD703222B89D1A00B346AC /* ViewController.swift in Sources */,
 				11FD703322B89F4D00B346AC /* AppDelegate.swift in Sources */,
 				A3D9D43F23C9B16D003B602E /* oneDriveKeyValuesProtocol.swift in Sources */,
+				111D477D24EE4B3B00B7462B /* VaultClientConnectTest.swift in Sources */,
 				A3D9D42F23C99FC1003B602E /* oneDriveClientTest.swift in Sources */,
 				A3D9D42A23C99F9F003B602E /* oneDriveClientConnectTest.swift in Sources */,
 				A3D9D43E23C9B16D003B602E /* oneDriveFilesProtocol.swift in Sources */,
@@ -854,16 +899,20 @@
 				11749DA024082FB1007B8F32 /* OutputStream.swift in Sources */,
 				11D26F4422CA3B4B00E4099A /* Dictionary.swift in Sources */,
 				A3E13E85240E449A002569B1 /* FilesProtocol.swift in Sources */,
+				111D478324EE4EF100B7462B /* VaultClientOptionsBuilder.swift in Sources */,
 				A3E13E86240E449A002569B1 /* IPFSProtocol.swift in Sources */,
 				A3E13E87240E449A002569B1 /* KeyValuesProtocol.swift in Sources */,
 				A3E13E8F240E45D2002569B1 /* OneDriveClientOptionsBuilder.swift in Sources */,
 				A3E13E8E240E45D2002569B1 /* OneDriveClientOptions.swift in Sources */,
+				111D478024EE4E2600B7462B /* VaultClientOptions.swift in Sources */,
+				111D478924EE57D000B7462B /* VaultConstants.swift in Sources */,
 				A3E13E8D240E45D2002569B1 /* OneDriveClient.swift in Sources */,
 				1103756823FF966E004216D0 /* SimpleAuthServer.swift in Sources */,
 				1129C19524052CC500CD77F2 /* Alamofire+Synchronous.swift in Sources */,
 				1103752623FE6DB1004216D0 /* AuthInfoStoreImpl.swift in Sources */,
 				1103755F23FF964D004216D0 /* OneDriveConstants.swift in Sources */,
 				1104AFED23F97880004454C3 /* Header.swift in Sources */,
+				111D477A24ED0C1200B7462B /* VaultAuthHelper.swift in Sources */,
 				1103756B23FF9679004216D0 /* OneDriveAuthHelper.swift in Sources */,
 				1103756523FF9664004216D0 /* OneDriveURL.swift in Sources */,
 				1103756223FF9659004216D0 /* OneDriveAPIs.swift in Sources */,
@@ -874,10 +923,12 @@
 				1103755C23FF963B004216D0 /* IPFSRpc.swift in Sources */,
 				1103752023FD191E004216D0 /* IPFSApis.swift in Sources */,
 				11D26F7722CA3B8800E4099A /* HiveClient.swift in Sources */,
+				111D478624EE55FE00B7462B /* VaultClient.swift in Sources */,
 				A3E13E90240E45EE002569B1 /* HiveClientOptions.swift in Sources */,
 				11D26F8222CA3B8800E4099A /* HiveCallback.swift in Sources */,
 				11D26F7022CA3B8200E4099A /* HiveError.swift in Sources */,
 				1103757A23FF96BF004216D0 /* Log.swift in Sources */,
+				111D478C24EE810A00B7462B /* VaultURL.swift in Sources */,
 				1103757123FF96A0004216D0 /* LogLevel.swift in Sources */,
 				11D26F7222CA3B8800E4099A /* Authenticator.swift in Sources */,
 				1103757723FF96B5004216D0 /* ConnectHelper.swift in Sources */,
@@ -898,16 +949,20 @@
 				1103757323FF96AB004216D0 /* AuthToken.swift in Sources */,
 				1147720923F678BD00C7C36F /* SwiftyJSON.swift in Sources */,
 				A3D9D41223C9671C003B602E /* IPFSProtocol.swift in Sources */,
+				111D478224EE4EF100B7462B /* VaultClientOptionsBuilder.swift in Sources */,
 				1103752523FE6DB1004216D0 /* AuthInfoStoreImpl.swift in Sources */,
 				A3D9D41323C9671C003B602E /* FilesProtocol.swift in Sources */,
 				A37F893D23C72B2600F6C11E /* HiveClientOptions.swift in Sources */,
 				A3D9D40A23C865D2003B602E /* IPFSClientOptions.swift in Sources */,
+				111D477F24EE4E2600B7462B /* VaultClientOptions.swift in Sources */,
+				111D478824EE57D000B7462B /* VaultConstants.swift in Sources */,
 				1103757923FF96BF004216D0 /* Log.swift in Sources */,
 				1103756123FF9659004216D0 /* OneDriveAPIs.swift in Sources */,
 				1103757623FF96B5004216D0 /* ConnectHelper.swift in Sources */,
 				1103751F23FD191E004216D0 /* IPFSApis.swift in Sources */,
 				1104AFEC23F97880004454C3 /* Header.swift in Sources */,
 				1103757C23FF96C7004216D0 /* Persistent.swift in Sources */,
+				111D477924ED0C1200B7462B /* VaultAuthHelper.swift in Sources */,
 				11E573FF22C4C33400F85419 /* String.swift in Sources */,
 				1103756423FF9664004216D0 /* OneDriveURL.swift in Sources */,
 				A3D9D41823C973E4003B602E /* IPFSRpcNode.swift in Sources */,
@@ -918,10 +973,12 @@
 				11E573FE22C4C33400F85419 /* Dictionary.swift in Sources */,
 				11ED682A22FF1078004C17D0 /* ElastosHiveSDK.swift in Sources */,
 				A39C499E22539C9C0027BDF9 /* HiveError.swift in Sources */,
+				111D478524EE55FE00B7462B /* VaultClient.swift in Sources */,
 				1129C19424052CC500CD77F2 /* Alamofire+Synchronous.swift in Sources */,
 				A39CB4BF2292854000535E43 /* HiveCallback.swift in Sources */,
 				A3D9D41A23C97CD7003B602E /* IPFSClientOptionsBuilder.swift in Sources */,
 				A3FD3C81228000EE0031413A /* HiveClient.swift in Sources */,
+				111D478B24EE810A00B7462B /* VaultURL.swift in Sources */,
 				A3D9D40823C86533003B602E /* IPFSClient.swift in Sources */,
 				1103757023FF96A0004216D0 /* LogLevel.swift in Sources */,
 				A3D9D40E23C865E1003B602E /* OneDriveClient.swift in Sources */,
