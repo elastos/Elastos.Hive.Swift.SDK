@@ -35,6 +35,7 @@ public class AuthWebViewController: UIViewController, WKUIDelegate, WKNavigation
     public func loadRequest(_ requestURL: String){
         let authURLRequest: URLRequest = getOneDriveAuthonURL(requestURL)
         self.initialRequest = authURLRequest
+        self.webView?.customUserAgent = "Chrome/56.0.0.0 Mobile"
         self.webView?.load(self.initialRequest!)
     }
     private func getOneDriveAuthonURL(_ requestURL: String)-> URLRequest {
