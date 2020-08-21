@@ -131,7 +131,7 @@ class VaultAuthHelper: ConnectHelper {
             let port = UInt16(redirectUrl[startIndex..<endIndex])
             let param = "client_id=\(clientId)&scope=\(scope)&response_type=code&redirect_uri=\(redirectUrl)"
 
-            let url = OneDriveURL.acquireAuthCode(param)
+            let url = VaultURL.acquireAuthCode(param)
             server.startRun(port!)
             _ = authenticator.requestAuthentication(url)
             server.getCode().done{ auth in
@@ -147,11 +147,12 @@ class VaultAuthHelper: ConnectHelper {
         return HivePromise<Void> { resolver in
             let params: Dictionary<String, Any> = [
                 "client_id" : clientId,
+                "client_secret": clientSecret,
                 "code" : authCode,
                 "grant_type" : GRANT_TYPE_GET_TOKEN,
                 "redirect_uri" : redirectUrl
             ]
-            let url = OneDriveURL.token()
+            let url = VaultURL.token()
             var urlRequest = URLRequest(url: URL(string: url)!)
             urlRequest.httpMethod = "POST"
             urlRequest.httpBody = params.queryString.data(using: String.Encoding.utf8)
@@ -182,13 +183,13 @@ class VaultAuthHelper: ConnectHelper {
                 "refresh_token": token,
                 "grant_type": GRANT_TYPE_REFRESH_TOKEN
             ]
-            let url = OneDriveURL.token()
+            let url = VaultURL.token()
             var urlRequest = URLRequest(url: URL(string: url)!)
             urlRequest.httpMethod = "POST"
             urlRequest.httpBody = params.queryString.data(using: String.Encoding.utf8)
             urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
             Alamofire.request(urlRequest).responseJSON(completionHandler: { dataResponse in
-                guard dataResponse.response?.statusCode == 200 else{
+                guard dataResponse.response?.statusCode == 200 else {
                     let json = JSON(JSON(dataResponse.result.value as Any)["error"])
                     self.connectState = false
                     let error = HiveError.failue(des: json["message"].stringValue)

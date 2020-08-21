@@ -29,8 +29,44 @@ class VaultURL {
 
     init() {}
 
-    public func resetIPFSApi(baseUrl: String) {
+    public func resetVaultApi(baseUrl: String) {
         self.baseUrl = baseUrl
     }
+
+    class func acquireAuthCode(_ param: String) -> String {
+         return AUTH_URI + "?\(param.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!)"
+     }
+
+    class func token() -> String {
+        return "https://oauth2.googleapis.com/token"
+    }
+
+    func auth() -> String {
+        return baseUrl + "/api/v1/did/auth"
+    }
+
+    func synchronization() -> String {
+        return baseUrl + "/api/v1/sync/setup/google_drive"
+    }
+
+    func mongoDBSetup() -> String {
+        return baseUrl + "/api/v1/db/create_collection"
+    }
+
+    func mongoDBCollection() -> String {
+        return baseUrl + "api/v1/db/col/*"
+    }
+
+    func createFolder() -> String {
+        return baseUrl + "/api/v1/files/creator/folder"
+    }
+
+    func createFile() -> String {
+        return baseUrl + "/api/v1/files/creator/file"
+    }
+
+//    func uploadFile() -> String {
+//        return baseUrl + "/api/v1/files/creator/file"
+//    }
 
 }

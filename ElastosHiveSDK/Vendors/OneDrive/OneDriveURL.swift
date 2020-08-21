@@ -33,7 +33,7 @@ class OneDriveURL {
         return ONE_DRIVE_API_BASE_URL + APP_ROOT + ":\(_path):/createUploadSession"
     }
     
-   class func acquireAuthCode(_ param: String) -> String {
+    class func acquireAuthCode(_ param: String) -> String {
         return ONE_DRIVE_AUTH_BASE_URL + AUTHORIZE + "?\(param.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!)"
     }
     
