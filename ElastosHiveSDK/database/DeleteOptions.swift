@@ -22,39 +22,6 @@
 
 import Foundation
 
-public enum HiveError: Error {
-    case insufficientParameters(des: String?)
-    case invalidatedBuilder(des: String?)
-    case failue(des: String?)
-    case IllegalArgument(des: String?)
-    case no_rpc_node_available(des: String?)
-    case netWork(des: Error?)
-    case failues(des: Dictionary<String, String>?)
+public class DeleteOptions: NSObject {
+
 }
-
-extension HiveError {
-
-    static func description(_ error: HiveError) -> String {
-        switch error {
-        case .failue(let des):
-            return des ?? "Operation failed"
-        case .insufficientParameters(let des):
-            return des ?? ""
-        case .invalidatedBuilder(let des):
-            return des ?? ""
-        case .IllegalArgument(let des):
-            return des ?? ""
-        case .no_rpc_node_available(let des):
-            return des ?? ""
-        case .netWork(let des):
-            return des.debugDescription
-        case .failues(let des):
-            var re = ""
-            des?.forEach{ key, value in
-                re = key + "\n" + value + "\n"
-            }
-            return re
-        }
-    }
-}
-

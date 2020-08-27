@@ -20,7 +20,7 @@
 * SOFTWARE.
 */
 
-import UIKit
+import Foundation
 
 @inline(__always) private func TAG() -> String { return "VaultAuthHelper" }
 class VaultAuthHelper: ConnectHelper {
@@ -49,7 +49,7 @@ class VaultAuthHelper: ConnectHelper {
         self.nodeUrl = nodeUrl
         self.clientSecret = clientSecret
         self.authToken = authToken
-        self.persistent = AuthInfoStoreImpl(persistentStorePath)
+        self.persistent = VaultAuthInfoStoreImpl(persistentStorePath)
     }
 
     override func connectAsync(authenticator: Authenticator? = nil) -> HivePromise<Void> {
@@ -90,18 +90,36 @@ class VaultAuthHelper: ConnectHelper {
         }
 
         return HivePromise<Void> { resolver in
-            self.acquireAuthCode(authenticator)
-                .then { authCode -> HivePromise<Void>  in
-                    return self.acquireAccessToken(authCode)
-                }.done { _ in
-                    self.connectState = true
-                    Log.d(TAG(), "Login succeed")
-                    resolver.fulfill(Void())
-                }.catch { error in
-                    self.connectState = false
-                    resolver.reject(error)
+            self.nodeAuth().then { _ -> HivePromise<String> in
+                return self.acquireAuthCode(authenticator)
+            }.then { authCode -> HivePromise<Void>  in
+                return self.acquireAccessToken(authCode)
+            }.then{ _ -> HivePromise<JSON> in
+                return self.syncGoogleDrive()
+            }.done { _ in
+                self.connectState = true
+                Log.d(TAG(), "Login succeed")
+                resolver.fulfill(Void())
+            }.catch { error in
+                self.connectState = false
+                resolver.reject(error)
             }
         }
+    }
+
+    private func syncGoogleDrive() -> HivePromise<JSON> {
+        let token = JSON(persistent.parseFrom())
+        let param = ["token": token["access_token"].stringValue,
+                     "refresh_token": token["refresh_token"].stringValue,
+                     "token_uri": TOKEN_URI,
+                     "client_id": clientId,
+                     "client_secret": clientSecret,
+                     "scopes": SCOPES,
+                     "expiry": token["expires_at"].intValue] as [String : Any]
+        VaultURL.sharedInstance.resetVaultApi(baseUrl: nodeUrl)// test
+        let url = VaultURL.sharedInstance.synchronization()
+
+        return VaultApi.request(url: url, parameters: param)
     }
 
     private func tryRestoreToken() {
@@ -223,7 +241,10 @@ class VaultAuthHelper: ConnectHelper {
         return !connectState
     }
 
-    func nodeAuth() throws {
-
+    func nodeAuth() -> HivePromise<JSON> {
+        VaultURL.sharedInstance.resetVaultApi(baseUrl: nodeUrl)
+        let url = VaultURL.sharedInstance.auth()
+        let param = ["jwt": authToken]
+       return VaultApi.nodeAuth(url: url, parameters: param)
     }
 }

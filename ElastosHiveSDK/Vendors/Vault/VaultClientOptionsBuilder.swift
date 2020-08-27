@@ -20,7 +20,7 @@
 * SOFTWARE.
 */
 
-import UIKit
+import Foundation
 
 class VaultClientOptionsBuilder: NSObject {
     private var options: VaultClientOptions?

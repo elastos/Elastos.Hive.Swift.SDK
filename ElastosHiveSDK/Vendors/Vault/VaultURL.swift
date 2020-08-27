@@ -20,7 +20,7 @@
 * SOFTWARE.
 */
 
-import UIKit
+import Foundation
 
 class VaultURL {
 
@@ -42,15 +42,15 @@ class VaultURL {
     }
 
     func auth() -> String {
-        return baseUrl + "/api/v1/did/auth"
+        return baseUrl + "api/v1/did/auth"
     }
 
     func synchronization() -> String {
-        return baseUrl + "/api/v1/sync/setup/google_drive"
+        return baseUrl + "api/v1/sync/setup/google_drive"
     }
 
     func mongoDBSetup() -> String {
-        return baseUrl + "/api/v1/db/create_collection"
+        return baseUrl + "api/v1/db/create_collection"
     }
 
     func mongoDBCollection() -> String {
@@ -58,11 +58,11 @@ class VaultURL {
     }
 
     func createFolder() -> String {
-        return baseUrl + "/api/v1/files/creator/folder"
+        return baseUrl + "api/v1/files/creator/folder"
     }
 
     func createFile() -> String {
-        return baseUrl + "/api/v1/files/creator/file"
+        return baseUrl + "api/v1/files/creator/file"
     }
 
 //    func uploadFile() -> String {

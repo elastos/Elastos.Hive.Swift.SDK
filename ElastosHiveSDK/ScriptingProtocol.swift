@@ -22,29 +22,12 @@
 
 import Foundation
 
-class VaultClientHandle: HiveClientHandle {
-    var authenticator: Authenticator
-    var authHelper: VaultAuthHelper
+public protocol ScriptingProtocol {
+    func registerCondition(_ name: String, _ condition: Condition) -> HivePromise<Bool>
 
-    init(_ clientOptions: HiveClientOptions) {
-        let options = clientOptions as! VaultClientOptions
-        authHelper = VaultAuthHelper(options.clientId, SCOPE, options.redirectURL, options.storePath, options.nodeUrl, options.authToken, options.clientSecret)
-        authenticator = options.authenicator!
-    }
+    func registerScript(_ name: String, _ executable: Executable) -> HivePromise<Bool>
+    func registerScript(_ name: String, _ condition: Condition, _ executable: Executable) -> HivePromise<Bool>
 
-    override func connect() throws {
-        _ = try authHelper.connectAsync(authenticator: authenticator).wait()
-    }
-
-    override func connectAsync() -> HivePromise<Void> {
-        return authHelper.connectAsync(authenticator: authenticator)
-    }
-
-    override func disconnect() {
-        authHelper.disconnect()
-    }
-
-    override func isConnected() -> Bool {
-        return authHelper.connectState
-    }
+    func call(_ scriptName: String) -> HivePromise<FileHandle>
+    func call(_ scriptName: String, _ params: [String: Any]) -> HivePromise<FileHandle>
 }

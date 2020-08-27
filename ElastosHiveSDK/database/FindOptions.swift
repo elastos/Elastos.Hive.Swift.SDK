@@ -22,30 +22,6 @@
 
 import Foundation
 
-let ONE_DRIVE_AUTH_URL: String = "https://login.microsoftonline.com/common/oauth2/v2.0"
-let ONE_DRIVE_AUTH_BASE_URL: String = ONE_DRIVE_AUTH_URL+"/"
-let ONE_DRIVE_API_BASE_URL: String  = "https://graph.microsoft.com/v1.0/me/drive/"
+public class FindOptions: NSObject {
 
-let AUTHORIZE: String = "authorize"
-let LOGOUT: String = "/logout"
-let TOKEN: String = "/token"
-let APP_ROOT: String = "special/approot"
-let FILES_ROOT_PATH  = "/Files"
-let KEYVALUES_ROOT_PATH = "/KeyValues"
-
-let ONEDRIVE_CONFIG = "onedrive.json"
-let IPFS_CONFIG = "ipfs.json"
-
-let GRANT_TYPE_GET_TOKEN: String = "authorization_code"
-let GRANT_TYPE_REFRESH_TOKEN: String = "refresh_token"
-let TOKEN_INVALID = "The token is invalid, please refresh token."
-
-enum statusCode: Int {
-    typealias RawValue = Int
-    case ok  = 200
-    case created = 201
-    case accepted = 202
-    case delete = 204
-    case redirect_url = 302
-    case unauthorized  = 401
 }

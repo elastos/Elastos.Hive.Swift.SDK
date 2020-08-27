@@ -20,7 +20,7 @@
 * SOFTWARE.
 */
 
-import UIKit
+import Foundation
 
 class VaultClientOptions: HiveClientOptions {
     private var _authToken: String?

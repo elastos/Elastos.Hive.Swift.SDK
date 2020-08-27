@@ -1,10 +1,33 @@
+/*
+* Copyright (c) 2019 Elastos Foundation
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in all
+* copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
+*/
 
-class AuthInfoStoreImpl: Persistent {
+import Foundation
+
+class VaultAuthInfoStoreImpl: Persistent {
     private var path: String
     init(_ path: String) {
-        self.path = path + "/" + ONEDRIVE_CONFIG
+        self.path = path + "/" + VAULT_CONFIG
     }
-    
+
     func parseFrom() -> Dictionary<String, Any> {
         let fileManager = FileManager.default
         let exist: Bool = fileManager.fileExists(atPath: path)
@@ -21,13 +44,13 @@ class AuthInfoStoreImpl: Persistent {
         }
         return [: ]
     }
-    
+
     func upateContent(_ json: Dictionary<String, Any>) {
         let fileManager = FileManager.default
         let exist: Bool = fileManager.fileExists(atPath: path)
         do {
             if !exist {
-                let perpath = path.prefix(path.count - "/onedrive.json".count)
+                let perpath = path.prefix(path.count - "/vault.json".count)
                 try fileManager.createDirectory(atPath: String(perpath), withIntermediateDirectories: true, attributes: nil)
                 fileManager.createFile(atPath: path, contents: nil, attributes: nil)
             }

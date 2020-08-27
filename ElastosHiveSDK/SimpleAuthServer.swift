@@ -28,13 +28,13 @@ import Swifter
 internal class SimpleAuthServer: NSObject {
     private let httpServer: HttpServer = HttpServer()
     static let sharedInstance = SimpleAuthServer()
-    
+
     private override init() {}
 
     func startRun(_ port: UInt16) {
         try? httpServer.start(port as in_port_t)
     }
-    
+
     func getCode() -> HivePromise<String> {
         return HivePromise<String>{ resolver in
             httpServer[""] = { request in
@@ -42,15 +42,15 @@ internal class SimpleAuthServer: NSObject {
                     resolver.reject(HiveError.failue(des: "failed"))
                     return HttpResponse.ok(.json("nil" as AnyObject))
                 }
-                
+
                 resolver.fulfill(request.queryParams[0].1)
                 return HttpResponse.ok(.json("nil" as AnyObject))
             }
         }
     }
-    
+
     func getCodeSync() throws -> String {
-        
+
         let semaphore: DispatchSemaphore! = DispatchSemaphore(value: 0)
         var result : String? = nil
         httpServer[""] = { request in
@@ -62,7 +62,7 @@ internal class SimpleAuthServer: NSObject {
             semaphore.signal()
             return HttpResponse.ok(.json("nil" as AnyObject))
         }
-        
+
         semaphore.wait()
         if result != nil {
             return result!

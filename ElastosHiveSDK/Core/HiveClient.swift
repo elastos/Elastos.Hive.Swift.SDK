@@ -20,11 +20,15 @@ public class HiveClientHandle: NSObject {
         return nil
     }
 
-    public func asIPFS() -> IPFSProtocol? {
+    public func asDatabase() -> DatabaseProtocol? {
         return nil
     }
 
     public func asKeyValues() -> KeyValuesProtocol? {
+        return nil
+    }
+
+    public func asScripting() -> ScriptingProtocol? {
         return nil
     }
 
