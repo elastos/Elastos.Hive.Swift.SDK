@@ -3,13 +3,14 @@ def import_pods
   pod 'Swifter', '~> 1.4.6'
   pod 'Alamofire'
   pod 'PromiseKit'
+  pod 'ElastosDIDSDK', '1.0'
 end
 
 
 
 target :ElastosHiveSDK do
 use_frameworks!
-  platform :ios, '9.0'
+  platform :ios, '11.0'
   import_pods
   target 'ElastosHiveSDKTests' do
     inherit! :search_paths
@@ -25,6 +26,8 @@ end
   target :ElastosHiveSDK_macOS do
   platform :osx, '10.10'
   use_frameworks!
-  import_pods
+  pod 'Swifter', '~> 1.4.6'
+  pod 'Alamofire'
+  pod 'PromiseKit'
 end
 

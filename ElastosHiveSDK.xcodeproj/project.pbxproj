@@ -41,8 +41,6 @@
 		111D478024EE4E2600B7462B /* VaultClientOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D477E24EE4E2600B7462B /* VaultClientOptions.swift */; };
 		111D478224EE4EF100B7462B /* VaultClientOptionsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D478124EE4EF100B7462B /* VaultClientOptionsBuilder.swift */; };
 		111D478324EE4EF100B7462B /* VaultClientOptionsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D478124EE4EF100B7462B /* VaultClientOptionsBuilder.swift */; };
-		111D478524EE55FE00B7462B /* VaultClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D478424EE55FE00B7462B /* VaultClient.swift */; };
-		111D478624EE55FE00B7462B /* VaultClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D478424EE55FE00B7462B /* VaultClient.swift */; };
 		111D478824EE57D000B7462B /* VaultConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D478724EE57D000B7462B /* VaultConstants.swift */; };
 		111D478924EE57D000B7462B /* VaultConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D478724EE57D000B7462B /* VaultConstants.swift */; };
 		111D478B24EE810A00B7462B /* VaultURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D478A24EE810A00B7462B /* VaultURL.swift */; };
@@ -107,6 +105,8 @@
 		1170FB0F2501CEF70049E81D /* VaultIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FB0D2501CEF70049E81D /* VaultIndex.swift */; };
 		1170FB112501D21C0049E81D /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FB102501D21C0049E81D /* Result.swift */; };
 		1170FB122501D21C0049E81D /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FB102501D21C0049E81D /* Result.swift */; };
+		1170FB142502019C0049E81D /* Vault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FB132502019C0049E81D /* Vault.swift */; };
+		1170FB152502019C0049E81D /* Vault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FB132502019C0049E81D /* Vault.swift */; };
 		11749D9F24082FB1007B8F32 /* OutputStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11749D9E24082FB1007B8F32 /* OutputStream.swift */; };
 		11749DA024082FB1007B8F32 /* OutputStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11749D9E24082FB1007B8F32 /* OutputStream.swift */; };
 		11749DA224083D63007B8F32 /* TestResultHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11749DA124083D63007B8F32 /* TestResultHandler.swift */; };
@@ -178,7 +178,6 @@
 		111D477C24EE4B3B00B7462B /* VaultClientConnectTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultClientConnectTest.swift; sourceTree = "<group>"; };
 		111D477E24EE4E2600B7462B /* VaultClientOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultClientOptions.swift; sourceTree = "<group>"; };
 		111D478124EE4EF100B7462B /* VaultClientOptionsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultClientOptionsBuilder.swift; sourceTree = "<group>"; };
-		111D478424EE55FE00B7462B /* VaultClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultClient.swift; sourceTree = "<group>"; };
 		111D478724EE57D000B7462B /* VaultConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultConstants.swift; sourceTree = "<group>"; };
 		111D478A24EE810A00B7462B /* VaultURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultURL.swift; sourceTree = "<group>"; };
 		111D478D24F399AC00B7462B /* VaultApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultApi.swift; sourceTree = "<group>"; };
@@ -213,6 +212,7 @@
 		1170FB0A2501CD2F0049E81D /* ReadPreference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadPreference.swift; sourceTree = "<group>"; };
 		1170FB0D2501CEF70049E81D /* VaultIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultIndex.swift; sourceTree = "<group>"; };
 		1170FB102501D21C0049E81D /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		1170FB132502019C0049E81D /* Vault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vault.swift; sourceTree = "<group>"; };
 		11749D9E24082FB1007B8F32 /* OutputStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputStream.swift; sourceTree = "<group>"; };
 		11749DA124083D63007B8F32 /* TestResultHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestResultHandler.swift; sourceTree = "<group>"; };
 		1176BF2F229CE8F600240EDF /* TestHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -308,7 +308,6 @@
 				111D477824ED0C1200B7462B /* VaultAuthHelper.swift */,
 				111D477E24EE4E2600B7462B /* VaultClientOptions.swift */,
 				111D478124EE4EF100B7462B /* VaultClientOptionsBuilder.swift */,
-				111D478424EE55FE00B7462B /* VaultClient.swift */,
 				111D478724EE57D000B7462B /* VaultConstants.swift */,
 				111D478A24EE810A00B7462B /* VaultURL.swift */,
 				111D478D24F399AC00B7462B /* VaultApi.swift */,
@@ -522,6 +521,7 @@
 				114FD83F2297CF7600467E38 /* Authenticator.swift */,
 				A39CB4BE2292854000535E43 /* HiveCallback.swift */,
 				111D47F624F7A5E400B7462B /* SimpleAuthServer.swift */,
+				1170FB132502019C0049E81D /* Vault.swift */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -947,6 +947,7 @@
 				11D26F4422CA3B4B00E4099A /* Dictionary.swift in Sources */,
 				A3E13E85240E449A002569B1 /* FilesProtocol.swift in Sources */,
 				111D47DB24F7908D00B7462B /* FindOptions.swift in Sources */,
+				1170FB152502019C0049E81D /* Vault.swift in Sources */,
 				111D478324EE4EF100B7462B /* VaultClientOptionsBuilder.swift in Sources */,
 				A3E13E87240E449A002569B1 /* KeyValuesProtocol.swift in Sources */,
 				1170FB122501D21C0049E81D /* Result.swift in Sources */,
@@ -966,7 +967,6 @@
 				111D47E724F7927D00B7462B /* InsertResult.swift in Sources */,
 				111D47E424F7910100B7462B /* UpdateOptions.swift in Sources */,
 				11D26F7722CA3B8800E4099A /* HiveClient.swift in Sources */,
-				111D478624EE55FE00B7462B /* VaultClient.swift in Sources */,
 				A3E13E90240E45EE002569B1 /* HiveClientOptions.swift in Sources */,
 				1127462E24FE3343007D6356 /* DatabaseClient.swift in Sources */,
 				111D47D524F7906F00B7462B /* DeleteOptions.swift in Sources */,
@@ -1006,6 +1006,7 @@
 				A3D9D41323C9671C003B602E /* FilesProtocol.swift in Sources */,
 				A37F893D23C72B2600F6C11E /* HiveClientOptions.swift in Sources */,
 				111D47C424F78EDF00B7462B /* ScriptingProtocol.swift in Sources */,
+				1170FB142502019C0049E81D /* Vault.swift in Sources */,
 				111D47F424F7A30300B7462B /* Executable.swift in Sources */,
 				111D477F24EE4E2600B7462B /* VaultClientOptions.swift in Sources */,
 				1170FB112501D21C0049E81D /* Result.swift in Sources */,
@@ -1031,7 +1032,6 @@
 				11ED682A22FF1078004C17D0 /* ElastosHiveSDK.swift in Sources */,
 				1127463324FE3386007D6356 /* ScriptClient.swift in Sources */,
 				A39C499E22539C9C0027BDF9 /* HiveError.swift in Sources */,
-				111D478524EE55FE00B7462B /* VaultClient.swift in Sources */,
 				1129C19424052CC500CD77F2 /* Alamofire+Synchronous.swift in Sources */,
 				111D47D424F7906F00B7462B /* DeleteOptions.swift in Sources */,
 				111D47E924F7940600B7462B /* UpdateResult.swift in Sources */,
@@ -1384,7 +1384,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = ElastosHiveSDK/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1419,7 +1419,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = ElastosHiveSDK/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

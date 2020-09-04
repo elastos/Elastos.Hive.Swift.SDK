@@ -35,4 +35,5 @@ let GRANT_TYPE_REFRESH_TOKEN: String = "refresh_token"
 let TOKEN_INVALID = "The token is invalid, please refresh token."
 let AUTHORIZE: String = "authorize"
 let VAULT_CONFIG = "vault.json"
+public let MAIN_NET_RESOLVER = "http://api.elastos.io:20606"
 

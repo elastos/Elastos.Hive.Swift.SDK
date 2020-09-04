@@ -31,27 +31,84 @@ class VaultAuthHelper: ConnectHelper {
     let tokenType: String = "token_type"
     let expireAtKey: String = "expires_at"
 
-    var clientId: String
-    var scope: String
-    var redirectUrl: String
-    var token: AuthToken?
-    let server = SimpleAuthServer.sharedInstance
-    var connectState: Bool = false
-    var persistent: Persistent
-    var nodeUrl: String
-    var authToken: String
-    var clientSecret: String
+//    var clientId: String
+//    var scope: String
+//    var redirectUrl: String
+//    var token: AuthToken?
+//    let server = SimpleAuthServer.sharedInstance
+//    var connectState: Bool = false
+//    var persistent: Persistent
+//    var nodeUrl: String
+//    var authToken: String
+//    var clientSecret: String
+//
+//    init(_ clientId: String, _ scope: String, _ redirectUrl: String, _ persistentStorePath: String, _ nodeUrl: String, _ authToken: String, _ clientSecret: String) {
+//        self.clientId = clientId
+//        self.scope = scope
+//        self.redirectUrl = redirectUrl
+//        self.nodeUrl = nodeUrl
+//        self.clientSecret = clientSecret
+//        self.authToken = authToken
+//        self.persistent = VaultAuthInfoStoreImpl(persistentStorePath)
+//    }
 
-    init(_ clientId: String, _ scope: String, _ redirectUrl: String, _ persistentStorePath: String, _ nodeUrl: String, _ authToken: String, _ clientSecret: String) {
-        self.clientId = clientId
-        self.scope = scope
-        self.redirectUrl = redirectUrl
-        self.nodeUrl = nodeUrl
-        self.clientSecret = clientSecret
-        self.authToken = authToken
-        self.persistent = VaultAuthInfoStoreImpl(persistentStorePath)
+    private var _clientId: String?
+    private var _scope: String?
+    private var _redirectUrl: String?
+    private var _token: AuthToken?
+    private let _server = SimpleAuthServer.sharedInstance
+    private var _connectState: Bool = false
+    private var _persistent: Persistent
+    private var _nodeUrl: String
+    private var _authToken: String?
+    private var _clientSecret: String?
+
+    private var _authenticationDIDDocument: DIDDocument?
+    private var _authenticationHandler: Authenticator?
+
+    public init(_ nodeUrl: String, _ storePath: String, _ authenticationDIDDocument: DIDDocument, _ handler: Authenticator) {
+        _authenticationDIDDocument = authenticationDIDDocument
+        _authenticationHandler = handler
+        _nodeUrl = nodeUrl
+        _persistent = VaultAuthInfoStoreImpl(storePath)
+
+        VaultURL.sharedInstance.resetVaultApi(baseUrl: _nodeUrl)
+        // TODO:
+        // reset auth api
     }
 
+    public init(_ nodeUrl: String, _ storePath: String, clientId: String, _ clientSecret: String, _ redirectUrl: String, _ scope: String) {
+        _clientId = clientId
+        _scope = scope
+        _redirectUrl = redirectUrl
+        _nodeUrl = nodeUrl
+        _clientSecret = clientSecret
+        _persistent = VaultAuthInfoStoreImpl(storePath)
+
+        VaultURL.sharedInstance.resetVaultApi(baseUrl: _nodeUrl)
+        // TODO:
+        // reset auth api
+    }
+/*
+     public VaultAuthHelper(String nodeUrl, String storePath, String clientId, String clientSecret, String redirectUrl, String scope) {
+         this.nodeUrl = nodeUrl;
+         this.clientId = clientId;
+         this.redirectUrl = redirectUrl;
+         this.scope = scope;
+         this.clientSecret = clientSecret;
+
+         this.persistent = new AuthInfoStoreImpl(storePath, VaultConstance.CONFIG);
+
+         try {
+             BaseServiceConfig config = new BaseServiceConfig.Builder().build();
+             ConnectionManager.resetHiveVaultApi(nodeUrl, config);
+             ConnectionManager.resetAuthApi(VaultConstance.TOKEN_URI, config);
+         } catch (Exception e) {
+             e.printStackTrace();
+         }
+     }
+
+     */
     override func connectAsync(authenticator: Authenticator? = nil) -> HivePromise<Void> {
         return connectAsync(authenticator: authenticator, handleBy: HiveCallback<Void>())
     }
@@ -69,7 +126,7 @@ class VaultAuthHelper: ConnectHelper {
     }
 
     func disconnect() {
-        return connectState = false
+        return _connectState = false
     }
 
     override func checkValid() -> HivePromise<Void> {
@@ -79,11 +136,11 @@ class VaultAuthHelper: ConnectHelper {
 
     private func do_login(_ authenticator: Authenticator) -> HivePromise<Void> {
 
-        connectState = false
+        _connectState = false
         tryRestoreToken()
-        if token != nil {
-            if !(token!.isExpired()) {
-                connectState = true
+        if _token != nil {
+            if !(_token!.isExpired()) {
+                _connectState = true
                 return HivePromise<Void>()
             }
             return refreshToken()
@@ -97,33 +154,33 @@ class VaultAuthHelper: ConnectHelper {
             }.then{ _ -> HivePromise<JSON> in
                 return self.syncGoogleDrive()
             }.done { _ in
-                self.connectState = true
+                self._connectState = true
                 Log.d(TAG(), "Login succeed")
                 resolver.fulfill(Void())
             }.catch { error in
-                self.connectState = false
+                self._connectState = false
                 resolver.reject(error)
             }
         }
     }
 
     private func syncGoogleDrive() -> HivePromise<JSON> {
-        let token = JSON(persistent.parseFrom())
+        let token = JSON(_persistent.parseFrom())
         let param = ["token": token["access_token"].stringValue,
                      "refresh_token": token["refresh_token"].stringValue,
                      "token_uri": TOKEN_URI,
-                     "client_id": clientId,
-                     "client_secret": clientSecret,
+                     "client_id": _clientId!,
+                     "client_secret": _clientSecret!,
                      "scopes": SCOPES,
                      "expiry": token["expires_at"].intValue] as [String : Any]
-        VaultURL.sharedInstance.resetVaultApi(baseUrl: nodeUrl)// test
+        VaultURL.sharedInstance.resetVaultApi(baseUrl: _nodeUrl)// test
         let url = VaultURL.sharedInstance.synchronization()
 
         return VaultApi.request(url: url, parameters: param)
     }
 
     private func tryRestoreToken() {
-        let json = JSON(persistent.parseFrom())
+        let json = JSON(_persistent.parseFrom())
         var refreshToken = ""
         var accessToken = ""
         var expiresAt = -1
@@ -138,21 +195,21 @@ class VaultAuthHelper: ConnectHelper {
             expiresAt = json[expireAtKey].intValue
         }
         if refreshToken != "" && accessToken != "" && expiresAt > 0 {
-            self.token = AuthToken(refreshToken, accessToken, expiresAt)
+            self._token = AuthToken(refreshToken, accessToken, expiresAt)
         }
     }
 
     private func acquireAuthCode(_ authenticator: Authenticator) -> HivePromise<String> {
         return HivePromise<String> { resolver in
-            let startIndex: String.Index = redirectUrl.index(redirectUrl.startIndex, offsetBy: 17)
-            let endIndex: String.Index =  redirectUrl.index(redirectUrl.startIndex, offsetBy: redirectUrl.count)
-            let port = UInt16(redirectUrl[startIndex..<endIndex])
-            let param = "client_id=\(clientId)&scope=\(scope)&response_type=code&redirect_uri=\(redirectUrl)"
+            let startIndex: String.Index = _redirectUrl!.index(_redirectUrl!.startIndex, offsetBy: 17)
+            let endIndex: String.Index =  _redirectUrl!.index(_redirectUrl!.startIndex, offsetBy: _redirectUrl!.count)
+            let port = UInt16(_redirectUrl![startIndex..<endIndex])
+            let param = "client_id=\(_clientId!)&scope=\(_scope!)&response_type=code&redirect_uri=\(_redirectUrl!)"
 
             let url = VaultURL.acquireAuthCode(param)
-            server.startRun(port!)
+            _server.startRun(port!)
             _ = authenticator.requestAuthentication(url)
-            server.getCode().done{ auth in
+            _server.getCode().done{ auth in
                 Log.d(TAG(), "AuthCode succeed")
                 resolver.fulfill(auth)
                 }.catch{ error in
@@ -164,11 +221,11 @@ class VaultAuthHelper: ConnectHelper {
     private func acquireAccessToken(_ authCode: String) -> HivePromise<Void> {
         return HivePromise<Void> { resolver in
             let params: Dictionary<String, Any> = [
-                "client_id" : clientId,
-                "client_secret": clientSecret,
+                "client_id" : _clientId!,
+                "client_secret": _clientSecret!,
                 "code" : authCode,
                 "grant_type" : GRANT_TYPE_GET_TOKEN,
-                "redirect_uri" : redirectUrl
+                "redirect_uri" : _redirectUrl!
             ]
             let url = VaultURL.token()
             var urlRequest = URLRequest(url: URL(string: url)!)
@@ -191,13 +248,13 @@ class VaultAuthHelper: ConnectHelper {
     private func refreshToken() -> HivePromise<Void> {
         return HivePromise<Void> {  resolver in
             var token = ""
-            if (self.token != nil) {
-                token = self.token!.refreshToken
+            if (self._token != nil) {
+                token = self._token!.refreshToken
             }
             let params: Dictionary<String, Any> = [
-                "client_id" : clientId,
-                "scope" : scope,
-                "redirect_uri" : redirectUrl,
+                "client_id": _clientId!,
+                "scope": _scope!,
+                "redirect_uri": _redirectUrl!,
                 "refresh_token": token,
                 "grant_type": GRANT_TYPE_REFRESH_TOKEN
             ]
@@ -209,12 +266,12 @@ class VaultAuthHelper: ConnectHelper {
             Alamofire.request(urlRequest).responseJSON(completionHandler: { dataResponse in
                 guard dataResponse.response?.statusCode == 200 else {
                     let json = JSON(JSON(dataResponse.result.value as Any)["error"])
-                    self.connectState = false
+                    self._connectState = false
                     let error = HiveError.failue(des: json["message"].stringValue)
                     resolver.reject(error)
                     return
                 }
-                self.connectState = true
+                self._connectState = true
                 Log.d(TAG(), "RefreshToken succeed")
                 let json: JSON = JSON(dataResponse.result.value as Any)
                 self.sotre(json)
@@ -225,26 +282,26 @@ class VaultAuthHelper: ConnectHelper {
 
     private func sotre(_ json: JSON) {
         let exTime = Int(Date().timeIntervalSince1970) + json[expireInKey].intValue
-        token = AuthToken(json[refreshTokenKey].stringValue, json[accessTokenKey].stringValue, exTime)
-        let dict = [clientIdKey: clientId, refreshTokenKey: token!.refreshToken, accessTokenKey: token!.accessToken, expireAtKey: token!.expiredTime, tokenType: json[tokenType].stringValue]
-        persistent.upateContent(dict)
+        _token = AuthToken(json[refreshTokenKey].stringValue, json[accessTokenKey].stringValue, exTime)
+        let dict = [clientIdKey: _clientId!, refreshTokenKey: _token!.refreshToken, accessTokenKey: _token!.accessToken, expireAtKey: _token!.expiredTime, tokenType: json[tokenType].stringValue]
+        _persistent.upateContent(dict)
     }
 
     private func isExpired() -> Bool {
-        if (token == nil || token!.isExpired())
+        if (_token == nil || _token!.isExpired())
         {
-            connectState = false
+            _connectState = false
         }
         else {
-            connectState = true
+            _connectState = true
         }
-        return !connectState
+        return !_connectState
     }
 
     func nodeAuth() -> HivePromise<JSON> {
-        VaultURL.sharedInstance.resetVaultApi(baseUrl: nodeUrl)
+        VaultURL.sharedInstance.resetVaultApi(baseUrl: _nodeUrl)
         let url = VaultURL.sharedInstance.auth()
-        let param = ["jwt": authToken]
+        let param = ["jwt": _authToken!]
        return VaultApi.nodeAuth(url: url, parameters: param)
     }
 }

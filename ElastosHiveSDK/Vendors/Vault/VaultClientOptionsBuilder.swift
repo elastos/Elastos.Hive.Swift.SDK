@@ -56,12 +56,12 @@ class VaultClientOptionsBuilder: NSObject {
     }
 
     public func withAuthenticator(_ authenticator: Authenticator) -> VaultClientOptionsBuilder {
-        options?.setAuthenticator(authenticator)
+        _ = options?.setAuthenticator(authenticator)
         return self
     }
 
     public func withStorePath(using path: String) -> VaultClientOptionsBuilder {
-        options?.setStorePath(path)
+        _ = options?.setLocalDataPath(path)
         return self
     }
 

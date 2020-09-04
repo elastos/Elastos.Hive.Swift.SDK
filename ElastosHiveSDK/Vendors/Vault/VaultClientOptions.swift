@@ -90,7 +90,7 @@ class VaultClientOptions: HiveClientOptions {
         return checkValid(true)
     }
 
-    override func buildClient() -> HiveClientHandle? {
-        return VaultClientHandle(self)
-    }
+//    override func buildClient() -> HiveClientHandle? {
+//        return VaultClientHandle(self)
+//    }
 }
