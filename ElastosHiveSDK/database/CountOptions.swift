@@ -22,6 +22,39 @@
 
 import Foundation
 
-public class CountOptions: NSObject {
+public class CountOptions: Options<CountOptions> {
 
+    public init(_ cSkip: Int, _ cLimit: Int) {
+        super.init()
+        _ = skip(cSkip)
+        _ = limit(cLimit)
+    }
+
+    public override init() {
+
+    }
+
+    public func skip(_ value: Int) -> CountOptions {
+        return setNumberOption("skip", value)
+    }
+
+    public func limit(_ value: Int) -> CountOptions {
+        return setNumberOption("limit", value)
+    }
+
+    public func maxTimeMS(_ value: Int) -> CountOptions {
+        return setNumberOption("maxTimeMS", value)
+    }
+
+    public func collation(_ value: Collation) -> CountOptions {
+        return setStringOption("skip", value.description)
+    }
+
+    public func hint(_ value: VaultIndex) -> CountOptions {
+        return setObjectOption("hint", value)
+    }
+
+    public func hint(_ value: Array<String>) -> CountOptions {
+        return setArrayOption("hint", value)
+    }
 }

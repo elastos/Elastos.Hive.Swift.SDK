@@ -22,6 +22,9 @@
 
 import Foundation
 
-public class DeleteResult: NSObject {
+public class DeleteResult: Result {
 
+    public func deletedCount() -> Int {
+        return get("deletedCount") as! Int
+    }
 }

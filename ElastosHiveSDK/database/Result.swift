@@ -22,11 +22,11 @@
 
 import Foundation
 
-public class InsertResult: Result {
+public class Result: NSObject {
 
-    public func insertedIds() -> Array<String> {
-        let ids: Array<String> = get("insertedIds")as! Array<String>
+    var result: [String: Any] = [: ]
 
-        return ids
+    func get(_ name: String) -> Any {
+        return result[name]
     }
 }

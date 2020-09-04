@@ -22,6 +22,30 @@
 
 import Foundation
 
-public class InsertOptions: NSObject {
+public class InsertOptions: Options<InsertOptions> {
 
+    public init(_ iBypassDocumentValidation: Bool, _ iOrdered: Bool) {
+        super.init()
+        _ = bypassDocumentValidation(iBypassDocumentValidation)
+        _ = ordered(iOrdered)
+    }
+
+    public init(_ iBypassDocumentValidation: Bool) {
+        super.init()
+        _ = bypassDocumentValidation(iBypassDocumentValidation)
+    }
+
+    public override init() {
+
+    }
+
+    public func bypassDocumentValidation(_ value: Bool) -> InsertOptions {
+
+        return setBooleanOption("bypass_document_validation", value)
+    }
+
+    public func ordered(_ value: Bool) -> InsertOptions {
+
+        return setBooleanOption("ordered", value)
+    }
 }

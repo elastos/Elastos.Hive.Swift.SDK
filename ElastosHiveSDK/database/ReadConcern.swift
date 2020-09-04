@@ -22,11 +22,21 @@
 
 import Foundation
 
-public class InsertResult: Result {
+public enum ReadConcern: String {
+    case LOCAL = "LOCAL"
+    case AVAILABLE = "AVAILABLE"
+    case MAJORITY = "MAJORITY"
+    case LINEARIZABLE = "LINEARIZABLE"
+    case SNAPSHOT = "SNAPSHOT"
 
-    public func insertedIds() -> Array<String> {
-        let ids: Array<String> = get("insertedIds")as! Array<String>
+    var description: String {
 
-        return ids
+        switch self {
+        case .LOCAL: return "local"
+        case .AVAILABLE: return "available"
+        case .LINEARIZABLE: return "linearizable"
+        case .MAJORITY: return "majority"
+        case .SNAPSHOT: return "snapshot"
+        }
     }
 }

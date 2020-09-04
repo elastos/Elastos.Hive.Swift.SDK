@@ -22,6 +22,25 @@
 
 import Foundation
 
-public class UpdateResult: NSObject {
+public class UpdateResult: Result {
 
+    public func matchedCount() -> Int {
+
+        return get("matchedCount") as! Int
+    }
+
+    public func modifiedCount() -> Int {
+
+        return get("modifiedCount") as! Int
+    }
+
+    public func upsertedCount() -> Int {
+
+        return get("upsertedCount") as! Int
+    }
+
+    public func upsertedId() -> Int {
+
+        return get("upsertedId") as! Int
+    }
 }

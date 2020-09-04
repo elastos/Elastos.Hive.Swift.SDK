@@ -22,11 +22,6 @@
 
 import Foundation
 
-public class InsertResult: Result {
+public class VaultIndex: NSObject {
 
-    public func insertedIds() -> Array<String> {
-        let ids: Array<String> = get("insertedIds")as! Array<String>
-
-        return ids
-    }
 }

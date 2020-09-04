@@ -22,6 +22,30 @@
 
 import Foundation
 
-public class UpdateOptions: NSObject {
+public class UpdateOptions: Options<UpdateOptions> {
 
+    public func upsert(value: Bool) -> UpdateOptions {
+
+        return setBooleanOption("upsert", value)
+    }
+
+    public func bypassDocumentValidation(value: Bool) -> UpdateOptions {
+
+        return setBooleanOption("bypass_document_validation", value)
+    }
+
+    public func collation(value: Bool) -> UpdateOptions {
+
+        return setObjectOption("collation", value)
+    }
+
+    public func hint(value: VaultIndex) -> UpdateOptions {
+
+        return setObjectOption("hint", value)
+    }
+
+    public func hint(value: Array<VaultIndex>) -> UpdateOptions {
+
+        return setArrayOption("hint", value)
+    }
 }

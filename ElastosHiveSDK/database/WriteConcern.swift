@@ -22,11 +22,37 @@
 
 import Foundation
 
-public class InsertResult: Result {
+public class WriteConcern: Options<WriteConcern> {
 
-    public func insertedIds() -> Array<String> {
-        let ids: Array<String> = get("insertedIds")as! Array<String>
+    public init(_ write: Int, _ writeTimeout: Int, _ writeJ: Bool, _ writeFsync: Bool) {
+        super.init()
+        _ = w(write)
+        _ = wtimeout(writeTimeout)
+        _ = j(writeJ)
+        _ = fsync(writeFsync)
+    }
 
-        return ids
+    public override init() {
+
+    }
+
+    public func w(_ value: Int) -> WriteConcern {
+
+        return setNumberOption("w", value)
+    }
+
+    public func wtimeout(_ value: Int) -> WriteConcern {
+
+        return setNumberOption("wtimeout", value)
+    }
+
+    public func j(_ value: Bool) -> WriteConcern {
+
+        return setBooleanOption("j", value)
+    }
+
+    public func fsync(_ value: Bool) -> WriteConcern {
+
+        return setBooleanOption("fsync", value)
     }
 }

@@ -22,6 +22,36 @@
 
 import Foundation
 
-public class DeleteOptions: NSObject {
+public class DeleteOptions: Options<DeleteOptions> {
 
+    public init(_ dCollation: Collation, _ dHint: VaultIndex) {
+        super.init()
+        _ = collation(dCollation)
+        _ = hint(dHint)
+    }
+
+    public init(_ dCollation: Collation, _ dHint: Array<VaultIndex>) {
+        super.init()
+        _ = collation(dCollation)
+        _ = hint(dHint)
+    }
+
+    public override init() {
+
+    }
+
+    public func collation(_ value: Collation) -> DeleteOptions{
+
+        return setObjectOption("collation", value)
+    }
+
+    public func hint(_ value: VaultIndex) -> DeleteOptions{
+
+        return setObjectOption("hint", value)
+    }
+
+    public func hint(_ value: Array<VaultIndex>) -> DeleteOptions{
+
+        return setArrayOption("hint", value)
+    }
 }

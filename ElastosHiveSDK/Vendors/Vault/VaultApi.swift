@@ -57,6 +57,73 @@ class VaultApi: NSObject {
         }
     }
 
+    class func requestWithBool(url: URLConvertible,
+                        method: HTTPMethod = .post,
+                        parameters: Parameters? = nil,
+                        encoding: ParameterEncoding = JSONEncoding.default,
+                        headers: HTTPHeaders? = nil) -> HivePromise<Bool> {
+        return HivePromise<Bool> { resolver in
+            Alamofire.request(url,
+                              method: method,
+                              parameters: parameters,
+                              encoding: encoding,
+                              headers: headers)
+                .responseJSON { dataResponse in
+                    switch dataResponse.result {
+                    case .success(let re):
+                        let rejson = JSON(re)
+                        let status = rejson["_status"].stringValue
+                        guard status == "OK" else {
+                            var dic: [String: String] = [: ]
+                            rejson.forEach { key, value in
+                                dic[key] = value.stringValue
+                            }
+                            let err = HiveError.failues(des: dic)
+                            resolver.reject(err)
+                            return
+                        }
+                        resolver.fulfill(true)
+                    case .failure(let error):
+                        resolver.reject(error)
+                    }
+            }
+        }
+    }
+
+    class func requestWithInsert(url: URLConvertible,
+                        method: HTTPMethod = .post,
+                        parameters: Parameters? = nil,
+                        encoding: ParameterEncoding = JSONEncoding.default,
+                        headers: HTTPHeaders? = nil) -> HivePromise<InsertResult> {
+        return HivePromise<InsertResult> { resolver in
+            Alamofire.request(url,
+                              method: method,
+                              parameters: parameters,
+                              encoding: encoding,
+                              headers: headers)
+                .responseJSON { dataResponse in
+                    switch dataResponse.result {
+                    case .success(let re):
+                        let rejson = JSON(re)
+                        let status = rejson["_status"].stringValue
+                        guard status == "OK" else {
+                            var dic: [String: String] = [: ]
+                            rejson.forEach { key, value in
+                                dic[key] = value.stringValue
+                            }
+                            let err = HiveError.failues(des: dic)
+                            resolver.reject(err)
+                            return
+                        }
+                        // TODO:
+                        resolver.fulfill(InsertResult())
+                    case .failure(let error):
+                        resolver.reject(error)
+                    }
+            }
+        }
+    }
+
     class func nodeAuth(url: URLConvertible,
                         method: HTTPMethod = .post,
                         parameters: Parameters? = nil,

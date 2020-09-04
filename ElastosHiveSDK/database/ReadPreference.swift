@@ -22,11 +22,22 @@
 
 import Foundation
 
-public class InsertResult: Result {
+public enum ReadPreference: String {
+    case PRIMARY = "PRIMARY"
+    case PRIMARY_PREFERRED = "PRIMARY_PREFERRED"
+    case SECONDARY = "SECONDARY"
+    case SECONDARY_PREFERRED = "SECONDARY_PREFERRED"
+    case NEAREST = "NEAREST"
 
-    public func insertedIds() -> Array<String> {
-        let ids: Array<String> = get("insertedIds")as! Array<String>
+    var description: String {
 
-        return ids
+        switch self {
+        case .PRIMARY: return "primary"
+        case .PRIMARY_PREFERRED: return "primary_preferred"
+        case .SECONDARY: return "secondary"
+        case .SECONDARY_PREFERRED: return "secondary_preferred"
+        case .NEAREST: return "nearest"
+        }
     }
 }
+

@@ -22,6 +22,71 @@
 
 import Foundation
 
-public class CreateCollectionOptions: NSObject {
+public class CreateCollectionOptions: Options<CreateCollectionOptions> {
 
+    public override init() {
+
+    }
+
+    public func writeConcern(_ value: WriteConcern?) -> CreateCollectionOptions {
+        if let _ = value {
+            _ = setObjectOption("write_concern", value as Any)
+        }
+        else {
+            remove("write_concern")
+        }
+
+        return self
+    }
+
+    public func readConcern(_ value: ReadConcern?) -> CreateCollectionOptions {
+        if let _ = value {
+            _ = setStringOption("read_concern", value!.description)
+        }
+        else {
+            remove("read_concern")
+        }
+
+        return self
+    }
+
+    public func readPreference(_ value: ReadPreference?) -> CreateCollectionOptions {
+        if let _ = value {
+            _ = setStringOption("read_preference", value!.description)
+        }
+        else {
+            remove("read_preference")
+        }
+
+        return self
+    }
+
+    public func capped(_ value: Bool) -> CreateCollectionOptions {
+        _ = setBooleanOption("capped", value)
+
+        return self
+    }
+
+    public func size(_ value: Int) -> CreateCollectionOptions {
+        _ = setNumberOption("size", value)
+
+        return self
+    }
+
+    public func max(_ value: Int) -> CreateCollectionOptions {
+        _ = setNumberOption("max", value)
+
+        return self
+    }
+
+    public func collation(_ value: Collation?) -> CreateCollectionOptions {
+        if let _ = value {
+            _ = setObjectOption("collation", value as Any)
+        }
+        else {
+            remove("collation")
+        }
+
+        return self
+    }
 }

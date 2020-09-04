@@ -53,8 +53,56 @@ class VaultURL {
         return baseUrl + "api/v1/db/create_collection"
     }
 
+    func deleteMongoDBCollection() -> String {
+        return baseUrl + "/api/v1/db/delete_collection"
+    }
+
     func mongoDBCollection() -> String {
         return baseUrl + "api/v1/db/col/*"
+    }
+
+    func insertOne() -> String {
+        return baseUrl + "/api/v1/db/insert_one"
+    }
+
+    func insertMany() -> String {
+        return baseUrl + "/api/v1/db/insert_many"
+    }
+
+    func countDocuments() -> String {
+        return baseUrl + "/api/v1/db/count_documents"
+    }
+
+    func findOne() -> String {
+        return baseUrl + "/api/v1/db/find_one"
+    }
+
+    func findMany() -> String {
+        return baseUrl + "/api/v1/db/find_many"
+    }
+
+    func updateOne() -> String {
+        return baseUrl + "/api/v1/db/update_one"
+    }
+
+    func updateMany() -> String {
+        return baseUrl + "/api/v1/db/update_many"
+    }
+
+    func deleteOne() -> String {
+        return baseUrl + "/api/v1/db/delete_one"
+    }
+
+    func deleteMany() -> String {
+        return baseUrl + "/api/v1/db/delete_many"
+    }
+
+    func registerCondition() -> String {
+        return baseUrl + "/scripting/set_subcondition"
+    }
+
+    func registerScript() -> String {
+        return baseUrl + "/scripting/set_script"
     }
 
     func createFolder() -> String {
