@@ -19,12 +19,56 @@ class DBTest: XCTestCase {
     func testDbCreate() {
         let lock = XCTestExpectation(description: "wait for test.")
             _ = database?.createCollection("new").done{ result in
+                XCTAssertTrue(true)
                 lock.fulfill()
             }.catch{ error in
+                XCTFail()
                 lock.fulfill()
             }
         self.wait(for: [lock], timeout: 100.0)
     }
+
+    func testDeleteCollection() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        database?.deleteCollection("new").done{ result in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ error in
+            lock.fulfill()
+            XCTFail()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+    
+    /*
+         @Test
+         public void testInsertOne() {
+             try {
+                 ObjectNode docNode = JsonNodeFactory.instance.objectNode();
+                 docNode.put("author", "john doe1");
+                 docNode.put("title", "Eve for Dummies2");
+
+     //            InsertOptions insertOptions = new InsertOptions();
+     //            insertOptions.bypassDocumentValidation(false).ordered(true);
+
+                 database.insertOne("works", docNode, /*insertOptions*/null, new Callback<InsertResult>() {
+                     @Override
+                     public void onError(HiveException e) {
+                         fail();
+                     }
+
+                     @Override
+                     public void onSuccess(InsertResult result) {
+                         assertNotNull(result);
+                         System.out.println("acknowledged="+result.get("acknowledged"));
+                         System.out.println("inserted_id="+result.get("inserted_id"));
+                     }
+                 }).get();
+             } catch (Exception e) {
+                 e.printStackTrace();
+             }
+         }
+     */
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -47,6 +91,7 @@ class DBTest: XCTestCase {
             }
             self.wait(for: [lock], timeout: 100.0)
         } catch {
+            XCTFail()
         }
     }
 

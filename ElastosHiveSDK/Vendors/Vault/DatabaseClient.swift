@@ -56,7 +56,9 @@ class DatabaseClient: DatabaseProtocol {
     }
 
     func deleteCollection(_ name: String) -> HivePromise<Bool> {
-        return deleteColImp(name, HiveCallback())
+        return authHelper.checkValid().then { _ -> HivePromise<Bool> in
+            return self.deleteColImp(name, HiveCallback())
+        }
     }
 
     func deleteCollection(_ name: String, handler: HiveCallback<Bool>) -> HivePromise<Bool> {
@@ -65,13 +67,16 @@ class DatabaseClient: DatabaseProtocol {
 
     private func deleteColImp(_ collection: String, _ handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
         let param = ["collection": collection]
+        let header = Header(authHelper)
         let url = VaultURL.sharedInstance.deleteMongoDBCollection()
 
-        return VaultApi.requestWithBool(url: url, parameters: param)
+        return VaultApi.requestWithBool(url: url, parameters: param, headers: header.headers())
     }
 
     func insertOne(_ collection: String, _ doc: [String : Any], options: InsertOptions) -> HivePromise<InsertResult> {
-        return insertOne(collection, doc, options: options, handler: HiveCallback())
+        return authHelper.checkValid().then { _ -> HivePromise<InsertResult> in
+            return self.insertOne(collection, doc, options: options, handler: HiveCallback())
+        }
     }
 
     func insertOne(_ collection: String, _ doc: [String : Any], options: InsertOptions, handler: HiveCallback<InsertResult>) -> HivePromise<InsertResult> {
@@ -82,7 +87,7 @@ class DatabaseClient: DatabaseProtocol {
         let param = ["collection": collection]
         let url = VaultURL.sharedInstance.insertOne()
 
-        return VaultApi.requestWithInsert(url: url, parameters: param)
+        return VaultApi.requestWithInsert(url: url, parameters: param, headers: Header(authHelper).headers())
     }
 
     func insertMany(_ collection: String, _ docs: Array<[String : Any]>, options: InsertOptions) -> HivePromise<InsertResult> {
