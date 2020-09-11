@@ -175,7 +175,9 @@ class DatabaseClient: DatabaseProtocol {
     }
 
     func updateOne(_ collection: String, _ filter: [String : Any], _ update: [String : Any], options: UpdateOptions) -> HivePromise<UpdateResult> {
-        return updateOne(collection, filter, update, options: options, handler: HiveCallback())
+        return authHelper.checkValid().then { _ -> HivePromise<UpdateResult> in
+            return self.updateOne(collection, filter, update, options: options, handler: HiveCallback())
+        }
     }
 
     func updateOne(_ collection: String, _ filter: [String : Any], _ update: [String : Any], options: UpdateOptions, handler: HiveCallback<UpdateResult>) -> HivePromise<UpdateResult> {
@@ -183,11 +185,11 @@ class DatabaseClient: DatabaseProtocol {
     }
 
     private func updateOneImp(_ collection: String, _ filter: [String: Any], _ update: [String: Any], _ options: UpdateOptions, _ handleBy: HiveCallback<UpdateResult>) -> HivePromise<UpdateResult> {
-        let param = ["collection": collection]
+        let param = ["collection": collection, "filter": filter, "update": ["$set": update]] as [String : Any]
         let url = VaultURL.sharedInstance.updateOne()
 
         return HivePromise<UpdateResult> { resolver in
-            VaultApi.request(url: url, parameters: param).get { json in
+            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).get { json in
                 resolver.fulfill(UpdateResult())
             }.catch { error in
                 resolver.reject(error)

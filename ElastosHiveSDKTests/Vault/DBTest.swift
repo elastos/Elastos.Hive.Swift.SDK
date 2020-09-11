@@ -98,31 +98,45 @@ class DBTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
 
+    func testUpdateOne() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        let filterInfo = ["author": "john doe1"]
+        let update = ["author": "john doe2_1", "title": "Eve for Dummies2_1_1"]
+        let updateOptions = UpdateOptions()
+        database?.updateOne("new", filterInfo, update, options: updateOptions).done{ result in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ error in
+            lock.fulfill()
+            XCTFail()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
     /*
+
          @Test
-         public void testFindMany() {
+         public void testUpdateOne() {
              try {
-                 ObjectNode query = JsonNodeFactory.instance.objectNode();
-                 query.put("author", "john doe1");
+                 ObjectNode filter = JsonNodeFactory.instance.objectNode();
+                 filter.put("author", "john doe1");
 
-                 ObjectMapper objectMapper = new ObjectMapper();
+                 ObjectNode update = JsonNodeFactory.instance.objectNode();
+                 update.put("author", "john doe2");
+                 update.put("title", "Eve for Dummies2_1");
 
-                 FindOptions findOptions = new FindOptions();
-                 findOptions.skip(0)
-                         .allowPartialResults(false)
-                         .returnKey(false)
-                         .batchSize(0)
-                         .projection(objectMapper.readTree("{\"_id\": false}"));
+                 UpdateOptions updateOptions = new UpdateOptions();
+                 updateOptions.upsert(true).bypassDocumentValidation(false);
 
-                 database.findMany("works", query, findOptions, new Callback<List<JsonNode>>() {
+                 database.updateOne("works", filter, update, updateOptions, new Callback<UpdateResult>() {
                      @Override
                      public void onError(HiveException e) {
-
+                         fail();
                      }
 
                      @Override
-                     public void onSuccess(List<JsonNode> result) {
-
+                     public void onSuccess(UpdateResult result) {
+                         assertNotNull(result);
+                         System.out.println("modifiedCount="+result.modifiedCount());
                      }
                  }).get();
              } catch (Exception e) {
