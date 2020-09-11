@@ -1,6 +1,6 @@
 import XCTest
 @testable import ElastosHiveSDK
-
+/*
 class IPFSClientIFPSProtocolTest: XCTestCase {
     private let STORE_PATH = "fakePath"
     
@@ -325,4 +325,4 @@ class IPFSClientIFPSProtocolTest: XCTestCase {
         client = nil
     }
 }
-
+*/

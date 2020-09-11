@@ -57,6 +57,15 @@ class VaultApi: NSObject {
         }
     }
 
+    class func requestSync(url: URLConvertible,
+                           method: HTTPMethod = .post,
+                           parameters: Parameters? = nil,
+                           encoding: ParameterEncoding = JSONEncoding.default,
+                           headers: HTTPHeaders? = nil) {
+        // TODO:
+
+    }
+
     class func requestWithBool(url: URLConvertible,
                         method: HTTPMethod = .post,
                         parameters: Parameters? = nil,
@@ -135,9 +144,24 @@ class VaultApi: NSObject {
                               parameters: parameters,
                               encoding: encoding,
                               headers: headers)
-                .responseData { redata in
-                    let re = String(data: redata.data!, encoding: .utf8)
-                    print(re)
+                .responseJSON { dataResponse in
+                    switch dataResponse.result {
+                    case .success(let re):
+                        let rejson = JSON(re)
+                        let status = rejson["_status"].stringValue
+                        guard status == "OK" else {
+                            var dic: [String: String] = [: ]
+                            rejson.forEach { key, value in
+                                dic[key] = value.stringValue
+                            }
+                            let err = HiveError.failues(des: dic)
+                            resolver.reject(err)
+                            return
+                        }
+                        resolver.fulfill(rejson)
+                    case .failure(let error):
+                        resolver.reject(error)
+                    }
             }
         }
     }

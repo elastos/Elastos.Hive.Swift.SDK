@@ -32,7 +32,7 @@ public class HiveClientOptions: NSObject {
     private var _DIDResolverUrl: String?
     private var _localPath: String?
 
-    override init() {
+    public override init() {
         super.init()
     }
 
@@ -67,9 +67,9 @@ public class HiveClientOptions: NSObject {
         return self
     }
 
-    public var authenicator: Authenticator {
+    public var authenicator: Authenticator? {
         get {
-            return _authenticator!
+            return _authenticator
         }
     }
 

@@ -29,6 +29,16 @@ class DatabaseClient: DatabaseProtocol {
         self.authHelper = authHelper
     }
 
+    func createCollection(_ name: String) -> HivePromise<Bool> {
+        return authHelper.checkValid().then { _ -> HivePromise<Bool> in
+            return self.createCollection(name, handler: HiveCallback())
+        }
+    }
+
+    func createCollection(_ name: String, handler: HiveCallback<Bool>) -> HivePromise<Bool> {
+        return createColImp(name, nil, HiveCallback())
+    }
+
     func createCollection(_ name: String, options: CreateCollectionOptions) -> HivePromise<Bool> {
         return createColImp(name, options, HiveCallback())
     }
@@ -37,11 +47,12 @@ class DatabaseClient: DatabaseProtocol {
         return createColImp(name, options, handler)
     }
 
-    private func createColImp(_ collection: String, _ options: CreateCollectionOptions, _ handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
+    private func createColImp(_ collection: String, _ options: CreateCollectionOptions?, _ handleBy: HiveCallback<Bool>) -> HivePromise<Bool> {
         let param = ["collection": collection]
+        let header = Header(authHelper)
         let url = VaultURL.sharedInstance.mongoDBSetup()
 
-        return VaultApi.requestWithBool(url: url, parameters: param)
+        return VaultApi.requestWithBool(url: url, parameters: param, headers: header.headers())
     }
 
     func deleteCollection(_ name: String) -> HivePromise<Bool> {

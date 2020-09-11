@@ -36,7 +36,9 @@ class AuthToken: NSObject {
     }
 
     func isExpired() -> Bool {
-        let currentSeconds = Int(Date().timeIntervalSince1970)
-        return currentSeconds >= Int(expiredTime)!
+        // todo:
+//        let currentSeconds = Int(Date().timeIntervalSince1970)
+//        return currentSeconds >= Int(expiredTime)!
+        return false
     }
 }

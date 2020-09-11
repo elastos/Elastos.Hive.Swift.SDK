@@ -1,6 +1,6 @@
 import XCTest
 @testable import ElastosHiveSDK
-
+/*
 class IPFSClientProtocoTest: XCTestCase {
     private let STORE_PATH = "fakePath"
     private let IPADDRS: [String] = ["52.83.165.233", "52.83.238.247", "3.133.166.156", "13.59.79.222", "3.133.71.168"]
@@ -61,3 +61,4 @@ class IPFSClientProtocoTest: XCTestCase {
         client = nil
     }
 }
+*/

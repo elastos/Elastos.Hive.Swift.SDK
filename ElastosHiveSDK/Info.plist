@@ -22,8 +22,6 @@
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
-		<key>NSAllowsArbitraryLoadsInWebContent</key>
-		<true/>
 	</dict>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2019 org.elastos. All rights reserved.</string>

@@ -1,6 +1,6 @@
 import XCTest
 @testable import ElastosHiveSDK
-
+/*
 class IPFSClientTest: XCTestCase {
     private let STORE_PATH = "\(NSHomeDirectory())/Library/Caches/ipfs"
     private var options: IPFSClientOptions?
@@ -38,4 +38,4 @@ class IPFSClientTest: XCTestCase {
 
     override func tearDown() {}
 }
-
+*/

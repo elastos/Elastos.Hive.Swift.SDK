@@ -1,6 +1,6 @@
 import XCTest
 @testable import ElastosHiveSDK
-
+/*
 class IPFSClientConnectTest: XCTestCase {
     private let STORE_PATH = "fakePath"
     private var client: HiveClientHandle?
@@ -56,5 +56,5 @@ class IPFSClientConnectTest: XCTestCase {
         client = nil
     }
 }
-
+*/
 

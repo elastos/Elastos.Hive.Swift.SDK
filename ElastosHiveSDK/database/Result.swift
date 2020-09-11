@@ -27,6 +27,6 @@ public class Result: NSObject {
     var result: [String: Any] = [: ]
 
     func get(_ name: String) -> Any {
-        return result[name]
+        return result[name] as Any
     }
 }

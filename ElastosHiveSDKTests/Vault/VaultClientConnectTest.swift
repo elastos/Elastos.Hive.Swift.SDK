@@ -3,6 +3,7 @@ import XCTest
 @testable import ElastosHiveSDK
 
 class VaultClientConnectTest: XCTestCase {
+    /*
     let CLIENT_ID = "1098324333865-q7he5l91a4pqnuq9s2pt5btj9kenebkl.apps.googleusercontent.com"
     let CLIENT_SECRET = "0Ekmgx8dPbSxnTxxF-fqxjnz"
     let REDIRECT_URL = "http://localhost:12345"
@@ -72,7 +73,7 @@ class VaultClientConnectTest: XCTestCase {
             XCTFail()
         }
     }
-
+*/
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }

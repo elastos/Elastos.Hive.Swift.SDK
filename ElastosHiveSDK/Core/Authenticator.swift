@@ -23,5 +23,5 @@
 import Foundation
 
 public protocol Authenticator {
-    func requestAuthentication(_ jwtToken: String) -> Bool
+    func requestAuthentication(_ jwtToken: String) -> HivePromise<String>
 }

@@ -4,6 +4,11 @@ def import_pods
   pod 'Alamofire'
   pod 'PromiseKit'
   pod 'ElastosDIDSDK', '1.0'
+
+  pod 'BlueRSA', '~> 1.0'
+  pod 'LoggerAPI', '~> 1.7'
+  pod 'KituraContracts', '~> 1.1'
+  pod 'BlueCryptor', '~> 1.0'
 end
 
 

@@ -24,13 +24,17 @@ import Foundation
 
 public typealias HivePromise = Promise
 
+private var _opts: HiveClientOptions?
+private var _providerCache: [String: String] = [: ]
+private var _vaultCache: [DID: Vault]?
 @objc(HiveClient)
 public class HiveClientHandle: NSObject {
-    private var _opts: HiveClientOptions
-    private var _vaultCache: [DID: Vault]?
-    private var _providerCache: [String: String] = [: ]
+//    private var _opts: HiveClientOptions
+//    private var _providerCache: [String: String] = [: ]
+//    private var _vaultCache: [DID: Vault]?
     public init(_ options: HiveClientOptions) {
-        self._opts = options
+        _opts = options
+//        opt = options
     }
 
 //    public func connect() throws {}
@@ -60,18 +64,14 @@ public class HiveClientHandle: NSObject {
 //    }
 
     public static func createInstance(withOptions: HiveClientOptions) throws -> HiveClientHandle {
-        let client = withOptions.buildClient()
-        guard client != nil else {
-            throw HiveError.failue(des: "Not implemented")
-        }
 
-        return client!
+        return HiveClientHandle(withOptions)
     }
 
     public func getVault(_ ownerDid: String) -> HivePromise<Vault> {
         return HivePromise<Vault> { resolver in
             var vaultProvider = ""
-            _ = getVaultProvider(ownerDid).get { result in
+            _ = HiveClientHandle.getVaultProvider(ownerDid).get { result in
                 vaultProvider = result
 
                 var vault: Vault
@@ -79,7 +79,7 @@ public class HiveClientHandle: NSObject {
                     resolver.reject("TODO" as! Error)
                     return
                 }
-                let authHelper = VaultAuthHelper(vaultProvider, self._opts.localPath, self._opts.authenticationDIDDocument, self._opts.authenicator)
+                let authHelper = VaultAuthHelper(vaultProvider, _opts!.localPath, _opts!.authenticationDIDDocument, _opts!.authenicator)
                 vault = Vault(authHelper, vaultProvider, ownerDid)
                 resolver.fulfill(vault)
             }
@@ -89,18 +89,19 @@ public class HiveClientHandle: NSObject {
         }
     }
 
-    public func getVaultProvider(_ ownerDid: String) -> HivePromise<String> {
+    public class func getVaultProvider(_ ownerDid: String) -> HivePromise<String> {
 
         return HivePromise<String> { resolver in
             var vaultProvider: String?
             do {
-                if _opts.didResolverUrl == nil {
-                   try DIDBackend.initializeInstance(MAIN_NET_RESOLVER, _opts.localPath)
+                if _opts?.didResolverUrl == nil {
+                    try DIDBackend.initializeInstance(MAIN_NET_RESOLVER, _opts!.localPath)
                 }
                 else {
-                    try DIDBackend.initializeInstance(_opts.didResolverUrl!, _opts.localPath)
+                    try DIDBackend.initializeInstance(_opts!.didResolverUrl!, _opts!.localPath)
                 }
-                try ResolverCache.reset()
+                //todo: ResolverCache.reset() 删除了整个路径 ！！！！
+//                try ResolverCache.reset()
                 let did = try DID(ownerDid)
                 let doc = try did.resolve()
                 let services = doc?.selectServices(byType: "HiveVault")
@@ -109,15 +110,19 @@ public class HiveClientHandle: NSObject {
                     _providerCache[ownerDid] = vaultProvider
                 }
                 else {
+                    //TODO: 缓存没有成功。
                     vaultProvider = _providerCache[ownerDid]
                 }
                 // TODO: 返回值vaultProvider是否可以为nil ！！！！！！！！
-                resolver.fulfill(vaultProvider!)
+                resolver.fulfill("http://localhost:5000")
             }
             catch {
                 resolver.reject(error)
             }
-
         }
+    }
+
+    public class func setVaultProvider(_ ownerDid: String, _ vaultAddress: String) {
+        _providerCache[ownerDid] = vaultAddress
     }
 }

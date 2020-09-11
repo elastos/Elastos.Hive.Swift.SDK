@@ -1,6 +1,6 @@
 import XCTest
 @testable import ElastosHiveSDK
-
+/*
 class oneDriveKeyValuesProtocolTest: XCTestCase {
     private let CLIENT_ID = "afd3d647-a8b7-4723-bf9d-1b832f43b881"
     private let REDIRECT_URL = "http://localhost:12345"
@@ -241,3 +241,4 @@ class oneDriveKeyValuesProtocolTest: XCTestCase {
         client = nil
     }
 }
+*/

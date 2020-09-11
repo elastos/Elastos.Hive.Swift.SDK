@@ -24,6 +24,8 @@ import Foundation
 
 public protocol DatabaseProtocol {
 
+    func createCollection(_ name: String) -> HivePromise<Bool>
+    func createCollection(_ name: String, handler: HiveCallback<Bool>) -> HivePromise<Bool>
     func createCollection(_ name: String, options: CreateCollectionOptions) -> HivePromise<Bool>
     func createCollection(_ name: String, options: CreateCollectionOptions, handler: HiveCallback<Bool>) -> HivePromise<Bool>
 
