@@ -73,18 +73,18 @@ class DatabaseClient: DatabaseProtocol {
         return VaultApi.requestWithBool(url: url, parameters: param, headers: header.headers())
     }
 
-    func insertOne(_ collection: String, _ doc: [String : Any], options: InsertOptions) -> HivePromise<InsertResult> {
+    func insertOne(_ collection: String, _ doc: [String : Any], options: InsertOptions?) -> HivePromise<InsertResult> {
         return authHelper.checkValid().then { _ -> HivePromise<InsertResult> in
             return self.insertOne(collection, doc, options: options, handler: HiveCallback())
         }
     }
 
-    func insertOne(_ collection: String, _ doc: [String : Any], options: InsertOptions, handler: HiveCallback<InsertResult>) -> HivePromise<InsertResult> {
+    func insertOne(_ collection: String, _ doc: [String : Any], options: InsertOptions?, handler: HiveCallback<InsertResult>) -> HivePromise<InsertResult> {
         return insertOneImp(collection, doc, options, handler)
     }
 
-    private func insertOneImp(_ collection: String, _ doc: [String: Any], _ options: InsertOptions, _ handleBy: HiveCallback<InsertResult>) -> HivePromise<InsertResult> {
-        let param = ["collection": collection]
+    private func insertOneImp(_ collection: String, _ doc: [String: Any], _ options: InsertOptions?, _ handleBy: HiveCallback<InsertResult>) -> HivePromise<InsertResult> {
+        let param = ["collection": collection, "document": doc] as [String : Any]
         let url = VaultURL.sharedInstance.insertOne()
 
         return VaultApi.requestWithInsert(url: url, parameters: param, headers: Header(authHelper).headers())

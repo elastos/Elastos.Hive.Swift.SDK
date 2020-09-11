@@ -32,8 +32,8 @@ public protocol DatabaseProtocol {
     func deleteCollection(_ name: String) -> HivePromise<Bool>
     func deleteCollection(_ name: String, handler: HiveCallback<Bool>) -> HivePromise<Bool>
 
-    func insertOne(_ collection: String, _ doc: [String: Any], options: InsertOptions) -> HivePromise<InsertResult>
-    func insertOne(_ collection: String, _ doc: [String: Any], options: InsertOptions, handler: HiveCallback<InsertResult>) -> HivePromise<InsertResult>
+    func insertOne(_ collection: String, _ doc: [String: Any], options: InsertOptions?) -> HivePromise<InsertResult>
+    func insertOne(_ collection: String, _ doc: [String: Any], options: InsertOptions?, handler: HiveCallback<InsertResult>) -> HivePromise<InsertResult>
 
     func insertMany(_ collection: String, _ docs: Array<[String: Any]>, options: InsertOptions) -> HivePromise<InsertResult>
     func insertMany(_ collection: String, _ docs: Array<[String: Any]>, options: InsertOptions, handler: HiveCallback<InsertResult>) -> HivePromise<InsertResult>

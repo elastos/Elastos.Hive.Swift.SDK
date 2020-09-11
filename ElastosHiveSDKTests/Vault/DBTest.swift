@@ -39,7 +39,20 @@ class DBTest: XCTestCase {
         }
         self.wait(for: [lock], timeout: 1000.0)
     }
-    
+
+    func testInsertOne() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        let inserInfo = ["author": "john doe1", "title": "Eve for Dummies2"]
+        database?.insertOne("new", inserInfo, options: nil).done{ result in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ error in
+            lock.fulfill()
+            XCTFail()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+
     /*
          @Test
          public void testInsertOne() {
