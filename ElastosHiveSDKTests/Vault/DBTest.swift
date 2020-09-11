@@ -143,34 +143,19 @@ class DBTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
 
-    /*
-     @Test
-     public void testDeleteOne() {
-         try {
-
-             ObjectNode filter = JsonNodeFactory.instance.objectNode();
-             filter.put("author", "john doe2");
-
-             DeleteOptions deleteOptions = new DeleteOptions();
-
-             database.deleteOne("works", filter, null, new Callback<DeleteResult>() {
-                 @Override
-                 public void onError(HiveException e) {
-                     fail();
-                 }
-
-                 @Override
-                 public void onSuccess(DeleteResult result) {
-                     assertNotNull(result);
-                     System.out.println("deletedCount="+result.deletedCount());
-                 }
-             }).get();
-         } catch (Exception e) {
-             e.printStackTrace();
-         }
-     }
-
-     */
+    func testDeleteMany() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        let filterInfo = ["author": "john doe2"]
+        let deleteOptions = DeleteOptions()
+        database?.deleteMany("new", filterInfo, options: deleteOptions).done{ result in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ error in
+            lock.fulfill()
+            XCTFail()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
