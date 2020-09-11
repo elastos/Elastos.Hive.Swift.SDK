@@ -42,8 +42,23 @@ class DBTest: XCTestCase {
 
     func testInsertOne() {
         let lock = XCTestExpectation(description: "wait for test.")
-        let inserInfo = ["author": "john doe1", "title": "Eve for Dummies2"]
+        let inserInfo = ["author": "john doe1", "title": "Eve for Dummies1"]
         database?.insertOne("new", inserInfo, options: nil).done{ result in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ error in
+            lock.fulfill()
+            XCTFail()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+
+    func testInsertMany() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        let inserInfo1 = ["author": "john doe1", "title": "Eve for Dummies1"]
+        let inserInfo2 = ["author": "john doe2", "title": "Eve for Dummies2"]
+        let insertOptions = InsertOptions()
+        database?.insertMany("new", [inserInfo1, inserInfo2], options: insertOptions).done{ result in
             XCTAssertTrue(true)
             lock.fulfill()
         }.catch{ error in
@@ -55,16 +70,18 @@ class DBTest: XCTestCase {
 
     /*
          @Test
-         public void testInsertOne() {
+         public void testInsertMany() {
              try {
+                 List<JsonNode> nodes = new ArrayList();
                  ObjectNode docNode = JsonNodeFactory.instance.objectNode();
                  docNode.put("author", "john doe1");
                  docNode.put("title", "Eve for Dummies2");
+                 nodes.add(docNode);
 
-     //            InsertOptions insertOptions = new InsertOptions();
-     //            insertOptions.bypassDocumentValidation(false).ordered(true);
+                 InsertOptions insertOptions = new InsertOptions();
+                 insertOptions.bypassDocumentValidation(false).ordered(true);
 
-                 database.insertOne("works", docNode, /*insertOptions*/null, new Callback<InsertResult>() {
+                 database.insertMany("works", nodes, insertOptions, new Callback<InsertResult>() {
                      @Override
                      public void onError(HiveException e) {
                          fail();
@@ -73,14 +90,13 @@ class DBTest: XCTestCase {
                      @Override
                      public void onSuccess(InsertResult result) {
                          assertNotNull(result);
-                         System.out.println("acknowledged="+result.get("acknowledged"));
-                         System.out.println("inserted_id="+result.get("inserted_id"));
                      }
                  }).get();
              } catch (Exception e) {
                  e.printStackTrace();
              }
          }
+
      */
 
     override func setUpWithError() throws {

@@ -91,7 +91,9 @@ class DatabaseClient: DatabaseProtocol {
     }
 
     func insertMany(_ collection: String, _ docs: Array<[String : Any]>, options: InsertOptions) -> HivePromise<InsertResult> {
-        return insertMany(collection, docs, options: options, handler: HiveCallback())
+        return authHelper.checkValid().then { _ -> HivePromise<InsertResult> in
+            return self.insertMany(collection, docs, options: options, handler: HiveCallback())
+        }
     }
 
     func insertMany(_ collection: String, _ docs: Array<[String : Any]>, options: InsertOptions, handler: HiveCallback<InsertResult>) -> HivePromise<InsertResult> {
@@ -99,10 +101,10 @@ class DatabaseClient: DatabaseProtocol {
     }
 
     private func insertManyImp(_ collection: String, _ doc: Array<[String: Any]>, _ options: InsertOptions, _ handleBy: HiveCallback<InsertResult>) -> HivePromise<InsertResult> {
-        let param = ["collection": collection]
+        let param = ["collection": collection, "document": doc] as [String : Any]
         let url = VaultURL.sharedInstance.insertMany()
 
-        return VaultApi.requestWithInsert(url: url, parameters: param)
+        return VaultApi.requestWithInsert(url: url, parameters: param, headers: Header(authHelper).headers())
     }
 
     func countDocuments(_ collection: String, _ query: [String : Any], options: CountOptions) -> HivePromise<Int> {
