@@ -129,7 +129,9 @@ class DatabaseClient: DatabaseProtocol {
     }
 
     func findOne(_ collection: String, _ query: [String : Any], options: FindOptions) -> HivePromise<[String : Any]> {
-        return findOne(collection, query, options: options, handler: HiveCallback())
+        return authHelper.checkValid().then { _ -> HivePromise<[String: Any]> in
+            return self.findOne(collection, query, options: options, handler: HiveCallback())
+        }
     }
 
     func findOne(_ collection: String, _ query: [String : Any], options: FindOptions, handler: HiveCallback<[String : Any]>) -> HivePromise<[String : Any]> {
@@ -137,12 +139,12 @@ class DatabaseClient: DatabaseProtocol {
     }
 
     private func findOneImp(_ collection: String, _ query: [String: Any], _ options: FindOptions, _ handleBy: HiveCallback<[String: Any]>) -> HivePromise<[String: Any]> {
-        let param = ["collection": collection]
+        let param = ["collection": collection, "filter": query] as [String : Any]
         let url = VaultURL.sharedInstance.findOne()
 
         return HivePromise<[String: Any]> { resolver in
-            VaultApi.request(url: url, parameters: param).get { json in
-                resolver.fulfill(["TODO": "TODO"])
+            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).get { json in
+                resolver.fulfill(json.dictionaryValue)
             }.catch { error in
                 resolver.reject(error)
             }

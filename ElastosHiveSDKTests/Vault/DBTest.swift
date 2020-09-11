@@ -68,27 +68,45 @@ class DBTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
 
+    func testFindOne() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        let queryInfo = ["author": "john doe1"]
+
+        let findOptions = FindOptions()
+        database?.findOne("new", queryInfo, options: findOptions).done{ result in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ error in
+            lock.fulfill()
+            XCTFail()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+
     /*
          @Test
-         public void testInsertMany() {
+         public void testFindOne() {
              try {
-                 List<JsonNode> nodes = new ArrayList();
-                 ObjectNode docNode = JsonNodeFactory.instance.objectNode();
-                 docNode.put("author", "john doe1");
-                 docNode.put("title", "Eve for Dummies2");
-                 nodes.add(docNode);
+                 ObjectNode query = JsonNodeFactory.instance.objectNode();
+                 query.put("author", "john doe1");
 
-                 InsertOptions insertOptions = new InsertOptions();
-                 insertOptions.bypassDocumentValidation(false).ordered(true);
+                 ObjectMapper objectMapper = new ObjectMapper();
 
-                 database.insertMany("works", nodes, insertOptions, new Callback<InsertResult>() {
+                 FindOptions findOptions = new FindOptions();
+                 findOptions.skip(0)
+                         .allowPartialResults(false)
+                         .returnKey(false)
+                         .batchSize(0)
+                         .projection(objectMapper.readTree("{\"_id\": false}"));
+
+                 database.findOne("works", query, null, new Callback<JsonNode>() {
                      @Override
                      public void onError(HiveException e) {
                          fail();
                      }
 
                      @Override
-                     public void onSuccess(InsertResult result) {
+                     public void onSuccess(JsonNode result) {
                          assertNotNull(result);
                      }
                  }).get();
@@ -96,7 +114,6 @@ class DBTest: XCTestCase {
                  e.printStackTrace();
              }
          }
-
      */
 
     override func setUpWithError() throws {
