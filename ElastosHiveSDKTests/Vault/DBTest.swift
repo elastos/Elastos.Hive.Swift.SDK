@@ -83,9 +83,24 @@ class DBTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
 
+    func testFindMany() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        let queryInfo = ["author": "john doe1"]
+
+        let findOptions = FindOptions()
+        database?.findMany("new", queryInfo, options: findOptions).done{ result in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ error in
+            lock.fulfill()
+            XCTFail()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+
     /*
          @Test
-         public void testFindOne() {
+         public void testFindMany() {
              try {
                  ObjectNode query = JsonNodeFactory.instance.objectNode();
                  query.put("author", "john doe1");
@@ -99,21 +114,22 @@ class DBTest: XCTestCase {
                          .batchSize(0)
                          .projection(objectMapper.readTree("{\"_id\": false}"));
 
-                 database.findOne("works", query, null, new Callback<JsonNode>() {
+                 database.findMany("works", query, findOptions, new Callback<List<JsonNode>>() {
                      @Override
                      public void onError(HiveException e) {
-                         fail();
+
                      }
 
                      @Override
-                     public void onSuccess(JsonNode result) {
-                         assertNotNull(result);
+                     public void onSuccess(List<JsonNode> result) {
+
                      }
                  }).get();
              } catch (Exception e) {
                  e.printStackTrace();
              }
          }
+
      */
 
     override func setUpWithError() throws {

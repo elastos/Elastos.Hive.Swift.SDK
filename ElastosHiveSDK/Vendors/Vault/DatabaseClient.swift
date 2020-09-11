@@ -152,7 +152,9 @@ class DatabaseClient: DatabaseProtocol {
     }
 
     func findMany(_ collection: String, _ query: [String : Any], options: FindOptions) -> HivePromise<Array<[String : Any]>> {
-        return findMany(collection, query, options: options, handler: HiveCallback())
+        return authHelper.checkValid().then { _ -> HivePromise<Array<[String : Any]>> in
+            return self.findMany(collection, query, options: options, handler: HiveCallback())
+        }
     }
 
     func findMany(_ collection: String, _ query: [String : Any], options: FindOptions, handler: HiveCallback<Array<[String : Any]>>) -> HivePromise<Array<[String : Any]>> {
@@ -160,11 +162,11 @@ class DatabaseClient: DatabaseProtocol {
     }
 
     private func findManyImp(_ collection: String, _ query: [String: Any], _ options: FindOptions, _ handleBy: HiveCallback<Array<[String: Any]>>) -> HivePromise<Array<[String: Any]>> {
-        let param = ["collection": collection]
+        let param = ["collection": collection, "filter": query] as [String : Any]
         let url = VaultURL.sharedInstance.findMany()
 
         return HivePromise<Array<[String: Any]>> { resolver in
-            VaultApi.request(url: url, parameters: param).get { json in
+            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).get { json in
                 resolver.fulfill([["TODO": "TODO"]])
             }.catch { error in
                 resolver.reject(error)
@@ -255,5 +257,4 @@ class DatabaseClient: DatabaseProtocol {
             }
         }
     }
-
 }
