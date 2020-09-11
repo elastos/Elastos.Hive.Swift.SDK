@@ -112,38 +112,52 @@ class DBTest: XCTestCase {
         }
         self.wait(for: [lock], timeout: 1000.0)
     }
+
+
+    func testUpdateMany() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        let filterInfo = ["author": "john doe1"]
+        let update = ["author": "john doe2_1", "title": "Eve for Dummies2_1_1_2"]
+        let updateOptions = UpdateOptions()
+        database?.updateMany("new", filterInfo, update, options: updateOptions).done{ result in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ error in
+            lock.fulfill()
+            XCTFail()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+
     /*
+     @Test
+     public void testUpdateMany() {
+         try {
+             ObjectNode filter = JsonNodeFactory.instance.objectNode();
+             filter.put("author", "john doe1");
 
-         @Test
-         public void testUpdateOne() {
-             try {
-                 ObjectNode filter = JsonNodeFactory.instance.objectNode();
-                 filter.put("author", "john doe1");
+             ObjectNode update = JsonNodeFactory.instance.objectNode();
+             update.put("author", "john doe2");
+             update.put("title", "Eve for Dummies2_1");
 
-                 ObjectNode update = JsonNodeFactory.instance.objectNode();
-                 update.put("author", "john doe2");
-                 update.put("title", "Eve for Dummies2_1");
+             UpdateOptions updateOptions = new UpdateOptions();
+             updateOptions.upsert(true).bypassDocumentValidation(false);
 
-                 UpdateOptions updateOptions = new UpdateOptions();
-                 updateOptions.upsert(true).bypassDocumentValidation(false);
+             database.updateMany("works", filter, update, updateOptions, new Callback<UpdateResult>() {
+                 @Override
+                 public void onError(HiveException e) {
 
-                 database.updateOne("works", filter, update, updateOptions, new Callback<UpdateResult>() {
-                     @Override
-                     public void onError(HiveException e) {
-                         fail();
-                     }
+                 }
 
-                     @Override
-                     public void onSuccess(UpdateResult result) {
-                         assertNotNull(result);
-                         System.out.println("modifiedCount="+result.modifiedCount());
-                     }
-                 }).get();
-             } catch (Exception e) {
-                 e.printStackTrace();
-             }
+                 @Override
+                 public void onSuccess(UpdateResult result) {
+
+                 }
+             }).get();
+         } catch (Exception e) {
+             e.printStackTrace();
          }
-
+     }
      */
 
     override func setUpWithError() throws {
