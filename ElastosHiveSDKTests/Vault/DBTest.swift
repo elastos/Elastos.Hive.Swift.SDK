@@ -129,35 +129,47 @@ class DBTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
 
+    func testDeleteOne() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        let filterInfo = ["author": "john doe2"]
+        let deleteOptions = DeleteOptions()
+        database?.deleteOne("new", filterInfo, options: deleteOptions).done{ result in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ error in
+            lock.fulfill()
+            XCTFail()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+
     /*
      @Test
-     public void testUpdateMany() {
+     public void testDeleteOne() {
          try {
+
              ObjectNode filter = JsonNodeFactory.instance.objectNode();
-             filter.put("author", "john doe1");
+             filter.put("author", "john doe2");
 
-             ObjectNode update = JsonNodeFactory.instance.objectNode();
-             update.put("author", "john doe2");
-             update.put("title", "Eve for Dummies2_1");
+             DeleteOptions deleteOptions = new DeleteOptions();
 
-             UpdateOptions updateOptions = new UpdateOptions();
-             updateOptions.upsert(true).bypassDocumentValidation(false);
-
-             database.updateMany("works", filter, update, updateOptions, new Callback<UpdateResult>() {
+             database.deleteOne("works", filter, null, new Callback<DeleteResult>() {
                  @Override
                  public void onError(HiveException e) {
-
+                     fail();
                  }
 
                  @Override
-                 public void onSuccess(UpdateResult result) {
-
+                 public void onSuccess(DeleteResult result) {
+                     assertNotNull(result);
+                     System.out.println("deletedCount="+result.deletedCount());
                  }
              }).get();
          } catch (Exception e) {
              e.printStackTrace();
          }
      }
+
      */
 
     override func setUpWithError() throws {

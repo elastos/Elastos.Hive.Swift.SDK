@@ -221,7 +221,9 @@ class DatabaseClient: DatabaseProtocol {
     }
 
     func deleteOne(_ collection: String, _ filter: [String : Any], options: DeleteOptions) -> HivePromise<DeleteResult> {
-        return deleteOne(collection, filter, options: options, handler: HiveCallback())
+        return authHelper.checkValid().then { _ -> HivePromise<DeleteResult> in
+            return self.deleteOne(collection, filter, options: options, handler: HiveCallback())
+        }
     }
 
     func deleteOne(_ collection: String, _ filter: [String : Any], options: DeleteOptions, handler: HiveCallback<DeleteResult>) -> HivePromise<DeleteResult> {
@@ -229,11 +231,11 @@ class DatabaseClient: DatabaseProtocol {
     }
 
     private func deleteOneImp(_ collection: String, _ filter: [String: Any], _ options: DeleteOptions, _ handleBy: HiveCallback<DeleteResult>) -> HivePromise<DeleteResult>{
-        let param = ["collection": collection]
+        let param = ["collection": collection, "filter": filter] as [String : Any]
         let url = VaultURL.sharedInstance.deleteOne()
 
         return HivePromise<DeleteResult> { resolver in
-            VaultApi.request(url: url, parameters: param).get { json in
+            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).get { json in
                 resolver.fulfill(DeleteResult())
             }.catch { error in
                 resolver.reject(error)
