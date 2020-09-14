@@ -22,20 +22,32 @@
 
 import Foundation
 
-public class Condition: NSObject {
-    private var type: String
-    private var name: String?
+public class AggregatedExecutable: Executable {
+    private let TYPE = "aggregated"
+    private var executables: [Executable] = []
 
-    init(_ type: String, _ name: String) {
-        self.type = type
-        self.name = name
+    public init(_ name: String, _ executables: [Executable]) {
+        self.executables = executables
+        super.init(TYPE, name)
     }
 
-    init(_ type: String) {
-        self.type = type
+    public init(_ name: String) {
+        super.init(TYPE, name)
     }
 
-    // TODO: serialize
+    public func append(_ executable: Executable) throws -> AggregatedExecutable {
+        if executable.isMember(of: AggregatedExecutable.self) {
+            let ae: AggregatedExecutable = executable as! AggregatedExecutable
+            executables.append(ae)
+        }
+        else if executable.isMember(of: RawExecutable.self) {
+            throw HiveError.unsupportedOperation(des: "Can not handle the RawExecutable")
+        }
+        else {
+            executables.append(executable)
+        }
+        return self
+    }
+
+    //TODO: override GETBODY
 }
-
-

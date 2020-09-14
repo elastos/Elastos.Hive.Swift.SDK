@@ -23,5 +23,17 @@
 import Foundation
 
 public class Executable: NSObject {
+    private var type: String
+    private var name: String?
+    
+    init(_ type: String, _ name: String) {
+        self.type = type
+        self.name = name
+    }
 
+    init(_ type: String) {
+        self.type = type
+    }
+    // TODO: serialize
 }
+

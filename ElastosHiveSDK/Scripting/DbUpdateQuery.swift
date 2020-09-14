@@ -22,20 +22,26 @@
 
 import Foundation
 
-public class Condition: NSObject {
-    private var type: String
-    private var name: String?
+public class DbUpdateQuery: Executable {
+    private let TYPE = "update"
+    private var query: UpdateQuery
 
-    init(_ type: String, _ name: String) {
-        self.type = type
-        self.name = name
+    public init(_ name: String, _ collection: String, _ filter: [String: Any], _ update: [String: Any]) {
+        self.query = UpdateQuery (collection, filter, update)
+        super.init(TYPE, name)
     }
 
-    init(_ type: String) {
-        self.type = type
-    }
-
-    // TODO: serialize
 }
 
+public class UpdateQuery  {
+    private var collection: String
+    private var filter: [String: Any]
+    private var update: [String: Any]
 
+    public init(_ collection: String, _ filter: [String: Any], _ update: [String: Any]) {
+        self.collection = collection
+        self.update = update
+        self.filter = filter
+    }
+    // TODO: 序列化
+}

@@ -30,6 +30,7 @@ public enum HiveError: Error {
     case no_rpc_node_available(des: String?)
     case netWork(des: Error?)
     case failues(des: Dictionary<String, String>?)
+    case unsupportedOperation(des: String?)
 }
 
 extension HiveError {
@@ -54,6 +55,8 @@ extension HiveError {
                 re = key + "\n" + value + "\n"
             }
             return re
+        case .unsupportedOperation(let des):
+            return des ?? ""
         }
     }
 }

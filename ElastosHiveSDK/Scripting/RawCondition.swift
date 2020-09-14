@@ -22,20 +22,14 @@
 
 import Foundation
 
-public class Condition: NSObject {
-    private var type: String
-    private var name: String?
+public class RawCondition: Condition {
+    private let TYPE = "raw"
+    private var condition: String
 
-    init(_ type: String, _ name: String) {
-        self.type = type
-        self.name = name
-    }
-
-    init(_ type: String) {
-        self.type = type
+    public init(_ condition: String) {
+        self.condition = condition
+        super.init(TYPE)
     }
 
     // TODO: serialize
 }
-
-

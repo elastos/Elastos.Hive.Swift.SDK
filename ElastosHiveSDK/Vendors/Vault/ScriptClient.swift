@@ -36,7 +36,7 @@ class ScriptClient: ScriptingProtocol {
     }
 
     private func registerConditionImp(_ name: String, _ condition: Condition) -> HivePromise<Bool> {
-        let param = ["conditionName": name, "condition": condition] as [String : Any]
+        let param = ["name": name, "condition": condition] as [String : Any]
         let url = VaultURL.sharedInstance.registerCondition()
 
         return VaultApi.requestWithBool(url: url, parameters: param)
@@ -61,6 +61,37 @@ class ScriptClient: ScriptingProtocol {
 
         return VaultApi.requestWithBool(url: url, parameters: param)
     }
+    /*
+    private CompletableFuture<Boolean> registerScriptImp(String name, Condition accessCondition, Executable executable) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+
+                Map map = new HashMap<>();
+                map.put("name", name);
+                if (accessCondition != null)
+                    map.put("condition", accessCondition);
+                map.put("executable", executable);
+
+                String json = JsonUtil.getJsonFromObject(map);
+
+                Response<BaseResponse> response = ConnectionManager.getHiveVaultApi()
+                        .registerScript(RequestBody.create(MediaType.parse("Content-Type, application/json"), json))
+                        .execute();
+                int responseCode = checkResponseCode(response);
+                if (responseCode == 404) {
+                    throw new HiveException(HiveException.ITEM_NOT_FOUND);
+                } else if (responseCode != 0) {
+                    throw new HiveException(HiveException.ERROR);
+                }
+                BaseResponse baseResponse = response.body();
+                return null!=baseResponse && baseResponse.get_error()==null;
+            } catch (Exception e) {
+                HiveException exception = new HiveException(e.getLocalizedMessage());
+                throw new CompletionException(exception);
+            }
+        });
+    }
+    */
 
     func call(_ scriptName: String) -> HivePromise<FileHandle> {
         return HivePromise<FileHandle>(error: "TODO" as! Error)

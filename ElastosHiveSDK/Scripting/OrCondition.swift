@@ -22,20 +22,15 @@
 
 import Foundation
 
-public class Condition: NSObject {
-    private var type: String
-    private var name: String?
+public class OrCondition: AggregatedCondition {
+    private let TYPE = "or"
 
-    init(_ type: String, _ name: String) {
-        self.type = type
-        self.name = name
+    public init(_ name: String, _ conditions: [Condition]) {
+        super.init(TYPE, name, conditions)
     }
 
-    init(_ type: String) {
-        self.type = type
+    public init(_ name: String) {
+        super.init(TYPE, name)
     }
-
-    // TODO: serialize
 }
-
 

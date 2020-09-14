@@ -22,20 +22,13 @@
 
 import Foundation
 
-public class Condition: NSObject {
-    private var type: String
-    private var name: String?
+public class DbFindQuery: Executable {
+    private let TYPE = "find"
+    private var query: Query
 
-    init(_ type: String, _ name: String) {
-        self.type = type
-        self.name = name
+    public init(_ name: String, _ collection: String, _ filter: [String: Any]) {
+        self.query = Query(collection, filter)
+        super.init(TYPE, name)
     }
-
-    init(_ type: String) {
-        self.type = type
-    }
-
-    // TODO: serialize
 }
-
 

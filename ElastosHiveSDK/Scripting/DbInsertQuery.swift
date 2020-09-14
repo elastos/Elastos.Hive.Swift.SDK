@@ -22,20 +22,25 @@
 
 import Foundation
 
-public class Condition: NSObject {
-    private var type: String
-    private var name: String?
+public class DbInsertQuery: Executable {
+    private let TYPE = "insert"
+    private var query: InsertQuery
 
-    init(_ type: String, _ name: String) {
-        self.type = type
-        self.name = name
+    public init(_ name: String, _ collection: String, _ doc: [String: Any]) {
+        self.query = InsertQuery(collection, doc)
+        super.init(TYPE, name)
     }
 
-    init(_ type: String) {
-        self.type = type
-    }
-
-    // TODO: serialize
 }
 
+public class InsertQuery {
+    private var collection: String
+    private var doc: [String: Any]
+
+    public init(_ collection: String, _ doc: [String: Any]) {
+        self.collection = collection
+        self.doc = doc
+    }
+    // TODO: 序列化
+}
 

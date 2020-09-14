@@ -22,20 +22,23 @@
 
 import Foundation
 
-public class Condition: NSObject {
-    private var type: String
-    private var name: String?
+public class AggregatedCondition: Condition {
+    private var conditions: [Condition] = []
 
-    init(_ type: String, _ name: String) {
-        self.type = type
-        self.name = name
+    public init(_ type: String, _ name: String, _ conditions: [Condition]) {
+        self.conditions = conditions
+        super.init(type, name)
+
     }
 
-    init(_ type: String) {
-        self.type = type
+    public override init(_ type: String, _ name: String) {
+        super.init(type, name)
     }
 
-    // TODO: serialize
+    public func append(_ condition: Condition) -> AggregatedCondition {
+        conditions.append(condition)
+        return self
+    }
+
+    //TODO: getbody
 }
-
-
