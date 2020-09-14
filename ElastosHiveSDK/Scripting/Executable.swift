@@ -34,6 +34,9 @@ public class Executable: NSObject {
     init(_ type: String) {
         self.type = type
     }
-    // TODO: serialize
+    
+    public func serialize()throws -> [String: Any] {
+        return [: ]
+    }
 }
 

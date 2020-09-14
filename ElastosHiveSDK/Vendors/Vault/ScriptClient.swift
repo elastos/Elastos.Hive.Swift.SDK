@@ -51,15 +51,19 @@ class ScriptClient: ScriptingProtocol {
     }
 
     private func registerScriptImp(_ name: String, _ accessCondition: Condition?, _ executable: Executable) -> HivePromise<Bool> {
-        var param = ["scriptName": name] as [String : Any]
-        if let _ = accessCondition {
-            param["accessCondition"] = accessCondition!
-        }
-        param["executable"] = executable
-
+//        var param = ["name": name] as [String : Any]
+//        if let _ = accessCondition {
+//            param["accessCondition"] = accessCondition!
+//        }
+//        param["executable"] = try! executable.serialize()
+//        let param = ["name": "script_no_condition",
+//                     "executable": ["type": "find", "name": "get_groups", "body": ["collection": "test_group", "filter": ["friends": "$caller_did"], "options": ["projection": ["_id": false, "name": true]]]]] as [String : Any]
+        let param = ["name": "script_no_condition",
+                     "executable": ["type": "find", "name": "get_groups", "body": ["collection": "test_group", "filter": ["friends": "$caller_did"]]]] as [String : Any]
+        print(param)
         let url = VaultURL.sharedInstance.registerScript()
 
-        return VaultApi.requestWithBool(url: url, parameters: param)
+        return VaultApi.requestWithResponseData(url: url, parameters: param, headers: Header(authHelper).headers())
     }
     /*
     private CompletableFuture<Boolean> registerScriptImp(String name, Condition accessCondition, Executable executable) {

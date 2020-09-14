@@ -26,10 +26,17 @@ public class RawExecutable: Executable {
     private let TYPE = "raw"
     private var executable: String
 
-    public init(_ executable: String) {
+    public override init(_ executable: String) {
         self.executable = executable
         super.init(TYPE)
     }
 
-    //TODO: serialize serializeWithType
+    public override func serialize()throws -> [String: Any] {
+        let data = executable.data(using: String.Encoding.utf8)
+        let re = try JSONSerialization.jsonObject(with: data!,options: .mutableContainers) as? [String : Any]
+        guard re != nil else {
+            throw HiveError.IllegalArgument(des: "param is nil")
+        }
+        return re!
+    }
 }

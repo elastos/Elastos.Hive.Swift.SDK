@@ -146,6 +146,8 @@
 		118F2DA3250F332700447A0A /* QueryHasResultsCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2DA1250F332700447A0A /* QueryHasResultsCondition.swift */; };
 		118F2DA5250F33AB00447A0A /* RawCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2DA4250F33AB00447A0A /* RawCondition.swift */; };
 		118F2DA6250F33AB00447A0A /* RawCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2DA4250F33AB00447A0A /* RawCondition.swift */; };
+		118F2DAA250F61FB00447A0A /* JsonGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2DA9250F61FB00447A0A /* JsonGenerator.swift */; };
+		118F2DAB250F61FB00447A0A /* JsonGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2DA9250F61FB00447A0A /* JsonGenerator.swift */; };
 		119D4B67244851A500FE559F /* Pods_TestHost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F09DA7DC9D47111E630261C /* Pods_TestHost.framework */; };
 		11D26F4022CA3B3300E4099A /* ElastosHiveSDK_macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 11D26F3E22CA3B3300E4099A /* ElastosHiveSDK_macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		11D26F4422CA3B4B00E4099A /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FA22C4C33400F85419 /* Dictionary.swift */; };
@@ -285,6 +287,7 @@
 		118F2D9E250F32B100447A0A /* OrCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrCondition.swift; sourceTree = "<group>"; };
 		118F2DA1250F332700447A0A /* QueryHasResultsCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryHasResultsCondition.swift; sourceTree = "<group>"; };
 		118F2DA4250F33AB00447A0A /* RawCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawCondition.swift; sourceTree = "<group>"; };
+		118F2DA9250F61FB00447A0A /* JsonGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JsonGenerator.swift; sourceTree = "<group>"; };
 		11D26F3C22CA3B3300E4099A /* ElastosHiveSDK_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ElastosHiveSDK_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		11D26F3E22CA3B3300E4099A /* ElastosHiveSDK_macOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ElastosHiveSDK_macOS.h; sourceTree = "<group>"; };
 		11E573FA22C4C33400F85419 /* Dictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
@@ -425,6 +428,7 @@
 		111D47F224F7A2EB00B7462B /* Scripting */ = {
 			isa = PBXGroup;
 			children = (
+				118F2DA9250F61FB00447A0A /* JsonGenerator.swift */,
 				111D47F324F7A30300B7462B /* Executable.swift */,
 				111D47F924F7A79800B7462B /* Condition.swift */,
 				118F2D86250F23EB00447A0A /* AggregatedCondition.swift */,
@@ -1040,6 +1044,7 @@
 				11D26F4422CA3B4B00E4099A /* Dictionary.swift in Sources */,
 				A3E13E85240E449A002569B1 /* FilesProtocol.swift in Sources */,
 				111D47DB24F7908D00B7462B /* FindOptions.swift in Sources */,
+				118F2DAB250F61FB00447A0A /* JsonGenerator.swift in Sources */,
 				1170FB152502019C0049E81D /* Vault.swift in Sources */,
 				111D478324EE4EF100B7462B /* VaultClientOptionsBuilder.swift in Sources */,
 				A3E13E87240E449A002569B1 /* KeyValuesProtocol.swift in Sources */,
@@ -1111,6 +1116,7 @@
 				A3D9D41323C9671C003B602E /* FilesProtocol.swift in Sources */,
 				A37F893D23C72B2600F6C11E /* HiveClientOptions.swift in Sources */,
 				111D47C424F78EDF00B7462B /* ScriptingProtocol.swift in Sources */,
+				118F2DAA250F61FB00447A0A /* JsonGenerator.swift in Sources */,
 				1170FB142502019C0049E81D /* Vault.swift in Sources */,
 				111D47F424F7A30300B7462B /* Executable.swift in Sources */,
 				111D477F24EE4E2600B7462B /* VaultClientOptions.swift in Sources */,

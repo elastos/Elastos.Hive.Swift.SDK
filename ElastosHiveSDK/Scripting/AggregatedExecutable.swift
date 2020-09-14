@@ -31,7 +31,7 @@ public class AggregatedExecutable: Executable {
         super.init(TYPE, name)
     }
 
-    public init(_ name: String) {
+    public override init(_ name: String) {
         super.init(TYPE, name)
     }
 

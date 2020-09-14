@@ -26,7 +26,7 @@ public class RawCondition: Condition {
     private let TYPE = "raw"
     private var condition: String
 
-    public init(_ condition: String) {
+    public override init(_ condition: String) {
         self.condition = condition
         super.init(TYPE)
     }

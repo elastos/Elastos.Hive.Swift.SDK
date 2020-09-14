@@ -167,7 +167,7 @@ class DBTest: XCTestCase {
             _ = options.setAuthenticator(VaultAuthenticator())
             options.setAuthenticationDIDDocument(doc)
                 .setDidResolverUrl("http://api.elastos.io:21606")
-            _ = options.setLocalDataPath(self.localDataPath)
+            _ = options.setLocalDataPath(localDataPath)
             HiveClientHandle.setVaultProvider("did:elastos:inpxc8Tb1hKZGrqoYsJuH6VNnXpk3gi7UM", "http://localhost:5000/")
             self.client = try HiveClientHandle.createInstance(withOptions: options)
             let lock = XCTestExpectation(description: "wait for test.")
