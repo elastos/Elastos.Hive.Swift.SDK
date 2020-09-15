@@ -128,7 +128,15 @@ class FileClient: FilesProtocol {
     }
 
     func move(_ src: String, _ dest: String, handler: HiveCallback<Bool>) -> HivePromise<Bool> {
-        return HivePromise<Bool>(error: "TODO" as! Error)
+        return authHelper.checkValid().then { _ -> HivePromise<Bool> in
+            return self.moveImp(src, dest, handler)
+        }
+    }
+
+    private func moveImp(_ src: String, _ dest: String, _ handler: HiveCallback<Bool>) -> HivePromise<Bool> {
+        let url = VaultURL.sharedInstance.move()
+        let param = ["src_path": src, "dst_path": dest]
+        return VaultApi.requestWithBool(url: url, parameters: param, headers: Header(authHelper).headers())
     }
 
     func copy(_ src: String, _ dest: String) -> HivePromise<Bool> {
@@ -136,7 +144,15 @@ class FileClient: FilesProtocol {
     }
 
     func copy(_ src: String, _ dest: String, handler: HiveCallback<Bool>) -> HivePromise<Bool> {
-        return HivePromise<Bool>(error: "TODO" as! Error)
+        return authHelper.checkValid().then { _ -> HivePromise<Bool> in
+            return self.copyImp(src, dest, handler)
+        }
+    }
+
+    private func copyImp(_ src: String, _ dest: String, _ handler: HiveCallback<Bool>) -> HivePromise<Bool> {
+        let url = VaultURL.sharedInstance.move()
+        let param = ["src_path": src, "dst_path": dest]
+        return VaultApi.requestWithBool(url: url, parameters: param, headers: Header(authHelper).headers())
     }
 
     func hash(_ path: String) -> HivePromise<String> {

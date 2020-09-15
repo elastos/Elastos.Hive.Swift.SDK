@@ -117,6 +117,14 @@ class VaultURL {
         return baseUrl + "/api/v1/files/delete"
     }
 
+    func move() -> String {
+        return baseUrl + "/api/v1/files/move"
+    }
+
+    func copy() -> String {
+        return baseUrl + "/api/v1/files/copy"
+    }
+    
     func registerCondition() -> String {
         return baseUrl + "/scripting/set_subcondition"
     }
