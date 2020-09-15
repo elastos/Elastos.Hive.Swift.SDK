@@ -41,6 +41,10 @@ class VaultURL {
         return "https://oauth2.googleapis.com/token"
     }
 
+    func checkToken() -> String {
+        return baseUrl + "/api/v1/did/check_token"
+    }
+
     func signIn() -> String {
         return baseUrl + "/api/v1/did/sign_in"
     }
@@ -99,6 +103,18 @@ class VaultURL {
 
     func deleteMany() -> String {
         return baseUrl + "/api/v1/db/delete_many"
+    }
+
+    func upload(_ path: String) -> String {
+        return baseUrl + "/api/v1/files/upload/" + path
+    }
+
+    func download(_ path: String) -> String {//dir.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+        return baseUrl + "/api/v1/files/download?path=" + path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+    }
+
+    func deleteFileOrFolder() -> String {
+        return baseUrl + "/api/v1/files/delete"
     }
 
     func registerCondition() -> String {

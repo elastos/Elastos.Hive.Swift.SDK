@@ -148,6 +148,7 @@
 		118F2DA6250F33AB00447A0A /* RawCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2DA4250F33AB00447A0A /* RawCondition.swift */; };
 		118F2DAA250F61FB00447A0A /* JsonGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2DA9250F61FB00447A0A /* JsonGenerator.swift */; };
 		118F2DAB250F61FB00447A0A /* JsonGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2DA9250F61FB00447A0A /* JsonGenerator.swift */; };
+		118F2DAD25105C3700447A0A /* FileTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2DAC25105C3700447A0A /* FileTest.swift */; };
 		119D4B67244851A500FE559F /* Pods_TestHost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F09DA7DC9D47111E630261C /* Pods_TestHost.framework */; };
 		11D26F4022CA3B3300E4099A /* ElastosHiveSDK_macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 11D26F3E22CA3B3300E4099A /* ElastosHiveSDK_macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		11D26F4422CA3B4B00E4099A /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FA22C4C33400F85419 /* Dictionary.swift */; };
@@ -288,6 +289,7 @@
 		118F2DA1250F332700447A0A /* QueryHasResultsCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryHasResultsCondition.swift; sourceTree = "<group>"; };
 		118F2DA4250F33AB00447A0A /* RawCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawCondition.swift; sourceTree = "<group>"; };
 		118F2DA9250F61FB00447A0A /* JsonGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JsonGenerator.swift; sourceTree = "<group>"; };
+		118F2DAC25105C3700447A0A /* FileTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTest.swift; sourceTree = "<group>"; };
 		11D26F3C22CA3B3300E4099A /* ElastosHiveSDK_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ElastosHiveSDK_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		11D26F3E22CA3B3300E4099A /* ElastosHiveSDK_macOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ElastosHiveSDK_macOS.h; sourceTree = "<group>"; };
 		11E573FA22C4C33400F85419 /* Dictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
@@ -389,6 +391,7 @@
 				111D477C24EE4B3B00B7462B /* VaultClientConnectTest.swift */,
 				1170FB19250507C70049E81D /* DBTest.swift */,
 				118F2D82250F1A7200447A0A /* ScriptTest.swift */,
+				118F2DAC25105C3700447A0A /* FileTest.swift */,
 				118F2D84250F1ABA00447A0A /* Constance.swift */,
 			);
 			path = Vault;
@@ -1000,6 +1003,7 @@
 				A3D9D43823C9A024003B602E /* IPFSClientTest.swift in Sources */,
 				11FD703422B89F5100B346AC /* AuthWebViewController.swift in Sources */,
 				A3D9D43923C9A024003B602E /* IPFSClientConnectTest.swift in Sources */,
+				118F2DAD25105C3700447A0A /* FileTest.swift in Sources */,
 				118F2D85250F1ABA00447A0A /* Constance.swift in Sources */,
 				A3D9D44323C9BC29003B602E /* IPFSClientProtocol.swift in Sources */,
 				118F2D83250F1A7200447A0A /* ScriptTest.swift in Sources */,

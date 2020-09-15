@@ -23,11 +23,11 @@
 import Foundation
 
 public protocol FilesProtocol {
-    func upload(_ path: String) -> HivePromise<FileHandle>
-    func upload(_ path: String, handler: HiveCallback<FileHandle>) -> HivePromise<FileHandle>
+    func upload(_ path: String) -> HivePromise<InputStream>
+    func upload(_ path: String, handler: HiveCallback<InputStream>) -> HivePromise<InputStream>
 
-    func download(_ path: String) -> HivePromise<FileHandle>
-    func download(_ path: String, handler: HiveCallback<FileHandle>) -> HivePromise<FileHandle>
+    func download(_ path: String) -> HivePromise<OutputStream>
+    func download(_ path: String, handler: HiveCallback<OutputStream>) -> HivePromise<OutputStream>
 
     func delete(_ path: String) -> HivePromise<Bool>
     func delete(_ path: String, handler: HiveCallback<Bool>) -> HivePromise<Bool>

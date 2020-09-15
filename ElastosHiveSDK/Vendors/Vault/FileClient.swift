@@ -21,51 +21,62 @@
 */
 
 import Foundation
-
+private let remoteDataFromInputStreamContent = "this is test for DataFromInputStream".data(using: .utf8)
 class FileClient: FilesProtocol {
+
     private var authHelper: VaultAuthHelper
 
     public init(_ authHelper: VaultAuthHelper) {
         self.authHelper = authHelper
     }
 
-    func upload(_ path: String) -> HivePromise<FileHandle> {
+    func upload(_ path: String) -> HivePromise<InputStream> {
         return upload(path, handler: HiveCallback())
     }
 
-    func upload(_ path: String, handler: HiveCallback<FileHandle>) -> HivePromise<FileHandle> {
-        return HivePromise<FileHandle>(error: "TODO" as! Error)
+    func upload(_ path: String, handler: HiveCallback<InputStream>) -> HivePromise<InputStream> {
+        return authHelper.checkValid().then { _ -> HivePromise<InputStream> in
+            return self.uploadImp(path, callback: handler)
+        }
     }
 
-//    private func uploadImp(_ path: String, callback: HiveCallback<FileHandle>) -> HivePromise<FileHandle> {
-//
-//
-//    }
+    private func uploadImp(_ path: String, callback: HiveCallback<InputStream>) -> HivePromise<InputStream> {
+        return HivePromise<InputStream> { resolver in
+//            var inStream = InputStream()
+             let inStream = InputStream.init(data: remoteDataFromInputStreamContent!)
+//            resolver.fulfill(inStream)
+            let url = VaultURL.sharedInstance.upload(path)
+            Alamofire.upload(inStream, to: url, method: .post, headers: Header(authHelper).headers()).responseData { responseData in
+                let re = String(data: responseData.data!, encoding: .utf8)
+                print(re)
+                print(re)
+            }
+        }
+    }
     /*
-     private CompletableFuture<Writer> uploadImp(String path, Callback<Writer> callback) {
+     private <T> CompletableFuture<T> uploadImp(String path, Class<T> resultType, Callback<T> callback) {
 
          return CompletableFuture.supplyAsync(() -> {
+
+             HttpURLConnection httpURLConnection = null;
              try {
+                 httpURLConnection = ConnectionManager.openURLConnection(path);
+                 OutputStream rawOutputStream = httpURLConnection.getOutputStream();
 
-                 URL reslUrl = new URL(path);
-                 HttpURLConnection conn = (HttpURLConnection) reslUrl.openConnection();
-                 conn.setDoOutput(true);
-                 conn.setDoInput(true);
-                 conn.setUseCaches(false);
-                 conn.setRequestMethod("POST");
-                 conn.setRequestProperty("Transfer-Encoding", "chunked");
-                 conn.setRequestProperty("Connection", "Keep-Alive");
-                 conn.setRequestProperty("Charsert", "UTF-8");
-                 conn.setConnectTimeout(5000);
-                 conn.setReadTimeout(5000);
-                 conn.setChunkedStreamingMode(20 * 1024); //指定流的大小，当内容达到这个值的时候就把流输出
+                 if(null == rawOutputStream) return null;
 
-                 OutputStream outputStream = conn.getOutputStream();
-                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
+                 UploadOutputStream outputStream = new UploadOutputStream(httpURLConnection, rawOutputStream);
 
-                 return outputStreamWriter;
-
+                 if(resultType.isAssignableFrom(OutputStream.class)) {
+                     callback.onSuccess((T) outputStream);
+                     return (T) outputStream;
+                 } else {
+                     OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
+                     callback.onSuccess((T) outputStreamWriter);
+                     return (T) outputStreamWriter;
+                 }
              } catch (Exception e) {
+                 ResponseHelper.readConnection(httpURLConnection);
                  HiveException exception = new HiveException(e.getLocalizedMessage());
                  callback.onError(exception);
                  throw new CompletionException(exception);
@@ -73,12 +84,27 @@ class FileClient: FilesProtocol {
          });
      }
      */
-    func download(_ path: String) -> HivePromise<FileHandle> {
+    func download(_ path: String) -> HivePromise<OutputStream> {
         return download(path, handler: HiveCallback())
     }
 
-    func download(_ path: String, handler: HiveCallback<FileHandle>) -> HivePromise<FileHandle> {
-        return HivePromise<FileHandle>(error: "TODO" as! Error)
+    func download(_ path: String, handler: HiveCallback<OutputStream>) -> HivePromise<OutputStream> {
+        return authHelper.checkValid().then { _ -> HivePromise<OutputStream> in
+            return self.downloadImp(path, handler: handler)
+        }
+    }
+
+    private func downloadImp<T>(_ remoteFile: String, handler: HiveCallback<T>) -> HivePromise<T> {
+        return HivePromise<T> { resolver in
+            //            resolver.fulfill(inStream)
+            let url = VaultURL.sharedInstance.download(remoteFile)
+            Alamofire.request(url, method: .get, headers: Header(authHelper).headers())
+                .responseData { data_re in
+                    let re = String(data: data_re.data!, encoding: .utf8)
+                    print(re)
+                    print(re)
+            }
+        }
     }
 
     func delete(_ path: String) -> HivePromise<Bool> {
@@ -86,7 +112,15 @@ class FileClient: FilesProtocol {
     }
 
     func delete(_ path: String, handler: HiveCallback<Bool>) -> HivePromise<Bool> {
-        return HivePromise<Bool>(error: "TODO" as! Error)
+        return authHelper.checkValid().then { _ -> HivePromise<Bool> in
+            return self.deleteImp(path, handler)
+        }
+    }
+
+    private func deleteImp(_ remoteFile: String, _ handler: HiveCallback<Bool>) -> HivePromise<Bool> {
+        let param = ["path": remoteFile]
+        let url = VaultURL.sharedInstance.deleteFileOrFolder()
+        return VaultApi.requestWithBool(url: url, parameters: param, headers: Header(authHelper).headers())
     }
 
     func move(_ src: String, _ dest: String) -> HivePromise<Bool> {

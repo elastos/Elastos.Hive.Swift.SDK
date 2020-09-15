@@ -43,6 +43,7 @@ class ScriptTest: XCTestCase {
                 lock.fulfill()
             }
             self.wait(for: [lock], timeout: 1000.0)
+
         } catch {
             XCTFail()
         }
