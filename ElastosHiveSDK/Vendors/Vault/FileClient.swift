@@ -43,14 +43,38 @@ class FileClient: FilesProtocol {
     private func uploadImp(_ path: String, callback: HiveCallback<InputStream>) -> HivePromise<InputStream> {
         return HivePromise<InputStream> { resolver in
 //            var inStream = InputStream()
-             let inStream = InputStream.init(data: remoteDataFromInputStreamContent!)
-//            resolver.fulfill(inStream)
-            let url = VaultURL.sharedInstance.upload(path)
-            Alamofire.upload(inStream, to: url, method: .post, headers: Header(authHelper).headers()).responseData { responseData in
-                let re = String(data: responseData.data!, encoding: .utf8)
-                print(re)
-                print(re)
+
+            var data = Data()
+
+            let inStream = InputStream.init(fileAtPath: "/Users/liaihong/Documents/Git/Elastos.NET.Hive.Swift.SDK_1/ElastosHiveSDKTests/Resources/test.txt")
+
+            inStream!.open()
+            let bufferSize = 1024
+            let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: bufferSize)
+
+            while inStream!.hasBytesAvailable {
+                let read = inStream!.read(buffer, maxLength: bufferSize)
+                if read < 0 {
+//                    throw inStream?.streamError!
+                } else if read == 0 {
+                    //EOF
+                    break
+                }
+                data.append(buffer, count: read)
             }
+
+            print(String(data: data, encoding: String.Encoding.utf8) as Any)
+
+//            let outStream = OutputStream.init(url: <#T##URL#>, append: <#T##Bool#>)
+
+            let outputStream = OutputStream(toFileAtPath: path, append: false)
+//            resolver.fulfill(inStream)
+//            let url = VaultURL.sharedInstance.upload(path)
+//            Alamofire.upload(inStream, to: url, method: .post, headers: Header(authHelper).headers()).responseData { responseData in
+//                let re = String(data: responseData.data!, encoding: .utf8)
+//                print(re)
+//                print(re)
+//            }
         }
     }
     /*
@@ -160,7 +184,15 @@ class FileClient: FilesProtocol {
     }
 
     func hash(_ path: String, handler: HiveCallback<String>) -> HivePromise<String> {
-        return HivePromise<String>(error: "TODO" as! Error)
+        return authHelper.checkValid().then { _ -> HivePromise<String> in
+            return self.hashImp(path, handler)
+        }
+    }
+
+    private func hashImp(_ path: String, _ handler: HiveCallback<String>) -> HivePromise<String> {
+        return HivePromise<String> { resolver in
+
+        }
     }
 
     func list(_ path: String) -> HivePromise<Array<FileInfo>> {
@@ -168,7 +200,15 @@ class FileClient: FilesProtocol {
     }
 
     func list(_ path: String, handler: HiveCallback<Array<FileInfo>>) -> HivePromise<Array<FileInfo>> {
-        return HivePromise<Array<FileInfo>>(error: "TODO" as! Error)
+        return authHelper.checkValid().then { _ -> HivePromise<Array<FileInfo>> in
+            return self.listImp(path, handler)
+        }
+    }
+
+    private func listImp(_ path: String, _ handler: HiveCallback<Array<FileInfo>>) -> HivePromise<Array<FileInfo>> {
+        return HivePromise<Array<FileInfo>> { _ in
+
+        }
     }
 
     func stat(_ path: String) -> HivePromise<Array<FileInfo>> {
