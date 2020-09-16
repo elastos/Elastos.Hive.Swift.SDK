@@ -44,6 +44,6 @@ public protocol FilesProtocol {
     func list(_ path: String) -> HivePromise<Array<FileInfo>>
     func list(_ path: String, handler: HiveCallback<Array<FileInfo>>) -> HivePromise<Array<FileInfo>>
 
-    func stat(_ path: String) -> HivePromise<Array<FileInfo>>
-    func stat(_ path: String, handler: HiveCallback<Array<FileInfo>>) -> HivePromise<Array<FileInfo>>
+    func stat(_ path: String) -> HivePromise<FileInfo>
+    func stat(_ path: String, handler: HiveCallback<FileInfo>) -> HivePromise<FileInfo>
 }

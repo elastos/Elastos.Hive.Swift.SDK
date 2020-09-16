@@ -134,7 +134,7 @@ class VaultURL {
     }
 
     func stat(_ path: String) -> String {
-        return baseUrl + "api/v1/files/properties?path=" + path
+        return baseUrl + "/api/v1/files/properties?path=" + path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
     }
     
     func registerCondition() -> String {

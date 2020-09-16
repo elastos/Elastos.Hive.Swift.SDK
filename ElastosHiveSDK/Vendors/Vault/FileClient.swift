@@ -231,13 +231,29 @@ class FileClient: FilesProtocol {
         }
     }
 
-    func stat(_ path: String) -> HivePromise<Array<FileInfo>> {
+    func stat(_ path: String) -> HivePromise<FileInfo> {
         return stat(path, handler: HiveCallback())
     }
 
-    func stat(_ path: String, handler: HiveCallback<Array<FileInfo>>) -> HivePromise<Array<FileInfo>> {
-        return HivePromise<Array<FileInfo>>(error: "TODO" as! Error)
+    func stat(_ path: String, handler: HiveCallback<FileInfo>) -> HivePromise<FileInfo> {
+        return authHelper.checkValid().then { _ -> HivePromise<FileInfo> in
+            return self.statImp(path, handler)
+        }
     }
 
-
+    private func statImp(_ path: String, _ handler: HiveCallback<FileInfo>) -> HivePromise<FileInfo>{
+        return HivePromise<FileInfo> { resolver in
+            let url = VaultURL.sharedInstance.stat(path)
+            VaultApi.request(url: url, method: .get, headers: Header(authHelper).headers()).done { json in
+                    let info = FileInfo()
+                    info.setName(json["name"].stringValue)
+                    info.setSize(json["size"].intValue)
+                    info.setLastModify(json["last_modify"].stringValue)
+                    info.setType(json["type"].stringValue)
+                resolver.fulfill(info)
+            }.catch { error in
+                resolver.reject(error)
+            }
+        }
+    }
 }
