@@ -142,7 +142,7 @@ class VaultURL {
     }
 
     func registerScript() -> String {
-        return baseUrl + "/scripting/set_script"
+        return baseUrl + "/api/v1/scripting/set_script"
     }
 
     func createFolder() -> String {

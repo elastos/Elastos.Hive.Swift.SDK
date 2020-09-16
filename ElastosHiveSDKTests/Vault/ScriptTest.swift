@@ -32,41 +32,18 @@ class ScriptTest: XCTestCase {
     }
 
     func testRegisterScriptNoCondition() {
-        do {
-            let json = "{\"type\":\"find\",\"name\":\"get_groups\",\"body\":{\"collection\":\"test_group\",\"filter\":{\"*caller_did\":\"friends\"}}}"
-            let lock = XCTestExpectation(description: "wait for test.")
-            scripting!.registerScript("script_no_condition", RawExecutable(json)).done { re in
-                XCTAssertTrue(re)
-                lock.fulfill()
-            }.catch { error in
-                XCTFail()
-                lock.fulfill()
-            }
-            self.wait(for: [lock], timeout: 1000.0)
-
-        } catch {
+        let json = "{\"type\":\"find\",\"name\":\"get_groups\",\"body\":{\"collection\":\"test_group\",\"filter\":{\"*caller_did\":\"friends\"}}}"
+        let lock = XCTestExpectation(description: "wait for test.")
+        scripting!.registerScript("script_no_condition", RawExecutable(json)).done { re in
+            XCTAssertTrue(re)
+            lock.fulfill()
+        }.catch { error in
             XCTFail()
+            lock.fulfill()
         }
+        self.wait(for: [lock], timeout: 1000.0)
     }
-//    func testExecutable() {
-//        do {
-//
-//        } catch {
-//            XCTFail()
-//        }
-//    }
-    /*
-     @Test
-     public void registerScriptNoCondition() {
-         try {
-             String json = "{\"type\":\"find\",\"name\":\"get_groups\",\"body\":{\"collection\":\"test_group\",\"filter\":{\"*caller_did\":\"friends\"}}}";
-             scripting.registerScript("script_no_condition", new RawExecutable(json)).get();
-         } catch (Exception e) {
-             e.printStackTrace();
-         }
-     }
 
-     */
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         do {
