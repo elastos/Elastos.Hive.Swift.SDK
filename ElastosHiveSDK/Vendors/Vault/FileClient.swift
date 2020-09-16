@@ -191,7 +191,12 @@ class FileClient: FilesProtocol {
 
     private func hashImp(_ path: String, _ handler: HiveCallback<String>) -> HivePromise<String> {
         return HivePromise<String> { resolver in
-
+            let url = VaultURL.sharedInstance.hash(path)
+            VaultApi.request(url: url, method: .get, headers: Header(authHelper).headers()).done { json in
+                resolver.fulfill(json["SHA256"].stringValue)
+            }.catch { error in
+                resolver.reject(error)
+            }
         }
     }
 

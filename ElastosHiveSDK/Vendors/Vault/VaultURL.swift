@@ -124,6 +124,18 @@ class VaultURL {
     func copy() -> String {
         return baseUrl + "/api/v1/files/copy"
     }
+
+    func hash(_ path: String) -> String {
+        return baseUrl + "/api/v1/files/file/hash?path=" + path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+    }
+
+    func list(_ path: String) -> String {
+        return baseUrl + "/api/v1/files/list/folder?path=" + path
+    }
+
+    func stat(_ path: String) -> String {
+        return baseUrl + "api/v1/files/properties?path=" + path
+    }
     
     func registerCondition() -> String {
         return baseUrl + "/scripting/set_subcondition"
