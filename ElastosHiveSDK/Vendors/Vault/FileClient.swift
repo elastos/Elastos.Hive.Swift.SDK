@@ -211,8 +211,23 @@ class FileClient: FilesProtocol {
     }
 
     private func listImp(_ path: String, _ handler: HiveCallback<Array<FileInfo>>) -> HivePromise<Array<FileInfo>> {
-        return HivePromise<Array<FileInfo>> { _ in
-
+        return HivePromise<Array<FileInfo>> { resolver in
+            let url = VaultURL.sharedInstance.list(path)
+            VaultApi.request(url: url, method: .get, headers: Header(authHelper).headers()).done { json in
+                let arraryInfo = json["file_info_list"].arrayValue
+                var fileList = [FileInfo]()
+                arraryInfo.forEach { j in
+                    let info = FileInfo()
+                    info.setName(j["name"].stringValue)
+                    info.setSize(j["size"].intValue)
+                    info.setLastModify(j["last_modify"].stringValue)
+                    info.setType(j["type"].stringValue)
+                    fileList.append(info)
+                }
+                resolver.fulfill(fileList)
+            }.catch { error in
+                resolver.reject(error)
+            }
         }
     }
 

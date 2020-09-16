@@ -24,4 +24,60 @@ import Foundation
 
 public class FileInfo: NSObject {
 
+    enum TPYE: String {
+        case FILE = "FILE"
+        case FOLDER = "FOLDER"
+    }
+
+    private var _type: String?
+    private var _name: String?
+    private var _size: Int?
+    private var _last_modify: String?
+
+    public override init() {
+
+    }
+
+    public var name: String? {
+        return _name
+    }
+
+    func setName(_ name: String) {
+        _name = name
+    }
+
+    public var type: String? {
+        switch _type {
+        case "file":
+            return TPYE.FILE.rawValue
+        case "folder":
+            return TPYE.FOLDER.rawValue
+        case .none:
+            return nil
+        case .some(_): break
+
+        }
+        return nil
+    }
+
+    func setType(_ type: String) {
+        _type = type
+    }
+
+    public var size: Int? {
+        return _size
+    }
+
+    func setSize(_ size: Int) {
+        _size = size
+    }
+
+    public var lastModify: String? {
+        return _last_modify
+    }
+
+    func setLastModify(_ time: String) {
+        _last_modify = time
+    }
+
 }
