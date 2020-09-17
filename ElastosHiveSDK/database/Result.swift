@@ -23,10 +23,22 @@
 import Foundation
 
 public class Result: NSObject {
+    enum TYPE {
+        case int
+        case string
+        case array
+        case dictionary
+    }
+    var result: [String: JSON] = [: ]
 
-    var result: [String: Any] = [: ]
+    init(_ json: JSON) {
+        super.init()
+        json.forEach { key, value in
+            self.result[key] = value
+        }
+     }
 
-    func get(_ name: String) -> Any {
-        return result[name] as Any
+    func get(_ name: String) -> JSON? {
+        return result[name]
     }
 }

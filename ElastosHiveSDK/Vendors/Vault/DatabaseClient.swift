@@ -120,14 +120,13 @@ class DatabaseClient: DatabaseProtocol {
     }
 
     private func countDocumentsImp(_ collection: String, _ query: [String: Any], _ options: CountOptions, _ handleBy: HiveCallback<Int>) -> HivePromise<Int> {
-        let param = ["collection": collection]
+        let param = ["collection": collection, "filter": query] as [String : Any]
         let url = VaultURL.sharedInstance.countDocuments()
 
         return HivePromise<Int> { resolver in
-            VaultApi.request(url: url, parameters: param).get { json in
-                //TODO:
-                handleBy.didSucceed(0)
-                resolver.fulfill(0)
+            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
+                handleBy.didSucceed(json["count"].intValue)
+                resolver.fulfill(json["count"].intValue)
             }.catch { error in
                 handleBy.runError(HiveError.netWork(des: error))
                 resolver.reject(error)
@@ -201,8 +200,8 @@ class DatabaseClient: DatabaseProtocol {
 
         return HivePromise<UpdateResult> { resolver in
             VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).get { json in
-                handleBy.didSucceed(UpdateResult())
-                resolver.fulfill(UpdateResult())
+//                handleBy.didSucceed(UpdateResult())
+//                resolver.fulfill(UpdateResult())
             }.catch { error in
                 handleBy.runError(HiveError.netWork(des: error))
                 resolver.reject(error)
@@ -226,8 +225,8 @@ class DatabaseClient: DatabaseProtocol {
 
         return HivePromise<UpdateResult> { resolver in
             VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).get { json in
-                handleBy.didSucceed(UpdateResult())
-                resolver.fulfill(UpdateResult())
+//                handleBy.didSucceed(UpdateResult())
+//                resolver.fulfill(UpdateResult())
             }.catch { error in
                 handleBy.runError(HiveError.netWork(des: error))
                 resolver.reject(error)
@@ -251,8 +250,8 @@ class DatabaseClient: DatabaseProtocol {
 
         return HivePromise<DeleteResult> { resolver in
             VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).get { json in
-                handleBy.didSucceed(DeleteResult())
-                resolver.fulfill(DeleteResult())
+//                handleBy.didSucceed(DeleteResult())
+//                resolver.fulfill(DeleteResult())
             }.catch { error in
                 handleBy.runError(HiveError.netWork(des: error))
                 resolver.reject(error)
@@ -276,8 +275,8 @@ class DatabaseClient: DatabaseProtocol {
 
         return HivePromise<DeleteResult> { resolver in
             VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).get { json in
-                handleBy.didSucceed(DeleteResult())
-                resolver.fulfill(DeleteResult())
+//                handleBy.didSucceed(DeleteResult())
+//                resolver.fulfill(DeleteResult())
             }.catch { error in
                 handleBy.runError(HiveError.netWork(des: error))
                 resolver.reject(error)

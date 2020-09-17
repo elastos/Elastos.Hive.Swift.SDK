@@ -138,9 +138,11 @@ class VaultApi: NSObject {
                             resolver.reject(err)
                             return
                         }
-                        // TODO:
-                        resolver.fulfill(InsertResult())
+                        let insertResult = InsertResult(rejson)
+                        handler.didSucceed(insertResult)
+                        resolver.fulfill(insertResult)
                     case .failure(let error):
+                        handler.runError(HiveError.netWork(des: error))
                         resolver.reject(error)
                     }
             }

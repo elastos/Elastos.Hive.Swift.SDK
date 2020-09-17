@@ -25,8 +25,19 @@ import Foundation
 public class InsertResult: Result {
 
     public func insertedIds() -> Array<String> {
-        let ids: Array<String> = get("insertedIds")as! Array<String>
+        let ids = get("inserted_ids")
+        if let _ = ids {
+            var insertArray: [String] = []
+            ids?.arrayValue.forEach{ id in
+                insertArray.append(id.stringValue)
+            }
+            return insertArray
+        }
+        let id = get("inserted_id")?.stringValue
+        if let _ = id {
+            return [id!]
+        }
 
-        return ids
+        return []
     }
 }

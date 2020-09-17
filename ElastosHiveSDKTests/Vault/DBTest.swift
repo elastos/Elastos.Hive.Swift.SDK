@@ -67,6 +67,21 @@ class DBTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
 
+    func testCountDocuments() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        let filter = ["author": "john doe2"]
+        let options = CountOptions()
+//        options.limit(1).skip(0).maxTimeMS(1000000000); //TODO:
+        database?.countDocuments("new", filter, options: options).done{ result in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ error in
+            lock.fulfill()
+            XCTFail()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+
     func testFindOne() {
         let lock = XCTestExpectation(description: "wait for test.")
         let queryInfo = ["author": "john doe1"]
