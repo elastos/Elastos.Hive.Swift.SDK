@@ -65,37 +65,7 @@ class FileClient: FilesProtocol {
             }
         }
     }
-    /*
-     private <T> CompletableFuture<T> uploadImp(String path, Class<T> resultType, Callback<T> callback) {
 
-         return CompletableFuture.supplyAsync(() -> {
-
-             HttpURLConnection httpURLConnection = null;
-             try {
-                 httpURLConnection = ConnectionManager.openURLConnection(path);
-                 OutputStream rawOutputStream = httpURLConnection.getOutputStream();
-
-                 if(null == rawOutputStream) return null;
-
-                 UploadOutputStream outputStream = new UploadOutputStream(httpURLConnection, rawOutputStream);
-
-                 if(resultType.isAssignableFrom(OutputStream.class)) {
-                     callback.onSuccess((T) outputStream);
-                     return (T) outputStream;
-                 } else {
-                     OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
-                     callback.onSuccess((T) outputStreamWriter);
-                     return (T) outputStreamWriter;
-                 }
-             } catch (Exception e) {
-                 ResponseHelper.readConnection(httpURLConnection);
-                 HiveException exception = new HiveException(e.getLocalizedMessage());
-                 callback.onError(exception);
-                 throw new CompletionException(exception);
-             }
-         });
-     }
-     */
     func download(_ path: String) -> HivePromise<OutputStream> {
         return download(path, handler: HiveCallback())
     }
@@ -106,17 +76,50 @@ class FileClient: FilesProtocol {
         }
     }
 
-    private func downloadImp<T>(_ remoteFile: String, handler: HiveCallback<T>) -> HivePromise<T> {
-        return HivePromise<T> { resolver in
-            //            resolver.fulfill(inStream)
+    private func downloadImp(_ remoteFile: String, handler: HiveCallback<OutputStream>) -> HivePromise<OutputStream> {
+        return HivePromise<OutputStream> { resolver in
             let url = VaultURL.sharedInstance.download(remoteFile)
             Alamofire.request(url, method: .get, headers: Header(authHelper).headers())
-                .responseData { data_re in
-                    let re = String(data: data_re.data!, encoding: .utf8)
-                    print(re)
-                    print(re)
+                .responseString { result in
+                switch result.result {
+                case .success(let re):
+                    let rejson = JSON(re)
+                    let status = rejson["_status"].stringValue
+                    guard status != "ERR" else {
+                        var dic: [String: String] = [: ]
+                        rejson.forEach { key, value in
+                            dic[key] = value.stringValue
+                        }
+                        let err = HiveError.failues(des: dic)
+                        resolver.reject(err)
+                        return
+                    }
+                    let outputStream = OutputStream(toMemory: ())
+                    outputStream.open()
+                    self.writeData(data: result.data!, outputStream: outputStream, maxLengthPerWrite: 1024)
+                    outputStream.close()
+                    resolver.fulfill(outputStream)
+                case .failure(let error):
+                    resolver.reject(error)
+                }
             }
         }
+    }
+
+    private func writeData(data: Data, outputStream: OutputStream, maxLengthPerWrite: Int) {
+        let size = data.count
+        data.withUnsafeBytes({(bytes: UnsafePointer<UInt8>) in
+            var bytesWritten = 0
+            while bytesWritten < size {
+                var maxLength = maxLengthPerWrite
+                if size - bytesWritten < maxLengthPerWrite {
+                    maxLength = size - bytesWritten
+                }
+                let n = outputStream.write(bytes.advanced(by: bytesWritten), maxLength: maxLength)
+                bytesWritten += n
+                print(n)
+            }
+        })
     }
 
     func delete(_ path: String) -> HivePromise<Bool> {
