@@ -63,11 +63,6 @@ class ScriptClient: ScriptingProtocol {
             param["accessCondition"] = accessCondition!
         }
         param["executable"] = try! executable.serialize()
-//        let param = ["name": "script_no_condition",
-//                     "executable": ["type": "find", "name": "get_groups", "body": ["collection": "test_group", "filter": ["friends": "$caller_did"], "options": ["projection": ["_id": false, "name": true]]]]] as [String : Any]
-//        let param = ["name": "script_no_condition",
-//                     "executable": ["type": "find", "name": "get_groups", "body": ["collection": "test_group", "filter": ["friends": "$caller_did"]]]] as [String : Any]
-        print(param)
         let url = VaultURL.sharedInstance.registerScript()
 
         return VaultApi.requestWithBool(url: url, parameters: param, headers: Header(authHelper).headers())

@@ -9,10 +9,12 @@ class FileTest: XCTestCase {
 
     func testUpload() {
         let lock = XCTestExpectation(description: "wait for test.")
-        _ = file?.upload("hive/testIos.txt").done{ re in
-
+        _ = file?.upload("/Users/liaihong/Documents/Git/Elastos.NET.Hive.Swift.SDK_1/ElastosHiveSDKTests/Resources/test.txt", asRemoteFile: "hive/testIos_001.txt").done{ re in
+            XCTAssertTrue(re)
+            lock.fulfill()
         }.catch{ error in
-
+            XCTFail()
+            lock.fulfill()
         }
         self.wait(for: [lock], timeout: 1000.0)
     }

@@ -30,51 +30,39 @@ class FileClient: FilesProtocol {
         self.authHelper = authHelper
     }
 
-    func upload(_ path: String) -> HivePromise<InputStream> {
-        return upload(path, handler: HiveCallback())
+    func upload(_ localPath: String, asRemoteFile: String) -> Promise<Bool> {
+        return upload(localPath, asRemoteFile: asRemoteFile, handler: HiveCallback())
     }
 
-    func upload(_ path: String, handler: HiveCallback<InputStream>) -> HivePromise<InputStream> {
-        return authHelper.checkValid().then { _ -> HivePromise<InputStream> in
-            return self.uploadImp(path, callback: handler)
+    func upload(_ localPath: String, asRemoteFile: String, handler: HiveCallback<Bool>) -> Promise<Bool> {
+        return authHelper.checkValid().then { _ -> HivePromise<Bool> in
+            return self.uploadImp(localPath, asRemoteFile: asRemoteFile, callback: handler)
         }
     }
 
-    private func uploadImp(_ path: String, callback: HiveCallback<InputStream>) -> HivePromise<InputStream> {
-        return HivePromise<InputStream> { resolver in
-//            var inStream = InputStream()
-
-            var data = Data()
-
-            let inStream = InputStream.init(fileAtPath: "/Users/liaihong/Documents/Git/Elastos.NET.Hive.Swift.SDK_1/ElastosHiveSDKTests/Resources/test.txt")
-
-            inStream!.open()
-            let bufferSize = 1024
-            let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: bufferSize)
-
-            while inStream!.hasBytesAvailable {
-                let read = inStream!.read(buffer, maxLength: bufferSize)
-                if read < 0 {
-//                    throw inStream?.streamError!
-                } else if read == 0 {
-                    //EOF
-                    break
+    private func uploadImp(_ localPath: String, asRemoteFile: String, callback: HiveCallback<Bool>) -> HivePromise<Bool> {
+        return HivePromise<Bool> { resolver in
+            let inputStream = InputStream.init(fileAtPath: localPath)
+            let url = VaultURL.sharedInstance.upload(asRemoteFile)
+            Alamofire.upload(inputStream!, to: url, method: .post, headers: Header(authHelper).headers()).responseJSON { dataResponse in
+                switch dataResponse.result {
+                case .success(let re):
+                    let rejson = JSON(re)
+                    let status = rejson["_status"].stringValue
+                    guard status == "OK" else {
+                        var dic: [String: String] = [: ]
+                        rejson.forEach { key, value in
+                            dic[key] = value.stringValue
+                        }
+                        let err = HiveError.failues(des: dic)
+                        resolver.reject(err)
+                        return
+                    }
+                    resolver.fulfill(true)
+                case .failure(let error):
+                    resolver.reject(error)
                 }
-                data.append(buffer, count: read)
             }
-
-            print(String(data: data, encoding: String.Encoding.utf8) as Any)
-
-//            let outStream = OutputStream.init(url: <#T##URL#>, append: <#T##Bool#>)
-
-            let outputStream = OutputStream(toFileAtPath: path, append: false)
-//            resolver.fulfill(inStream)
-//            let url = VaultURL.sharedInstance.upload(path)
-//            Alamofire.upload(inStream, to: url, method: .post, headers: Header(authHelper).headers()).responseData { responseData in
-//                let re = String(data: responseData.data!, encoding: .utf8)
-//                print(re)
-//                print(re)
-//            }
         }
     }
     /*
