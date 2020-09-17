@@ -36,11 +36,11 @@ class FileClient: FilesProtocol {
 
     func upload(_ localPath: String, asRemoteFile: String, handler: HiveCallback<Bool>) -> Promise<Bool> {
         return authHelper.checkValid().then { _ -> HivePromise<Bool> in
-            return self.uploadImp(localPath, asRemoteFile: asRemoteFile, callback: handler)
+            return self.uploadImp(localPath, asRemoteFile: asRemoteFile, handler: handler)
         }
     }
 
-    private func uploadImp(_ localPath: String, asRemoteFile: String, callback: HiveCallback<Bool>) -> HivePromise<Bool> {
+    private func uploadImp(_ localPath: String, asRemoteFile: String, handler: HiveCallback<Bool>) -> HivePromise<Bool> {
         return HivePromise<Bool> { resolver in
             let inputStream = InputStream.init(fileAtPath: localPath)
             let url = VaultURL.sharedInstance.upload(asRemoteFile)
@@ -55,11 +55,14 @@ class FileClient: FilesProtocol {
                             dic[key] = value.stringValue
                         }
                         let err = HiveError.failues(des: dic)
+                        handler.runError(err)
                         resolver.reject(err)
                         return
                     }
+                    handler.didSucceed(true)
                     resolver.fulfill(true)
                 case .failure(let error):
+                    handler.runError(HiveError.netWork(des: error))
                     resolver.reject(error)
                 }
             }
@@ -91,6 +94,7 @@ class FileClient: FilesProtocol {
                             dic[key] = value.stringValue
                         }
                         let err = HiveError.failues(des: dic)
+                        handler.runError(err)
                         resolver.reject(err)
                         return
                     }
@@ -98,8 +102,10 @@ class FileClient: FilesProtocol {
                     outputStream.open()
                     self.writeData(data: result.data!, outputStream: outputStream, maxLengthPerWrite: 1024)
                     outputStream.close()
+                    handler.didSucceed(outputStream)
                     resolver.fulfill(outputStream)
                 case .failure(let error):
+                    handler.runError(HiveError.netWork(des: error))
                     resolver.reject(error)
                 }
             }
@@ -135,7 +141,7 @@ class FileClient: FilesProtocol {
     private func deleteImp(_ remoteFile: String, _ handler: HiveCallback<Bool>) -> HivePromise<Bool> {
         let param = ["path": remoteFile]
         let url = VaultURL.sharedInstance.deleteFileOrFolder()
-        return VaultApi.requestWithBool(url: url, parameters: param, headers: Header(authHelper).headers())
+        return VaultApi.requestWithBool(url: url, parameters: param, headers: Header(authHelper).headers(), handler: handler)
     }
 
     func move(_ src: String, _ dest: String) -> HivePromise<Bool> {
@@ -151,7 +157,7 @@ class FileClient: FilesProtocol {
     private func moveImp(_ src: String, _ dest: String, _ handler: HiveCallback<Bool>) -> HivePromise<Bool> {
         let url = VaultURL.sharedInstance.move()
         let param = ["src_path": src, "dst_path": dest]
-        return VaultApi.requestWithBool(url: url, parameters: param, headers: Header(authHelper).headers())
+        return VaultApi.requestWithBool(url: url, parameters: param, headers: Header(authHelper).headers(), handler: handler)
     }
 
     func copy(_ src: String, _ dest: String) -> HivePromise<Bool> {
@@ -167,7 +173,7 @@ class FileClient: FilesProtocol {
     private func copyImp(_ src: String, _ dest: String, _ handler: HiveCallback<Bool>) -> HivePromise<Bool> {
         let url = VaultURL.sharedInstance.move()
         let param = ["src_path": src, "dst_path": dest]
-        return VaultApi.requestWithBool(url: url, parameters: param, headers: Header(authHelper).headers())
+        return VaultApi.requestWithBool(url: url, parameters: param, headers: Header(authHelper).headers(), handler: handler)
     }
 
     func hash(_ path: String) -> HivePromise<String> {
@@ -184,8 +190,10 @@ class FileClient: FilesProtocol {
         return HivePromise<String> { resolver in
             let url = VaultURL.sharedInstance.hash(path)
             VaultApi.request(url: url, method: .get, headers: Header(authHelper).headers()).done { json in
+                handler.didSucceed(json["SHA256"].stringValue)
                 resolver.fulfill(json["SHA256"].stringValue)
             }.catch { error in
+                handler.runError(HiveError.netWork(des: error))
                 resolver.reject(error)
             }
         }
@@ -215,8 +223,10 @@ class FileClient: FilesProtocol {
                     info.setType(j["type"].stringValue)
                     fileList.append(info)
                 }
+                handler.didSucceed(fileList)
                 resolver.fulfill(fileList)
             }.catch { error in
+                handler.runError(HiveError.netWork(des: error))
                 resolver.reject(error)
             }
         }
@@ -241,8 +251,10 @@ class FileClient: FilesProtocol {
                     info.setSize(json["size"].intValue)
                     info.setLastModify(json["last_modify"].stringValue)
                     info.setType(json["type"].stringValue)
+                handler.didSucceed(info)
                 resolver.fulfill(info)
             }.catch { error in
+                handler.runError(HiveError.netWork(des: error))
                 resolver.reject(error)
             }
         }

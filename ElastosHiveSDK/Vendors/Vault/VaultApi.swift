@@ -57,20 +57,11 @@ class VaultApi: NSObject {
         }
     }
 
-    class func requestSync(url: URLConvertible,
-                           method: HTTPMethod = .post,
-                           parameters: Parameters? = nil,
-                           encoding: ParameterEncoding = JSONEncoding.default,
-                           headers: HTTPHeaders? = nil) {
-        // TODO:
-
-    }
-
     class func requestWithBool(url: URLConvertible,
                         method: HTTPMethod = .post,
                         parameters: Parameters? = nil,
                         encoding: ParameterEncoding = JSONEncoding.default,
-                        headers: HTTPHeaders? = nil) -> HivePromise<Bool> {
+                        headers: HTTPHeaders? = nil, handler: HiveCallback<Bool>? = nil) -> HivePromise<Bool> {
         return HivePromise<Bool> { resolver in
             Alamofire.request(url,
                               method: method,
@@ -88,11 +79,14 @@ class VaultApi: NSObject {
                                 dic[key] = value.stringValue
                             }
                             let err = HiveError.failues(des: dic)
+                            handler?.runError(err)
                             resolver.reject(err)
                             return
                         }
+                        handler?.didSucceed(true)
                         resolver.fulfill(true)
                     case .failure(let error):
+                        handler?.runError(HiveError.netWork(des: error))
                         resolver.reject(error)
                     }
             }
@@ -123,7 +117,7 @@ class VaultApi: NSObject {
                         method: HTTPMethod = .post,
                         parameters: Parameters? = nil,
                         encoding: ParameterEncoding = JSONEncoding.default,
-                        headers: HTTPHeaders? = nil) -> HivePromise<InsertResult> {
+                        headers: HTTPHeaders? = nil, handler: HiveCallback<InsertResult>) -> HivePromise<InsertResult> {
         return HivePromise<InsertResult> { resolver in
             Alamofire.request(url,
                               method: method,
