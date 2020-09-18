@@ -23,11 +23,9 @@
 import Foundation
 
 public protocol ScriptingProtocol {
-    func registerCondition(_ name: String, _ condition: Condition) -> HivePromise<Bool>
-
     func registerScript(_ name: String, _ executable: Executable) -> HivePromise<Bool>
     func registerScript(_ name: String, _ condition: Condition, _ executable: Executable) -> HivePromise<Bool>
 
-    func call(_ scriptName: String) -> HivePromise<FileHandle>
-    func call(_ scriptName: String, _ params: [String: Any]) -> HivePromise<FileHandle>
+    func call(_ scriptName: String) -> HivePromise<OutputStream>
+    func call(_ scriptName: String, _ params: [String: Any]) -> HivePromise<OutputStream>
 }

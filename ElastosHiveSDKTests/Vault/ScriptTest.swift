@@ -44,6 +44,51 @@ class ScriptTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
 
+    // TODO:
+    func testRegisterScriptWithCondition() {
+        let json = "{\"type\":\"find\",\"name\":\"get_groups\",\"body\":{\"collection\":\"test_group\",\"filter\":{\"*caller_did\":\"friends\"}}}"
+        let lock = XCTestExpectation(description: "wait for test.")
+        scripting!.registerScript("script_no_condition", RawExecutable(json)).done { re in
+            XCTAssertTrue(re)
+            lock.fulfill()
+        }.catch { error in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+
+    func testCallScriptNoParams() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        scripting?.call("script_no_condition").done{ re in
+            lock.fulfill()
+        }.catch{ err in
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 10000.0)
+    }
+
+    func testCallScriptWithParams() {
+        do {
+            let lock = XCTestExpectation(description: "wait for test.")
+            let param = "{\"group_id\":{\"$oid\":\"5f497bb83bd36ab235d82e6a\"}}"
+            let para = try JSONSerialization.jsonObject(with: param.data(using: .utf8)!, options: [ ]) as! [String : Any]
+            scripting?.call("script_no_condition", para).done{ output in
+                let data: Data = output.property(forKey: Stream.PropertyKey.dataWrittenToMemoryStreamKey)! as! Data
+                let rejson = try JSONSerialization.jsonObject(with: data , options: .mutableContainers) as AnyObject
+                print(rejson)
+                XCTAssertTrue(true)
+                lock.fulfill()
+            }.catch{ err in
+                XCTAssertTrue(true)
+                lock.fulfill()
+            }
+            self.wait(for: [lock], timeout: 10000.0)
+        } catch {
+            XCTFail()
+        }
+    }
+
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         do {

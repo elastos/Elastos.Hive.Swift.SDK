@@ -136,25 +136,12 @@ class VaultURL {
     func stat(_ path: String) -> String {
         return baseUrl + "/api/v1/files/properties?path=" + path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
     }
-    
-    func registerCondition() -> String {
-        return baseUrl + "/scripting/set_subcondition"
-    }
 
     func registerScript() -> String {
         return baseUrl + "/api/v1/scripting/set_script"
     }
 
-    func createFolder() -> String {
-        return baseUrl + "/api/v1/files/creator/folder"
+    func call() -> String {
+        return baseUrl + "/api/v1/scripting/run_script"
     }
-
-    func createFile() -> String {
-        return baseUrl + "/api/v1/files/creator/file"
-    }
-
-//    func uploadFile() -> String {
-//        return baseUrl + "/api/v1/files/creator/file"
-//    }
-
 }

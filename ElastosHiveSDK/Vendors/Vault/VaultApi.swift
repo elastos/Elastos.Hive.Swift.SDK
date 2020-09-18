@@ -51,7 +51,7 @@ class VaultApi: NSObject {
                         }
                         resolver.fulfill(rejson)
                     case .failure(let error):
-                        resolver.reject(error)
+                        resolver.reject(HiveError.netWork(des: error))
                     }
             }
         }

@@ -30,20 +30,6 @@ class ScriptClient: ScriptingProtocol {
         self.authHelper = authHelper
     }
 
-    func registerCondition(_ name: String, _ condition: Condition) -> HivePromise<Bool> {
-
-        return authHelper.checkValid().then { _ -> HivePromise<Bool> in
-            return self.registerConditionImp(name, condition)
-        }
-    }
-
-    private func registerConditionImp(_ name: String, _ condition: Condition) -> HivePromise<Bool> {
-        let param = ["name": name, "condition": condition] as [String : Any]
-        let url = VaultURL.sharedInstance.registerCondition()
-
-        return VaultApi.requestWithBool(url: url, parameters: param)
-    }
-
     func registerScript(_ name: String, _ executable: Executable) -> HivePromise<Bool> {
         return authHelper.checkValid().then { _ -> HivePromise<Bool> in
             return self.registerScriptImp(name, nil, executable)
@@ -68,11 +54,52 @@ class ScriptClient: ScriptingProtocol {
         return VaultApi.requestWithBool(url: url, parameters: param, headers: Header(authHelper).headers())
     }
 
-    func call(_ scriptName: String) -> HivePromise<FileHandle> {
-        return HivePromise<FileHandle>(error: "TODO" as! Error)
+    func call(_ scriptName: String) -> HivePromise<OutputStream> {
+        return authHelper.checkValid().then { _ -> HivePromise<OutputStream> in
+            return self.callImp(scriptName)
+        }
     }
 
-    func call(_ scriptName: String, _ params: [String : Any]) -> HivePromise<FileHandle> {
-        return HivePromise<FileHandle>(error: "TODO" as! Error)
+    func call(_ scriptName: String, _ params: [String : Any]) -> HivePromise<OutputStream> {
+        return authHelper.checkValid().then { _ -> HivePromise<OutputStream> in
+            return self.callImp(scriptName, params: params)
+        }
+    }
+
+    private func callImp(_ scriptName: String, params: [String : Any]? = nil) -> HivePromise<OutputStream> {
+        return HivePromise<OutputStream> { resolver in
+            var param = ["name": scriptName] as [String : Any]
+            if let _ = params {
+                param["params"] = params!
+            }
+            let url = VaultURL.sharedInstance.call()
+            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
+                let re = json["items"].arrayObject
+                let data = try JSONSerialization.data(withJSONObject: re as Any, options: [])
+                let outputStream = OutputStream(toMemory: ())
+                outputStream.open()
+                self.writeData(data: data, outputStream: outputStream, maxLengthPerWrite: 1024)
+                outputStream.close()
+                resolver.fulfill(outputStream)
+            }.catch { error in
+                resolver.reject(error)
+            }
+        }
+    }
+
+    private func writeData(data: Data, outputStream: OutputStream, maxLengthPerWrite: Int) {
+        let size = data.count
+        data.withUnsafeBytes({(bytes: UnsafePointer<UInt8>) in
+            var bytesWritten = 0
+            while bytesWritten < size {
+                var maxLength = maxLengthPerWrite
+                if size - bytesWritten < maxLengthPerWrite {
+                    maxLength = size - bytesWritten
+                }
+                let n = outputStream.write(bytes.advanced(by: bytesWritten), maxLength: maxLength)
+                bytesWritten += n
+                print(n)
+            }
+        })
     }
 }
