@@ -25,6 +25,6 @@ import Foundation
 public class DeleteResult: Result {
 
     public func deletedCount() -> Int {
-        return get("deletedCount") as! Int
+        return get("deleted_count")?.intValue == nil ? 0 : get("deleted_count")!.intValue
     }
 }

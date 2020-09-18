@@ -26,21 +26,21 @@ public class UpdateResult: Result {
 
     public func matchedCount() -> Int {
 
-        return get("matchedCount") as! Int
+        return get("matched_count")?.intValue == nil ? 0 : get("matched_count")!.intValue
     }
 
     public func modifiedCount() -> Int {
 
-        return get("modifiedCount") as! Int
+        return get("modified_count")?.intValue == nil ? 0 : get("modified_count")!.intValue
     }
 
     public func upsertedCount() -> Int {
 
-        return get("upsertedCount") as! Int
+        return get("upserted_count")?.intValue == nil ? 0 : get("upserted_count")!.intValue
     }
 
     public func upsertedId() -> Int {
 
-        return get("upsertedId") as! Int
+        return get("upserted_id")?.intValue == nil ? 0 : get("upserted_id")!.intValue
     }
 }
