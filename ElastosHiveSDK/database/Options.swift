@@ -56,21 +56,15 @@ public class Options<T>: NSObject {
     }
 
     func serialize() throws -> String {
+        let data = try JSONSerialization.data(withJSONObject: param, options: [])
+        guard let paramStr = String(data: data, encoding: .utf8) else {
+            return ""
+        }
 
-        return "TODO"
+        return paramStr
     }
 
     func remove(_ key: String) {
         param.removeValue(forKey: key)
     }
-    /*
-     public String serialize() throws IOException {
-         SimpleModule module = new SimpleModule();
-         module.addSerializer(Index.class, new Index.Serializer());
-         ObjectMapper mapper = new ObjectMapper();
-         mapper.registerModule(module);
-
-         return mapper.writer().writeValueAsString(this);
-     }
-     */
 }

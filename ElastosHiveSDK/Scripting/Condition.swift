@@ -35,7 +35,18 @@ public class Condition: NSObject {
         self.type = type
     }
 
-    // TODO: serialize
+    func serialize() throws -> String {
+        var param = ["type": type]
+        if let _ = name {
+            param["name"] = name!
+        }
+        let data = try JSONSerialization.data(withJSONObject: param, options: [])
+        guard let paramStr = String(data: data, encoding: .utf8) else {
+            return ""
+        }
+
+        return paramStr
+    }
 }
 
 
