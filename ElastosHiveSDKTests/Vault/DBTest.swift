@@ -4,9 +4,18 @@ import XCTest
 @testable import ElastosDIDSDK
 
 class VaultAuthenticator: Authenticator {
-    func requestAuthentication(_ requestURL: String) -> HivePromise<String> {
+    func requestAuthentication(_ jwtToken: String) -> HivePromise<String> {
         return HivePromise<String> { resolver in
-            resolver.fulfill("eyJhbGciOiAiRVMyNTYiLCAidHlwZSI6ICJKV1QiLCAidmVyc2lvbiI6ICIxLjAiLCAia2lkIjogImRpZDplbGFzdG9zOmlkZnBLSkoxc29EeFQyR2NnQ1JuRHQzY3U5NFpuR2Z6TlgjcHJpbWFyeSJ9.eyJpc3MiOiJkaWQ6ZWxhc3RvczppZGZwS0pKMXNvRHhUMkdjZ0NSbkR0M2N1OTRabkdmek5YIiwic3ViIjoiRElEQXV0aFJlc3BvbnNlIiwiYXVkIjoiZGlkOmVsYXN0b3M6aVlnRDRrcFdha1FpQkI5YTNNQlRVeDhXMkUycWVvamRONSIsImlhdCI6MTYwMDI0NDA3NywiZXhwIjo2MDAwMDE2MDAyNDQwNzcsIm5iZiI6MTYwMDI0NDA3NywicHJlc2VudGF0aW9uIjp7InR5cGUiOiJWZXJpZmlhYmxlUHJlc2VudGF0aW9uIiwiY3JlYXRlZCI6IjIwMjAtMDktMTZUMDg6MTQ6MzdaIiwidmVyaWZpYWJsZUNyZWRlbnRpYWwiOlt7ImlkIjoiZGlkOmVsYXN0b3M6aWRmcEtKSjFzb0R4VDJHY2dDUm5EdDNjdTk0Wm5HZnpOWCNkaWRhcHAiLCJ0eXBlIjpbIkFwcElkQ3JlZGVudGlhbCJdLCJpc3N1ZXIiOiJkaWQ6ZWxhc3RvczppajhrckFWUkppdFpLSm1jQ3Vmb0xIUWpxN01lZjNaalROIiwiaXNzdWFuY2VEYXRlIjoiMjAyMC0wOS0xNlQwODoxNDozN1oiLCJleHBpcmF0aW9uRGF0ZSI6IjIwMjUtMDktMDFUMTk6NDc6MjRaIiwiY3JlZGVudGlhbFN1YmplY3QiOnsiaWQiOiJkaWQ6ZWxhc3RvczppZGZwS0pKMXNvRHhUMkdjZ0NSbkR0M2N1OTRabkdmek5YIiwiYXBwRGlkIjoiYXBwSWQifSwicHJvb2YiOnsidHlwZSI6IkVDRFNBc2VjcDI1NnIxIiwidmVyaWZpY2F0aW9uTWV0aG9kIjoiZGlkOmVsYXN0b3M6aWo4a3JBVlJKaXRaS0ptY0N1Zm9MSFFqcTdNZWYzWmpUTiNwcmltYXJ5Iiwic2lnbmF0dXJlIjoickxYYkRYWU9EX2xqcUpyR0UtbDVtcjU3VkxFYzVFUFA3ZDg4dHo3cmZGRHpaQVlTSnNyX00wbVRxYzVDbXFrV2EtMkpGWDBodEZEbmpMLXVEbXBZakEifX1dLCJwcm9vZiI6eyJ0eXBlIjoiRUNEU0FzZWNwMjU2cjEiLCJ2ZXJpZmljYXRpb25NZXRob2QiOiJkaWQ6ZWxhc3RvczppZGZwS0pKMXNvRHhUMkdjZ0NSbkR0M2N1OTRabkdmek5YI3ByaW1hcnkiLCJyZWFsbSI6ImRpZDplbGFzdG9zOmlZZ0Q0a3BXYWtRaUJCOWEzTUJUVXg4VzJFMnFlb2pkTjUiLCJub25jZSI6ImE1ZjA0MDFlLWY3ZjQtMTFlYS04M2U0LWM0YjMwMTkyNmZkOCIsInNpZ25hdHVyZSI6IkdzMjRNTXdQSFJrOTBGN0tJZUxzc3JNYUFNUUlPV29uTU5FTjhhQ29OOVg3RDVJX2s1ZHIwdXpyYWU2QjltREJBOFBxdm9CVjZYRzNTaXhzaEljbEF3In19fQ.g1B3xdJ2V7lnq1ssCujXbIXyeCaVPSzXEhQwVDwtv-EpP44SuENwbhZ_ejhwMExUxcU7_GLlJXhAQ14ydPl_oA")
+            //            resolver.fulfill("")
+            do{
+                let jws = try JwtParserBuilder().build().parseClaimsJwt(jwtToken)
+                let nonce = jws.claims.get(key: "nonce")
+                let hive_did = jws.claims.getIssuer()
+
+            }
+            catch {
+
+            }
         }
     }
 }

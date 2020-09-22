@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2019 Elastos Foundation
+* Copyright (c) 2020 Elastos Foundation
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -22,17 +22,23 @@
 
 import Foundation
 
-public class RawCondition: Condition {
-    private let TYPE = "raw"
-    private var condition: String
+public class ObjectId: NSObject {
+    private var _id: String
 
-    public override init(_ condition: String) {
-        self.condition = condition
-        super.init(TYPE)
+    public init(_ id: String) {
+        self._id = id
     }
 
-    public override func serialize() throws -> String {
+    public var id: String {
+        return _id
+    }
 
-        return condition
+    public func serialize() throws -> String {
+        let gen = JsonGenerator()
+        gen.writeStartObject()
+        gen.writeStringField("$oid", id)
+        gen.writeEndObject()
+
+        return gen.toString()
     }
 }

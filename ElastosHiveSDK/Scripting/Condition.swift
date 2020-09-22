@@ -47,8 +47,11 @@ public class Condition: NSObject {
     }
 
     public func jsonSerialize()throws -> [String: Any] {
-
-        return [: ]
+        var para: [String: Any] = ["type": type]
+        if let _ = name {
+            para["name"] = name
+        }
+        return para
     }
 }
 

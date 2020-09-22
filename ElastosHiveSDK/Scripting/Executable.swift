@@ -36,12 +36,22 @@ public class Executable: NSObject {
     }
     
     public func serialize() -> String {
-        return ""
+        let jsonGenerator = JsonGenerator()
+        jsonGenerator.writeStartObject()
+        jsonGenerator.writeStringField("type", type)
+        if let _ = name {
+            jsonGenerator.writeStringField("name", name!)
+        }
+        jsonGenerator.writeEndObject()
+        return jsonGenerator.toString()
     }
 
     public func jsonSerialize()throws -> [String: Any] {
-
-        return [: ]
+        var para: [String: Any] = ["type": type]
+        if let _ = name {
+            para["name"] = name
+        }
+        return para
     }
 }
 

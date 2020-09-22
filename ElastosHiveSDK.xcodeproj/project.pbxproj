@@ -92,6 +92,16 @@
 		1147720A23F678BD00C7C36F /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1147720823F678BD00C7C36F /* SwiftyJSON.swift */; };
 		114E612D2510DD24003673FF /* test.txt in Resources */ = {isa = PBXBuildFile; fileRef = 114E612C2510DD23003673FF /* test.txt */; };
 		114FD8402297CF7700467E38 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114FD83F2297CF7600467E38 /* Authenticator.swift */; };
+		115E82E7251A4495004DCB1E /* MinKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115E82E6251A4495004DCB1E /* MinKey.swift */; };
+		115E82E8251A4495004DCB1E /* MinKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115E82E6251A4495004DCB1E /* MinKey.swift */; };
+		115E82EA251A44AA004DCB1E /* MaxKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115E82E9251A44AA004DCB1E /* MaxKey.swift */; };
+		115E82EB251A44AA004DCB1E /* MaxKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115E82E9251A44AA004DCB1E /* MaxKey.swift */; };
+		115E82ED251A44BC004DCB1E /* ObjectId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115E82EC251A44BC004DCB1E /* ObjectId.swift */; };
+		115E82EE251A44BC004DCB1E /* ObjectId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115E82EC251A44BC004DCB1E /* ObjectId.swift */; };
+		115E82F0251A4553004DCB1E /* RegularExpression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115E82EF251A4553004DCB1E /* RegularExpression.swift */; };
+		115E82F1251A4553004DCB1E /* RegularExpression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115E82EF251A4553004DCB1E /* RegularExpression.swift */; };
+		115E82F3251A4590004DCB1E /* Timestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115E82F2251A4590004DCB1E /* Timestamp.swift */; };
+		115E82F4251A4590004DCB1E /* Timestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115E82F2251A4590004DCB1E /* Timestamp.swift */; };
 		1170FB052501CB3F0049E81D /* WriteConcern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FB042501CB3F0049E81D /* WriteConcern.swift */; };
 		1170FB062501CB3F0049E81D /* WriteConcern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FB042501CB3F0049E81D /* WriteConcern.swift */; };
 		1170FB082501CCD30049E81D /* ReadConcern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FB072501CCD30049E81D /* ReadConcern.swift */; };
@@ -239,6 +249,11 @@
 		1147720823F678BD00C7C36F /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		114E612C2510DD23003673FF /* test.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test.txt; sourceTree = "<group>"; };
 		114FD83F2297CF7600467E38 /* Authenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Authenticator.swift; path = Core/Authenticator.swift; sourceTree = "<group>"; };
+		115E82E6251A4495004DCB1E /* MinKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinKey.swift; sourceTree = "<group>"; };
+		115E82E9251A44AA004DCB1E /* MaxKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaxKey.swift; sourceTree = "<group>"; };
+		115E82EC251A44BC004DCB1E /* ObjectId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectId.swift; sourceTree = "<group>"; };
+		115E82EF251A4553004DCB1E /* RegularExpression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegularExpression.swift; sourceTree = "<group>"; };
+		115E82F2251A4590004DCB1E /* Timestamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timestamp.swift; sourceTree = "<group>"; };
 		1170FB042501CB3F0049E81D /* WriteConcern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteConcern.swift; sourceTree = "<group>"; };
 		1170FB072501CCD30049E81D /* ReadConcern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadConcern.swift; sourceTree = "<group>"; };
 		1170FB0A2501CD2F0049E81D /* ReadPreference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadPreference.swift; sourceTree = "<group>"; };
@@ -381,11 +396,16 @@
 				111D47D924F7908D00B7462B /* FindOptions.swift */,
 				111D47DF24F790C700B7462B /* InsertOptions.swift */,
 				111D47E524F7927D00B7462B /* InsertResult.swift */,
+				115E82E6251A4495004DCB1E /* MinKey.swift */,
+				115E82E9251A44AA004DCB1E /* MaxKey.swift */,
+				115E82EC251A44BC004DCB1E /* ObjectId.swift */,
 				111D47E224F7910100B7462B /* UpdateOptions.swift */,
 				111D47E824F7940600B7462B /* UpdateResult.swift */,
 				1170FB042501CB3F0049E81D /* WriteConcern.swift */,
 				1170FB072501CCD30049E81D /* ReadConcern.swift */,
 				1170FB0A2501CD2F0049E81D /* ReadPreference.swift */,
+				115E82EF251A4553004DCB1E /* RegularExpression.swift */,
+				115E82F2251A4590004DCB1E /* Timestamp.swift */,
 				1170FB0D2501CEF70049E81D /* VaultIndex.swift */,
 				1170FB102501D21C0049E81D /* Result.swift */,
 			);
@@ -972,6 +992,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				11ED682B22FF1078004C17D0 /* ElastosHiveSDK.swift in Sources */,
+				115E82EE251A44BC004DCB1E /* ObjectId.swift in Sources */,
 				111D47CF24F7905100B7462B /* CountOptions.swift in Sources */,
 				1127463124FE3369007D6356 /* FileClient.swift in Sources */,
 				111D47F124F7A18900B7462B /* FileInfo.swift in Sources */,
@@ -997,11 +1018,14 @@
 				111D47F524F7A30300B7462B /* Executable.swift in Sources */,
 				1170FB092501CCD30049E81D /* ReadConcern.swift in Sources */,
 				111D478924EE57D000B7462B /* VaultConstants.swift in Sources */,
+				115E82EB251A44AA004DCB1E /* MaxKey.swift in Sources */,
 				111D47D224F7906100B7462B /* CreateCollectionOptions.swift in Sources */,
 				118F2D88250F23EB00447A0A /* AggregatedCondition.swift in Sources */,
+				115E82F4251A4590004DCB1E /* Timestamp.swift in Sources */,
 				1129C19524052CC500CD77F2 /* Alamofire+Synchronous.swift in Sources */,
 				1170FBA22508D35B0049E81D /* Header.swift in Sources */,
 				111D47E124F790C700B7462B /* InsertOptions.swift in Sources */,
+				115E82F1251A4553004DCB1E /* RegularExpression.swift in Sources */,
 				111D477A24ED0C1200B7462B /* VaultAuthHelper.swift in Sources */,
 				111D47FB24F7A79800B7462B /* Condition.swift in Sources */,
 				111D478F24F399AC00B7462B /* VaultApi.swift in Sources */,
@@ -1023,6 +1047,7 @@
 				111D478C24EE810A00B7462B /* VaultURL.swift in Sources */,
 				111D47C224F78E8200B7462B /* DatabaseProtocol.swift in Sources */,
 				1170FB0F2501CEF70049E81D /* VaultIndex.swift in Sources */,
+				115E82E8251A4495004DCB1E /* MinKey.swift in Sources */,
 				111D47FE24F8B63C00B7462B /* Options.swift in Sources */,
 				1103757123FF96A0004216D0 /* LogLevel.swift in Sources */,
 				111D479424F4E2C300B7462B /* VaultAuthInfoStoreImpl.swift in Sources */,
@@ -1042,6 +1067,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				111D47CE24F7905100B7462B /* CountOptions.swift in Sources */,
+				115E82ED251A44BC004DCB1E /* ObjectId.swift in Sources */,
 				111D47F024F7A18900B7462B /* FileInfo.swift in Sources */,
 				1127463024FE3369007D6356 /* FileClient.swift in Sources */,
 				1103756D23FF9689004216D0 /* DataResponse.swift in Sources */,
@@ -1067,11 +1093,14 @@
 				111D47D124F7906100B7462B /* CreateCollectionOptions.swift in Sources */,
 				1170FB082501CCD30049E81D /* ReadConcern.swift in Sources */,
 				1103757623FF96B5004216D0 /* ConnectHelper.swift in Sources */,
+				115E82EA251A44AA004DCB1E /* MaxKey.swift in Sources */,
 				111D47E024F790C700B7462B /* InsertOptions.swift in Sources */,
 				118F2D87250F23EB00447A0A /* AggregatedCondition.swift in Sources */,
+				115E82F3251A4590004DCB1E /* Timestamp.swift in Sources */,
 				1103757C23FF96C7004216D0 /* Persistent.swift in Sources */,
 				1170FBA12508D35A0049E81D /* Header.swift in Sources */,
 				111D477924ED0C1200B7462B /* VaultAuthHelper.swift in Sources */,
+				115E82F0251A4553004DCB1E /* RegularExpression.swift in Sources */,
 				11E573FF22C4C33400F85419 /* String.swift in Sources */,
 				111D47FA24F7A79800B7462B /* Condition.swift in Sources */,
 				111D478E24F399AC00B7462B /* VaultApi.swift in Sources */,
@@ -1093,6 +1122,7 @@
 				111D47E924F7940600B7462B /* UpdateResult.swift in Sources */,
 				A39CB4BF2292854000535E43 /* HiveCallback.swift in Sources */,
 				1170FB0E2501CEF70049E81D /* VaultIndex.swift in Sources */,
+				115E82E7251A4495004DCB1E /* MinKey.swift in Sources */,
 				111D47FD24F8B63C00B7462B /* Options.swift in Sources */,
 				A3FD3C81228000EE0031413A /* HiveClient.swift in Sources */,
 				111D478B24EE810A00B7462B /* VaultURL.swift in Sources */,
