@@ -23,8 +23,8 @@
 import Foundation
 
 public class Executable: NSObject {
-    private var type: String
-    private var name: String?
+    var type: String
+    var name: String?
     
     init(_ type: String, _ name: String) {
         self.type = type
@@ -35,7 +35,12 @@ public class Executable: NSObject {
         self.type = type
     }
     
-    public func serialize()throws -> [String: Any] {
+    public func serialize() -> String {
+        return ""
+    }
+
+    public func jsonSerialize()throws -> [String: Any] {
+
         return [: ]
     }
 }

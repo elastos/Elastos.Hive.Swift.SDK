@@ -49,5 +49,50 @@ public class AggregatedExecutable: Executable {
         return self
     }
 
-    //TODO: override GETBODY
+    func body() -> [Executable] {
+        return executables
+    }
+
+    public override func serialize() -> String {
+        let jsonGenerator = JsonGenerator()
+        jsonGenerator.writeStartObject()
+        jsonGenerator.writeStringField("type", type)
+        if let _ = name {
+            jsonGenerator.writeStringField("name", name!)
+        }
+        if executables.count != 0 {
+            jsonGenerator.writeFieldName("body")
+            jsonGenerator.writeStartArray()
+            executables.forEach { e in
+                jsonGenerator.writeStartObject()
+                jsonGenerator.writeStringField("type", e.type)
+                if let _ = e.name {
+                    jsonGenerator.writeStringField("name", e.name!)
+                }
+                jsonGenerator.writeEndObject()
+            }
+            jsonGenerator.writeEndArray()
+        }
+        jsonGenerator.writeEndObject()
+        return jsonGenerator.toString()
+    }
+
+    public override func jsonSerialize() throws -> [String : Any] {
+        var param: [String: Any] = ["type": type]
+        if let _ = name {
+            param["name"] = name
+        }
+        if executables.count > 0 {
+            var array: [[String: Any]] = []
+            executables.forEach { e in
+                var d = ["type": e.type]
+                if let _  = e.name {
+                    d["name"] = e.name!
+                }
+                array.append(d)
+            }
+            param["body"] = array
+        }
+        return param
+    }
 }

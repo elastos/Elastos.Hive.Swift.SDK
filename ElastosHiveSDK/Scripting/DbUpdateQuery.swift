@@ -43,5 +43,29 @@ public class UpdateQuery  {
         self.update = update
         self.filter = filter
     }
-    // TODO: 序列化
+
+    public func serialize() throws -> String {
+        let jsonGenerator = JsonGenerator()
+
+        jsonGenerator.writeStartObject()
+        jsonGenerator.writeStringField("collection", collection)
+        var data = try JSONSerialization.data(withJSONObject: filter, options: [])
+        guard let jsonString = String(data: data, encoding: .utf8) else {
+            return ""
+        }
+        jsonGenerator.writeStringField("filter", jsonString)
+
+        data = try JSONSerialization.data(withJSONObject: update, options: [])
+        guard let str = String(data: data, encoding: .utf8) else {
+            return ""
+        }
+        jsonGenerator.writeStringField("update", str)
+
+        return jsonGenerator.toString()
+    }
+
+    public func jsonSerialize()throws -> [String: Any] {
+
+        return ["collection": collection, "filter": filter, "update": update]
+    }
 }

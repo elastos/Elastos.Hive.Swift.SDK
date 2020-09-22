@@ -41,6 +41,24 @@ public class InsertQuery {
         self.collection = collection
         self.doc = doc
     }
-    // TODO: 序列化
+
+    public func serialize() throws -> String {
+        let jsonGenerator = JsonGenerator()
+
+        jsonGenerator.writeStartObject()
+        jsonGenerator.writeStringField("collection", collection)
+        let data = try JSONSerialization.data(withJSONObject: doc, options: [])
+        guard let jsonString = String(data: data, encoding: .utf8) else {
+            return ""
+        }
+        jsonGenerator.writeStringField("document", jsonString)
+
+        return jsonGenerator.toString()
+    }
+
+    public func jsonSerialize()throws -> [String: Any] {
+
+        return ["collection": collection, "document": doc]
+    }
 }
 

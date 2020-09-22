@@ -23,8 +23,8 @@
 import Foundation
 
 public class Condition: NSObject {
-    private var type: String
-    private var name: String?
+    var type: String
+    var name: String?
 
     init(_ type: String, _ name: String) {
         self.type = type
@@ -36,16 +36,19 @@ public class Condition: NSObject {
     }
 
     func serialize() throws -> String {
-        var param = ["type": type]
+        let jsonGenerator = JsonGenerator()
+        jsonGenerator.writeStartObject()
+        jsonGenerator.writeStringField("type", type)
         if let _ = name {
-            param["name"] = name!
+            jsonGenerator.writeStringField("name", name!)
         }
-        let data = try JSONSerialization.data(withJSONObject: param, options: [])
-        guard let paramStr = String(data: data, encoding: .utf8) else {
-            return ""
-        }
+        jsonGenerator.writeEndObject()
+        return jsonGenerator.toString()
+    }
 
-        return paramStr
+    public func jsonSerialize()throws -> [String: Any] {
+
+        return [: ]
     }
 }
 

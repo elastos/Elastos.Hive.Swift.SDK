@@ -31,7 +31,7 @@ public class RawExecutable: Executable {
         super.init(TYPE)
     }
 
-    public override func serialize()throws -> [String: Any] {
+    public override func jsonSerialize() throws -> [String : Any] {
         let data = executable.data(using: String.Encoding.utf8)
         let re = try JSONSerialization.jsonObject(with: data!,options: .mutableContainers) as? [String : Any]
         guard re != nil else {

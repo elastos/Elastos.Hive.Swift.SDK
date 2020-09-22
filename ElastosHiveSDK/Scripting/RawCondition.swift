@@ -31,5 +31,18 @@ public class RawCondition: Condition {
         super.init(TYPE)
     }
 
-    // TODO: serialize
+    // TODO: CHECK
+    public override func serialize() throws -> String {
+        let jsonGenerator = JsonGenerator()
+        jsonGenerator.writeStartObject()
+        jsonGenerator.writeStringField("type", type)
+        jsonGenerator.writeStringField("collection", condition)
+
+        return jsonGenerator.toString()
+    }
+
+    public override func jsonSerialize()throws -> [String: Any] {
+
+        return ["type": type, "condition": condition]
+    }
 }
