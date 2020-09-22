@@ -46,7 +46,6 @@ public class UpdateQuery  {
 
     public func serialize() throws -> String {
         let jsonGenerator = JsonGenerator()
-
         jsonGenerator.writeStartObject()
         jsonGenerator.writeStringField("collection", collection)
         var data = try JSONSerialization.data(withJSONObject: filter, options: [])

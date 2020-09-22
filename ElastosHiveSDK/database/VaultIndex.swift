@@ -23,5 +23,39 @@
 import Foundation
 
 public class VaultIndex: NSObject {
+   public enum Order : Int {
+        case ASCENDING = 1
+        case DESCENDING = -1
+    }
 
+    private var _key: String
+    private var _order: Order
+
+    public init(_ key: String, _ order: Order) {
+        self._key = key
+        self._order = order
+        super.init()
+    }
+
+    public var key: String {
+        return _key
+    }
+
+    public var order: Order {
+        return _order
+    }
+
+    public func serialize() throws -> String {
+        let jsonGenerator = JsonGenerator()
+        jsonGenerator.writeStartObject()
+        jsonGenerator.writeNumberField(key, order.rawValue)
+
+        return jsonGenerator.toString()
+    }
+
+    public func jsonSerialize()throws -> [String: Any] {
+
+        return [key: _order]
+    }
 }
+
