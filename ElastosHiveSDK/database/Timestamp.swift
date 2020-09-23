@@ -22,7 +22,7 @@
 
 import Foundation
 
-public class Timestamp: NSObject {
+public class Timestamp: NSObject, Encodable {
     private var _t: Int
     private var _i: Int
 
@@ -39,16 +39,13 @@ public class Timestamp: NSObject {
         return _t
     }
 
-    public func serialize() -> String {
-        let gen = JsonGenerator()
-        gen.writeStartObject()
-        gen.writeFieldName("$timestamp")
-        gen.writeStartObject()
-        gen.writeNumberField("t", _t)
-        gen.writeNumberField("i", _i)
-        gen.writeEndObject()
-        gen.writeEndObject()
-
-        return gen.toString()
+    public func serialize(_ jsonGenerator: JsonGenerator) {
+        jsonGenerator.writeStartObject()
+        jsonGenerator.writeFieldName("$timestamp")
+        jsonGenerator.writeStartObject()
+        jsonGenerator.writeNumberField("t", _t)
+        jsonGenerator.writeNumberField("i", _i)
+        jsonGenerator.writeEndObject()
+        jsonGenerator.writeEndObject()
     }
 }

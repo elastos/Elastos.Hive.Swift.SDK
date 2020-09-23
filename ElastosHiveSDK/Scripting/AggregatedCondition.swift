@@ -54,13 +54,8 @@ public class AggregatedCondition: Condition {
         if conditions.count != 0 {
             jsonGenerator.writeFieldName("body")
             jsonGenerator.writeStartArray()
-            conditions.forEach { c in
-                jsonGenerator.writeStartObject()
-                jsonGenerator.writeStringField("type", c.type)
-                if let _ = c.name {
-                    jsonGenerator.writeStringField("name", c.name!)
-                }
-                jsonGenerator.writeEndObject()
+            try conditions.forEach { c in
+               try c.serialize(jsonGenerator)
             }
             jsonGenerator.writeEndArray()
         }
@@ -68,7 +63,23 @@ public class AggregatedCondition: Condition {
         return jsonGenerator.toString()
     }
 
-    public override func jsonSerialize() throws -> [String : Any] {
+    override func serialize(_ gen: JsonGenerator) throws {
+        gen.writeStartObject()
+        gen.writeStringField("type", type)
+        gen.writeStringField("name", name!)
+        if body().count > 0 {
+            gen.writeFieldName("body")
+            gen.writeStartArray()
+            let cs = body()
+            try cs.forEach { c in
+                try c.serialize(gen)
+            }
+            gen.writeEndArray()
+        }
+        gen.writeEndObject()
+    }
+
+    public override func jsonSerialize() -> [String : Any] {
         var param: [String: Any] = ["type": type]
         if let _ = name {
             param["name"] = name

@@ -32,5 +32,21 @@ public class OrCondition: AggregatedCondition {
     public init(_ name: String) {
         super.init(TYPE, name)
     }
+
+    override func serialize(_ gen: JsonGenerator) throws {
+        gen.writeStartObject()
+        gen.writeStringField("type", type)
+        gen.writeStringField("name", name!)
+        if body().count > 0 {
+            gen.writeFieldName("body")
+            gen.writeStartArray()
+            let cs = body()
+            try cs.forEach { c in
+                try c.serialize(gen)
+            }
+            gen.writeEndArray()
+        }
+        gen.writeEndObject()
+    }
 }
 

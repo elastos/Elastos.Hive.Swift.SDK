@@ -22,7 +22,7 @@
 
 import Foundation
 
-public class MinKey: NSObject {
+public class MinKey: Encodable {
     private var _value: Int
 
     public init(_ value: Int) {
@@ -32,14 +32,16 @@ public class MinKey: NSObject {
     var vaule: Int {
         return _value
     }
+//
+//    public func encode(to encoder: Encoder) throws {
+//
+//    }
 
-    public func serialize() throws -> String {
-        let gen = JsonGenerator()
-        gen.writeStartObject()
-        gen.writeNumberField("$minKey", vaule)
-        gen.writeEndObject()
-
-        return gen.toString()
+    public func serialize(_ jsonGenerator: JsonGenerator) {
+//        let gen = JsonGenerator()
+        jsonGenerator.writeStartObject()
+        jsonGenerator.writeNumberField("$minKey", vaule)
+        jsonGenerator.writeEndObject()
     }
 }
 

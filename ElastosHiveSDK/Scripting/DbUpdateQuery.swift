@@ -30,7 +30,6 @@ public class DbUpdateQuery: Executable {
         self.query = UpdateQuery (collection, filter, update)
         super.init(TYPE, name)
     }
-
 }
 
 public class UpdateQuery  {

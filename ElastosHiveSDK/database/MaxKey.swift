@@ -22,7 +22,7 @@
 
 import Foundation
 
-public class MaxKey: NSObject {
+public class MaxKey: NSObject, Encodable {
     private var _value: Int
 
     public init(_ value: Int) {
@@ -33,12 +33,9 @@ public class MaxKey: NSObject {
         return _value
     }
 
-    public func serialize() throws -> String {
-        let gen = JsonGenerator()
-        gen.writeStartObject()
-        gen.writeNumberField("$maxKey", vaule)
-        gen.writeEndObject()
-
-        return gen.toString()
+    public func serialize(_ jsonGenerator: JsonGenerator) {
+        jsonGenerator.writeStartObject()
+        jsonGenerator.writeNumberField("$maxKey", vaule)
+        jsonGenerator.writeEndObject()
     }
 }

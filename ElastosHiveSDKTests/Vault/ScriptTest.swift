@@ -14,46 +14,31 @@ class ScriptTest: XCTestCase {
             let data = json.data(using: String.Encoding.utf8)
             var dict = try JSONSerialization.jsonObject(with: data!,options: .mutableContainers) as! [String : Any]
             dict["dateField"] = Date()
-            dict["idField"] = "123123123123123123"
-            dict["minKeyField"] =
+            dict["idField"] = ObjectId("123123123123123123")
+            dict["minKeyField"] = MinKey(100)
+            dict["maxKeyField"] = MaxKey(200)
+            dict["regexField"] = RegularExpression("testpattern", "i")
+            dict["tsField"] = Timestamp(100000, 1234)
+
+            let cond1 = QueryHasResultsCondition("cond1", "c1", dict)
+            let cond2 = QueryHasResultsCondition("cond2", "c2", dict)
+            let cond3 = QueryHasResultsCondition("cond3", "c3", dict)
+            let cond4 = QueryHasResultsCondition("cond4", "c4", dict)
+            let cond5 = RawCondition(json)
+
+            let orCond = OrCondition("abc", [cond1, cond2])
+            let andCond = AndCondition("xyz", [cond3, cond4])
+            let cond = OrCondition("root")
+            cond.append(orCond).append(cond5).append(andCond)
+
+//            print(cond5.serialize())
+            print(try cond.serialize())
+            print(try cond.serialize())
         } catch {
             XCTFail()
         }
     }
-    /*
-    @Test
-    public void testCondition() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        String json = "{\"name\":\"mkyong\", \"age\":37, \"c\":[\"adc\",\"zfy\",\"aaa\"], \"d\": {\"foo\": 1, \"bar\": 2}}";
-
-        ObjectNode n = (ObjectNode)mapper.readTree(json);
-        n.putPOJO("minKeyField", new MinKey(100));
-        n.putPOJO("maxKeyField", new MaxKey(200));
-        n.putPOJO("regexField", new RegularExpression("testpattern", "i"));
-        n.putPOJO("tsField", new Timestamp(100000, 1234));
-
-        Condition cond1 = new QueryHasResultsCondition("cond1", "c1", n);
-        Condition cond2 = new QueryHasResultsCondition("cond2", "c2", n);
-        Condition cond3 = new QueryHasResultsCondition("cond3", "c3", n);
-        Condition cond4 = new QueryHasResultsCondition("cond4", "c4", n);
-        RawCondition cond5 = new RawCondition(json);
-
-        OrCondition orCond = new OrCondition("abc", new Condition[] { cond1, cond2});
-        AndCondition andCond = new AndCondition("xyz", new Condition[] { cond3, cond4});
-
-        OrCondition cond = new OrCondition("root");
-        cond.append(orCond).append(cond5).append(andCond);
-
-        JsonFactory factory = new JsonFactory();
-        StringWriter jsonObjectWriter = new StringWriter();
-        JsonGenerator generator = factory.createGenerator(jsonObjectWriter);
-
-
-
-        System.out.println(cond5.serialize());
-        System.out.println(cond.serialize());
-    }
-    */
+    
     func testExecutable() {
         do {
             let json = "{\"name\":\"mkyong\", \"age\":37, \"c\":[\"adc\",\"zfy\",\"aaa\"], \"d\": {\"foo\": 1, \"bar\": 2}}"
@@ -68,9 +53,14 @@ class ScriptTest: XCTestCase {
                 .append(exec2)
                 .append(exec3)
             print(ae)
+//            print(try ae.serialize())
+            //System.out.println(ae.serialize());
             let ae2 = AggregatedExecutable("ae2")
             try ae2.append(exec1).append(exec2).append(ae).append(exec3)
             print(ae2)
+            print(try ae2.serialize())
+            print(try ae2.serialize())
+            // System.out.println(ae2.serialize())
         } catch {
             XCTFail()
         }

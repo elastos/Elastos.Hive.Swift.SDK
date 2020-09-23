@@ -31,6 +31,14 @@ public class DbInsertQuery: Executable {
         super.init(TYPE, name)
     }
 
+    public override func serialize(_ jsonGenerator: JsonGenerator) throws {
+        jsonGenerator.writeStartObject()
+        jsonGenerator.writeStringField("type", type)
+        jsonGenerator.writeStringField("name", name!)
+        jsonGenerator.writeFieldName("body")
+        try query.serialize(jsonGenerator)
+        jsonGenerator.writeEndObject()
+    }
 }
 
 public class InsertQuery {
@@ -40,6 +48,77 @@ public class InsertQuery {
     public init(_ collection: String, _ doc: [String: Any]) {
         self.collection = collection
         self.doc = doc
+    }
+    public func serialize(_ jsonGenerator: JsonGenerator) throws {
+        jsonGenerator.writeStartObject()
+        jsonGenerator.writeStringField("collection", collection)
+        jsonGenerator.writeFieldName("document")
+        try serialize(jsonGenerator: jsonGenerator, doc)
+        jsonGenerator.writeEndObject()
+    }
+
+    private func serialize(jsonGenerator: JsonGenerator, _ param: [String: Any]) throws {
+        jsonGenerator.writeStartObject()
+        try param.forEach { key, value in
+            jsonGenerator.writeFieldName(key)
+            if value is Date {
+                let m = value as! Date
+                jsonGenerator.writeStartObject()
+                jsonGenerator.writeFieldName("$data")
+                jsonGenerator.writeString(Date.convertToUTCStringFromDate(m))
+                jsonGenerator.writeEndObject()
+            }
+            else if value is Int {
+                jsonGenerator.writeNumber(value as! Int)
+            }
+            else if value is Bool {
+                let m = value as! Bool
+                jsonGenerator.writeBool(m)
+            }
+            else if value is [String: Any] {
+                try serialize(jsonGenerator: jsonGenerator, value as! [String: Any])
+            }
+            else if value is String {
+                jsonGenerator.writeString(value as! String)
+            }
+            else if value is [Any] {
+                let m = value as! [Any]
+                try serialize(jsonGenerator: jsonGenerator, m)
+            }
+        }
+        jsonGenerator.writeEndObject()
+    }
+
+    private func serialize(jsonGenerator: JsonGenerator, _ param: [Any]) throws {
+        jsonGenerator.writeStartArray()
+        try param.forEach { value in
+            if value is Int {
+                jsonGenerator.writeNumber(value as! Int)
+            }
+            else if value is ObjectId {
+                let m = value as! ObjectId
+                m.serialize(jsonGenerator)
+            }
+            else if value is Date {
+                let m = value as! Date
+                jsonGenerator.writeString(Date.convertToUTCStringFromDate(m))
+            }
+            else if value is Bool {
+                let m = value as! Bool
+                jsonGenerator.writeBool(m)
+            }
+            else if value is [String: Any] {
+                try serialize(jsonGenerator: jsonGenerator, value as! [String: Any])
+            }
+            else if value is String {
+                jsonGenerator.writeString(value as! String)
+            }
+            else if value is [Any] {
+                let m = value as! [Any]
+                try serialize(jsonGenerator: jsonGenerator, m)
+            }
+        }
+        jsonGenerator.writeEndArray()
     }
 
     public func serialize() throws -> String {

@@ -22,7 +22,7 @@
 
 import Foundation
 
-class ScriptClient: ScriptingProtocol {
+public class ScriptClient: ScriptingProtocol {
 
     private var authHelper: VaultAuthHelper
 
@@ -30,13 +30,13 @@ class ScriptClient: ScriptingProtocol {
         self.authHelper = authHelper
     }
 
-    func registerScript(_ name: String, _ executable: Executable) -> HivePromise<Bool> {
+    public func registerScript(_ name: String, _ executable: Executable) -> HivePromise<Bool> {
         return authHelper.checkValid().then { _ -> HivePromise<Bool> in
             return self.registerScriptImp(name, nil, executable)
         }
     }
 
-    func registerScript(_ name: String, _ condition: Condition, _ executable: Executable) -> HivePromise<Bool> {
+    public func registerScript(_ name: String, _ condition: Condition, _ executable: Executable) -> HivePromise<Bool> {
 
         return authHelper.checkValid().then { _ -> HivePromise<Bool> in
             return self.registerScriptImp(name, condition, executable)
@@ -48,19 +48,20 @@ class ScriptClient: ScriptingProtocol {
         if let _ = accessCondition {
             param["accessCondition"] = accessCondition!
         }
-        param["executable"] = try! executable.serialize()
+        // TODO: 
+        param["executable"] = try! executable.serialize(JsonGenerator())
         let url = VaultURL.sharedInstance.registerScript()
 
         return VaultApi.requestWithBool(url: url, parameters: param, headers: Header(authHelper).headers())
     }
 
-    func call(_ scriptName: String) -> HivePromise<OutputStream> {
+    public func call(_ scriptName: String) -> HivePromise<OutputStream> {
         return authHelper.checkValid().then { _ -> HivePromise<OutputStream> in
             return self.callImp(scriptName)
         }
     }
 
-    func call(_ scriptName: String, _ params: [String : Any]) -> HivePromise<OutputStream> {
+    public func call(_ scriptName: String, _ params: [String : Any]) -> HivePromise<OutputStream> {
         return authHelper.checkValid().then { _ -> HivePromise<OutputStream> in
             return self.callImp(scriptName, params: params)
         }

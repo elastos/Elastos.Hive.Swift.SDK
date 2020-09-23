@@ -23,7 +23,7 @@
 import Foundation
 
 @inline(__always) private func TAG() -> String { return "VaultAuthHelper" }
-class VaultAuthHelper: ConnectHelper {
+public class VaultAuthHelper: ConnectHelper {
     let clientIdKey: String = "client_id"
     let accessTokenKey: String = "access_token"
     let refreshTokenKey: String = "refresh_token"
@@ -68,12 +68,12 @@ class VaultAuthHelper: ConnectHelper {
         // reset auth api
     }
 
-    override func checkValid() -> HivePromise<Void> {
+    public override func checkValid() -> HivePromise<Void> {
 
         return checkValid(handleBy: HiveCallback<Void>())
     }
 
-    override func checkValid(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
+    public override func checkValid(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
         return HivePromise<Void> { resolver in
             let globalQueue = DispatchQueue.global()
             globalQueue.async {

@@ -35,6 +35,10 @@ public class Condition: NSObject {
         self.type = type
     }
 
+    func serialize(_ gen: JsonGenerator) throws {
+
+    }
+
     func serialize() throws -> String {
         let jsonGenerator = JsonGenerator()
         jsonGenerator.writeStartObject()
@@ -46,7 +50,7 @@ public class Condition: NSObject {
         return jsonGenerator.toString()
     }
 
-    public func jsonSerialize()throws -> [String: Any] {
+    public func jsonSerialize() throws -> [String: Any] {
         var para: [String: Any] = ["type": type]
         if let _ = name {
             para["name"] = name

@@ -22,7 +22,7 @@
 
 import Foundation
 private let remoteDataFromInputStreamContent = "this is test for DataFromInputStream".data(using: .utf8)
-class FileClient: FilesProtocol {
+public class FileClient: FilesProtocol {
 
     private var authHelper: VaultAuthHelper
 
@@ -30,11 +30,11 @@ class FileClient: FilesProtocol {
         self.authHelper = authHelper
     }
 
-    func upload(_ localPath: String, asRemoteFile: String) -> Promise<Bool> {
+    public func upload(_ localPath: String, asRemoteFile: String) -> HivePromise<Bool> {
         return upload(localPath, asRemoteFile: asRemoteFile, handler: HiveCallback())
     }
 
-    func upload(_ localPath: String, asRemoteFile: String, handler: HiveCallback<Bool>) -> Promise<Bool> {
+    public func upload(_ localPath: String, asRemoteFile: String, handler: HiveCallback<Bool>) -> HivePromise<Bool> {
         return authHelper.checkValid().then { _ -> HivePromise<Bool> in
             return self.uploadImp(localPath, asRemoteFile: asRemoteFile, handler: handler)
         }
@@ -69,11 +69,11 @@ class FileClient: FilesProtocol {
         }
     }
 
-    func download(_ path: String) -> HivePromise<OutputStream> {
+    public func download(_ path: String) -> HivePromise<OutputStream> {
         return download(path, handler: HiveCallback())
     }
 
-    func download(_ path: String, handler: HiveCallback<OutputStream>) -> HivePromise<OutputStream> {
+    public func download(_ path: String, handler: HiveCallback<OutputStream>) -> HivePromise<OutputStream> {
         return authHelper.checkValid().then { _ -> HivePromise<OutputStream> in
             return self.downloadImp(path, handler: handler)
         }
@@ -128,11 +128,11 @@ class FileClient: FilesProtocol {
         })
     }
 
-    func delete(_ path: String) -> HivePromise<Bool> {
+    public func delete(_ path: String) -> HivePromise<Bool> {
         return delete(path, handler: HiveCallback())
     }
 
-    func delete(_ path: String, handler: HiveCallback<Bool>) -> HivePromise<Bool> {
+    public func delete(_ path: String, handler: HiveCallback<Bool>) -> HivePromise<Bool> {
         return authHelper.checkValid().then { _ -> HivePromise<Bool> in
             return self.deleteImp(path, handler)
         }
@@ -144,11 +144,11 @@ class FileClient: FilesProtocol {
         return VaultApi.requestWithBool(url: url, parameters: param, headers: Header(authHelper).headers(), handler: handler)
     }
 
-    func move(_ src: String, _ dest: String) -> HivePromise<Bool> {
+    public func move(_ src: String, _ dest: String) -> HivePromise<Bool> {
         return move(src, dest, handler: HiveCallback())
     }
 
-    func move(_ src: String, _ dest: String, handler: HiveCallback<Bool>) -> HivePromise<Bool> {
+    public func move(_ src: String, _ dest: String, handler: HiveCallback<Bool>) -> HivePromise<Bool> {
         return authHelper.checkValid().then { _ -> HivePromise<Bool> in
             return self.moveImp(src, dest, handler)
         }
@@ -160,11 +160,11 @@ class FileClient: FilesProtocol {
         return VaultApi.requestWithBool(url: url, parameters: param, headers: Header(authHelper).headers(), handler: handler)
     }
 
-    func copy(_ src: String, _ dest: String) -> HivePromise<Bool> {
+    public func copy(_ src: String, _ dest: String) -> HivePromise<Bool> {
         return copy(src, dest, handler: HiveCallback())
     }
 
-    func copy(_ src: String, _ dest: String, handler: HiveCallback<Bool>) -> HivePromise<Bool> {
+    public func copy(_ src: String, _ dest: String, handler: HiveCallback<Bool>) -> HivePromise<Bool> {
         return authHelper.checkValid().then { _ -> HivePromise<Bool> in
             return self.copyImp(src, dest, handler)
         }
@@ -176,11 +176,11 @@ class FileClient: FilesProtocol {
         return VaultApi.requestWithBool(url: url, parameters: param, headers: Header(authHelper).headers(), handler: handler)
     }
 
-    func hash(_ path: String) -> HivePromise<String> {
+    public func hash(_ path: String) -> HivePromise<String> {
         return hash(path, handler: HiveCallback())
     }
 
-    func hash(_ path: String, handler: HiveCallback<String>) -> HivePromise<String> {
+    public func hash(_ path: String, handler: HiveCallback<String>) -> HivePromise<String> {
         return authHelper.checkValid().then { _ -> HivePromise<String> in
             return self.hashImp(path, handler)
         }
@@ -199,11 +199,11 @@ class FileClient: FilesProtocol {
         }
     }
 
-    func list(_ path: String) -> HivePromise<Array<FileInfo>> {
+    public func list(_ path: String) -> HivePromise<Array<FileInfo>> {
         return list(path, handler: HiveCallback())
     }
 
-    func list(_ path: String, handler: HiveCallback<Array<FileInfo>>) -> HivePromise<Array<FileInfo>> {
+    public func list(_ path: String, handler: HiveCallback<Array<FileInfo>>) -> HivePromise<Array<FileInfo>> {
         return authHelper.checkValid().then { _ -> HivePromise<Array<FileInfo>> in
             return self.listImp(path, handler)
         }
@@ -232,11 +232,11 @@ class FileClient: FilesProtocol {
         }
     }
 
-    func stat(_ path: String) -> HivePromise<FileInfo> {
+    public func stat(_ path: String) -> HivePromise<FileInfo> {
         return stat(path, handler: HiveCallback())
     }
 
-    func stat(_ path: String, handler: HiveCallback<FileInfo>) -> HivePromise<FileInfo> {
+    public func stat(_ path: String, handler: HiveCallback<FileInfo>) -> HivePromise<FileInfo> {
         return authHelper.checkValid().then { _ -> HivePromise<FileInfo> in
             return self.statImp(path, handler)
         }

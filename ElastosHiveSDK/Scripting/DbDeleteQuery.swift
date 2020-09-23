@@ -45,18 +45,112 @@ public class Query {
         self.filter = query
     }
 
-    public func serialize() throws -> String {
-        let jsonGenerator = JsonGenerator()
-
+    public func serialize(_ jsonGenerator: JsonGenerator) throws {
         jsonGenerator.writeStartObject()
         jsonGenerator.writeStringField("collection", collection)
-        let data = try JSONSerialization.data(withJSONObject: filter, options: [])
-        guard let jsonString = String(data: data, encoding: .utf8) else {
-            return ""
-        }
-        jsonGenerator.writeStringField("filter", jsonString)
+        jsonGenerator.writeFieldName("filter")
+        try serialize(jsonGenerator: jsonGenerator, filter)
+        jsonGenerator.writeEndObject()
+    }
 
-        return jsonGenerator.toString()
+    private func serialize(jsonGenerator: JsonGenerator, _ param: [String: Any]) throws {
+        jsonGenerator.writeStartObject()
+        try param.forEach { key, value in
+            jsonGenerator.writeFieldName(key)
+            if value is MinKey {
+                let m = value as! MinKey
+                m.serialize(jsonGenerator)
+            }
+            else if value is MaxKey {
+                let m = value as! MaxKey
+                m.serialize(jsonGenerator)
+            }
+            else if value is RegularExpression {
+                let m = value as! RegularExpression
+                m.serialize(jsonGenerator)
+            }
+            else if value is Timestamp {
+                let m = value as! Timestamp
+                m.serialize(jsonGenerator)
+            }
+            else if value is ObjectId {
+                let m = value as! ObjectId
+                m.serialize(jsonGenerator)
+            }
+            else if value is Date {
+                let m = value as! Date
+                jsonGenerator.writeStartObject()
+                jsonGenerator.writeFieldName("$data")
+                jsonGenerator.writeString(Date.convertToUTCStringFromDate(m))
+                jsonGenerator.writeEndObject()
+            }
+            else if value is Int {
+                jsonGenerator.writeNumber(value as! Int)
+            }
+            else if value is Bool {
+                let m = value as! Bool
+                jsonGenerator.writeBool(m)
+            }
+            else if value is [String: Any] {
+                try serialize(jsonGenerator: jsonGenerator, value as! [String: Any])
+            }
+            else if value is String {
+                jsonGenerator.writeString(value as! String)
+            }
+            else if value is [Any] {
+                let m = value as! [Any]
+                try serialize(jsonGenerator: jsonGenerator, m)
+            }
+        }
+        jsonGenerator.writeEndObject()
+    }
+
+    private func serialize(jsonGenerator: JsonGenerator, _ param: [Any]) throws {
+        jsonGenerator.writeStartArray()
+        try param.forEach { value in
+            if value is MinKey {
+                let m = value as! MinKey
+                m.serialize(jsonGenerator)
+            }
+            else if value is MaxKey {
+                let m = value as! MaxKey
+                m.serialize(jsonGenerator)
+            }
+            else if value is RegularExpression {
+                let m = value as! RegularExpression
+                m.serialize(jsonGenerator)
+            }
+            else if value is Timestamp {
+                let m = value as! Timestamp
+                m.serialize(jsonGenerator)
+            }
+            else if value is Int {
+                jsonGenerator.writeNumber(value as! Int)
+            }
+            else if value is ObjectId {
+                let m = value as! ObjectId
+                m.serialize(jsonGenerator)
+            }
+            else if value is Date {
+                let m = value as! Date
+                jsonGenerator.writeString(Date.convertToUTCStringFromDate(m))
+            }
+            else if value is Bool {
+                let m = value as! Bool
+                jsonGenerator.writeBool(m)
+            }
+            else if value is [String: Any] {
+                try serialize(jsonGenerator: jsonGenerator, value as! [String: Any])
+            }
+            else if value is String {
+                jsonGenerator.writeString(value as! String)
+            }
+            else if value is [Any] {
+                let m = value as! [Any]
+                try serialize(jsonGenerator: jsonGenerator, m)
+            }
+        }
+        jsonGenerator.writeEndArray()
     }
 
     public func jsonSerialize()throws -> [String: Any] {

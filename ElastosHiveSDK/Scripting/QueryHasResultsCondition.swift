@@ -30,4 +30,13 @@ public class QueryHasResultsCondition: Condition {
         self.query = Query (collection, filter)
         super.init(TYPE, name)
     }
+
+    override func serialize(_ gen: JsonGenerator) throws {
+        gen.writeStartObject()
+        gen.writeStringField("type", type)
+        gen.writeStringField("name", name!)
+        gen.writeFieldName("body")
+        try query.serialize(gen)
+        gen.writeEndObject()
+    }
 }

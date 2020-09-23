@@ -34,8 +34,8 @@ public class Executable: NSObject {
     init(_ type: String) {
         self.type = type
     }
-    
-    public func serialize() -> String {
+
+    public func serialize() throws -> String {
         let jsonGenerator = JsonGenerator()
         jsonGenerator.writeStartObject()
         jsonGenerator.writeStringField("type", type)
@@ -44,6 +44,15 @@ public class Executable: NSObject {
         }
         jsonGenerator.writeEndObject()
         return jsonGenerator.toString()
+    }
+
+    public func serialize(_ jsonGenerator: JsonGenerator) throws {
+        jsonGenerator.writeStartObject()
+        jsonGenerator.writeStringField("type", type)
+        if let _ = name {
+            jsonGenerator.writeStringField("name", name!)
+        }
+        jsonGenerator.writeEndObject()
     }
 
     public func jsonSerialize()throws -> [String: Any] {

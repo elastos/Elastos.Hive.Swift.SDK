@@ -53,7 +53,7 @@ public class AggregatedExecutable: Executable {
         return executables
     }
 
-    public override func serialize() -> String {
+    public override func serialize() throws -> String {
         let jsonGenerator = JsonGenerator()
         jsonGenerator.writeStartObject()
         jsonGenerator.writeStringField("type", type)
@@ -63,18 +63,21 @@ public class AggregatedExecutable: Executable {
         if executables.count != 0 {
             jsonGenerator.writeFieldName("body")
             jsonGenerator.writeStartArray()
-            executables.forEach { e in
-                jsonGenerator.writeStartObject()
-                jsonGenerator.writeStringField("type", e.type)
-                if let _ = e.name {
-                    jsonGenerator.writeStringField("name", e.name!)
-                }
-                jsonGenerator.writeEndObject()
+            try executables.forEach { e in
+               try e.serialize(jsonGenerator)
             }
             jsonGenerator.writeEndArray()
         }
         jsonGenerator.writeEndObject()
         return jsonGenerator.toString()
+    }
+
+    public override func serialize(_ jsonGenerator: JsonGenerator) throws {
+        if executables.count != 0 {
+            try executables.forEach { e in
+               try e.serialize(jsonGenerator)
+            }
+        }
     }
 
     public override func jsonSerialize() throws -> [String : Any] {

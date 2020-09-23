@@ -22,6 +22,36 @@
 
 import Foundation
 
-class RegularExpression: NSObject {
+public class RegularExpression: NSObject, Encodable {
+    private var _pattern: String
+    private var _options: String?
 
+    public init(_ pattern: String, _ options: String) {
+        self._pattern = pattern
+        self._options = options
+    }
+
+    public init(_ pattern: String) {
+        self._pattern = pattern
+    }
+
+    var options: String? {
+        return _options
+    }
+
+    var pattern: String {
+        return _pattern
+    }
+
+    public func serialize(_ jsonGenerator: JsonGenerator) {
+        jsonGenerator.writeStartObject()
+        jsonGenerator.writeFieldName("$regularExpression")
+        jsonGenerator.writeStartObject()
+        jsonGenerator.writeStringField("pattern", pattern)
+        if let _ = options {
+            jsonGenerator.writeStringField("options", options!)
+        }
+        jsonGenerator.writeEndObject()
+        jsonGenerator.writeEndObject()
+    }
 }

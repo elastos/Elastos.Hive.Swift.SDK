@@ -31,7 +31,78 @@ public class RawCondition: Condition {
         super.init(TYPE)
     }
 
-    public override func serialize() throws -> String {
+    override func serialize(_ jsonGenerator: JsonGenerator) throws {
+        let param = try jsonSerialize()
+        try serialize(jsonGenerator: jsonGenerator, param)
+    }
+
+    private func serialize(jsonGenerator: JsonGenerator, _ param: [String: Any]) throws {
+        jsonGenerator.writeStartObject()
+        try param.forEach { key, value in
+            jsonGenerator.writeFieldName(key)
+            if value is Date {
+                let m = value as! Date
+                jsonGenerator.writeStartObject()
+                jsonGenerator.writeFieldName("$data")
+                jsonGenerator.writeString(Date.convertToUTCStringFromDate(m))
+                jsonGenerator.writeEndObject()
+            }
+            else if value is Int {
+                jsonGenerator.writeNumber(value as! Int)
+            }
+            else if value is Bool {
+                let m = value as! Bool
+                jsonGenerator.writeBool(m)
+            }
+            else if value is [String: Any] {
+                try serialize(jsonGenerator: jsonGenerator, value as! [String: Any])
+            }
+            else if value is String {
+                jsonGenerator.writeString(value as! String)
+            }
+            else if value is [Any] {
+                let m = value as! [Any]
+                try serialize(jsonGenerator: jsonGenerator, m)
+            }
+        }
+        jsonGenerator.writeEndObject()
+    }
+
+    private func serialize(jsonGenerator: JsonGenerator, _ param: [Any]) throws {
+        jsonGenerator.writeStartArray()
+        try param.forEach { value in
+            if value is Date {
+                let m = value as! Date
+                jsonGenerator.writeString(Date.convertToUTCStringFromDate(m))
+            }
+            else if value is Bool {
+                let m = value as! Bool
+                jsonGenerator.writeBool(m)
+            }
+            else if value is [String: Any] {
+                try serialize(jsonGenerator: jsonGenerator, value as! [String: Any])
+            }
+            else if value is String {
+                jsonGenerator.writeString(value as! String)
+            }
+            else if value is [Any] {
+                let m = value as! [Any]
+                try serialize(jsonGenerator: jsonGenerator, m)
+            }
+        }
+        jsonGenerator.writeEndArray()
+    }
+
+    public override func jsonSerialize() throws -> [String: Any] {
+        let data = condition.data(using: String.Encoding.utf8)
+        let re = try JSONSerialization.jsonObject(with: data!,options: .mutableContainers) as? [String : Any]
+        guard re != nil else {
+            throw HiveError.IllegalArgument(des: "param is nil")
+        }
+        return re!
+    }
+
+    public override func serialize() -> String {
 
         return condition
     }

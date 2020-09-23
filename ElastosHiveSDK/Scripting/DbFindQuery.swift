@@ -30,5 +30,14 @@ public class DbFindQuery: Executable {
         self.query = Query(collection, filter)
         super.init(TYPE, name)
     }
+
+    public override func serialize(_ jsonGenerator: JsonGenerator) throws {
+        jsonGenerator.writeStartObject()
+        jsonGenerator.writeStringField("type", type)
+        jsonGenerator.writeStringField("name", name!)
+        jsonGenerator.writeFieldName("body")
+        try query.serialize(jsonGenerator)
+        jsonGenerator.writeEndObject()
+    }
 }
 

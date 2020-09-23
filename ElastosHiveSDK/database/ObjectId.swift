@@ -33,12 +33,9 @@ public class ObjectId: NSObject {
         return _id
     }
 
-    public func serialize() throws -> String {
-        let gen = JsonGenerator()
-        gen.writeStartObject()
-        gen.writeStringField("$oid", id)
-        gen.writeEndObject()
-
-        return gen.toString()
+    public func serialize(_ jsonGenerator: JsonGenerator) {
+        jsonGenerator.writeStartObject()
+        jsonGenerator.writeStringField("$oid", id)
+        jsonGenerator.writeEndObject()
     }
 }

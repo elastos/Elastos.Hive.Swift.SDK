@@ -22,28 +22,28 @@
 
 import Foundation
 
-class DatabaseClient: DatabaseProtocol {
+public class DatabaseClient: DatabaseProtocol {
     private var authHelper: VaultAuthHelper
 
     public init(_ authHelper: VaultAuthHelper) {
         self.authHelper = authHelper
     }
     
-    func createCollection(_ name: String) -> HivePromise<Bool> {
+    public func createCollection(_ name: String) -> HivePromise<Bool> {
         return self.createCollection(name, handler: HiveCallback())
     }
 
-    func createCollection(_ name: String, handler: HiveCallback<Bool>) -> HivePromise<Bool> {
+    public func createCollection(_ name: String, handler: HiveCallback<Bool>) -> HivePromise<Bool> {
         return authHelper.checkValid().then { _ -> HivePromise<Bool> in
             return self.createColImp(name, nil, HiveCallback())
         }
     }
 
-    func createCollection(_ name: String, options: CreateCollectionOptions) -> HivePromise<Bool> {
+    public func createCollection(_ name: String, options: CreateCollectionOptions) -> HivePromise<Bool> {
         return createCollection(name, options: options, handler: HiveCallback())
     }
 
-    func createCollection(_ name: String, options: CreateCollectionOptions, handler: HiveCallback<Bool>) -> HivePromise<Bool> {
+    public func createCollection(_ name: String, options: CreateCollectionOptions, handler: HiveCallback<Bool>) -> HivePromise<Bool> {
         return authHelper.checkValid().then { _ -> HivePromise<Bool> in
             return self.createColImp(name, options, handler)
         }
@@ -57,11 +57,11 @@ class DatabaseClient: DatabaseProtocol {
         return VaultApi.requestWithBool(url: url, parameters: param, headers: header.headers(), handler: handleBy)
     }
 
-    func deleteCollection(_ name: String) -> HivePromise<Bool> {
+    public func deleteCollection(_ name: String) -> HivePromise<Bool> {
         return self.deleteCollection(name, handler: HiveCallback())
     }
 
-    func deleteCollection(_ name: String, handler: HiveCallback<Bool>) -> HivePromise<Bool> {
+    public func deleteCollection(_ name: String, handler: HiveCallback<Bool>) -> HivePromise<Bool> {
         return authHelper.checkValid().then { _ -> HivePromise<Bool> in
             return self.deleteColImp(name, handler)
         }
@@ -75,11 +75,11 @@ class DatabaseClient: DatabaseProtocol {
         return VaultApi.requestWithBool(url: url, parameters: param, headers: header.headers(), handler: handleBy)
     }
 
-    func insertOne(_ collection: String, _ doc: [String : Any], options: InsertOptions?) -> HivePromise<InsertResult> {
+    public func insertOne(_ collection: String, _ doc: [String : Any], options: InsertOptions?) -> HivePromise<InsertResult> {
         return self.insertOne(collection, doc, options: options, handler: HiveCallback())
     }
 
-    func insertOne(_ collection: String, _ doc: [String : Any], options: InsertOptions?, handler: HiveCallback<InsertResult>) -> HivePromise<InsertResult> {
+    public func insertOne(_ collection: String, _ doc: [String : Any], options: InsertOptions?, handler: HiveCallback<InsertResult>) -> HivePromise<InsertResult> {
         return authHelper.checkValid().then { _ -> HivePromise<InsertResult> in
             return self.insertOneImp(collection, doc, options, handler)
         }
@@ -92,11 +92,11 @@ class DatabaseClient: DatabaseProtocol {
         return VaultApi.requestWithInsert(url: url, parameters: param, headers: Header(authHelper).headers(), handler: handleBy)
     }
 
-    func insertMany(_ collection: String, _ docs: Array<[String : Any]>, options: InsertOptions) -> HivePromise<InsertResult> {
+    public func insertMany(_ collection: String, _ docs: Array<[String : Any]>, options: InsertOptions) -> HivePromise<InsertResult> {
         return insertMany(collection, docs, options: options, handler: HiveCallback())
     }
 
-    func insertMany(_ collection: String, _ docs: Array<[String : Any]>, options: InsertOptions, handler: HiveCallback<InsertResult>) -> HivePromise<InsertResult> {
+    public func insertMany(_ collection: String, _ docs: Array<[String : Any]>, options: InsertOptions, handler: HiveCallback<InsertResult>) -> HivePromise<InsertResult> {
         return authHelper.checkValid().then { _ -> HivePromise<InsertResult> in
             return self.insertManyImp(collection, docs, options, handler)
         }
@@ -109,11 +109,11 @@ class DatabaseClient: DatabaseProtocol {
         return VaultApi.requestWithInsert(url: url, parameters: param, headers: Header(authHelper).headers(), handler: handleBy)
     }
 
-    func countDocuments(_ collection: String, _ query: [String : Any], options: CountOptions) -> HivePromise<Int> {
+    public func countDocuments(_ collection: String, _ query: [String : Any], options: CountOptions) -> HivePromise<Int> {
         return countDocuments(collection, query, options: options, handler: HiveCallback())
     }
 
-    func countDocuments(_ collection: String, _ query: [String : Any], options: CountOptions, handler: HiveCallback<Int>) -> HivePromise<Int> {
+    public func countDocuments(_ collection: String, _ query: [String : Any], options: CountOptions, handler: HiveCallback<Int>) -> HivePromise<Int> {
         return authHelper.checkValid().then { _ -> HivePromise<Int> in
             return self.countDocumentsImp(collection, query, options, handler)
         }
@@ -134,11 +134,11 @@ class DatabaseClient: DatabaseProtocol {
         }
     }
 
-    func findOne(_ collection: String, _ query: [String : Any], options: FindOptions) -> HivePromise<[String : Any]> {
+    public func findOne(_ collection: String, _ query: [String : Any], options: FindOptions) -> HivePromise<[String : Any]> {
         return self.findOne(collection, query, options: options, handler: HiveCallback())
     }
 
-    func findOne(_ collection: String, _ query: [String : Any], options: FindOptions, handler: HiveCallback<[String : Any]>) -> HivePromise<[String : Any]> {
+    public func findOne(_ collection: String, _ query: [String : Any], options: FindOptions, handler: HiveCallback<[String : Any]>) -> HivePromise<[String : Any]> {
         return authHelper.checkValid().then { _ -> HivePromise<[String: Any]> in
             return self.findOneImp(collection, query, options, handler)
         }
@@ -159,11 +159,11 @@ class DatabaseClient: DatabaseProtocol {
         }
     }
 
-    func findMany(_ collection: String, _ query: [String : Any], options: FindOptions) -> HivePromise<Array<[String : Any]>> {
+    public func findMany(_ collection: String, _ query: [String : Any], options: FindOptions) -> HivePromise<Array<[String : Any]>> {
         return self.findMany(collection, query, options: options, handler: HiveCallback())
     }
 
-    func findMany(_ collection: String, _ query: [String : Any], options: FindOptions, handler: HiveCallback<Array<[String : Any]>>) -> HivePromise<Array<[String : Any]>> {
+    public func findMany(_ collection: String, _ query: [String : Any], options: FindOptions, handler: HiveCallback<Array<[String : Any]>>) -> HivePromise<Array<[String : Any]>> {
         return authHelper.checkValid().then { _ -> HivePromise<Array<[String : Any]>> in
             return self.findManyImp(collection, query, options, HiveCallback())
         }
@@ -188,11 +188,11 @@ class DatabaseClient: DatabaseProtocol {
         }
     }
 
-    func updateOne(_ collection: String, _ filter: [String : Any], _ update: [String : Any], options: UpdateOptions) -> HivePromise<UpdateResult> {
+    public func updateOne(_ collection: String, _ filter: [String : Any], _ update: [String : Any], options: UpdateOptions) -> HivePromise<UpdateResult> {
         return self.updateOne(collection, filter, update, options: options, handler: HiveCallback())
     }
 
-    func updateOne(_ collection: String, _ filter: [String : Any], _ update: [String : Any], options: UpdateOptions, handler: HiveCallback<UpdateResult>) -> HivePromise<UpdateResult> {
+    public func updateOne(_ collection: String, _ filter: [String : Any], _ update: [String : Any], options: UpdateOptions, handler: HiveCallback<UpdateResult>) -> HivePromise<UpdateResult> {
         return authHelper.checkValid().then { _ -> HivePromise<UpdateResult> in
             return self.updateOneImp(collection, filter, update, options, handler)
         }
@@ -214,11 +214,11 @@ class DatabaseClient: DatabaseProtocol {
         }
     }
 
-    func updateMany(_ collection: String, _ filter: [String : Any], _ update: [String : Any], options: UpdateOptions) -> HivePromise<UpdateResult> {
+    public func updateMany(_ collection: String, _ filter: [String : Any], _ update: [String : Any], options: UpdateOptions) -> HivePromise<UpdateResult> {
         return self.updateMany(collection, filter, update, options: options, handler: HiveCallback())
     }
 
-    func updateMany(_ collection: String, _ filter: [String : Any], _ update: [String : Any], options: UpdateOptions, handler: HiveCallback<UpdateResult>) -> HivePromise<UpdateResult> {
+    public func updateMany(_ collection: String, _ filter: [String : Any], _ update: [String : Any], options: UpdateOptions, handler: HiveCallback<UpdateResult>) -> HivePromise<UpdateResult> {
         return authHelper.checkValid().then { _ -> HivePromise<UpdateResult> in
             return self.updateManyImp(collection, filter, update, options, handler)
         }
@@ -240,11 +240,11 @@ class DatabaseClient: DatabaseProtocol {
         }
     }
 
-    func deleteOne(_ collection: String, _ filter: [String : Any], options: DeleteOptions) -> HivePromise<DeleteResult> {
+    public func deleteOne(_ collection: String, _ filter: [String : Any], options: DeleteOptions) -> HivePromise<DeleteResult> {
         return self.deleteOne(collection, filter, options: options, handler: HiveCallback())
     }
 
-    func deleteOne(_ collection: String, _ filter: [String : Any], options: DeleteOptions, handler: HiveCallback<DeleteResult>) -> HivePromise<DeleteResult> {
+    public func deleteOne(_ collection: String, _ filter: [String : Any], options: DeleteOptions, handler: HiveCallback<DeleteResult>) -> HivePromise<DeleteResult> {
         return authHelper.checkValid().then { _ -> HivePromise<DeleteResult> in
             return self.deleteOneImp(collection, filter, options, handler)
         }
@@ -266,11 +266,11 @@ class DatabaseClient: DatabaseProtocol {
         }
     }
 
-    func deleteMany(_ collection: String, _ filter: [String : Any], options: DeleteOptions) -> HivePromise<DeleteResult> {
+    public func deleteMany(_ collection: String, _ filter: [String : Any], options: DeleteOptions) -> HivePromise<DeleteResult> {
         return self.deleteMany(collection, filter, options: options, handler: HiveCallback())
     }
 
-    func deleteMany(_ collection: String, _ filter: [String : Any], options: DeleteOptions, handler: HiveCallback<DeleteResult>) -> HivePromise<DeleteResult> {
+    public func deleteMany(_ collection: String, _ filter: [String : Any], options: DeleteOptions, handler: HiveCallback<DeleteResult>) -> HivePromise<DeleteResult> {
         return authHelper.checkValid().then { _ -> HivePromise<DeleteResult> in
             return self.deleteManyImp(collection, filter, options, handler)
         }
