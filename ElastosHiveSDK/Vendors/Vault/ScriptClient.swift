@@ -49,7 +49,7 @@ public class ScriptClient: ScriptingProtocol {
             param["accessCondition"] = accessCondition!
         }
         // TODO: 
-        param["executable"] = try! executable.serialize(JsonGenerator())
+        param["executable"] = try! executable.jsonSerialize()
         let url = VaultURL.sharedInstance.registerScript()
 
         return VaultApi.requestWithBool(url: url, parameters: param, headers: Header(authHelper).headers())

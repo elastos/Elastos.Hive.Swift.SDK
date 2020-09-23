@@ -6,16 +6,16 @@ import XCTest
 class VaultAuthenticator: Authenticator {
     func requestAuthentication(_ jwtToken: String) -> HivePromise<String> {
         return HivePromise<String> { resolver in
-            //            resolver.fulfill("")
-            do{
-                let jws = try JwtParserBuilder().build().parseClaimsJwt(jwtToken)
-                let nonce = jws.claims.get(key: "nonce")
-                let hive_did = jws.claims.getIssuer()
-
-            }
-            catch {
-
-            }
+                        resolver.fulfill("eyJhbGciOiAiRVMyNTYiLCAidHlwZSI6ICJKV1QiLCAidmVyc2lvbiI6ICIxLjAiLCAia2lkIjogImRpZDplbGFzdG9zOmlkZnBLSkoxc29EeFQyR2NnQ1JuRHQzY3U5NFpuR2Z6TlgjcHJpbWFyeSJ9.eyJpc3MiOiJkaWQ6ZWxhc3RvczppZGZwS0pKMXNvRHhUMkdjZ0NSbkR0M2N1OTRabkdmek5YIiwic3ViIjoiRElEQXV0aFJlc3BvbnNlIiwiYXVkIjoiZGlkOmVsYXN0b3M6aVlnRDRrcFdha1FpQkI5YTNNQlRVeDhXMkUycWVvamRONSIsImlhdCI6MTYwMDg1NTk0NSwiZXhwIjo2MDAwMDE2MDA4NTU5NDUsIm5iZiI6MTYwMDg1NTk0NSwicHJlc2VudGF0aW9uIjp7InR5cGUiOiJWZXJpZmlhYmxlUHJlc2VudGF0aW9uIiwiY3JlYXRlZCI6IjIwMjAtMDktMjNUMTA6MTI6MjVaIiwidmVyaWZpYWJsZUNyZWRlbnRpYWwiOlt7ImlkIjoiZGlkOmVsYXN0b3M6aWRmcEtKSjFzb0R4VDJHY2dDUm5EdDNjdTk0Wm5HZnpOWCNkaWRhcHAiLCJ0eXBlIjpbIkFwcElkQ3JlZGVudGlhbCJdLCJpc3N1ZXIiOiJkaWQ6ZWxhc3RvczppajhrckFWUkppdFpLSm1jQ3Vmb0xIUWpxN01lZjNaalROIiwiaXNzdWFuY2VEYXRlIjoiMjAyMC0wOS0yM1QxMDoxMjoyNVoiLCJleHBpcmF0aW9uRGF0ZSI6IjIwMjUtMDktMDFUMTk6NDc6MjRaIiwiY3JlZGVudGlhbFN1YmplY3QiOnsiaWQiOiJkaWQ6ZWxhc3RvczppZGZwS0pKMXNvRHhUMkdjZ0NSbkR0M2N1OTRabkdmek5YIiwiYXBwRGlkIjoiYXBwSWQifSwicHJvb2YiOnsidHlwZSI6IkVDRFNBc2VjcDI1NnIxIiwidmVyaWZpY2F0aW9uTWV0aG9kIjoiZGlkOmVsYXN0b3M6aWo4a3JBVlJKaXRaS0ptY0N1Zm9MSFFqcTdNZWYzWmpUTiNwcmltYXJ5Iiwic2lnbmF0dXJlIjoicy1zdUN2el9IZjBoc0VLckhuRVkyRFEzUEcwTFBGSzdNTzc5YUpobS04bEZuclRFQk9VakpuY1hpU3JZYWJtaUNpMjF6S2pQMjN1SndLSE13S1hQemcifX1dLCJwcm9vZiI6eyJ0eXBlIjoiRUNEU0FzZWNwMjU2cjEiLCJ2ZXJpZmljYXRpb25NZXRob2QiOiJkaWQ6ZWxhc3RvczppZGZwS0pKMXNvRHhUMkdjZ0NSbkR0M2N1OTRabkdmek5YI3ByaW1hcnkiLCJyZWFsbSI6ImRpZDplbGFzdG9zOmlZZ0Q0a3BXYWtRaUJCOWEzTUJUVXg4VzJFMnFlb2pkTjUiLCJub25jZSI6IjQzN2NkYzFjLWZkODUtMTFlYS04Zjg1LWM0YjMwMTkyNmZkOCIsInNpZ25hdHVyZSI6ImZlN3FsTWYwUmY3OXRxT1F1OEgxbUx4QWs3eUdtdEd6VlE3M2hGTkg0bnV3dklTWHI1NlZ0M0tpdGtXOVI3QUhFLV9MTExHMDlOLUN5RXI4Tkc3U3h3In19fQ.DcTo8OI0Fc_LlbS8iK5ZAC0h7sv7GTNEO8ypXLuOst3MLmpuzrmedkhQmxF7udMnjkAKht3r8LLGgFIJ4R-Kyg")
+//            do{
+//                let jws = try JwtParserBuilder().build().parseClaimsJwt(jwtToken)
+//                let nonce = jws.claims.get(key: "nonce")
+//                let hive_did = jws.claims.getIssuer()
+//
+//            }
+//            catch {
+//
+//            }
         }
     }
 }

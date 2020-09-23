@@ -21,7 +21,7 @@ class FileTest: XCTestCase {
 
     func testDownload() {
         let lock = XCTestExpectation(description: "wait for test.")
-        _ = file?.download("hive/testIos.txt").done{ output in
+        _ = file?.download("hive/testIos0000.txt").done{ output in
             let data: Data = output.property(forKey: Stream.PropertyKey.dataWrittenToMemoryStreamKey)! as! Data
             XCTAssertEqual(String(data: data, encoding: .utf8), "this is test file abcdefghijklmnopqrstuvwxyz")
             lock.fulfill()
