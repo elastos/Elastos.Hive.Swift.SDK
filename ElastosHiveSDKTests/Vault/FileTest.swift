@@ -1,7 +1,7 @@
 
 import XCTest
 @testable import ElastosHiveSDK
-@testable import ElastosDIDSDK
+import ElastosDIDSDK
 
 class FileTest: XCTestCase {
     private var client: HiveClientHandle?

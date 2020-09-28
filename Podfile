@@ -1,9 +1,9 @@
 # Uncomment the next line to define a global platform for your project
 def import_pods
-  pod 'Swifter', '~> 1.4.6'
+  pod 'Swifter'
   pod 'Alamofire'
   pod 'PromiseKit'
-  pod 'ElastosDIDSDK', '1.1'
+ # pod 'ElastosDIDSDK', '1.1'
 
   pod 'BlueRSA', '~> 1.0'
   pod 'LoggerAPI', '~> 1.7'
