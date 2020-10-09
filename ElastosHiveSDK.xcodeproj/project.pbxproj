@@ -172,6 +172,8 @@
 		118F2DA6250F33AB00447A0A /* RawCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2DA4250F33AB00447A0A /* RawCondition.swift */; };
 		118F2DAD25105C3700447A0A /* FileTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2DAC25105C3700447A0A /* FileTest.swift */; };
 		119D4B67244851A500FE559F /* Pods_TestHost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F09DA7DC9D47111E630261C /* Pods_TestHost.framework */; };
+		11C4C9AE252F19AC00FD6A60 /* Antlr4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 111CA4DC251C836D0030D39C /* Antlr4.framework */; };
+		11C4C9B0252F19AD00FD6A60 /* Antlr4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 111CA4DC251C836D0030D39C /* Antlr4.framework */; };
 		11D26F4022CA3B3300E4099A /* ElastosHiveSDK_macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 11D26F3E22CA3B3300E4099A /* ElastosHiveSDK_macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		11D26F4422CA3B4B00E4099A /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FA22C4C33400F85419 /* Dictionary.swift */; };
 		11D26F4522CA3B4B00E4099A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FB22C4C33400F85419 /* String.swift */; };
@@ -214,6 +216,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = A39C496E225399860027BDF9;
 			remoteInfo = ElastosHiveSDK;
+		};
+		11C4C9B3252F19D700FD6A60 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A39C4966225399860027BDF9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1176BF2E229CE8F600240EDF;
+			remoteInfo = TestHost;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -373,6 +382,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				111CA600252062A50030D39C /* ElastosDIDSDK.framework in Frameworks */,
+				11C4C9AE252F19AC00FD6A60 /* Antlr4.framework in Frameworks */,
 				1137942E227ED9AD004A1F65 /* ElastosHiveSDK.framework in Frameworks */,
 				0D94ED2D06BBCAE410D0273C /* Pods_ElastosHiveSDKTests.framework in Frameworks */,
 			);
@@ -404,6 +414,7 @@
 			files = (
 				6DDA50FA35E7A18E5EF0C90E /* Pods_ElastosHiveSDK.framework in Frameworks */,
 				111CA607252062B00030D39C /* ElastosDIDSDK.framework in Frameworks */,
+				11C4C9B0252F19AD00FD6A60 /* Antlr4.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -747,6 +758,7 @@
 			);
 			dependencies = (
 				11379430227ED9AD004A1F65 /* PBXTargetDependency */,
+				11C4C9B4252F19D700FD6A60 /* PBXTargetDependency */,
 			);
 			name = ElastosHiveSDKTests;
 			productName = ElastosHiveSDKTests;
@@ -1254,6 +1266,11 @@
 			target = A39C496E225399860027BDF9 /* ElastosHiveSDK */;
 			targetProxy = 1137942F227ED9AD004A1F65 /* PBXContainerItemProxy */;
 		};
+		11C4C9B4252F19D700FD6A60 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1176BF2E229CE8F600240EDF /* TestHost */;
+			targetProxy = 11C4C9B3252F19D700FD6A60 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -1322,7 +1339,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestHost.app/TestHost";
 			};
 			name = Debug;
 		};
@@ -1354,7 +1370,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestHost.app/TestHost";
 			};
 			name = Release;
 		};

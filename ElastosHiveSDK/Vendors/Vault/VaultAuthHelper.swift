@@ -142,7 +142,7 @@ public class VaultAuthHelper: ConnectHelper {
     private func verifyToken(_ jwtToken: String) -> Bool {
         do {
 //            let claims = try JwtParserBuilder().build().getBody()
-            let jwtParser = JwtParserBuilder().build()
+            let jwtParser = try JwtParserBuilder().build()
             let jwts = try jwtParser.parseClaimsJwt(jwtToken)
             let claims = jwts.claims
             let exp = claims.getExpiration()

@@ -14,24 +14,50 @@ end
 
 
 target :ElastosHiveSDK do
-use_frameworks!
+
+  use_frameworks!
   platform :ios, '11.0'
   import_pods
-  target 'ElastosHiveSDKTests' do
-    inherit! :search_paths
-    import_pods
-  end
-
-  target 'TestHost' do
-    inherit! :search_paths
-    import_pods
-  end
+#  target 'ElastosHiveSDKTests' do
+#    inherit! :search_paths
+#    import_pods
+#  end
+#
+#  target 'TestHost' do
+#    inherit! :search_paths
+#    import_pods
+#  end
 end
 
-  target :ElastosHiveSDK_macOS do
+target :ElastosHiveSDKTests do
+
+  use_frameworks!
+  platform :ios, '11.0'
+  import_pods
+#  target 'ElastosHiveSDKTests' do
+#    inherit! :search_paths
+#    import_pods
+#  end
+
+#  target 'TestHost' do
+#    inherit! :search_paths
+#    import_pods
+#  end
+end
+
+target :TestHost do
+
+  use_frameworks!
+  platform :ios, '11.0'
+  import_pods
+
+end
+
+
+target :ElastosHiveSDK_macOS do
   platform :osx, '10.10'
   use_frameworks!
-  pod 'Swifter', '~> 1.4.6'
+  pod 'Swifter'
   pod 'Alamofire'
   pod 'PromiseKit'
 end
