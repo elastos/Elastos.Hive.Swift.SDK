@@ -26,7 +26,7 @@
 		</data>
 		<key>Headers/ElastosDIDSDK-Swift.h</key>
 		<data>
-		Yk8wTM/Q5Z0c09jrgTK6rHlrZfg=
+		kmDGGo25M5vuOk1TcOrTT6u6IH4=
 		</data>
 		<key>Headers/ElastosDIDSDK.h</key>
 		<data>
@@ -44,37 +44,13 @@
 		<data>
 		tkB5E+s0VykSndAxnp5ND+yrzHg=
 		</data>
-		<key>Modules/ElastosDIDSDK.swiftmodule/Project/x86_64-apple-ios-simulator.swiftsourceinfo</key>
-		<data>
-		587U58nKn9PWGEjS2OZsjARALnk=
-		</data>
-		<key>Modules/ElastosDIDSDK.swiftmodule/Project/x86_64.swiftsourceinfo</key>
-		<data>
-		587U58nKn9PWGEjS2OZsjARALnk=
-		</data>
-		<key>Modules/ElastosDIDSDK.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
-		<data>
-		jJkyH0lLGk5XOCQeNsPZSQgVjl4=
-		</data>
-		<key>Modules/ElastosDIDSDK.swiftmodule/x86_64-apple-ios-simulator.swiftinterface</key>
-		<data>
-		YgUdd2U5gN0+ccl8rZHIa0l4ZLI=
-		</data>
-		<key>Modules/ElastosDIDSDK.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
-		<data>
-		WXdMKqfspBEyphBeo8eUmbXfPtg=
-		</data>
 		<key>Modules/ElastosDIDSDK.swiftmodule/x86_64.swiftdoc</key>
 		<data>
-		jJkyH0lLGk5XOCQeNsPZSQgVjl4=
-		</data>
-		<key>Modules/ElastosDIDSDK.swiftmodule/x86_64.swiftinterface</key>
-		<data>
-		YgUdd2U5gN0+ccl8rZHIa0l4ZLI=
+		qtBPrg9+Zcc38nQqMuMPWuyH98o=
 		</data>
 		<key>Modules/ElastosDIDSDK.swiftmodule/x86_64.swiftmodule</key>
 		<data>
-		WXdMKqfspBEyphBeo8eUmbXfPtg=
+		wB02PH9zqyxrG1PlaAWr9A5FFwE=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -122,7 +98,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			p3Y5U8NgBDT+yJtro/fNUUdCWIZ0GEx6aRy5iGxJBXs=
+			mKZH35YMV9lzPPYQCn9TOOOiWCbkHSWyJ4UZSAixqZ0=
 			</data>
 		</dict>
 		<key>Headers/ElastosDIDSDK.h</key>
@@ -146,60 +122,18 @@
 			CF9AbNtSy1gAZNQq1NEtVDCS3s7drfsrWGaF+KDEUX0=
 			</data>
 		</dict>
-		<key>Modules/ElastosDIDSDK.swiftmodule/Project/x86_64-apple-ios-simulator.swiftsourceinfo</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			8R/HKyyy6W0hV7AWk/3EOgOww6vaWx+Hf59OjSsmy9U=
-			</data>
-		</dict>
-		<key>Modules/ElastosDIDSDK.swiftmodule/Project/x86_64.swiftsourceinfo</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			8R/HKyyy6W0hV7AWk/3EOgOww6vaWx+Hf59OjSsmy9U=
-			</data>
-		</dict>
-		<key>Modules/ElastosDIDSDK.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			fHLylTnnLuhGyjPzPDfEQBN6Mn4ZMrg6FYaMtVzon4E=
-			</data>
-		</dict>
-		<key>Modules/ElastosDIDSDK.swiftmodule/x86_64-apple-ios-simulator.swiftinterface</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			Lwn+hyAsUqYPJsjgZyvJKSeIOXx1TLx4y+7B7s52Wq8=
-			</data>
-		</dict>
-		<key>Modules/ElastosDIDSDK.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			ktF96TIFWamjdQtYCqNTut65Y8YmVen2IrryoITvLhI=
-			</data>
-		</dict>
 		<key>Modules/ElastosDIDSDK.swiftmodule/x86_64.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			fHLylTnnLuhGyjPzPDfEQBN6Mn4ZMrg6FYaMtVzon4E=
-			</data>
-		</dict>
-		<key>Modules/ElastosDIDSDK.swiftmodule/x86_64.swiftinterface</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			Lwn+hyAsUqYPJsjgZyvJKSeIOXx1TLx4y+7B7s52Wq8=
+			Mxc6TsYPA0N9nELJfQ/8TQ6vN3oNZjjlB8Jp7iB1lrY=
 			</data>
 		</dict>
 		<key>Modules/ElastosDIDSDK.swiftmodule/x86_64.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			ktF96TIFWamjdQtYCqNTut65Y8YmVen2IrryoITvLhI=
+			r2QDEwmimsuEsveZNOKdeCQlorXjvaggyR4sz1HC5Zk=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

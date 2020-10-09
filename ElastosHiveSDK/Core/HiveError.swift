@@ -29,7 +29,7 @@ public enum HiveError: Error {
     case IllegalArgument(des: String?)
     case no_rpc_node_available(des: String?)
     case netWork(des: Error?)
-    case failues(des: Dictionary<String, String>?)
+    case failues(des: Dictionary<String, Any>?)
     case unsupportedOperation(des: String?)
 }
 
@@ -52,7 +52,7 @@ extension HiveError {
         case .failues(let des):
             var re = ""
             des?.forEach{ key, value in
-                re = key + "\n" + value + "\n"
+                re = key + "\n" + String("\(value)") + "\n"
             }
             return re
         case .unsupportedOperation(let des):

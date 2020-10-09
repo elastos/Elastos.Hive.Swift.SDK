@@ -54,6 +54,7 @@ public class Entity {
 
     func initPrivateIdentity(_ mnemonic: String) throws {
         let storePath = "\(NSHomeDirectory())/Library/Caches/store" + "/" + name
+        print(storePath)
         // Create a fake adapter, just print the tx payload to console.
         store = try DIDStore.open(atPath: storePath, withType: "filesystem", adapter: adapter)
         // Check the store whether contains the root private identity.
@@ -89,17 +90,27 @@ public class Entity {
     func initDid() throws {
         // Check the DID store already contains owner's DID(with private key).
         let dids = try store!.listDids(using: DIDStore.DID_HAS_PRIVATEKEY)
-        try dids.forEach { d in
-            if d.getMetadata().aliasName == "me" {
-                // Already create my DID.
-                print("My DID \(name) \(d)")
-
-                // This only for dummy backend.
-                // normally don't need this on ID sidechain.
-                try store!.publishDid(for: d, using: storepass)
-                try waitForWalletAvaliable()
-            }
+        for d in dids {
+            // Already create my DID.
+            print("My DID \(name) \(d)")
+            self.did = d
+            // This only for dummy backend.
+            // normally don't need this on ID sidechain.
+            try store!.publishDid(for: d, using: storepass)
+            try waitForWalletAvaliable()
+            return
         }
+//        try dids.forEach { d in
+//            if d.getMetadata().aliasName == "me" {
+//                // Already create my DID.
+//                print("My DID \(name) \(d)")
+//
+//                // This only for dummy backend.
+//                // normally don't need this on ID sidechain.
+//                try store!.publishDid(for: d, using: storepass)
+//                try waitForWalletAvaliable()
+//            }
+//        }
         let doc = try store!.newDid(withAlias: "me", using: storepass)
         self.did = doc.subject
         print("My new DID created: ", name, did!.description)
@@ -122,7 +133,7 @@ public class DIDApp: Entity {
 
 
     func issueDiplomaFor(_ dapp: DApp) throws -> VerifiableCredential {
-        let subject = ["'appDid'": dapp.appId]
+        let subject = ["appDid": dapp.appId]
         let userCalendar = Calendar.current
         var components = DateComponents()
         components.year = 2025

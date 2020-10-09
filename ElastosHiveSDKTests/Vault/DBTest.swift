@@ -1,7 +1,7 @@
 
 import XCTest
 @testable import ElastosHiveSDK
-@testable import ElastosDIDSDK
+import ElastosDIDSDK
 
 let p = PresentationJWT()
 let testapp = DApp("testapp", "amount material swim purse swallow gate pride series cannon patient dentist person", p.adapter!)
@@ -26,7 +26,10 @@ class VaultAuthenticator: Authenticator {
                 let claim = ddd.claims
                 print(claim.get(key: "presentation"))
                 print(claim.get(key: "presentation"))
-
+                print(token)
+                let toks = token.split(separator: ".")
+                let str  = "\(toks[0]).\(toks[1])"
+                let test = try doc.verify(signature: "\(toks[2])", onto: str.data(using: String.Encoding.utf8)!)
                 try p.waitForWalletAvaliable()
                 resolver.fulfill(token)
             }
@@ -202,16 +205,17 @@ class DBTest: XCTestCase {
 //            let docString = DOC_STR
 //            let doc = DIDDocument.convertToDIDDocument(docString)
             let doc = try testapp.getDocument()
+            _ = try didapp.getDocument()
             print(doc.toString())
             let options: HiveClientOptions = HiveClientOptions()
             _ = options.setAuthenticator(VaultAuthenticator())
             options.setAuthenticationDIDDocument(doc)
                 .setDidResolverUrl("http://api.elastos.io:21606")
             _ = options.setLocalDataPath(localDataPath)
-            HiveClientHandle.setVaultProvider(doc.subject.toString(), PROVIDER)
+            HiveClientHandle.setVaultProvider(doc.subject.description, PROVIDER)
             self.client = try HiveClientHandle.createInstance(withOptions: options)
             let lock = XCTestExpectation(description: "wait for test.")
-            _ = self.client?.getVault(doc.subject.toString()).get{ result in
+            _ = self.client?.getVault(doc.subject.description).get{ result in
                 self.database = (result.database as! DatabaseClient)
                 lock.fulfill()
             }

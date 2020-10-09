@@ -34,24 +34,14 @@
 		1103757A23FF96BF004216D0 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103757823FF96BF004216D0 /* Log.swift */; };
 		1103757C23FF96C7004216D0 /* Persistent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103757B23FF96C7004216D0 /* Persistent.swift */; };
 		1103757D23FF96C7004216D0 /* Persistent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103757B23FF96C7004216D0 /* Persistent.swift */; };
-		111CA4DE251C83750030D39C /* Antlr4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 111CA4DC251C836D0030D39C /* Antlr4.framework */; };
-		111CA4DF251C83750030D39C /* Antlr4.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 111CA4DC251C836D0030D39C /* Antlr4.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		111CA54B252027760030D39C /* TestError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111CA54A252027760030D39C /* TestError.swift */; };
-		111CA54C252027760030D39C /* TestError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111CA54A252027760030D39C /* TestError.swift */; };
 		111CA600252062A50030D39C /* ElastosDIDSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 111CA5FE252062A50030D39C /* ElastosDIDSDK.framework */; platformFilter = ios; };
 		111CA602252062A50030D39C /* ElastosDIDSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 111CA5FE252062A50030D39C /* ElastosDIDSDK.framework */; };
-		111CA603252062AC0030D39C /* ElastosDIDSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 111CA5FE252062A50030D39C /* ElastosDIDSDK.framework */; };
-		111CA604252062AC0030D39C /* ElastosDIDSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 111CA5FE252062A50030D39C /* ElastosDIDSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		111CA607252062B00030D39C /* ElastosDIDSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 111CA5FE252062A50030D39C /* ElastosDIDSDK.framework */; platformFilter = ios; };
 		111CA608252062B00030D39C /* ElastosDIDSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 111CA5FE252062A50030D39C /* ElastosDIDSDK.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		111CA6DA252097CB0030D39C /* SPVAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111CA6D8252097CB0030D39C /* SPVAdaptor.swift */; };
-		111CA6DB252097CB0030D39C /* SPVAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111CA6D8252097CB0030D39C /* SPVAdaptor.swift */; };
 		111CA6DC252097CB0030D39C /* DummyAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111CA6D9252097CB0030D39C /* DummyAdapter.swift */; };
-		111CA6DD252097CB0030D39C /* DummyAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111CA6D9252097CB0030D39C /* DummyAdapter.swift */; };
-		111CA74D252098D30030D39C /* SPVWrapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 111CA7382520980B0030D39C /* SPVWrapper.framework */; };
-		111CA74E252098D30030D39C /* SPVWrapper.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 111CA7382520980B0030D39C /* SPVWrapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		111CA78C25209EAE0030D39C /* PresentationJWT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111CA78B25209EAE0030D39C /* PresentationJWT.swift */; };
-		111CA78D25209EAE0030D39C /* PresentationJWT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111CA78B25209EAE0030D39C /* PresentationJWT.swift */; };
 		111D477924ED0C1200B7462B /* VaultAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D477824ED0C1200B7462B /* VaultAuthHelper.swift */; };
 		111D477A24ED0C1200B7462B /* VaultAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D477824ED0C1200B7462B /* VaultAuthHelper.swift */; };
 		111D478824EE57D000B7462B /* VaultConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D478724EE57D000B7462B /* VaultConstants.swift */; };
@@ -140,12 +130,6 @@
 		11749D9F24082FB1007B8F32 /* OutputStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11749D9E24082FB1007B8F32 /* OutputStream.swift */; };
 		11749DA024082FB1007B8F32 /* OutputStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11749D9E24082FB1007B8F32 /* OutputStream.swift */; };
 		11749DA224083D63007B8F32 /* TestResultHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11749DA124083D63007B8F32 /* TestResultHandler.swift */; };
-		1176BF32229CE8F600240EDF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176BF31229CE8F600240EDF /* AppDelegate.swift */; };
-		1176BF34229CE8F600240EDF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176BF33229CE8F600240EDF /* ViewController.swift */; };
-		1176BF37229CE8F600240EDF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1176BF35229CE8F600240EDF /* Main.storyboard */; };
-		1176BF39229CE8F900240EDF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1176BF38229CE8F900240EDF /* Assets.xcassets */; };
-		1176BF3C229CE8F900240EDF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1176BF3A229CE8F900240EDF /* LaunchScreen.storyboard */; };
-		1176BF43229CEB4F00240EDF /* AuthWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176BF42229CEB4F00240EDF /* AuthWebViewController.swift */; };
 		118F2D83250F1A7200447A0A /* ScriptTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2D82250F1A7200447A0A /* ScriptTest.swift */; };
 		118F2D85250F1ABA00447A0A /* Constance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2D84250F1ABA00447A0A /* Constance.swift */; };
 		118F2D87250F23EB00447A0A /* AggregatedCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2D86250F23EB00447A0A /* AggregatedCondition.swift */; };
@@ -171,9 +155,9 @@
 		118F2DA5250F33AB00447A0A /* RawCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2DA4250F33AB00447A0A /* RawCondition.swift */; };
 		118F2DA6250F33AB00447A0A /* RawCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2DA4250F33AB00447A0A /* RawCondition.swift */; };
 		118F2DAD25105C3700447A0A /* FileTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2DAC25105C3700447A0A /* FileTest.swift */; };
-		119D4B67244851A500FE559F /* Pods_TestHost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F09DA7DC9D47111E630261C /* Pods_TestHost.framework */; };
-		11C4C9AE252F19AC00FD6A60 /* Antlr4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 111CA4DC251C836D0030D39C /* Antlr4.framework */; };
-		11C4C9B0252F19AD00FD6A60 /* Antlr4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 111CA4DC251C836D0030D39C /* Antlr4.framework */; };
+		11D14549253014D5000E627A /* Antlr4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11D14548253014D5000E627A /* Antlr4.framework */; platformFilter = ios; };
+		11D14554253015A2000E627A /* ElastosDIDSDK.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 111CA5FE252062A50030D39C /* ElastosDIDSDK.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		11D14557253015AB000E627A /* Antlr4.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 11D14548253014D5000E627A /* Antlr4.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		11D26F4022CA3B3300E4099A /* ElastosHiveSDK_macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 11D26F3E22CA3B3300E4099A /* ElastosHiveSDK_macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		11D26F4422CA3B4B00E4099A /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FA22C4C33400F85419 /* Dictionary.swift */; };
 		11D26F4522CA3B4B00E4099A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FB22C4C33400F85419 /* String.swift */; };
@@ -185,9 +169,6 @@
 		11E573FF22C4C33400F85419 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FB22C4C33400F85419 /* String.swift */; };
 		11ED682A22FF1078004C17D0 /* ElastosHiveSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED682922FF1077004C17D0 /* ElastosHiveSDK.swift */; };
 		11ED682B22FF1078004C17D0 /* ElastosHiveSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED682922FF1077004C17D0 /* ElastosHiveSDK.swift */; };
-		11FD703222B89D1A00B346AC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176BF33229CE8F600240EDF /* ViewController.swift */; };
-		11FD703322B89F4D00B346AC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176BF31229CE8F600240EDF /* AppDelegate.swift */; };
-		11FD703422B89F5100B346AC /* AuthWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176BF42229CEB4F00240EDF /* AuthWebViewController.swift */; };
 		2663D22A7DA76A0E3D1F6D8C /* Pods_ElastosHiveSDK_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DE05E42E9E969EDC26357D1 /* Pods_ElastosHiveSDK_macOS.framework */; };
 		6DDA50FA35E7A18E5EF0C90E /* Pods_ElastosHiveSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D17AD36AC88E073FD2B2D930 /* Pods_ElastosHiveSDK.framework */; };
 		A37F893D23C72B2600F6C11E /* HiveClientOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37F893C23C72B2600F6C11E /* HiveClientOptions.swift */; };
@@ -203,13 +184,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		111CA7372520980B0030D39C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 111CA7332520980A0030D39C /* SPVWrapper.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 11267024238CC7120086740D;
-			remoteInfo = SPVWrapper;
-		};
 		1137942F227ED9AD004A1F65 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A39C4966225399860027BDF9 /* Project object */;
@@ -217,12 +191,12 @@
 			remoteGlobalIDString = A39C496E225399860027BDF9;
 			remoteInfo = ElastosHiveSDK;
 		};
-		11C4C9B3252F19D700FD6A60 /* PBXContainerItemProxy */ = {
+		11D14542253013FA000E627A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = A39C4966225399860027BDF9 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 1176BF2E229CE8F600240EDF;
-			remoteInfo = TestHost;
+			containerPortal = 11D1453E253013FA000E627A /* SPVWrapper.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 11267024238CC7120086740D;
+			remoteInfo = SPVWrapper;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -238,19 +212,6 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		111CA4B6251C81320030D39C /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				111CA74E252098D30030D39C /* SPVWrapper.framework in Embed Frameworks */,
-				111CA4DF251C83750030D39C /* Antlr4.framework in Embed Frameworks */,
-				111CA604252062AC0030D39C /* ElastosDIDSDK.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		111CA4FA251C849F0030D39C /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -259,6 +220,17 @@
 			files = (
 			);
 			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		11D145532530159B000E627A /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				11D14557253015AB000E627A /* Antlr4.framework in CopyFiles */,
+				11D14554253015A2000E627A /* ElastosDIDSDK.framework in CopyFiles */,
+			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -271,12 +243,10 @@
 		1103757523FF96B5004216D0 /* ConnectHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConnectHelper.swift; path = Core/ConnectHelper.swift; sourceTree = "<group>"; };
 		1103757823FF96BF004216D0 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Log.swift; path = Core/Log.swift; sourceTree = "<group>"; };
 		1103757B23FF96C7004216D0 /* Persistent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Persistent.swift; path = Core/Persistent.swift; sourceTree = "<group>"; };
-		111CA4DC251C836D0030D39C /* Antlr4.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Antlr4.framework; sourceTree = "<group>"; };
 		111CA54A252027760030D39C /* TestError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestError.swift; sourceTree = "<group>"; };
 		111CA5FE252062A50030D39C /* ElastosDIDSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ElastosDIDSDK.framework; sourceTree = "<group>"; };
 		111CA6D8252097CB0030D39C /* SPVAdaptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPVAdaptor.swift; sourceTree = "<group>"; };
 		111CA6D9252097CB0030D39C /* DummyAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DummyAdapter.swift; sourceTree = "<group>"; };
-		111CA7332520980A0030D39C /* SPVWrapper.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SPVWrapper.xcodeproj; path = SPVWrapper/SPVWrapper.xcodeproj; sourceTree = "<group>"; };
 		111CA78B25209EAE0030D39C /* PresentationJWT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationJWT.swift; sourceTree = "<group>"; };
 		111D477824ED0C1200B7462B /* VaultAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultAuthHelper.swift; sourceTree = "<group>"; };
 		111D478724EE57D000B7462B /* VaultConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultConstants.swift; sourceTree = "<group>"; };
@@ -326,15 +296,6 @@
 		1170FBA02508D35A0049E81D /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 		11749D9E24082FB1007B8F32 /* OutputStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputStream.swift; sourceTree = "<group>"; };
 		11749DA124083D63007B8F32 /* TestResultHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestResultHandler.swift; sourceTree = "<group>"; };
-		1176BF2F229CE8F600240EDF /* TestHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		1176BF31229CE8F600240EDF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		1176BF33229CE8F600240EDF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		1176BF36229CE8F600240EDF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		1176BF38229CE8F900240EDF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		1176BF3B229CE8F900240EDF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		1176BF3D229CE8F900240EDF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1176BF41229CE90E00240EDF /* TestHost.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TestHost.entitlements; sourceTree = "<group>"; };
-		1176BF42229CEB4F00240EDF /* AuthWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthWebViewController.swift; sourceTree = "<group>"; };
 		118F2D82250F1A7200447A0A /* ScriptTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptTest.swift; sourceTree = "<group>"; };
 		118F2D84250F1ABA00447A0A /* Constance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constance.swift; sourceTree = "<group>"; };
 		118F2D86250F23EB00447A0A /* AggregatedCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AggregatedCondition.swift; sourceTree = "<group>"; };
@@ -349,6 +310,8 @@
 		118F2DA1250F332700447A0A /* QueryHasResultsCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryHasResultsCondition.swift; sourceTree = "<group>"; };
 		118F2DA4250F33AB00447A0A /* RawCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawCondition.swift; sourceTree = "<group>"; };
 		118F2DAC25105C3700447A0A /* FileTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTest.swift; sourceTree = "<group>"; };
+		11D1453E253013FA000E627A /* SPVWrapper.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = SPVWrapper.xcodeproj; sourceTree = "<group>"; };
+		11D14548253014D5000E627A /* Antlr4.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Antlr4.framework; path = ElastosHiveSDKTests/Antlr4.framework; sourceTree = SOURCE_ROOT; };
 		11D26F3C22CA3B3300E4099A /* ElastosHiveSDK_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ElastosHiveSDK_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		11D26F3E22CA3B3300E4099A /* ElastosHiveSDK_macOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ElastosHiveSDK_macOS.h; sourceTree = "<group>"; };
 		11E573FA22C4C33400F85419 /* Dictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
@@ -382,20 +345,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				111CA600252062A50030D39C /* ElastosDIDSDK.framework in Frameworks */,
-				11C4C9AE252F19AC00FD6A60 /* Antlr4.framework in Frameworks */,
+				11D14549253014D5000E627A /* Antlr4.framework in Frameworks */,
 				1137942E227ED9AD004A1F65 /* ElastosHiveSDK.framework in Frameworks */,
 				0D94ED2D06BBCAE410D0273C /* Pods_ElastosHiveSDKTests.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		1176BF2C229CE8F600240EDF /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				111CA603252062AC0030D39C /* ElastosDIDSDK.framework in Frameworks */,
-				119D4B67244851A500FE559F /* Pods_TestHost.framework in Frameworks */,
-				111CA74D252098D30030D39C /* SPVWrapper.framework in Frameworks */,
-				111CA4DE251C83750030D39C /* Antlr4.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -414,7 +366,6 @@
 			files = (
 				6DDA50FA35E7A18E5EF0C90E /* Pods_ElastosHiveSDK.framework in Frameworks */,
 				111CA607252062B00030D39C /* ElastosDIDSDK.framework in Frameworks */,
-				11C4C9B0252F19AD00FD6A60 /* Antlr4.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -433,17 +384,10 @@
 		111CA6E2252097DC0030D39C /* Externals */ = {
 			isa = PBXGroup;
 			children = (
-				111CA7332520980A0030D39C /* SPVWrapper.xcodeproj */,
+				11D14548253014D5000E627A /* Antlr4.framework */,
+				11D1453E253013FA000E627A /* SPVWrapper.xcodeproj */,
 			);
 			path = Externals;
-			sourceTree = "<group>";
-		};
-		111CA7342520980A0030D39C /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				111CA7382520980B0030D39C /* SPVWrapper.framework */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		111D477724EBA5B400B7462B /* Vault */ = {
@@ -562,20 +506,12 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		1176BF30229CE8F600240EDF /* TestHost */ = {
+		11D1453F253013FA000E627A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				111CA4DC251C836D0030D39C /* Antlr4.framework */,
-				1176BF41229CE90E00240EDF /* TestHost.entitlements */,
-				1176BF42229CEB4F00240EDF /* AuthWebViewController.swift */,
-				1176BF31229CE8F600240EDF /* AppDelegate.swift */,
-				1176BF33229CE8F600240EDF /* ViewController.swift */,
-				1176BF35229CE8F600240EDF /* Main.storyboard */,
-				1176BF38229CE8F900240EDF /* Assets.xcassets */,
-				1176BF3A229CE8F900240EDF /* LaunchScreen.storyboard */,
-				1176BF3D229CE8F900240EDF /* Info.plist */,
+				11D14543253013FA000E627A /* SPVWrapper.framework */,
 			);
-			path = TestHost;
+			name = Products;
 			sourceTree = "<group>";
 		};
 		11D26F3D22CA3B3300E4099A /* ElastosHiveSDK_macOS */ = {
@@ -648,7 +584,6 @@
 			children = (
 				A39C4971225399860027BDF9 /* ElastosHiveSDK */,
 				1137942A227ED9AD004A1F65 /* ElastosHiveSDKTests */,
-				1176BF30229CE8F600240EDF /* TestHost */,
 				11D26F3D22CA3B3300E4099A /* ElastosHiveSDK_macOS */,
 				A39C4970225399860027BDF9 /* Products */,
 				873FCFD648761A208C564AD4 /* Pods */,
@@ -661,7 +596,6 @@
 			children = (
 				A39C496F225399860027BDF9 /* ElastosHiveSDK.framework */,
 				11379429227ED9AD004A1F65 /* ElastosHiveSDKTests.xctest */,
-				1176BF2F229CE8F600240EDF /* TestHost.app */,
 				11D26F3C22CA3B3300E4099A /* ElastosHiveSDK_macOS.framework */,
 			);
 			name = Products;
@@ -753,37 +687,17 @@
 				11379426227ED9AD004A1F65 /* Frameworks */,
 				11379427227ED9AD004A1F65 /* Resources */,
 				7389AFB6B8B6DAB5A102422D /* [CP] Embed Pods Frameworks */,
+				11D145532530159B000E627A /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				11379430227ED9AD004A1F65 /* PBXTargetDependency */,
-				11C4C9B4252F19D700FD6A60 /* PBXTargetDependency */,
 			);
 			name = ElastosHiveSDKTests;
 			productName = ElastosHiveSDKTests;
 			productReference = 11379429227ED9AD004A1F65 /* ElastosHiveSDKTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		1176BF2E229CE8F600240EDF /* TestHost */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 1176BF3E229CE8F900240EDF /* Build configuration list for PBXNativeTarget "TestHost" */;
-			buildPhases = (
-				2A1FD9C428F9205650B62218 /* [CP] Check Pods Manifest.lock */,
-				1176BF2B229CE8F600240EDF /* Sources */,
-				1176BF2C229CE8F600240EDF /* Frameworks */,
-				1176BF2D229CE8F600240EDF /* Resources */,
-				6689F888F2CE51DB3E1D373B /* [CP] Embed Pods Frameworks */,
-				111CA4B6251C81320030D39C /* Embed Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = TestHost;
-			productName = TestHost;
-			productReference = 1176BF2F229CE8F600240EDF /* TestHost.app */;
-			productType = "com.apple.product-type.application";
 		};
 		11D26F3B22CA3B3300E4099A /* ElastosHiveSDK_macOS */ = {
 			isa = PBXNativeTarget;
@@ -841,14 +755,6 @@
 					11379428227ED9AD004A1F65 = {
 						CreatedOnToolsVersion = 10.2;
 					};
-					1176BF2E229CE8F600240EDF = {
-						CreatedOnToolsVersion = 10.2;
-						SystemCapabilities = {
-							com.apple.Keychain = {
-								enabled = 1;
-							};
-						};
-					};
 					11D26F3B22CA3B3300E4099A = {
 						CreatedOnToolsVersion = 10.2.1;
 					};
@@ -871,15 +777,14 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 111CA7342520980A0030D39C /* Products */;
-					ProjectRef = 111CA7332520980A0030D39C /* SPVWrapper.xcodeproj */;
+					ProductGroup = 11D1453F253013FA000E627A /* Products */;
+					ProjectRef = 11D1453E253013FA000E627A /* SPVWrapper.xcodeproj */;
 				},
 			);
 			projectRoot = "";
 			targets = (
 				A39C496E225399860027BDF9 /* ElastosHiveSDK */,
 				11379428227ED9AD004A1F65 /* ElastosHiveSDKTests */,
-				1176BF2E229CE8F600240EDF /* TestHost */,
 				11D26F3B22CA3B3300E4099A /* ElastosHiveSDK_macOS */,
 				112F1F5B22E01499001706DB /* ElastosHiveSDKFramework */,
 			);
@@ -887,11 +792,11 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		111CA7382520980B0030D39C /* SPVWrapper.framework */ = {
+		11D14543253013FA000E627A /* SPVWrapper.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = SPVWrapper.framework;
-			remoteRef = 111CA7372520980B0030D39C /* PBXContainerItemProxy */;
+			remoteRef = 11D14542253013FA000E627A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -903,16 +808,6 @@
 			files = (
 				114E612D2510DD24003673FF /* test.txt in Resources */,
 				1170FB9F25073D360049E81D /* ijUnD4KeRpeBUFmcEDCbhxMTJRzUYCQCZM in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		1176BF2D229CE8F600240EDF /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				1176BF3C229CE8F900240EDF /* LaunchScreen.storyboard in Resources */,
-				1176BF39229CE8F900240EDF /* Assets.xcassets in Resources */,
-				1176BF37229CE8F600240EDF /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -949,45 +844,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "FMK_NAME=${PROJECT_NAME}\nINSTALL_DIR=${SRCROOT}/'Products'/${FMK_NAME}'.framework'\nFINAL_DIR=${SRCROOT}/Products\nWRK_DIR=${BUILD_DIR}\nDEVICE_DIR=${WRK_DIR}'/Debug-iphoneos'/${FMK_NAME}'.framework'\nSIMULATOR_DIR=${WRK_DIR}'/Debug-iphonesimulator'/${FMK_NAME}'.framework'\nxcodebuild -workspace ${FMK_NAME}\".xcworkspace\" -scheme ${FMK_NAME} OTHER_CFLAGS=\"-fembed-bitcode\" -configuration \"Debug\" -sdk iphoneos -arch arm64 clean build -UseModernBuildSystem=NO || exit 1\nxcodebuild -workspace ${FMK_NAME}\".xcworkspace\" -scheme ${FMK_NAME} OTHER_CFLAGS=\"-fembed-bitcode\" -configuration \"Debug\" -sdk iphonesimulator -arch x86_64 clean build -UseModernBuildSystem=NO || exit 1\n# Cleaning the oldest.\nif [ -d \"${INSTALL_DIR}\" ]\nthen\nrm -rf \"${INSTALL_DIR}\"\nfi\nmkdir -p \"${INSTALL_DIR}\"\ncp -R \"${DEVICE_DIR}/\" \"${INSTALL_DIR}/\"\ncp -R \"${SIMULATOR_DIR}/Modules/${FMK_NAME}.swiftmodule/\" \"${INSTALL_DIR}/Modules/${FMK_NAME}.swiftmodule/\"\nlipo -create \"${DEVICE_DIR}/${FMK_NAME}\" \"${SIMULATOR_DIR}/${FMK_NAME}\" -output \"${INSTALL_DIR}/${FMK_NAME}\"\nrm -r \"${WRK_DIR}\"\nopen \"${FINAL_DIR}\"\n";
-		};
-		2A1FD9C428F9205650B62218 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-TestHost-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6689F888F2CE51DB3E1D373B /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TestHost/Pods-TestHost-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TestHost/Pods-TestHost-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TestHost/Pods-TestHost-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
 		};
 		73827CA57F0DF5767CA9E536 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1081,30 +937,13 @@
 			files = (
 				11749DA224083D63007B8F32 /* TestResultHandler.swift in Sources */,
 				111CA6DC252097CB0030D39C /* DummyAdapter.swift in Sources */,
-				11FD703422B89F5100B346AC /* AuthWebViewController.swift in Sources */,
 				118F2DAD25105C3700447A0A /* FileTest.swift in Sources */,
 				111CA54B252027760030D39C /* TestError.swift in Sources */,
 				118F2D85250F1ABA00447A0A /* Constance.swift in Sources */,
 				118F2D83250F1A7200447A0A /* ScriptTest.swift in Sources */,
 				111CA6DA252097CB0030D39C /* SPVAdaptor.swift in Sources */,
-				11FD703222B89D1A00B346AC /* ViewController.swift in Sources */,
 				111CA78C25209EAE0030D39C /* PresentationJWT.swift in Sources */,
 				1170FB1A250507C70049E81D /* DBTest.swift in Sources */,
-				11FD703322B89F4D00B346AC /* AppDelegate.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		1176BF2B229CE8F600240EDF /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				111CA54C252027760030D39C /* TestError.swift in Sources */,
-				111CA6DD252097CB0030D39C /* DummyAdapter.swift in Sources */,
-				1176BF34229CE8F600240EDF /* ViewController.swift in Sources */,
-				1176BF32229CE8F600240EDF /* AppDelegate.swift in Sources */,
-				111CA78D25209EAE0030D39C /* PresentationJWT.swift in Sources */,
-				111CA6DB252097CB0030D39C /* SPVAdaptor.swift in Sources */,
-				1176BF43229CEB4F00240EDF /* AuthWebViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1266,31 +1105,7 @@
 			target = A39C496E225399860027BDF9 /* ElastosHiveSDK */;
 			targetProxy = 1137942F227ED9AD004A1F65 /* PBXContainerItemProxy */;
 		};
-		11C4C9B4252F19D700FD6A60 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 1176BF2E229CE8F600240EDF /* TestHost */;
-			targetProxy = 11C4C9B3252F19D700FD6A60 /* PBXContainerItemProxy */;
-		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		1176BF35229CE8F600240EDF /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1176BF36229CE8F600240EDF /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		1176BF3A229CE8F900240EDF /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1176BF3B229CE8F900240EDF /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		112F1F5D22E01499001706DB /* Debug */ = {
@@ -1367,72 +1182,6 @@
 					"$(PROJECT_DIR)/ElastosHiveSDKTests/Externals/SPVWrapper/SPVWrapper/lib/-iphonesimulator",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = elastos.ElastosHiveSDKTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		1176BF3F229CE8F900240EDF /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = DB374220454CA5325E399B9B /* Pods-TestHost.debug.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
-				CODE_SIGN_ENTITLEMENTS = TestHost/TestHost.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 202009231837;
-				DEVELOPMENT_TEAM = T4LVNDN76A;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/TestHost",
-					"$(PROJECT_DIR)/ElastosHiveSDK",
-				);
-				INFOPLIST_FILE = TestHost/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/ElastosHiveSDKTests/Externals/SPVWrapper/SPVWrapper/lib/-iphonesimulator",
-				);
-				MARKETING_VERSION = 1.0.2;
-				PRODUCT_BUNDLE_IDENTIFIER = org.elastos.TestHost;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		1176BF40229CE8F900240EDF /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 556E8D39E54EDBDFA4DEAD42 /* Pods-TestHost.release.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
-				CODE_SIGN_ENTITLEMENTS = TestHost/TestHost.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 202009231837;
-				DEVELOPMENT_TEAM = T4LVNDN76A;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/TestHost",
-					"$(PROJECT_DIR)/ElastosHiveSDK",
-				);
-				INFOPLIST_FILE = TestHost/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/ElastosHiveSDKTests/Externals/SPVWrapper/SPVWrapper/lib/-iphonesimulator",
-				);
-				MARKETING_VERSION = 1.0.2;
-				PRODUCT_BUNDLE_IDENTIFIER = org.elastos.TestHost;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1727,15 +1476,6 @@
 			buildConfigurations = (
 				11379432227ED9AD004A1F65 /* Debug */,
 				11379433227ED9AD004A1F65 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		1176BF3E229CE8F900240EDF /* Build configuration list for PBXNativeTarget "TestHost" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				1176BF3F229CE8F900240EDF /* Debug */,
-				1176BF40229CE8F900240EDF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
