@@ -24,7 +24,7 @@ import Foundation
 
 public class FileInfo: NSObject {
 
-    enum TPYE: String {
+   public enum TPYE: String {
         case FILE = "FILE"
         case FOLDER = "FOLDER"
     }

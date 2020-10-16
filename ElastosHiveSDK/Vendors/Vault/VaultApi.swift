@@ -170,7 +170,7 @@ class VaultApi: NSObject {
                             rejson.forEach { key, value in
                                 dic[key] = value
                             }
-                            let err = HiveError.failues(des: dic)
+                            let err = HiveError.failues(des: (re as! Dictionary<String, Any>))
                             resolver.reject(err)
                             return
                         }

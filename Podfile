@@ -3,7 +3,7 @@ def import_pods
   pod 'Swifter', '1.5.0'
   pod 'Alamofire'
   pod 'PromiseKit'
-#  pod 'ElastosDIDSDK', '1.1'
+  pod 'ElastosDIDSDK', '1.1'
 
   pod 'BlueRSA', '~> 1.0'
   pod 'LoggerAPI', '~> 1.7'
@@ -18,11 +18,6 @@ use_frameworks!
   platform :ios, '11.0'
   import_pods
   target 'ElastosHiveSDKTests' do
-    inherit! :search_paths
-    import_pods
-  end
-
-  target 'TestHost' do
     inherit! :search_paths
     import_pods
   end

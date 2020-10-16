@@ -90,7 +90,7 @@ public class VaultAuthHelper: ConnectHelper {
 
     private func doCheckExpired() throws {
         _connectState = false
-//        tryRestoreToken()
+        tryRestoreToken()
         if token == nil || token!.isExpired() {
             try signIn(self._authenticationHandler)
         }
@@ -141,15 +141,8 @@ public class VaultAuthHelper: ConnectHelper {
 
     private func verifyToken(_ jwtToken: String) -> Bool {
         do {
-//            let claims = try JwtParserBuilder().build().getBody()
             let jwtParser = try JwtParserBuilder().build()
-            let jwts = try jwtParser.parseClaimsJwt(jwtToken)
-            let claims = jwts.claims
-            let exp = claims.getExpiration()
-            let subject = claims.getSubject()
-            let iss = claims.getIssuer()
-            let nonce = claims.get(key: "nonce")
-            let aud = claims.getAudience()
+            _ = try jwtParser.parseClaimsJwt(jwtToken)
         } catch {
             return false
         }
