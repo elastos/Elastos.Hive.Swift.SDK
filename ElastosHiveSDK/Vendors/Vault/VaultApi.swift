@@ -113,12 +113,12 @@ class VaultApi: NSObject {
         }
     }
 
-    class func requestWithInsert(url: URLConvertible,
+    class func requestWithInsert<T>(url: URLConvertible,
                         method: HTTPMethod = .post,
                         parameters: Parameters? = nil,
                         encoding: ParameterEncoding = JSONEncoding.default,
-                        headers: HTTPHeaders? = nil, handler: HiveCallback<InsertResult>) -> HivePromise<InsertResult> {
-        return HivePromise<InsertResult> { resolver in
+                        headers: HTTPHeaders? = nil, handler: HiveCallback<T>) -> HivePromise<T> {
+        return HivePromise<T> { resolver in
             Alamofire.request(url,
                               method: method,
                               parameters: parameters,
@@ -138,14 +138,21 @@ class VaultApi: NSObject {
                             resolver.reject(err)
                             return
                         }
-                        let insertResult = InsertResult(rejson)
-                        handler.didSucceed(insertResult)
-                        resolver.fulfill(insertResult)
+                        if T.self is InsertOneResult {
+                            let insertOneResult = InsertOneResult(rejson)
+                            handler.didSucceed(insertOneResult as! T)
+                            resolver.fulfill(insertOneResult as! T)
+                        }
+                        else {
+                            let insertOneResult = InsertManyResult(rejson)
+                            handler.didSucceed(insertOneResult as! T)
+                            resolver.fulfill(insertOneResult as! T)
+                        }
                     case .failure(let error):
                         handler.runError(HiveError.netWork(des: error))
                         resolver.reject(error)
                     }
-            }
+                }
         }
     }
 

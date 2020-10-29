@@ -32,11 +32,11 @@ public protocol DatabaseProtocol {
     func deleteCollection(_ name: String) -> HivePromise<Bool>
     func deleteCollection(_ name: String, handler: HiveCallback<Bool>) -> HivePromise<Bool>
 
-    func insertOne(_ collection: String, _ doc: [String: Any], options: InsertOptions?) -> HivePromise<InsertResult>
-    func insertOne(_ collection: String, _ doc: [String: Any], options: InsertOptions?, handler: HiveCallback<InsertResult>) -> HivePromise<InsertResult>
+    func insertOne(_ collection: String, _ doc: [String: Any], options: InsertOptions?) -> HivePromise<InsertOneResult>
+    func insertOne(_ collection: String, _ doc: [String: Any], options: InsertOptions?, handler: HiveCallback<InsertOneResult>) -> HivePromise<InsertOneResult>
 
-    func insertMany(_ collection: String, _ docs: Array<[String: Any]>, options: InsertOptions) -> HivePromise<InsertResult>
-    func insertMany(_ collection: String, _ docs: Array<[String: Any]>, options: InsertOptions, handler: HiveCallback<InsertResult>) -> HivePromise<InsertResult>
+    func insertMany(_ collection: String, _ docs: Array<[String: Any]>, options: InsertOptions) -> HivePromise<InsertManyResult>
+    func insertMany(_ collection: String, _ docs: Array<[String: Any]>, options: InsertOptions, handler: HiveCallback<InsertManyResult>) -> HivePromise<InsertManyResult>
 
     func countDocuments(_ collection: String, _ query: [String: Any], options: CountOptions) -> HivePromise<Int>
     func countDocuments(_ collection: String, _ query: [String: Any], options: CountOptions, handler: HiveCallback<Int>) -> HivePromise<Int>
