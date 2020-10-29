@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -21,7 +21,6 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		0D94ED2D06BBCAE410D0273C /* Pods_ElastosHiveSDKTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DB068EABA0DB13AB595055A /* Pods_ElastosHiveSDKTests.framework */; };
 		1103756D23FF9689004216D0 /* DataResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103756C23FF9689004216D0 /* DataResponse.swift */; };
 		1103756E23FF9689004216D0 /* DataResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103756C23FF9689004216D0 /* DataResponse.swift */; };
 		1103757023FF96A0004216D0 /* LogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103756F23FF96A0004216D0 /* LogLevel.swift */; };
@@ -34,10 +33,6 @@
 		1103757A23FF96BF004216D0 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103757823FF96BF004216D0 /* Log.swift */; };
 		1103757C23FF96C7004216D0 /* Persistent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103757B23FF96C7004216D0 /* Persistent.swift */; };
 		1103757D23FF96C7004216D0 /* Persistent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103757B23FF96C7004216D0 /* Persistent.swift */; };
-		111CA54B252027760030D39C /* TestError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111CA54A252027760030D39C /* TestError.swift */; };
-		111CA6DA252097CB0030D39C /* SPVAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111CA6D8252097CB0030D39C /* SPVAdaptor.swift */; };
-		111CA6DC252097CB0030D39C /* DummyAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111CA6D9252097CB0030D39C /* DummyAdapter.swift */; };
-		111CA78C25209EAE0030D39C /* PresentationJWT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111CA78B25209EAE0030D39C /* PresentationJWT.swift */; };
 		111D477924ED0C1200B7462B /* VaultAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D477824ED0C1200B7462B /* VaultAuthHelper.swift */; };
 		111D477A24ED0C1200B7462B /* VaultAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D477824ED0C1200B7462B /* VaultAuthHelper.swift */; };
 		111D478824EE57D000B7462B /* VaultConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D478724EE57D000B7462B /* VaultConstants.swift */; };
@@ -90,12 +85,10 @@
 		1127463424FE3386007D6356 /* ScriptClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1127463224FE3386007D6356 /* ScriptClient.swift */; };
 		1129C19424052CC500CD77F2 /* Alamofire+Synchronous.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1129C19324052CC500CD77F2 /* Alamofire+Synchronous.swift */; };
 		1129C19524052CC500CD77F2 /* Alamofire+Synchronous.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1129C19324052CC500CD77F2 /* Alamofire+Synchronous.swift */; };
-		1137942E227ED9AD004A1F65 /* ElastosHiveSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A39C496F225399860027BDF9 /* ElastosHiveSDK.framework */; };
 		1147720923F678BD00C7C36F /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1147720823F678BD00C7C36F /* SwiftyJSON.swift */; };
 		1147720A23F678BD00C7C36F /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1147720823F678BD00C7C36F /* SwiftyJSON.swift */; };
 		11496C65251B1E37002DE4F0 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11496C64251B1E37002DE4F0 /* Date.swift */; };
 		11496C66251B1E37002DE4F0 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11496C64251B1E37002DE4F0 /* Date.swift */; };
-		114E612D2510DD24003673FF /* test.txt in Resources */ = {isa = PBXBuildFile; fileRef = 114E612C2510DD23003673FF /* test.txt */; };
 		114FD8402297CF7700467E38 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114FD83F2297CF7600467E38 /* Authenticator.swift */; };
 		115E82E7251A4495004DCB1E /* MinKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115E82E6251A4495004DCB1E /* MinKey.swift */; };
 		115E82E8251A4495004DCB1E /* MinKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115E82E6251A4495004DCB1E /* MinKey.swift */; };
@@ -119,15 +112,27 @@
 		1170FB122501D21C0049E81D /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FB102501D21C0049E81D /* Result.swift */; };
 		1170FB142502019C0049E81D /* Vault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FB132502019C0049E81D /* Vault.swift */; };
 		1170FB152502019C0049E81D /* Vault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FB132502019C0049E81D /* Vault.swift */; };
-		1170FB1A250507C70049E81D /* DBTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FB19250507C70049E81D /* DBTest.swift */; };
-		1170FB9F25073D360049E81D /* ijUnD4KeRpeBUFmcEDCbhxMTJRzUYCQCZM in Resources */ = {isa = PBXBuildFile; fileRef = 1170FB9E25073D360049E81D /* ijUnD4KeRpeBUFmcEDCbhxMTJRzUYCQCZM */; };
 		1170FBA12508D35A0049E81D /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FBA02508D35A0049E81D /* Header.swift */; };
 		1170FBA22508D35B0049E81D /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FBA02508D35A0049E81D /* Header.swift */; };
 		11749D9F24082FB1007B8F32 /* OutputStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11749D9E24082FB1007B8F32 /* OutputStream.swift */; };
 		11749DA024082FB1007B8F32 /* OutputStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11749D9E24082FB1007B8F32 /* OutputStream.swift */; };
-		11749DA224083D63007B8F32 /* TestResultHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11749DA124083D63007B8F32 /* TestResultHandler.swift */; };
-		118F2D83250F1A7200447A0A /* ScriptTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2D82250F1A7200447A0A /* ScriptTest.swift */; };
-		118F2D85250F1ABA00447A0A /* Constance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2D84250F1ABA00447A0A /* Constance.swift */; };
+		117B4EA22541F29B001DCDE9 /* ElastosHiveSDKTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117B4EA12541F29B001DCDE9 /* ElastosHiveSDKTest.swift */; };
+		117B4EC62541F4C7001DCDE9 /* SPVAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117B4EC42541F4C7001DCDE9 /* SPVAdaptor.swift */; };
+		117B4EC72541F4C7001DCDE9 /* DummyAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117B4EC52541F4C7001DCDE9 /* DummyAdapter.swift */; };
+		117B4F062541F4EC001DCDE9 /* test.txt in Resources */ = {isa = PBXBuildFile; fileRef = 117B4F042541F4EC001DCDE9 /* test.txt */; };
+		117B4F072541F4EC001DCDE9 /* ijUnD4KeRpeBUFmcEDCbhxMTJRzUYCQCZM in Resources */ = {isa = PBXBuildFile; fileRef = 117B4F052541F4EC001DCDE9 /* ijUnD4KeRpeBUFmcEDCbhxMTJRzUYCQCZM */; };
+		117B4F0A2541F4F6001DCDE9 /* TestResultHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117B4F092541F4F6001DCDE9 /* TestResultHandler.swift */; };
+		117B4F132541F4FE001DCDE9 /* TestError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117B4F0D2541F4FE001DCDE9 /* TestError.swift */; };
+		117B4F142541F4FE001DCDE9 /* Constance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117B4F0E2541F4FE001DCDE9 /* Constance.swift */; };
+		117B4F152541F4FE001DCDE9 /* FileTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117B4F0F2541F4FE001DCDE9 /* FileTest.swift */; };
+		117B4F162541F4FE001DCDE9 /* DBTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117B4F102541F4FE001DCDE9 /* DBTest.swift */; };
+		117B4F172541F4FE001DCDE9 /* ScriptTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117B4F112541F4FE001DCDE9 /* ScriptTest.swift */; };
+		117B4F182541F4FF001DCDE9 /* PresentationJWT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117B4F122541F4FE001DCDE9 /* PresentationJWT.swift */; };
+		117B4F4F25442752001DCDE9 /* ElastosDIDSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 117B4F4E25442752001DCDE9 /* ElastosDIDSDK.framework */; platformFilter = ios; };
+		117B4F51254427AA001DCDE9 /* ElastosDIDSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 117B4F4E25442752001DCDE9 /* ElastosDIDSDK.framework */; };
+		117B4F52254427B1001DCDE9 /* ElastosDIDSDK.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 117B4F4E25442752001DCDE9 /* ElastosDIDSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		117B4F56254427D9001DCDE9 /* Antlr4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 117B4F55254427D9001DCDE9 /* Antlr4.framework */; platformFilter = ios; };
+		117B4F57254427E6001DCDE9 /* Antlr4.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 117B4F55254427D9001DCDE9 /* Antlr4.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		118F2D87250F23EB00447A0A /* AggregatedCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2D86250F23EB00447A0A /* AggregatedCondition.swift */; };
 		118F2D88250F23EB00447A0A /* AggregatedCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2D86250F23EB00447A0A /* AggregatedCondition.swift */; };
 		118F2D8A250F264900447A0A /* AggregatedExecutable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2D89250F264900447A0A /* AggregatedExecutable.swift */; };
@@ -150,10 +155,6 @@
 		118F2DA3250F332700447A0A /* QueryHasResultsCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2DA1250F332700447A0A /* QueryHasResultsCondition.swift */; };
 		118F2DA5250F33AB00447A0A /* RawCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2DA4250F33AB00447A0A /* RawCondition.swift */; };
 		118F2DA6250F33AB00447A0A /* RawCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2DA4250F33AB00447A0A /* RawCondition.swift */; };
-		118F2DAD25105C3700447A0A /* FileTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2DAC25105C3700447A0A /* FileTest.swift */; };
-		119BE12D2539638F00C6D5B5 /* Antlr4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119BE12C2539638F00C6D5B5 /* Antlr4.framework */; };
-		119BE1872539699500C6D5B5 /* Antlr4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119BE12C2539638F00C6D5B5 /* Antlr4.framework */; };
-		11D09B2C25317FF8000C977C /* SPVWrapper.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 11D14543253013FA000E627A /* SPVWrapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		11D26F4022CA3B3300E4099A /* ElastosHiveSDK_macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 11D26F3E22CA3B3300E4099A /* ElastosHiveSDK_macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		11D26F4422CA3B4B00E4099A /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FA22C4C33400F85419 /* Dictionary.swift */; };
 		11D26F4522CA3B4B00E4099A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FB22C4C33400F85419 /* String.swift */; };
@@ -165,8 +166,7 @@
 		11E573FF22C4C33400F85419 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FB22C4C33400F85419 /* String.swift */; };
 		11ED682A22FF1078004C17D0 /* ElastosHiveSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED682922FF1077004C17D0 /* ElastosHiveSDK.swift */; };
 		11ED682B22FF1078004C17D0 /* ElastosHiveSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED682922FF1077004C17D0 /* ElastosHiveSDK.swift */; };
-		2663D22A7DA76A0E3D1F6D8C /* Pods_ElastosHiveSDK_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DE05E42E9E969EDC26357D1 /* Pods_ElastosHiveSDK_macOS.framework */; };
-		6DDA50FA35E7A18E5EF0C90E /* Pods_ElastosHiveSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D17AD36AC88E073FD2B2D930 /* Pods_ElastosHiveSDK.framework */; };
+		5D106F5A7A26F9CFFC5FF838 /* Pods_ElastosHiveSDK_ElastosHiveSDKTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2127B1A148DAD847D7B8D0FA /* Pods_ElastosHiveSDK_ElastosHiveSDKTest.framework */; };
 		A37F893D23C72B2600F6C11E /* HiveClientOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37F893C23C72B2600F6C11E /* HiveClientOptions.swift */; };
 		A39C4980225399860027BDF9 /* ElastosHiveSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = A39C4972225399860027BDF9 /* ElastosHiveSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A39C499E22539C9C0027BDF9 /* HiveError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C499422539C9C0027BDF9 /* HiveError.swift */; };
@@ -177,21 +177,30 @@
 		A3E13E87240E449A002569B1 /* KeyValuesProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D9D41523C96DA1003B602E /* KeyValuesProtocol.swift */; };
 		A3E13E90240E45EE002569B1 /* HiveClientOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37F893C23C72B2600F6C11E /* HiveClientOptions.swift */; };
 		A3FD3C81228000EE0031413A /* HiveClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FD3C80228000EE0031413A /* HiveClient.swift */; };
+		B12AB57B32EC591CB0803B82 /* Pods_ElastosHiveSDK_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 521B5B301FEFD73424F5832C /* Pods_ElastosHiveSDK_macOS.framework */; };
+		B7090B1541BE387FF3017209 /* Pods_ElastosHiveSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7BD59829C40F0EF2D1CA505 /* Pods_ElastosHiveSDK.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		1137942F227ED9AD004A1F65 /* PBXContainerItemProxy */ = {
+		117B4EC02541F494001DCDE9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A39C4966225399860027BDF9 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = A39C496E225399860027BDF9;
 			remoteInfo = ElastosHiveSDK;
 		};
-		11D14542253013FA000E627A /* PBXContainerItemProxy */ = {
+		117B4F1F2541F5E3001DCDE9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 11D1453E253013FA000E627A /* SPVWrapper.xcodeproj */;
+			containerPortal = 117B4F1B2541F5E3001DCDE9 /* SPVWrapper.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 11267024238CC7120086740D;
+			remoteInfo = SPVWrapper;
+		};
+		117B4F282541F725001DCDE9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 117B4F1B2541F5E3001DCDE9 /* SPVWrapper.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 11267023238CC7120086740D;
 			remoteInfo = SPVWrapper;
 		};
 /* End PBXContainerItemProxy section */
@@ -207,30 +216,37 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		11D145532530159B000E627A /* CopyFiles */ = {
+		116F3B602541AB2600D38AB0 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				11D09B2C25317FF8000C977C /* SPVWrapper.framework in CopyFiles */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		117B4EBC2541F435001DCDE9 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				117B4F57254427E6001DCDE9 /* Antlr4.framework in CopyFiles */,
+				117B4F52254427B1001DCDE9 /* ElastosDIDSDK.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0DB068EABA0DB13AB595055A /* Pods_ElastosHiveSDKTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ElastosHiveSDKTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		00A5588EFE0AAEF3B9A91514 /* Pods-ElastosHiveSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDK.debug.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDK/Pods-ElastosHiveSDK.debug.xcconfig"; sourceTree = "<group>"; };
 		1103756C23FF9689004216D0 /* DataResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataResponse.swift; path = Result/DataResponse.swift; sourceTree = "<group>"; };
 		1103756F23FF96A0004216D0 /* LogLevel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LogLevel.swift; path = Core/LogLevel.swift; sourceTree = "<group>"; };
 		1103757223FF96AB004216D0 /* AuthToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuthToken.swift; path = Core/AuthToken.swift; sourceTree = "<group>"; };
 		1103757523FF96B5004216D0 /* ConnectHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConnectHelper.swift; path = Core/ConnectHelper.swift; sourceTree = "<group>"; };
 		1103757823FF96BF004216D0 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Log.swift; path = Core/Log.swift; sourceTree = "<group>"; };
 		1103757B23FF96C7004216D0 /* Persistent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Persistent.swift; path = Core/Persistent.swift; sourceTree = "<group>"; };
-		111CA54A252027760030D39C /* TestError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestError.swift; sourceTree = "<group>"; };
-		111CA6D8252097CB0030D39C /* SPVAdaptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPVAdaptor.swift; sourceTree = "<group>"; };
-		111CA6D9252097CB0030D39C /* DummyAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DummyAdapter.swift; sourceTree = "<group>"; };
-		111CA78B25209EAE0030D39C /* PresentationJWT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationJWT.swift; sourceTree = "<group>"; };
 		111D477824ED0C1200B7462B /* VaultAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultAuthHelper.swift; sourceTree = "<group>"; };
 		111D478724EE57D000B7462B /* VaultConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultConstants.swift; sourceTree = "<group>"; };
 		111D478A24EE810A00B7462B /* VaultURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultURL.swift; sourceTree = "<group>"; };
@@ -257,30 +273,40 @@
 		1127462F24FE3369007D6356 /* FileClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileClient.swift; sourceTree = "<group>"; };
 		1127463224FE3386007D6356 /* ScriptClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptClient.swift; sourceTree = "<group>"; };
 		1129C19324052CC500CD77F2 /* Alamofire+Synchronous.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Alamofire+Synchronous.swift"; sourceTree = "<group>"; };
-		11379429227ED9AD004A1F65 /* ElastosHiveSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ElastosHiveSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		1137942D227ED9AD004A1F65 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1147720823F678BD00C7C36F /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		11496C64251B1E37002DE4F0 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
-		114E612C2510DD23003673FF /* test.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test.txt; sourceTree = "<group>"; };
 		114FD83F2297CF7600467E38 /* Authenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Authenticator.swift; path = Core/Authenticator.swift; sourceTree = "<group>"; };
 		115E82E6251A4495004DCB1E /* MinKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinKey.swift; sourceTree = "<group>"; };
 		115E82E9251A44AA004DCB1E /* MaxKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaxKey.swift; sourceTree = "<group>"; };
 		115E82EC251A44BC004DCB1E /* ObjectId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectId.swift; sourceTree = "<group>"; };
 		115E82EF251A4553004DCB1E /* RegularExpression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegularExpression.swift; sourceTree = "<group>"; };
 		115E82F2251A4590004DCB1E /* Timestamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timestamp.swift; sourceTree = "<group>"; };
+		116F3B6C2541ADF100D38AB0 /* Pods_ElastosHiveSDK_ElastosHiveSDKTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_ElastosHiveSDK_ElastosHiveSDKTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1170FB042501CB3F0049E81D /* WriteConcern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteConcern.swift; sourceTree = "<group>"; };
 		1170FB072501CCD30049E81D /* ReadConcern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadConcern.swift; sourceTree = "<group>"; };
 		1170FB0A2501CD2F0049E81D /* ReadPreference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadPreference.swift; sourceTree = "<group>"; };
 		1170FB0D2501CEF70049E81D /* VaultIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultIndex.swift; sourceTree = "<group>"; };
 		1170FB102501D21C0049E81D /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		1170FB132502019C0049E81D /* Vault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vault.swift; sourceTree = "<group>"; };
-		1170FB19250507C70049E81D /* DBTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBTest.swift; sourceTree = "<group>"; };
-		1170FB9E25073D360049E81D /* ijUnD4KeRpeBUFmcEDCbhxMTJRzUYCQCZM */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ijUnD4KeRpeBUFmcEDCbhxMTJRzUYCQCZM; sourceTree = "<group>"; };
 		1170FBA02508D35A0049E81D /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 		11749D9E24082FB1007B8F32 /* OutputStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputStream.swift; sourceTree = "<group>"; };
-		11749DA124083D63007B8F32 /* TestResultHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestResultHandler.swift; sourceTree = "<group>"; };
-		118F2D82250F1A7200447A0A /* ScriptTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptTest.swift; sourceTree = "<group>"; };
-		118F2D84250F1ABA00447A0A /* Constance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constance.swift; sourceTree = "<group>"; };
+		117B4E9F2541F29B001DCDE9 /* ElastosHiveSDKTest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ElastosHiveSDKTest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		117B4EA12541F29B001DCDE9 /* ElastosHiveSDKTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElastosHiveSDKTest.swift; sourceTree = "<group>"; };
+		117B4EA32541F29B001DCDE9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		117B4EC42541F4C7001DCDE9 /* SPVAdaptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPVAdaptor.swift; sourceTree = "<group>"; };
+		117B4EC52541F4C7001DCDE9 /* DummyAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DummyAdapter.swift; sourceTree = "<group>"; };
+		117B4F042541F4EC001DCDE9 /* test.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test.txt; sourceTree = "<group>"; };
+		117B4F052541F4EC001DCDE9 /* ijUnD4KeRpeBUFmcEDCbhxMTJRzUYCQCZM */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ijUnD4KeRpeBUFmcEDCbhxMTJRzUYCQCZM; sourceTree = "<group>"; };
+		117B4F092541F4F6001DCDE9 /* TestResultHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestResultHandler.swift; sourceTree = "<group>"; };
+		117B4F0D2541F4FE001DCDE9 /* TestError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestError.swift; sourceTree = "<group>"; };
+		117B4F0E2541F4FE001DCDE9 /* Constance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constance.swift; sourceTree = "<group>"; };
+		117B4F0F2541F4FE001DCDE9 /* FileTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileTest.swift; sourceTree = "<group>"; };
+		117B4F102541F4FE001DCDE9 /* DBTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBTest.swift; sourceTree = "<group>"; };
+		117B4F112541F4FE001DCDE9 /* ScriptTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScriptTest.swift; sourceTree = "<group>"; };
+		117B4F122541F4FE001DCDE9 /* PresentationJWT.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresentationJWT.swift; sourceTree = "<group>"; };
+		117B4F1B2541F5E3001DCDE9 /* SPVWrapper.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = SPVWrapper.xcodeproj; sourceTree = "<group>"; };
+		117B4F4E25442752001DCDE9 /* ElastosDIDSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ElastosDIDSDK.framework; sourceTree = "<group>"; };
+		117B4F55254427D9001DCDE9 /* Antlr4.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Antlr4.framework; sourceTree = "<group>"; };
 		118F2D86250F23EB00447A0A /* AggregatedCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AggregatedCondition.swift; sourceTree = "<group>"; };
 		118F2D89250F264900447A0A /* AggregatedExecutable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AggregatedExecutable.swift; sourceTree = "<group>"; };
 		118F2D8C250F28BA00447A0A /* RawExecutable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawExecutable.swift; sourceTree = "<group>"; };
@@ -292,22 +318,19 @@
 		118F2D9E250F32B100447A0A /* OrCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrCondition.swift; sourceTree = "<group>"; };
 		118F2DA1250F332700447A0A /* QueryHasResultsCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryHasResultsCondition.swift; sourceTree = "<group>"; };
 		118F2DA4250F33AB00447A0A /* RawCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawCondition.swift; sourceTree = "<group>"; };
-		118F2DAC25105C3700447A0A /* FileTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTest.swift; sourceTree = "<group>"; };
-		119BE12C2539638F00C6D5B5 /* Antlr4.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Antlr4.framework; sourceTree = "<group>"; };
-		11D1453E253013FA000E627A /* SPVWrapper.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = SPVWrapper.xcodeproj; sourceTree = "<group>"; };
 		11D26F3C22CA3B3300E4099A /* ElastosHiveSDK_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ElastosHiveSDK_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		11D26F3E22CA3B3300E4099A /* ElastosHiveSDK_macOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ElastosHiveSDK_macOS.h; sourceTree = "<group>"; };
 		11E573FA22C4C33400F85419 /* Dictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
 		11E573FB22C4C33400F85419 /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		11ED682922FF1077004C17D0 /* ElastosHiveSDK.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElastosHiveSDK.swift; sourceTree = "<group>"; };
-		13C6D592C180032E4F31BEF6 /* Pods-ElastosHiveSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDK.debug.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDK/Pods-ElastosHiveSDK.debug.xcconfig"; sourceTree = "<group>"; };
-		2368C8CBAE94193EAF7DB87D /* Pods-ElastosHiveSDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDKTests.debug.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDKTests/Pods-ElastosHiveSDKTests.debug.xcconfig"; sourceTree = "<group>"; };
-		30EAA8B1E119CDD4125218B6 /* Pods-ElastosHiveSDK_macOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDK_macOS.debug.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDK_macOS/Pods-ElastosHiveSDK_macOS.debug.xcconfig"; sourceTree = "<group>"; };
-		35FCE1DB23121BEEE8DD94B1 /* Pods-ElastosHiveSDK_macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDK_macOS.release.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDK_macOS/Pods-ElastosHiveSDK_macOS.release.xcconfig"; sourceTree = "<group>"; };
-		556E8D39E54EDBDFA4DEAD42 /* Pods-TestHost.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestHost.release.xcconfig"; path = "Target Support Files/Pods-TestHost/Pods-TestHost.release.xcconfig"; sourceTree = "<group>"; };
-		5F09DA7DC9D47111E630261C /* Pods_TestHost.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TestHost.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6081910F0FC211291C05B08B /* Pods-ElastosHiveSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDK.release.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDK/Pods-ElastosHiveSDK.release.xcconfig"; sourceTree = "<group>"; };
-		6DE05E42E9E969EDC26357D1 /* Pods_ElastosHiveSDK_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ElastosHiveSDK_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1441B070239C3AC111894741 /* Pods-ElastosHiveSDK-ElastosHiveSDKTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDK-ElastosHiveSDKTest.debug.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDK-ElastosHiveSDKTest/Pods-ElastosHiveSDK-ElastosHiveSDKTest.debug.xcconfig"; sourceTree = "<group>"; };
+		2016BF9AD451CDFD6852EA66 /* Pods-ElastosHiveSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDK.release.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDK/Pods-ElastosHiveSDK.release.xcconfig"; sourceTree = "<group>"; };
+		2127B1A148DAD847D7B8D0FA /* Pods_ElastosHiveSDK_ElastosHiveSDKTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ElastosHiveSDK_ElastosHiveSDKTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		521B5B301FEFD73424F5832C /* Pods_ElastosHiveSDK_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ElastosHiveSDK_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5BBF29D228C9752D7247CA2E /* Pods-ElastosHiveSDK-ElastosHiveSDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDK-ElastosHiveSDKTests.debug.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDK-ElastosHiveSDKTests/Pods-ElastosHiveSDK-ElastosHiveSDKTests.debug.xcconfig"; sourceTree = "<group>"; };
+		5EA53962DA7A3F516D4A230D /* Pods_ElastosHiveSDK_ElastosHiveSDKTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ElastosHiveSDK_ElastosHiveSDKTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7B695844958C453CFC9D3BD4 /* Pods-ElastosHiveSDK_macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDK_macOS.release.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDK_macOS/Pods-ElastosHiveSDK_macOS.release.xcconfig"; sourceTree = "<group>"; };
+		8CE9F168B9D25590FBF19E9C /* Pods-ElastosHiveSDK-ElastosHiveSDKTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDK-ElastosHiveSDKTest.release.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDK-ElastosHiveSDKTest/Pods-ElastosHiveSDK-ElastosHiveSDKTest.release.xcconfig"; sourceTree = "<group>"; };
 		A37F893C23C72B2600F6C11E /* HiveClientOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HiveClientOptions.swift; path = Core/HiveClientOptions.swift; sourceTree = "<group>"; };
 		A39C496F225399860027BDF9 /* ElastosHiveSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ElastosHiveSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A39C4972225399860027BDF9 /* ElastosHiveSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ElastosHiveSDK.h; sourceTree = "<group>"; };
@@ -317,19 +340,19 @@
 		A3D9D41023C9671C003B602E /* FilesProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FilesProtocol.swift; path = Protocols/FilesProtocol.swift; sourceTree = "<group>"; };
 		A3D9D41523C96DA1003B602E /* KeyValuesProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KeyValuesProtocol.swift; path = Protocols/KeyValuesProtocol.swift; sourceTree = "<group>"; };
 		A3FD3C80228000EE0031413A /* HiveClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HiveClient.swift; path = Core/HiveClient.swift; sourceTree = "<group>"; };
-		C228C56325B65D63A60C99C8 /* Pods-ElastosHiveSDKTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDKTests.release.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDKTests/Pods-ElastosHiveSDKTests.release.xcconfig"; sourceTree = "<group>"; };
-		D17AD36AC88E073FD2B2D930 /* Pods_ElastosHiveSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ElastosHiveSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		DB374220454CA5325E399B9B /* Pods-TestHost.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestHost.debug.xcconfig"; path = "Target Support Files/Pods-TestHost/Pods-TestHost.debug.xcconfig"; sourceTree = "<group>"; };
+		CAAC7955B87A6E24A2069E6F /* Pods-ElastosHiveSDK_macOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDK_macOS.debug.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDK_macOS/Pods-ElastosHiveSDK_macOS.debug.xcconfig"; sourceTree = "<group>"; };
+		F5860BF929A42E65F45B0EA6 /* Pods-ElastosHiveSDK-ElastosHiveSDKTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDK-ElastosHiveSDKTests.release.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDK-ElastosHiveSDKTests/Pods-ElastosHiveSDK-ElastosHiveSDKTests.release.xcconfig"; sourceTree = "<group>"; };
+		F7BD59829C40F0EF2D1CA505 /* Pods_ElastosHiveSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ElastosHiveSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		11379426227ED9AD004A1F65 /* Frameworks */ = {
+		117B4E9C2541F29B001DCDE9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1137942E227ED9AD004A1F65 /* ElastosHiveSDK.framework in Frameworks */,
-				0D94ED2D06BBCAE410D0273C /* Pods_ElastosHiveSDKTests.framework in Frameworks */,
-				119BE12D2539638F00C6D5B5 /* Antlr4.framework in Frameworks */,
+				117B4F51254427AA001DCDE9 /* ElastosDIDSDK.framework in Frameworks */,
+				5D106F5A7A26F9CFFC5FF838 /* Pods_ElastosHiveSDK_ElastosHiveSDKTest.framework in Frameworks */,
+				117B4F56254427D9001DCDE9 /* Antlr4.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -337,7 +360,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2663D22A7DA76A0E3D1F6D8C /* Pods_ElastosHiveSDK_macOS.framework in Frameworks */,
+				B12AB57B32EC591CB0803B82 /* Pods_ElastosHiveSDK_macOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -345,32 +368,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6DDA50FA35E7A18E5EF0C90E /* Pods_ElastosHiveSDK.framework in Frameworks */,
-				119BE1872539699500C6D5B5 /* Antlr4.framework in Frameworks */,
+				B7090B1541BE387FF3017209 /* Pods_ElastosHiveSDK.framework in Frameworks */,
+				117B4F4F25442752001DCDE9 /* ElastosDIDSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		111CA6D7252097CB0030D39C /* DID */ = {
-			isa = PBXGroup;
-			children = (
-				111CA6D8252097CB0030D39C /* SPVAdaptor.swift */,
-				111CA6D9252097CB0030D39C /* DummyAdapter.swift */,
-			);
-			path = DID;
-			sourceTree = "<group>";
-		};
-		111CA6E2252097DC0030D39C /* Externals */ = {
-			isa = PBXGroup;
-			children = (
-				119BE12C2539638F00C6D5B5 /* Antlr4.framework */,
-				11D1453E253013FA000E627A /* SPVWrapper.xcodeproj */,
-			);
-			path = Externals;
-			sourceTree = "<group>";
-		};
 		111D477724EBA5B400B7462B /* Vault */ = {
 			isa = PBXGroup;
 			children = (
@@ -386,19 +391,6 @@
 			);
 			name = Vault;
 			path = Vendors/Vault;
-			sourceTree = "<group>";
-		};
-		111D477B24EE4B0700B7462B /* Vault */ = {
-			isa = PBXGroup;
-			children = (
-				111CA78B25209EAE0030D39C /* PresentationJWT.swift */,
-				111CA54A252027760030D39C /* TestError.swift */,
-				1170FB19250507C70049E81D /* DBTest.swift */,
-				118F2D82250F1A7200447A0A /* ScriptTest.swift */,
-				118F2DAC25105C3700447A0A /* FileTest.swift */,
-				118F2D84250F1ABA00447A0A /* Constance.swift */,
-			);
-			path = Vault;
 			sourceTree = "<group>";
 		};
 		111D47C924F7902600B7462B /* database */ = {
@@ -457,19 +449,6 @@
 			path = Scripting;
 			sourceTree = "<group>";
 		};
-		1137942A227ED9AD004A1F65 /* ElastosHiveSDKTests */ = {
-			isa = PBXGroup;
-			children = (
-				111CA6E2252097DC0030D39C /* Externals */,
-				111CA6D7252097CB0030D39C /* DID */,
-				1170FB2825073CD60049E81D /* Resources */,
-				111D477B24EE4B0700B7462B /* Vault */,
-				1137942D227ED9AD004A1F65 /* Info.plist */,
-				11749DA124083D63007B8F32 /* TestResultHandler.swift */,
-			);
-			path = ElastosHiveSDKTests;
-			sourceTree = "<group>";
-		};
 		1147720723F678BD00C7C36F /* SwiftyJSON */ = {
 			isa = PBXGroup;
 			children = (
@@ -478,19 +457,64 @@
 			path = SwiftyJSON;
 			sourceTree = "<group>";
 		};
-		1170FB2825073CD60049E81D /* Resources */ = {
+		117B4EA02541F29B001DCDE9 /* ElastosHiveSDKTest */ = {
 			isa = PBXGroup;
 			children = (
-				114E612C2510DD23003673FF /* test.txt */,
-				1170FB9E25073D360049E81D /* ijUnD4KeRpeBUFmcEDCbhxMTJRzUYCQCZM */,
+				117B4F0C2541F4FE001DCDE9 /* Vault */,
+				117B4F032541F4EC001DCDE9 /* Resources */,
+				117B4EC92541F4CF001DCDE9 /* Externals */,
+				117B4EC32541F4C6001DCDE9 /* DID */,
+				117B4EA12541F29B001DCDE9 /* ElastosHiveSDKTest.swift */,
+				117B4F092541F4F6001DCDE9 /* TestResultHandler.swift */,
+				117B4EA32541F29B001DCDE9 /* Info.plist */,
+			);
+			path = ElastosHiveSDKTest;
+			sourceTree = "<group>";
+		};
+		117B4EC32541F4C6001DCDE9 /* DID */ = {
+			isa = PBXGroup;
+			children = (
+				117B4EC42541F4C7001DCDE9 /* SPVAdaptor.swift */,
+				117B4EC52541F4C7001DCDE9 /* DummyAdapter.swift */,
+			);
+			path = DID;
+			sourceTree = "<group>";
+		};
+		117B4EC92541F4CF001DCDE9 /* Externals */ = {
+			isa = PBXGroup;
+			children = (
+				117B4F55254427D9001DCDE9 /* Antlr4.framework */,
+				117B4F1B2541F5E3001DCDE9 /* SPVWrapper.xcodeproj */,
+			);
+			path = Externals;
+			sourceTree = "<group>";
+		};
+		117B4F032541F4EC001DCDE9 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				117B4F042541F4EC001DCDE9 /* test.txt */,
+				117B4F052541F4EC001DCDE9 /* ijUnD4KeRpeBUFmcEDCbhxMTJRzUYCQCZM */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		11D1453F253013FA000E627A /* Products */ = {
+		117B4F0C2541F4FE001DCDE9 /* Vault */ = {
 			isa = PBXGroup;
 			children = (
-				11D14543253013FA000E627A /* SPVWrapper.framework */,
+				117B4F0D2541F4FE001DCDE9 /* TestError.swift */,
+				117B4F0E2541F4FE001DCDE9 /* Constance.swift */,
+				117B4F0F2541F4FE001DCDE9 /* FileTest.swift */,
+				117B4F102541F4FE001DCDE9 /* DBTest.swift */,
+				117B4F112541F4FE001DCDE9 /* ScriptTest.swift */,
+				117B4F122541F4FE001DCDE9 /* PresentationJWT.swift */,
+			);
+			path = Vault;
+			sourceTree = "<group>";
+		};
+		117B4F1C2541F5E3001DCDE9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				117B4F202541F5E3001DCDE9 /* SPVWrapper.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -515,28 +539,17 @@
 			path = Extension;
 			sourceTree = "<group>";
 		};
-		54606D10E83E614A3F17056C /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				D17AD36AC88E073FD2B2D930 /* Pods_ElastosHiveSDK.framework */,
-				0DB068EABA0DB13AB595055A /* Pods_ElastosHiveSDKTests.framework */,
-				5F09DA7DC9D47111E630261C /* Pods_TestHost.framework */,
-				6DE05E42E9E969EDC26357D1 /* Pods_ElastosHiveSDK_macOS.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		873FCFD648761A208C564AD4 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				13C6D592C180032E4F31BEF6 /* Pods-ElastosHiveSDK.debug.xcconfig */,
-				6081910F0FC211291C05B08B /* Pods-ElastosHiveSDK.release.xcconfig */,
-				2368C8CBAE94193EAF7DB87D /* Pods-ElastosHiveSDKTests.debug.xcconfig */,
-				C228C56325B65D63A60C99C8 /* Pods-ElastosHiveSDKTests.release.xcconfig */,
-				DB374220454CA5325E399B9B /* Pods-TestHost.debug.xcconfig */,
-				556E8D39E54EDBDFA4DEAD42 /* Pods-TestHost.release.xcconfig */,
-				30EAA8B1E119CDD4125218B6 /* Pods-ElastosHiveSDK_macOS.debug.xcconfig */,
-				35FCE1DB23121BEEE8DD94B1 /* Pods-ElastosHiveSDK_macOS.release.xcconfig */,
+				00A5588EFE0AAEF3B9A91514 /* Pods-ElastosHiveSDK.debug.xcconfig */,
+				2016BF9AD451CDFD6852EA66 /* Pods-ElastosHiveSDK.release.xcconfig */,
+				5BBF29D228C9752D7247CA2E /* Pods-ElastosHiveSDK-ElastosHiveSDKTests.debug.xcconfig */,
+				F5860BF929A42E65F45B0EA6 /* Pods-ElastosHiveSDK-ElastosHiveSDKTests.release.xcconfig */,
+				CAAC7955B87A6E24A2069E6F /* Pods-ElastosHiveSDK_macOS.debug.xcconfig */,
+				7B695844958C453CFC9D3BD4 /* Pods-ElastosHiveSDK_macOS.release.xcconfig */,
+				1441B070239C3AC111894741 /* Pods-ElastosHiveSDK-ElastosHiveSDKTest.debug.xcconfig */,
+				8CE9F168B9D25590FBF19E9C /* Pods-ElastosHiveSDK-ElastosHiveSDKTest.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -564,11 +577,11 @@
 			isa = PBXGroup;
 			children = (
 				A39C4971225399860027BDF9 /* ElastosHiveSDK */,
-				1137942A227ED9AD004A1F65 /* ElastosHiveSDKTests */,
 				11D26F3D22CA3B3300E4099A /* ElastosHiveSDK_macOS */,
+				117B4EA02541F29B001DCDE9 /* ElastosHiveSDKTest */,
 				A39C4970225399860027BDF9 /* Products */,
 				873FCFD648761A208C564AD4 /* Pods */,
-				54606D10E83E614A3F17056C /* Frameworks */,
+				FF8C0D1BF4E76CAA4CB26FE2 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -576,8 +589,8 @@
 			isa = PBXGroup;
 			children = (
 				A39C496F225399860027BDF9 /* ElastosHiveSDK.framework */,
-				11379429227ED9AD004A1F65 /* ElastosHiveSDKTests.xctest */,
 				11D26F3C22CA3B3300E4099A /* ElastosHiveSDK_macOS.framework */,
+				117B4E9F2541F29B001DCDE9 /* ElastosHiveSDKTest.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -585,6 +598,7 @@
 		A39C4971225399860027BDF9 /* ElastosHiveSDK */ = {
 			isa = PBXGroup;
 			children = (
+				117B4F4E25442752001DCDE9 /* ElastosDIDSDK.framework */,
 				1147720723F678BD00C7C36F /* SwiftyJSON */,
 				11E573F922C4C33400F85419 /* Extension */,
 				111D47C924F7902600B7462B /* database */,
@@ -636,6 +650,18 @@
 			name = Vendors;
 			sourceTree = "<group>";
 		};
+		FF8C0D1BF4E76CAA4CB26FE2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				116F3B6C2541ADF100D38AB0 /* Pods_ElastosHiveSDK_ElastosHiveSDKTests.framework */,
+				F7BD59829C40F0EF2D1CA505 /* Pods_ElastosHiveSDK.framework */,
+				5EA53962DA7A3F516D4A230D /* Pods_ElastosHiveSDK_ElastosHiveSDKTests.framework */,
+				521B5B301FEFD73424F5832C /* Pods_ElastosHiveSDK_macOS.framework */,
+				2127B1A148DAD847D7B8D0FA /* Pods_ElastosHiveSDK_ElastosHiveSDKTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -658,32 +684,33 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		11379428227ED9AD004A1F65 /* ElastosHiveSDKTests */ = {
+		117B4E9E2541F29B001DCDE9 /* ElastosHiveSDKTest */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 11379431227ED9AD004A1F65 /* Build configuration list for PBXNativeTarget "ElastosHiveSDKTests" */;
+			buildConfigurationList = 117B4EA72541F29B001DCDE9 /* Build configuration list for PBXNativeTarget "ElastosHiveSDKTest" */;
 			buildPhases = (
-				9C6BAF7A402DDFEAEAE68FFC /* [CP] Check Pods Manifest.lock */,
-				11379425227ED9AD004A1F65 /* Sources */,
-				11379426227ED9AD004A1F65 /* Frameworks */,
-				11379427227ED9AD004A1F65 /* Resources */,
-				7389AFB6B8B6DAB5A102422D /* [CP] Embed Pods Frameworks */,
-				11D145532530159B000E627A /* CopyFiles */,
+				DCF308FACD54288AE8A53BDA /* [CP] Check Pods Manifest.lock */,
+				117B4E9B2541F29B001DCDE9 /* Sources */,
+				117B4E9C2541F29B001DCDE9 /* Frameworks */,
+				117B4E9D2541F29B001DCDE9 /* Resources */,
+				49A640A36AF083EF99ECFDD9 /* [CP] Embed Pods Frameworks */,
+				117B4EBC2541F435001DCDE9 /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				11379430227ED9AD004A1F65 /* PBXTargetDependency */,
+				117B4F292541F725001DCDE9 /* PBXTargetDependency */,
+				117B4EC12541F494001DCDE9 /* PBXTargetDependency */,
 			);
-			name = ElastosHiveSDKTests;
-			productName = ElastosHiveSDKTests;
-			productReference = 11379429227ED9AD004A1F65 /* ElastosHiveSDKTests.xctest */;
+			name = ElastosHiveSDKTest;
+			productName = ElastosHiveSDKTest;
+			productReference = 117B4E9F2541F29B001DCDE9 /* ElastosHiveSDKTest.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		11D26F3B22CA3B3300E4099A /* ElastosHiveSDK_macOS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 11D26F4122CA3B3300E4099A /* Build configuration list for PBXNativeTarget "ElastosHiveSDK_macOS" */;
 			buildPhases = (
-				A69A7AFBCD4DB14406871C23 /* [CP] Check Pods Manifest.lock */,
+				44E8188A51E3F4BC4B19E7A6 /* [CP] Check Pods Manifest.lock */,
 				11D26F3722CA3B3300E4099A /* Headers */,
 				11D26F3822CA3B3300E4099A /* Sources */,
 				11D26F3922CA3B3300E4099A /* Frameworks */,
@@ -703,11 +730,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A39C4983225399860027BDF9 /* Build configuration list for PBXNativeTarget "ElastosHiveSDK" */;
 			buildPhases = (
-				73827CA57F0DF5767CA9E536 /* [CP] Check Pods Manifest.lock */,
+				48C64FE8ECB20212A90F4B5E /* [CP] Check Pods Manifest.lock */,
 				A39C496A225399860027BDF9 /* Headers */,
 				A39C496B225399860027BDF9 /* Sources */,
 				A39C496C225399860027BDF9 /* Frameworks */,
 				A39C496D225399860027BDF9 /* Resources */,
+				116F3B602541AB2600D38AB0 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -724,15 +752,15 @@
 		A39C4966225399860027BDF9 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1020;
+				LastSwiftUpdateCheck = 1200;
 				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = org.elastos;
 				TargetAttributes = {
 					112F1F5B22E01499001706DB = {
 						CreatedOnToolsVersion = 10.2.1;
 					};
-					11379428227ED9AD004A1F65 = {
-						CreatedOnToolsVersion = 10.2;
+					117B4E9E2541F29B001DCDE9 = {
+						CreatedOnToolsVersion = 12.0;
 					};
 					11D26F3B22CA3B3300E4099A = {
 						CreatedOnToolsVersion = 10.2.1;
@@ -756,37 +784,37 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 11D1453F253013FA000E627A /* Products */;
-					ProjectRef = 11D1453E253013FA000E627A /* SPVWrapper.xcodeproj */;
+					ProductGroup = 117B4F1C2541F5E3001DCDE9 /* Products */;
+					ProjectRef = 117B4F1B2541F5E3001DCDE9 /* SPVWrapper.xcodeproj */;
 				},
 			);
 			projectRoot = "";
 			targets = (
 				A39C496E225399860027BDF9 /* ElastosHiveSDK */,
-				11379428227ED9AD004A1F65 /* ElastosHiveSDKTests */,
 				11D26F3B22CA3B3300E4099A /* ElastosHiveSDK_macOS */,
 				112F1F5B22E01499001706DB /* ElastosHiveSDKFramework */,
+				117B4E9E2541F29B001DCDE9 /* ElastosHiveSDKTest */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		11D14543253013FA000E627A /* SPVWrapper.framework */ = {
+		117B4F202541F5E3001DCDE9 /* SPVWrapper.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = SPVWrapper.framework;
-			remoteRef = 11D14542253013FA000E627A /* PBXContainerItemProxy */;
+			remoteRef = 117B4F1F2541F5E3001DCDE9 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
-		11379427227ED9AD004A1F65 /* Resources */ = {
+		117B4E9D2541F29B001DCDE9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				114E612D2510DD24003673FF /* test.txt in Resources */,
-				1170FB9F25073D360049E81D /* ijUnD4KeRpeBUFmcEDCbhxMTJRzUYCQCZM in Resources */,
+				117B4F072541F4EC001DCDE9 /* ijUnD4KeRpeBUFmcEDCbhxMTJRzUYCQCZM in Resources */,
+				117B4F062541F4EC001DCDE9 /* test.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -824,68 +852,7 @@
 			shellPath = /bin/sh;
 			shellScript = "FMK_NAME=${PROJECT_NAME}\nINSTALL_DIR=${SRCROOT}/'Products'/${FMK_NAME}'.framework'\nFINAL_DIR=${SRCROOT}/Products\nWRK_DIR=${BUILD_DIR}\nDEVICE_DIR=${WRK_DIR}'/Debug-iphoneos'/${FMK_NAME}'.framework'\nSIMULATOR_DIR=${WRK_DIR}'/Debug-iphonesimulator'/${FMK_NAME}'.framework'\nxcodebuild -workspace ${FMK_NAME}\".xcworkspace\" -scheme ${FMK_NAME} OTHER_CFLAGS=\"-fembed-bitcode\" -configuration \"Debug\" -sdk iphoneos -arch arm64 clean build -UseModernBuildSystem=NO || exit 1\nxcodebuild -workspace ${FMK_NAME}\".xcworkspace\" -scheme ${FMK_NAME} OTHER_CFLAGS=\"-fembed-bitcode\" -configuration \"Debug\" -sdk iphonesimulator -arch x86_64 clean build -UseModernBuildSystem=NO || exit 1\n# Cleaning the oldest.\nif [ -d \"${INSTALL_DIR}\" ]\nthen\nrm -rf \"${INSTALL_DIR}\"\nfi\nmkdir -p \"${INSTALL_DIR}\"\ncp -R \"${DEVICE_DIR}/\" \"${INSTALL_DIR}/\"\ncp -R \"${SIMULATOR_DIR}/Modules/${FMK_NAME}.swiftmodule/\" \"${INSTALL_DIR}/Modules/${FMK_NAME}.swiftmodule/\"\nlipo -create \"${DEVICE_DIR}/${FMK_NAME}\" \"${SIMULATOR_DIR}/${FMK_NAME}\" -output \"${INSTALL_DIR}/${FMK_NAME}\"\nrm -r \"${WRK_DIR}\"\nopen \"${FINAL_DIR}\"\n";
 		};
-		73827CA57F0DF5767CA9E536 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ElastosHiveSDK-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		7389AFB6B8B6DAB5A102422D /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ElastosHiveSDKTests/Pods-ElastosHiveSDKTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ElastosHiveSDKTests/Pods-ElastosHiveSDKTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ElastosHiveSDKTests/Pods-ElastosHiveSDKTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9C6BAF7A402DDFEAEAE68FFC /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ElastosHiveSDKTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A69A7AFBCD4DB14406871C23 /* [CP] Check Pods Manifest.lock */ = {
+		44E8188A51E3F4BC4B19E7A6 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -907,22 +874,84 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		48C64FE8ECB20212A90F4B5E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ElastosHiveSDK-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		49A640A36AF083EF99ECFDD9 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ElastosHiveSDK-ElastosHiveSDKTest/Pods-ElastosHiveSDK-ElastosHiveSDKTest-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ElastosHiveSDK-ElastosHiveSDKTest/Pods-ElastosHiveSDK-ElastosHiveSDKTest-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ElastosHiveSDK-ElastosHiveSDKTest/Pods-ElastosHiveSDK-ElastosHiveSDKTest-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DCF308FACD54288AE8A53BDA /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ElastosHiveSDK-ElastosHiveSDKTest-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		11379425227ED9AD004A1F65 /* Sources */ = {
+		117B4E9B2541F29B001DCDE9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				11749DA224083D63007B8F32 /* TestResultHandler.swift in Sources */,
-				111CA6DC252097CB0030D39C /* DummyAdapter.swift in Sources */,
-				118F2DAD25105C3700447A0A /* FileTest.swift in Sources */,
-				111CA54B252027760030D39C /* TestError.swift in Sources */,
-				118F2D85250F1ABA00447A0A /* Constance.swift in Sources */,
-				118F2D83250F1A7200447A0A /* ScriptTest.swift in Sources */,
-				111CA6DA252097CB0030D39C /* SPVAdaptor.swift in Sources */,
-				111CA78C25209EAE0030D39C /* PresentationJWT.swift in Sources */,
-				1170FB1A250507C70049E81D /* DBTest.swift in Sources */,
+				117B4F172541F4FE001DCDE9 /* ScriptTest.swift in Sources */,
+				117B4F0A2541F4F6001DCDE9 /* TestResultHandler.swift in Sources */,
+				117B4F182541F4FF001DCDE9 /* PresentationJWT.swift in Sources */,
+				117B4EA22541F29B001DCDE9 /* ElastosHiveSDKTest.swift in Sources */,
+				117B4F162541F4FE001DCDE9 /* DBTest.swift in Sources */,
+				117B4F132541F4FE001DCDE9 /* TestError.swift in Sources */,
+				117B4F152541F4FE001DCDE9 /* FileTest.swift in Sources */,
+				117B4F142541F4FE001DCDE9 /* Constance.swift in Sources */,
+				117B4EC72541F4C7001DCDE9 /* DummyAdapter.swift in Sources */,
+				117B4EC62541F4C7001DCDE9 /* SPVAdaptor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1079,10 +1108,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		11379430227ED9AD004A1F65 /* PBXTargetDependency */ = {
+		117B4EC12541F494001DCDE9 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A39C496E225399860027BDF9 /* ElastosHiveSDK */;
-			targetProxy = 1137942F227ED9AD004A1F65 /* PBXContainerItemProxy */;
+			targetProxy = 117B4EC02541F494001DCDE9 /* PBXContainerItemProxy */;
+		};
+		117B4F292541F725001DCDE9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SPVWrapper;
+			targetProxy = 117B4F282541F725001DCDE9 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1105,22 +1139,20 @@
 			};
 			name = Release;
 		};
-		11379432227ED9AD004A1F65 /* Debug */ = {
+		117B4EA82541F29B001DCDE9 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2368C8CBAE94193EAF7DB87D /* Pods-ElastosHiveSDKTests.debug.xcconfig */;
+			baseConfigurationReference = 1441B070239C3AC111894741 /* Pods-ElastosHiveSDK-ElastosHiveSDKTest.debug.xcconfig */;
 			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = T4LVNDN76A;
+				DEVELOPMENT_TEAM = LFU7T9UYL5;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/ElastosHiveSDKTests",
+					"$(PROJECT_DIR)/ElastosHiveSDKTest/Externals",
 					"$(PROJECT_DIR)/ElastosHiveSDK",
-					"$(PROJECT_DIR)/TestHost",
-					"$(PROJECT_DIR)/ElastosHiveSDKTests/Externals",
 				);
-				INFOPLIST_FILE = ElastosHiveSDKTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				INFOPLIST_FILE = ElastosHiveSDKTest/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1128,31 +1160,29 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/ElastosHiveSDKTests/Externals/SPVWrapper/SPVWrapper/lib/-iphonesimulator",
+					"$(PROJECT_DIR)/ElastosHiveSDKTest/Externals/SPVWrapper/lib/-iphonesimulator",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = elastos.ElastosHiveSDKTests;
+				PRODUCT_BUNDLE_IDENTIFIER = elastos.ElastosHiveSDKTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
-		11379433227ED9AD004A1F65 /* Release */ = {
+		117B4EA92541F29B001DCDE9 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C228C56325B65D63A60C99C8 /* Pods-ElastosHiveSDKTests.release.xcconfig */;
+			baseConfigurationReference = 8CE9F168B9D25590FBF19E9C /* Pods-ElastosHiveSDK-ElastosHiveSDKTest.release.xcconfig */;
 			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = T4LVNDN76A;
+				DEVELOPMENT_TEAM = LFU7T9UYL5;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/ElastosHiveSDKTests",
+					"$(PROJECT_DIR)/ElastosHiveSDKTest/Externals",
 					"$(PROJECT_DIR)/ElastosHiveSDK",
-					"$(PROJECT_DIR)/TestHost",
-					"$(PROJECT_DIR)/ElastosHiveSDKTests/Externals",
 				);
-				INFOPLIST_FILE = ElastosHiveSDKTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				INFOPLIST_FILE = ElastosHiveSDKTest/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1160,18 +1190,18 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/ElastosHiveSDKTests/Externals/SPVWrapper/SPVWrapper/lib/-iphonesimulator",
+					"$(PROJECT_DIR)/ElastosHiveSDKTest/Externals/SPVWrapper/lib/-iphonesimulator",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = elastos.ElastosHiveSDKTests;
+				PRODUCT_BUNDLE_IDENTIFIER = elastos.ElastosHiveSDKTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
 		11D26F4222CA3B3300E4099A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 30EAA8B1E119CDD4125218B6 /* Pods-ElastosHiveSDK_macOS.debug.xcconfig */;
+			baseConfigurationReference = CAAC7955B87A6E24A2069E6F /* Pods-ElastosHiveSDK_macOS.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
@@ -1205,7 +1235,7 @@
 		};
 		11D26F4322CA3B3300E4099A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 35FCE1DB23121BEEE8DD94B1 /* Pods-ElastosHiveSDK_macOS.release.xcconfig */;
+			baseConfigurationReference = 7B695844958C453CFC9D3BD4 /* Pods-ElastosHiveSDK_macOS.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
@@ -1363,7 +1393,7 @@
 		};
 		A39C4984225399860027BDF9 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 13C6D592C180032E4F31BEF6 /* Pods-ElastosHiveSDK.debug.xcconfig */;
+			baseConfigurationReference = 00A5588EFE0AAEF3B9A91514 /* Pods-ElastosHiveSDK.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;
@@ -1382,6 +1412,7 @@
 					"$(PROJECT_DIR)/TestHost",
 					"$(PROJECT_DIR)/ElastosHiveSDKTests",
 					"$(PROJECT_DIR)/ElastosHiveSDKTests/Externals",
+					"$(PROJECT_DIR)/ElastosHiveSDKTest/Externals",
 				);
 				INFOPLIST_FILE = ElastosHiveSDK/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1405,7 +1436,7 @@
 		};
 		A39C4985225399860027BDF9 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6081910F0FC211291C05B08B /* Pods-ElastosHiveSDK.release.xcconfig */;
+			baseConfigurationReference = 2016BF9AD451CDFD6852EA66 /* Pods-ElastosHiveSDK.release.xcconfig */;
 			buildSettings = {
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;
@@ -1424,6 +1455,7 @@
 					"$(PROJECT_DIR)/TestHost",
 					"$(PROJECT_DIR)/ElastosHiveSDKTests",
 					"$(PROJECT_DIR)/ElastosHiveSDKTests/Externals",
+					"$(PROJECT_DIR)/ElastosHiveSDKTest/Externals",
 				);
 				INFOPLIST_FILE = ElastosHiveSDK/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1456,11 +1488,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		11379431227ED9AD004A1F65 /* Build configuration list for PBXNativeTarget "ElastosHiveSDKTests" */ = {
+		117B4EA72541F29B001DCDE9 /* Build configuration list for PBXNativeTarget "ElastosHiveSDKTest" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				11379432227ED9AD004A1F65 /* Debug */,
-				11379433227ED9AD004A1F65 /* Release */,
+				117B4EA82541F29B001DCDE9 /* Debug */,
+				117B4EA92541F29B001DCDE9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
