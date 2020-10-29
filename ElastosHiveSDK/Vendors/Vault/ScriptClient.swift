@@ -88,6 +88,40 @@ public class ScriptClient: ScriptingProtocol {
         }
     }
 
+    public func call<T>(_ scriptName: String, _ appDid: String) -> Promise<T> {
+        return authHelper.checkValid().then { _ -> HivePromise<T> in
+            return self.callWithAppDidImp(scriptName, params: nil, appDid)
+        }
+    }
+
+    public func call<T>(_ scriptName: String, _ params: [String : Any], _ appDid: String) -> Promise<T> {
+        return authHelper.checkValid().then { _ -> HivePromise<T> in
+            return self.callWithAppDidImp(scriptName, params: params, appDid)
+        }
+    }
+
+    private func callWithAppDidImp<T>(_ scriptName: String, params: [String : Any]? = nil, _ appDid: String) -> HivePromise<T> {
+        return HivePromise<T> { resolver in
+            var param = ["name": scriptName] as [String : Any]
+            if let _ = params {
+                param["params"] = params!
+            }
+            let url = VaultURL.sharedInstance.call()
+            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
+                let re = json["items"].arrayObject
+                let data = try JSONSerialization.data(withJSONObject: re as Any, options: [])
+                let outputStream = OutputStream(toMemory: ())
+                outputStream.open()
+                self.writeData(data: data, outputStream: outputStream, maxLengthPerWrite: 1024)
+                outputStream.close()
+                resolver.fulfill(outputStream as! T)
+            }.catch { error in
+                resolver.reject(error)
+            }
+        }
+    }
+
+
     private func writeData(data: Data, outputStream: OutputStream, maxLengthPerWrite: Int) {
         let size = data.count
         data.withUnsafeBytes({(bytes: UnsafePointer<UInt8>) in
