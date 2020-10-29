@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -66,8 +66,8 @@
 		111D47E124F790C700B7462B /* InsertOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47DF24F790C700B7462B /* InsertOptions.swift */; };
 		111D47E324F7910100B7462B /* UpdateOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47E224F7910100B7462B /* UpdateOptions.swift */; };
 		111D47E424F7910100B7462B /* UpdateOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47E224F7910100B7462B /* UpdateOptions.swift */; };
-		111D47E624F7927D00B7462B /* InsertResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47E524F7927D00B7462B /* InsertResult.swift */; };
-		111D47E724F7927D00B7462B /* InsertResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47E524F7927D00B7462B /* InsertResult.swift */; };
+		111D47E624F7927D00B7462B /* InsertManyResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47E524F7927D00B7462B /* InsertManyResult.swift */; };
+		111D47E724F7927D00B7462B /* InsertManyResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47E524F7927D00B7462B /* InsertManyResult.swift */; };
 		111D47E924F7940600B7462B /* UpdateResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47E824F7940600B7462B /* UpdateResult.swift */; };
 		111D47EA24F7940600B7462B /* UpdateResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47E824F7940600B7462B /* UpdateResult.swift */; };
 		111D47EC24F794A500B7462B /* DeleteResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47EB24F794A500B7462B /* DeleteResult.swift */; };
@@ -153,6 +153,8 @@
 		118F2DAD25105C3700447A0A /* FileTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2DAC25105C3700447A0A /* FileTest.swift */; };
 		119BE12D2539638F00C6D5B5 /* Antlr4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119BE12C2539638F00C6D5B5 /* Antlr4.framework */; };
 		119BE1872539699500C6D5B5 /* Antlr4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119BE12C2539638F00C6D5B5 /* Antlr4.framework */; };
+		11C9EAE1254A633D00080995 /* ElastosDIDSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11C9EADF254A633C00080995 /* ElastosDIDSDK.framework */; platformFilter = ios; };
+		11C9EAE5254A637500080995 /* InsertOneResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C9EAE4254A637500080995 /* InsertOneResult.swift */; };
 		11D09B2C25317FF8000C977C /* SPVWrapper.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 11D14543253013FA000E627A /* SPVWrapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		11D26F4022CA3B3300E4099A /* ElastosHiveSDK_macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 11D26F3E22CA3B3300E4099A /* ElastosHiveSDK_macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		11D26F4422CA3B4B00E4099A /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FA22C4C33400F85419 /* Dictionary.swift */; };
@@ -245,7 +247,7 @@
 		111D47D924F7908D00B7462B /* FindOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindOptions.swift; sourceTree = "<group>"; };
 		111D47DF24F790C700B7462B /* InsertOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertOptions.swift; sourceTree = "<group>"; };
 		111D47E224F7910100B7462B /* UpdateOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateOptions.swift; sourceTree = "<group>"; };
-		111D47E524F7927D00B7462B /* InsertResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertResult.swift; sourceTree = "<group>"; };
+		111D47E524F7927D00B7462B /* InsertManyResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertManyResult.swift; sourceTree = "<group>"; };
 		111D47E824F7940600B7462B /* UpdateResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateResult.swift; sourceTree = "<group>"; };
 		111D47EB24F794A500B7462B /* DeleteResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteResult.swift; sourceTree = "<group>"; };
 		111D47EF24F7A18900B7462B /* FileInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileInfo.swift; sourceTree = "<group>"; };
@@ -294,6 +296,8 @@
 		118F2DA4250F33AB00447A0A /* RawCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawCondition.swift; sourceTree = "<group>"; };
 		118F2DAC25105C3700447A0A /* FileTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTest.swift; sourceTree = "<group>"; };
 		119BE12C2539638F00C6D5B5 /* Antlr4.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Antlr4.framework; sourceTree = "<group>"; };
+		11C9EADF254A633C00080995 /* ElastosDIDSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ElastosDIDSDK.framework; sourceTree = "<group>"; };
+		11C9EAE4254A637500080995 /* InsertOneResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertOneResult.swift; sourceTree = "<group>"; };
 		11D1453E253013FA000E627A /* SPVWrapper.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = SPVWrapper.xcodeproj; sourceTree = "<group>"; };
 		11D26F3C22CA3B3300E4099A /* ElastosHiveSDK_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ElastosHiveSDK_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		11D26F3E22CA3B3300E4099A /* ElastosHiveSDK_macOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ElastosHiveSDK_macOS.h; sourceTree = "<group>"; };
@@ -345,6 +349,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				11C9EAE1254A633D00080995 /* ElastosDIDSDK.framework in Frameworks */,
 				6DDA50FA35E7A18E5EF0C90E /* Pods_ElastosHiveSDK.framework in Frameworks */,
 				119BE1872539699500C6D5B5 /* Antlr4.framework in Frameworks */,
 			);
@@ -412,7 +417,8 @@
 				111D47EB24F794A500B7462B /* DeleteResult.swift */,
 				111D47D924F7908D00B7462B /* FindOptions.swift */,
 				111D47DF24F790C700B7462B /* InsertOptions.swift */,
-				111D47E524F7927D00B7462B /* InsertResult.swift */,
+				111D47E524F7927D00B7462B /* InsertManyResult.swift */,
+				11C9EAE4254A637500080995 /* InsertOneResult.swift */,
 				115E82E6251A4495004DCB1E /* MinKey.swift */,
 				115E82E9251A44AA004DCB1E /* MaxKey.swift */,
 				115E82EC251A44BC004DCB1E /* ObjectId.swift */,
@@ -585,6 +591,7 @@
 		A39C4971225399860027BDF9 /* ElastosHiveSDK */ = {
 			isa = PBXGroup;
 			children = (
+				11C9EADF254A633C00080995 /* ElastosDIDSDK.framework */,
 				1147720723F678BD00C7C36F /* SwiftyJSON */,
 				11E573F922C4C33400F85419 /* Extension */,
 				111D47C924F7902600B7462B /* database */,
@@ -967,7 +974,7 @@
 				111D477A24ED0C1200B7462B /* VaultAuthHelper.swift in Sources */,
 				111D47FB24F7A79800B7462B /* Condition.swift in Sources */,
 				111D478F24F399AC00B7462B /* VaultApi.swift in Sources */,
-				111D47E724F7927D00B7462B /* InsertResult.swift in Sources */,
+				111D47E724F7927D00B7462B /* InsertManyResult.swift in Sources */,
 				111D47E424F7910100B7462B /* UpdateOptions.swift in Sources */,
 				118F2D9A250F2CF400447A0A /* DbInsertQuery.swift in Sources */,
 				118F2D8E250F28BA00447A0A /* RawExecutable.swift in Sources */,
@@ -1019,6 +1026,7 @@
 				A37F893D23C72B2600F6C11E /* HiveClientOptions.swift in Sources */,
 				111D47C424F78EDF00B7462B /* ScriptingProtocol.swift in Sources */,
 				1170FB142502019C0049E81D /* Vault.swift in Sources */,
+				11C9EAE5254A637500080995 /* InsertOneResult.swift in Sources */,
 				111D47F424F7A30300B7462B /* Executable.swift in Sources */,
 				118F2DA2250F332700447A0A /* QueryHasResultsCondition.swift in Sources */,
 				118F2D9F250F32B100447A0A /* OrCondition.swift in Sources */,
@@ -1042,7 +1050,7 @@
 				11E573FF22C4C33400F85419 /* String.swift in Sources */,
 				111D47FA24F7A79800B7462B /* Condition.swift in Sources */,
 				111D478E24F399AC00B7462B /* VaultApi.swift in Sources */,
-				111D47E624F7927D00B7462B /* InsertResult.swift in Sources */,
+				111D47E624F7927D00B7462B /* InsertManyResult.swift in Sources */,
 				A3D9D41623C96DA1003B602E /* KeyValuesProtocol.swift in Sources */,
 				118F2D99250F2CF400447A0A /* DbInsertQuery.swift in Sources */,
 				118F2D8D250F28BA00447A0A /* RawExecutable.swift in Sources */,

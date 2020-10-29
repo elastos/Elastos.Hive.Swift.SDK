@@ -75,34 +75,34 @@ public class DatabaseClient: DatabaseProtocol {
         return VaultApi.requestWithBool(url: url, parameters: param, headers: header.headers(), handler: handleBy)
     }
 
-    public func insertOne(_ collection: String, _ doc: [String : Any], options: InsertOptions?) -> HivePromise<InsertResult> {
+    public func insertOne(_ collection: String, _ doc: [String : Any], options: InsertOptions?) -> HivePromise<InsertOneResult> {
         return self.insertOne(collection, doc, options: options, handler: HiveCallback())
     }
 
-    public func insertOne(_ collection: String, _ doc: [String : Any], options: InsertOptions?, handler: HiveCallback<InsertResult>) -> HivePromise<InsertResult> {
-        return authHelper.checkValid().then { _ -> HivePromise<InsertResult> in
+    public func insertOne(_ collection: String, _ doc: [String : Any], options: InsertOptions?, handler: HiveCallback<InsertOneResult>) -> HivePromise<InsertOneResult> {
+        return authHelper.checkValid().then { _ -> HivePromise<InsertOneResult> in
             return self.insertOneImp(collection, doc, options, handler)
         }
     }
 
-    private func insertOneImp(_ collection: String, _ doc: [String: Any], _ options: InsertOptions?, _ handleBy: HiveCallback<InsertResult>) -> HivePromise<InsertResult> {
+    private func insertOneImp(_ collection: String, _ doc: [String: Any], _ options: InsertOptions?, _ handleBy: HiveCallback<InsertOneResult>) -> HivePromise<InsertOneResult> {
         let param = ["collection": collection, "document": doc] as [String : Any]
         let url = VaultURL.sharedInstance.insertOne()
 
         return VaultApi.requestWithInsert(url: url, parameters: param, headers: Header(authHelper).headers(), handler: handleBy)
     }
 
-    public func insertMany(_ collection: String, _ docs: Array<[String : Any]>, options: InsertOptions) -> HivePromise<InsertResult> {
+    public func insertMany(_ collection: String, _ docs: Array<[String : Any]>, options: InsertOptions) -> HivePromise<InsertManyResult> {
         return insertMany(collection, docs, options: options, handler: HiveCallback())
     }
 
-    public func insertMany(_ collection: String, _ docs: Array<[String : Any]>, options: InsertOptions, handler: HiveCallback<InsertResult>) -> HivePromise<InsertResult> {
-        return authHelper.checkValid().then { _ -> HivePromise<InsertResult> in
+    public func insertMany(_ collection: String, _ docs: Array<[String : Any]>, options: InsertOptions, handler: HiveCallback<InsertManyResult>) -> HivePromise<InsertManyResult> {
+        return authHelper.checkValid().then { _ -> HivePromise<InsertManyResult> in
             return self.insertManyImp(collection, docs, options, handler)
         }
     }
 
-    private func insertManyImp(_ collection: String, _ doc: Array<[String: Any]>, _ options: InsertOptions, _ handleBy: HiveCallback<InsertResult>) -> HivePromise<InsertResult> {
+    private func insertManyImp(_ collection: String, _ doc: Array<[String: Any]>, _ options: InsertOptions, _ handleBy: HiveCallback<InsertManyResult>) -> HivePromise<InsertManyResult> {
         let param = ["collection": collection, "document": doc] as [String : Any]
         let url = VaultURL.sharedInstance.insertMany()
 

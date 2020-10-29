@@ -22,22 +22,27 @@
 
 import Foundation
 
-public class InsertResult: Result {
+public class InsertManyResult: Result {
+    private var _acknowledged: Bool = false
+    private var _insertedIds: [String] = []
 
     public func insertedIds() -> Array<String> {
         let ids = get("inserted_ids")
         if let _ = ids {
-            var insertArray: [String] = []
             ids?.arrayValue.forEach{ id in
-                insertArray.append(id.stringValue)
+                _insertedIds.append(id.stringValue)
             }
-            return insertArray
-        }
-        let id = get("inserted_id")?.stringValue
-        if let _ = id {
-            return [id!]
+            return _insertedIds
         }
 
-        return []
+        return _insertedIds
+    }
+
+    public var acknowledged: Bool {
+        return _acknowledged
+    }
+
+    public func deserialize(_ content: String) {
+        // TODO:
     }
 }
