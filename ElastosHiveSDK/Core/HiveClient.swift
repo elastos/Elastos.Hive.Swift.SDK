@@ -114,7 +114,7 @@ public class HiveClientHandle: NSObject {
                     vaultProvider = _providerCache[ownerDid]
                 }
                 // TODO: 返回值vaultProvider是否可以为nil ！！！！！！！！
-                resolver.fulfill("http://localhost:5000")
+                resolver.fulfill(vaultProvider!)
             }
             catch {
                 resolver.reject(error)

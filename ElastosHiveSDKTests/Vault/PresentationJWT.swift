@@ -9,14 +9,14 @@ public class PresentationJWT {
         // Get DID resolve cache dir.
         let cacheDir = "\(NSHomeDirectory())/Library/Caches/store" + "/cache"
         if PresentationJWT.spvAdapter == nil {
-            let cblock: PasswordCallback = ({(walletDir, walletId) -> String in return "11111111"})
-            PresentationJWT.spvAdapter = SPVAdaptor("/Users/liaihong/.wallet", "test", "TestNet", "http://api.elastos.io:21606", cblock)
+            let cblock: PasswordCallback = ({(walletDir, walletId) -> String in return walletPassword})
+            PresentationJWT.spvAdapter = SPVAdaptor(walletDir, walletId, networkConfig, resolver, cblock)
         }
         adapter = (PresentationJWT.spvAdapter! as! SPVAdaptor)
 //        try DIDBackend.initializeInstance("http://api.elastos.io:21606", cacheDir)
         // Dummy adapter for easy to use
         // Initializa the DID backend globally.
-        try! DIDBackend.initializeInstance("http://api.elastos.io:21606", cacheDir)
+        try! DIDBackend.initializeInstance(resolver, cacheDir)
     }
 
     func waitForWalletAvaliable() throws {

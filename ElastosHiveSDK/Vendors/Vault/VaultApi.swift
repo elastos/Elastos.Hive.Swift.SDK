@@ -41,9 +41,9 @@ class VaultApi: NSObject {
                         let rejson = JSON(re)
                         let status = rejson["_status"].stringValue
                         guard status == "OK" else {
-                            var dic: [String: String] = [: ]
+                            var dic: [String: Any] = [: ]
                             rejson.forEach { key, value in
-                                dic[key] = value.stringValue
+                                dic[key] = value
                             }
                             let err = HiveError.failues(des: dic)
                             resolver.reject(err)
@@ -117,7 +117,7 @@ class VaultApi: NSObject {
                         method: HTTPMethod = .post,
                         parameters: Parameters? = nil,
                         encoding: ParameterEncoding = JSONEncoding.default,
-                        headers: HTTPHeaders? = nil, handler: HiveCallback<T>) -> HivePromise<T> {
+                        headers: HTTPHeaders? = nil, handler: HiveCallback<T>, type: T.Type) -> HivePromise<T> {
         return HivePromise<T> { resolver in
             Alamofire.request(url,
                               method: method,
@@ -138,7 +138,8 @@ class VaultApi: NSObject {
                             resolver.reject(err)
                             return
                         }
-                        if T.self is InsertOneResult {
+
+                        if type.self == InsertOneResult.self {
                             let insertOneResult = InsertOneResult(rejson)
                             handler.didSucceed(insertOneResult as! T)
                             resolver.fulfill(insertOneResult as! T)

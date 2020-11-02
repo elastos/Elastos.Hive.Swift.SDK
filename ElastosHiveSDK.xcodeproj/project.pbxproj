@@ -155,6 +155,9 @@
 		119BE1872539699500C6D5B5 /* Antlr4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119BE12C2539638F00C6D5B5 /* Antlr4.framework */; };
 		11C9EAE1254A633D00080995 /* ElastosDIDSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11C9EADF254A633C00080995 /* ElastosDIDSDK.framework */; platformFilter = ios; };
 		11C9EAE5254A637500080995 /* InsertOneResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C9EAE4254A637500080995 /* InsertOneResult.swift */; };
+		11C9EB47254AA57600080995 /* ElastosDIDSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11C9EADF254A633C00080995 /* ElastosDIDSDK.framework */; };
+		11C9EB49254AA57B00080995 /* ElastosDIDSDK.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 11C9EADF254A633C00080995 /* ElastosDIDSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		11C9EB4C254AA58300080995 /* Antlr4.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 119BE12C2539638F00C6D5B5 /* Antlr4.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		11D09B2C25317FF8000C977C /* SPVWrapper.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 11D14543253013FA000E627A /* SPVWrapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		11D26F4022CA3B3300E4099A /* ElastosHiveSDK_macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 11D26F3E22CA3B3300E4099A /* ElastosHiveSDK_macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		11D26F4422CA3B4B00E4099A /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FA22C4C33400F85419 /* Dictionary.swift */; };
@@ -215,6 +218,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				11C9EB4C254AA58300080995 /* Antlr4.framework in CopyFiles */,
+				11C9EB49254AA57B00080995 /* ElastosDIDSDK.framework in CopyFiles */,
 				11D09B2C25317FF8000C977C /* SPVWrapper.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -331,6 +336,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				11C9EB47254AA57600080995 /* ElastosDIDSDK.framework in Frameworks */,
 				1137942E227ED9AD004A1F65 /* ElastosHiveSDK.framework in Frameworks */,
 				0D94ED2D06BBCAE410D0273C /* Pods_ElastosHiveSDKTests.framework in Frameworks */,
 				119BE12D2539638F00C6D5B5 /* Antlr4.framework in Frameworks */,
