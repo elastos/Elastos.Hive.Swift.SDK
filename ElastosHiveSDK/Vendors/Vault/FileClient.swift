@@ -42,9 +42,10 @@ public class FileClient: FilesProtocol {
 
     private func uploadImp(_ localPath: String, asRemoteFile: String, handler: HiveCallback<Bool>) -> HivePromise<Bool> {
         return HivePromise<Bool> { resolver in
-            let inputStream = InputStream.init(fileAtPath: localPath)
             let url = VaultURL.sharedInstance.upload(asRemoteFile)
-            Alamofire.upload(inputStream!, to: url, method: .post, headers: Header(authHelper).headers()).responseJSON { dataResponse in
+            let localURL = URL.init(string: localPath)
+            Alamofire.upload(localURL!, to: url, method: .post, headers: Header(authHelper).headers())
+                .responseJSON { dataResponse in
                 switch dataResponse.result {
                 case .success(let re):
                     let rejson = JSON(re)

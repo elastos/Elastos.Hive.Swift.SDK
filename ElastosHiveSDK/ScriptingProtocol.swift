@@ -29,7 +29,7 @@ public protocol ScriptingProtocol {
     func call(_ scriptName: String) -> HivePromise<OutputStream>
     func call(_ scriptName: String, _ params: [String: Any]) -> HivePromise<OutputStream>
 
-    func call<T>(_ scriptName: String, _ appDid: String) -> HivePromise<T>
-    func call<T>(_ scriptName: String, _ params: [String: Any], _ appDid: String) -> HivePromise<T>
+    func call<T>(_ scriptName: String, _ appDid: String, _ resultType: T.Type) -> HivePromise<T>
+    func call<T>(_ scriptName: String, _ params: [String: Any], _ appDid: String, _ resultType: T.Type) -> HivePromise<T>
 
 }

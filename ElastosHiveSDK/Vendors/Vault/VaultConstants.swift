@@ -27,13 +27,13 @@ let AUTH_URI = "https://accounts.google.com/o/oauth2/auth"
 let TOKEN_URI = "https://oauth2.googleapis.com"
 let SCOPE = "https://www.googleapis.com/auth/drive"
 let SCOPES = "[https://www.googleapis.com/auth/drive]"
-let DEFAULT_REDIRECT_URL = "localhost"
-let DEFAULT_REDIRECT_PORT = 12345
+//let DEFAULT_REDIRECT_URL = "localhost"
+//let DEFAULT_REDIRECT_PORT = 12345
 
 let GRANT_TYPE_GET_TOKEN: String = "authorization_code"
 let GRANT_TYPE_REFRESH_TOKEN: String = "refresh_token"
 let TOKEN_INVALID = "The token is invalid, please refresh token."
 let AUTHORIZE: String = "authorize"
 let VAULT_CONFIG = "vault.json"
-public let MAIN_NET_RESOLVER = "http://api.elastos.io:20606"
+public let MAIN_NET_RESOLVER = "http://api.elastos.io:21606"
 

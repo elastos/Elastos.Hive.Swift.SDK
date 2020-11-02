@@ -88,19 +88,19 @@ public class ScriptClient: ScriptingProtocol {
         }
     }
 
-    public func call<T>(_ scriptName: String, _ appDid: String) -> Promise<T> {
+    public func call<T>(_ scriptName: String, _ appDid: String, _ resultType: T.Type) -> Promise<T> {
         return authHelper.checkValid().then { _ -> HivePromise<T> in
-            return self.callWithAppDidImp(scriptName, params: nil, appDid)
+            return self.callWithAppDidImp(scriptName, params: nil, appDid, resultType)
         }
     }
 
-    public func call<T>(_ scriptName: String, _ params: [String : Any], _ appDid: String) -> Promise<T> {
+    public func call<T>(_ scriptName: String, _ params: [String : Any], _ appDid: String, _ resultType: T.Type) -> Promise<T> {
         return authHelper.checkValid().then { _ -> HivePromise<T> in
-            return self.callWithAppDidImp(scriptName, params: params, appDid)
+            return self.callWithAppDidImp(scriptName, params: params, appDid, resultType)
         }
     }
 
-    private func callWithAppDidImp<T>(_ scriptName: String, params: [String : Any]? = nil, _ appDid: String) -> HivePromise<T> {
+    private func callWithAppDidImp<T>(_ scriptName: String, params: [String : Any]? = nil, _ appDid: String, _ resultType: T.Type) -> HivePromise<T> {
         return HivePromise<T> { resolver in
             var param = ["name": scriptName] as [String : Any]
             if let _ = params {

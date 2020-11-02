@@ -127,18 +127,20 @@ class ScriptTest: XCTestCase {
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         do {
-            let json = DOC_STR
-            let doc = try DIDDocument.convertToDIDDocument(fromJson: json)
-            let options = HiveClientOptions()
+            let doc = try testapp.getDocument()
+            print("testapp doc ===")
+            print(doc.toString())
+            _ = try didapp.getDocument()
+            print(doc.toString())
+            let options: HiveClientOptions = HiveClientOptions()
             _ = options.setAuthenticator(VaultAuthenticator())
-            _ = options.setAuthenticationDIDDocument(doc)
-            _ = options.setDidResolverUrl("http://api.elastos.io:21606")
+            options.setAuthenticationDIDDocument(doc)
+                .setDidResolverUrl(resolver)
             _ = options.setLocalDataPath(localDataPath)
-
-            HiveClientHandle.setVaultProvider(OWNERDID, PROVIDER)
-            client = try HiveClientHandle.createInstance(withOptions: options)
+            HiveClientHandle.setVaultProvider(doc.subject.description, PROVIDER)
+            self.client = try HiveClientHandle.createInstance(withOptions: options)
             let lock = XCTestExpectation(description: "wait for test.")
-            _ = self.client?.getVault(OWNERDID).get{ result in
+            _ = self.client?.getVault(doc.subject.description).get{ result in
                 self.scripting = (result.scripting as! ScriptClient)
                 lock.fulfill()
             }

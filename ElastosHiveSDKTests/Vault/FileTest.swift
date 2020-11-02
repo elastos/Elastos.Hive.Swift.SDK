@@ -7,9 +7,9 @@ class FileTest: XCTestCase {
     private var client: HiveClientHandle?
     private var file: FileClient?
 
-    func testUpload() {
+    func test_0Upload() {
         let lock = XCTestExpectation(description: "wait for test.")
-        _ = file?.upload("/Users/liaihong/Documents/Git/Elastos.NET.Hive.Swift.SDK_1/ElastosHiveSDKTests/Resources/test.txt", asRemoteFile: "hive/testIos0000.txt").done{ re in
+        _ = file?.upload("/Users/liaihong/Desktop/test.txt", asRemoteFile: "hive/testIos01.txt").done{ re in
             XCTAssertTrue(re)
             lock.fulfill()
         }.catch{ error in
@@ -19,9 +19,9 @@ class FileTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
 
-    func testDownload() {
+    func test_1Download() {
         let lock = XCTestExpectation(description: "wait for test.")
-        _ = file?.download("hive/testIos0000.txt").done{ output in
+        _ = file?.download("hive/testIos01.txt").done{ output in
             let data: Data = output.property(forKey: Stream.PropertyKey.dataWrittenToMemoryStreamKey)! as! Data
             XCTAssertEqual(String(data: data, encoding: .utf8), "this is test file abcdefghijklmnopqrstuvwxyz")
             lock.fulfill()
@@ -32,7 +32,7 @@ class FileTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
 
-    func testDelete() {
+    func test_2Delete() {
         let lock = XCTestExpectation(description: "wait for test.")
         _ = file?.delete("hive/testIos_delete01.txt").done{ re in
             XCTAssertTrue(re)
@@ -44,7 +44,7 @@ class FileTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
 
-    func testCopy() {
+    func test_3Copy() {
         let lock = XCTestExpectation(description: "wait for test.")
         _ = file?.copy("hive/testIos.txt", "hive/f1/testIos_copy_1.txt").done{ re in
             XCTAssertTrue(re)
@@ -56,7 +56,7 @@ class FileTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
 
-    func testMove() {
+    func test_4Move() {
         let lock = XCTestExpectation(description: "wait for test.")
         _ = file?.move("hive/f1/testIos_copy_1.txt", "hive/f2/f3/testIos_move_1.txt").done{ re in
             XCTAssertTrue(re)
@@ -68,7 +68,7 @@ class FileTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
 
-    func testHash() {
+    func test_5Hash() {
         let lock = XCTestExpectation(description: "wait for test.")
         _ = file?.hash("hive/f2/f3/testIos_move_1.txt").done{ re in
             XCTAssertTrue(true)
@@ -81,7 +81,7 @@ class FileTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
 
-    func testlist() {
+    func test_6list() {
         let lock = XCTestExpectation(description: "wait for test.")
         _ = file?.list("hive/f2/f3").done{ re in
             XCTAssertTrue(true)
@@ -94,7 +94,7 @@ class FileTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
 
-    func testStat() {
+    func test_7Stat() {
         let lock = XCTestExpectation(description: "wait for test.")
         _ = file?.stat("hive/f2/f3").done{ re in
             XCTAssertTrue(true)
@@ -110,19 +110,20 @@ class FileTest: XCTestCase {
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         do {
-            let json = "{\"id\":\"did:elastos:inpxc8Tb1hKZGrqoYsJuH6VNnXpk3gi7UM\",\"publicKey\":[{\"id\":\"#primary\",\"publicKeyBase58\":\"pBvEfpUJK8FzWB7kD59henSfmZqBK8PqDBt53PczLqsG\"}],\"authentication\":[\"#primary\"],\"expires\":\"2025-09-08T05:43:06Z\",\"proof\":{\"created\":\"2020-09-08T05:43:06Z\",\"signatureValue\":\"rUg9Q1W9fW2yagpj4Ex97HHLMsrkRbjGKJQQn54joMvFJfochmMq5U-MFkgxsNQ9m0xCvCKO_JWv-OH2Ghc5Gw\"}}"
-
-            let doc = try DIDDocument.convertToDIDDocument(fromJson: json)
+            let doc = try testapp.getDocument()
+            print("testapp doc ===")
+            print(doc.toString())
+            _ = try didapp.getDocument()
             print(doc.toString())
             let options: HiveClientOptions = HiveClientOptions()
             _ = options.setAuthenticator(VaultAuthenticator())
             options.setAuthenticationDIDDocument(doc)
-                .setDidResolverUrl("http://api.elastos.io:21606")
+                .setDidResolverUrl(resolver)
             _ = options.setLocalDataPath(localDataPath)
-            HiveClientHandle.setVaultProvider("did:elastos:inpxc8Tb1hKZGrqoYsJuH6VNnXpk3gi7UM", "http://localhost:5000/")
+            HiveClientHandle.setVaultProvider(doc.subject.description, PROVIDER)
             self.client = try HiveClientHandle.createInstance(withOptions: options)
             let lock = XCTestExpectation(description: "wait for test.")
-            _ = self.client?.getVault("did:elastos:inpxc8Tb1hKZGrqoYsJuH6VNnXpk3gi7UM").get{ result in
+            _ = self.client?.getVault(doc.subject.description).get{ result in
                 self.file = (result.files as! FileClient)
                 lock.fulfill()
             }
