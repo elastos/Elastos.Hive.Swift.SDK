@@ -42,7 +42,7 @@ public class HiveClientHandle: NSObject {
     public func getVault(_ ownerDid: String) -> HivePromise<Vault> {
         return HivePromise<Vault> { resolver in
             var vaultProvider = ""
-            _ = HiveClientHandle.getVaultProvider(ownerDid).get { result in
+            _ = HiveClientHandle.getVaultProvider(ownerDid).done { result in
                 vaultProvider = result
 
                 var vault: Vault
