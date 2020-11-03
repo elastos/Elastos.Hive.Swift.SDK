@@ -106,7 +106,7 @@ public class VaultAuthHelper: ConnectHelper {
 
     private func doCheckExpired() throws {
         _connectState = false
-//        tryRestoreToken()
+        tryRestoreToken()
         if token == nil || token!.isExpired() {
             try signIn(self._authenticationHandler)
         }
