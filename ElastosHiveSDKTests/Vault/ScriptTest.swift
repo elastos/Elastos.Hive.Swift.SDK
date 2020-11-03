@@ -6,7 +6,8 @@ import ElastosDIDSDK
 class ScriptTest: XCTestCase {
     private var client: HiveClientHandle?
     private var scripting: ScriptClient?
-
+    private var noConditionName: String = "get_groups"
+    private var withConditionName: String = "get_group_messages"
 
     func testCondition() {
         do {
@@ -79,11 +80,11 @@ class ScriptTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
 
-    // TODO:
-    func testRegisterScriptWithCondition() {
-        let json = "{\"type\":\"find\",\"name\":\"get_groups\",\"body\":{\"collection\":\"test_group\",\"filter\":{\"*caller_did\":\"friends\"}}}"
+    func test04_registerWithCondition() {
+        let executable = "{\"type\":\"find\",\"name\":\"get_groups\",\"body\":{\"collection\":\"test_group\",\"filter\":{\"friends\":\"$caller_did\"}}}"
+        let condition = "{\"type\":\"queryHasResults\",\"name\":\"verify_user_permission\",\"body\":{\"collection\":\"test_group\",\"filter\":{\"_id\":\"$params.group_id\",\"friends\":\"$caller_did\"}}}"
         let lock = XCTestExpectation(description: "wait for test.")
-        scripting!.registerScript("script_no_condition", RawExecutable(json)).done { re in
+        scripting!.registerScript(withConditionName, RawCondition(condition), RawExecutable(executable)).done { re in
             XCTAssertTrue(re)
             lock.fulfill()
         }.catch { error in

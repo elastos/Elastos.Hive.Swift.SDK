@@ -24,48 +24,64 @@ import Foundation
 
 @inline(__always) private func TAG() -> String { return "VaultAuthHelper" }
 public class VaultAuthHelper: ConnectHelper {
-    let clientIdKey: String = "client_id"
-    let accessTokenKey: String = "access_token"
-    let refreshTokenKey: String = "refresh_token"
+    let USER_DID_KEY: String = "user_did"
+    let APP_ID_KEY: String = "app_id"
+    let APP_INSTANCE_DID_KEY: String = "app_instance_did"
+
+    let ACCESS_TOKEN_KEY: String = "access_token"
+    let REFRESH_TOKEN_KEY: String = "refresh_token"
     let expireInKey: String = "expires_in"
-    let tokenType: String = "token_type"
-    let expireAtKey: String = "expires_at"
-    private var _clientId: String?
-    private var _scope: String?
-    private var _redirectUrl: String?
+    let TOKEN_TYPE_KEY: String = "token_type"
+    let EXPIRES_AT_KEY: String = "expires_at"
+    private var _ownerDid: String?
+    private var _userDid: String?
+    private var _appId: String?
+    private var _appInstanceDid: String?
+
     var token: AuthToken?
-    private let _server = SimpleAuthServer.sharedInstance
     private var _connectState: Bool = false
     private var _persistent: Persistent
     private var _nodeUrl: String
-    private var _authToken: String?
-    private var _clientSecret: String?
 
     private var _authenticationDIDDocument: DIDDocument?
     private var _authenticationHandler: Authenticator?
 
-    public init(_ nodeUrl: String, _ storePath: String, _ authenticationDIDDocument: DIDDocument, _ handler: Authenticator?) {
-        _authenticationDIDDocument = authenticationDIDDocument
-        _authenticationHandler = handler
-        _nodeUrl = nodeUrl
-        _persistent = VaultAuthInfoStoreImpl(storePath)
-
-        VaultURL.sharedInstance.resetVaultApi(baseUrl: _nodeUrl)
-        // TODO:
-        // reset auth api
+    public var ownerDid: String? {
+        return _ownerDid
     }
 
-    public init(_ nodeUrl: String, _ storePath: String, clientId: String, _ clientSecret: String, _ redirectUrl: String, _ scope: String) {
-        _clientId = clientId
-        _scope = scope
-        _redirectUrl = redirectUrl
+    public var userDid: String? {
+        return _userDid
+    }
+
+    public func setUserDid(_ userDid: String) {
+        _userDid = userDid
+    }
+
+    public var appId: String? {
+        return _appId
+    }
+
+    public func setAppId(_ appId: String) {
+        _appId = appId
+    }
+
+    public var appInstanceDid: String? {
+        return _appInstanceDid
+    }
+
+    public func setAppInstanceDid(_ appInstanceDid: String) {
+        _appInstanceDid = appInstanceDid
+    }
+
+    public init(_ ownerDid: String, _ nodeUrl: String, _ storePath: String, _ authenticationDIDDocument: DIDDocument, _ handler: Authenticator?) {
+        _authenticationDIDDocument = authenticationDIDDocument
+        _authenticationHandler = handler
+        _ownerDid = ownerDid
         _nodeUrl = nodeUrl
-        _clientSecret = clientSecret
         _persistent = VaultAuthInfoStoreImpl(storePath)
 
         VaultURL.sharedInstance.resetVaultApi(baseUrl: _nodeUrl)
-        // TODO:
-        // reset auth api
     }
 
     public override func checkValid() -> HivePromise<Void> {
@@ -90,7 +106,7 @@ public class VaultAuthHelper: ConnectHelper {
 
     private func doCheckExpired() throws {
         _connectState = false
-        tryRestoreToken()
+//        tryRestoreToken()
         if token == nil || token!.isExpired() {
             try signIn(self._authenticationHandler)
         }
@@ -105,7 +121,7 @@ public class VaultAuthHelper: ConnectHelper {
         let param = ["document": json0]
         let url = VaultURL.sharedInstance.signIn()
         var challenge = ""
-        var erro = ""
+        var erro: Error?
         let header = ["Content-Type": "application/json;charset=UTF-8"]
         let semaphore: DispatchSemaphore! = DispatchSemaphore(value: 0)
         VaultApi.request(url: url, parameters: param as Parameters, headers: header)
@@ -113,20 +129,23 @@ public class VaultAuthHelper: ConnectHelper {
                 challenge = re["challenge"].stringValue
                 semaphore.signal()
         }.catch { err in
-            print(err)
-            erro = "121212"
+            erro = err
             semaphore.signal()
         }
         semaphore.wait()
-        guard erro == "" else {
-            throw HiveError.failue(des: erro)
+        guard erro == nil else {
+            throw HiveError.netWork(des: erro)
         }
         if handler != nil && self.verifyToken(challenge) {
             let semaphore: DispatchSemaphore! = DispatchSemaphore(value: 0)
             requestAuthToken(handler!, challenge).then { aToken -> HivePromise<JSON> in
                 return self.nodeAuth(aToken)
             }.done { re in
-                self.sotre(re)
+                do {
+                    try self.sotre(re)
+                } catch {
+                    erro = error
+                }
                 semaphore.signal()
             }.catch { error in
                 semaphore.signal()
@@ -149,47 +168,46 @@ public class VaultAuthHelper: ConnectHelper {
         return true
     }
 
-    private func syncGoogleDrive() -> HivePromise<JSON> {
-        let token = JSON(_persistent.parseFrom())
-        let param = ["token": token["access_token"].stringValue,
-                     "refresh_token": token["refresh_token"].stringValue,
-                     "token_uri": TOKEN_URI,
-                     "client_id": _clientId!,
-                     "client_secret": _clientSecret!,
-                     "scopes": SCOPES,
-                     "expiry": token["expires_at"].intValue] as [String : Any]
-        VaultURL.sharedInstance.resetVaultApi(baseUrl: _nodeUrl)// test
-        let url = VaultURL.sharedInstance.synchronization()
-
-        return VaultApi.request(url: url, parameters: param)
-    }
-
     private func tryRestoreToken() {
         let json = JSON(_persistent.parseFrom())
-//        var refreshToken = ""
+        _userDid = json[USER_DID_KEY].stringValue
+        _appId = json[APP_ID_KEY].stringValue
+        _appInstanceDid = json[APP_INSTANCE_DID_KEY].stringValue
+
         var accessToken = ""
-        var expiresAt = -1
-
-        if (json[accessTokenKey].stringValue != "") {
-            accessToken = json[accessTokenKey].stringValue
+        var expiredTime = ""
+        var refreshToken = ""
+        if (json[ACCESS_TOKEN_KEY].stringValue != "") {
+            accessToken = json[ACCESS_TOKEN_KEY].stringValue
         }
-        if (json[expireAtKey].stringValue != "") {
-            expiresAt = json[expireAtKey].intValue
+        if (json[EXPIRES_AT_KEY].stringValue != "") {
+            expiredTime = json[EXPIRES_AT_KEY].stringValue
         }
-        if accessToken != "" && expiresAt > 0 {
-            self.token = AuthToken("", accessToken, expiresAt)
+        if (json[REFRESH_TOKEN_KEY].stringValue != "") {
+            refreshToken = json[EXPIRES_AT_KEY].stringValue
+        }
+        if accessToken != "" && expiredTime != "" {
+            self.token = AuthToken(refreshToken, accessToken, expiredTime)
         }
     }
 
-    private func sotre(_ json: JSON) {
-        let exTime = Int(Date().timeIntervalSince1970) + json[expireInKey].intValue
-        token = AuthToken("", json[accessTokenKey].stringValue, exTime)
-        let dict = [accessTokenKey: token!.accessToken, expireAtKey: token!.expiredTime]
-        _persistent.upateContent(dict)
-    }
-
-    private func initConnection() {
-        VaultURL.sharedInstance.resetVaultApi(baseUrl: _nodeUrl)
+    private func sotre(_ json: JSON) throws {
+        let access_token = json[ACCESS_TOKEN_KEY].stringValue
+        let jp = try JwtParserBuilder().build()
+        let c = try jp.parseClaimsJwt(access_token).claims
+        let exp = c.getExpiration()
+        setUserDid(c.get(key: "userDid") as! String)
+        setAppId(c.get(key:"appId") as! String)
+        setAppInstanceDid(c.get(key:"appInstanceDid") as! String)
+        let expiresTime: String = Date.convertToUTCStringFromDate(exp!)
+        token = AuthToken("", json[ACCESS_TOKEN_KEY].stringValue, expiresTime)
+        let json = [ACCESS_TOKEN_KEY: token!.accessToken,
+                    EXPIRES_AT_KEY: token!.expiredTime,
+                    TOKEN_TYPE_KEY: "token",
+                    USER_DID_KEY: _userDid,
+                    APP_ID_KEY: _appId,
+                    APP_INSTANCE_DID_KEY: _appInstanceDid]
+        _persistent.upateContent(json as Dictionary<String, Any>)
     }
 
     private func nodeAuth(_ jwt: String) -> HivePromise<JSON> {
