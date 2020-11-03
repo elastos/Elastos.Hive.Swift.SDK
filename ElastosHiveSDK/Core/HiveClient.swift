@@ -29,39 +29,10 @@ private var _providerCache: [String: String] = [: ]
 private var _vaultCache: [DID: Vault]?
 @objc(HiveClient)
 public class HiveClientHandle: NSObject {
-//    private var _opts: HiveClientOptions
-//    private var _providerCache: [String: String] = [: ]
-//    private var _vaultCache: [DID: Vault]?
+
     public init(_ options: HiveClientOptions) {
         _opts = options
-//        opt = options
     }
-
-//    public func connect() throws {}
-//    public func connectAsync() -> HivePromise<Void> {
-//        return HivePromise<Void>(error: HiveError.failue(des: "Not implemented"))
-//    }
-//
-//    public func disconnect() {}
-//    public func isConnected() -> Bool {
-//        return false
-//    }
-//
-//    public func asFiles() -> FilesProtocol? {
-//        return nil
-//    }
-//
-//    public func asDatabase() -> DatabaseProtocol? {
-//        return nil
-//    }
-//
-//    public func asKeyValues() -> KeyValuesProtocol? {
-//        return nil
-//    }
-//
-//    public func asScripting() -> ScriptingProtocol? {
-//        return nil
-//    }
 
     public static func createInstance(withOptions: HiveClientOptions) throws -> HiveClientHandle {
 
@@ -79,7 +50,7 @@ public class HiveClientHandle: NSObject {
                     resolver.reject("TODO" as! Error)
                     return
                 }
-                let authHelper = VaultAuthHelper(vaultProvider, _opts!.localPath, _opts!.authenticationDIDDocument, _opts!.authenicator)
+                let authHelper = VaultAuthHelper(ownerDid, vaultProvider, _opts!.localPath, _opts!.authenticationDIDDocument, _opts!.authenicator)
                 vault = Vault(authHelper, vaultProvider, ownerDid)
                 resolver.fulfill(vault)
             }

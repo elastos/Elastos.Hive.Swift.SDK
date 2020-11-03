@@ -9,7 +9,7 @@ class FileTest: XCTestCase {
 
     func test_0Upload() {
         let lock = XCTestExpectation(description: "wait for test.")
-        _ = file?.upload("/Users/liaihong/Desktop/test.txt", asRemoteFile: "hive/testIos01.txt").done{ re in
+        _ = file?.upload("/Users/liaihong/Desktop/test.txt", asRemoteFile: "hive/testIos.txt").done{ re in
             XCTAssertTrue(re)
             lock.fulfill()
         }.catch{ error in
@@ -21,7 +21,7 @@ class FileTest: XCTestCase {
 
     func test_1Download() {
         let lock = XCTestExpectation(description: "wait for test.")
-        _ = file?.download("hive/testIos01.txt").done{ output in
+        _ = file?.download("hive/testIos.txt").done{ output in
             let data: Data = output.property(forKey: Stream.PropertyKey.dataWrittenToMemoryStreamKey)! as! Data
             XCTAssertEqual(String(data: data, encoding: .utf8), "this is test file abcdefghijklmnopqrstuvwxyz")
             lock.fulfill()
@@ -35,6 +35,30 @@ class FileTest: XCTestCase {
     func test_2Delete() {
         let lock = XCTestExpectation(description: "wait for test.")
         _ = file?.delete("hive/testIos_delete01.txt").done{ re in
+            XCTAssertTrue(re)
+            lock.fulfill()
+        }.catch{ error in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+
+    func test_2_1Delete() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        _ = file?.delete("hive/f1/testIos_copy_1.txt").done{ re in
+            XCTAssertTrue(re)
+            lock.fulfill()
+        }.catch{ error in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+
+    func test_2_2Delete() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        _ = file?.delete("hive/f2/f3/testIos_move_1.txt").done{ re in
             XCTAssertTrue(re)
             lock.fulfill()
         }.catch{ error in

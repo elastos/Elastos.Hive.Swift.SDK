@@ -93,26 +93,6 @@ class VaultApi: NSObject {
         }
     }
 
-    class func requestWithResponseData(url: URLConvertible,
-                        method: HTTPMethod = .post,
-                        parameters: Parameters? = nil,
-                        encoding: ParameterEncoding = JSONEncoding.default,
-                        headers: HTTPHeaders? = nil) -> HivePromise<Bool> {
-        return HivePromise<Bool> { resolver in
-            print(url)
-            Alamofire.request(url,
-                              method: method,
-                              parameters: parameters,
-                              encoding: encoding,
-                              headers: headers)
-                .responseData { responseData in
-                    let re = String(data: responseData.data!, encoding: .utf8)
-                    print(re)
-                    print(re)
-            }
-        }
-    }
-
     class func requestWithInsert<T>(url: URLConvertible,
                         method: HTTPMethod = .post,
                         parameters: Parameters? = nil,

@@ -46,9 +46,8 @@ public class ScriptClient: ScriptingProtocol {
     private func registerScriptImp(_ name: String, _ accessCondition: Condition?, _ executable: Executable) -> HivePromise<Bool> {
         var param = ["name": name] as [String : Any]
         if let _ = accessCondition {
-            param["accessCondition"] = accessCondition!
+            param["accessCondition"] = try? accessCondition!.jsonSerialize()
         }
-        // TODO: 
         param["executable"] = try! executable.jsonSerialize()
         let url = VaultURL.sharedInstance.registerScript()
 
@@ -76,6 +75,7 @@ public class ScriptClient: ScriptingProtocol {
             let url = VaultURL.sharedInstance.call()
             VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
                 let re = json["items"].arrayObject
+                
                 let data = try JSONSerialization.data(withJSONObject: re as Any, options: [])
                 let outputStream = OutputStream(toMemory: ())
                 outputStream.open()
@@ -109,12 +109,19 @@ public class ScriptClient: ScriptingProtocol {
             let url = VaultURL.sharedInstance.call()
             VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
                 let re = json["items"].arrayObject
-                let data = try JSONSerialization.data(withJSONObject: re as Any, options: [])
-                let outputStream = OutputStream(toMemory: ())
-                outputStream.open()
-                self.writeData(data: data, outputStream: outputStream, maxLengthPerWrite: 1024)
-                outputStream.close()
-                resolver.fulfill(outputStream as! T)
+                if resultType.self == OutputStream.self {
+                    let data = try JSONSerialization.data(withJSONObject: re as Any, options: [])
+                    let outputStream = OutputStream(toMemory: ())
+                    outputStream.open()
+                    self.writeData(data: data, outputStream: outputStream, maxLengthPerWrite: 1024)
+                    outputStream.close()
+                    resolver.fulfill(outputStream as! T)
+                }
+                // the data
+                else {
+                    let data = try JSONSerialization.data(withJSONObject: re as Any, options: [])
+                    resolver.fulfill(data as! T)
+                }
             }.catch { error in
                 resolver.reject(error)
             }
