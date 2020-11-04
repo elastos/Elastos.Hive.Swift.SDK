@@ -63,32 +63,33 @@ public class HiveClientHandle: NSObject {
     public class func getVaultProvider(_ ownerDid: String) -> HivePromise<String> {
 
         return HivePromise<String> { resolver in
-            var vaultProvider: String?
-            do {
-                if _opts?.didResolverUrl == nil {
-                    try DIDBackend.initializeInstance(MAIN_NET_RESOLVER, _opts!.localPath)
+            let globalQueue = DispatchQueue.global()
+            globalQueue.async {
+                var vaultProvider: String?
+                do {
+                    if _opts?.didResolverUrl == nil {
+                        try DIDBackend.initializeInstance(MAIN_NET_RESOLVER, _opts!.localPath)
+                    }
+                    else {
+                        try DIDBackend.initializeInstance(_opts!.didResolverUrl!, _opts!.localPath)
+                    }
+                    //todo: ResolverCache.reset() 删除了整个路径 ！！！！
+                    //                try ResolverCache.reset()
+                    let did = try DID(ownerDid)
+                    let doc = try did.resolve()
+                    let services = doc?.selectServices(byType: "HiveVault")
+                    if services != nil && services!.count > 0 {
+                        vaultProvider = services![0].endpoint
+                        _providerCache[ownerDid] = vaultProvider
+                    }
+                    else {
+                        vaultProvider = _providerCache[ownerDid]
+                    }
+                    resolver.fulfill(vaultProvider!)
                 }
-                else {
-                    try DIDBackend.initializeInstance(_opts!.didResolverUrl!, _opts!.localPath)
+                catch {
+                    resolver.reject(error)
                 }
-                //todo: ResolverCache.reset() 删除了整个路径 ！！！！
-//                try ResolverCache.reset()
-                let did = try DID(ownerDid)
-                let doc = try did.resolve()
-                let services = doc?.selectServices(byType: "HiveVault")
-                if services != nil && services!.count > 0 {
-                    vaultProvider = services![0].endpoint
-                    _providerCache[ownerDid] = vaultProvider
-                }
-                else {
-                    //TODO: 缓存没有成功。
-                    vaultProvider = _providerCache[ownerDid]
-                }
-                // TODO: 返回值vaultProvider是否可以为nil ！！！！！！！！
-                resolver.fulfill(vaultProvider!)
-            }
-            catch {
-                resolver.reject(error)
             }
         }
     }
