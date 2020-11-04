@@ -54,72 +54,75 @@ public class ScriptClient: ScriptingProtocol {
         return VaultApi.requestWithBool(url: url, parameters: param, headers: Header(authHelper).headers())
     }
 
-    public func call(_ scriptName: String) -> HivePromise<OutputStream> {
-        return authHelper.checkValid().then { _ -> HivePromise<OutputStream> in
-            return self.callImp(scriptName)
+    public func call<T>(_ scriptName: String, _ resultType: T.Type) -> HivePromise<T> {
+        return authHelper.checkValid().then { _ -> HivePromise<T> in
+            return self.callWithAppDidImp(scriptName, appDid: nil, resultType)
         }
     }
 
-    public func call(_ scriptName: String, _ params: [String : Any]) -> HivePromise<OutputStream> {
-        return authHelper.checkValid().then { _ -> HivePromise<OutputStream> in
-            return self.callImp(scriptName, params: params)
-        }
-    }
-
-    private func callImp(_ scriptName: String, params: [String : Any]? = nil) -> HivePromise<OutputStream> {
-        return HivePromise<OutputStream> { resolver in
-            var param = ["name": scriptName] as [String : Any]
-            if let _ = params {
-                param["params"] = params!
-            }
-            let url = VaultURL.sharedInstance.call()
-            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
-                let re = json["items"].arrayObject
-                
-                let data = try JSONSerialization.data(withJSONObject: re as Any, options: [])
-                let outputStream = OutputStream(toMemory: ())
-                outputStream.open()
-                self.writeData(data: data, outputStream: outputStream, maxLengthPerWrite: 1024)
-                outputStream.close()
-                resolver.fulfill(outputStream)
-            }.catch { error in
-                resolver.reject(error)
-            }
+    public func call<T>(_ scriptName: String, _ params: [String : Any], _ resultType: T.Type) -> HivePromise<T> {
+        return authHelper.checkValid().then { _ -> HivePromise<T> in
+            return self.callWithAppDidImp(scriptName, params: params, appDid: nil, resultType)
         }
     }
 
     public func call<T>(_ scriptName: String, _ appDid: String, _ resultType: T.Type) -> Promise<T> {
         return authHelper.checkValid().then { _ -> HivePromise<T> in
-            return self.callWithAppDidImp(scriptName, params: nil, appDid, resultType)
+            return self.callWithAppDidImp(scriptName, appDid: appDid,  resultType)
         }
     }
 
-    public func call<T>(_ scriptName: String, _ params: [String : Any], _ appDid: String, _ resultType: T.Type) -> Promise<T> {
+    public func call<T>(_ scriptName: String, _ params: [String : Any], _ appDid: String, _ resultType: T.Type) -> HivePromise<T> {
         return authHelper.checkValid().then { _ -> HivePromise<T> in
-            return self.callWithAppDidImp(scriptName, params: params, appDid, resultType)
+            return self.callWithAppDidImp(scriptName, params: params, appDid: appDid, resultType)
         }
     }
 
-    private func callWithAppDidImp<T>(_ scriptName: String, params: [String : Any]? = nil, _ appDid: String, _ resultType: T.Type) -> HivePromise<T> {
+    private func callWithAppDidImp<T>(_ scriptName: String, params: [String : Any]? = nil, appDid: String?, _ resultType: T.Type) -> HivePromise<T> {
         return HivePromise<T> { resolver in
             var param = ["name": scriptName] as [String : Any]
+            if let ownerDid = authHelper.ownerDid {
+                var dic = ["target_did": ownerDid]
+                if let _ = appDid {
+                    dic["target_app_did"] = appDid!
+                }
+                param["context"] = dic
+            }
             if let _ = params {
                 param["params"] = params!
             }
+            print(param)
             let url = VaultURL.sharedInstance.call()
             VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
-                let re = json["items"].arrayObject
+                let status = json["_status"].stringValue
+                guard status == "OK" else {
+                    var dic: [String: Any] = [: ]
+                    json.forEach { key, value in
+                        dic[key] = value
+                    }
+                    let err = HiveError.failues(des: dic)
+                    resolver.reject(err)
+                    return
+                }
+
                 if resultType.self == OutputStream.self {
-                    let data = try JSONSerialization.data(withJSONObject: re as Any, options: [])
+                    let data = try JSONSerialization.data(withJSONObject: json.dictionaryObject as Any, options: [])
                     let outputStream = OutputStream(toMemory: ())
                     outputStream.open()
                     self.writeData(data: data, outputStream: outputStream, maxLengthPerWrite: 1024)
                     outputStream.close()
                     resolver.fulfill(outputStream as! T)
                 }
-                // the data
+                // The String type
+                else if resultType.self == String.self {
+                    let dic = json.dictionaryObject
+                    let data = try JSONSerialization.data(withJSONObject: dic as Any, options: [])
+                    let str = String(data: data, encoding: String.Encoding.utf8)
+                    resolver.fulfill(str as! T)
+                }
+                // the Data type
                 else {
-                    let data = try JSONSerialization.data(withJSONObject: re as Any, options: [])
+                    let data = try JSONSerialization.data(withJSONObject: json.dictionaryObject as Any, options: [])
                     resolver.fulfill(data as! T)
                 }
             }.catch { error in
@@ -128,6 +131,30 @@ public class ScriptClient: ScriptingProtocol {
         }
     }
 
+    public func call<T>(_ name: String, _ params: [String : Any], _ type: ScriptingType, _ resultType: T.Type) -> HivePromise<T> {
+        return self.authHelper.checkValid().then { _ -> HivePromise<T> in
+            switch type {
+            case .UPLOAD:
+                return self.uploadImp(filePath: name, param: params, type: type, resultType: resultType)
+            case .DOWNLOAD:
+                return self.downloadImp(scriptName: name, param: params, type: type, resultType: resultType)
+            case .PROPERTIES:
+                return self.callWithAppDidImp(name, params: params, appDid: nil, resultType)
+            }
+        }
+    }
+
+    private func uploadImp<T>(filePath: String, param: [String: Any], type: ScriptingType, resultType: T.Type) -> HivePromise<T> {
+        return HivePromise<T> { resolver in
+            let url = VaultURL.sharedInstance.call()
+        }
+    }
+
+    private func downloadImp<T>(scriptName: String, param: [String: Any], type: ScriptingType, resultType: T.Type) -> HivePromise<T> {
+        return HivePromise<T> { resolver in
+            let url = VaultURL.sharedInstance.call()
+        }
+    }
 
     private func writeData(data: Data, outputStream: OutputStream, maxLengthPerWrite: Int) {
         let size = data.count

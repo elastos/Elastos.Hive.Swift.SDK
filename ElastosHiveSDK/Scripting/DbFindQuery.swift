@@ -31,6 +31,11 @@ public class DbFindQuery: Executable {
         super.init(TYPE, name)
     }
 
+    public init(_ name: String, _ collection: String, _ filter: [String: Any], _ options: [String: Any]) {
+        self.query = Query(collection, filter, options)
+        super.init(TYPE, name)
+    }
+
     public override func serialize(_ jsonGenerator: JsonGenerator) throws {
         jsonGenerator.writeStartObject()
         jsonGenerator.writeStringField("type", type)
@@ -38,6 +43,13 @@ public class DbFindQuery: Executable {
         jsonGenerator.writeFieldName("body")
         try query.serialize(jsonGenerator)
         jsonGenerator.writeEndObject()
+    }
+
+    public override func jsonSerialize() throws -> [String : Any] {
+        let jsonGenerator = JsonGenerator()
+        try serialize(jsonGenerator)
+        let datafilter = jsonGenerator.toString().data(using: String.Encoding.utf8)
+        return try (JSONSerialization.jsonObject(with: datafilter!,options: .mutableContainers) as? [String : Any])!
     }
 }
 

@@ -39,4 +39,11 @@ public class QueryHasResultsCondition: Condition {
         try query.serialize(gen)
         gen.writeEndObject()
     }
+
+    public override func jsonSerialize() throws -> [String : Any] {
+        let jsonGenerator = JsonGenerator()
+        try serialize(jsonGenerator)
+        let data = jsonGenerator.toString().data(using: String.Encoding.utf8)
+        return try (JSONSerialization.jsonObject(with: data!,options: .mutableContainers) as? [String : Any])!
+    }
 }

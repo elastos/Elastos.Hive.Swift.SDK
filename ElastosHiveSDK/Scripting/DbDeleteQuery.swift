@@ -39,10 +39,17 @@ public class DbDeleteQuery: Executable {
 public class Query {
     private var collection: String
     private var filter: [String: Any]
+    private var options: [String: Any]?
 
     public init(_ collection: String, _ query: [String: Any]) {
         self.collection = collection
         self.filter = query
+    }
+
+    public init(_ collection: String, _ query: [String: Any], _ options: [String: Any]) {
+        self.collection = collection
+        self.filter = query
+        self.options = options
     }
 
     public func serialize(_ jsonGenerator: JsonGenerator) throws {
@@ -50,6 +57,10 @@ public class Query {
         jsonGenerator.writeStringField("collection", collection)
         jsonGenerator.writeFieldName("filter")
         try serialize(jsonGenerator: jsonGenerator, filter)
+        if let _ = options {
+            jsonGenerator.writeFieldName("options")
+            try serialize(jsonGenerator: jsonGenerator, options!)
+        }
         jsonGenerator.writeEndObject()
     }
 

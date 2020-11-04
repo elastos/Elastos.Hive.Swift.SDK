@@ -22,14 +22,21 @@
 
 import Foundation
 
+public enum ScriptingType {
+    case UPLOAD
+    case DOWNLOAD
+    case PROPERTIES
+}
+
 public protocol ScriptingProtocol {
     func registerScript(_ name: String, _ executable: Executable) -> HivePromise<Bool>
     func registerScript(_ name: String, _ condition: Condition, _ executable: Executable) -> HivePromise<Bool>
 
-    func call(_ scriptName: String) -> HivePromise<OutputStream>
-    func call(_ scriptName: String, _ params: [String: Any]) -> HivePromise<OutputStream>
+    func call<T>(_ scriptName: String, _ resultType: T.Type) -> HivePromise<T>
+    func call<T>(_ scriptName: String, _ params: [String: Any], _ resultType: T.Type) -> HivePromise<T>
 
     func call<T>(_ scriptName: String, _ appDid: String, _ resultType: T.Type) -> HivePromise<T>
     func call<T>(_ scriptName: String, _ params: [String: Any], _ appDid: String, _ resultType: T.Type) -> HivePromise<T>
 
+    func call<T>(_ name: String, _ params: [String: Any], _ type: ScriptingType, _ resultType: T.Type) -> HivePromise<T>
 }
