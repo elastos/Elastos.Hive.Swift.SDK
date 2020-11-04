@@ -100,17 +100,7 @@ public class Entity {
             try waitForWalletAvaliable()
             return
         }
-//        try dids.forEach { d in
-//            if d.getMetadata().aliasName == "me" {
-//                // Already create my DID.
-//                print("My DID \(name) \(d)")
-//
-//                // This only for dummy backend.
-//                // normally don't need this on ID sidechain.
-//                try store!.publishDid(for: d, using: storepass)
-//                try waitForWalletAvaliable()
-//            }
-//        }
+
         let doc = try store!.newDid(withAlias: "me", using: storepass)
         self.did = doc.subject
         print("My new DID created: ", name, did!.description)
@@ -130,7 +120,6 @@ public class DIDApp: Entity {
         super.init(name, mnemonic, adapter)
         issuer = try! VerifiableCredentialIssuer(getDocument())
     }
-
 
     func issueDiplomaFor(_ dapp: DApp) throws -> VerifiableCredential {
         let subject = ["appDid": dapp.appId]

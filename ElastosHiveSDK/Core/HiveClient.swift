@@ -29,8 +29,7 @@ private var _providerCache: [String: String] = [: ]
 private var _vaultCache: [DID: Vault]?
 @objc(HiveClient)
 public class HiveClientHandle: NSObject {
-
-    public init(_ options: HiveClientOptions) {
+    init(_ options: HiveClientOptions) {
         _opts = options
     }
 

@@ -81,17 +81,15 @@ public class ScriptClient: ScriptingProtocol {
     private func callWithAppDidImp<T>(_ scriptName: String, params: [String : Any]? = nil, appDid: String?, _ resultType: T.Type) -> HivePromise<T> {
         return HivePromise<T> { resolver in
             var param = ["name": scriptName] as [String : Any]
-            if let ownerDid = authHelper.ownerDid {
+            if let _ = appDid {
+                let ownerDid = authHelper.ownerDid
                 var dic = ["target_did": ownerDid]
-                if let _ = appDid {
-                    dic["target_app_did"] = appDid!
-                }
+                dic["target_app_did"] = appDid!
                 param["context"] = dic
             }
             if let _ = params {
                 param["params"] = params!
             }
-            print(param)
             let url = VaultURL.sharedInstance.call()
             VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
                 let status = json["_status"].stringValue
