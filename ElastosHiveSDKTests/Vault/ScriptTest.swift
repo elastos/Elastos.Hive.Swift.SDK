@@ -51,8 +51,8 @@ class ScriptTest: XCTestCase {
             let exec4 = RawExecutable(json)
             let ae = AggregatedExecutable("ae")
             try ae.append(exec1)
-                .append(exec2)
-                .append(exec3)
+                  .append(exec2)
+                  .append(exec3)
             print(ae)
 //            print(try ae.serialize())
             //System.out.println(ae.serialize());
@@ -67,72 +67,146 @@ class ScriptTest: XCTestCase {
         }
     }
 
-    func testRegisterScriptNoCondition() {
-        let json = "{\"type\":\"find\",\"name\":\"get_groups\",\"body\":{\"collection\":\"test_group\",\"filter\":{\"*caller_did\":\"friends\"}}}"
-        let lock = XCTestExpectation(description: "wait for test.")
-        scripting!.registerScript("script_no_condition", RawExecutable(json)).done { re in
-            XCTAssertTrue(re)
-            lock.fulfill()
-        }.catch { error in
+    func test03_registerNoCondition() {
+        do {
+            let datafilter = "{\"friends\":\"$caller_did\"}".data(using: String.Encoding.utf8)
+            let filter = try JSONSerialization.jsonObject(with: datafilter!,options: .mutableContainers) as? [String : Any]
+            let dataoptions = "{\"projection\":{\"_id\":false,\"name\":true}}".data(using: String.Encoding.utf8)
+            let options = try JSONSerialization.jsonObject(with: dataoptions!,options: .mutableContainers) as? [String : Any]
+
+            let executable: DbFindQuery = DbFindQuery("get_groups", "groups", filter!, options!)
+            let lock = XCTestExpectation(description: "wait for test.")
+            scripting!.registerScript(noConditionName, executable).done { re in
+                XCTAssertTrue(re)
+                lock.fulfill()
+            }.catch { error in
+                XCTFail()
+                lock.fulfill()
+            }
+            self.wait(for: [lock], timeout: 1000.0)
+        } catch {
             XCTFail()
-            lock.fulfill()
         }
-        self.wait(for: [lock], timeout: 1000.0)
     }
 
     func test04_registerWithCondition() {
-        let executable = "{\"type\":\"find\",\"name\":\"get_groups\",\"body\":{\"collection\":\"test_group\",\"filter\":{\"friends\":\"$caller_did\"}}}"
-        let condition = "{\"type\":\"queryHasResults\",\"name\":\"verify_user_permission\",\"body\":{\"collection\":\"test_group\",\"filter\":{\"_id\":\"$params.group_id\",\"friends\":\"$caller_did\"}}}"
-        let lock = XCTestExpectation(description: "wait for test.")
-        scripting!.registerScript(withConditionName, RawCondition(condition), RawExecutable(executable)).done { re in
-            XCTAssertTrue(re)
-            lock.fulfill()
-        }.catch { error in
-            XCTFail()
-            lock.fulfill()
+        do {
+            let datafilter = "{\"_id\":\"$params.group_id\",\"friends\":\"$caller_did\"}".data(using: String.Encoding.utf8)
+            let filter = try JSONSerialization.jsonObject(with: datafilter!,options: .mutableContainers) as? [String : Any]
+            let executable: DbFindQuery = DbFindQuery("get_groups", "groups", filter!)
+            let condition: QueryHasResultsCondition = QueryHasResultsCondition("verify_user_permission", "test_group", filter!)
+            let lock = XCTestExpectation(description: "wait for test.")
+            scripting!.registerScript(withConditionName, condition, executable).done { re in
+                XCTAssertTrue(re)
+                lock.fulfill()
+            }.catch { error in
+                XCTFail()
+                lock.fulfill()
+            }
+            self.wait(for: [lock], timeout: 1000.0)
+        } catch {
+
         }
-        self.wait(for: [lock], timeout: 1000.0)
     }
 
-    func testCallScriptNoParams() {
+    func test05_callStringType() {
         let lock = XCTestExpectation(description: "wait for test.")
-        scripting?.call("script_no_condition").done{ re in
+        scripting?.call(noConditionName, String.self).done{ re in
             lock.fulfill()
         }.catch{ err in
+            XCTFail()
             lock.fulfill()
         }
         self.wait(for: [lock], timeout: 10000.0)
     }
 
-    func testCallScriptWithParams() {
+    func test06_callDataType() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        scripting?.call(noConditionName, Data.self).done{ data in
+            let rejson = try JSONSerialization.jsonObject(with: data , options: .mutableContainers) as AnyObject
+            print(rejson)
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ err in
+            XCTFail()
+            lock.fulfill()
+        }
+            self.wait(for: [lock], timeout: 10000.0)
+    }
+
+    func test09_callWithParams() {
         do {
             let lock = XCTestExpectation(description: "wait for test.")
             let param = "{\"group_id\":{\"$oid\":\"5f497bb83bd36ab235d82e6a\"}}"
-            let para = try JSONSerialization.jsonObject(with: param.data(using: .utf8)!, options: [ ]) as! [String : Any]
-            scripting?.call("script_no_condition", para).done{ output in
-                let data: Data = output.property(forKey: Stream.PropertyKey.dataWrittenToMemoryStreamKey)! as! Data
-                let rejson = try JSONSerialization.jsonObject(with: data , options: .mutableContainers) as AnyObject
-                print(rejson)
+            let params = try JSONSerialization.jsonObject(with: param.data(using: .utf8)!, options: [ ]) as! [String : Any]
+            scripting?.call(withConditionName,params, String.self).done{ str in
+                print(str)
                 XCTAssertTrue(true)
                 lock.fulfill()
             }.catch{ err in
-                XCTAssertTrue(true)
+                XCTFail()
                 lock.fulfill()
             }
             self.wait(for: [lock], timeout: 10000.0)
         } catch {
             XCTFail()
         }
+
+    }
+
+    func test10_callOtherScript() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        scripting?.call(noConditionName, "appid", String.self).done{ str in
+            print(str)
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ err in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 10000.0)
+    }
+
+    func test11_setUploadScript() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        let executable = "{\"type\":\"fileUpload\",\"name\":\"upload_file\",\"output\":true,\"body\":{\"path\":\"$params.path\"}}"
+        scripting?.registerScript("upload_file", RawExecutable(executable)).done{ re in
+            print(re)
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ err in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 10000.0)
+    }
+
+    func test12_uploadFile() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        let metadata = "{\"name\":\"upload_file\",\"params\":{\"group_id\":{\"$oid\":\"5f8d9dfe2f4c8b7a6f8ec0f1\"},\"path\":\"test.txt\"}}"
+        let params = ["name": "upload_file", "params":["group_id": ["$oid": "5f8d9dfe2f4c8b7a6f8ec0f1"], "path": "test.txt"]] as [String : Any]
+        scripting!.call("/Users/liaihong/Desktop/test.txt", params, ScriptingType.UPLOAD, String.self).done { re in
+            print(re)
+            lock.fulfill()
+        }.catch{ err in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 10000.0)
     }
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         do {
-            let doc = try testapp.getDocument()
-            print("testapp doc ===")
-            print(doc.toString())
-            _ = try didapp.getDocument()
-            print(doc.toString())
+//            let doc = try testapp.getDocument()
+//            print("testapp doc ===")
+//            print(doc.toString())
+//            _ = try didapp.getDocument()
+//            print(doc.toString())
+            let json = "{\"id\":\"did:elastos:iTgb87rP2ye4g8HgPnd7gmoqm7A8UD32Yb\",\"publicKey\":[{\"id\":\"#primary\",\"publicKeyBase58\":\"27epa4BHq9wNoxLDmbXXEVi5EzTeoGeUrbHN61jtkb9N5\"}],\"authentication\":[\"#primary\"],\"expires\":\"2025-10-08T14:07:59Z\",\"proof\":{\"created\":\"2020-10-08T14:07:59Z\",\"signatureValue\":\"i1NTDfGMxtLgRzPXXB49CuM287Z2tDkG5ZsdwFEn2txcZiW1PCIfOQajRHAkti9VGUtuZpAOnSd4t6BsLcJ5Vg\"}}"
+            let doc = try DIDDocument.convertToDIDDocument(fromJson: json)
+
+//            let d = "{\"id\":\"did:elastos:iXzvzZ7wX96bzpgx3sHeeRjoExoBPcZDsY\",\"publicKey\":[{\"id\":\"#primary\",\"publicKeyBase58\":\"rbxQCHxBVNtuKMxnGJzz6ZV6iq4K68JeqFvayrmRZAgE\"}],\"authentication\":[\"#primary\"],\"expires\":\"2025-10-08T14:14:01Z\",\"proof\":{\"created\":\"2020-10-08T14:14:01Z\",\"signatureValue\":\"txjmogZvwWa4IwA7rzBS2OX7UeTKNNqYnOE5NoAmwzWbIgZ6b-ywrdeBiuoTEaeiT9IhsMTeIrXlNnBQ3Z0TTw\"}}"
             let options: HiveClientOptions = HiveClientOptions()
             _ = options.setAuthenticator(VaultAuthenticator())
             options.setAuthenticationDIDDocument(doc)
@@ -141,16 +215,34 @@ class ScriptTest: XCTestCase {
             HiveClientHandle.setVaultProvider(doc.subject.description, PROVIDER)
             self.client = try HiveClientHandle.createInstance(withOptions: options)
             let lock = XCTestExpectation(description: "wait for test.")
-            _ = self.client?.getVault(doc.subject.description).get{ result in
+
+            _ = self.client?.getVault(doc.subject.description).done{ result in
                 self.scripting = (result.scripting as! ScriptClient)
+                print("block \(Thread.isMainThread)")
+                print("current block \(Thread.current)")
                 lock.fulfill()
             }
+            print("111 \(Thread.isMainThread)")
+            print("current 111 \(Thread.current)")
             self.wait(for: [lock], timeout: 100.0)
         } catch {
             XCTFail()
         }
     }
+/*
+     PresentationInJWT presentationInJWT = new PresentationInJWT().init();
+     Client.setupResolver(TestData.RESOLVER_URL, null);
+     Client.Options options = new Client.Options();
+     options.setLocalDataPath(localDataPath);
+     options.setAuthenticationHandler(jwtToken -> CompletableFuture.supplyAsync(()
+             -> presentationInJWT.getAuthToken(jwtToken)));
+     options.setAuthenticationDIDDocument(presentationInJWT.getDoc());
 
+     Client client = Client.createInstance(options);
+     client.setVaultProvider(TestData.OWNERDID, TestData.PROVIDER);
+
+     vault = client.getVault(TestData.OWNERDID).get();
+     */
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
