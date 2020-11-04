@@ -4,8 +4,8 @@ import XCTest
 import ElastosDIDSDK
 
 let p = PresentationJWT()
-let testapp = DApp("testapp", "amount material swim purse swallow gate pride series cannon patient dentist person", p.adapter!)
-let didapp = DIDApp("didapp", "clever bless future fuel obvious black subject cake art pyramid member clump", p.adapter!)
+let testapp = DApp("testapp", "universe asthma canal come return torch giggle column dial gift hobby nephew", p.adapter!)
+let didapp = DIDApp("didapp", "foster control ordinary fan sadness aware forest surge decorate cover student cram", p.adapter!)
 
 class VaultAuthenticator: Authenticator {
     func requestAuthentication(_ jwtToken: String) -> HivePromise<String> {

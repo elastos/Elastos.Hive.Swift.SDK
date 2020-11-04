@@ -156,7 +156,7 @@ class ScriptTest: XCTestCase {
 
     func test10_callOtherScript() {
         let lock = XCTestExpectation(description: "wait for test.")
-        scripting?.call(noConditionName, "appid", String.self).done{ str in
+        scripting?.call(noConditionName, "appId", String.self).done{ str in
             print(str)
             XCTAssertTrue(true)
             lock.fulfill()
@@ -198,25 +198,26 @@ class ScriptTest: XCTestCase {
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         do {
-//            let doc = try testapp.getDocument()
-//            print("testapp doc ===")
-//            print(doc.toString())
-//            _ = try didapp.getDocument()
-//            print(doc.toString())
-            let json = "{\"id\":\"did:elastos:iTgb87rP2ye4g8HgPnd7gmoqm7A8UD32Yb\",\"publicKey\":[{\"id\":\"#primary\",\"publicKeyBase58\":\"27epa4BHq9wNoxLDmbXXEVi5EzTeoGeUrbHN61jtkb9N5\"}],\"authentication\":[\"#primary\"],\"expires\":\"2025-10-08T14:07:59Z\",\"proof\":{\"created\":\"2020-10-08T14:07:59Z\",\"signatureValue\":\"i1NTDfGMxtLgRzPXXB49CuM287Z2tDkG5ZsdwFEn2txcZiW1PCIfOQajRHAkti9VGUtuZpAOnSd4t6BsLcJ5Vg\"}}"
-            let doc = try DIDDocument.convertToDIDDocument(fromJson: json)
+            let doc = try testapp.getDocument()
+            print("testapp doc ===")
+            print(doc.toString())
+            _ = try didapp.getDocument()
+            print(doc.toString())
+//            let mnemonic0: String = try Mnemonic.generate(Mnemonic.ENGLISH)
+//            let mnemonic1: String = try Mnemonic.generate(Mnemonic.ENGLISH)
 
-//            let d = "{\"id\":\"did:elastos:iXzvzZ7wX96bzpgx3sHeeRjoExoBPcZDsY\",\"publicKey\":[{\"id\":\"#primary\",\"publicKeyBase58\":\"rbxQCHxBVNtuKMxnGJzz6ZV6iq4K68JeqFvayrmRZAgE\"}],\"authentication\":[\"#primary\"],\"expires\":\"2025-10-08T14:14:01Z\",\"proof\":{\"created\":\"2020-10-08T14:14:01Z\",\"signatureValue\":\"txjmogZvwWa4IwA7rzBS2OX7UeTKNNqYnOE5NoAmwzWbIgZ6b-ywrdeBiuoTEaeiT9IhsMTeIrXlNnBQ3Z0TTw\"}}"
+//            let json = "{\"id\":\"did:elastos:iTgb87rP2ye4g8HgPnd7gmoqm7A8UD32Yb\",\"publicKey\":[{\"id\":\"#primary\",\"publicKeyBase58\":\"27epa4BHq9wNoxLDmbXXEVi5EzTeoGeUrbHN61jtkb9N5\"}],\"authentication\":[\"#primary\"],\"expires\":\"2025-10-08T14:07:59Z\",\"proof\":{\"created\":\"2020-10-08T14:07:59Z\",\"signatureValue\":\"i1NTDfGMxtLgRzPXXB49CuM287Z2tDkG5ZsdwFEn2txcZiW1PCIfOQajRHAkti9VGUtuZpAOnSd4t6BsLcJ5Vg\"}}"
+//            let doc = try DIDDocument.convertToDIDDocument(fromJson: json)
             let options: HiveClientOptions = HiveClientOptions()
             _ = options.setAuthenticator(VaultAuthenticator())
             options.setAuthenticationDIDDocument(doc)
                 .setDidResolverUrl(resolver)
             _ = options.setLocalDataPath(localDataPath)
-            HiveClientHandle.setVaultProvider(doc.subject.description, PROVIDER)
+            HiveClientHandle.setVaultProvider("did:elastos:ihicebcDsnTM1ssi2PT6dNwrU2uWih7M5M", PROVIDER)
             self.client = try HiveClientHandle.createInstance(withOptions: options)
             let lock = XCTestExpectation(description: "wait for test.")
 
-            _ = self.client?.getVault(doc.subject.description).done{ result in
+            _ = self.client?.getVault("did:elastos:ihicebcDsnTM1ssi2PT6dNwrU2uWih7M5M").done{ result in
                 self.scripting = (result.scripting as! ScriptClient)
                 print("block \(Thread.isMainThread)")
                 print("current block \(Thread.current)")
@@ -229,20 +230,7 @@ class ScriptTest: XCTestCase {
             XCTFail()
         }
     }
-/*
-     PresentationInJWT presentationInJWT = new PresentationInJWT().init();
-     Client.setupResolver(TestData.RESOLVER_URL, null);
-     Client.Options options = new Client.Options();
-     options.setLocalDataPath(localDataPath);
-     options.setAuthenticationHandler(jwtToken -> CompletableFuture.supplyAsync(()
-             -> presentationInJWT.getAuthToken(jwtToken)));
-     options.setAuthenticationDIDDocument(presentationInJWT.getDoc());
 
-     Client client = Client.createInstance(options);
-     client.setVaultProvider(TestData.OWNERDID, TestData.PROVIDER);
-
-     vault = client.getVault(TestData.OWNERDID).get();
-     */
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
