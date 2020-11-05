@@ -24,39 +24,15 @@ import Foundation
 
 @objc(HiveClientOptions)
 public class HiveClientOptions: NSObject {
-//    private var _storePath: String?
-//    private var _authenticator: Authenticator?
-    private var _enableCloudSync: Bool?
     private var _authenticator: Authenticator?
     private var _authenticationDIDDocument: DIDDocument?
-    private var _DIDResolverUrl: String?
     private var _localPath: String?
 
     public override init() {
         super.init()
     }
 
-    public var didResolverUrl: String? {
-        get {
-            return _DIDResolverUrl
-        }
-    }
-
-    public func setDidResolverUrl(_ DIDResolverUrl: String) {
-        self._DIDResolverUrl = DIDResolverUrl
-    }
-
-    public var enableCloudSync: Bool {
-        get {
-            return _enableCloudSync!
-        }
-    }
-
-    public func setEnableCloudSync(_ enable: Bool) {
-        self._enableCloudSync = enable
-    }
-
-    public var authenticationDIDDocument: DIDDocument {
+    var authenticationDIDDocument: DIDDocument {
         get {
             return _authenticationDIDDocument!
         }
@@ -67,7 +43,7 @@ public class HiveClientOptions: NSObject {
         return self
     }
 
-    public var authenicator: Authenticator? {
+    var authenicator: Authenticator? {
         get {
             return _authenticator
         }
@@ -79,7 +55,7 @@ public class HiveClientOptions: NSObject {
         return self
     }
 
-    public var localPath: String {
+    var localPath: String {
         get {
             return _localPath!
         }
@@ -91,11 +67,7 @@ public class HiveClientOptions: NSObject {
         return self
     }
 
-    func buildClient() -> HiveClientHandle? {
-        return nil
-    }
-
-    func checkValid(_ all: Bool) -> Bool {
-        return _localPath != nil && (!all || _authenticator != nil)
+    func checkValid() -> Bool {
+        return _authenticationDIDDocument != nil && _authenticator != nil && _localPath != nil
     }
 }
