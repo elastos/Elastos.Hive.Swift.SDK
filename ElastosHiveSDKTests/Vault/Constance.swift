@@ -10,6 +10,7 @@ var OWNERDID = "did:elastos:ihUVhBfgXrrDavvzTBJNmQQFK77s56sMsW"
 let PROVIDER = "https://hive1.trinity-tech.io"
 let localDataPath = "\(NSHomeDirectory())/Library/Caches/store"
 
+let didCachePath = "\(NSHomeDirectory())/Library/Caches/DIDStore"
 
 let walletDir: String = "/Users/liaihong/.wallet"
 

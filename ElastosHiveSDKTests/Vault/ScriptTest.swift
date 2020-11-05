@@ -203,16 +203,11 @@ class ScriptTest: XCTestCase {
             print(doc.toString())
             _ = try didapp.getDocument()
             print(doc.toString())
-//            let mnemonic0: String = try Mnemonic.generate(Mnemonic.ENGLISH)
-//            let mnemonic1: String = try Mnemonic.generate(Mnemonic.ENGLISH)
-
-//            let json = "{\"id\":\"did:elastos:iTgb87rP2ye4g8HgPnd7gmoqm7A8UD32Yb\",\"publicKey\":[{\"id\":\"#primary\",\"publicKeyBase58\":\"27epa4BHq9wNoxLDmbXXEVi5EzTeoGeUrbHN61jtkb9N5\"}],\"authentication\":[\"#primary\"],\"expires\":\"2025-10-08T14:07:59Z\",\"proof\":{\"created\":\"2020-10-08T14:07:59Z\",\"signatureValue\":\"i1NTDfGMxtLgRzPXXB49CuM287Z2tDkG5ZsdwFEn2txcZiW1PCIfOQajRHAkti9VGUtuZpAOnSd4t6BsLcJ5Vg\"}}"
-//            let doc = try DIDDocument.convertToDIDDocument(fromJson: json)
+            try HiveClientHandle.setupResolver(resolver, didCachePath)
             let options: HiveClientOptions = HiveClientOptions()
+            _ = options.setLocalDataPath(localDataPath)
             _ = options.setAuthenticator(VaultAuthenticator())
             options.setAuthenticationDIDDocument(doc)
-                .setDidResolverUrl(resolver)
-            _ = options.setLocalDataPath(localDataPath)
             HiveClientHandle.setVaultProvider("did:elastos:ihicebcDsnTM1ssi2PT6dNwrU2uWih7M5M", PROVIDER)
             self.client = try HiveClientHandle.createInstance(withOptions: options)
             let lock = XCTestExpectation(description: "wait for test.")

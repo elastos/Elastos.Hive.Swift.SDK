@@ -23,33 +23,64 @@
 import Foundation
 
 public typealias HivePromise = Promise
-
-private var _opts: HiveClientOptions?
 private var _providerCache: [String: String] = [: ]
 private var _vaultCache: [DID: Vault]?
 @objc(HiveClient)
 public class HiveClientHandle: NSObject {
+    private static var _reslover: String = "http://api.elastos.io:20606" // Default
+    private static var _cacheDir: String = "\(NSHomeDirectory())/Library/Caches/store" // Default
+    private static var resolverDidSetup: Bool = false // Default
+
+    private var authenticationDIDDocument: DIDDocument
+    private var authentcationHandler: Authenticator
+    private var localDataPath: String
+    private var cachedProviders: [String: Any] = [: ]
+
     init(_ options: HiveClientOptions) {
-        _opts = options
+        self.authenticationDIDDocument = options.authenticationDIDDocument
+        self.authentcationHandler = options.authenicator!
+        self.localDataPath = options.localPath
+    }
+
+    public class func setupResolver() throws { }
+
+    public class func setupResolver(_ resolver: String, _ cacheDir: String) throws {
+        guard resolver != "" else {
+            throw HiveError.failue(des: "resolver is not nil.")
+        }
+        guard cacheDir != "" else {
+            throw HiveError.failue(des: "cacheDir is not nil.")
+        }
+
+        guard !HiveClientHandle.resolverDidSetup else {
+            throw HiveError.failue(des: "Resolver already setuped")
+        }
+
+        _reslover = resolver
+        _cacheDir = cacheDir
+        try DIDBackend.initializeInstance(_reslover, _cacheDir)
+        //ResolverCache.reset() // 删除了整个路径 ！！！！
     }
 
     public static func createInstance(withOptions: HiveClientOptions) throws -> HiveClientHandle {
-
+        guard resolverDidSetup else {
+            throw HiveError.failue(des: "Setup did resolver first")
+        }
         return HiveClientHandle(withOptions)
     }
 
     public func getVault(_ ownerDid: String) -> HivePromise<Vault> {
         return HivePromise<Vault> { resolver in
             var vaultProvider = ""
-            _ = HiveClientHandle.getVaultProvider(ownerDid).done { result in
-                vaultProvider = result
+            _ = HiveClientHandle.getVaultProvider(ownerDid).done { [self] provider in
+                vaultProvider = provider
 
                 var vault: Vault
                 guard vaultProvider != "" else {
                     resolver.reject("TODO" as! Error)
                     return
                 }
-                let authHelper = VaultAuthHelper(ownerDid, vaultProvider, _opts!.localPath, _opts!.authenticationDIDDocument, _opts!.authenicator)
+                let authHelper = VaultAuthHelper(ownerDid, vaultProvider, localDataPath, authenticationDIDDocument, authentcationHandler)
                 vault = Vault(authHelper, vaultProvider, ownerDid)
                 resolver.fulfill(vault)
             }
@@ -66,14 +97,6 @@ public class HiveClientHandle: NSObject {
             globalQueue.async {
                 var vaultProvider: String?
                 do {
-                    if _opts?.didResolverUrl == nil {
-                        try DIDBackend.initializeInstance(MAIN_NET_RESOLVER, _opts!.localPath)
-                    }
-                    else {
-                        try DIDBackend.initializeInstance(_opts!.didResolverUrl!, _opts!.localPath)
-                    }
-                    //todo: ResolverCache.reset() 删除了整个路径 ！！！！
-                    //                try ResolverCache.reset()
                     let did = try DID(ownerDid)
                     let doc = try did.resolve()
                     let services = doc?.selectServices(byType: "HiveVault")
@@ -83,6 +106,9 @@ public class HiveClientHandle: NSObject {
                     }
                     else {
                         vaultProvider = _providerCache[ownerDid]
+                    }
+                    if vaultProvider == nil {
+                        vaultProvider = ""
                     }
                     resolver.fulfill(vaultProvider!)
                 }
