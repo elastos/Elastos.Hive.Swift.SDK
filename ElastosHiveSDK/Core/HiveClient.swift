@@ -42,7 +42,9 @@ public class HiveClientHandle: NSObject {
         self.localDataPath = options.localPath
     }
 
-    public class func setupResolver() throws { }
+    public class func setupResolver() throws {
+        try setupResolver(_reslover, _cacheDir)
+    }
 
     public class func setupResolver(_ resolver: String, _ cacheDir: String) throws {
         guard resolver != "" else {
@@ -53,12 +55,13 @@ public class HiveClientHandle: NSObject {
         }
 
         guard !HiveClientHandle.resolverDidSetup else {
-            throw HiveError.failue(des: "Resolver already setuped")
+//            throw HiveError.failue(des: "Resolver already setuped")
+            return
         }
-
         _reslover = resolver
         _cacheDir = cacheDir
         try DIDBackend.initializeInstance(_reslover, _cacheDir)
+        resolverDidSetup = true
         //ResolverCache.reset() // 删除了整个路径 ！！！！
     }
 
@@ -77,7 +80,7 @@ public class HiveClientHandle: NSObject {
 
                 var vault: Vault
                 guard vaultProvider != "" else {
-                    resolver.reject("TODO" as! Error)
+                    resolver.reject("Please set provider first. provider is nil." as! Error)
                     return
                 }
                 let authHelper = VaultAuthHelper(ownerDid, vaultProvider, localDataPath, authenticationDIDDocument, authentcationHandler)
