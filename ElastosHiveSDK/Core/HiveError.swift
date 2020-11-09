@@ -35,7 +35,7 @@ public enum HiveError: Error {
 
 extension HiveError {
 
-    static func description(_ error: HiveError) -> String {
+   public static func description(_ error: HiveError) -> String {
         switch error {
         case .failue(let des):
             return des ?? "Operation failed"
@@ -50,11 +50,11 @@ extension HiveError {
         case .netWork(let des):
             return des.debugDescription
         case .failues(let des):
-            var re = ""
-            des?.forEach{ key, value in
-                re = key + "\n" + String("\(value)") + "\n"
+            let data = try? JSONSerialization.data(withJSONObject: des as Any, options: [])
+            guard data != nil else {
+                return ""
             }
-            return re
+            return String(data: data!, encoding: String.Encoding.utf8)!
         case .unsupportedOperation(let des):
             return des ?? ""
         }
