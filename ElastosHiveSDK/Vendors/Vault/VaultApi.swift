@@ -74,9 +74,9 @@ class VaultApi: NSObject {
                         let rejson = JSON(re)
                         let status = rejson["_status"].stringValue
                         guard status == "OK" else {
-                            var dic: [String: String] = [: ]
+                            var dic: [String: Any] = [: ]
                             rejson.forEach { key, value in
-                                dic[key] = value.stringValue
+                                dic[key] = value
                             }
                             let err = HiveError.failues(des: dic)
                             handler?.runError(err)
@@ -110,9 +110,9 @@ class VaultApi: NSObject {
                         let rejson = JSON(re)
                         let status = rejson["_status"].stringValue
                         guard status == "OK" else {
-                            var dic: [String: String] = [: ]
+                            var dic: [String: Any] = [: ]
                             rejson.forEach { key, value in
-                                dic[key] = value.stringValue
+                                dic[key] = value
                             }
                             let err = HiveError.failues(des: dic)
                             resolver.reject(err)
@@ -158,7 +158,7 @@ class VaultApi: NSObject {
                             rejson.forEach { key, value in
                                 dic[key] = value
                             }
-                            let err = HiveError.failues(des: (re as! Dictionary<String, Any>))
+                            let err = HiveError.failues(des: (dic ))
                             resolver.reject(err)
                             return
                         }

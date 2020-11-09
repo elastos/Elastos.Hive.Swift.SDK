@@ -123,7 +123,7 @@ public class VaultAuthHelper: ConnectHelper {
         var challenge = ""
         var erro: Error?
         let header = ["Content-Type": "application/json;charset=UTF-8"]
-        let semaphore: DispatchSemaphore! = DispatchSemaphore(value: 0)
+        var semaphore: DispatchSemaphore! = DispatchSemaphore(value: 0)
         VaultApi.request(url: url, parameters: param as Parameters, headers: header)
             .done { re in
                 challenge = re["challenge"].stringValue
@@ -136,21 +136,26 @@ public class VaultAuthHelper: ConnectHelper {
         guard erro == nil else {
             throw HiveError.netWork(des: erro)
         }
-        if handler != nil && self.verifyToken(challenge) {
-            let semaphore: DispatchSemaphore! = DispatchSemaphore(value: 0)
-            requestAuthToken(handler!, challenge).then { aToken -> HivePromise<JSON> in
-                return self.nodeAuth(aToken)
-            }.done { re in
-                do {
-                    try self.sotre(re)
-                } catch {
-                    erro = error
-                }
-                semaphore.signal()
-            }.catch { error in
-                semaphore.signal()
+        if handler != nil {
+            try self.verifyToken(challenge)
+        }
+        semaphore = DispatchSemaphore(value: 0)
+        requestAuthToken(handler!, challenge).then { aToken -> HivePromise<JSON> in
+            return self.nodeAuth(aToken)
+        }.done { re in
+            do {
+                try self.sotre(re)
+            } catch {
+                erro = error
             }
-            semaphore.wait()
+            semaphore.signal()
+        }.catch { error in
+            erro = error
+            semaphore.signal()
+        }
+        semaphore.wait()
+        guard erro == nil else {
+            throw HiveError.netWork(des: erro)
         }
     }
 
@@ -158,14 +163,9 @@ public class VaultAuthHelper: ConnectHelper {
         return handler.requestAuthentication(challenge)
     }
 
-    private func verifyToken(_ jwtToken: String) -> Bool {
-        do {
-            let jwtParser = try JwtParserBuilder().build()
-            _ = try jwtParser.parseClaimsJwt(jwtToken)
-        } catch {
-            return false
-        }
-        return true
+    private func verifyToken(_ jwtToken: String)throws {
+        let jwtParser = try JwtParserBuilder().build()
+        _ = try jwtParser.parseClaimsJwt(jwtToken)
     }
 
     private func tryRestoreToken() {
