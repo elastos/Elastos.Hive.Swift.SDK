@@ -39,7 +39,7 @@ internal class SimpleAuthServer: NSObject {
         return HivePromise<String>{ resolver in
             httpServer[""] = { request in
                 guard request.queryParams.count > 0 || request.queryParams[0].0 != "code" else {
-                    resolver.reject(HiveError.failue(des: "failed"))
+                    resolver.reject(HiveError.failure(des: "failed"))
                     return HttpResponse.ok(.json("nil" as AnyObject))
                 }
 
@@ -67,7 +67,7 @@ internal class SimpleAuthServer: NSObject {
         if result != nil {
             return result!
         } else {
-            throw HiveError.failue(des: "failed")
+            throw HiveError.failure(des: "failed")
         }
     }
 

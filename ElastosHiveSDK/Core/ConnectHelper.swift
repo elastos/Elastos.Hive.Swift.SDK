@@ -29,7 +29,7 @@ public class ConnectHelper: NSObject {
     }
     
     public func connectAsync(authenticator: Authenticator? = nil, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
-        return HivePromise<Void>(error: HiveError.failue(des: "Dummy"))
+        return HivePromise<Void>(error: HiveError.failure(des: "Dummy"))
     }
     
     public func checkValid() -> HivePromise<Void> {
@@ -37,6 +37,6 @@ public class ConnectHelper: NSObject {
     }
     
     public func checkValid(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
-        return HivePromise<Void>(error: HiveError.failue(des: "Dummy"))
+        return HivePromise<Void>(error: HiveError.failure(des: "Dummy"))
     }
 }

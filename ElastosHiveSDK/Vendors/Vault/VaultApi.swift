@@ -24,7 +24,7 @@ import Foundation
 
 class VaultApi: NSObject {
     
-    class func request(url: URLConvertible,
+    class func requestWithSignIn(url: URLConvertible,
                         method: HTTPMethod = .post,
                         parameters: Parameters? = nil,
                         encoding: ParameterEncoding = JSONEncoding.default,
@@ -45,7 +45,7 @@ class VaultApi: NSObject {
                             rejson.forEach { key, value in
                                 dic[key] = value
                             }
-                            let err = HiveError.failues(des: dic)
+                            let err = HiveError.failureWithDic(des: dic)
                             resolver.reject(err)
                             return
                         }
@@ -57,11 +57,45 @@ class VaultApi: NSObject {
         }
     }
 
+    class func request(url: URLConvertible,
+                        method: HTTPMethod = .post,
+                        parameters: Parameters? = nil,
+                        encoding: ParameterEncoding = JSONEncoding.default,
+                        headers: HTTPHeaders? = nil, helper: VaultAuthHelper) -> HivePromise<JSON> {
+        return HivePromise<JSON> { resolver in
+            Alamofire.request(url,
+                              method: method,
+                              parameters: parameters,
+                              encoding: encoding,
+                              headers: headers)
+                .responseJSON { dataResponse in
+                    switch dataResponse.result {
+                    case .success(let re):
+                        let globalQueue = DispatchQueue.global()
+                        globalQueue.async {
+                            let rejson = JSON(re)
+                            do {
+                                try helper.retryLogin(rejson)
+                                let error = HiveError.failure(des: "auth failed, re-login was successful, please visit api again.")
+                                resolver.reject(error)
+                                return
+                            } catch {
+                                resolver.reject(error)
+                            }
+                            resolver.fulfill(rejson)
+                        }
+                    case .failure(let error):
+                        resolver.reject(HiveError.netWork(des: error))
+                    }
+                }
+        }
+    }
+
     class func requestWithBool(url: URLConvertible,
                         method: HTTPMethod = .post,
                         parameters: Parameters? = nil,
                         encoding: ParameterEncoding = JSONEncoding.default,
-                        headers: HTTPHeaders? = nil, handler: HiveCallback<Bool>? = nil) -> HivePromise<Bool> {
+                        headers: HTTPHeaders? = nil, handler: HiveCallback<Bool>? = nil, helper: VaultAuthHelper) -> HivePromise<Bool> {
         return HivePromise<Bool> { resolver in
             Alamofire.request(url,
                               method: method,
@@ -71,25 +105,27 @@ class VaultApi: NSObject {
                 .responseJSON { dataResponse in
                     switch dataResponse.result {
                     case .success(let re):
-                        let rejson = JSON(re)
-                        let status = rejson["_status"].stringValue
-                        guard status == "OK" else {
-                            var dic: [String: Any] = [: ]
-                            rejson.forEach { key, value in
-                                dic[key] = value
+                        let globalQueue = DispatchQueue.global()
+                        globalQueue.async {
+                            let rejson = JSON(re)
+                            do {
+                                try helper.retryLogin(rejson)
+                                let error = HiveError.failure(des: "auth failed, re-login was successful, please visit api again.")
+                                handler?.runError(error)
+                                resolver.reject(error)
+                                return
+                            } catch {
+                                handler?.runError(error as! HiveError)
+                                resolver.reject(error)
                             }
-                            let err = HiveError.failues(des: dic)
-                            handler?.runError(err)
-                            resolver.reject(err)
-                            return
+                            handler?.didSucceed(true)
+                            resolver.fulfill(true)
                         }
-                        handler?.didSucceed(true)
-                        resolver.fulfill(true)
                     case .failure(let error):
                         handler?.runError(HiveError.netWork(des: error))
                         resolver.reject(error)
                     }
-            }
+                }
         }
     }
 
@@ -97,7 +133,7 @@ class VaultApi: NSObject {
                         method: HTTPMethod = .post,
                         parameters: Parameters? = nil,
                         encoding: ParameterEncoding = JSONEncoding.default,
-                        headers: HTTPHeaders? = nil, handler: HiveCallback<T>, type: T.Type) -> HivePromise<T> {
+                        headers: HTTPHeaders? = nil, handler: HiveCallback<T>, type: T.Type, helper: VaultAuthHelper) -> HivePromise<T> {
         return HivePromise<T> { resolver in
             Alamofire.request(url,
                               method: method,
@@ -107,27 +143,30 @@ class VaultApi: NSObject {
                 .responseJSON { dataResponse in
                     switch dataResponse.result {
                     case .success(let re):
-                        let rejson = JSON(re)
-                        let status = rejson["_status"].stringValue
-                        guard status == "OK" else {
-                            var dic: [String: Any] = [: ]
-                            rejson.forEach { key, value in
-                                dic[key] = value
+                        let globalQueue = DispatchQueue.global()
+                        globalQueue.async {
+                            let rejson = JSON(re)
+                            do {
+                                try helper.retryLogin(rejson)
+                                let error = HiveError.failure(des: "auth failed, re-login was successful, please visit api again.")
+                                handler.runError(error)
+                                resolver.reject(error)
+                                return
+                            } catch {
+                                handler.runError(error as! HiveError)
+                                resolver.reject(error)
                             }
-                            let err = HiveError.failues(des: dic)
-                            resolver.reject(err)
-                            return
-                        }
 
-                        if type.self == InsertOneResult.self {
-                            let insertOneResult = InsertOneResult(rejson)
-                            handler.didSucceed(insertOneResult as! T)
-                            resolver.fulfill(insertOneResult as! T)
-                        }
-                        else {
-                            let insertOneResult = InsertManyResult(rejson)
-                            handler.didSucceed(insertOneResult as! T)
-                            resolver.fulfill(insertOneResult as! T)
+                            if type.self == InsertOneResult.self {
+                                let insertOneResult = InsertOneResult(rejson)
+                                handler.didSucceed(insertOneResult as! T)
+                                resolver.fulfill(insertOneResult as! T)
+                            }
+                            else {
+                                let insertOneResult = InsertManyResult(rejson)
+                                handler.didSucceed(insertOneResult as! T)
+                                resolver.fulfill(insertOneResult as! T)
+                            }
                         }
                     case .failure(let error):
                         handler.runError(HiveError.netWork(des: error))
@@ -158,7 +197,7 @@ class VaultApi: NSObject {
                             rejson.forEach { key, value in
                                 dic[key] = value
                             }
-                            let err = HiveError.failues(des: (dic ))
+                            let err = HiveError.failureWithDic(des: (dic ))
                             resolver.reject(err)
                             return
                         }
@@ -166,7 +205,7 @@ class VaultApi: NSObject {
                     case .failure(let error):
                         resolver.reject(error)
                     }
-            }
+                }
         }
     }
 }

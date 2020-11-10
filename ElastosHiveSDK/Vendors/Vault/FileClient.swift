@@ -48,20 +48,22 @@ public class FileClient: FilesProtocol {
                 .responseJSON { dataResponse in
                 switch dataResponse.result {
                 case .success(let re):
-                    let rejson = JSON(re)
-                    let status = rejson["_status"].stringValue
-                    guard status == "OK" else {
-                        var dic: [String: String] = [: ]
-                        rejson.forEach { key, value in
-                            dic[key] = value.stringValue
+                    let globalQueue = DispatchQueue.global()
+                    globalQueue.async {
+                        let rejson = JSON(re)
+                        do {
+                            try self.authHelper.retryLogin(rejson)
+                            let error = HiveError.failure(des: "auth failed, re-login was successful, please visit api again.")
+                            handler.runError(error)
+                            resolver.reject(error)
+                            return
+                        } catch {
+                            handler.runError(error as! HiveError)
+                            resolver.reject(error)
                         }
-                        let err = HiveError.failues(des: dic)
-                        handler.runError(err)
-                        resolver.reject(err)
-                        return
+                        handler.didSucceed(true)
+                        resolver.fulfill(true)
                     }
-                    handler.didSucceed(true)
-                    resolver.fulfill(true)
                 case .failure(let error):
                     handler.runError(HiveError.netWork(des: error))
                     resolver.reject(error)
@@ -87,24 +89,26 @@ public class FileClient: FilesProtocol {
                 .responseString { result in
                 switch result.result {
                 case .success(let re):
-                    let rejson = JSON(re)
-                    let status = rejson["_status"].stringValue
-                    guard status != "ERR" else {
-                        var dic: [String: String] = [: ]
-                        rejson.forEach { key, value in
-                            dic[key] = value.stringValue
+                    let globalQueue = DispatchQueue.global()
+                    globalQueue.async {
+                        let rejson = JSON(re)
+                        do {
+                            try self.authHelper.retryLogin(rejson)
+                            let error = HiveError.failure(des: "auth failed, re-login was successful, please visit api again.")
+                            handler.runError(error)
+                            resolver.reject(error)
+                            return
+                        } catch {
+                            handler.runError(error as! HiveError)
+                            resolver.reject(error)
                         }
-                        let err = HiveError.failues(des: dic)
-                        handler.runError(err)
-                        resolver.reject(err)
-                        return
+                        let outputStream = OutputStream(toMemory: ())
+                        outputStream.open()
+                        self.writeData(data: result.data!, outputStream: outputStream, maxLengthPerWrite: 1024)
+                        outputStream.close()
+                        handler.didSucceed(outputStream)
+                        resolver.fulfill(outputStream)
                     }
-                    let outputStream = OutputStream(toMemory: ())
-                    outputStream.open()
-                    self.writeData(data: result.data!, outputStream: outputStream, maxLengthPerWrite: 1024)
-                    outputStream.close()
-                    handler.didSucceed(outputStream)
-                    resolver.fulfill(outputStream)
                 case .failure(let error):
                     handler.runError(HiveError.netWork(des: error))
                     resolver.reject(error)
@@ -142,7 +146,7 @@ public class FileClient: FilesProtocol {
     private func deleteImp(_ remoteFile: String, _ handler: HiveCallback<Bool>) -> HivePromise<Bool> {
         let param = ["path": remoteFile]
         let url = VaultURL.sharedInstance.deleteFileOrFolder()
-        return VaultApi.requestWithBool(url: url, parameters: param, headers: Header(authHelper).headers(), handler: handler)
+        return VaultApi.requestWithBool(url: url, parameters: param, headers: Header(authHelper).headers(), handler: handler, helper: authHelper)
     }
 
     public func move(_ src: String, _ dest: String) -> HivePromise<Bool> {
@@ -158,7 +162,7 @@ public class FileClient: FilesProtocol {
     private func moveImp(_ src: String, _ dest: String, _ handler: HiveCallback<Bool>) -> HivePromise<Bool> {
         let url = VaultURL.sharedInstance.move()
         let param = ["src_path": src, "dst_path": dest]
-        return VaultApi.requestWithBool(url: url, parameters: param, headers: Header(authHelper).headers(), handler: handler)
+        return VaultApi.requestWithBool(url: url, parameters: param, headers: Header(authHelper).headers(), handler: handler, helper: authHelper)
     }
 
     public func copy(_ src: String, _ dest: String) -> HivePromise<Bool> {
@@ -174,7 +178,7 @@ public class FileClient: FilesProtocol {
     private func copyImp(_ src: String, _ dest: String, _ handler: HiveCallback<Bool>) -> HivePromise<Bool> {
         let url = VaultURL.sharedInstance.move()
         let param = ["src_path": src, "dst_path": dest]
-        return VaultApi.requestWithBool(url: url, parameters: param, headers: Header(authHelper).headers(), handler: handler)
+        return VaultApi.requestWithBool(url: url, parameters: param, headers: Header(authHelper).headers(), handler: handler, helper: authHelper)
     }
 
     public func hash(_ path: String) -> HivePromise<String> {
@@ -190,7 +194,7 @@ public class FileClient: FilesProtocol {
     private func hashImp(_ path: String, _ handler: HiveCallback<String>) -> HivePromise<String> {
         return HivePromise<String> { resolver in
             let url = VaultURL.sharedInstance.hash(path)
-            VaultApi.request(url: url, method: .get, headers: Header(authHelper).headers()).done { json in
+            VaultApi.request(url: url, method: .get, headers: Header(authHelper).headers(), helper: authHelper).done { json in
                 handler.didSucceed(json["SHA256"].stringValue)
                 resolver.fulfill(json["SHA256"].stringValue)
             }.catch { error in
@@ -213,7 +217,7 @@ public class FileClient: FilesProtocol {
     private func listImp(_ path: String, _ handler: HiveCallback<Array<FileInfo>>) -> HivePromise<Array<FileInfo>> {
         return HivePromise<Array<FileInfo>> { resolver in
             let url = VaultURL.sharedInstance.list(path)
-            VaultApi.request(url: url, method: .get, headers: Header(authHelper).headers()).done { json in
+            VaultApi.request(url: url, method: .get, headers: Header(authHelper).headers(), helper: authHelper).done { json in
                 let arraryInfo = json["file_info_list"].arrayValue
                 var fileList = [FileInfo]()
                 arraryInfo.forEach { j in
@@ -246,7 +250,7 @@ public class FileClient: FilesProtocol {
     private func statImp(_ path: String, _ handler: HiveCallback<FileInfo>) -> HivePromise<FileInfo>{
         return HivePromise<FileInfo> { resolver in
             let url = VaultURL.sharedInstance.stat(path)
-            VaultApi.request(url: url, method: .get, headers: Header(authHelper).headers()).done { json in
+            VaultApi.request(url: url, method: .get, headers: Header(authHelper).headers(), helper: authHelper).done { json in
                     let info = FileInfo()
                     info.setName(json["name"].stringValue)
                     info.setSize(json["size"].intValue)

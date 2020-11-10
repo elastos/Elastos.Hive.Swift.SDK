@@ -51,7 +51,7 @@ public class ScriptClient: ScriptingProtocol {
         param["executable"] = try! executable.jsonSerialize()
         let url = VaultURL.sharedInstance.registerScript()
 
-        return VaultApi.requestWithBool(url: url, parameters: param, headers: Header(authHelper).headers())
+        return VaultApi.requestWithBool(url: url, parameters: param, headers: Header(authHelper).headers(), helper: authHelper)
     }
 
     public func call<T>(_ scriptName: String, _ resultType: T.Type) -> HivePromise<T> {
@@ -91,18 +91,7 @@ public class ScriptClient: ScriptingProtocol {
                 param["params"] = params!
             }
             let url = VaultURL.sharedInstance.call()
-            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
-                let status = json["_status"].stringValue
-                guard status == "OK" else {
-                    var dic: [String: Any] = [: ]
-                    json.forEach { key, value in
-                        dic[key] = value
-                    }
-                    let err = HiveError.failues(des: dic)
-                    resolver.reject(err)
-                    return
-                }
-
+            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers(), helper: authHelper).done { json in
                 if resultType.self == OutputStream.self {
                     let data = try JSONSerialization.data(withJSONObject: json.dictionaryObject as Any, options: [])
                     let outputStream = OutputStream(toMemory: ())
