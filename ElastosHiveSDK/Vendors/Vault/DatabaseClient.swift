@@ -76,6 +76,7 @@ public class DatabaseClient: DatabaseProtocol {
                         resolver.reject(HiveError.failureWithDic(des: dic))
                     }
                 }
+                resolver.fulfill(true)
             }.catch { error in
                 resolver.reject(error)
             }
@@ -119,6 +120,7 @@ public class DatabaseClient: DatabaseProtocol {
                         resolver.reject(HiveError.failureWithDic(des: dic))
                     }
                 }
+                resolver.fulfill(true)
             }.catch { error in
                 resolver.reject(error)
             }
