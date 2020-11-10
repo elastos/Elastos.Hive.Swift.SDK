@@ -61,7 +61,7 @@ class VaultApi: NSObject {
                         method: HTTPMethod = .post,
                         parameters: Parameters? = nil,
                         encoding: ParameterEncoding = JSONEncoding.default,
-                        headers: HTTPHeaders? = nil, helper: VaultAuthHelper) -> HivePromise<JSON> {
+                        headers: HTTPHeaders? = nil) -> HivePromise<JSON> {
         return HivePromise<JSON> { resolver in
             Alamofire.request(url,
                               method: method,
@@ -71,106 +71,10 @@ class VaultApi: NSObject {
                 .responseJSON { dataResponse in
                     switch dataResponse.result {
                     case .success(let re):
-                        let globalQueue = DispatchQueue.global()
-                        globalQueue.async {
-                            let rejson = JSON(re)
-                            do {
-                                try helper.retryLogin(rejson)
-                                let error = HiveError.failure(des: "auth failed, re-login was successful, please visit api again.")
-                                resolver.reject(error)
-                                return
-                            } catch {
-                                resolver.reject(error)
-                            }
-                            resolver.fulfill(rejson)
-                        }
+                        let json = JSON(re)
+                        resolver.fulfill(json)
                     case .failure(let error):
                         resolver.reject(HiveError.netWork(des: error))
-                    }
-                }
-        }
-    }
-
-    class func requestWithBool(url: URLConvertible,
-                        method: HTTPMethod = .post,
-                        parameters: Parameters? = nil,
-                        encoding: ParameterEncoding = JSONEncoding.default,
-                        headers: HTTPHeaders? = nil, handler: HiveCallback<Bool>? = nil, helper: VaultAuthHelper) -> HivePromise<Bool> {
-        return HivePromise<Bool> { resolver in
-            Alamofire.request(url,
-                              method: method,
-                              parameters: parameters,
-                              encoding: encoding,
-                              headers: headers)
-                .responseJSON { dataResponse in
-                    switch dataResponse.result {
-                    case .success(let re):
-                        let globalQueue = DispatchQueue.global()
-                        globalQueue.async {
-                            let rejson = JSON(re)
-                            do {
-                                try helper.retryLogin(rejson)
-                                let error = HiveError.failure(des: "auth failed, re-login was successful, please visit api again.")
-                                handler?.runError(error)
-                                resolver.reject(error)
-                                return
-                            } catch {
-                                handler?.runError(error as! HiveError)
-                                resolver.reject(error)
-                            }
-                            handler?.didSucceed(true)
-                            resolver.fulfill(true)
-                        }
-                    case .failure(let error):
-                        handler?.runError(HiveError.netWork(des: error))
-                        resolver.reject(error)
-                    }
-                }
-        }
-    }
-
-    class func requestWithInsert<T>(url: URLConvertible,
-                        method: HTTPMethod = .post,
-                        parameters: Parameters? = nil,
-                        encoding: ParameterEncoding = JSONEncoding.default,
-                        headers: HTTPHeaders? = nil, handler: HiveCallback<T>, type: T.Type, helper: VaultAuthHelper) -> HivePromise<T> {
-        return HivePromise<T> { resolver in
-            Alamofire.request(url,
-                              method: method,
-                              parameters: parameters,
-                              encoding: encoding,
-                              headers: headers)
-                .responseJSON { dataResponse in
-                    switch dataResponse.result {
-                    case .success(let re):
-                        let globalQueue = DispatchQueue.global()
-                        globalQueue.async {
-                            let rejson = JSON(re)
-                            do {
-                                try helper.retryLogin(rejson)
-                                let error = HiveError.failure(des: "auth failed, re-login was successful, please visit api again.")
-                                handler.runError(error)
-                                resolver.reject(error)
-                                return
-                            } catch {
-                                handler.runError(error as! HiveError)
-                                resolver.reject(error)
-                            }
-
-                            if type.self == InsertOneResult.self {
-                                let insertOneResult = InsertOneResult(rejson)
-                                handler.didSucceed(insertOneResult as! T)
-                                resolver.fulfill(insertOneResult as! T)
-                            }
-                            else {
-                                let insertOneResult = InsertManyResult(rejson)
-                                handler.didSucceed(insertOneResult as! T)
-                                resolver.fulfill(insertOneResult as! T)
-                            }
-                        }
-                    case .failure(let error):
-                        handler.runError(HiveError.netWork(des: error))
-                        resolver.reject(error)
                     }
                 }
         }
