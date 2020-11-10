@@ -32,53 +32,79 @@ public class ScriptClient: ScriptingProtocol {
 
     public func registerScript(_ name: String, _ executable: Executable) -> HivePromise<Bool> {
         return authHelper.checkValid().then { _ -> HivePromise<Bool> in
-            return self.registerScriptImp(name, nil, executable)
+            return self.registerScriptImp(name, nil, executable, tryAgain: 0)
         }
     }
 
     public func registerScript(_ name: String, _ condition: Condition, _ executable: Executable) -> HivePromise<Bool> {
 
         return authHelper.checkValid().then { _ -> HivePromise<Bool> in
-            return self.registerScriptImp(name, condition, executable)
+            return self.registerScriptImp(name, condition, executable, tryAgain: 0)
         }
     }
 
-    private func registerScriptImp(_ name: String, _ accessCondition: Condition?, _ executable: Executable) -> HivePromise<Bool> {
-        var param = ["name": name] as [String : Any]
-        if let _ = accessCondition {
-            param["accessCondition"] = try? accessCondition!.jsonSerialize()
-        }
-        param["executable"] = try! executable.jsonSerialize()
-        let url = VaultURL.sharedInstance.registerScript()
+    private func registerScriptImp(_ name: String, _ accessCondition: Condition?, _ executable: Executable, tryAgain: Int) -> HivePromise<Bool> {
+        HivePromise<Bool> { resolver in
 
-        return VaultApi.requestWithBool(url: url, parameters: param, headers: Header(authHelper).headers(), helper: authHelper)
+            var param = ["name": name] as [String : Any]
+            if let _ = accessCondition {
+                param["accessCondition"] = try? accessCondition!.jsonSerialize()
+            }
+            param["executable"] = try! executable.jsonSerialize()
+            let url = VaultURL.sharedInstance.registerScript()
+            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
+                let status = json["_status"].stringValue
+                if status == "ERR" {
+                    let errorCode = json["_error"]["code"].intValue
+                    let errorMessage = json["_error"]["message"].stringValue
+                    if errorCode == 401 && errorMessage == "auth failed" && tryAgain < 1 {
+                        self.authHelper.retryLogin().then { success -> HivePromise<Bool> in
+                            return self.registerScriptImp(name, accessCondition, executable, tryAgain: 1)
+                        }.done { result in
+                            resolver.fulfill(result)
+                        }.catch { error in
+                            resolver.reject(error)
+                        }
+                    } else {
+                        var dic: [String: Any] = [: ]
+                        json.forEach { key, value in
+                            dic[key] = value
+                        }
+                        resolver.reject(HiveError.failureWithDic(des: dic))
+                    }
+                }
+                resolver.fulfill(true)
+            }.catch { error in
+                resolver.reject(error)
+            }
+        }
     }
 
     public func call<T>(_ scriptName: String, _ resultType: T.Type) -> HivePromise<T> {
         return authHelper.checkValid().then { _ -> HivePromise<T> in
-            return self.callWithAppDidImp(scriptName, appDid: nil, resultType)
+            return self.callWithAppDidImp(scriptName, appDid: nil, resultType, tryAgain: 0)
         }
     }
 
     public func call<T>(_ scriptName: String, _ params: [String : Any], _ resultType: T.Type) -> HivePromise<T> {
         return authHelper.checkValid().then { _ -> HivePromise<T> in
-            return self.callWithAppDidImp(scriptName, params: params, appDid: nil, resultType)
+            return self.callWithAppDidImp(scriptName, params: params, appDid: nil, resultType, tryAgain: 0)
         }
     }
 
     public func call<T>(_ scriptName: String, _ appDid: String, _ resultType: T.Type) -> Promise<T> {
         return authHelper.checkValid().then { _ -> HivePromise<T> in
-            return self.callWithAppDidImp(scriptName, appDid: appDid,  resultType)
+            return self.callWithAppDidImp(scriptName, appDid: appDid,  resultType, tryAgain: 0)
         }
     }
 
     public func call<T>(_ scriptName: String, _ params: [String : Any], _ appDid: String, _ resultType: T.Type) -> HivePromise<T> {
         return authHelper.checkValid().then { _ -> HivePromise<T> in
-            return self.callWithAppDidImp(scriptName, params: params, appDid: appDid, resultType)
+            return self.callWithAppDidImp(scriptName, params: params, appDid: appDid, resultType, tryAgain: 0)
         }
     }
 
-    private func callWithAppDidImp<T>(_ scriptName: String, params: [String : Any]? = nil, appDid: String?, _ resultType: T.Type) -> HivePromise<T> {
+    private func callWithAppDidImp<T>(_ scriptName: String, params: [String : Any]? = nil, appDid: String?, _ resultType: T.Type, tryAgain: Int) -> HivePromise<T> {
         return HivePromise<T> { resolver in
             var param = ["name": scriptName] as [String : Any]
             if let _ = appDid {
@@ -91,7 +117,28 @@ public class ScriptClient: ScriptingProtocol {
                 param["params"] = params!
             }
             let url = VaultURL.sharedInstance.call()
-            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers(), helper: authHelper).done { json in
+            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
+                let status = json["_status"].stringValue
+                if status == "ERR" {
+                    let errorCode = json["_error"]["code"].intValue
+                    let errorMessage = json["_error"]["message"].stringValue
+                    if errorCode == 401 && errorMessage == "auth failed" && tryAgain < 1 {
+                        self.authHelper.retryLogin().then { success -> HivePromise<T> in
+                            return self.callWithAppDidImp(scriptName, params: params, appDid: appDid, resultType, tryAgain: tryAgain)
+                        }.done { result in
+                            resolver.fulfill(result)
+                        }.catch { e in
+                            resolver.reject(e)
+                        }
+                    } else {
+                        var dic: [String: Any] = [: ]
+                        json.forEach { key, value in
+                            dic[key] = value
+                        }
+                        resolver.reject(HiveError.failureWithDic(des: dic))
+                    }
+                }
+
                 if resultType.self == OutputStream.self {
                     let data = try JSONSerialization.data(withJSONObject: json.dictionaryObject as Any, options: [])
                     let outputStream = OutputStream(toMemory: ())
@@ -126,7 +173,7 @@ public class ScriptClient: ScriptingProtocol {
             case .DOWNLOAD:
                 return self.downloadImp(scriptName: name, param: params, type: type, resultType: resultType)
             case .PROPERTIES:
-                return self.callWithAppDidImp(name, params: params, appDid: nil, resultType)
+                return self.callWithAppDidImp(name, params: params, appDid: nil, resultType, tryAgain: 0)
             }
         }
     }

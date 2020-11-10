@@ -169,6 +169,7 @@ public class VaultAuthHelper: ConnectHelper {
     }
 
     private func tryRestoreToken() {
+        self.token = nil
         let json = JSON(_persistent.parseFrom())
         _userDid = json[USER_DID_KEY].stringValue
         _appId = json[APP_ID_KEY].stringValue
@@ -217,19 +218,36 @@ public class VaultAuthHelper: ConnectHelper {
        return VaultApi.nodeAuth(url: url, parameters: param)
     }
 
-    func retryLogin(_ json: JSON) throws {
-        let status = json["_status"].stringValue
-        if status == "ERR" {
-            let errorcode = json["_error"]["code"].intValue
-            if errorcode == 401 {
-                try self.signIn(_authenticationHandler)
-            } else {
-                var dic: [String: Any] = [: ]
-                json.forEach { key, value in
-                    dic[key] = value
-                }
-                throw HiveError.failureWithDic(des: dic)
+    func retryLogin() -> HivePromise<Bool> {
+        HivePromise<Bool> { resolver in
+            let json = _authenticationDIDDocument!.toString()
+            let data = json.data(using: .utf8)
+            let json0 = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
+            let param = ["document": json0]
+            let url = VaultURL.sharedInstance.signIn()
+            let header = ["Content-Type": "application/json;charset=UTF-8"]
+            VaultApi.requestWithSignIn(url: url, parameters: param as Parameters, headers: header).then { json -> HivePromise<String> in
+                let challenge = json["challenge"].stringValue
+                return self.requestAuthToken(self._authenticationHandler!, challenge)
+            }.then { authToken -> HivePromise<JSON> in
+                return self.nodeAuth(authToken)
+            }.done { json in
+                try self.sotre(json)
+                resolver.fulfill(true)
+            }.catch { error in
+                resolver.reject(error)
             }
         }
+    }
+
+    private func delete() {
+        token = AuthToken("", "", "")
+        let json = [ACCESS_TOKEN_KEY: token!.accessToken,
+                    EXPIRES_AT_KEY: token!.expiredTime,
+                    TOKEN_TYPE_KEY: "token",
+                    USER_DID_KEY: "",
+                    APP_ID_KEY: "",
+                    APP_INSTANCE_DID_KEY: ""]
+        _persistent.upateContent(json as Dictionary<String, Any>)
     }
 }
