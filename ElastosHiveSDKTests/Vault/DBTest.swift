@@ -12,7 +12,8 @@ class VaultAuthenticator: Authenticator {
         return HivePromise<String> { resolver in
             do{
                 //SignIn
-                let doc = try testapp.getDocument()
+//                let doc = try testapp.getDocument()
+                let doc = try DIDDocument.convertToDIDDocument(fromJson: DOC_STR)
                 let docStr = doc.toString(true, forSign: true)
                 print(docStr)
 
@@ -202,13 +203,12 @@ class DBTest: XCTestCase {
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         do {
-//            let docString = DOC_STR
-//            let doc = DIDDocument.convertToDIDDocument(docString)
+//            let doc = try DIDDocument.convertToDIDDocument(fromJson: DOC_STR)
             let doc = try testapp.getDocument()
             print("testapp doc ===")
             print(doc.toString())
-            _ = try didapp.getDocument()
-            print(doc.toString())
+            let d = try didapp.getDocument()
+            print(d.toString())
             try HiveClientHandle.setupResolver(resolver, didCachePath)
             let options: HiveClientOptions = HiveClientOptions()
             _ = options.setLocalDataPath(localDataPath)

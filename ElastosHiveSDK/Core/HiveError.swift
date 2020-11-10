@@ -25,11 +25,11 @@ import Foundation
 public enum HiveError: Error {
     case insufficientParameters(des: String?)
     case invalidatedBuilder(des: String?)
-    case failue(des: String?)
+    case failure(des: String?)
     case IllegalArgument(des: String?)
     case no_rpc_node_available(des: String?)
     case netWork(des: Error?)
-    case failues(des: Dictionary<String, Any>?)
+    case failureWithDic(des: Dictionary<String, Any>?)
     case unsupportedOperation(des: String?)
 }
 
@@ -37,7 +37,7 @@ extension HiveError {
 
    public static func description(_ error: HiveError) -> String {
         switch error {
-        case .failue(let des):
+        case .failure(let des):
             return des ?? "Operation failed"
         case .insufficientParameters(let des):
             return des ?? ""
@@ -49,7 +49,7 @@ extension HiveError {
             return des ?? ""
         case .netWork(let des):
             return des.debugDescription
-        case .failues(let des):
+        case .failureWithDic(let des):
             let data = try? JSONSerialization.data(withJSONObject: des as Any, options: [])
             guard data != nil else {
                 return ""

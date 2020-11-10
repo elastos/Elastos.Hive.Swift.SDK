@@ -54,7 +54,7 @@ public class DatabaseClient: DatabaseProtocol {
         let header = Header(authHelper)
         let url = VaultURL.sharedInstance.mongoDBSetup()
 
-        return VaultApi.requestWithBool(url: url, parameters: param, headers: header.headers(), handler: handleBy)
+        return VaultApi.requestWithBool(url: url, parameters: param, headers: header.headers(), handler: handleBy, helper: authHelper)
     }
 
     public func deleteCollection(_ name: String) -> HivePromise<Bool> {
@@ -72,7 +72,7 @@ public class DatabaseClient: DatabaseProtocol {
         let header = Header(authHelper)
         let url = VaultURL.sharedInstance.deleteMongoDBCollection()
 
-        return VaultApi.requestWithBool(url: url, parameters: param, headers: header.headers(), handler: handleBy)
+        return VaultApi.requestWithBool(url: url, parameters: param, headers: header.headers(), handler: handleBy, helper: authHelper)
     }
 
     public func insertOne(_ collection: String, _ doc: [String : Any], options: InsertOptions?) -> HivePromise<InsertOneResult> {
@@ -89,7 +89,7 @@ public class DatabaseClient: DatabaseProtocol {
         let param = ["collection": collection, "document": doc] as [String : Any]
         let url = VaultURL.sharedInstance.insertOne()
 
-        return VaultApi.requestWithInsert(url: url, parameters: param, headers: Header(authHelper).headers(), handler: handleBy, type: InsertOneResult.self)
+        return VaultApi.requestWithInsert(url: url, parameters: param, headers: Header(authHelper).headers(), handler: handleBy, type: InsertOneResult.self, helper: authHelper)
     }
 
     public func insertMany(_ collection: String, _ docs: Array<[String : Any]>, options: InsertOptions) -> HivePromise<InsertManyResult> {
@@ -106,7 +106,7 @@ public class DatabaseClient: DatabaseProtocol {
         let param = ["collection": collection, "document": doc] as [String : Any]
         let url = VaultURL.sharedInstance.insertMany()
 
-        return VaultApi.requestWithInsert(url: url, parameters: param, headers: Header(authHelper).headers(), handler: handleBy, type: InsertManyResult.self)
+        return VaultApi.requestWithInsert(url: url, parameters: param, headers: Header(authHelper).headers(), handler: handleBy, type: InsertManyResult.self, helper: authHelper)
     }
 
     public func countDocuments(_ collection: String, _ query: [String : Any], options: CountOptions) -> HivePromise<Int> {
@@ -124,7 +124,7 @@ public class DatabaseClient: DatabaseProtocol {
         let url = VaultURL.sharedInstance.countDocuments()
 
         return HivePromise<Int> { resolver in
-            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
+            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers(), helper: authHelper).done { json in
                 handleBy.didSucceed(json["count"].intValue)
                 resolver.fulfill(json["count"].intValue)
             }.catch { error in
@@ -149,7 +149,7 @@ public class DatabaseClient: DatabaseProtocol {
         let url = VaultURL.sharedInstance.findOne()
 
         return HivePromise<[String: Any]> { resolver in
-            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).get { json in
+            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers(), helper: authHelper).get { json in
                 handleBy.didSucceed(json.dictionaryObject!)
                 resolver.fulfill(json.dictionaryObject!)
             }.catch { error in
@@ -174,7 +174,7 @@ public class DatabaseClient: DatabaseProtocol {
         let url = VaultURL.sharedInstance.findMany()
 
         return HivePromise<Array<[String: Any]>> { resolver in
-            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).get { json in
+            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers(), helper: authHelper).get { json in
                 var items: [Dictionary<String, Any>] = []
                 json["items"].arrayValue.forEach { json in
                     items.append(json.dictionaryObject!)
@@ -203,7 +203,7 @@ public class DatabaseClient: DatabaseProtocol {
         let url = VaultURL.sharedInstance.updateOne()
 
         return HivePromise<UpdateResult> { resolver in
-            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).get { json in
+            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers(), helper: authHelper).get { json in
                 let updateRe = UpdateResult(json)
                 handleBy.didSucceed(updateRe)
                 resolver.fulfill(updateRe)
@@ -229,7 +229,7 @@ public class DatabaseClient: DatabaseProtocol {
         let url = VaultURL.sharedInstance.updateMany()
 
         return HivePromise<UpdateResult> { resolver in
-            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).get { json in
+            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers(), helper: authHelper).get { json in
                 let updateRe = UpdateResult(json)
                 handleBy.didSucceed(updateRe)
                 resolver.fulfill(updateRe)
@@ -255,7 +255,7 @@ public class DatabaseClient: DatabaseProtocol {
         let url = VaultURL.sharedInstance.deleteOne()
 
         return HivePromise<DeleteResult> { resolver in
-            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).get { json in
+            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers(), helper: authHelper).done { json in
                 let deleteRe = DeleteResult(json)
                 handleBy.didSucceed(deleteRe)
                 resolver.fulfill(deleteRe)
@@ -281,7 +281,7 @@ public class DatabaseClient: DatabaseProtocol {
         let url = VaultURL.sharedInstance.deleteMany()
 
         return HivePromise<DeleteResult> { resolver in
-            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).get { json in
+            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers(), helper: authHelper).get { json in
                 let deleteRe = DeleteResult(json)
                 handleBy.didSucceed(deleteRe)
                 resolver.fulfill(deleteRe)

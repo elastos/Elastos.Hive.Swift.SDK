@@ -44,7 +44,7 @@ public class VaultAuthHelper: ConnectHelper {
     private var _nodeUrl: String
 
     private var _authenticationDIDDocument: DIDDocument?
-    private var _authenticationHandler: Authenticator?
+    var _authenticationHandler: Authenticator?
 
     public var ownerDid: String? {
         return _ownerDid
@@ -112,7 +112,7 @@ public class VaultAuthHelper: ConnectHelper {
         }
     }
 
-    private func signIn(_ handler: Authenticator?) throws {
+    func signIn(_ handler: Authenticator?) throws {
 
         let json = _authenticationDIDDocument!.toString()
         let data = json.data(using: .utf8)
@@ -124,7 +124,7 @@ public class VaultAuthHelper: ConnectHelper {
         var erro: Error?
         let header = ["Content-Type": "application/json;charset=UTF-8"]
         var semaphore: DispatchSemaphore! = DispatchSemaphore(value: 0)
-        VaultApi.request(url: url, parameters: param as Parameters, headers: header)
+        VaultApi.requestWithSignIn(url: url, parameters: param as Parameters, headers: header)
             .done { re in
                 challenge = re["challenge"].stringValue
                 semaphore.signal()
@@ -215,5 +215,21 @@ public class VaultAuthHelper: ConnectHelper {
         let url = VaultURL.sharedInstance.auth()
         let param = ["jwt": jwt]
        return VaultApi.nodeAuth(url: url, parameters: param)
+    }
+
+    func retryLogin(_ json: JSON) throws {
+        let status = json["_status"].stringValue
+        if status == "ERR" {
+            let errorcode = json["_error"]["code"].intValue
+            if errorcode == 401 {
+                try self.signIn(_authenticationHandler)
+            } else {
+                var dic: [String: Any] = [: ]
+                json.forEach { key, value in
+                    dic[key] = value
+                }
+                throw HiveError.failureWithDic(des: dic)
+            }
+        }
     }
 }
