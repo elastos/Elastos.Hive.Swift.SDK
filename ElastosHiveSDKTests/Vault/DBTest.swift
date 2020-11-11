@@ -4,7 +4,7 @@ import XCTest
 import ElastosDIDSDK
 
 let p = PresentationJWT()
-let testapp = DApp("testapp", "universe asthma canal come return torch giggle column dial gift hobby nephew", p.adapter!)
+let testapp = DApp("testapp", "height uphold laundry enhance prepare surface catch close analyst badge force absorb", p.adapter!)
 let didapp = DIDApp("didapp", "foster control ordinary fan sadness aware forest surge decorate cover student cram", p.adapter!)
 
 class VaultAuthenticator: Authenticator {
@@ -12,8 +12,8 @@ class VaultAuthenticator: Authenticator {
         return HivePromise<String> { resolver in
             do{
                 //SignIn
-//                let doc = try testapp.getDocument()
-                let doc = try DIDDocument.convertToDIDDocument(fromJson: DOC_STR)
+                let doc = try testapp.getDocument()
+//                let doc = try DIDDocument.convertToDIDDocument(fromJson: DOC_STR)
                 let docStr = doc.toString(true, forSign: true)
                 print(docStr)
 
@@ -22,6 +22,8 @@ class VaultAuthenticator: Authenticator {
                 let nonce: String = c.get(key: "nonce") as! String
                 let vc: VerifiableCredential = try didapp.issueDiplomaFor(testapp)
                 let vp = try testapp.createPresentation(vc, iss, nonce)
+                let vpIs = vp.isValid
+                print("vpIs == \(vpIs)")
                 let token = try testapp.createToken(vp, iss)
                 let ddd = try JwtParserBuilder().build().parseClaimsJwt(token)
                 let claim = ddd.claims
@@ -31,6 +33,7 @@ class VaultAuthenticator: Authenticator {
                 let toks = token.split(separator: ".")
                 let str  = "\(toks[0]).\(toks[1])"
                 let test = try doc.verify(signature: "\(toks[2])", onto: str.data(using: String.Encoding.utf8)!)
+                print("doc.verify = \(test)")
                 try p.waitForWalletAvaliable()
                 resolver.fulfill(token)
             }
@@ -51,6 +54,8 @@ class DBTest: XCTestCase {
                 XCTAssertTrue(true)
                 lock.fulfill()
             }.catch{ error in
+                print("testDbCreate error.")
+                print(error)
                 XCTFail()
                 lock.fulfill()
             }

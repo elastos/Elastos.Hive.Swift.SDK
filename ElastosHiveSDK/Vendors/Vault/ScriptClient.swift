@@ -73,7 +73,9 @@ public class ScriptClient: ScriptingProtocol {
                         resolver.reject(HiveError.failureWithDic(des: dic))
                     }
                 }
-                resolver.fulfill(true)
+                else {
+                    resolver.fulfill(true)
+                }
             }.catch { error in
                 resolver.reject(error)
             }
@@ -138,26 +140,27 @@ public class ScriptClient: ScriptingProtocol {
                         resolver.reject(HiveError.failureWithDic(des: dic))
                     }
                 }
-
-                if resultType.self == OutputStream.self {
-                    let data = try JSONSerialization.data(withJSONObject: json.dictionaryObject as Any, options: [])
-                    let outputStream = OutputStream(toMemory: ())
-                    outputStream.open()
-                    self.writeData(data: data, outputStream: outputStream, maxLengthPerWrite: 1024)
-                    outputStream.close()
-                    resolver.fulfill(outputStream as! T)
-                }
-                // The String type
-                else if resultType.self == String.self {
-                    let dic = json.dictionaryObject
-                    let data = try JSONSerialization.data(withJSONObject: dic as Any, options: [])
-                    let str = String(data: data, encoding: String.Encoding.utf8)
-                    resolver.fulfill(str as! T)
-                }
-                // the Data type
                 else {
-                    let data = try JSONSerialization.data(withJSONObject: json.dictionaryObject as Any, options: [])
-                    resolver.fulfill(data as! T)
+                    if resultType.self == OutputStream.self {
+                        let data = try JSONSerialization.data(withJSONObject: json.dictionaryObject as Any, options: [])
+                        let outputStream = OutputStream(toMemory: ())
+                        outputStream.open()
+                        self.writeData(data: data, outputStream: outputStream, maxLengthPerWrite: 1024)
+                        outputStream.close()
+                        resolver.fulfill(outputStream as! T)
+                    }
+                    // The String type
+                    else if resultType.self == String.self {
+                        let dic = json.dictionaryObject
+                        let data = try JSONSerialization.data(withJSONObject: dic as Any, options: [])
+                        let str = String(data: data, encoding: String.Encoding.utf8)
+                        resolver.fulfill(str as! T)
+                    }
+                    // the Data type
+                    else {
+                        let data = try JSONSerialization.data(withJSONObject: json.dictionaryObject as Any, options: [])
+                        resolver.fulfill(data as! T)
+                    }
                 }
             }.catch { error in
                 resolver.reject(error)

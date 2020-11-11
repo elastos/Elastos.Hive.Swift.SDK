@@ -69,7 +69,9 @@ public class FileClient: FilesProtocol {
                                 resolver.reject(HiveError.failureWithDic(des: dic))
                             }
                         }
-                        resolver.fulfill(true)
+                        else {
+                            resolver.fulfill(true)
+                        }
                     case .failure(let error):
                         handler.runError(HiveError.netWork(des: error))
                         resolver.reject(error)
@@ -116,12 +118,14 @@ public class FileClient: FilesProtocol {
                                 resolver.reject(HiveError.failureWithDic(des: dic))
                             }
                         }
-                        let outputStream = OutputStream(toMemory: ())
-                        outputStream.open()
-                        self.writeData(data: result.data!, outputStream: outputStream, maxLengthPerWrite: 1024)
-                        outputStream.close()
-                        handler.didSucceed(outputStream)
-                        resolver.fulfill(outputStream)
+                        else {
+                            let outputStream = OutputStream(toMemory: ())
+                            outputStream.open()
+                            self.writeData(data: result.data!, outputStream: outputStream, maxLengthPerWrite: 1024)
+                            outputStream.close()
+                            handler.didSucceed(outputStream)
+                            resolver.fulfill(outputStream)
+                        }
                     case .failure(let error):
                         handler.runError(HiveError.netWork(des: error))
                         resolver.reject(error)
@@ -182,7 +186,9 @@ public class FileClient: FilesProtocol {
                         resolver.reject(HiveError.failureWithDic(des: dic))
                     }
                 }
-                resolver.fulfill(true)
+                else {
+                    resolver.fulfill(true)
+                }
             }.catch { error in
                 resolver.reject(error)
             }
@@ -225,7 +231,9 @@ public class FileClient: FilesProtocol {
                         resolver.reject(HiveError.failureWithDic(des: dic))
                     }
                 }
-                resolver.fulfill(true)
+                else {
+                    resolver.fulfill(true)
+                }
             }.catch { error in
                 resolver.reject(error)
             }
@@ -268,7 +276,9 @@ public class FileClient: FilesProtocol {
                         resolver.reject(HiveError.failureWithDic(des: dic))
                     }
                 }
-                resolver.fulfill(true)
+                else {
+                    resolver.fulfill(true)
+                }
             }.catch { error in
                 resolver.reject(error)
             }
@@ -310,8 +320,10 @@ public class FileClient: FilesProtocol {
                         resolver.reject(HiveError.failureWithDic(des: dic))
                     }
                 }
-                handler.didSucceed(json["SHA256"].stringValue)
-                resolver.fulfill(json["SHA256"].stringValue)
+                else {
+                    handler.didSucceed(json["SHA256"].stringValue)
+                    resolver.fulfill(json["SHA256"].stringValue)
+                }
             }.catch { error in
                 handler.runError(HiveError.netWork(des: error))
                 resolver.reject(error)
@@ -354,18 +366,20 @@ public class FileClient: FilesProtocol {
                         resolver.reject(HiveError.failureWithDic(des: dic))
                     }
                 }
-                let arraryInfo = json["file_info_list"].arrayValue
-                var fileList = [FileInfo]()
-                arraryInfo.forEach { j in
-                    let info = FileInfo()
-                    info.setName(j["name"].stringValue)
-                    info.setSize(j["size"].intValue)
-                    info.setLastModify(j["last_modify"].stringValue)
-                    info.setType(j["type"].stringValue)
-                    fileList.append(info)
+                else {
+                    let arraryInfo = json["file_info_list"].arrayValue
+                    var fileList = [FileInfo]()
+                    arraryInfo.forEach { j in
+                        let info = FileInfo()
+                        info.setName(j["name"].stringValue)
+                        info.setSize(j["size"].intValue)
+                        info.setLastModify(j["last_modify"].stringValue)
+                        info.setType(j["type"].stringValue)
+                        fileList.append(info)
+                    }
+                    handler.didSucceed(fileList)
+                    resolver.fulfill(fileList)
                 }
-                handler.didSucceed(fileList)
-                resolver.fulfill(fileList)
             }.catch { error in
                 handler.runError(HiveError.netWork(des: error))
                 resolver.reject(error)
@@ -408,13 +422,15 @@ public class FileClient: FilesProtocol {
                         resolver.reject(HiveError.failureWithDic(des: dic))
                     }
                 }
-                let info = FileInfo()
-                info.setName(json["name"].stringValue)
-                info.setSize(json["size"].intValue)
-                info.setLastModify(json["last_modify"].stringValue)
-                info.setType(json["type"].stringValue)
-                handler.didSucceed(info)
-                resolver.fulfill(info)
+                else {
+                    let info = FileInfo()
+                    info.setName(json["name"].stringValue)
+                    info.setSize(json["size"].intValue)
+                    info.setLastModify(json["last_modify"].stringValue)
+                    info.setType(json["type"].stringValue)
+                    handler.didSucceed(info)
+                    resolver.fulfill(info)
+                }
             }.catch { error in
                 handler.runError(HiveError.netWork(des: error))
                 resolver.reject(error)
