@@ -63,7 +63,8 @@ public class Entity {
             return // Already exists
         }
         // Create a mnemonic use language(English).english
-        let mnemonic = try Mnemonic.generate("english")
+        let mnemonic0 = try Mnemonic.generate("english")
+        let mnemonic1 = try Mnemonic.generate("english")
         print("[%s] Please write down your mnemonic and passwords:%n", name)
         print("  Mnemonic: " + mnemonic)
         print("  Mnemonic passphrase: " + passphrase)

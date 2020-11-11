@@ -76,7 +76,9 @@ public class DatabaseClient: DatabaseProtocol {
                         resolver.reject(HiveError.failureWithDic(des: dic))
                     }
                 }
-                resolver.fulfill(true)
+                else {
+                    resolver.fulfill(true)
+                }
             }.catch { error in
                 resolver.reject(error)
             }
@@ -120,7 +122,9 @@ public class DatabaseClient: DatabaseProtocol {
                         resolver.reject(HiveError.failureWithDic(des: dic))
                     }
                 }
-                resolver.fulfill(true)
+                else {
+                    resolver.fulfill(true)
+                }
             }.catch { error in
                 resolver.reject(error)
             }
@@ -163,8 +167,10 @@ public class DatabaseClient: DatabaseProtocol {
                         resolver.reject(HiveError.failureWithDic(des: dic))
                     }
                 }
-                let insertOneResult = InsertOneResult(json)
-                resolver.fulfill(insertOneResult)
+                else {
+                    let insertOneResult = InsertOneResult(json)
+                    resolver.fulfill(insertOneResult)
+                }
             }.catch { error in
                 resolver.reject(error)
             }
@@ -207,8 +213,10 @@ public class DatabaseClient: DatabaseProtocol {
                         resolver.reject(HiveError.failureWithDic(des: dic))
                     }
                 }
-                let insertManyResult = InsertManyResult(json)
-                resolver.fulfill(insertManyResult)
+                else {
+                    let insertManyResult = InsertManyResult(json)
+                    resolver.fulfill(insertManyResult)
+                }
             }.catch { error in
                 resolver.reject(error)
             }
@@ -251,8 +259,10 @@ public class DatabaseClient: DatabaseProtocol {
                         resolver.reject(HiveError.failureWithDic(des: dic))
                     }
                 }
-                handleBy.didSucceed(json["count"].intValue)
-                resolver.fulfill(json["count"].intValue)
+                else {
+                    handleBy.didSucceed(json["count"].intValue)
+                    resolver.fulfill(json["count"].intValue)
+                }
             }.catch { error in
                 resolver.reject(error)
             }
@@ -295,8 +305,10 @@ public class DatabaseClient: DatabaseProtocol {
                         resolver.reject(HiveError.failureWithDic(des: dic))
                     }
                 }
-                handleBy.didSucceed(json.dictionaryObject!)
-                resolver.fulfill(json.dictionaryObject!)
+                else {
+                    handleBy.didSucceed(json.dictionaryObject!)
+                    resolver.fulfill(json.dictionaryObject!)
+                }
             }.catch { error in
                 resolver.reject(error)
             }
@@ -339,12 +351,14 @@ public class DatabaseClient: DatabaseProtocol {
                         resolver.reject(HiveError.failureWithDic(des: dic))
                     }
                 }
-                var items: [Dictionary<String, Any>] = []
-                json["items"].arrayValue.forEach { json in
-                    items.append(json.dictionaryObject!)
+                else {
+                    var items: [Dictionary<String, Any>] = []
+                    json["items"].arrayValue.forEach { json in
+                        items.append(json.dictionaryObject!)
+                    }
+                    handleBy.didSucceed(items)
+                    resolver.fulfill(items)
                 }
-                handleBy.didSucceed(items)
-                resolver.fulfill(items)
             }.catch { error in
                 resolver.reject(error)
             }
@@ -387,9 +401,11 @@ public class DatabaseClient: DatabaseProtocol {
                         resolver.reject(HiveError.failureWithDic(des: dic))
                     }
                 }
-                let updateRe = UpdateResult(json)
-                handleBy.didSucceed(updateRe)
-                resolver.fulfill(updateRe)
+                else {
+                    let updateRe = UpdateResult(json)
+                    handleBy.didSucceed(updateRe)
+                    resolver.fulfill(updateRe)
+                }
             }.catch { error in
                 resolver.reject(error)
             }
@@ -432,9 +448,11 @@ public class DatabaseClient: DatabaseProtocol {
                         resolver.reject(HiveError.failureWithDic(des: dic))
                     }
                 }
-                let updateRe = UpdateResult(json)
-                handleBy.didSucceed(updateRe)
-                resolver.fulfill(updateRe)
+                else {
+                    let updateRe = UpdateResult(json)
+                    handleBy.didSucceed(updateRe)
+                    resolver.fulfill(updateRe)
+                }
             }.catch { error in
                 resolver.reject(error)
             }
@@ -477,9 +495,11 @@ public class DatabaseClient: DatabaseProtocol {
                         resolver.reject(HiveError.failureWithDic(des: dic))
                     }
                 }
-                let deleteRe = DeleteResult(json)
-                handleBy.didSucceed(deleteRe)
-                resolver.fulfill(deleteRe)
+                else {
+                    let deleteRe = DeleteResult(json)
+                    handleBy.didSucceed(deleteRe)
+                    resolver.fulfill(deleteRe)
+                }
             }.catch { error in
                 resolver.reject(error)
             }
@@ -522,9 +542,11 @@ public class DatabaseClient: DatabaseProtocol {
                         resolver.reject(HiveError.failureWithDic(des: dic))
                     }
                 }
-                let deleteRe = DeleteResult(json)
-                handleBy.didSucceed(deleteRe)
-                resolver.fulfill(deleteRe)
+                else {
+                    let deleteRe = DeleteResult(json)
+                    handleBy.didSucceed(deleteRe)
+                    resolver.fulfill(deleteRe)
+                }
             }.catch { error in
                 resolver.reject(error)
             }
