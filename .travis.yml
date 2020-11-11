@@ -1,31 +1,27 @@
 language: swift
 os: osx
-osx_image: xcode10.3
+osx_image: xcode12.1
 sudo: true
 
 matrix:
   include:
-  - env: TARGET=iOS DESTINATION=iphoneos
+  - env: TARGET=iOS DESTINATION=iphoneos SWIFT_VERSION=4.2
 
-  - env: TARGET=iOS DESTINATION=iphonesimulator
-
-  - env: TARGET=macOS
+  - env: TARGET=iOS DESTINATION=iphonesimulator SWIFT_VERSION=4.2
 
 install:
   - sudo gem update --system
   - sudo gem install -n /usr/local/bin cocoapods
   - travis_retry pod repo update --verbose
-  - pod install --verbose --no-repo-update
+  - pod install
+  - brew install wget
+  - sh test.sh
 
 script:
   - xcodebuild -showsdks
-  - if [ $TARGET == "macOS" ]; then
-      xcodebuild -workspace ElastosHiveSDK.xcworkspace -scheme ElastosHiveSDK_macOS CODE_SIGNING_REQUIRED=NO;
-    else
-      if [ $DESTINATION == "iphoneos" ]; then
-        xcodebuild -workspace ElastosHiveSDK.xcworkspace -scheme ElastosHiveSDK -configuration Release build;
+  - if [ $DESTINATION == "iphoneos" ]; then
+        xcodebuild -workspace ElastosHiveSDK.xcworkspace -scheme ElastosHiveSDK OTHER_CFLAGS="-fembed-bitcode" -configuration "Release" -sdk iphoneos -arch arm64 clean build;
       else
         xcodebuild -workspace ElastosHiveSDK.xcworkspace -scheme ElastosHiveSDK -configuration Release -destination 'platform=iOS Simulator,name=iPhone Xs,OS=12.2' build;
       fi
-    fi
   #- ./docs.sh
