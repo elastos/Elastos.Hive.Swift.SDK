@@ -5,32 +5,17 @@ Elastos Hive Swift Framework
 
 ## Summary
 
-Elastos Hive Swift Framework is a set of Swift APIs as well as an uniform layer that would be used by Elastos dApps  to access  (or store)  their files or datum from (or to) cloud driver backends, which is currently including the list of following cloud drivers supported:
+Elastos Hive is a basic service infrastructure that provides decentralised data storage capabilities to applications. And Elastos Hive Swift SDK provides a set of Swift APIs for applications to access/store vault data on Hive backend servers.
 
-- OneDriver
-- Hive IPFS/Cluster
-- ownCloud  on WebDav (Not supported yet)
+Elastos Hive currently is under heavy development, and plans to support with the following data objects in the near future:
 
-## Table of Contents  
+- File storage
+- Database
+- Key-Values
+- Scripting
 
-- [Elastos Hive Swift Framework](#elastos-hive-swift-framework)  
-   - [Summary](#summary)  
-   - [Table of Contents](#table-of-contents)  
-   - [Build from source](#build-from-source)  
-   - [Tests](#tests)  
-   - [CocoaPods](#cocoaPods)  
-   - [How-to use APIs](#how-to-use-APIs) 
-       - [HiveClient class](#hiveclient-class)
-       - [HiveDrive class](#hivedrive-class)
-       - [HiveDirectory class](#hivedirectory-class)
-       - [HiveFile calss](#hivefile-calss)
-   - [License](#license)  
-   - [Build Docs](#build-docs)
-       - [1. Swift APIs Docs](#1-swift-apis-docs)
-       - [2. Object-C APIs Docs](#2-object-c-apis-docs)
-   - [Thanks](#thanks)
-   - [Contributing](#contributing)
-   - [License](#license)
+Anyway, Elastos Hive will keep practising the promise of users remain in full control of their own data.
+
 
 ## Build from source
 
@@ -83,7 +68,7 @@ $ pod install
 
 ## How-to use APIs
 
-See HOW_TO_USE_APIS(#./HOWTOUSEAPIS.md)
+TODO
 
 ## Build Docs
 
