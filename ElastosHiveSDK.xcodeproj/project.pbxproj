@@ -411,7 +411,7 @@
 			path = Vault;
 			sourceTree = "<group>";
 		};
-		111D47C924F7902600B7462B /* database */ = {
+		111D47C924F7902600B7462B /* Database */ = {
 			isa = PBXGroup;
 			children = (
 				111D47CA24F7904100B7462B /* Collation.swift */,
@@ -437,15 +437,15 @@
 				1170FB0D2501CEF70049E81D /* VaultIndex.swift */,
 				1170FB102501D21C0049E81D /* Result.swift */,
 			);
-			path = database;
+			path = Database;
 			sourceTree = "<group>";
 		};
-		111D47EE24F7A17A00B7462B /* file */ = {
+		111D47EE24F7A17A00B7462B /* File */ = {
 			isa = PBXGroup;
 			children = (
 				111D47EF24F7A18900B7462B /* FileInfo.swift */,
 			);
-			path = file;
+			path = File;
 			sourceTree = "<group>";
 		};
 		111D47F224F7A2EB00B7462B /* Scripting */ = {
@@ -598,10 +598,10 @@
 			children = (
 				1147720723F678BD00C7C36F /* SwiftyJSON */,
 				11E573F922C4C33400F85419 /* Extension */,
-				111D47C924F7902600B7462B /* database */,
+				111D47C924F7902600B7462B /* Database */,
 				A39C499122539C880027BDF9 /* Vendors */,
 				A39C498E22539C5E0027BDF9 /* Errors */,
-				111D47EE24F7A17A00B7462B /* file */,
+				111D47EE24F7A17A00B7462B /* File */,
 				A37F893523C72ABB00F6C11E /* Protocols */,
 				111D47F224F7A2EB00B7462B /* Scripting */,
 				A37F892E23C7278A00F6C11E /* Result */,
