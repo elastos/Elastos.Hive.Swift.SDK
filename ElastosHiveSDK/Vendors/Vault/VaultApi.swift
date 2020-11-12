@@ -38,18 +38,14 @@ class VaultApi: NSObject {
                 .responseJSON { dataResponse in
                     switch dataResponse.result {
                     case .success(let re):
-                        let rejson = JSON(re)
-                        let status = rejson["_status"].stringValue
+                        let json = JSON(re)
+                        let status = json["_status"].stringValue
                         guard status == "OK" else {
-                            var dic: [String: Any] = [: ]
-                            rejson.forEach { key, value in
-                                dic[key] = value
-                            }
-                            let err = HiveError.failureWithDic(des: dic)
-                            resolver.reject(err)
+                            let errorStr = HiveError.praseError(json)
+                            resolver.reject(HiveError.failure(des: errorStr))
                             return
                         }
-                        resolver.fulfill(rejson)
+                        resolver.fulfill(json)
                     case .failure(let error):
                         resolver.reject(HiveError.netWork(des: error))
                     }
@@ -58,10 +54,10 @@ class VaultApi: NSObject {
     }
 
     class func request(url: URLConvertible,
-                        method: HTTPMethod = .post,
-                        parameters: Parameters? = nil,
-                        encoding: ParameterEncoding = JSONEncoding.default,
-                        headers: HTTPHeaders? = nil) -> HivePromise<JSON> {
+                       method: HTTPMethod = .post,
+                       parameters: Parameters? = nil,
+                       encoding: ParameterEncoding = JSONEncoding.default,
+                       headers: HTTPHeaders? = nil) -> HivePromise<JSON> {
         return HivePromise<JSON> { resolver in
             Alamofire.request(url,
                               method: method,
@@ -94,18 +90,14 @@ class VaultApi: NSObject {
                 .responseJSON { dataResponse in
                     switch dataResponse.result {
                     case .success(let re):
-                        let rejson = JSON(re)
-                        let status = rejson["_status"].stringValue
+                        let json = JSON(re)
+                        let status = json["_status"].stringValue
                         guard status == "OK" else {
-                            var dic: [String: Any] = [: ]
-                            rejson.forEach { key, value in
-                                dic[key] = value
-                            }
-                            let err = HiveError.failureWithDic(des: (dic ))
-                            resolver.reject(err)
+                            let errorStr = HiveError.praseError(json)
+                            resolver.reject(HiveError.failure(des: errorStr))
                             return
                         }
-                        resolver.fulfill(rejson)
+                        resolver.fulfill(json)
                     case .failure(let error):
                         resolver.reject(error)
                     }

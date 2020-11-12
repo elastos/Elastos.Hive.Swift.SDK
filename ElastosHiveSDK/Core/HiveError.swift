@@ -59,5 +59,18 @@ extension HiveError {
             return des ?? ""
         }
     }
+
+    static func praseError(_ json: JSON) -> String {
+        let status = json["_status"].stringValue
+        let code = json["_error"]["code"].intValue
+        let message = json["_error"]["message"].stringValue
+
+        var dic = ["_status": status, "_error": ["code": code, "message": message]] as [String : Any]
+        let data = try? JSONSerialization.data(withJSONObject: dic as Any, options: [])
+        guard data != nil else {
+            return ""
+        }
+        return String(data: data!, encoding: String.Encoding.utf8)!
+    }
 }
 

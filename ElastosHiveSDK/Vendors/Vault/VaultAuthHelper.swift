@@ -121,7 +121,7 @@ public class VaultAuthHelper: ConnectHelper {
         let param = ["document": json0]
         let url = VaultURL.sharedInstance.signIn()
         var challenge = ""
-        var erro: Error?
+        var erro: HiveError?
         let header = ["Content-Type": "application/json;charset=UTF-8"]
         var semaphore: DispatchSemaphore! = DispatchSemaphore(value: 0)
         VaultApi.requestWithSignIn(url: url, parameters: param as Parameters, headers: header)
@@ -129,12 +129,12 @@ public class VaultAuthHelper: ConnectHelper {
                 challenge = re["challenge"].stringValue
                 semaphore.signal()
         }.catch { err in
-            erro = err
+            erro = err as? HiveError
             semaphore.signal()
         }
         semaphore.wait()
         guard erro == nil else {
-            throw HiveError.netWork(des: erro)
+            throw erro!
         }
         if handler != nil {
             try self.verifyToken(challenge)
@@ -146,16 +146,16 @@ public class VaultAuthHelper: ConnectHelper {
             do {
                 try self.sotre(re)
             } catch {
-                erro = error
+                erro = error as? HiveError
             }
             semaphore.signal()
         }.catch { error in
-            erro = error
+            erro = error as? HiveError
             semaphore.signal()
         }
         semaphore.wait()
         guard erro == nil else {
-            throw HiveError.netWork(des: erro)
+            throw erro!
         }
     }
 

@@ -23,6 +23,7 @@
 import Foundation
 
 public class DatabaseClient: DatabaseProtocol {
+    private static let TAG = "DatabaseClient"
     private var authHelper: VaultAuthHelper
 
     public init(_ authHelper: VaultAuthHelper) {
@@ -69,17 +70,16 @@ public class DatabaseClient: DatabaseProtocol {
                             resolver.reject(error)
                         }
                     } else {
-                        var dic: [String: Any] = [: ]
-                        json.forEach { key, value in
-                            dic[key] = value
-                        }
-                        resolver.reject(HiveError.failureWithDic(des: dic))
+                        let errorStr = HiveError.praseError(json)
+                        Log.e(DatabaseClient.TAG, "createCollection ERROR: ", errorStr)
+                        resolver.reject(HiveError.failure(des: errorStr))
                     }
                 }
                 else {
                     resolver.fulfill(true)
                 }
             }.catch { error in
+                Log.e(DatabaseClient.TAG, "createCollection ERROR: ", HiveError.description(error as! HiveError))
                 resolver.reject(error)
             }
         }
@@ -115,17 +115,16 @@ public class DatabaseClient: DatabaseProtocol {
                             resolver.reject(error)
                         }
                     } else {
-                        var dic: [String: Any] = [: ]
-                        json.forEach { key, value in
-                            dic[key] = value
-                        }
-                        resolver.reject(HiveError.failureWithDic(des: dic))
+                        let errorStr = HiveError.praseError(json)
+                        Log.e(DatabaseClient.TAG, "deleteCollection ERROR: ", errorStr)
+                        resolver.reject(HiveError.failure(des: errorStr))
                     }
                 }
                 else {
                     resolver.fulfill(true)
                 }
             }.catch { error in
+                Log.e(DatabaseClient.TAG, "deleteCollection ERROR: ", HiveError.description(error as! HiveError))
                 resolver.reject(error)
             }
         }
@@ -160,11 +159,9 @@ public class DatabaseClient: DatabaseProtocol {
                             resolver.reject(error)
                         }
                     } else {
-                        var dic: [String: Any] = [: ]
-                        json.forEach { key, value in
-                            dic[key] = value
-                        }
-                        resolver.reject(HiveError.failureWithDic(des: dic))
+                        let errorStr = HiveError.praseError(json)
+                        Log.e(DatabaseClient.TAG, "insertOne ERROR: ", errorStr)
+                        resolver.reject(HiveError.failure(des: errorStr))
                     }
                 }
                 else {
@@ -172,6 +169,7 @@ public class DatabaseClient: DatabaseProtocol {
                     resolver.fulfill(insertOneResult)
                 }
             }.catch { error in
+                Log.e(DatabaseClient.TAG, "insertOne ERROR: ", HiveError.description(error as! HiveError))
                 resolver.reject(error)
             }
         }
@@ -206,11 +204,9 @@ public class DatabaseClient: DatabaseProtocol {
                             resolver.reject(error)
                         }
                     } else {
-                        var dic: [String: Any] = [: ]
-                        json.forEach { key, value in
-                            dic[key] = value
-                        }
-                        resolver.reject(HiveError.failureWithDic(des: dic))
+                        let errorStr = HiveError.praseError(json)
+                        Log.e(DatabaseClient.TAG, "insertMany ERROR: ", errorStr)
+                        resolver.reject(HiveError.failure(des: errorStr))
                     }
                 }
                 else {
@@ -218,6 +214,7 @@ public class DatabaseClient: DatabaseProtocol {
                     resolver.fulfill(insertManyResult)
                 }
             }.catch { error in
+                Log.e(DatabaseClient.TAG, "insertMany ERROR: ", HiveError.description(error as! HiveError))
                 resolver.reject(error)
             }
         }
@@ -252,11 +249,9 @@ public class DatabaseClient: DatabaseProtocol {
                             resolver.reject(error)
                         }
                     } else {
-                        var dic: [String: Any] = [: ]
-                        json.forEach { key, value in
-                            dic[key] = value
-                        }
-                        resolver.reject(HiveError.failureWithDic(des: dic))
+                        let errorStr = HiveError.praseError(json)
+                        Log.e(DatabaseClient.TAG, "countDocuments ERROR: ", errorStr)
+                        resolver.reject(HiveError.failure(des: errorStr))
                     }
                 }
                 else {
@@ -264,6 +259,7 @@ public class DatabaseClient: DatabaseProtocol {
                     resolver.fulfill(json["count"].intValue)
                 }
             }.catch { error in
+                Log.e(DatabaseClient.TAG, "countDocuments ERROR: ", HiveError.description(error as! HiveError))
                 resolver.reject(error)
             }
         }
@@ -344,11 +340,9 @@ public class DatabaseClient: DatabaseProtocol {
                             resolver.reject(error)
                         }
                     } else {
-                        var dic: [String: Any] = [: ]
-                        json.forEach { key, value in
-                            dic[key] = value
-                        }
-                        resolver.reject(HiveError.failureWithDic(des: dic))
+                        let errorStr = HiveError.praseError(json)
+                        Log.e(DatabaseClient.TAG, "findMany ERROR: ", errorStr)
+                        resolver.reject(HiveError.failure(des: errorStr))
                     }
                 }
                 else {
@@ -360,6 +354,7 @@ public class DatabaseClient: DatabaseProtocol {
                     resolver.fulfill(items)
                 }
             }.catch { error in
+                Log.e(DatabaseClient.TAG, "findMany ERROR: ", HiveError.description(error as! HiveError))
                 resolver.reject(error)
             }
         }
@@ -378,7 +373,6 @@ public class DatabaseClient: DatabaseProtocol {
     private func updateOneImp(_ collection: String, _ filter: [String: Any], _ update: [String: Any], _ options: UpdateOptions, _ handleBy: HiveCallback<UpdateResult>, tryAgain: Int) -> HivePromise<UpdateResult> {
         let param = ["collection": collection, "filter": filter, "update": ["$set": update]] as [String : Any]
         let url = VaultURL.sharedInstance.updateOne()
-
         return HivePromise<UpdateResult> { resolver in
             VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).get { json in
                 let status = json["_status"].stringValue
@@ -394,11 +388,9 @@ public class DatabaseClient: DatabaseProtocol {
                             resolver.reject(error)
                         }
                     } else {
-                        var dic: [String: Any] = [: ]
-                        json.forEach { key, value in
-                            dic[key] = value
-                        }
-                        resolver.reject(HiveError.failureWithDic(des: dic))
+                        let errorStr = HiveError.praseError(json)
+                        Log.e(DatabaseClient.TAG, "updateOne error: ", errorStr)
+                        resolver.reject(HiveError.failure(des: errorStr))
                     }
                 }
                 else {
@@ -407,6 +399,7 @@ public class DatabaseClient: DatabaseProtocol {
                     resolver.fulfill(updateRe)
                 }
             }.catch { error in
+                Log.e(DatabaseClient.TAG, "updateOne error: ", HiveError.description(error as! HiveError))
                 resolver.reject(error)
             }
         }
@@ -425,7 +418,6 @@ public class DatabaseClient: DatabaseProtocol {
     private func updateManyImp(_ collection: String, _ filter: [String: Any], _ update: [String: Any], _ options: UpdateOptions, _ handleBy: HiveCallback<UpdateResult>, tryAgain: Int) -> HivePromise<UpdateResult>{
         let param = ["collection": collection, "filter": filter, "update": ["$set": update]] as [String : Any]
         let url = VaultURL.sharedInstance.updateMany()
-
         return HivePromise<UpdateResult> { resolver in
             VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).get { json in
                 let status = json["_status"].stringValue
@@ -441,11 +433,9 @@ public class DatabaseClient: DatabaseProtocol {
                             resolver.reject(error)
                         }
                     } else {
-                        var dic: [String: Any] = [: ]
-                        json.forEach { key, value in
-                            dic[key] = value
-                        }
-                        resolver.reject(HiveError.failureWithDic(des: dic))
+                        let errorStr = HiveError.praseError(json)
+                        Log.e(DatabaseClient.TAG, "updateMany ERROR: ", errorStr)
+                        resolver.reject(HiveError.failure(des: errorStr))
                     }
                 }
                 else {
@@ -454,6 +444,7 @@ public class DatabaseClient: DatabaseProtocol {
                     resolver.fulfill(updateRe)
                 }
             }.catch { error in
+                Log.e(DatabaseClient.TAG, "updateMany ERROR: ", HiveError.description(error as! HiveError))
                 resolver.reject(error)
             }
         }
@@ -488,11 +479,9 @@ public class DatabaseClient: DatabaseProtocol {
                             resolver.reject(error)
                         }
                     } else {
-                        var dic: [String: Any] = [: ]
-                        json.forEach { key, value in
-                            dic[key] = value
-                        }
-                        resolver.reject(HiveError.failureWithDic(des: dic))
+                        let errorStr = HiveError.praseError(json)
+                        Log.e(DatabaseClient.TAG, "deleteOne ERROR: ", errorStr)
+                        resolver.reject(HiveError.failure(des: errorStr))
                     }
                 }
                 else {
@@ -501,6 +490,7 @@ public class DatabaseClient: DatabaseProtocol {
                     resolver.fulfill(deleteRe)
                 }
             }.catch { error in
+                Log.e(DatabaseClient.TAG, "deleteOne ERROR: ", HiveError.description(error as! HiveError))
                 resolver.reject(error)
             }
         }
@@ -535,11 +525,9 @@ public class DatabaseClient: DatabaseProtocol {
                             resolver.reject(error)
                         }
                     } else {
-                        var dic: [String: Any] = [: ]
-                        json.forEach { key, value in
-                            dic[key] = value
-                        }
-                        resolver.reject(HiveError.failureWithDic(des: dic))
+                        let errorStr = HiveError.praseError(json)
+                        Log.e(DatabaseClient.TAG, "deleteMany ERROR: ", errorStr)
+                        resolver.reject(HiveError.failure(des: errorStr))
                     }
                 }
                 else {
@@ -548,6 +536,7 @@ public class DatabaseClient: DatabaseProtocol {
                     resolver.fulfill(deleteRe)
                 }
             }.catch { error in
+                Log.e(DatabaseClient.TAG, "deleteMany ERROR: ", HiveError.description(error as! HiveError))
                 resolver.reject(error)
             }
         }

@@ -23,7 +23,7 @@
 import Foundation
 
 public class ScriptClient: ScriptingProtocol {
-
+    private static let TAG = "ScriptClient"
     private var authHelper: VaultAuthHelper
 
     public init(_ authHelper: VaultAuthHelper) {
@@ -66,17 +66,16 @@ public class ScriptClient: ScriptingProtocol {
                             resolver.reject(error)
                         }
                     } else {
-                        var dic: [String: Any] = [: ]
-                        json.forEach { key, value in
-                            dic[key] = value
-                        }
-                        resolver.reject(HiveError.failureWithDic(des: dic))
+                        let errorStr = HiveError.praseError(json)
+                        Log.e(ScriptClient.TAG, "registerScript ERROR: ", errorStr)
+                        resolver.reject(HiveError.failure(des: errorStr))
                     }
                 }
                 else {
                     resolver.fulfill(true)
                 }
             }.catch { error in
+                Log.e(ScriptClient.TAG, "registerScript ERROR: ", HiveError.description(error as! HiveError))
                 resolver.reject(error)
             }
         }
@@ -133,11 +132,9 @@ public class ScriptClient: ScriptingProtocol {
                             resolver.reject(e)
                         }
                     } else {
-                        var dic: [String: Any] = [: ]
-                        json.forEach { key, value in
-                            dic[key] = value
-                        }
-                        resolver.reject(HiveError.failureWithDic(des: dic))
+                        let errorStr = HiveError.praseError(json)
+                        Log.e(ScriptClient.TAG, "call ERROR: ", errorStr)
+                        resolver.reject(HiveError.failure(des: errorStr))
                     }
                 }
                 else {
@@ -163,6 +160,7 @@ public class ScriptClient: ScriptingProtocol {
                     }
                 }
             }.catch { error in
+                Log.e(ScriptClient.TAG, "call ERROR: ", HiveError.description(error as! HiveError))
                 resolver.reject(error)
             }
         }

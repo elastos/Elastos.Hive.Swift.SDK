@@ -23,7 +23,7 @@
 import Foundation
 private let remoteDataFromInputStreamContent = "this is test for DataFromInputStream".data(using: .utf8)
 public class FileClient: FilesProtocol {
-
+    private static let TAG = "FileClient"
     private var authHelper: VaultAuthHelper
 
     public init(_ authHelper: VaultAuthHelper) {
@@ -62,18 +62,17 @@ public class FileClient: FilesProtocol {
                                     resolver.reject(error)
                                 }
                             } else {
-                                var dic: [String: Any] = [: ]
-                                json.forEach { key, value in
-                                    dic[key] = value
-                                }
-                                resolver.reject(HiveError.failureWithDic(des: dic))
+                                let errorStr = HiveError.praseError(json)
+                                Log.e(FileClient.TAG, "upload ERROR: ", errorStr)
+                                resolver.reject(HiveError.failure(des: errorStr))
                             }
                         }
                         else {
                             resolver.fulfill(true)
                         }
                     case .failure(let error):
-                        handler.runError(HiveError.netWork(des: error))
+                        Log.e(FileClient.TAG, "upload ERROR: ", HiveError.description(error as! HiveError))
+                        handler.runError(error as! HiveError)
                         resolver.reject(error)
                     }
                 }
@@ -111,11 +110,9 @@ public class FileClient: FilesProtocol {
                                     resolver.reject(error)
                                 }
                             } else {
-                                var dic: [String: Any] = [: ]
-                                json.forEach { key, value in
-                                    dic[key] = value
-                                }
-                                resolver.reject(HiveError.failureWithDic(des: dic))
+                                let errorStr = HiveError.praseError(json)
+                                Log.e(FileClient.TAG, "download ERROR: ", errorStr)
+                                resolver.reject(HiveError.failure(des: errorStr))
                             }
                         }
                         else {
@@ -127,6 +124,7 @@ public class FileClient: FilesProtocol {
                             resolver.fulfill(outputStream)
                         }
                     case .failure(let error):
+                        Log.e(FileClient.TAG, "download ERROR: ", HiveError.description(error as! HiveError))
                         handler.runError(HiveError.netWork(des: error))
                         resolver.reject(error)
                     }
@@ -179,17 +177,16 @@ public class FileClient: FilesProtocol {
                             resolver.reject(error)
                         }
                     } else {
-                        var dic: [String: Any] = [: ]
-                        json.forEach { key, value in
-                            dic[key] = value
-                        }
-                        resolver.reject(HiveError.failureWithDic(des: dic))
+                        let errorStr = HiveError.praseError(json)
+                        Log.e(FileClient.TAG, "delete ERROR: ", errorStr)
+                        resolver.reject(HiveError.failure(des: errorStr))
                     }
                 }
                 else {
                     resolver.fulfill(true)
                 }
             }.catch { error in
+                Log.e(FileClient.TAG, "delete ERROR: ", HiveError.description(error as! HiveError))
                 resolver.reject(error)
             }
         }
@@ -224,17 +221,16 @@ public class FileClient: FilesProtocol {
                             resolver.reject(error)
                         }
                     } else {
-                        var dic: [String: Any] = [: ]
-                        json.forEach { key, value in
-                            dic[key] = value
-                        }
-                        resolver.reject(HiveError.failureWithDic(des: dic))
+                        let errorStr = HiveError.praseError(json)
+                        Log.e(FileClient.TAG, "move ERROR: ", errorStr)
+                        resolver.reject(HiveError.failure(des: errorStr))
                     }
                 }
                 else {
                     resolver.fulfill(true)
                 }
             }.catch { error in
+                Log.e(FileClient.TAG, "move ERROR: ", HiveError.description(error as! HiveError))
                 resolver.reject(error)
             }
         }
@@ -269,17 +265,16 @@ public class FileClient: FilesProtocol {
                             resolver.reject(error)
                         }
                     } else {
-                        var dic: [String: Any] = [: ]
-                        json.forEach { key, value in
-                            dic[key] = value
-                        }
-                        resolver.reject(HiveError.failureWithDic(des: dic))
+                        let errorStr = HiveError.praseError(json)
+                        Log.e(FileClient.TAG, "copy ERROR: ", errorStr)
+                        resolver.reject(HiveError.failure(des: errorStr))
                     }
                 }
                 else {
                     resolver.fulfill(true)
                 }
             }.catch { error in
+                Log.e(FileClient.TAG, "copy ERROR: ", HiveError.description(error as! HiveError))
                 resolver.reject(error)
             }
         }
@@ -313,11 +308,9 @@ public class FileClient: FilesProtocol {
                             resolver.reject(error)
                         }
                     } else {
-                        var dic: [String: Any] = [: ]
-                        json.forEach { key, value in
-                            dic[key] = value
-                        }
-                        resolver.reject(HiveError.failureWithDic(des: dic))
+                        let errorStr = HiveError.praseError(json)
+                        Log.e(FileClient.TAG, "hash ERROR: ", errorStr)
+                        resolver.reject(HiveError.failure(des: errorStr))
                     }
                 }
                 else {
@@ -325,6 +318,7 @@ public class FileClient: FilesProtocol {
                     resolver.fulfill(json["SHA256"].stringValue)
                 }
             }.catch { error in
+                Log.e(FileClient.TAG, "hash ERROR: ", HiveError.description(error as! HiveError))
                 handler.runError(HiveError.netWork(des: error))
                 resolver.reject(error)
             }
@@ -359,11 +353,9 @@ public class FileClient: FilesProtocol {
                             resolver.reject(error)
                         }
                     } else {
-                        var dic: [String: Any] = [: ]
-                        json.forEach { key, value in
-                            dic[key] = value
-                        }
-                        resolver.reject(HiveError.failureWithDic(des: dic))
+                        let errorStr = HiveError.praseError(json)
+                        Log.e(FileClient.TAG, "list ERROR: ", errorStr)
+                        resolver.reject(HiveError.failure(des: errorStr))
                     }
                 }
                 else {
@@ -381,6 +373,7 @@ public class FileClient: FilesProtocol {
                     resolver.fulfill(fileList)
                 }
             }.catch { error in
+                Log.e(FileClient.TAG, "list ERROR: ", HiveError.description(error as! HiveError))
                 handler.runError(HiveError.netWork(des: error))
                 resolver.reject(error)
             }
@@ -415,11 +408,9 @@ public class FileClient: FilesProtocol {
                             resolver.reject(error)
                         }
                     } else {
-                        var dic: [String: Any] = [: ]
-                        json.forEach { key, value in
-                            dic[key] = value
-                        }
-                        resolver.reject(HiveError.failureWithDic(des: dic))
+                        let errorStr = HiveError.praseError(json)
+                        Log.e(FileClient.TAG, "stat ERROR: ", errorStr)
+                        resolver.reject(HiveError.failure(des: errorStr))
                     }
                 }
                 else {
@@ -432,6 +423,7 @@ public class FileClient: FilesProtocol {
                     resolver.fulfill(info)
                 }
             }.catch { error in
+                Log.e(FileClient.TAG, "stat ERROR: ", HiveError.description(error as! HiveError))
                 handler.runError(HiveError.netWork(des: error))
                 resolver.reject(error)
             }
