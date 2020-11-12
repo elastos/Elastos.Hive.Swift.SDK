@@ -177,6 +177,28 @@ class DBTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
 
+    func testUpdateManyWith$param() {
+        let dic = ["_error": ["message": "Exception: method: 'query_update_one', Err: The dollar ($) prefixed field '$set' in '$set' is not valid for storage., full error: {'index': 0, 'code': 52, 'errmsg': \"The dollar ($) prefixed field '$set' in '$set' is not valid for storage.\"}", "code": 500]]
+        let data = try? JSONSerialization.data(withJSONObject: dic as Any, options: [])
+        let dicStr = String(data: data!, encoding: String.Encoding.utf8)!
+        print(dicStr)
+
+        let lock = XCTestExpectation(description: "wait for test.")
+        let filterInfo = ["myParam": "hey"]
+        let update = ["myParam": "hey", "randomParam": "0.7522371070254117"]
+        let updateOptions = UpdateOptions()
+        database?.updateMany("new0", filterInfo, update, options: updateOptions).done{ result in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ error in
+            let e = HiveError.description(error as! HiveError)
+            print(e)
+            lock.fulfill()
+            XCTFail()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+
     func testDeleteOne() {
         let lock = XCTestExpectation(description: "wait for test.")
         let filterInfo = ["author": "john doe2"]
@@ -208,12 +230,12 @@ class DBTest: XCTestCase {
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         do {
-//            let doc = try DIDDocument.convertToDIDDocument(fromJson: DOC_STR)
-            let doc = try testapp.getDocument()
+            let doc = try DIDDocument.convertToDIDDocument(fromJson: DOC_STR)
+//            let doc = try testapp.getDocument()
             print("testapp doc ===")
-            print(doc.toString())
-            let d = try didapp.getDocument()
-            print(d.toString())
+//            print(doc.toString())
+//            let d = try didapp.getDocument()
+//            print(d.toString())
             try HiveClientHandle.setupResolver(resolver, didCachePath)
             let options: HiveClientOptions = HiveClientOptions()
             _ = options.setLocalDataPath(localDataPath)
