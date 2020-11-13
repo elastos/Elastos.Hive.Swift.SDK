@@ -134,24 +134,8 @@ class FileTest: XCTestCase {
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         do {
-            let doc = try testapp.getDocument()
-            print("testapp doc ===")
-            print(doc.toString())
-            _ = try didapp.getDocument()
-            print(doc.toString())
-            try HiveClientHandle.setupResolver(resolver, didCachePath)
-            let options: HiveClientOptions = HiveClientOptions()
-            _ = options.setLocalDataPath(localDataPath)
-            _ = options.setAuthenticator(VaultAuthenticator())
-            options.setAuthenticationDIDDocument(doc)
-            HiveClientHandle.setVaultProvider(doc.subject.description, PROVIDER)
-            self.client = try HiveClientHandle.createInstance(withOptions: options)
-            let lock = XCTestExpectation(description: "wait for test.")
-            _ = self.client?.getVault(doc.subject.description).get{ result in
-                self.file = (result.files as! FileClient)
-                lock.fulfill()
-            }
-            self.wait(for: [lock], timeout: 100.0)
+            user = try UserFactory.createUser1()
+            self.file = (user!.vault!.files as! FileClient)
         } catch {
             XCTFail()
         }

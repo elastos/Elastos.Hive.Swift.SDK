@@ -58,7 +58,7 @@ public class SPVAdaptor: DIDAdapter {
 
     public func resolve(_ requestId: String, _ did: String, _ all: Bool) throws -> String {
         var resuleString: String?
-        let url:URL! = URL(string: resolver)
+        let url:URL! = URL(string: RESOLVER_URL)
         var request:URLRequest! = URLRequest.init(url: url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 60)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")

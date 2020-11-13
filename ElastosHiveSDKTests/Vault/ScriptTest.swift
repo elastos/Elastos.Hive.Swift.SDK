@@ -198,29 +198,8 @@ class ScriptTest: XCTestCase {
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         do {
-            let doc = try testapp.getDocument()
-            print("testapp doc ===")
-            print(doc.toString())
-            _ = try didapp.getDocument()
-            print(doc.toString())
-            try HiveClientHandle.setupResolver(resolver, didCachePath)
-            let options: HiveClientOptions = HiveClientOptions()
-            _ = options.setLocalDataPath(localDataPath)
-            _ = options.setAuthenticator(VaultAuthenticator())
-            options.setAuthenticationDIDDocument(doc)
-            HiveClientHandle.setVaultProvider("did:elastos:ihicebcDsnTM1ssi2PT6dNwrU2uWih7M5M", PROVIDER)
-            self.client = try HiveClientHandle.createInstance(withOptions: options)
-            let lock = XCTestExpectation(description: "wait for test.")
-
-            _ = self.client?.getVault("did:elastos:ihicebcDsnTM1ssi2PT6dNwrU2uWih7M5M").done{ result in
-                self.scripting = (result.scripting as! ScriptClient)
-                print("block \(Thread.isMainThread)")
-                print("current block \(Thread.current)")
-                lock.fulfill()
-            }
-            print("111 \(Thread.isMainThread)")
-            print("current 111 \(Thread.current)")
-            self.wait(for: [lock], timeout: 100.0)
+            user = try UserFactory.createUser1()
+            self.scripting = (user!.vault!.scripting as! ScriptClient)
         } catch {
             XCTFail()
         }
