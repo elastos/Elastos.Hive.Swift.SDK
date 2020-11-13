@@ -25,37 +25,25 @@ import Foundation
 public protocol DatabaseProtocol {
 
     func createCollection(_ name: String) -> HivePromise<Bool>
-    func createCollection(_ name: String, handler: HiveCallback<Bool>) -> HivePromise<Bool>
     func createCollection(_ name: String, options: CreateCollectionOptions) -> HivePromise<Bool>
-    func createCollection(_ name: String, options: CreateCollectionOptions, handler: HiveCallback<Bool>) -> HivePromise<Bool>
 
     func deleteCollection(_ name: String) -> HivePromise<Bool>
-    func deleteCollection(_ name: String, handler: HiveCallback<Bool>) -> HivePromise<Bool>
 
     func insertOne(_ collection: String, _ doc: [String: Any], options: InsertOptions?) -> HivePromise<InsertOneResult>
-    func insertOne(_ collection: String, _ doc: [String: Any], options: InsertOptions?, handler: HiveCallback<InsertOneResult>) -> HivePromise<InsertOneResult>
 
     func insertMany(_ collection: String, _ docs: Array<[String: Any]>, options: InsertOptions) -> HivePromise<InsertManyResult>
-    func insertMany(_ collection: String, _ docs: Array<[String: Any]>, options: InsertOptions, handler: HiveCallback<InsertManyResult>) -> HivePromise<InsertManyResult>
 
     func countDocuments(_ collection: String, _ query: [String: Any], options: CountOptions) -> HivePromise<Int>
-    func countDocuments(_ collection: String, _ query: [String: Any], options: CountOptions, handler: HiveCallback<Int>) -> HivePromise<Int>
 
     func findOne(_ collection: String, _ query: [String: Any], options: FindOptions) -> HivePromise<[String: Any]>
-    func findOne(_ collection: String, _ query: [String: Any], options: FindOptions, handler: HiveCallback<[String: Any]>) -> HivePromise<[String: Any]>
 
     func findMany(_ collection: String, _ query: [String: Any], options: FindOptions) -> HivePromise<Array<[String: Any]>>
-    func findMany(_ collection: String, _ query: [String: Any], options: FindOptions, handler: HiveCallback<Array<[String: Any]>>) -> HivePromise<Array<[String: Any]>>
 
     func updateOne(_ collection: String, _ filter: [String: Any], _ update: [String: Any], options: UpdateOptions) -> HivePromise<UpdateResult>
-    func updateOne(_ collection: String, _ filter: [String: Any], _ update: [String: Any], options: UpdateOptions, handler: HiveCallback<UpdateResult>) -> HivePromise<UpdateResult>
 
     func updateMany(_ collection: String, _ filter: [String: Any], _ update: [String: Any], options: UpdateOptions) -> HivePromise<UpdateResult>
-    func updateMany(_ collection: String, _ filter: [String: Any], _ update: [String: Any], options: UpdateOptions, handler: HiveCallback<UpdateResult>) -> HivePromise<UpdateResult>
 
     func deleteOne(_ collection: String, _ filter: [String: Any], options: DeleteOptions) -> HivePromise<DeleteResult>
-    func deleteOne(_ collection: String, _ filter: [String: Any], options: DeleteOptions, handler: HiveCallback<DeleteResult>) -> HivePromise<DeleteResult>
 
     func deleteMany(_ collection: String, _ filter: [String: Any], options: DeleteOptions) -> HivePromise<DeleteResult>
-    func deleteMany(_ collection: String, _ filter: [String: Any], options: DeleteOptions, handler: HiveCallback<DeleteResult>) -> HivePromise<DeleteResult>
 }

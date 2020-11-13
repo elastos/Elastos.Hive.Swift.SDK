@@ -24,26 +24,18 @@ import Foundation
 
 public protocol FilesProtocol {
     func upload(_ localPath: String, asRemoteFile: String) -> HivePromise<Bool>
-    func upload(_ localPath: String, asRemoteFile: String, handler: HiveCallback<Bool>) -> HivePromise<Bool>
 
     func download(_ path: String) -> HivePromise<OutputStream>
-    func download(_ path: String, handler: HiveCallback<OutputStream>) -> HivePromise<OutputStream>
 
     func delete(_ path: String) -> HivePromise<Bool>
-    func delete(_ path: String, handler: HiveCallback<Bool>) -> HivePromise<Bool>
 
     func move(_ src: String, _ dest: String) -> HivePromise<Bool>
-    func move(_ src: String, _ dest: String, handler: HiveCallback<Bool>) -> HivePromise<Bool>
 
     func copy(_ src: String, _ dest: String) -> HivePromise<Bool>
-    func copy(_ src: String, _ dest: String, handler: HiveCallback<Bool>) -> HivePromise<Bool>
 
     func hash(_ path: String) -> HivePromise<String>
-    func hash(_ path: String, handler: HiveCallback<String>) -> HivePromise<String>
 
     func list(_ path: String) -> HivePromise<Array<FileInfo>>
-    func list(_ path: String, handler: HiveCallback<Array<FileInfo>>) -> HivePromise<Array<FileInfo>>
 
     func stat(_ path: String) -> HivePromise<FileInfo>
-    func stat(_ path: String, handler: HiveCallback<FileInfo>) -> HivePromise<FileInfo>
 }

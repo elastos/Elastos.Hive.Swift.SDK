@@ -181,19 +181,19 @@ class ScriptTest: XCTestCase {
         self.wait(for: [lock], timeout: 10000.0)
     }
 
-    func test12_uploadFile() {
-        let lock = XCTestExpectation(description: "wait for test.")
-        let metadata = "{\"name\":\"upload_file\",\"params\":{\"group_id\":{\"$oid\":\"5f8d9dfe2f4c8b7a6f8ec0f1\"},\"path\":\"test.txt\"}}"
-        let params = ["name": "upload_file", "params":["group_id": ["$oid": "5f8d9dfe2f4c8b7a6f8ec0f1"], "path": "test.txt"]] as [String : Any]
-        scripting!.call("/Users/liaihong/Desktop/test.txt", params, ScriptingType.UPLOAD, String.self).done { re in
-            print(re)
-            lock.fulfill()
-        }.catch{ err in
-            XCTFail()
-            lock.fulfill()
-        }
-        self.wait(for: [lock], timeout: 10000.0)
-    }
+//    func test12_uploadFile() {
+//        let lock = XCTestExpectation(description: "wait for test.")
+//        let metadata = "{\"name\":\"upload_file\",\"params\":{\"group_id\":{\"$oid\":\"5f8d9dfe2f4c8b7a6f8ec0f1\"},\"path\":\"test.txt\"}}"
+//        let params = ["name": "upload_file", "params":["group_id": ["$oid": "5f8d9dfe2f4c8b7a6f8ec0f1"], "path": "test.txt"]] as [String : Any]
+//        scripting!.call("/Users/liaihong/Desktop/test.txt", params, ScriptingType.UPLOAD, String.self).done { re in
+//            print(re)
+//            lock.fulfill()
+//        }.catch{ err in
+//            XCTFail()
+//            lock.fulfill()
+//        }
+//        self.wait(for: [lock], timeout: 10000.0)
+//    }
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
