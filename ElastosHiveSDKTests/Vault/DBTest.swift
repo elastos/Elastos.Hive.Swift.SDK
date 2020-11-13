@@ -3,39 +3,13 @@ import XCTest
 @testable import ElastosHiveSDK
 import ElastosDIDSDK
 
-let p = PresentationJWT()
-let testapp = DApp("testapp", "height uphold laundry enhance prepare surface catch close analyst badge force absorb", p.adapter!)
-let didapp = DIDApp("didapp", "foster control ordinary fan sadness aware forest surge decorate cover student cram", p.adapter!)
-
 class VaultAuthenticator: Authenticator {
     func requestAuthentication(_ jwtToken: String) -> HivePromise<String> {
         return HivePromise<String> { resolver in
             do{
-                //SignIn
-                let doc = try testapp.getDocument()
-//                let doc = try DIDDocument.convertToDIDDocument(fromJson: DOC_STR)
-                let docStr = doc.toString(true, forSign: true)
-                print(docStr)
-
-                let c = try JwtParserBuilder().build().parseClaimsJwt(jwtToken).claims
-                let iss: String = c.getIssuer()!
-                let nonce: String = c.get(key: "nonce") as! String
-                let vc: VerifiableCredential = try didapp.issueDiplomaFor(testapp)
-                let vp = try testapp.createPresentation(vc, iss, nonce)
-                let vpIs = vp.isValid
-                print("vpIs == \(vpIs)")
-                let token = try testapp.createToken(vp, iss)
-                let ddd = try JwtParserBuilder().build().parseClaimsJwt(token)
-                let claim = ddd.claims
-                print(claim.get(key: "presentation"))
-                print(claim.get(key: "presentation"))
-                print(token)
-                let toks = token.split(separator: ".")
-                let str  = "\(toks[0]).\(toks[1])"
-                let test = try doc.verify(signature: "\(toks[2])", onto: str.data(using: String.Encoding.utf8)!)
-                print("doc.verify = \(test)")
-                try p.waitForWalletAvaliable()
-                resolver.fulfill(token)
+                let authtoken = try user?.presentationInJWT!.getAuthToken(jwtToken)
+                print("authtoken = \(authtoken)")
+                resolver.fulfill(authtoken!)
             }
             catch {
                 resolver.reject(error)
@@ -44,6 +18,7 @@ class VaultAuthenticator: Authenticator {
     }
 }
 
+public var user: UserFactory?
 class DBTest: XCTestCase {
     private var client: HiveClientHandle?
     private var database: DatabaseClient?
@@ -230,22 +205,13 @@ class DBTest: XCTestCase {
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         do {
-            let doc = try DIDDocument.convertToDIDDocument(fromJson: DOC_STR)
-//            let doc = try testapp.getDocument()
-            print("testapp doc ===")
-//            print(doc.toString())
-//            let d = try didapp.getDocument()
-//            print(d.toString())
-            try HiveClientHandle.setupResolver(resolver, didCachePath)
-            let options: HiveClientOptions = HiveClientOptions()
-            _ = options.setLocalDataPath(localDataPath)
-            _ = options.setAuthenticator(VaultAuthenticator())
-            options.setAuthenticationDIDDocument(doc)
-            HiveClientHandle.setVaultProvider(doc.subject.description, PROVIDER)
-            self.client = try HiveClientHandle.createInstance(withOptions: options)
+            user = try UserFactory.createUser1()
             let lock = XCTestExpectation(description: "wait for test.")
-            _ = self.client?.getVault(doc.subject.description).get{ result in
-                self.database = (result.database as! DatabaseClient)
+            user!.client.getVault(OWNERDID).done { [self] vault in
+                self.database = (vault.database as! DatabaseClient)
+                lock.fulfill()
+            }.catch { error in
+                print(error)
                 lock.fulfill()
             }
             self.wait(for: [lock], timeout: 100.0)
