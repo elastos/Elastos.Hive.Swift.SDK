@@ -199,7 +199,15 @@ class ScriptTest: XCTestCase {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         do {
             user = try UserFactory.createUser1()
-            self.scripting = (user!.vault!.scripting as! ScriptClient)
+            let lock = XCTestExpectation(description: "wait for test.")
+            user!.client.getVault(OWNERDID).done { [self] vault in
+                self.scripting = (vault.scripting as! ScriptClient)
+                lock.fulfill()
+            }.catch { error in
+                print(error)
+                lock.fulfill()
+            }
+            self.wait(for: [lock], timeout: 100.0)
         } catch {
             XCTFail()
         }
