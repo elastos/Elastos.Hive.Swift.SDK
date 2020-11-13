@@ -135,7 +135,15 @@ class FileTest: XCTestCase {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         do {
             user = try UserFactory.createUser1()
-            self.file = (user!.vault!.files as! FileClient)
+            let lock = XCTestExpectation(description: "wait for test.")
+            user!.client.getVault(OWNERDID).done { [self] vault in
+                self.file = (vault.files as! FileClient)
+                lock.fulfill()
+            }.catch { error in
+                print(error)
+                lock.fulfill()
+            }
+            self.wait(for: [lock], timeout: 100.0)
         } catch {
             XCTFail()
         }
