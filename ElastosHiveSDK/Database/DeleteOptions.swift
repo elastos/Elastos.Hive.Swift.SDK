@@ -25,27 +25,27 @@ import Foundation
 public class DeleteOptions: Options<DeleteOptions> {
     private var _collation: Collation?
 
-    public init(_ dCollation: Collation, _ dHint: VaultIndex) {
+    public init(_ dCollation: Collation, _ dHint: VaultIndex) throws {
         super.init()
         _collation = dCollation
         _hint = [dHint]
-        _ = collation(dCollation)
+        _ = try collation(dCollation)
         _ = hint(dHint)
     }
 
-    public init(_ dCollation: Collation, _ dHint: Array<VaultIndex>) {
+    public init(_ dCollation: Collation, _ dHint: Array<VaultIndex>) throws {
         super.init()
         _collation = dCollation
         _hint = dHint
-        _ = collation(dCollation)
+        _ = try collation(dCollation)
         _ = hint(dHint)
     }
 
     public override init() { }
 
-    public func collation(_ value: Collation) -> DeleteOptions{
+    public func collation(_ value: Collation) throws -> DeleteOptions{
 
-        return setObjectOption("collation", value.jsonSerialize())
+        return setObjectOption("collation", try value.jsonSerialize())
     }
 
     public var collation: Collation? {

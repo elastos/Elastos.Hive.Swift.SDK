@@ -83,7 +83,8 @@ public class Options<T>: NSObject {
         return param[name] as Any
     }
 
-    func jsonSerialize() -> [String: Any] {
+    func jsonSerialize() throws -> [String: Any] {
+        try handleOtherParames()
         return param
     }
 
@@ -92,6 +93,17 @@ public class Options<T>: NSObject {
     }
 
     public func serialize() throws -> String {
+        try handleOtherParames()
+        let data = try JSONSerialization.data(withJSONObject: param, options: [])
+        guard let paramStr = String(data: data, encoding: .utf8) else {
+            return ""
+        }
+
+        return paramStr
+    }
+
+
+    func handleOtherParames() throws {
         var hs: Array<[String: Any]> = [ ]
         try _hint.forEach { v in
             try hs.append(v.jsonSerialize())
@@ -106,12 +118,6 @@ public class Options<T>: NSObject {
         if hs.count != 0 {
             _ = setArrayOption("sort", hs)
         }
-        let data = try JSONSerialization.data(withJSONObject: param, options: [])
-        guard let paramStr = String(data: data, encoding: .utf8) else {
-            return ""
-        }
-
-        return paramStr
     }
 }
 

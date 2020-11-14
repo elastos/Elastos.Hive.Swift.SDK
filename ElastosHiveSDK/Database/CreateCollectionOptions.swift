@@ -31,9 +31,9 @@ public class CreateCollectionOptions: Options<CreateCollectionOptions> {
 
     public override init() { }
 
-    public func writeConcern(_ value: WriteConcern?) -> CreateCollectionOptions {
+    public func writeConcern(_ value: WriteConcern?) throws -> CreateCollectionOptions {
         if let _ = value {
-            _ = setObjectOption("write_concern", value!.jsonSerialize())
+            _ = setObjectOption("write_concern", try value!.jsonSerialize())
         }
         else {
             remove("write_concern")
@@ -102,9 +102,9 @@ public class CreateCollectionOptions: Options<CreateCollectionOptions> {
         return getNumberOption("max")
     }
 
-    public func collation(_ value: Collation?) -> CreateCollectionOptions {
+    public func collation(_ value: Collation?) throws -> CreateCollectionOptions {
         if let _ = value {
-            _ = setObjectOption("collation", value!.jsonSerialize())
+            _ = setObjectOption("collation", try value!.jsonSerialize())
         }
         else {
             remove("collation")
