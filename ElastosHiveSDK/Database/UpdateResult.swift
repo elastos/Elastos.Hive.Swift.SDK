@@ -39,8 +39,16 @@ public class UpdateResult: Result {
         return get("upserted_count")?.intValue == nil ? 0 : get("upserted_count")!.intValue
     }
 
-    public func upsertedId() -> Int {
+    public func upsertedId() -> String {
 
-        return get("upserted_id")?.intValue == nil ? 0 : get("upserted_id")!.intValue
+        return get("upserted_id")?.stringValue == nil ? "" : get("upserted_id")!.stringValue
+    }
+
+    public class func deserialize(_ content: String) throws -> UpdateResult {
+        let data = content.data(using: String.Encoding.utf8)
+        let paramars = try JSONSerialization.jsonObject(with: data!,
+                                                        options: .mutableContainers) as? [String : Any] ?? [: ]
+        let opt = UpdateResult(JSON(paramars))
+        return opt
     }
 }

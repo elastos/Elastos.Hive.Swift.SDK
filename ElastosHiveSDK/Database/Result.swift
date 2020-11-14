@@ -41,4 +41,14 @@ public class Result: NSObject {
     func get(_ name: String) -> JSON? {
         return result[name]
     }
+
+    public func serialize() throws -> String {
+        let j: JSON = ["result": result]
+        let data = try JSONSerialization.data(withJSONObject: j["result"].dictionaryObject as Any, options: [])
+        guard let paramStr = String(data: data, encoding: .utf8) else {
+            return ""
+        }
+
+        return paramStr
+    }
 }
