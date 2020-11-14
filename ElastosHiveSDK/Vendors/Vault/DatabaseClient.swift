@@ -44,7 +44,12 @@ public class DatabaseClient: DatabaseProtocol {
 
     private func createColImp(_ collection: String, _ options: CreateCollectionOptions?, tryAgain: Int) -> HivePromise<Bool> {
         HivePromise<Bool> { resolver in
-            let param = ["collection": collection]
+            var param: [String: Any] = ["collection": collection]
+            if options != nil {
+                if try options!.jsonSerialize().count != 0 {
+                    param["options"] = try options!.jsonSerialize()
+                }
+            }
             let header = Header(authHelper)
             let url = VaultURL.sharedInstance.mongoDBSetup()
             
@@ -126,7 +131,12 @@ public class DatabaseClient: DatabaseProtocol {
     
     private func insertOneImp(_ collection: String, _ doc: [String: Any], _ options: InsertOptions?, tryAgain: Int) -> HivePromise<InsertOneResult> {
         HivePromise<InsertOneResult> { resolver in
-            let param = ["collection": collection, "document": doc] as [String : Any]
+            var param = ["collection": collection, "document": doc] as [String : Any]
+            if options != nil {
+                if try options!.jsonSerialize().count != 0 {
+                    param["options"] = try options!.jsonSerialize()
+                }
+            }
             let url = VaultURL.sharedInstance.insertOne()
             
             VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
@@ -167,7 +177,10 @@ public class DatabaseClient: DatabaseProtocol {
 
     private func insertManyImp(_ collection: String, _ doc: Array<[String: Any]>, _ options: InsertOptions, tryAgain: Int) -> HivePromise<InsertManyResult> {
         HivePromise<InsertManyResult> { resolver in
-            let param = ["collection": collection, "document": doc] as [String : Any]
+            var param = ["collection": collection, "document": doc] as [String : Any]
+            if try options.jsonSerialize().count != 0 {
+                param["options"] = try options.jsonSerialize()
+            }
             let url = VaultURL.sharedInstance.insertMany()
             
             VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
@@ -207,10 +220,13 @@ public class DatabaseClient: DatabaseProtocol {
     }
 
     private func countDocumentsImp(_ collection: String, _ query: [String: Any], _ options: CountOptions, tryAgain: Int) -> HivePromise<Int> {
-        let param = ["collection": collection, "filter": query] as [String : Any]
-        let url = VaultURL.sharedInstance.countDocuments()
-
         return HivePromise<Int> { resolver in
+            var param = ["collection": collection, "filter": query] as [String : Any]
+            if try options.jsonSerialize().count != 0 {
+                param["options"] = try options.jsonSerialize()
+            }
+            let url = VaultURL.sharedInstance.countDocuments()
+
             VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
                 let status = json["_status"].stringValue
                 if status == "ERR" {
@@ -247,10 +263,13 @@ public class DatabaseClient: DatabaseProtocol {
     }
 
     private func findOneImp(_ collection: String, _ query: [String: Any], _ options: FindOptions, tryAgain: Int) -> HivePromise<[String: Any]> {
-        let param = ["collection": collection, "filter": query] as [String : Any]
-        let url = VaultURL.sharedInstance.findOne()
-
         return HivePromise<[String: Any]> { resolver in
+            var param = ["collection": collection, "filter": query] as [String : Any]
+            if try options.jsonSerialize().count != 0 {
+                param["options"] = try options.jsonSerialize()
+            }
+            let url = VaultURL.sharedInstance.findOne()
+
             VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).get { json in
                 let status = json["_status"].stringValue
                 if status == "ERR" {
@@ -286,10 +305,13 @@ public class DatabaseClient: DatabaseProtocol {
     }
 
     private func findManyImp(_ collection: String, _ query: [String: Any], _ options: FindOptions, tryAgain: Int) -> HivePromise<Array<[String: Any]>> {
-        let param = ["collection": collection, "filter": query] as [String : Any]
-        let url = VaultURL.sharedInstance.findMany()
-
         return HivePromise<Array<[String: Any]>> { resolver in
+            var param = ["collection": collection, "filter": query] as [String : Any]
+            if try options.jsonSerialize().count != 0 {
+                param["options"] = try options.jsonSerialize()
+            }
+            let url = VaultURL.sharedInstance.findMany()
+
             VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).get { json in
                 let status = json["_status"].stringValue
                 if status == "ERR" {
@@ -330,9 +352,13 @@ public class DatabaseClient: DatabaseProtocol {
     }
 
     private func updateOneImp(_ collection: String, _ filter: [String: Any], _ update: [String: Any], _ options: UpdateOptions, tryAgain: Int) -> HivePromise<UpdateResult> {
-        let param = ["collection": collection, "filter": filter, "update": ["$set": update]] as [String : Any]
-        let url = VaultURL.sharedInstance.updateOne()
         return HivePromise<UpdateResult> { resolver in
+            var param = ["collection": collection, "filter": filter, "update": update] as [String : Any]
+            if try options.jsonSerialize().count != 0 {
+                param["options"] = try options.jsonSerialize()
+            }
+            let url = VaultURL.sharedInstance.updateOne()
+
             VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).get { json in
                 let status = json["_status"].stringValue
                 if status == "ERR" {
@@ -370,9 +396,13 @@ public class DatabaseClient: DatabaseProtocol {
     }
 
     private func updateManyImp(_ collection: String, _ filter: [String: Any], _ update: [String: Any], _ options: UpdateOptions, tryAgain: Int) -> HivePromise<UpdateResult>{
-        let param = ["collection": collection, "filter": filter, "update": ["$set": update]] as [String : Any]
-        let url = VaultURL.sharedInstance.updateMany()
         return HivePromise<UpdateResult> { resolver in
+            var param = ["collection": collection, "filter": filter, "update": update] as [String : Any]
+            if try options.jsonSerialize().count != 0 {
+                param["options"] = try options.jsonSerialize()
+            }
+            let url = VaultURL.sharedInstance.updateMany()
+
             VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).get { json in
                 let status = json["_status"].stringValue
                 if status == "ERR" {
@@ -410,10 +440,13 @@ public class DatabaseClient: DatabaseProtocol {
     }
 
     private func deleteOneImp(_ collection: String, _ filter: [String: Any], _ options: DeleteOptions, tryAgain: Int) -> HivePromise<DeleteResult>{
-        let param = ["collection": collection, "filter": filter] as [String : Any]
-        let url = VaultURL.sharedInstance.deleteOne()
-        
         return HivePromise<DeleteResult> { resolver in
+            var param = ["collection": collection, "filter": filter] as [String : Any]
+            if try options.jsonSerialize().count != 0 {
+                param["options"] = try options.jsonSerialize()
+            }
+            let url = VaultURL.sharedInstance.deleteOne()
+
             VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
                 let status = json["_status"].stringValue
                 if status == "ERR" {
@@ -451,10 +484,13 @@ public class DatabaseClient: DatabaseProtocol {
     }
 
     private func deleteManyImp(_ collection: String, _ filter: [String: Any], _ options: DeleteOptions, tryAgain: Int) -> HivePromise<DeleteResult>{
-        let param = ["collection": collection, "filter": filter] as [String : Any]
-        let url = VaultURL.sharedInstance.deleteMany()
-        
         return HivePromise<DeleteResult> { resolver in
+            var param = ["collection": collection, "filter": filter] as [String : Any]
+            if try options.jsonSerialize().count != 0 {
+                param["options"] = try options.jsonSerialize()
+            }
+            let url = VaultURL.sharedInstance.deleteMany()
+
             VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).get { json in
                 let status = json["_status"].stringValue
                 if status == "ERR" {

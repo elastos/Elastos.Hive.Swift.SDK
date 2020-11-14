@@ -63,9 +63,9 @@ public class CountOptions: Options<CountOptions> {
         return getNumberOption(MAXTIMEMS)
     }
 
-    public func collation(_ value: Collation) -> CountOptions {
+    public func collation(_ value: Collation) throws -> CountOptions {
         self._collation = value
-        return setObjectOption(COLLATION, value.jsonSerialize())
+        return setObjectOption(COLLATION, try value.jsonSerialize())
     }
 
     public var collation: Collation? {

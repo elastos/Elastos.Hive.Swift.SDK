@@ -32,13 +32,8 @@ public class MinKey: Encodable {
     var vaule: Int {
         return _value
     }
-//
-//    public func encode(to encoder: Encoder) throws {
-//
-//    }
 
     public func serialize(_ jsonGenerator: JsonGenerator) {
-//        let gen = JsonGenerator()
         jsonGenerator.writeStartObject()
         jsonGenerator.writeNumberField("$minKey", vaule)
         jsonGenerator.writeEndObject()

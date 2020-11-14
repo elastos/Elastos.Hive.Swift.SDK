@@ -89,8 +89,8 @@ public class FindOptions: Options<FindOptions> {
         return getNumberOption("batch_size")
     }
 
-    public func collation(_ value: Collation) -> FindOptions {
-        return setObjectOption("collation", value.jsonSerialize())
+    public func collation(_ value: Collation) throws -> FindOptions {
+        return setObjectOption("collation", try value.jsonSerialize())
     }
 
     public var collation: Collation? {

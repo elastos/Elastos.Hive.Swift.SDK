@@ -44,9 +44,9 @@ public class UpdateOptions: Options<UpdateOptions> {
         return getBooleanOption("bypass_document_validation")
     }
 
-    public func collation(value: Collation) -> UpdateOptions {
+    public func collation(value: Collation) throws -> UpdateOptions {
 
-        return setObjectOption("collation", value.jsonSerialize())
+        return setObjectOption("collation", try value.jsonSerialize())
     }
 
     public var collation: Collation? {
