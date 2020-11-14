@@ -55,7 +55,7 @@ public class VaultIndex: NSObject {
 
     public func jsonSerialize()throws -> [String: Any] {
 
-        return [key: _order]
+        return [key: _order.rawValue]
     }
 }
 

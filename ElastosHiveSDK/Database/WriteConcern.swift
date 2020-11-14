@@ -41,9 +41,17 @@ public class WriteConcern: Options<WriteConcern> {
         return setNumberOption("w", value)
     }
 
+    public var w: Int? {
+        return getNumberOption("w")
+    }
+
     public func wtimeout(_ value: Int) -> WriteConcern {
 
         return setNumberOption("wtimeout", value)
+    }
+
+    public var wtimeout: Int? {
+        return getNumberOption("wtimeout")
     }
 
     public func j(_ value: Bool) -> WriteConcern {
@@ -51,8 +59,16 @@ public class WriteConcern: Options<WriteConcern> {
         return setBooleanOption("j", value)
     }
 
+    public var j: Bool? {
+        return getBooleanOption("j")
+    }
+
     public func fsync(_ value: Bool) -> WriteConcern {
 
         return setBooleanOption("fsync", value)
+    }
+
+    public var fsync: Bool? {
+        return getBooleanOption("fsync")
     }
 }

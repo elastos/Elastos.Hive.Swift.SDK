@@ -23,35 +23,66 @@
 import Foundation
 
 public class DeleteOptions: Options<DeleteOptions> {
+    private var _collation: Collation?
 
     public init(_ dCollation: Collation, _ dHint: VaultIndex) {
         super.init()
+        _collation = dCollation
+        _hint = [dHint]
         _ = collation(dCollation)
         _ = hint(dHint)
     }
 
     public init(_ dCollation: Collation, _ dHint: Array<VaultIndex>) {
         super.init()
+        _collation = dCollation
+        _hint = dHint
         _ = collation(dCollation)
         _ = hint(dHint)
     }
 
-    public override init() {
-
-    }
+    public override init() { }
 
     public func collation(_ value: Collation) -> DeleteOptions{
 
-        return setObjectOption("collation", value)
+        return setObjectOption("collation", value.jsonSerialize())
     }
 
-    public func hint(_ value: VaultIndex) -> DeleteOptions{
+    public var collation: Collation? {
+        return _collation
+    }
 
-        return setObjectOption("hint", value)
+    public func hint(_ value: VaultIndex) -> DeleteOptions {
+        _hint.append(value)
+        return self
     }
 
     public func hint(_ value: Array<VaultIndex>) -> DeleteOptions{
+        _hint += value
+        return self
+    }
 
-        return setArrayOption("hint", value)
+    public class func deserialize(_ content: String) throws -> DeleteOptions {
+        let data = content.data(using: String.Encoding.utf8)
+        let paramars = try JSONSerialization.jsonObject(with: data!,
+                                                        options: .mutableContainers) as? [String : Any] ?? [: ]
+        let opt = DeleteOptions();
+        opt.param = paramars
+        let paramJson = JSON(paramars)
+        let hints = paramJson["hint"].arrayValue
+        if hints.count != 0 {
+            var hs: Array<VaultIndex> = [ ]
+            hints.forEach { json in
+                json.forEach { k, v in
+                    let index = VaultIndex(k, VaultIndex.Order(rawValue: v.intValue)!)
+                    hs.append(index)
+                }
+            }
+            opt._hint = hs
+        }
+        if let collation = paramJson["collation"].dictionaryObject {
+            opt._collation = Collation.deserialize(collation)
+        }
+        return opt
     }
 }

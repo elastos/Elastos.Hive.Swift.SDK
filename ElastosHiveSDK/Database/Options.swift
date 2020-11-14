@@ -23,16 +23,28 @@
 import Foundation
 
 public class Options<T>: NSObject {
+    let HINT = "hint"
 
-    private var param: [String: Any] = [:]
+    var param: [String: Any] = [:]
+    var _hint: Array<VaultIndex> = [ ]
+    var _sort: Array<VaultIndex> = [ ]
+
     func setStringOption(_ name: String, _ value: String) -> T {
         param[name] = value
         return self as! T
     }
 
+    func getStringOption(_ name: String) -> String? {
+        return param[name] as? String
+    }
+
     func setNumberOption(_ name: String, _ value: Int) -> T {
         param[name] = value
         return self as! T
+    }
+
+    func getNumberOption(_ name: String) -> Int? {
+        return param[name] as? Int
     }
     
     func setBooleanOption(_ name: String, _ value: Bool) -> T {
@@ -40,9 +52,17 @@ public class Options<T>: NSObject {
         return self as! T
     }
 
+    func getBooleanOption(_ name: String) -> Bool? {
+        return param[name] as? Bool
+    }
+
     func setArrayOption(_ name: String, _ value: Array<Any>) -> T {
         param[name] = value
         return self as! T
+    }
+
+    func getArrayOption(_ name: String) -> Array<Any>? {
+        return param[name] as? Array<Any>
     }
 
     func setObjectOption(_ name: String, _ value: [String: Any]) -> T {
@@ -50,12 +70,42 @@ public class Options<T>: NSObject {
         return self as! T
     }
 
+    func getObjectOption(_ name: String) -> [String: Any]? {
+        return param[name] as? [String: Any]
+    }
+
     func setObjectOption(_ name: String, _ value: Any) -> T {
         param[name] = value
         return self as! T
     }
 
-    func serialize() throws -> String {
+    func getObjectOption(_ name: String, _ value: Any) -> Any {
+        return param[name] as Any
+    }
+
+    func jsonSerialize() -> [String: Any] {
+        return param
+    }
+
+    func remove(_ key: String) {
+        param.removeValue(forKey: key)
+    }
+
+    public func serialize() throws -> String {
+        var hs: Array<[String: Any]> = [ ]
+        try _hint.forEach { v in
+            try hs.append(v.jsonSerialize())
+        }
+        if hs.count != 0 {
+            _ = setArrayOption(HINT, hs)
+        }
+        hs.removeAll()
+        try _sort.forEach{ v in
+            try hs.append(v.jsonSerialize())
+        }
+        if hs.count != 0 {
+            _ = setArrayOption("sort", hs)
+        }
         let data = try JSONSerialization.data(withJSONObject: param, options: [])
         guard let paramStr = String(data: data, encoding: .utf8) else {
             return ""
@@ -63,8 +113,5 @@ public class Options<T>: NSObject {
 
         return paramStr
     }
-
-    func remove(_ key: String) {
-        param.removeValue(forKey: key)
-    }
 }
+

@@ -35,17 +35,32 @@ public class InsertOptions: Options<InsertOptions> {
         _ = bypassDocumentValidation(iBypassDocumentValidation)
     }
 
-    public override init() {
-
-    }
+    public override init() { }
 
     public func bypassDocumentValidation(_ value: Bool) -> InsertOptions {
 
         return setBooleanOption("bypass_document_validation", value)
     }
 
+    public var bypassDocumentValidation: Bool? {
+        return getBooleanOption("bypass_document_validation")
+    }
+
     public func ordered(_ value: Bool) -> InsertOptions {
 
         return setBooleanOption("ordered", value)
+    }
+
+    public var ordered: Bool? {
+        return getBooleanOption("ordered")
+    }
+
+    public class func deserialize(_ content: String) throws -> InsertOptions {
+        let data = content.data(using: String.Encoding.utf8)
+        let paramars = try JSONSerialization.jsonObject(with: data!,
+                                                        options: .mutableContainers) as? [String : Any] ?? [: ]
+        let opt = InsertOptions();
+        opt.param = paramars
+        return opt
     }
 }

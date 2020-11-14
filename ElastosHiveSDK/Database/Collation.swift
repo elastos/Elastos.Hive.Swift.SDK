@@ -72,6 +72,19 @@ public enum MaxVariable: String {
 }
 
 public class Collation: Options<Collation> {
+    private let LOCALE = "locale"
+    private let CASELEVEL = "caseLevel"
+    private let CASEFIRST = "caseFirst"
+    private let STRENGTH = "strength"
+    private let NUMERICORDERING = "numericOrdering"
+    private let ALTERANTE = "alternate"
+    private let MAXVARIABLE = "maxVariable"
+    private let NORMALIZATION = "normalization"
+    private let BACKWARDS = "backwards"
+    private var _caseFirst: CaseFirst?
+    private var _strength: Strength?
+    private var _alternate: Alternate?
+    private var _maxVariable: MaxVariable?
 
     public init(_ cLocale: String, _ cCaseLevel: Bool, _ cCaseFirst: CaseFirst, _ cStrength: Strength, _ cNumericOrdering: Bool, _ cAlternate: Alternate, _ cMaxVariable: MaxVariable, _ cNormalization: Bool, _ cBackwards: Bool) {
         super.init()
@@ -86,48 +99,114 @@ public class Collation: Options<Collation> {
         _ = backwards(cBackwards)
     }
 
+    public override init() {
+        
+    }
+
     public func locale(_ value: String) -> Collation {
 
-        return setStringOption("locale", value)
+        return setStringOption(LOCALE, value)
+    }
+
+    public var locale: String? {
+        return getStringOption(LOCALE)
     }
 
     public func caseLevel(_ value: Bool) -> Collation {
 
-        return setBooleanOption("caseLevel", value)
+        return setBooleanOption(CASELEVEL, value)
+    }
+
+    public var caseLevel: Bool? {
+        return getBooleanOption(CASELEVEL)
     }
 
     public func caseFirst(_ value: CaseFirst) -> Collation {
+        _caseFirst = value
+        return setStringOption(CASEFIRST, value.description)
+    }
 
-        return setStringOption("caseFirst", value.description)
+    public var caseFirst: CaseFirst? {
+        return _caseFirst
     }
 
     public func strength(_ value: Strength) -> Collation {
+        _strength = value
+        return setNumberOption(STRENGTH, value.rawValue)
+    }
 
-        return setNumberOption("strength", value.rawValue)
+    public var strength: Strength? {
+        return _strength
     }
 
     public func numericOrdering(_ value: Bool) -> Collation {
 
-        return setBooleanOption("numericOrdering", value)
+        return setBooleanOption(NUMERICORDERING, value)
+    }
+
+    public var numericOrdering: Bool? {
+        return getBooleanOption(NUMERICORDERING)
     }
 
     public func alternate(_ value: Alternate) -> Collation {
+        _alternate = value
+        return setStringOption(ALTERANTE, value.description)
+    }
 
-        return setStringOption("alternate", value.description)
+    public var alternate: Alternate? {
+        return _alternate
     }
 
     public func maxVariable(_ value: MaxVariable) -> Collation {
+        _maxVariable = value
+        return setStringOption(MAXVARIABLE, value.description)
+    }
 
-        return setStringOption("maxVariable", value.description)
+    public var maxVariable: MaxVariable? {
+        return _maxVariable
     }
 
     public func normalization(_ value: Bool) -> Collation {
 
-        return setBooleanOption("normalization", value)
+        return setBooleanOption(NORMALIZATION, value)
+    }
+
+    public var normalization: Bool? {
+        return getBooleanOption(NORMALIZATION)
     }
 
     public func backwards(_ value: Bool) -> Collation {
 
-        return setBooleanOption("backwards", value)
+        return setBooleanOption(BACKWARDS, value)
+    }
+
+    public var backwards: Bool? {
+        return getBooleanOption(BACKWARDS)
+    }
+
+    public class func deserialize(_ content: [String: Any]) -> Collation {
+        let collation = Collation();
+        collation.param = content
+        let paramJson = JSON(content)
+        let caseF = paramJson["caseFirst"].stringValue
+        if caseF != "" {
+            collation._caseFirst = CaseFirst(rawValue: caseF)
+        }
+
+        let stre = paramJson["strength"].stringValue
+        if stre != "" {
+            collation._strength = Strength(rawValue: paramJson["strength"].intValue)
+        }
+
+        let alter = paramJson["alternate"].stringValue
+        if alter != "" {
+            collation._alternate = Alternate(rawValue: alter)
+        }
+        let max = paramJson["maxVariable"].stringValue
+        if max != "" {
+            collation._maxVariable = MaxVariable(rawValue: max)
+        }
+
+        return collation
     }
 }

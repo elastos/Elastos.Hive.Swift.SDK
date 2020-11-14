@@ -24,19 +24,26 @@ import Foundation
 
 public class CreateCollectionOptions: Options<CreateCollectionOptions> {
 
-    public override init() {
+    private var _writeConcern: WriteConcern?
+    private var _readConcern: ReadConcern?
+    private var _readPreference: ReadPreference?
+    private var _collation: Collation?
 
-    }
+    public override init() { }
 
     public func writeConcern(_ value: WriteConcern?) -> CreateCollectionOptions {
         if let _ = value {
-            _ = setObjectOption("write_concern", value as Any)
+            _ = setObjectOption("write_concern", value!.jsonSerialize())
         }
         else {
             remove("write_concern")
         }
 
         return self
+    }
+
+    public var writeConcern: WriteConcern? {
+        return _writeConcern
     }
 
     public func readConcern(_ value: ReadConcern?) -> CreateCollectionOptions {
@@ -48,6 +55,10 @@ public class CreateCollectionOptions: Options<CreateCollectionOptions> {
         }
 
         return self
+    }
+
+    public var readConcern: ReadConcern? {
+        return _readConcern
     }
 
     public func readPreference(_ value: ReadPreference?) -> CreateCollectionOptions {
@@ -67,10 +78,18 @@ public class CreateCollectionOptions: Options<CreateCollectionOptions> {
         return self
     }
 
+    public var capped: Bool? {
+        return getBooleanOption("capped")
+    }
+
     public func size(_ value: Int) -> CreateCollectionOptions {
         _ = setNumberOption("size", value)
 
         return self
+    }
+
+    public var size: Int? {
+        return getNumberOption("size")
     }
 
     public func max(_ value: Int) -> CreateCollectionOptions {
@@ -79,14 +98,50 @@ public class CreateCollectionOptions: Options<CreateCollectionOptions> {
         return self
     }
 
+    public var max: Int? {
+        return getNumberOption("max")
+    }
+
     public func collation(_ value: Collation?) -> CreateCollectionOptions {
         if let _ = value {
-            _ = setObjectOption("collation", value as Any)
+            _ = setObjectOption("collation", value!.jsonSerialize())
         }
         else {
             remove("collation")
         }
-
+        _collation = value
         return self
+    }
+
+    public var collation: Collation? {
+        return _collation
+    }
+
+    public class func deserialize(_ content: String) throws -> CreateCollectionOptions {
+        let data = content.data(using: String.Encoding.utf8)
+        let paramars = try JSONSerialization.jsonObject(with: data!,
+                                                        options: .mutableContainers) as? [String : Any] ?? [: ]
+        let opt = CreateCollectionOptions();
+        opt.param = paramars
+        let paramJson = JSON(paramars)
+        let collation = paramJson["collation"].dictionaryObject ?? [: ]
+        opt._collation = Collation.deserialize(collation)
+        var parm = paramJson["read_concern"].stringValue
+        if parm != "" {
+            opt._readConcern = ReadConcern(rawValue: parm)
+        }
+
+        parm = paramJson["readPreference"].stringValue
+        if parm != "" {
+            opt._readPreference = ReadPreference(rawValue: parm)
+        }
+
+        if let w = paramJson["writeConcern"].dictionaryObject {
+            let write = WriteConcern()
+            write.param = w
+            opt._writeConcern = write
+        }
+
+        return opt
     }
 }
