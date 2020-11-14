@@ -24,7 +24,8 @@ import Foundation
 
 public class DeleteResult: Result {
 
-    public func deletedCount() -> Int {
+    public var deletedCount: Int {
         return get("deleted_count")?.intValue == nil ? 0 : get("deleted_count")!.intValue
     }
+    
 }
