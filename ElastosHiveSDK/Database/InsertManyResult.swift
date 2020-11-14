@@ -23,7 +23,7 @@
 import Foundation
 
 public class InsertManyResult: Result {
-    private var _acknowledged: Bool = false
+    private var _acknowledged: Bool?
     private var _insertedIds: [String] = []
 
     public func insertedIds() -> Array<String> {
@@ -38,11 +38,16 @@ public class InsertManyResult: Result {
         return _insertedIds
     }
 
-    public var acknowledged: Bool {
-        return _acknowledged
+    public var acknowledged: Bool? {
+        return get("acknowledged")?.boolValue
     }
 
-    public func deserialize(_ content: String) {
-        // TODO:
+    public class func deserialize(_ content: String) throws -> InsertManyResult {
+        let data = content.data(using: String.Encoding.utf8)
+        let paramars = try JSONSerialization.jsonObject(with: data!,
+                                                        options: .mutableContainers) as? [String : Any] ?? [: ]
+        let opt = InsertManyResult(JSON(paramars))
+
+        return opt
     }
 }

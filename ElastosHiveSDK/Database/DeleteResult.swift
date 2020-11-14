@@ -28,4 +28,12 @@ public class DeleteResult: Result {
         return get("deleted_count")?.intValue == nil ? 0 : get("deleted_count")!.intValue
     }
     
+    public class func deserialize(_ content: String) throws -> DeleteResult {
+        let data = content.data(using: String.Encoding.utf8)
+        let paramars = try JSONSerialization.jsonObject(with: data!,
+                                                        options: .mutableContainers) as? [String : Any] ?? [: ]
+        let opt = DeleteResult(JSON(paramars))
+
+        return opt
+    }
 }

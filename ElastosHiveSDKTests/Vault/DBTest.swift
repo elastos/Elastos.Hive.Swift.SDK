@@ -122,61 +122,52 @@ class DBTest: XCTestCase {
 
     func test02_DbResults() {
         do {
-            let json = "{\"deleted_count\":1000}"
-            var ds = DeleteResult.deserialize(json)
+            var json = "{\"deleted_count\":1000}"
+            var ds = try DeleteResult.deserialize(json)
+            XCTAssertEqual(1000, ds.deletedCount)
+            json = try ds.serialize()
+            ds = try DeleteResult.deserialize(json)
+            XCTAssertEqual(1000, ds.deletedCount)
+            json = "{\"acknowledged\":true,\"inserted_id\":\"test_inserted_id\"}"
+            var ior = try InsertOneResult.deserialize(json)
+            XCTAssertTrue(ior.acknowledged!)
+            XCTAssertEqual("test_inserted_id", ior.insertedId())
+            json = try ior.serialize()
+            ior = try InsertOneResult.deserialize(json)
+            XCTAssertTrue(ior.acknowledged!)
+            XCTAssertEqual("test_inserted_id", ior.insertedId())
 
+            json = "{\"acknowledged\":false,\"inserted_ids\":[\"test_inserted_id1\",\"test_inserted_id2\"]}"
+            var imr = try InsertManyResult.deserialize(json)
+            XCTAssertFalse(imr.acknowledged!)
+            var ids = imr.insertedIds()
+            XCTAssertNotNil(ids)
+            XCTAssertEqual(2, ids.count)
+            json = try imr.serialize()
+            imr = try InsertManyResult.deserialize(json)
+            XCTAssertFalse(imr.acknowledged!)
+            ids = imr.insertedIds()
+            XCTAssertNotNil(ids)
+            XCTAssertEqual(2, ids.count)
+
+            json = "{\"matched_count\":10,\"modified_count\":5,\"upserted_count\":3,\"upserted_id\":\"test_id\"}"
+            var ur = try UpdateResult.deserialize(json)
+            XCTAssertEqual(10, ur.matchedCount())
+            XCTAssertEqual(5, ur.modifiedCount())
+            XCTAssertEqual(3, ur.upsertedCount())
+            XCTAssertEqual("test_id", ur.upsertedId())
+            json = try ur.serialize()
+            ur = try UpdateResult.deserialize(json)
+            XCTAssertEqual(10, ur.matchedCount())
+            XCTAssertEqual(5, ur.modifiedCount())
+            XCTAssertEqual(3, ur.upsertedCount())
+            XCTAssertEqual("test_id", ur.upsertedId())
         } catch {
             print(error)
             XCTFail()
         }
     }
 
-    /*
-     @Test
-     public void test02_DbResults() throws Exception {
-         String json = "{\"deleted_count\":1000}";
-         DeleteResult ds = DeleteResult.deserialize(json);
-         assertEquals(1000, ds.deletedCount());
-         json = ds.serialize();
-         ds = DeleteResult.deserialize(json);
-         assertEquals(1000, ds.deletedCount());
-
-         json = "{\"acknowledged\":true,\"inserted_id\":\"test_inserted_id\"}";
-         InsertOneResult ior = InsertOneResult.deserialize(json);
-         assertTrue(ior.acknowledged());
-         assertEquals("test_inserted_id", ior.insertedId());
-         json = ior.serialize();
-         ior = InsertOneResult.deserialize(json);
-         assertTrue(ior.acknowledged());
-         assertEquals("test_inserted_id", ior.insertedId());
-
-         json = "{\"acknowledged\":false,\"inserted_ids\":[\"test_inserted_id1\",\"test_inserted_id2\"]}";
-         InsertManyResult imr = InsertManyResult.deserialize(json);
-         assertFalse(imr.acknowledged());
-         List<String> ids = imr.insertedIds();
-         assertNotNull(ids);
-         assertEquals(2, ids.size());
-         json = imr.serialize();
-         imr = InsertManyResult.deserialize(json);
-         assertFalse(imr.acknowledged());
-         ids = imr.insertedIds();
-         assertNotNull(ids);
-         assertEquals(2, ids.size());
-
-         json = "{\"matched_count\":10,\"modified_count\":5,\"upserted_count\":3,\"upserted_id\":\"test_id\"}";
-         UpdateResult ur = UpdateResult.deserialize(json);
-         assertEquals(10, ur.matchedCount());
-         assertEquals(5, ur.modifiedCount());
-         assertEquals(3, ur.upsertedCount());
-         assertEquals("test_id", ur.upsertedId());
-         json = ur.serialize();
-         ur = UpdateResult.deserialize(json);
-         assertEquals(10, ur.matchedCount());
-         assertEquals(5, ur.modifiedCount());
-         assertEquals(3, ur.upsertedCount());
-         assertEquals("test_id", ur.upsertedId());
-     }
-     */
     func testDeleteCollection() {
         let lock = XCTestExpectation(description: "wait for test.")
         database?.deleteCollection("new").done{ result in
