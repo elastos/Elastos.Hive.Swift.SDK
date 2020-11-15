@@ -9,7 +9,7 @@ class ScriptTest: XCTestCase {
     private var noConditionName: String = "get_groups"
     private var withConditionName: String = "get_group_messages"
 
-    func testCondition() {
+    func test1_Condition() {
         do {
             let json = "{\"name\":\"mkyong\", \"age\":37, \"c\":[\"adc\",\"zfy\",\"aaa\"], \"d\": {\"foo\": 1, \"bar\": 2}}"
             let data = json.data(using: String.Encoding.utf8)
@@ -39,8 +39,8 @@ class ScriptTest: XCTestCase {
             XCTFail()
         }
     }
-    
-    func testExecutable() {
+
+    func test2_Executable() {
         do {
             let json = "{\"name\":\"mkyong\", \"age\":37, \"c\":[\"adc\",\"zfy\",\"aaa\"], \"d\": {\"foo\": 1, \"bar\": 2}}"
             let data = json.data(using: String.Encoding.utf8)
@@ -48,7 +48,7 @@ class ScriptTest: XCTestCase {
             let exec1 = DbFindQuery("exec1", "c1", dict!)
             let exec2 = DbFindQuery("exec2", "c2", dict!)
             let exec3 = DbInsertQuery("exec3", "c3", dict!)
-            let exec4 = RawExecutable(json)
+            let exec4 = RawExecutable(executable: json)
             let ae = AggregatedExecutable("ae")
             try ae.append(exec1)
                   .append(exec2)
@@ -93,7 +93,7 @@ class ScriptTest: XCTestCase {
         do {
             let datafilter = "{\"_id\":\"$params.group_id\",\"friends\":\"$caller_did\"}".data(using: String.Encoding.utf8)
             let filter = try JSONSerialization.jsonObject(with: datafilter!,options: .mutableContainers) as? [String : Any]
-            let executable: DbFindQuery = DbFindQuery("get_groups", "groups", filter!)
+            let executable: DbFindQuery = DbFindQuery("get_groups", "test_group", filter!)
             let condition: QueryHasResultsCondition = QueryHasResultsCondition("verify_user_permission", "test_group", filter!)
             let lock = XCTestExpectation(description: "wait for test.")
             scripting!.registerScript(withConditionName, condition, executable).done { re in
@@ -134,27 +134,7 @@ class ScriptTest: XCTestCase {
             self.wait(for: [lock], timeout: 10000.0)
     }
 
-    func test09_callWithParams() {
-        do {
-            let lock = XCTestExpectation(description: "wait for test.")
-            let param = "{\"group_id\":{\"$oid\":\"5f497bb83bd36ab235d82e6a\"}}"
-            let params = try JSONSerialization.jsonObject(with: param.data(using: .utf8)!, options: [ ]) as! [String : Any]
-            scripting?.call(withConditionName,params, String.self).done{ str in
-                print(str)
-                XCTAssertTrue(true)
-                lock.fulfill()
-            }.catch{ err in
-                XCTFail()
-                lock.fulfill()
-            }
-            self.wait(for: [lock], timeout: 10000.0)
-        } catch {
-            XCTFail()
-        }
-
-    }
-
-    func test10_callOtherScript() {
+    func test7_callOtherScript() {
         let lock = XCTestExpectation(description: "wait for test.")
         scripting?.call(noConditionName, "appId", String.self).done{ str in
             print(str)
@@ -167,10 +147,10 @@ class ScriptTest: XCTestCase {
         self.wait(for: [lock], timeout: 10000.0)
     }
 
-    func test11_setUploadScript() {
+    func test8_setUploadScript() {
         let lock = XCTestExpectation(description: "wait for test.")
         let executable = "{\"type\":\"fileUpload\",\"name\":\"upload_file\",\"output\":true,\"body\":{\"path\":\"$params.path\"}}"
-        scripting?.registerScript("upload_file", RawExecutable(executable)).done{ re in
+        scripting?.registerScript("upload_file", RawExecutable(executable: executable)).done{ re in
             print(re)
             XCTAssertTrue(true)
             lock.fulfill()
@@ -194,6 +174,35 @@ class ScriptTest: XCTestCase {
 //        }
 //        self.wait(for: [lock], timeout: 10000.0)
 //    }
+
+    func test15_setInfoScript() {
+        let hashExecutable = HashExecutable(name: "file_hash", path: "$params.path")
+        let propertiesExecutable = PropertiesExecutable(name: "file_properties", path: "$params.path")
+        let executable = AggregatedExecutable("file_properties_and_hash", [hashExecutable, propertiesExecutable])
+        let lock = XCTestExpectation(description: "wait for test.")
+        scripting!.registerScript("get_file_info", executable).done { success in
+            XCTAssertTrue(success)
+            lock.fulfill()
+        }.catch { error in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 10000.0)
+    }
+
+    func test16_getFileInfo() {
+        let params = ["group_id": ["$oid": "5f497bb83bd36ab235d82e6a"], "path": "test.txt"] as [String : Any]
+        let lock = XCTestExpectation(description: "wait for test.")
+        scripting!.call("get_file_info", params, ScriptingType.PROPERTIES, String.self).done { success in
+//            XCTAssertTrue(success)
+            print(success)
+            lock.fulfill()
+        }.catch { error in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 10000.0)
+    }
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.

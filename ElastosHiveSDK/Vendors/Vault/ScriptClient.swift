@@ -48,9 +48,9 @@ public class ScriptClient: ScriptingProtocol {
 
             var param = ["name": name] as [String : Any]
             if let _ = accessCondition {
-                param["accessCondition"] = try? accessCondition!.jsonSerialize()
+                param["accessCondition"] = try accessCondition!.jsonSerialize()
             }
-            param["executable"] = try! executable.jsonSerialize()
+            param["executable"] = try executable.jsonSerialize()
             let url = VaultURL.sharedInstance.registerScript()
             VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
                 let status = json["_status"].stringValue
@@ -108,10 +108,12 @@ public class ScriptClient: ScriptingProtocol {
     private func callWithAppDidImp<T>(_ scriptName: String, params: [String : Any]? = nil, appDid: String?, _ resultType: T.Type, tryAgain: Int) -> HivePromise<T> {
         return HivePromise<T> { resolver in
             var param = ["name": scriptName] as [String : Any]
-            if let _ = appDid {
-                let ownerDid = authHelper.ownerDid
-                var dic = ["target_did": ownerDid]
-                dic["target_app_did"] = appDid!
+            let ownerDid = authHelper.ownerDid
+            if ownerDid != nil{
+                var dic = ["target_did": ownerDid!]
+                if let _ = appDid {
+                    dic["target_app_did"] = appDid!
+                }
                 param["context"] = dic
             }
             if let _ = params {

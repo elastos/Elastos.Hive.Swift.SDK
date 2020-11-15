@@ -22,18 +22,17 @@
 
 import Foundation
 
-public class DbFindQuery: Executable {
-    private let TYPE = "find"
-    private var query: Query
+public class FileExecutable: Executable {
+    public var query: FileQuery
 
-    public init(_ name: String, _ collection: String, _ filter: [String: Any]) {
-        self.query = Query(collection, filter)
-        super.init(TYPE, name)
+    public init(_ type: String, _ name: String, _ path: String) {
+        self.query = FileQuery(path)
+        super.init(type, name)
     }
 
-    public init(_ name: String, _ collection: String, _ filter: [String: Any], _ options: [String: Any]) {
-        self.query = Query(collection, filter, options)
-        super.init(TYPE, name)
+    public init(_ type: String, _ name: String, _ path: String, _ output: Bool) {
+        self.query = FileQuery(path)
+        super.init(type, name, output)
     }
 
     public override func serialize(_ jsonGenerator: JsonGenerator) throws {
@@ -42,6 +41,7 @@ public class DbFindQuery: Executable {
         if let _ = name {
             jsonGenerator.writeStringField("name", name!)
         }
+        jsonGenerator.writeBoolField("output", output)
         jsonGenerator.writeFieldName("body")
         try query.serialize(jsonGenerator)
         jsonGenerator.writeEndObject()
@@ -55,3 +55,17 @@ public class DbFindQuery: Executable {
     }
 }
 
+public class FileQuery: NSObject {
+    public var path: String
+
+    public init(_ path: String) {
+        self.path = path
+        super.init()
+    }
+
+    public func serialize(_ jsonGenerator: JsonGenerator) throws {
+        jsonGenerator.writeStartObject()
+        jsonGenerator.writeStringField("path", path)
+        jsonGenerator.writeEndObject()
+    }
+}

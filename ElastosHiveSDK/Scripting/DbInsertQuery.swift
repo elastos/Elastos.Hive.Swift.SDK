@@ -34,7 +34,9 @@ public class DbInsertQuery: Executable {
     public override func serialize(_ jsonGenerator: JsonGenerator) throws {
         jsonGenerator.writeStartObject()
         jsonGenerator.writeStringField("type", type)
-        jsonGenerator.writeStringField("name", name!)
+        if let _ = name {
+            jsonGenerator.writeStringField("name", name!)
+        }
         jsonGenerator.writeFieldName("body")
         try query.serialize(jsonGenerator)
         jsonGenerator.writeEndObject()

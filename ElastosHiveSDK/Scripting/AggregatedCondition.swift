@@ -28,7 +28,6 @@ public class AggregatedCondition: Condition {
     public init(_ type: String, _ name: String, _ conditions: [Condition]) {
         self.conditions = conditions
         super.init(type, name)
-
     }
 
     public override init(_ type: String, _ name: String) {
@@ -79,22 +78,13 @@ public class AggregatedCondition: Condition {
         gen.writeEndObject()
     }
 
-    public override func jsonSerialize() -> [String : Any] {
-        var param: [String: Any] = ["type": type]
-        if let _ = name {
-            param["name"] = name
+    public override func jsonSerialize() throws -> [String : Any] {
+        let str = try serialize()
+
+        let data = str.data(using: String.Encoding.utf8)
+        guard data != nil else {
+            return [: ]
         }
-        if conditions.count > 0 {
-            var array: [[String: Any]] = []
-            conditions.forEach { c in
-                var d = ["type": c.type]
-                if let _  = c.name {
-                    d["name"] = c.name!
-                }
-                array.append(d)
-            }
-            param["body"] = array
-        }
-        return param
+        return try (JSONSerialization.jsonObject(with: data!,options: .mutableContainers) as? [String : Any])!
     }
 }

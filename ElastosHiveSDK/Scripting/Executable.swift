@@ -25,14 +25,21 @@ import Foundation
 public class Executable: NSObject {
     var type: String
     var name: String?
-    
+    var output: Bool = false
+
+    init(_ type: String) {
+        self.type = type
+    }
+
     init(_ type: String, _ name: String) {
         self.type = type
         self.name = name
     }
 
-    init(_ type: String) {
+    init(_ type: String, _ name: String, _ output: Bool) {
         self.type = type
+        self.name = name
+        self.output = output
     }
 
     public func serialize() throws -> String {
@@ -42,6 +49,7 @@ public class Executable: NSObject {
         if let _ = name {
             jsonGenerator.writeStringField("name", name!)
         }
+        jsonGenerator.writeBoolField("output", output)
         jsonGenerator.writeEndObject()
         return jsonGenerator.toString()
     }
@@ -52,6 +60,7 @@ public class Executable: NSObject {
         if let _ = name {
             jsonGenerator.writeStringField("name", name!)
         }
+        jsonGenerator.writeBoolField("output", output)
         jsonGenerator.writeEndObject()
     }
 
@@ -60,6 +69,7 @@ public class Executable: NSObject {
         if let _ = name {
             para["name"] = name
         }
+        para["output"] = output
         return para
     }
 }
