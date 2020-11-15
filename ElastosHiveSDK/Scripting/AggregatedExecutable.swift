@@ -81,21 +81,12 @@ public class AggregatedExecutable: Executable {
     }
 
     public override func jsonSerialize() throws -> [String : Any] {
-        var param: [String: Any] = ["type": type]
-        if let _ = name {
-            param["name"] = name
+        let str = try serialize()
+
+        let data = str.data(using: String.Encoding.utf8)
+        guard data != nil else {
+            return [: ]
         }
-        if executables.count > 0 {
-            var array: [[String: Any]] = []
-            executables.forEach { e in
-                var d = ["type": e.type]
-                if let _  = e.name {
-                    d["name"] = e.name!
-                }
-                array.append(d)
-            }
-            param["body"] = array
-        }
-        return param
+        return try (JSONSerialization.jsonObject(with: data!,options: .mutableContainers) as? [String : Any])!
     }
 }

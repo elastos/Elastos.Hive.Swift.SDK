@@ -26,7 +26,7 @@ public class RawExecutable: Executable {
     private let TYPE = "raw"
     private var executable: String
 
-    public override init(_ executable: String) {
+    public init(executable: String) {
         self.executable = executable
         super.init(TYPE)
     }
