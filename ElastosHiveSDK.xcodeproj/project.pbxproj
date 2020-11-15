@@ -176,7 +176,7 @@
 		11E92CED2560E228007EFC95 /* HashExecutable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E92CEC2560E228007EFC95 /* HashExecutable.swift */; };
 		11ED682A22FF1078004C17D0 /* ElastosHiveSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED682922FF1077004C17D0 /* ElastosHiveSDK.swift */; };
 		11ED682B22FF1078004C17D0 /* ElastosHiveSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED682922FF1077004C17D0 /* ElastosHiveSDK.swift */; };
-		2663D22A7DA76A0E3D1F6D8C /* Pods_ElastosHiveSDK_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DE05E42E9E969EDC26357D1 /* Pods_ElastosHiveSDK_macOS.framework */; };
+		11FD496D2561AC9B00A108D2 /* DownloadExecutable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FD496C2561AC9B00A108D2 /* DownloadExecutable.swift */; };
 		6DDA50FA35E7A18E5EF0C90E /* Pods_ElastosHiveSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D17AD36AC88E073FD2B2D930 /* Pods_ElastosHiveSDK.framework */; };
 		A37F893D23C72B2600F6C11E /* HiveClientOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37F893C23C72B2600F6C11E /* HiveClientOptions.swift */; };
 		A39C4980225399860027BDF9 /* ElastosHiveSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = A39C4972225399860027BDF9 /* ElastosHiveSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -321,14 +321,12 @@
 		11E92CE82560E1D4007EFC95 /* PropertiesExecutable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertiesExecutable.swift; sourceTree = "<group>"; };
 		11E92CEC2560E228007EFC95 /* HashExecutable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashExecutable.swift; sourceTree = "<group>"; };
 		11ED682922FF1077004C17D0 /* ElastosHiveSDK.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElastosHiveSDK.swift; sourceTree = "<group>"; };
+		11FD496C2561AC9B00A108D2 /* DownloadExecutable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadExecutable.swift; sourceTree = "<group>"; };
 		13C6D592C180032E4F31BEF6 /* Pods-ElastosHiveSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDK.debug.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDK/Pods-ElastosHiveSDK.debug.xcconfig"; sourceTree = "<group>"; };
 		2368C8CBAE94193EAF7DB87D /* Pods-ElastosHiveSDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDKTests.debug.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDKTests/Pods-ElastosHiveSDKTests.debug.xcconfig"; sourceTree = "<group>"; };
-		30EAA8B1E119CDD4125218B6 /* Pods-ElastosHiveSDK_macOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDK_macOS.debug.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDK_macOS/Pods-ElastosHiveSDK_macOS.debug.xcconfig"; sourceTree = "<group>"; };
-		35FCE1DB23121BEEE8DD94B1 /* Pods-ElastosHiveSDK_macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDK_macOS.release.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDK_macOS/Pods-ElastosHiveSDK_macOS.release.xcconfig"; sourceTree = "<group>"; };
 		556E8D39E54EDBDFA4DEAD42 /* Pods-TestHost.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestHost.release.xcconfig"; path = "Target Support Files/Pods-TestHost/Pods-TestHost.release.xcconfig"; sourceTree = "<group>"; };
 		5F09DA7DC9D47111E630261C /* Pods_TestHost.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TestHost.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6081910F0FC211291C05B08B /* Pods-ElastosHiveSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDK.release.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDK/Pods-ElastosHiveSDK.release.xcconfig"; sourceTree = "<group>"; };
-		6DE05E42E9E969EDC26357D1 /* Pods_ElastosHiveSDK_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ElastosHiveSDK_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A37F893C23C72B2600F6C11E /* HiveClientOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HiveClientOptions.swift; path = Core/HiveClientOptions.swift; sourceTree = "<group>"; };
 		A39C496F225399860027BDF9 /* ElastosHiveSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ElastosHiveSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A39C4972225399860027BDF9 /* ElastosHiveSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ElastosHiveSDK.h; sourceTree = "<group>"; };
@@ -359,7 +357,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2663D22A7DA76A0E3D1F6D8C /* Pods_ElastosHiveSDK_macOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -484,6 +481,7 @@
 				11E92CE42560DFF5007EFC95 /* UploadExecutable.swift */,
 				11E92CE82560E1D4007EFC95 /* PropertiesExecutable.swift */,
 				11E92CEC2560E228007EFC95 /* HashExecutable.swift */,
+				11FD496C2561AC9B00A108D2 /* DownloadExecutable.swift */,
 			);
 			path = Scripting;
 			sourceTree = "<group>";
@@ -552,7 +550,6 @@
 				D17AD36AC88E073FD2B2D930 /* Pods_ElastosHiveSDK.framework */,
 				0DB068EABA0DB13AB595055A /* Pods_ElastosHiveSDKTests.framework */,
 				5F09DA7DC9D47111E630261C /* Pods_TestHost.framework */,
-				6DE05E42E9E969EDC26357D1 /* Pods_ElastosHiveSDK_macOS.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -566,8 +563,6 @@
 				C228C56325B65D63A60C99C8 /* Pods-ElastosHiveSDKTests.release.xcconfig */,
 				DB374220454CA5325E399B9B /* Pods-TestHost.debug.xcconfig */,
 				556E8D39E54EDBDFA4DEAD42 /* Pods-TestHost.release.xcconfig */,
-				30EAA8B1E119CDD4125218B6 /* Pods-ElastosHiveSDK_macOS.debug.xcconfig */,
-				35FCE1DB23121BEEE8DD94B1 /* Pods-ElastosHiveSDK_macOS.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -714,7 +709,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 11D26F4122CA3B3300E4099A /* Build configuration list for PBXNativeTarget "ElastosHiveSDK_macOS" */;
 			buildPhases = (
-				A69A7AFBCD4DB14406871C23 /* [CP] Check Pods Manifest.lock */,
 				11D26F3722CA3B3300E4099A /* Headers */,
 				11D26F3822CA3B3300E4099A /* Sources */,
 				11D26F3922CA3B3300E4099A /* Frameworks */,
@@ -916,28 +910,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A69A7AFBCD4DB14406871C23 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ElastosHiveSDK_macOS-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1075,6 +1047,7 @@
 				115E82F3251A4590004DCB1E /* Timestamp.swift in Sources */,
 				1103757C23FF96C7004216D0 /* Persistent.swift in Sources */,
 				1170FBA12508D35A0049E81D /* Header.swift in Sources */,
+				11FD496D2561AC9B00A108D2 /* DownloadExecutable.swift in Sources */,
 				111D477924ED0C1200B7462B /* VaultAuthHelper.swift in Sources */,
 				115E82F0251A4553004DCB1E /* RegularExpression.swift in Sources */,
 				11E573FF22C4C33400F85419 /* String.swift in Sources */,
@@ -1211,7 +1184,6 @@
 		};
 		11D26F4222CA3B3300E4099A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 30EAA8B1E119CDD4125218B6 /* Pods-ElastosHiveSDK_macOS.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
@@ -1245,7 +1217,6 @@
 		};
 		11D26F4322CA3B3300E4099A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 35FCE1DB23121BEEE8DD94B1 /* Pods-ElastosHiveSDK_macOS.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;

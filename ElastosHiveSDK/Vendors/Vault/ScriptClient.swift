@@ -172,24 +172,114 @@ public class ScriptClient: ScriptingProtocol {
         return self.authHelper.checkValid().then { _ -> HivePromise<T> in
             switch type {
             case .UPLOAD:
-                return self.uploadImp(filePath: name, param: params, type: type, resultType: resultType)
+                return self.uploadImp(filePath: name, param: params, type: type, resultType: resultType, tryAgain: 0)
             case .DOWNLOAD:
-                return self.downloadImp(scriptName: name, param: params, type: type, resultType: resultType)
+                return self.downloadImp(scriptName: name, param: params, type: type, resultType: resultType, tryAgain: 0)
             case .PROPERTIES:
                 return self.callWithAppDidImp(name, params: params, appDid: nil, resultType, tryAgain: 0)
             }
         }
     }
 
-    private func uploadImp<T>(filePath: String, param: [String: Any], type: ScriptingType, resultType: T.Type) -> HivePromise<T> {
+    private func uploadImp<T>(filePath: String, param: [String: Any], type: ScriptingType, resultType: T.Type, tryAgain: Int) -> HivePromise<T> {
         return HivePromise<T> { resolver in
             let url = VaultURL.sharedInstance.call()
+            Alamofire.upload(multipartFormData: { (multipartFormData) in
+                let data: Data = try! Data(contentsOf: URL(fileURLWithPath: filePath))
+                multipartFormData.append(data, withName: "data", fileName: "test.txt", mimeType: "multipart/form-data")
+                let data1 = try? JSONSerialization.data(withJSONObject: param, options: [])
+                let str = String(data: data1!, encoding: String.Encoding.utf8)
+                multipartFormData.append(str!.data(using: .utf8)!, withName: "metadata" )
+            }, usingThreshold: UInt64.init(), to: url, method: .post, headers: Header(authHelper).headers()) { result in
+                switch result {
+                case .success(let upload, _, _):
+                    upload.responseJSON { response in
+                        let json = JSON(response.result.value as Any)
+                        let status = json["_status"].stringValue
+                        if status == "ERR" {
+                            let errorCode = json["_error"]["code"].intValue
+                            let errorMessage = json["_error"]["message"].stringValue
+                            if errorCode == 401 && errorMessage == "auth failed" && tryAgain < 1 {
+                                self.authHelper.retryLogin().then { success -> HivePromise<T> in
+                                    return self.uploadImp(filePath: filePath, param: param, type: type, resultType: resultType, tryAgain: 1)
+                                }.done { result in
+                                    resolver.fulfill(result)
+                                }.catch { e in
+                                    resolver.reject(e)
+                                }
+                            } else {
+                                let errorStr = HiveError.praseError(json)
+                                Log.e(ScriptClient.TAG, "upload ERROR: ", errorStr)
+                                resolver.reject(HiveError.failure(des: errorStr))
+                            }
+                        }
+                        else {
+                            do {
+                                if resultType.self == OutputStream.self {
+                                    let data = try JSONSerialization.data(withJSONObject: json.dictionaryObject as Any, options: [])
+                                    let outputStream = OutputStream(toMemory: ())
+                                    outputStream.open()
+                                    self.writeData(data: data, outputStream: outputStream, maxLengthPerWrite: 1024)
+                                    outputStream.close()
+                                    resolver.fulfill(outputStream as! T)
+                                }
+                                else if resultType.self == String.self {
+                                    let dic = json.dictionaryObject
+                                    let data = try JSONSerialization.data(withJSONObject: dic as Any, options: [])
+                                    let str = String(data: data, encoding: String.Encoding.utf8)
+                                    resolver.fulfill(str as! T)
+                                }
+                                else {
+                                    let data = try JSONSerialization.data(withJSONObject: json.dictionaryObject as Any, options: [])
+                                    resolver.fulfill(data as! T)
+                                }
+                            } catch {
+                                Log.e(ScriptClient.TAG, "upload ERROR: ", error.localizedDescription)
+                                resolver.reject(HiveError.failure(des: error.localizedDescription))
+                            }
+                        }
+                    }
+                case .failure(let encodingError):
+                    Log.e(ScriptClient.TAG, "upload ERROR: ", encodingError.localizedDescription)
+                    resolver.reject(HiveError.failure(des: encodingError.localizedDescription))
+                }
+            }
         }
     }
 
-    private func downloadImp<T>(scriptName: String, param: [String: Any], type: ScriptingType, resultType: T.Type) -> HivePromise<T> {
+    private func downloadImp<T>(scriptName: String, param: [String: Any], type: ScriptingType, resultType: T.Type, tryAgain: Int) -> HivePromise<T> {
         return HivePromise<T> { resolver in
             let url = VaultURL.sharedInstance.call()
+            var params = ["name": scriptName] as [String : Any]
+            if param.count > 0 {
+                params["params"] = param
+            }
+            Alamofire.request(url,
+                              method: .post,
+                              parameters: params,
+                              encoding: JSONEncoding.default,
+                              headers: Header(authHelper).headers())
+                .responseData { result in
+                    if result.result.isSuccess {
+                        if resultType.self == OutputStream.self {
+                            let outputStream = OutputStream(toMemory: ())
+                            outputStream.open()
+                            self.writeData(data: result.data!, outputStream: outputStream, maxLengthPerWrite: 1024)
+                            outputStream.close()
+                            resolver.fulfill(outputStream as! T)
+                        }
+                        else if resultType.self == String.self {
+                            let str = String(data: result.data!, encoding: String.Encoding.utf8)
+                            resolver.fulfill(str as! T)
+                        }
+                        else {
+                            resolver.fulfill(result.data as! T)
+                        }
+                    }
+                    else {
+                        resolver.reject(HiveError.failure(des: result.result.error?.localizedDescription))
+                    }
+                }
         }
     }
 
