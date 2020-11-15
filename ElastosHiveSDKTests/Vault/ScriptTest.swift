@@ -161,19 +161,45 @@ class ScriptTest: XCTestCase {
         self.wait(for: [lock], timeout: 10000.0)
     }
 
-//    func test12_uploadFile() {
-//        let lock = XCTestExpectation(description: "wait for test.")
-//        let metadata = "{\"name\":\"upload_file\",\"params\":{\"group_id\":{\"$oid\":\"5f8d9dfe2f4c8b7a6f8ec0f1\"},\"path\":\"test.txt\"}}"
-//        let params = ["name": "upload_file", "params":["group_id": ["$oid": "5f8d9dfe2f4c8b7a6f8ec0f1"], "path": "test.txt"]] as [String : Any]
-//        scripting!.call("/Users/liaihong/Desktop/test.txt", params, ScriptingType.UPLOAD, String.self).done { re in
-//            print(re)
-//            lock.fulfill()
-//        }.catch{ err in
-//            XCTFail()
-//            lock.fulfill()
-//        }
-//        self.wait(for: [lock], timeout: 10000.0)
-//    }
+    func test12_uploadFile() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        let params = ["name": "upload_file", "params":["group_id": ["$oid": "5f8d9dfe2f4c8b7a6f8ec0f1"], "path": "test.txt"]] as [String : Any]
+        scripting!.call("/Users/liaihong/Desktop/test.txt", params, ScriptingType.UPLOAD, String.self).done { re in
+            print(re)
+            lock.fulfill()
+        }.catch{ err in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 10000.0)
+    }
+
+    func test13_setDownloadScript() {
+        let executable = DownloadExecutable(name: "download_file", path: "$params.path", output: true)
+
+        let lock = XCTestExpectation(description: "wait for test.")
+        scripting!.registerScript("download_file", executable).done { success in
+            XCTAssertTrue(success)
+            lock.fulfill()
+        }.catch { error in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 10000.0)
+    }
+
+    func test14_downloadFile() {
+        let params = ["group_id": ["$oid": "5f497bb83bd36ab235d82e6a"], "path": "test.txt"] as [String : Any]
+        let lock = XCTestExpectation(description: "wait for test.")
+        scripting!.call("download_file", params, ScriptingType.DOWNLOAD, String.self).done { success in
+            print(success)
+            lock.fulfill()
+        }.catch { error in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 10000.0)
+    }
 
     func test15_setInfoScript() {
         let hashExecutable = HashExecutable(name: "file_hash", path: "$params.path")
@@ -194,7 +220,6 @@ class ScriptTest: XCTestCase {
         let params = ["group_id": ["$oid": "5f497bb83bd36ab235d82e6a"], "path": "test.txt"] as [String : Any]
         let lock = XCTestExpectation(description: "wait for test.")
         scripting!.call("get_file_info", params, ScriptingType.PROPERTIES, String.self).done { success in
-//            XCTAssertTrue(success)
             print(success)
             lock.fulfill()
         }.catch { error in
