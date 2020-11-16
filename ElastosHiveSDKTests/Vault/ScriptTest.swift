@@ -192,7 +192,7 @@ class ScriptTest: XCTestCase {
         let params = ["group_id": ["$oid": "5f497bb83bd36ab235d82e6a"], "path": "test.txt"] as [String : Any]
         let lock = XCTestExpectation(description: "wait for test.")
         scripting!.call("download_file", params, ScriptingType.DOWNLOAD, String.self).done { success in
-            print(success)
+//            print(success)
             lock.fulfill()
         }.catch { error in
             XCTFail()

@@ -39,8 +39,8 @@ public class FileClient: FilesProtocol {
     private func uploadImp(_ localPath: String, asRemoteFile: String, tryAgain: Int) -> HivePromise<Bool> {
         return HivePromise<Bool> { resolver in
             let url = VaultURL.sharedInstance.upload(asRemoteFile)
-            let localURL = URL.init(string: localPath)
-            Alamofire.upload(localURL!, to: url, method: .post, headers: Header(authHelper).headers())
+            let inputStream = InputStream.init(fileAtPath: localPath)
+            Alamofire.upload(inputStream!, to: url, method: .post, headers: Header(authHelper).headers())
                 .responseJSON { dataResponse in
                     switch dataResponse.result {
                     case .success(let re):
@@ -71,47 +71,59 @@ public class FileClient: FilesProtocol {
         }
     }
 
-    public func download(_ path: String) -> HivePromise<OutputStream> {
-        return authHelper.checkValid().then { _ -> HivePromise<OutputStream> in
-            return self.downloadImp(path, tryAgain: 0)
+    public func download(_ path: String, toLocalFile: String) -> HivePromise<Bool> {
+        return authHelper.checkValid().then { _ -> HivePromise<Bool> in
+            return self.downloadImp(path, toLocalFile, tryAgain: 0)
         }
     }
 
-    private func downloadImp(_ remoteFile: String, tryAgain: Int) -> HivePromise<OutputStream> {
-        return HivePromise<OutputStream> { resolver in
+    private func downloadImp(_ remoteFile: String, _ toLocalFile: String, tryAgain: Int) -> HivePromise<Bool> {
+        return HivePromise<Bool> { resolver in
             let url = VaultURL.sharedInstance.download(remoteFile)
-            Alamofire.request(url, method: .get, headers: Header(authHelper).headers())
-                .responseString { result in
-                    switch result.result {
-                    case .success(let re):
-                        let json = JSON(re)
-                        if !VaultApi.checkResponseIsError(json) {
-                            if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
-                                self.authHelper.retryLogin().then { success -> HivePromise<OutputStream> in
-                                    return self.downloadImp(remoteFile, tryAgain: 1)
-                                }.done { result in
-                                    resolver.fulfill(result)
-                                }.catch { error in
-                                    resolver.reject(error)
-                                }
-                            } else {
-                                let errorStr = HiveError.praseError(json)
-                                Log.e(FileClient.TAG, "download ERROR: ", errorStr)
-                                resolver.reject(HiveError.failure(des: errorStr))
-                            }
-                        }
-                        else {
-                            let outputStream = OutputStream(toMemory: ())
-                            outputStream.open()
-                            self.writeData(data: result.data!, outputStream: outputStream, maxLengthPerWrite: 1024)
-                            outputStream.close()
-                            resolver.fulfill(outputStream)
-                        }
-                    case .failure(let error):
-                        Log.e(FileClient.TAG, "download ERROR: ", HiveError.description(error as! HiveError))
-                        resolver.reject(error)
-                    }
+            Alamofire.download(url, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: Header(authHelper).headers()) { (lp, re) -> (destinationURL: URL, options: DownloadRequest.DownloadOptions) in
+                let arraySubstringsRemoteFile: [Substring] = remoteFile.split(separator: "/")
+                let arrayStringsRemoteFile: [String] = arraySubstringsRemoteFile.compactMap { "\($0)" }
+                let arraySubstringsLocalFile: [Substring] = toLocalFile.split(separator: "/")
+                let arrayStringsLocalFile: [String] = arraySubstringsLocalFile.compactMap { "\($0)" }
+                var url: URL?
+                // Determine whether the file name is specified in the toLocalFile.
+                if arrayStringsLocalFile.last!.contains(".") {
+                    url = URL.init(fileURLWithPath: toLocalFile)
                 }
+                else if arrayStringsLocalFile.last!.contains("/") {
+                    url = URL.init(fileURLWithPath: toLocalFile + arrayStringsRemoteFile.last!)
+                }
+                else {
+                    url = URL.init(fileURLWithPath: toLocalFile + "/" + arrayStringsRemoteFile.last!)
+                }
+                
+                return (url!, [.removePreviousFile, .createIntermediateDirectories])
+            }.downloadProgress{ pregress in
+                print(pregress)
+            }
+            .response { response in
+                if response.response?.statusCode != 200 {
+                    if response.response?.statusCode == 401 && tryAgain < 1 {
+                        self.authHelper.retryLogin().then { success -> HivePromise<Bool> in
+                            return self.downloadImp(remoteFile, toLocalFile, tryAgain: 1)
+                        }.done { result in
+                            resolver.fulfill(result)
+                        }.catch { error in
+                            resolver.reject(error)
+                        }
+                    }
+                    else{
+                        resolver.reject(HiveError.netWork(des: response.error))
+                    }
+                    return
+                }
+                if let _ = response.destinationURL {
+                    resolver.fulfill(true)
+                }
+                else {
+                    resolver.reject(HiveError.failure(des: "download \(remoteFile) failed."))
+                }
+            }
         }
     }
 
