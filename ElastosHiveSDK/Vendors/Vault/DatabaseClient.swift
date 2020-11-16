@@ -54,11 +54,8 @@ public class DatabaseClient: DatabaseProtocol {
             let url = VaultURL.sharedInstance.mongoDBSetup()
             
             VaultApi.request(url: url, parameters: param, headers: header.headers()).done { json in
-                let status = json["_status"].stringValue
-                if status == "ERR" {
-                    let errorCode = json["_error"]["code"].intValue
-                    let errorMessage = json["_error"]["message"].stringValue
-                    if errorCode == 401 && errorMessage == "auth failed" && tryAgain < 1 {
+                if !VaultApi.checkResponseIsError(json) {
+                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
                         self.authHelper.retryLogin().then { success -> HivePromise<Bool> in
                             return self.createColImp(collection, options, tryAgain: 1)
                         }.done { success in
@@ -95,11 +92,8 @@ public class DatabaseClient: DatabaseProtocol {
             let url = VaultURL.sharedInstance.deleteMongoDBCollection()
             
             VaultApi.request(url: url, parameters: param, headers: header.headers()).done { json in
-                let status = json["_status"].stringValue
-                if status == "ERR" {
-                    let errorCode = json["_error"]["code"].intValue
-                    let errorMessage = json["_error"]["message"].stringValue
-                    if errorCode == 401 && errorMessage == "auth failed" && tryAgain < 1 {
+                if !VaultApi.checkResponseIsError(json) {
+                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
                         self.authHelper.retryLogin().then { success -> HivePromise<Bool> in
                             return self.deleteColImp(collection, tryAgain: 1)
                         }.done { success in
@@ -140,11 +134,8 @@ public class DatabaseClient: DatabaseProtocol {
             let url = VaultURL.sharedInstance.insertOne()
             
             VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
-                let status = json["_status"].stringValue
-                if status == "ERR" {
-                    let errorCode = json["_error"]["code"].intValue
-                    let errorMessage = json["_error"]["message"].stringValue
-                    if errorCode == 401 && errorMessage == "auth failed" && tryAgain < 1 {
+                if !VaultApi.checkResponseIsError(json) {
+                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
                         self.authHelper.retryLogin().then { success -> HivePromise<InsertOneResult> in
                             return self.insertOneImp(collection, doc, options, tryAgain: 1)
                         }.done { insertResult in
@@ -184,11 +175,8 @@ public class DatabaseClient: DatabaseProtocol {
             let url = VaultURL.sharedInstance.insertMany()
             
             VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
-                let status = json["_status"].stringValue
-                if status == "ERR" {
-                    let errorCode = json["_error"]["code"].intValue
-                    let errorMessage = json["_error"]["message"].stringValue
-                    if errorCode == 401 && errorMessage == "auth failed" && tryAgain < 1 {
+                if !VaultApi.checkResponseIsError(json) {
+                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
                         self.authHelper.retryLogin().then { success -> HivePromise<InsertManyResult> in
                             return self.insertManyImp(collection, doc, options, tryAgain: 1)
                         }.done { insertResult in
@@ -228,11 +216,8 @@ public class DatabaseClient: DatabaseProtocol {
             let url = VaultURL.sharedInstance.countDocuments()
 
             VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
-                let status = json["_status"].stringValue
-                if status == "ERR" {
-                    let errorCode = json["_error"]["code"].intValue
-                    let errorMessage = json["_error"]["message"].stringValue
-                    if errorCode == 401 && errorMessage == "auth failed" && tryAgain < 1 {
+                if !VaultApi.checkResponseIsError(json) {
+                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
                         self.authHelper.retryLogin().then { success -> HivePromise<Int> in
                             return self.countDocumentsImp(collection, query, options, tryAgain: 1)
                         }.done { result in
@@ -258,7 +243,7 @@ public class DatabaseClient: DatabaseProtocol {
 
     public func findOne(_ collection: String, _ query: [String : Any], options: FindOptions) -> HivePromise<[String : Any]> {
         return authHelper.checkValid().then { _ -> HivePromise<[String: Any]> in
-            return self.findOneImp(collection, query, options, tryAgain: 1)
+            return self.findOneImp(collection, query, options, tryAgain: 0)
         }
     }
 
@@ -271,11 +256,8 @@ public class DatabaseClient: DatabaseProtocol {
             let url = VaultURL.sharedInstance.findOne()
 
             VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).get { json in
-                let status = json["_status"].stringValue
-                if status == "ERR" {
-                    let errorCode = json["_error"]["code"].intValue
-                    let errorMessage = json["_error"]["message"].stringValue
-                    if errorCode == 401 && errorMessage == "auth failed" && tryAgain < 1 {
+                if !VaultApi.checkResponseIsError(json) {
+                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
                         self.authHelper.retryLogin().then { success -> HivePromise<[String: Any]> in
                             return self.findOneImp(collection, query, options, tryAgain: 1)
                         }.done { result in
@@ -313,11 +295,8 @@ public class DatabaseClient: DatabaseProtocol {
             let url = VaultURL.sharedInstance.findMany()
 
             VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).get { json in
-                let status = json["_status"].stringValue
-                if status == "ERR" {
-                    let errorCode = json["_error"]["code"].intValue
-                    let errorMessage = json["_error"]["message"].stringValue
-                    if errorCode == 401 && errorMessage == "auth failed" && tryAgain < 1 {
+                if !VaultApi.checkResponseIsError(json) {
+                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
                         self.authHelper.retryLogin().then { success -> HivePromise<Array<[String: Any]>> in
                             return self.findManyImp(collection, query, options, tryAgain: 1)
                         }.done { result in
@@ -360,11 +339,8 @@ public class DatabaseClient: DatabaseProtocol {
             let url = VaultURL.sharedInstance.updateOne()
 
             VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).get { json in
-                let status = json["_status"].stringValue
-                if status == "ERR" {
-                    let errorCode = json["_error"]["code"].intValue
-                    let errorMessage = json["_error"]["message"].stringValue
-                    if errorCode == 401 && errorMessage == "auth failed" && tryAgain < 1 {
+                if !VaultApi.checkResponseIsError(json) {
+                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
                         self.authHelper.retryLogin().then { success -> HivePromise<UpdateResult> in
                             return self.updateOneImp(collection, filter, update, options, tryAgain: 1)
                         }.done { result in
@@ -404,11 +380,8 @@ public class DatabaseClient: DatabaseProtocol {
             let url = VaultURL.sharedInstance.updateMany()
 
             VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).get { json in
-                let status = json["_status"].stringValue
-                if status == "ERR" {
-                    let errorCode = json["_error"]["code"].intValue
-                    let errorMessage = json["_error"]["message"].stringValue
-                    if errorCode == 401 && errorMessage == "auth failed" && tryAgain < 1 {
+                if !VaultApi.checkResponseIsError(json) {
+                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
                         self.authHelper.retryLogin().then { success -> HivePromise<UpdateResult> in
                             return self.updateManyImp(collection, filter, update, options, tryAgain: 1)
                         }.done { result in
@@ -448,11 +421,8 @@ public class DatabaseClient: DatabaseProtocol {
             let url = VaultURL.sharedInstance.deleteOne()
 
             VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
-                let status = json["_status"].stringValue
-                if status == "ERR" {
-                    let errorCode = json["_error"]["code"].intValue
-                    let errorMessage = json["_error"]["message"].stringValue
-                    if errorCode == 401 && errorMessage == "auth failed" && tryAgain < 1 {
+                if !VaultApi.checkResponseIsError(json) {
+                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
                         self.authHelper.retryLogin().then { success -> HivePromise<DeleteResult> in
                             return self.deleteOneImp(collection, filter, options, tryAgain: 1)
                         }.done { result in
@@ -492,11 +462,8 @@ public class DatabaseClient: DatabaseProtocol {
             let url = VaultURL.sharedInstance.deleteMany()
 
             VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).get { json in
-                let status = json["_status"].stringValue
-                if status == "ERR" {
-                    let errorCode = json["_error"]["code"].intValue
-                    let errorMessage = json["_error"]["message"].stringValue
-                    if errorCode == 401 && errorMessage == "auth failed" && tryAgain < 1 {
+                if !VaultApi.checkResponseIsError(json) {
+                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
                         self.authHelper.retryLogin().then { success -> HivePromise<DeleteResult> in
                             return self.deleteManyImp(collection, filter, options, tryAgain: 1)
                         }.done { result in

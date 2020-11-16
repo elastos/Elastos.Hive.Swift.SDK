@@ -45,11 +45,8 @@ public class FileClient: FilesProtocol {
                     switch dataResponse.result {
                     case .success(let re):
                         let json = JSON(re)
-                        let status = json["_status"].stringValue
-                        if status == "ERR" {
-                            let errorCode = json["_error"]["code"].intValue
-                            let errorMessage = json["_error"]["message"].stringValue
-                            if errorCode == 401 && errorMessage == "auth failed" && tryAgain < 1 {
+                        if !VaultApi.checkResponseIsError(json) {
+                            if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
                                 self.authHelper.retryLogin().then { success -> HivePromise<Bool> in
                                     return self.uploadImp(localPath, asRemoteFile: asRemoteFile, tryAgain: 1)
                                 }.done { result in
@@ -88,11 +85,8 @@ public class FileClient: FilesProtocol {
                     switch result.result {
                     case .success(let re):
                         let json = JSON(re)
-                        let status = json["_status"].stringValue
-                        if status == "ERR" {
-                            let errorCode = json["_error"]["code"].intValue
-                            let errorMessage = json["_error"]["message"].stringValue
-                            if errorCode == 401 && errorMessage == "auth failed" && tryAgain < 1 {
+                        if !VaultApi.checkResponseIsError(json) {
+                            if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
                                 self.authHelper.retryLogin().then { success -> HivePromise<OutputStream> in
                                     return self.downloadImp(remoteFile, tryAgain: 1)
                                 }.done { result in
@@ -147,13 +141,9 @@ public class FileClient: FilesProtocol {
         HivePromise<Bool> { resolver in
             let param = ["path": remoteFile]
             let url = VaultURL.sharedInstance.deleteFileOrFolder()
-            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { re in
-                let json = JSON(re)
-                let status = json["_status"].stringValue
-                if status == "ERR" {
-                    let errorCode = json["_error"]["code"].intValue
-                    let errorMessage = json["_error"]["message"].stringValue
-                    if errorCode == 401 && errorMessage == "auth failed" && tryAgain < 1 {
+            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
+                if !VaultApi.checkResponseIsError(json) {
+                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
                         self.authHelper.retryLogin().then { success -> HivePromise<Bool> in
                             return self.deleteImp(remoteFile, tryAgain: 1)
                         }.done { result in
@@ -187,13 +177,9 @@ public class FileClient: FilesProtocol {
         HivePromise<Bool> { resolver in
             let url = VaultURL.sharedInstance.move()
             let param = ["src_path": src, "dst_path": dest]
-            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { re in
-                let json = JSON(re)
-                let status = json["_status"].stringValue
-                if status == "ERR" {
-                    let errorCode = json["_error"]["code"].intValue
-                    let errorMessage = json["_error"]["message"].stringValue
-                    if errorCode == 401 && errorMessage == "auth failed" && tryAgain < 1 {
+            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
+                if !VaultApi.checkResponseIsError(json) {
+                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
                         self.authHelper.retryLogin().then { success -> HivePromise<Bool> in
                             return self.moveImp(src, dest, tryAgain: 1)
                         }.done { result in
@@ -227,13 +213,9 @@ public class FileClient: FilesProtocol {
         HivePromise<Bool> { resolver in
             let url = VaultURL.sharedInstance.move()
             let param = ["src_path": src, "dst_path": dest]
-            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { re in
-                let json = JSON(re)
-                let status = json["_status"].stringValue
-                if status == "ERR" {
-                    let errorCode = json["_error"]["code"].intValue
-                    let errorMessage = json["_error"]["message"].stringValue
-                    if errorCode == 401 && errorMessage == "auth failed" && tryAgain < 1 {
+            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
+                if !VaultApi.checkResponseIsError(json) {
+                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
                         self.authHelper.retryLogin().then { success -> HivePromise<Bool> in
                             return self.copyImp(src, dest, tryAgain: 1)
                         }.done { result in
@@ -272,13 +254,9 @@ public class FileClient: FilesProtocol {
     private func hashImp(_ path: String, tryAgain: Int) -> HivePromise<String> {
         return HivePromise<String> { resolver in
             let url = VaultURL.sharedInstance.hash(path)
-            VaultApi.request(url: url, method: .get, headers: Header(authHelper).headers()).done { re in
-                let json = JSON(re)
-                let status = json["_status"].stringValue
-                if status == "ERR" {
-                    let errorCode = json["_error"]["code"].intValue
-                    let errorMessage = json["_error"]["message"].stringValue
-                    if errorCode == 401 && errorMessage == "auth failed" && tryAgain < 1 {
+            VaultApi.request(url: url, method: .get, headers: Header(authHelper).headers()).done { json in
+                if !VaultApi.checkResponseIsError(json) {
+                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
                         self.authHelper.retryLogin().then { success -> HivePromise<String> in
                             return self.hashImp(path, tryAgain: 1)
                         }.done { result in
@@ -311,13 +289,9 @@ public class FileClient: FilesProtocol {
     private func listImp(_ path: String, tryAgain: Int) -> HivePromise<Array<FileInfo>> {
         return HivePromise<Array<FileInfo>> { resolver in
             let url = VaultURL.sharedInstance.list(path)
-            VaultApi.request(url: url, method: .get, headers: Header(authHelper).headers()).done { re in
-                let json = JSON(re)
-                let status = json["_status"].stringValue
-                if status == "ERR" {
-                    let errorCode = json["_error"]["code"].intValue
-                    let errorMessage = json["_error"]["message"].stringValue
-                    if errorCode == 401 && errorMessage == "auth failed" && tryAgain < 1 {
+            VaultApi.request(url: url, method: .get, headers: Header(authHelper).headers()).done { json in
+                if !VaultApi.checkResponseIsError(json) {
+                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
                         self.authHelper.retryLogin().then { success -> HivePromise<Array<FileInfo>> in
                             return self.listImp(path, tryAgain: 1)
                         }.done { result in
@@ -360,13 +334,9 @@ public class FileClient: FilesProtocol {
     private func statImp(_ path: String, tryAgain: Int) -> HivePromise<FileInfo>{
         return HivePromise<FileInfo> { resolver in
             let url = VaultURL.sharedInstance.stat(path)
-            VaultApi.request(url: url, method: .get, headers: Header(authHelper).headers()).done { re in
-                let json = JSON(re)
-                let status = json["_status"].stringValue
-                if status == "ERR" {
-                    let errorCode = json["_error"]["code"].intValue
-                    let errorMessage = json["_error"]["message"].stringValue
-                    if errorCode == 401 && errorMessage == "auth failed" && tryAgain < 1 {
+            VaultApi.request(url: url, method: .get, headers: Header(authHelper).headers()).done { json in
+                if !VaultApi.checkResponseIsError(json) {
+                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
                         self.authHelper.retryLogin().then { success -> HivePromise<FileInfo> in
                             return self.statImp(path, tryAgain: 1)
                         }.done { result in
