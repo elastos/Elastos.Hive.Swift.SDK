@@ -53,11 +53,8 @@ public class ScriptClient: ScriptingProtocol {
             param["executable"] = try executable.jsonSerialize()
             let url = VaultURL.sharedInstance.registerScript()
             VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
-                let status = json["_status"].stringValue
-                if status == "ERR" {
-                    let errorCode = json["_error"]["code"].intValue
-                    let errorMessage = json["_error"]["message"].stringValue
-                    if errorCode == 401 && errorMessage == "auth failed" && tryAgain < 1 {
+                if !VaultApi.checkResponseIsError(json) {
+                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
                         self.authHelper.retryLogin().then { success -> HivePromise<Bool> in
                             return self.registerScriptImp(name, accessCondition, executable, tryAgain: 1)
                         }.done { result in
@@ -121,11 +118,8 @@ public class ScriptClient: ScriptingProtocol {
             }
             let url = VaultURL.sharedInstance.call()
             VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
-                let status = json["_status"].stringValue
-                if status == "ERR" {
-                    let errorCode = json["_error"]["code"].intValue
-                    let errorMessage = json["_error"]["message"].stringValue
-                    if errorCode == 401 && errorMessage == "auth failed" && tryAgain < 1 {
+                if !VaultApi.checkResponseIsError(json) {
+                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
                         self.authHelper.retryLogin().then { success -> HivePromise<T> in
                             return self.callWithAppDidImp(scriptName, params: params, appDid: appDid, resultType, tryAgain: tryAgain)
                         }.done { result in
@@ -195,11 +189,8 @@ public class ScriptClient: ScriptingProtocol {
                 case .success(let upload, _, _):
                     upload.responseJSON { response in
                         let json = JSON(response.result.value as Any)
-                        let status = json["_status"].stringValue
-                        if status == "ERR" {
-                            let errorCode = json["_error"]["code"].intValue
-                            let errorMessage = json["_error"]["message"].stringValue
-                            if errorCode == 401 && errorMessage == "auth failed" && tryAgain < 1 {
+                        if !VaultApi.checkResponseIsError(json) {
+                            if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
                                 self.authHelper.retryLogin().then { success -> HivePromise<T> in
                                     return self.uploadImp(filePath: filePath, param: param, type: type, resultType: resultType, tryAgain: 1)
                                 }.done { result in

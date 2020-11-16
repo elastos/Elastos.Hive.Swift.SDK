@@ -104,4 +104,24 @@ class VaultApi: NSObject {
                 }
         }
     }
+
+    class func checkResponseIsError(_  json: JSON) -> Bool {
+        let status = json["_status"].stringValue
+        if status == "ERR" {
+            return false
+        }
+        else {
+            return true
+        }
+    }
+
+    class func checkResponseCanRetryLogin(_  json: JSON, tryAgain: Int) -> Bool {
+        let errorCode = json["_error"]["code"].intValue
+        let errorMessage = json["_error"]["message"].stringValue
+        if errorCode == 401 && errorMessage == "auth failed" && tryAgain < 1 {
+            return true
+        } else {
+            return false
+        }
+    }
 }
