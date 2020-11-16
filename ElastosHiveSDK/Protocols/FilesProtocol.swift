@@ -25,7 +25,7 @@ import Foundation
 public protocol FilesProtocol {
     func upload(_ localPath: String, asRemoteFile: String) -> HivePromise<Bool>
 
-    func download(_ path: String) -> HivePromise<OutputStream>
+    func download(_ path: String,  toLocalFile: String) -> HivePromise<Bool>
 
     func delete(_ path: String) -> HivePromise<Bool>
 

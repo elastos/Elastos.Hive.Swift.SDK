@@ -252,6 +252,30 @@ public class ScriptClient: ScriptingProtocol {
                               headers: Header(authHelper).headers())
                 .responseData { result in
                     if result.result.isSuccess {
+                        if result.response?.statusCode != 200 {
+                            if result.response?.statusCode == 401 && tryAgain < 1  {
+                                self.authHelper.retryLogin().then { success -> HivePromise<T> in
+                                    return self.downloadImp(scriptName: scriptName, param: param, type: type, resultType: resultType, tryAgain: 1)
+                                }.done { result in
+                                    resolver.fulfill(result)
+                                }.catch { e in
+                                    resolver.reject(e)
+                                }
+                            }
+                            else {
+                                if result.result.error != nil {
+                                    resolver.reject(HiveError.netWork(des: result.result.error))
+                                }
+                                else if result.data != nil{
+                                    resolver.reject(HiveError.failure(des: String(data: result.data!, encoding: .utf8)))
+                                }
+                                else {
+                                    resolver.reject(HiveError.failure(des: "scripting download ERROR: "))
+                                }
+                            }
+                            return
+                        }
+
                         if resultType.self == OutputStream.self {
                             let outputStream = OutputStream(toMemory: ())
                             outputStream.open()
