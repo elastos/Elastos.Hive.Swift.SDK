@@ -23,17 +23,26 @@
 import Foundation
 
 class VaultAuthInfoStoreImpl: Persistent {
-    private var path: String
-    init(_ path: String) {
-        self.path = path + "/" + VAULT_CONFIG
+    private var storePath: String
+    private var realyPath: String
+    private var ownerDid: String
+    private var provider: String
+    private var fileName: String
+    init(_ ownerDid: String, _ provider: String, _ storePath: String) {
+        self.storePath = storePath
+        self.ownerDid = ownerDid
+        self.provider = provider
+        let tokenPath = storePath + "token/"
+        fileName = (ownerDid + provider).md5
+        self.realyPath = tokenPath + fileName
     }
 
     func parseFrom() -> Dictionary<String, Any> {
         let fileManager = FileManager.default
-        let exist: Bool = fileManager.fileExists(atPath: path)
+        let exist: Bool = fileManager.fileExists(atPath: realyPath)
         if (exist) {
             do {
-                let readHandler = FileHandle(forReadingAtPath: path)!
+                let readHandler = FileHandle(forReadingAtPath: realyPath)!
                 let data = readHandler.readDataToEndOfFile()
                 let json = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as? [String : Any] ?? [: ]
                 return json
@@ -47,15 +56,15 @@ class VaultAuthInfoStoreImpl: Persistent {
 
     func upateContent(_ json: Dictionary<String, Any>) {
         let fileManager = FileManager.default
-        let exist: Bool = fileManager.fileExists(atPath: path)
+        let exist: Bool = fileManager.fileExists(atPath: realyPath)
         do {
             if !exist {
-                let perpath = path.prefix(path.count - "/vault.json".count)
+                let perpath = realyPath.prefix(realyPath.count - fileName.count)
                 try fileManager.createDirectory(atPath: String(perpath), withIntermediateDirectories: true, attributes: nil)
-                fileManager.createFile(atPath: path, contents: nil, attributes: nil)
+                fileManager.createFile(atPath: realyPath, contents: nil, attributes: nil)
             }
             let data = try JSONSerialization.data(withJSONObject: json, options: [])
-            try data.write(to: URL(fileURLWithPath: path))
+            try data.write(to: URL(fileURLWithPath: realyPath))
         } catch {
             print(error)
         }
