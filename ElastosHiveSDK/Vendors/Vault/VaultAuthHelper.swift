@@ -79,7 +79,7 @@ public class VaultAuthHelper: ConnectHelper {
         _authenticationHandler = handler
         _ownerDid = ownerDid
         _nodeUrl = nodeUrl
-        _persistent = VaultAuthInfoStoreImpl(storePath)
+        _persistent = VaultAuthInfoStoreImpl(ownerDid, nodeUrl, storePath)
 
         VaultURL.sharedInstance.resetVaultApi(baseUrl: _nodeUrl)
     }
