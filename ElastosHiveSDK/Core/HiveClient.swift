@@ -28,7 +28,7 @@ private var _vaultCache: [DID: Vault]?
 @objc(HiveClient)
 public class HiveClientHandle: NSObject {
     private static var _reslover: String = "http://api.elastos.io:20606" // Default
-    private static var _cacheDir: String = "\(NSHomeDirectory())/Library/Caches/store" // Default
+    private static var _cacheDir: String = "\(NSHomeDirectory())/Library/Caches/didCache" // Default
     private static var resolverDidSetup: Bool = false // Default
 
     private var authenticationDIDDocument: DIDDocument
@@ -80,7 +80,7 @@ public class HiveClientHandle: NSObject {
 
                 var vault: Vault
                 guard vaultProvider != "" else {
-                    resolver.reject("Please set provider first. provider is nil." as! Error)
+                    resolver.reject(HiveError.providerIsNil(des: "Please set provider first. provider is nil."))
                     return
                 }
                 let authHelper = VaultAuthHelper(ownerDid, vaultProvider, localDataPath, authenticationDIDDocument, authentcationHandler)

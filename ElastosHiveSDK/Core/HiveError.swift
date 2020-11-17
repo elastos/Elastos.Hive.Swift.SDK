@@ -31,6 +31,7 @@ public enum HiveError: Error {
     case netWork(des: Error?)
     case failureWithDic(des: Dictionary<String, Any>?)
     case unsupportedOperation(des: String?)
+    case providerIsNil(des: String?)
 }
 
 extension HiveError {
@@ -56,6 +57,8 @@ extension HiveError {
             }
             return String(data: data!, encoding: String.Encoding.utf8)!
         case .unsupportedOperation(let des):
+            return des ?? ""
+        case .providerIsNil(des: let des):
             return des ?? ""
         }
     }
