@@ -77,6 +77,8 @@ public class HiveClientHandle: NSObject {
             var vaultProvider = ""
             _ = HiveClientHandle.getVaultProvider(ownerDid).done { [self] provider in
                 vaultProvider = provider
+                
+                //vaultProvider = "http://192.168.1.6:5000" // TMP BPI
 
                 var vault: Vault
                 guard vaultProvider != "" else {

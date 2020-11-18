@@ -21,8 +21,112 @@
 */
 
 import Foundation
-private let remoteDataFromInputStreamContent = "this is test for DataFromInputStream".data(using: .utf8)
-public class FileClient: FilesProtocol {
+
+struct BoundStreams {
+    let input: InputStream
+    let output: OutputStream
+}
+
+public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URLSessionDataDelegate, StreamDelegate {
+    
+    var uploadBoundStreams: BoundStreams
+    var task: URLSessionTask? = nil
+
+    init(url: URL, authHelper: VaultAuthHelper) {
+        var input: InputStream? = nil
+        var output: OutputStream? = nil
+        
+        Stream.getBoundStreams(withBufferSize: 32768,
+                                   inputStream: &input,
+                                   outputStream: &output)
+        
+        uploadBoundStreams = BoundStreams(input: input!, output: output!)
+
+        super.init()
+        
+        // Get out output stream ready for writing data we willreceive from clients
+        uploadBoundStreams.output.delegate = self
+        uploadBoundStreams.output.schedule(in: .current, forMode: .default)
+        uploadBoundStreams.output.open()
+        
+        // Start the upload task. This task will wait for input stream data
+        let config = URLSessionConfiguration.default
+        config.requestCachePolicy = .reloadIgnoringLocalCacheData
+        let operationQueue = OperationQueue() // Run in a background queue to not block the main operations (main thread)
+        let session = URLSession(configuration: config, delegate: self, delegateQueue: operationQueue)
+        let request = try! URLRequest(url: url, method: .post, headers: Header(authHelper).headers())
+        task = session.uploadTask(withStreamedRequest: request)
+        
+        self.task?.resume()
+    }
+    
+    public func write(data: Data) {
+        let dataSize = data.count
+        var totalBytesWritten = 0
+        while totalBytesWritten < dataSize {
+            print("TRYING TO WRITE \(dataSize) BYTES OF DATA")
+            
+            data.withUnsafeBytes() { (buffer: UnsafePointer<UInt8>) -> Void in
+                print("SPACE AVAILABLE? \(self.uploadBoundStreams.output.hasSpaceAvailable)")
+                
+                print("WRITING")
+                let bytesWritten: Int = self.uploadBoundStreams.output.write(buffer, maxLength: dataSize)
+                totalBytesWritten = totalBytesWritten + bytesWritten
+                
+                print("WROTE \(bytesWritten) bytes")
+            }
+        }
+        
+        print("ALL DATA WRITTEN BY WRITE()")
+    }
+    
+    public func close() {
+        print("CLOSING OUTPUT STREAM")
+        uploadBoundStreams.output.close()
+    }
+    
+    public func urlSession(_ session: URLSession, task: URLSessionTask, needNewBodyStream completionHandler: @escaping (InputStream?) -> Void) {
+        print("NEW BODY NEEDED")
+        // Provides the input stream to the back end API request. This input stream is filled by our output stream when we write data into it.
+        completionHandler(uploadBoundStreams.input)
+    }
+    
+    /*public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        print("DID COMPLETE WITH ERROR")
+    }
+    
+    public func urlSession(_ session: URLSession, task: URLSessionTask, didSendBodyData bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
+        print("DID SEND BODY DATA")
+    }
+    
+    public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
+        print("DATA DID RECEIVE DATA")
+    }
+    
+    public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
+        print("DATA DID RECEIVE RESPONSE")
+    }
+    
+    public func urlSession(_ session: URLSession, didBecomeInvalidWithError error: Error?) {
+        print("INVALID WITH ERROR")
+    }*/
+    
+    public func stream(_ aStream: Stream, handle eventCode: Stream.Event) {
+        guard aStream == uploadBoundStreams.output else {
+            return
+        }
+        
+        if eventCode.contains(.hasSpaceAvailable) {
+            print("HASSPACEAVAILABLE EVENT - unlocking")
+        }
+        if eventCode.contains(.errorOccurred) {
+            print("ERROROCCURED EVENT")
+            // Close the streams and alert the user that the upload failed.
+        }
+    }
+}
+
+public class FileClient: NSObject, FilesProtocol {
     private static let TAG = "FileClient"
     private var authHelper: VaultAuthHelper
 
@@ -30,16 +134,26 @@ public class FileClient: FilesProtocol {
         self.authHelper = authHelper
     }
 
-    public func upload(_ localPath: String, asRemoteFile: String) -> HivePromise<Bool> {
-        return authHelper.checkValid().then { _ -> HivePromise<Bool> in
-            return self.uploadImp(localPath, asRemoteFile: asRemoteFile, tryAgain: 0)
+    
+    public func upload(_ path: String) -> HivePromise<FileWriter?> {
+        return authHelper.checkValid().then { _ -> HivePromise<FileWriter?> in
+            return self.uploadImp(path, tryAgain: 0)
         }
     }
-
-    private func uploadImp(_ localPath: String, asRemoteFile: String, tryAgain: Int) -> HivePromise<Bool> {
-        return HivePromise<Bool> { resolver in
-            let url = VaultURL.sharedInstance.upload(asRemoteFile)
-            let inputStream = InputStream.init(fileAtPath: localPath)
+    
+    var testWriter: FileWriter? = nil // TODO @liaihong: store in a map like in java
+    
+    private func uploadImp(_ path: String, tryAgain: Int) -> HivePromise<FileWriter?> {
+        return HivePromise<FileWriter?> { resolver in
+            if let url = URL(string: VaultURL.sharedInstance.upload(path)) {
+                testWriter = FileWriter(url: url, authHelper: authHelper)
+                resolver.fulfill(testWriter!)
+            }
+            else {
+                resolver.reject(HiveError.failure(des: "Invalid url format"))
+            }
+            
+            /*let inputStream = InputStream.init(fileAtPath: localPath)
             Alamofire.upload(inputStream!, to: url, method: .post, headers: Header(authHelper).headers())
                 .responseJSON { dataResponse in
                     switch dataResponse.result {
@@ -68,9 +182,10 @@ public class FileClient: FilesProtocol {
                         resolver.reject(error)
                     }
                 }
+ */
         }
     }
-
+    
     public func download(_ path: String, toLocalFile: String) -> HivePromise<Bool> {
         return authHelper.checkValid().then { _ -> HivePromise<Bool> in
             return self.downloadImp(path, toLocalFile, tryAgain: 0)

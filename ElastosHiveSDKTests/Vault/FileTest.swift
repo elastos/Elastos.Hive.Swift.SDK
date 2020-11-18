@@ -9,8 +9,23 @@ class FileTest: XCTestCase {
 
     func test_0Upload() {
         let lock = XCTestExpectation(description: "wait for test.")
-        _ = file?.upload("/Users/liaihong/Desktop/test.txt", asRemoteFile: "hive/testIos.txt").done{ re in
-            XCTAssertTrue(re)
+        _ = file?.upload(path: "hive/testIos.txt").done { writer in
+            
+            let shortMessage = "ABCEFGH"
+            let message1 = "*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())"
+            let message2 = " ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD"
+            
+            writer?.write(data: shortMessage.data(using: .utf8)!)
+            
+            for _ in 0...100 {
+                writer?.write(data: message1.data(using: .utf8)!)
+            }
+                        
+            writer?.write(data: message2.data(using: .utf8)!)
+                        
+            writer?.close()
+            
+            XCTAssertNotNil(writer)
             lock.fulfill()
         }.catch{ error in
             XCTFail()
