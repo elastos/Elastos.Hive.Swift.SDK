@@ -66,7 +66,8 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         while totalBytesWritten < dataSize {
             print("TRYING TO WRITE \(dataSize) BYTES OF DATA")
             
-            data.withUnsafeBytes() { (buffer: UnsafePointer<UInt8>) -> Void in
+            // Keep reading the input buffer at the position we haven't read yet (advanced by).
+            data.advanced(by: totalBytesWritten).withUnsafeBytes() { (buffer: UnsafePointer<UInt8>) -> Void in
                 print("SPACE AVAILABLE? \(self.uploadBoundStreams.output.hasSpaceAvailable)")
                 
                 print("WRITING")
@@ -78,6 +79,10 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         }
         
         print("ALL DATA WRITTEN BY WRITE()")
+    }
+    
+    public func flush() {
+        // TODO: maybe on ios nothing to do here.
     }
     
     public func close() {
@@ -117,7 +122,7 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         }
         
         if eventCode.contains(.hasSpaceAvailable) {
-            print("HASSPACEAVAILABLE EVENT - unlocking")
+            print("HASSPACEAVAILABLE EVENT")
         }
         if eventCode.contains(.errorOccurred) {
             print("ERROROCCURED EVENT")

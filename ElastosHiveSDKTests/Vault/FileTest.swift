@@ -9,7 +9,7 @@ class FileTest: XCTestCase {
 
     func test_0Upload() {
         let lock = XCTestExpectation(description: "wait for test.")
-        _ = file?.upload(path: "hive/testIos.txt").done { writer in
+        _ = file?.upload("hive/testIos.txt").done { writer in
             
             let shortMessage = "ABCEFGH"
             let message1 = "*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())"
