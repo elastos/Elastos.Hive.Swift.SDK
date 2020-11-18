@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -35,7 +35,6 @@
 		1103757C23FF96C7004216D0 /* Persistent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103757B23FF96C7004216D0 /* Persistent.swift */; };
 		1103757D23FF96C7004216D0 /* Persistent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103757B23FF96C7004216D0 /* Persistent.swift */; };
 		111CA54B252027760030D39C /* TestError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111CA54A252027760030D39C /* TestError.swift */; };
-		111CA6DA252097CB0030D39C /* SPVAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111CA6D8252097CB0030D39C /* SPVAdaptor.swift */; };
 		111CA6DC252097CB0030D39C /* DummyAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111CA6D9252097CB0030D39C /* DummyAdapter.swift */; };
 		111D477924ED0C1200B7462B /* VaultAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D477824ED0C1200B7462B /* VaultAuthHelper.swift */; };
 		111D477A24ED0C1200B7462B /* VaultAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D477824ED0C1200B7462B /* VaultAuthHelper.swift */; };
@@ -130,6 +129,8 @@
 		11749D9F24082FB1007B8F32 /* OutputStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11749D9E24082FB1007B8F32 /* OutputStream.swift */; };
 		11749DA024082FB1007B8F32 /* OutputStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11749D9E24082FB1007B8F32 /* OutputStream.swift */; };
 		11749DA224083D63007B8F32 /* TestResultHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11749DA124083D63007B8F32 /* TestResultHandler.swift */; };
+		118E277E256546E3004EECF1 /* Antlr4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118E277D256546E3004EECF1 /* Antlr4.framework */; platformFilter = ios; };
+		118E278125654711004EECF1 /* Antlr4.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 118E277D256546E3004EECF1 /* Antlr4.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		118F2D83250F1A7200447A0A /* ScriptTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2D82250F1A7200447A0A /* ScriptTest.swift */; };
 		118F2D85250F1ABA00447A0A /* Constance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2D84250F1ABA00447A0A /* Constance.swift */; };
 		118F2D87250F23EB00447A0A /* AggregatedCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2D86250F23EB00447A0A /* AggregatedCondition.swift */; };
@@ -155,11 +156,7 @@
 		118F2DA5250F33AB00447A0A /* RawCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2DA4250F33AB00447A0A /* RawCondition.swift */; };
 		118F2DA6250F33AB00447A0A /* RawCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2DA4250F33AB00447A0A /* RawCondition.swift */; };
 		118F2DAD25105C3700447A0A /* FileTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2DAC25105C3700447A0A /* FileTest.swift */; };
-		119BE12D2539638F00C6D5B5 /* Antlr4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119BE12C2539638F00C6D5B5 /* Antlr4.framework */; };
-		119BE1872539699500C6D5B5 /* Antlr4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119BE12C2539638F00C6D5B5 /* Antlr4.framework */; };
 		11C9EAE5254A637500080995 /* InsertOneResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C9EAE4254A637500080995 /* InsertOneResult.swift */; };
-		11C9EB4C254AA58300080995 /* Antlr4.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 119BE12C2539638F00C6D5B5 /* Antlr4.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		11D09B2C25317FF8000C977C /* SPVWrapper.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 11D14543253013FA000E627A /* SPVWrapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		11D26F4022CA3B3300E4099A /* ElastosHiveSDK_macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 11D26F3E22CA3B3300E4099A /* ElastosHiveSDK_macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		11D26F4422CA3B4B00E4099A /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FA22C4C33400F85419 /* Dictionary.swift */; };
 		11D26F4522CA3B4B00E4099A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FB22C4C33400F85419 /* String.swift */; };
@@ -169,7 +166,6 @@
 		11D26F8222CA3B8800E4099A /* HiveCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39CB4BE2292854000535E43 /* HiveCallback.swift */; };
 		11E573FE22C4C33400F85419 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FA22C4C33400F85419 /* Dictionary.swift */; };
 		11E573FF22C4C33400F85419 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FB22C4C33400F85419 /* String.swift */; };
-		11E92CCF2560CE8D007EFC95 /* SPVWrapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11D14543253013FA000E627A /* SPVWrapper.framework */; };
 		11E92CE12560D8B2007EFC95 /* FileExecutable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E92CE02560D8B2007EFC95 /* FileExecutable.swift */; };
 		11E92CE52560DFF5007EFC95 /* UploadExecutable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E92CE42560DFF5007EFC95 /* UploadExecutable.swift */; };
 		11E92CE92560E1D4007EFC95 /* PropertiesExecutable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E92CE82560E1D4007EFC95 /* PropertiesExecutable.swift */; };
@@ -198,13 +194,6 @@
 			remoteGlobalIDString = A39C496E225399860027BDF9;
 			remoteInfo = ElastosHiveSDK;
 		};
-		11D14542253013FA000E627A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 11D1453E253013FA000E627A /* SPVWrapper.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 11267024238CC7120086740D;
-			remoteInfo = SPVWrapper;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -224,8 +213,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				11C9EB4C254AA58300080995 /* Antlr4.framework in CopyFiles */,
-				11D09B2C25317FF8000C977C /* SPVWrapper.framework in CopyFiles */,
+				118E278125654711004EECF1 /* Antlr4.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -240,7 +228,6 @@
 		1103757823FF96BF004216D0 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Log.swift; path = Core/Log.swift; sourceTree = "<group>"; };
 		1103757B23FF96C7004216D0 /* Persistent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Persistent.swift; path = Core/Persistent.swift; sourceTree = "<group>"; };
 		111CA54A252027760030D39C /* TestError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestError.swift; sourceTree = "<group>"; };
-		111CA6D8252097CB0030D39C /* SPVAdaptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPVAdaptor.swift; sourceTree = "<group>"; };
 		111CA6D9252097CB0030D39C /* DummyAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DummyAdapter.swift; sourceTree = "<group>"; };
 		111D477824ED0C1200B7462B /* VaultAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultAuthHelper.swift; sourceTree = "<group>"; };
 		111D478724EE57D000B7462B /* VaultConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultConstants.swift; sourceTree = "<group>"; };
@@ -295,6 +282,7 @@
 		1170FBA02508D35A0049E81D /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 		11749D9E24082FB1007B8F32 /* OutputStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputStream.swift; sourceTree = "<group>"; };
 		11749DA124083D63007B8F32 /* TestResultHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestResultHandler.swift; sourceTree = "<group>"; };
+		118E277D256546E3004EECF1 /* Antlr4.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Antlr4.framework; sourceTree = "<group>"; };
 		118F2D82250F1A7200447A0A /* ScriptTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptTest.swift; sourceTree = "<group>"; };
 		118F2D84250F1ABA00447A0A /* Constance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constance.swift; sourceTree = "<group>"; };
 		118F2D86250F23EB00447A0A /* AggregatedCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AggregatedCondition.swift; sourceTree = "<group>"; };
@@ -309,9 +297,7 @@
 		118F2DA1250F332700447A0A /* QueryHasResultsCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryHasResultsCondition.swift; sourceTree = "<group>"; };
 		118F2DA4250F33AB00447A0A /* RawCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawCondition.swift; sourceTree = "<group>"; };
 		118F2DAC25105C3700447A0A /* FileTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTest.swift; sourceTree = "<group>"; };
-		119BE12C2539638F00C6D5B5 /* Antlr4.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Antlr4.framework; sourceTree = "<group>"; };
 		11C9EAE4254A637500080995 /* InsertOneResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertOneResult.swift; sourceTree = "<group>"; };
-		11D1453E253013FA000E627A /* SPVWrapper.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = SPVWrapper.xcodeproj; sourceTree = "<group>"; };
 		11D26F3C22CA3B3300E4099A /* ElastosHiveSDK_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ElastosHiveSDK_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		11D26F3E22CA3B3300E4099A /* ElastosHiveSDK_macOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ElastosHiveSDK_macOS.h; sourceTree = "<group>"; };
 		11E573FA22C4C33400F85419 /* Dictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
@@ -346,10 +332,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				11E92CCF2560CE8D007EFC95 /* SPVWrapper.framework in Frameworks */,
 				1137942E227ED9AD004A1F65 /* ElastosHiveSDK.framework in Frameworks */,
 				0D94ED2D06BBCAE410D0273C /* Pods_ElastosHiveSDKTests.framework in Frameworks */,
-				119BE12D2539638F00C6D5B5 /* Antlr4.framework in Frameworks */,
+				118E277E256546E3004EECF1 /* Antlr4.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -365,7 +350,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6DDA50FA35E7A18E5EF0C90E /* Pods_ElastosHiveSDK.framework in Frameworks */,
-				119BE1872539699500C6D5B5 /* Antlr4.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -379,7 +363,6 @@
 				1147482D255E27F200D158B7 /* DIDApp.swift */,
 				11474827255E1C7100D158B7 /* Entity.swift */,
 				11474831255E291D00D158B7 /* PresentationInJWT.swift */,
-				111CA6D8252097CB0030D39C /* SPVAdaptor.swift */,
 				111CA6D9252097CB0030D39C /* DummyAdapter.swift */,
 			);
 			path = DID;
@@ -388,8 +371,7 @@
 		111CA6E2252097DC0030D39C /* Externals */ = {
 			isa = PBXGroup;
 			children = (
-				11D1453E253013FA000E627A /* SPVWrapper.xcodeproj */,
-				119BE12C2539638F00C6D5B5 /* Antlr4.framework */,
+				118E277D256546E3004EECF1 /* Antlr4.framework */,
 			);
 			path = Externals;
 			sourceTree = "<group>";
@@ -514,14 +496,6 @@
 				1170FB9E25073D360049E81D /* ijUnD4KeRpeBUFmcEDCbhxMTJRzUYCQCZM */,
 			);
 			path = Resources;
-			sourceTree = "<group>";
-		};
-		11D1453F253013FA000E627A /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				11D14543253013FA000E627A /* SPVWrapper.framework */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		11D26F3D22CA3B3300E4099A /* ElastosHiveSDK_macOS */ = {
@@ -779,12 +753,6 @@
 			mainGroup = A39C4965225399860027BDF9;
 			productRefGroup = A39C4970225399860027BDF9 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 11D1453F253013FA000E627A /* Products */;
-					ProjectRef = 11D1453E253013FA000E627A /* SPVWrapper.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				A39C496E225399860027BDF9 /* ElastosHiveSDK */,
@@ -794,16 +762,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		11D14543253013FA000E627A /* SPVWrapper.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = SPVWrapper.framework;
-			remoteRef = 11D14542253013FA000E627A /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		11379427227ED9AD004A1F65 /* Resources */ = {
@@ -928,7 +886,6 @@
 				1154C309255E36D500FE1E53 /* UserFactory.swift in Sources */,
 				11474832255E291D00D158B7 /* PresentationInJWT.swift in Sources */,
 				11474828255E1C7100D158B7 /* Entity.swift in Sources */,
-				111CA6DA252097CB0030D39C /* SPVAdaptor.swift in Sources */,
 				1170FB1A250507C70049E81D /* DBTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1131,6 +1088,8 @@
 					"$(PROJECT_DIR)/ElastosHiveSDK",
 					"$(PROJECT_DIR)/TestHost",
 					"$(PROJECT_DIR)/ElastosHiveSDKTests/Externals",
+					"$(USER_LIBRARY_DIR)/Containers/com.tencent.xinWeChat/Data/Library/Application\\ Support/com.tencent.xinWeChat/2.0b4.0.9/ab15c83c178d4aa7e042ea165740d52e/Message/MessageTemp/e280fe5c4b9f47543146d70d69faf311/File",
+					"$(USER_LIBRARY_DIR)/Containers/com.tencent.xinWeChat/Data/Library/Application\\ Support/com.tencent.xinWeChat/2.0b4.0.9/ab15c83c178d4aa7e042ea165740d52e/Message/MessageTemp/e280fe5c4b9f47543146d70d69faf311/File",
 				);
 				INFOPLIST_FILE = ElastosHiveSDKTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
@@ -1163,6 +1122,8 @@
 					"$(PROJECT_DIR)/ElastosHiveSDK",
 					"$(PROJECT_DIR)/TestHost",
 					"$(PROJECT_DIR)/ElastosHiveSDKTests/Externals",
+					"$(USER_LIBRARY_DIR)/Containers/com.tencent.xinWeChat/Data/Library/Application\\ Support/com.tencent.xinWeChat/2.0b4.0.9/ab15c83c178d4aa7e042ea165740d52e/Message/MessageTemp/e280fe5c4b9f47543146d70d69faf311/File",
+					"$(USER_LIBRARY_DIR)/Containers/com.tencent.xinWeChat/Data/Library/Application\\ Support/com.tencent.xinWeChat/2.0b4.0.9/ab15c83c178d4aa7e042ea165740d52e/Message/MessageTemp/e280fe5c4b9f47543146d70d69faf311/File",
 				);
 				INFOPLIST_FILE = ElastosHiveSDKTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
