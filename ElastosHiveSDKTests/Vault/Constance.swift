@@ -8,7 +8,7 @@ let DOC_STR_2 = "{\"id\":\"did:elastos:iXzvzZ7wX96bzpgx3sHeeRjoExoBPcZDsY\",\"pu
 
 //var OWNERDID = "did:elastos:ihUVhBfgXrrDavvzTBJNmQQFK77s56sMsW"
 //let PROVIDER = "http://localhost:5000/"
-//let PROVIDER = "https://hive1.trinity-tech.io/"
+//let PROVIDER = "https://hive1.trinity-tech.io"
 let PROVIDER = "https://hive2.trinity-tech.io"
 let localDataPath = "\(NSHomeDirectory())/Library/Caches/store"
 
