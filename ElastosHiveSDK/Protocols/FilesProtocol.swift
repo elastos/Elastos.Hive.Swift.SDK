@@ -23,7 +23,7 @@
 import Foundation
 
 public protocol FilesProtocol {
-    func upload(_ path: String) -> HivePromise<FileWriter?>
+    func upload(_ path: String) -> HivePromise<FileWriter>
     
     func download(_ path: String) -> HivePromise<FileReader>
 

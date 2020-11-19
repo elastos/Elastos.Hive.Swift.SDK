@@ -74,8 +74,6 @@
 		111D47F124F7A18900B7462B /* FileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47EF24F7A18900B7462B /* FileInfo.swift */; };
 		111D47F424F7A30300B7462B /* Executable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47F324F7A30300B7462B /* Executable.swift */; };
 		111D47F524F7A30300B7462B /* Executable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47F324F7A30300B7462B /* Executable.swift */; };
-		111D47F724F7A5E400B7462B /* SimpleAuthServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47F624F7A5E400B7462B /* SimpleAuthServer.swift */; };
-		111D47F824F7A5E400B7462B /* SimpleAuthServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47F624F7A5E400B7462B /* SimpleAuthServer.swift */; };
 		111D47FA24F7A79800B7462B /* Condition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47F924F7A79800B7462B /* Condition.swift */; };
 		111D47FB24F7A79800B7462B /* Condition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47F924F7A79800B7462B /* Condition.swift */; };
 		111D47FD24F8B63C00B7462B /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47FC24F8B63C00B7462B /* Options.swift */; };
@@ -131,6 +129,12 @@
 		11749DA224083D63007B8F32 /* TestResultHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11749DA124083D63007B8F32 /* TestResultHandler.swift */; };
 		118E277E256546E3004EECF1 /* Antlr4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118E277D256546E3004EECF1 /* Antlr4.framework */; platformFilter = ios; };
 		118E278125654711004EECF1 /* Antlr4.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 118E277D256546E3004EECF1 /* Antlr4.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		118E27AC2566C80D004EECF1 /* ElastosDIDSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118E27AB2566C80D004EECF1 /* ElastosDIDSDK.framework */; platformFilter = ios; };
+		118E27B82566C851004EECF1 /* Antlr4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118E277D256546E3004EECF1 /* Antlr4.framework */; };
+		118E27B92566C851004EECF1 /* ElastosDIDSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118E27AB2566C80D004EECF1 /* ElastosDIDSDK.framework */; };
+		118E27BB2566C86B004EECF1 /* ElastosDIDSDK.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 118E27AB2566C80D004EECF1 /* ElastosDIDSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		118E27BC2566C86B004EECF1 /* Antlr4.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 118E277D256546E3004EECF1 /* Antlr4.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		118E27BE2566C898004EECF1 /* ElastosDIDSDK.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 118E27AB2566C80D004EECF1 /* ElastosDIDSDK.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		118F2D83250F1A7200447A0A /* ScriptTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2D82250F1A7200447A0A /* ScriptTest.swift */; };
 		118F2D85250F1ABA00447A0A /* Constance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2D84250F1ABA00447A0A /* Constance.swift */; };
 		118F2D87250F23EB00447A0A /* AggregatedCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2D86250F23EB00447A0A /* AggregatedCondition.swift */; };
@@ -207,12 +211,24 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		118E27BA2566C85A004EECF1 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				118E27BB2566C86B004EECF1 /* ElastosDIDSDK.framework in CopyFiles */,
+				118E27BC2566C86B004EECF1 /* Antlr4.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		11D145532530159B000E627A /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				118E27BE2566C898004EECF1 /* ElastosDIDSDK.framework in CopyFiles */,
 				118E278125654711004EECF1 /* Antlr4.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -248,7 +264,6 @@
 		111D47EB24F794A500B7462B /* DeleteResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteResult.swift; sourceTree = "<group>"; };
 		111D47EF24F7A18900B7462B /* FileInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileInfo.swift; sourceTree = "<group>"; };
 		111D47F324F7A30300B7462B /* Executable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Executable.swift; sourceTree = "<group>"; };
-		111D47F624F7A5E400B7462B /* SimpleAuthServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleAuthServer.swift; sourceTree = "<group>"; };
 		111D47F924F7A79800B7462B /* Condition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Condition.swift; sourceTree = "<group>"; };
 		111D47FC24F8B63C00B7462B /* Options.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
 		1127462C24FE3343007D6356 /* DatabaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseClient.swift; sourceTree = "<group>"; };
@@ -283,6 +298,7 @@
 		11749D9E24082FB1007B8F32 /* OutputStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputStream.swift; sourceTree = "<group>"; };
 		11749DA124083D63007B8F32 /* TestResultHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestResultHandler.swift; sourceTree = "<group>"; };
 		118E277D256546E3004EECF1 /* Antlr4.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Antlr4.framework; sourceTree = "<group>"; };
+		118E27AB2566C80D004EECF1 /* ElastosDIDSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ElastosDIDSDK.framework; sourceTree = "<group>"; };
 		118F2D82250F1A7200447A0A /* ScriptTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptTest.swift; sourceTree = "<group>"; };
 		118F2D84250F1ABA00447A0A /* Constance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constance.swift; sourceTree = "<group>"; };
 		118F2D86250F23EB00447A0A /* AggregatedCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AggregatedCondition.swift; sourceTree = "<group>"; };
@@ -333,6 +349,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1137942E227ED9AD004A1F65 /* ElastosHiveSDK.framework in Frameworks */,
+				118E27AC2566C80D004EECF1 /* ElastosDIDSDK.framework in Frameworks */,
 				0D94ED2D06BBCAE410D0273C /* Pods_ElastosHiveSDKTests.framework in Frameworks */,
 				118E277E256546E3004EECF1 /* Antlr4.framework in Frameworks */,
 			);
@@ -349,6 +366,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				118E27B82566C851004EECF1 /* Antlr4.framework in Frameworks */,
+				118E27B92566C851004EECF1 /* ElastosDIDSDK.framework in Frameworks */,
 				6DDA50FA35E7A18E5EF0C90E /* Pods_ElastosHiveSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -371,6 +390,7 @@
 		111CA6E2252097DC0030D39C /* Externals */ = {
 			isa = PBXGroup;
 			children = (
+				118E27AB2566C80D004EECF1 /* ElastosDIDSDK.framework */,
 				118E277D256546E3004EECF1 /* Antlr4.framework */,
 			);
 			path = Externals;
@@ -614,7 +634,6 @@
 				A37F893C23C72B2600F6C11E /* HiveClientOptions.swift */,
 				114FD83F2297CF7600467E38 /* Authenticator.swift */,
 				A39CB4BE2292854000535E43 /* HiveCallback.swift */,
-				111D47F624F7A5E400B7462B /* SimpleAuthServer.swift */,
 				1170FB132502019C0049E81D /* Vault.swift */,
 			);
 			name = Core;
@@ -707,6 +726,7 @@
 				A39C496B225399860027BDF9 /* Sources */,
 				A39C496C225399860027BDF9 /* Frameworks */,
 				A39C496D225399860027BDF9 /* Resources */,
+				118E27BA2566C85A004EECF1 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -914,7 +934,6 @@
 				118F2DA0250F32B100447A0A /* OrCondition.swift in Sources */,
 				1170FB122501D21C0049E81D /* Result.swift in Sources */,
 				118F2D8B250F264900447A0A /* AggregatedExecutable.swift in Sources */,
-				111D47F824F7A5E400B7462B /* SimpleAuthServer.swift in Sources */,
 				111D47C524F78EDF00B7462B /* ScriptingProtocol.swift in Sources */,
 				1170FB062501CB3F0049E81D /* WriteConcern.swift in Sources */,
 				111D47F524F7A30300B7462B /* Executable.swift in Sources */,
@@ -991,7 +1010,6 @@
 				118F2D9F250F32B100447A0A /* OrCondition.swift in Sources */,
 				1170FB112501D21C0049E81D /* Result.swift in Sources */,
 				118F2D8A250F264900447A0A /* AggregatedExecutable.swift in Sources */,
-				111D47F724F7A5E400B7462B /* SimpleAuthServer.swift in Sources */,
 				111D478824EE57D000B7462B /* VaultConstants.swift in Sources */,
 				1170FB052501CB3F0049E81D /* WriteConcern.swift in Sources */,
 				1103757923FF96BF004216D0 /* Log.swift in Sources */,

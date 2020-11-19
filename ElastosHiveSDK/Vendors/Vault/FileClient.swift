@@ -22,29 +22,25 @@
 
 import Foundation
 
-public struct BoundStreams {
-    let input: InputStream
-    let output: OutputStream
+struct BoundStreams {
+    public let input: InputStream
+    public let output: OutputStream
 }
 
 public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URLSessionDataDelegate, StreamDelegate {
-    typealias Block = (_ data: Data) -> Void
-    var callBack: Block?
     var downloadBoundStreams: BoundStreams
     var task: URLSessionDataTask? = nil
-    private var downloadIsEnd: Bool = false
-
-    public var isEnd: Bool {
-       if self.downloadBoundStreams.output.streamStatus == Stream.Status.closed {
-            return true
-        }
-        return false
-    }
+    let BUFFER_SIZE = 32768
+    
+    var allBytesCount: Int = 0
+    var totalBytesWriteCount: Int = 0
+    var downloadDidFinsish: Bool = false
+    var readDidFinish: Bool = false
     
     init(url: URL, authHelper: VaultAuthHelper) {
         var input: InputStream? = nil
         var output: OutputStream? = nil
-        Stream.getBoundStreams(withBufferSize: 32768,
+        Stream.getBoundStreams(withBufferSize: BUFFER_SIZE,
                                    inputStream: &input,
                                    outputStream: &output)
         
@@ -62,25 +58,32 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         let config = URLSessionConfiguration.default
         let operationQueue = OperationQueue()
         let session = URLSession(configuration: config, delegate: self, delegateQueue: operationQueue)
-        let request = try! URLRequest(url: url, method: .get, headers: Header(authHelper).headers())
+        let request = try! URLRequest(url: url, method: .get, headers: Header(authHelper).headersStream())
         task = session.dataTask(with: request)
         
         self.task?.resume()
     }
     
-    public func read(_ block: @escaping (_ data: Data) -> Void ) {
-        callBack = block
-    }
-    
     public func read() -> Data? {
         
-        if self.downloadBoundStreams.input.hasBytesAvailable {
-            
-            var buffer = [UInt8](repeating: 0, count: 32768)
-            self.downloadBoundStreams.input.read(&buffer, maxLength: 32768)
-            return Data.init(bytes: buffer)
+        if self.downloadBoundStreams.input.hasBytesAvailable == true {
+            let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: BUFFER_SIZE)
+            let writeBytesCount = self.downloadBoundStreams.input.read(buffer, maxLength: BUFFER_SIZE)
+            if writeBytesCount == 0 && self.downloadDidFinsish == true {
+                self.readDidFinish = true;
+                return nil
+            }
+            let data = Data.init(bytes: buffer, count: writeBytesCount)
+            print("read \(writeBytesCount)")
+            self.totalBytesWriteCount = self.totalBytesWriteCount + data.count
+            return data
         }
         return nil
+    }
+    
+    public var didLoadFinish: Bool {
+        
+        return self.downloadDidFinsish && self.readDidFinish
     }
     
     public func flush() {
@@ -104,23 +107,29 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
 
     public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
         
-        if callBack != nil {
-            callBack!(data)
-        }
-            
+        self.allBytesCount = self.allBytesCount + data.count
+        
         let dataSize = data.count
         var totalBytesWritten = 0
+        
         while totalBytesWritten < dataSize {
-            // Keep reading the input buffer at the position we haven't read yet (advanced by).
-            data.advanced(by: totalBytesWritten).withUnsafeBytes() { (buffer: UnsafePointer<UInt8>) -> Void in
-                let bytesWritten: Int = self.downloadBoundStreams.output.write(buffer, maxLength: dataSize)
-                totalBytesWritten = totalBytesWritten + bytesWritten
+            
+            if self.downloadBoundStreams.output.hasSpaceAvailable {
+                data.advanced(by: totalBytesWritten).withUnsafeBytes() { (buffer: UnsafePointer<UInt8>) -> Void in
+                    
+                    var leaveBytesCount = dataSize - totalBytesWritten
+                    leaveBytesCount = leaveBytesCount < BUFFER_SIZE ? leaveBytesCount : BUFFER_SIZE
+                    let bytesWritten: Int = self.downloadBoundStreams.output.write(buffer, maxLength: leaveBytesCount)
+                    totalBytesWritten = totalBytesWritten + bytesWritten
+                    print("totalBytesWritten = \(totalBytesWritten), data count = \(dataSize)")
+                }
             }
         }
     }
     
     public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         print("DID COMPLETE WITH ERROR")
+        self.downloadDidFinsish = true
         downloadBoundStreams.output.close()
     }
 }
@@ -129,12 +138,13 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     
     var uploadBoundStreams: BoundStreams
     var task: URLSessionTask? = nil
+    let BUFFER_SIZE = 32768
 
     init(url: URL, authHelper: VaultAuthHelper) {
         var input: InputStream? = nil
         var output: OutputStream? = nil
         
-        Stream.getBoundStreams(withBufferSize: 32768,
+        Stream.getBoundStreams(withBufferSize: BUFFER_SIZE,
                                    inputStream: &input,
                                    outputStream: &output)
         
@@ -152,24 +162,42 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         config.requestCachePolicy = .reloadIgnoringLocalCacheData
         let operationQueue = OperationQueue() // Run in a background queue to not block the main operations (main thread)
         let session = URLSession(configuration: config, delegate: self, delegateQueue: operationQueue)
-        let request = try! URLRequest(url: url, method: .post, headers: Header(authHelper).headers())
+        var request = try! URLRequest(url: url, method: .post, headers: Header(authHelper).headersStream())
+        request.addValue("chunked", forHTTPHeaderField: "Transfer-Encoding")
         task = session.uploadTask(withStreamedRequest: request)
         
         self.task?.resume()
     }
     
-    public func write(data: Data) {
+    public func write(data: Data) throws {
         let dataSize = data.count
         var totalBytesWritten = 0
+        var availableRetries = 5
         while totalBytesWritten < dataSize {
             print("TRYING TO WRITE \(dataSize) BYTES OF DATA")
             
+            let remainingBytesToWrite = dataSize - totalBytesWritten
+
             // Keep reading the input buffer at the position we haven't read yet (advanced by).
-            data.advanced(by: totalBytesWritten).withUnsafeBytes() { (buffer: UnsafePointer<UInt8>) -> Void in
-                print("SPACE AVAILABLE? \(self.uploadBoundStreams.output.hasSpaceAvailable)")
-                
+            let bytesWritten = data.advanced(by: totalBytesWritten).withUnsafeBytes() { (buffer: UnsafePointer<UInt8>) -> Int in
+                //print("SPACE AVAILABLE? \(self.uploadBoundStreams.output.hasSpaceAvailable)")
+
                 print("WRITING")
-                let bytesWritten: Int = self.uploadBoundStreams.output.write(buffer, maxLength: dataSize)
+                return self.uploadBoundStreams.output.write(buffer, maxLength: min(dataSize, remainingBytesToWrite))
+            }
+
+            if bytesWritten == -1 {
+                // Something wrong happened - wait a moment - TODO: retry, and throw an exception in case of error several times
+                if availableRetries == 0 {
+                    throw HiveError.failure(des: "Failed to write data after several attempts")
+                }
+
+                print("Failed to write data, retrying...")
+
+                availableRetries = availableRetries - 1
+                Thread.sleep(forTimeInterval: 1.0)
+            }
+            else {
                 totalBytesWritten = totalBytesWritten + bytesWritten
                 
                 print("WROTE \(bytesWritten) bytes")
@@ -193,64 +221,29 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         // Provides the input stream to the back end API request. This input stream is filled by our output stream when we write data into it.
         completionHandler(uploadBoundStreams.input)
     }
-    
-    /*public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        print("DID COMPLETE WITH ERROR")
-    }
-    
-    public func urlSession(_ session: URLSession, task: URLSessionTask, didSendBodyData bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
-        print("DID SEND BODY DATA")
-    }
-    
-    public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
-        print("DATA DID RECEIVE DATA")
-    }
-    
-    public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
-        print("DATA DID RECEIVE RESPONSE")
-    }
-    
-    public func urlSession(_ session: URLSession, didBecomeInvalidWithError error: Error?) {
-        print("INVALID WITH ERROR")
-    }*/
-    
-    public func stream(_ aStream: Stream, handle eventCode: Stream.Event) {
-        guard aStream == uploadBoundStreams.output else {
-            return
-        }
-        
-        if eventCode.contains(.hasSpaceAvailable) {
-            print("HASSPACEAVAILABLE EVENT")
-        }
-        if eventCode.contains(.errorOccurred) {
-            print("ERROROCCURED EVENT")
-            // Close the streams and alert the user that the upload failed.
-        }
-    }
 }
 
 public class FileClient: NSObject, FilesProtocol {
     private static let TAG = "FileClient"
     private var authHelper: VaultAuthHelper
-
+    var writer: FileWriter? = nil
+    var reader: FileReader? = nil
+    
     public init(_ authHelper: VaultAuthHelper) {
         self.authHelper = authHelper
     }
 
-    
-    public func upload(_ path: String) -> HivePromise<FileWriter?> {
-        return authHelper.checkValid().then { _ -> HivePromise<FileWriter?> in
+    public func upload(_ path: String) -> HivePromise<FileWriter> {
+        return authHelper.checkValid().then { _ -> HivePromise<FileWriter> in
             return self.uploadImp(path, tryAgain: 0)
         }
     }
     
-    var testWriter: FileWriter? = nil // TODO @liaihong: store in a map like in java
-    
-    private func uploadImp(_ path: String, tryAgain: Int) -> HivePromise<FileWriter?> {
-        return HivePromise<FileWriter?> { resolver in
+    private func uploadImp(_ path: String, tryAgain: Int) -> HivePromise<FileWriter> {
+        return HivePromise<FileWriter> { resolver in
             if let url = URL(string: VaultURL.sharedInstance.upload(path)) {
-                testWriter = FileWriter(url: url, authHelper: authHelper)
-                resolver.fulfill(testWriter!)
+                writer = FileWriter(url: url, authHelper: authHelper)
+                resolver.fulfill(writer!)
             }
             else {
                 resolver.reject(HiveError.failure(des: "Invalid url format"))
@@ -258,8 +251,6 @@ public class FileClient: NSObject, FilesProtocol {
         }
     }
     
-    var testReader: FileReader? = nil // TODO @liaihong: store in a map like in java
-
     public func download(_ path: String) -> HivePromise<FileReader> {
         return authHelper.checkValid().then { _ -> HivePromise<FileReader> in
             return self.downloadImp(path, tryAgain: 0)
@@ -269,30 +260,14 @@ public class FileClient: NSObject, FilesProtocol {
     private func downloadImp(_ remoteFile: String, tryAgain: Int) -> HivePromise<FileReader> {
         return HivePromise<FileReader> { resolver in
             if let url = URL(string: VaultURL.sharedInstance.download(remoteFile)) {
-                testReader = FileReader(url: url, authHelper: authHelper)
-                resolver.fulfill(testReader!)
+                reader = FileReader(url: url, authHelper: authHelper)
+                resolver.fulfill(reader!)
             }
             else {
                 resolver.reject(HiveError.failure(des: "Invalid url format"))
             }
         }
     }
-
-//    private func writeData(data: Data, outputStream: OutputStream, maxLengthPerWrite: Int) {
-//        let size = data.count
-//        data.withUnsafeBytes({(bytes: UnsafePointer<UInt8>) in
-//            var bytesWritten = 0
-//            while bytesWritten < size {
-//                var maxLength = maxLengthPerWrite
-//                if size - bytesWritten < maxLengthPerWrite {
-//                    maxLength = size - bytesWritten
-//                }
-//                let n = outputStream.write(bytes.advanced(by: bytesWritten), maxLength: maxLength)
-//                bytesWritten += n
-//                print(n)
-//            }
-//        })
-//    }
 
     public func delete(_ path: String) -> HivePromise<Bool> {
         return authHelper.checkValid().then { _ -> HivePromise<Bool> in
