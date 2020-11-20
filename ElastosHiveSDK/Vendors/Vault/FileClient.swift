@@ -81,6 +81,23 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         return nil
     }
     
+    public func read(_ size: Int) -> Data? {
+
+        if self.downloadBoundStreams.input.hasBytesAvailable == true {
+            let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: BUFFER_SIZE)
+            let writeBytesCount = self.downloadBoundStreams.input.read(buffer, maxLength: size)
+            if writeBytesCount == 0 && self.downloadDidFinsish == true {
+                self.readDidFinish = true;
+                return nil
+            }
+            let data = Data.init(bytes: buffer, count: writeBytesCount)
+            print("read \(writeBytesCount)")
+            self.totalBytesWriteCount = self.totalBytesWriteCount + data.count
+            return data
+        }
+        return nil
+    }
+
     public var didLoadFinish: Bool {
         
         return self.downloadDidFinsish && self.readDidFinish
@@ -129,6 +146,7 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     
     public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         print("DID COMPLETE WITH ERROR")
+        // tod:error  task.response
         self.downloadDidFinsish = true
         downloadBoundStreams.output.close()
     }
@@ -220,6 +238,10 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         print("NEW BODY NEEDED")
         // Provides the input stream to the back end API request. This input stream is filled by our output stream when we write data into it.
         completionHandler(uploadBoundStreams.input)
+    }
+
+    public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        print("DID COMPLETE WITH ERROR")
     }
 }
 
