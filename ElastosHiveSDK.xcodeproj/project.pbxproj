@@ -129,12 +129,8 @@
 		11749DA224083D63007B8F32 /* TestResultHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11749DA124083D63007B8F32 /* TestResultHandler.swift */; };
 		118E277E256546E3004EECF1 /* Antlr4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118E277D256546E3004EECF1 /* Antlr4.framework */; platformFilter = ios; };
 		118E278125654711004EECF1 /* Antlr4.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 118E277D256546E3004EECF1 /* Antlr4.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		118E27AC2566C80D004EECF1 /* ElastosDIDSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118E27AB2566C80D004EECF1 /* ElastosDIDSDK.framework */; platformFilter = ios; };
 		118E27B82566C851004EECF1 /* Antlr4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118E277D256546E3004EECF1 /* Antlr4.framework */; };
-		118E27B92566C851004EECF1 /* ElastosDIDSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118E27AB2566C80D004EECF1 /* ElastosDIDSDK.framework */; };
-		118E27BB2566C86B004EECF1 /* ElastosDIDSDK.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 118E27AB2566C80D004EECF1 /* ElastosDIDSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		118E27BC2566C86B004EECF1 /* Antlr4.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 118E277D256546E3004EECF1 /* Antlr4.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		118E27BE2566C898004EECF1 /* ElastosDIDSDK.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 118E27AB2566C80D004EECF1 /* ElastosDIDSDK.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		118F2D83250F1A7200447A0A /* ScriptTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2D82250F1A7200447A0A /* ScriptTest.swift */; };
 		118F2D85250F1ABA00447A0A /* Constance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2D84250F1ABA00447A0A /* Constance.swift */; };
 		118F2D87250F23EB00447A0A /* AggregatedCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2D86250F23EB00447A0A /* AggregatedCondition.swift */; };
@@ -217,7 +213,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				118E27BB2566C86B004EECF1 /* ElastosDIDSDK.framework in CopyFiles */,
 				118E27BC2566C86B004EECF1 /* Antlr4.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -228,7 +223,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				118E27BE2566C898004EECF1 /* ElastosDIDSDK.framework in CopyFiles */,
 				118E278125654711004EECF1 /* Antlr4.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -298,7 +292,6 @@
 		11749D9E24082FB1007B8F32 /* OutputStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputStream.swift; sourceTree = "<group>"; };
 		11749DA124083D63007B8F32 /* TestResultHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestResultHandler.swift; sourceTree = "<group>"; };
 		118E277D256546E3004EECF1 /* Antlr4.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Antlr4.framework; sourceTree = "<group>"; };
-		118E27AB2566C80D004EECF1 /* ElastosDIDSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ElastosDIDSDK.framework; sourceTree = "<group>"; };
 		118F2D82250F1A7200447A0A /* ScriptTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptTest.swift; sourceTree = "<group>"; };
 		118F2D84250F1ABA00447A0A /* Constance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constance.swift; sourceTree = "<group>"; };
 		118F2D86250F23EB00447A0A /* AggregatedCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AggregatedCondition.swift; sourceTree = "<group>"; };
@@ -349,7 +342,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				1137942E227ED9AD004A1F65 /* ElastosHiveSDK.framework in Frameworks */,
-				118E27AC2566C80D004EECF1 /* ElastosDIDSDK.framework in Frameworks */,
 				0D94ED2D06BBCAE410D0273C /* Pods_ElastosHiveSDKTests.framework in Frameworks */,
 				118E277E256546E3004EECF1 /* Antlr4.framework in Frameworks */,
 			);
@@ -367,7 +359,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				118E27B82566C851004EECF1 /* Antlr4.framework in Frameworks */,
-				118E27B92566C851004EECF1 /* ElastosDIDSDK.framework in Frameworks */,
 				6DDA50FA35E7A18E5EF0C90E /* Pods_ElastosHiveSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -390,7 +381,6 @@
 		111CA6E2252097DC0030D39C /* Externals */ = {
 			isa = PBXGroup;
 			children = (
-				118E27AB2566C80D004EECF1 /* ElastosDIDSDK.framework */,
 				118E277D256546E3004EECF1 /* Antlr4.framework */,
 			);
 			path = Externals;
