@@ -33,14 +33,6 @@ class VaultURL {
         self.baseUrl = baseUrl
     }
 
-    class func acquireAuthCode(_ param: String) -> String {
-         return AUTH_URI + "?\(param.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!)"
-     }
-
-    class func token() -> String {
-        return "https://oauth2.googleapis.com/token"
-    }
-
     func checkToken() -> String {
         return baseUrl + "/api/v1/did/check_token"
     }
