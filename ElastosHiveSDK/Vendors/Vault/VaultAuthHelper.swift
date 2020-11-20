@@ -30,7 +30,6 @@ public class VaultAuthHelper: ConnectHelper {
 
     let ACCESS_TOKEN_KEY: String = "access_token"
     let REFRESH_TOKEN_KEY: String = "refresh_token"
-    let expireInKey: String = "expires_in"
     let TOKEN_TYPE_KEY: String = "token_type"
     let EXPIRES_AT_KEY: String = "expires_at"
     private var _ownerDid: String?
@@ -85,11 +84,6 @@ public class VaultAuthHelper: ConnectHelper {
     }
 
     public override func checkValid() -> HivePromise<Void> {
-
-        return checkValid(handleBy: HiveCallback<Void>())
-    }
-
-    public override func checkValid(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
         return HivePromise<Void> { resolver in
             let globalQueue = DispatchQueue.global()
             globalQueue.async {
@@ -108,11 +102,11 @@ public class VaultAuthHelper: ConnectHelper {
         _connectState = false
         tryRestoreToken()
         if token == nil || token!.isExpired() {
-            try signIn(self._authenticationHandler)
+            try signIn()
         }
     }
 
-    func signIn(_ handler: Authenticator?) throws {
+    func signIn() throws {
 
         let json = _authenticationDIDDocument!.toString()
         let data = json.data(using: .utf8)
@@ -136,11 +130,11 @@ public class VaultAuthHelper: ConnectHelper {
         guard erro == nil else {
             throw erro!
         }
-        if handler != nil {
+        if self._authenticationHandler != nil {
             try self.verifyToken(challenge)
         }
         semaphore = DispatchSemaphore(value: 0)
-        requestAuthToken(handler!, challenge).then { aToken -> HivePromise<JSON> in
+        requestAuthToken(self._authenticationHandler!, challenge).then { aToken -> HivePromise<JSON> in
             return self.nodeAuth(aToken)
         }.done { re in
             do {
@@ -163,9 +157,22 @@ public class VaultAuthHelper: ConnectHelper {
         return handler.requestAuthentication(challenge)
     }
 
-    private func verifyToken(_ jwtToken: String)throws {
+    private func verifyToken(_ jwtToken: String) throws {
         let jwtParser = try JwtParserBuilder().build()
-        _ = try jwtParser.parseClaimsJwt(jwtToken)
+        let claims = try jwtParser.parseClaimsJwt(jwtToken).claims
+        let exp = claims.getExpiration()
+        let aud = claims.getAudience()
+        let did = _authenticationDIDDocument?.subject.description
+        if did == nil || aud == nil || did! != aud! {
+            throw HiveError.failure(des: "authenticationDIDDocument's subject is not equal to audience")
+        }
+        let currentTime = Date()
+        guard let _ = exp else {
+            return
+        }
+        if currentTime > exp! {
+            throw HiveError.failure(des: "challenge token is expiration.")
+        }
     }
 
     private func tryRestoreToken() {

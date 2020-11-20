@@ -24,19 +24,8 @@ import Foundation
 
 @objc(AuthHelper)
 public class ConnectHelper: NSObject {
-    public func connectAsync(authenticator: Authenticator? = nil) -> HivePromise<Void> {
-        return connectAsync(authenticator: authenticator, handleBy: HiveCallback<Void>())
-    }
-    
-    public func connectAsync(authenticator: Authenticator? = nil, handleBy: HiveCallback<Void>) -> HivePromise<Void> {
-        return HivePromise<Void>(error: HiveError.failure(des: "Dummy"))
-    }
     
     public func checkValid() -> HivePromise<Void> {
-        return checkValid(handleBy: HiveCallback<Void>())
-    }
-    
-    public func checkValid(handleBy: HiveCallback<Void>) -> HivePromise<Void> {
         return HivePromise<Void>(error: HiveError.failure(des: "Dummy"))
     }
 }
