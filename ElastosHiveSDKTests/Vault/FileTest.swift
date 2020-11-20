@@ -62,6 +62,32 @@ class FileTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
     
+    func test_1Download_2() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        _ = file?.download("hive/testIos.txt").done{ [self] output in
+            let fileurl = creaFile()
+            while !output.didLoadFinish {
+                if let data = output.read(42760) {
+                    print("prepare to write \(data.count)")
+                    if let fileHandle = try? FileHandle(forWritingTo: fileurl) {
+                        fileHandle.seekToEndOfFile()
+                        fileHandle.write(data)
+                        fileHandle.closeFile()
+                        print("11")
+                    } else {
+                        print("nil")
+                    }
+                }
+            }
+            output.close()
+            lock.fulfill()
+        }.catch{ error in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+
     func test_2Delete() {
         let lock = XCTestExpectation(description: "wait for test.")
         _ = file?.delete("hive/testIos_delete01.txt").done{ re in
