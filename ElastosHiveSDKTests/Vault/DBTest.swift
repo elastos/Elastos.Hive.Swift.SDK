@@ -202,7 +202,7 @@ class DBTest: XCTestCase {
         let docNode2 = ["author": "john doe3", "title": "Eve for Dummies3"]
         let insertOptions = InsertOptions()
         _ = insertOptions.bypassDocumentValidation(false).ordered(true)
-        database?.insertMany("new", [docNode1, docNode2], options: insertOptions).done{ result in
+        database?.insertMany(collectionName, [docNode1, docNode2], options: insertOptions).done{ result in
             XCTAssertTrue(result.insertedIds().count > 0)
             lock.fulfill()
         }.catch{ error in
@@ -222,7 +222,7 @@ class DBTest: XCTestCase {
             .returnKey(false)
             .batchSize(0)
             .projection(["_id": false])
-        database?.findOne("new", queryInfo, options: findOptions).done{ result in
+        database?.findOne(collectionName, queryInfo, options: findOptions).done{ result in
             XCTAssertTrue(true)
             lock.fulfill()
         }.catch{ error in
@@ -242,7 +242,7 @@ class DBTest: XCTestCase {
             .returnKey(false)
             .batchSize(0)
             .projection(["_id": false])
-        database?.findMany("new", queryInfo, options: findOptions).done{ result in
+        database?.findMany(collectionName, queryInfo, options: findOptions).done{ result in
             XCTAssertTrue(true)
             lock.fulfill()
         }.catch{ error in
@@ -257,7 +257,7 @@ class DBTest: XCTestCase {
         let filter = ["author": "john doe2"]
         let options = CountOptions()
         _ = options.limit(1).skip(0).maxTimeMS(1000000000)
-        database?.countDocuments("new", filter, options: options).done{ result in
+        database?.countDocuments(collectionName, filter, options: options).done{ result in
             XCTAssertTrue(true)
             lock.fulfill()
         }.catch{ error in
@@ -273,7 +273,7 @@ class DBTest: XCTestCase {
         let update = ["$set": ["author": "john doe2_1", "title": "Eve for Dummies2"]]
         let updateOptions = UpdateOptions()
         _ = updateOptions.upsert(value: true).bypassDocumentValidation(value: false)
-        database?.updateOne("new", filterInfo, update, options: updateOptions).done{ result in
+        database?.updateOne(collectionName, filterInfo, update, options: updateOptions).done{ result in
             XCTAssertTrue(true)
             lock.fulfill()
         }.catch{ error in
@@ -289,7 +289,7 @@ class DBTest: XCTestCase {
         let update = ["$set":["author": "john doe2_1", "title": "Eve for Dummies2_1_1_2"]]
         let updateOptions = UpdateOptions()
         updateOptions.upsert(value: true).bypassDocumentValidation(value: false)
-        database?.updateMany("new", filterInfo, update, options: updateOptions).done{ result in
+        database?.updateMany(collectionName, filterInfo, update, options: updateOptions).done{ result in
             XCTAssertTrue(true)
             lock.fulfill()
         }.catch{ error in
@@ -298,48 +298,8 @@ class DBTest: XCTestCase {
         }
         self.wait(for: [lock], timeout: 1000.0)
     }
-
-    func test12_DeleteOne() {
-        let lock = XCTestExpectation(description: "wait for test.")
-        let filterInfo = ["author": "john doe2"]
-        let deleteOptions = DeleteOptions()
-        database?.deleteOne("new", filterInfo, options: deleteOptions).done{ result in
-            XCTAssertTrue(true)
-            lock.fulfill()
-        }.catch{ error in
-            lock.fulfill()
-            XCTFail()
-        }
-        self.wait(for: [lock], timeout: 1000.0)
-    }
-
-    func test13_DeleteMany() {
-        let lock = XCTestExpectation(description: "wait for test.")
-        let filterInfo = ["author": "john doe2"]
-        let deleteOptions = DeleteOptions()
-        database?.deleteMany("new", filterInfo, options: deleteOptions).done{ result in
-            XCTAssertTrue(true)
-            lock.fulfill()
-        }.catch{ error in
-            lock.fulfill()
-            XCTFail()
-        }
-        self.wait(for: [lock], timeout: 1000.0)
-    }
-
-    func test14_deleteCol() {
-        let lock = XCTestExpectation(description: "wait for test.")
-        database?.deleteCollection("new").done{ result in
-            XCTAssertTrue(true)
-            lock.fulfill()
-        }.catch{ error in
-            lock.fulfill()
-            XCTFail()
-        }
-        self.wait(for: [lock], timeout: 1000.0)
-    }
-
-    func testUpdateManyWith$param() {
+    
+    func test12_UpdateManyWith$param() {
         let dic = ["_error": ["message": "Exception: method: 'query_update_one', Err: The dollar ($) prefixed field '$set' in '$set' is not valid for storage., full error: {'index': 0, 'code': 52, 'errmsg': \"The dollar ($) prefixed field '$set' in '$set' is not valid for storage.\"}", "code": 500]]
         let data = try? JSONSerialization.data(withJSONObject: dic as Any, options: [])
         let dicStr = String(data: data!, encoding: String.Encoding.utf8)!
@@ -349,12 +309,52 @@ class DBTest: XCTestCase {
         let filterInfo = ["myParam": "hey"]
         let update = ["$set": ["myParam": "hey", "randomParam": "0.7522371070254117"]]
         let updateOptions = UpdateOptions()
-        database?.updateMany("new0", filterInfo, update, options: updateOptions).done{ result in
+        database?.updateMany(collectionName, filterInfo, update, options: updateOptions).done{ result in
             XCTAssertTrue(true)
             lock.fulfill()
         }.catch{ error in
             let e = HiveError.description(error as! HiveError)
             print(e)
+            lock.fulfill()
+            XCTFail()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+    
+    func test13_DeleteOne() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        let filterInfo = ["author": "john doe2"]
+        let deleteOptions = DeleteOptions()
+        database?.deleteOne(collectionName, filterInfo, options: deleteOptions).done{ result in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ error in
+            lock.fulfill()
+            XCTFail()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+
+    func test14_DeleteMany() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        let filterInfo = ["author": "john doe2"]
+        let deleteOptions = DeleteOptions()
+        database?.deleteMany(collectionName, filterInfo, options: deleteOptions).done{ result in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ error in
+            lock.fulfill()
+            XCTFail()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+
+    func test15_deleteCol() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        database?.deleteCollection(collectionName).done{ result in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ error in
             lock.fulfill()
             XCTFail()
         }
