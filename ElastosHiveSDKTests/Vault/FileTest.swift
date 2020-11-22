@@ -9,36 +9,45 @@ class FileTest: XCTestCase {
     
     func test_0Upload() {
         let lock = XCTestExpectation(description: "wait for test.")
-        _ = file?.upload("hive/testIos.txt").done { writer in
+        _ = file?.upload("hive/testIos13.txt").done { writer in
             
             let shortMessage = "ABCEFGH"
             let message1 = "*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())"
             let message2 = " ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD"
             
-            try writer.write(data: shortMessage.data(using: .utf8)!)
+            try writer.write(data: shortMessage.data(using: .utf8)!, { err in
+                print(err)
+            })
             
             for _ in 0...40 {
-                try writer.write(data: message1.data(using: .utf8)!)
+                    try writer.write(data: message1.data(using: .utf8)!, { err in
+                        print(err)
+                    })
+                }
+                try writer.write(data: message2.data(using: .utf8)!, { err in
+                    print(err)
+                })
+                try writer.write(data: "message2".data(using: .utf8)!, { err in
+                    print(err)
+                })
+//                try writer.write(data: message2.data(using: .utf8)!)
+//                try writer.write(data: "message2".data(using: .utf8)!)
+                
+                writer.close()
+                
+                XCTAssertNotNil(writer)
+                lock.fulfill()
+            }.catch{ error in
+                XCTFail()
+                lock.fulfill()
             }
-            
-            try writer.write(data: message2.data(using: .utf8)!)
-            try writer.write(data: "message2".data(using: .utf8)!)
-
-            writer.close()
-            
-            XCTAssertNotNil(writer)
-            lock.fulfill()
-        }.catch{ error in
-            XCTFail()
-            lock.fulfill()
-        }
         self.wait(for: [lock], timeout: 1000.0)
         Thread.sleep(forTimeInterval: 5.0)
     }
     
     func test_1Download_1() {
         let lock = XCTestExpectation(description: "wait for test.")
-        _ = file?.download("hive/testIos.txt").done{ [self] output in
+        _ = file?.download("hive/testIos13.txt").done{ [self] output in
             let fileurl = creaFile()
             while !output.didLoadFinish {
                 if let data = output.read() {

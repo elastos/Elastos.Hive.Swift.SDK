@@ -36,13 +36,17 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     var totalBytesWriteCount: Int = 0
     var downloadDidFinsish: Bool = false
     var readDidFinish: Bool = false
+    var resolver: Resolver<FileReader>
+    typealias AuthFailure = (_ error: HiveError) -> Void
+    var authFailure : AuthFailure?
     
-    init(url: URL, authHelper: VaultAuthHelper) {
+    init(url: URL, authHelper: VaultAuthHelper, resolver: Resolver<FileReader>) {
         var input: InputStream? = nil
         var output: OutputStream? = nil
+        self.resolver = resolver
         Stream.getBoundStreams(withBufferSize: BUFFER_SIZE,
-                                   inputStream: &input,
-                                   outputStream: &output)
+                               inputStream: &input,
+                               outputStream: &output)
         
         downloadBoundStreams = BoundStreams(input: input!, output: output!)
         super.init()
@@ -123,6 +127,21 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     }
 
     public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
+        let response = dataTask.response as? HTTPURLResponse
+        let code = response?.statusCode
+        guard code != nil else {
+            self.resolver.reject(HiveError.failure(des: "unkonw error."))
+            return
+        }
+        if code == 200 {
+            resolver.fulfill(self)
+            self.task?.cancel()
+        }
+        guard 200...299 ~= code! else {
+            resolver.reject(HiveError.failure(des: String(data: data, encoding: .utf8)))
+            self.task?.cancel()
+            return
+        }
         
         self.allBytesCount = self.allBytesCount + data.count
         
@@ -145,8 +164,22 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     }
     
     public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        let response = task.response as? HTTPURLResponse
+        let code = response?.statusCode
+        guard code != nil else {
+            self.resolver.reject(HiveError.failure(des: "unkonw error."))
+            return
+        }
+        guard 200...299 ~= code! else {
+            if code == 401 {
+                self.authFailure?(HiveError.failure(des: "code: 401"))
+                self.task?.cancel()
+            return
+            }
+            resolver.reject(HiveError.failure(des: "code: 401"))
+            return
+        }
         print("DID COMPLETE WITH ERROR")
-        // tod:error  task.response
         self.downloadDidFinsish = true
         downloadBoundStreams.output.close()
     }
@@ -158,13 +191,16 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     var task: URLSessionTask? = nil
     let BUFFER_SIZE = 32768
 
+    typealias RequestBlock = (_ error: HiveError) -> Void
+    private var requestBlock : RequestBlock?
+    
     init(url: URL, authHelper: VaultAuthHelper) {
         var input: InputStream? = nil
         var output: OutputStream? = nil
         
         Stream.getBoundStreams(withBufferSize: BUFFER_SIZE,
-                                   inputStream: &input,
-                                   outputStream: &output)
+                               inputStream: &input,
+                               outputStream: &output)
         
         uploadBoundStreams = BoundStreams(input: input!, output: output!)
 
@@ -187,7 +223,8 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         self.task?.resume()
     }
     
-    public func write(data: Data) throws {
+    public func write(data: Data, _ error: @escaping (_ error: HiveError) -> Void) throws {
+        self.requestBlock = error
         let dataSize = data.count
         var totalBytesWritten = 0
         var availableRetries = 5
@@ -234,6 +271,21 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         uploadBoundStreams.output.close()
     }
     
+    public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
+        // "{\"_status\":\"OK\"}\n"
+        let response = dataTask.response as? HTTPURLResponse
+        let code = response?.statusCode
+        guard code != nil else {
+            self.requestBlock?(HiveError.failure(des: "unknow error."))
+            return
+        }
+        guard 200...299 ~= code! else {
+            self.requestBlock?(HiveError.failure(des: String(data: data, encoding: .utf8)))
+            return
+        }
+        print("Upload success.")
+    }
+    
     public func urlSession(_ session: URLSession, task: URLSessionTask, needNewBodyStream completionHandler: @escaping (InputStream?) -> Void) {
         print("NEW BODY NEEDED")
         // Provides the input stream to the back end API request. This input stream is filled by our output stream when we write data into it.
@@ -241,7 +293,11 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     }
 
     public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        print("DID COMPLETE WITH ERROR")
+        guard error != nil else {
+            self.requestBlock?(HiveError.netWork(des: error))
+            return
+        }
+        print("DID COMPLETE WITHOUT ERROR")
     }
 }
 
@@ -282,8 +338,20 @@ public class FileClient: NSObject, FilesProtocol {
     private func downloadImp(_ remoteFile: String, tryAgain: Int) -> HivePromise<FileReader> {
         return HivePromise<FileReader> { resolver in
             if let url = URL(string: VaultURL.sharedInstance.download(remoteFile)) {
-                reader = FileReader(url: url, authHelper: authHelper)
-                resolver.fulfill(reader!)
+                reader = FileReader(url: url, authHelper: authHelper, resolver: resolver)
+                reader?.authFailure = { error in
+                    if tryAgain >= 1 {
+                        resolver.reject(error)
+                        return
+                    }
+                    self.authHelper.retryLogin().then { success -> HivePromise<FileReader> in
+                        return self.downloadImp(remoteFile, tryAgain: 1)
+                    }.done { result in
+                        resolver.fulfill(result)
+                    }.catch { error in
+                        resolver.reject(error)
+                    }
+                }
             }
             else {
                 resolver.reject(HiveError.failure(des: "Invalid url format"))
