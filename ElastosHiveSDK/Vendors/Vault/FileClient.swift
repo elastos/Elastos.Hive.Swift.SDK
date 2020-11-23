@@ -33,12 +33,16 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     let BUFFER_SIZE = 32768
     
     var allBytesCount: Int = 0
-    var totalBytesWriteCount: Int = 0
+    var totalBytesReadCount: Int = 0
     var downloadDidFinsish: Bool = false
     var readDidFinish: Bool = false
     var resolver: Resolver<FileReader>
     typealias AuthFailure = (_ error: HiveError) -> Void
     var authFailure : AuthFailure?
+    typealias RequestBlock = (_ error: HiveError) -> Void
+    private var requestBlock : RequestBlock?
+    typealias BlockRead = (_ block: Bool) -> Void
+    private var blockRead : BlockRead?
     
     init(url: URL, authHelper: VaultAuthHelper, resolver: Resolver<FileReader>) {
         var input: InputStream? = nil
@@ -68,37 +72,33 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         self.task?.resume()
     }
     
-    public func read() -> Data? {
-        
-        if self.downloadBoundStreams.input.hasBytesAvailable == true {
-            let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: BUFFER_SIZE)
-            let writeBytesCount = self.downloadBoundStreams.input.read(buffer, maxLength: BUFFER_SIZE)
-            if writeBytesCount == 0 && self.downloadDidFinsish == true {
-                self.readDidFinish = true;
-                return nil
-            }
-            let data = Data.init(bytes: buffer, count: writeBytesCount)
-            print("read \(writeBytesCount)")
-            self.totalBytesWriteCount = self.totalBytesWriteCount + data.count
-            return data
-        }
-        return nil
+    public func read(_ error: @escaping (_ error: HiveError) -> Void) -> Data? {
+        return read(BUFFER_SIZE, error)
     }
     
-    public func read(_ size: Int) -> Data? {
-
+    public func read(_ size: Int, _ error: @escaping (_ error: HiveError) -> Void) -> Data? {
+        self.requestBlock = error
         if self.downloadBoundStreams.input.hasBytesAvailable == true {
-            let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: BUFFER_SIZE)
-            let writeBytesCount = self.downloadBoundStreams.input.read(buffer, maxLength: size)
-            if writeBytesCount == 0 && self.downloadDidFinsish == true {
-                self.readDidFinish = true;
+            let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: size)
+            let readBytesCount = self.downloadBoundStreams.input.read(buffer, maxLength: size)
+            if readBytesCount == 0 && self.downloadDidFinsish == true {
+                self.readDidFinish = true
                 return nil
             }
-            let data = Data.init(bytes: buffer, count: writeBytesCount)
-            print("read \(writeBytesCount)")
-            self.totalBytesWriteCount = self.totalBytesWriteCount + data.count
+            let data = Data.init(bytes: buffer, count: readBytesCount)
+            print("read \(readBytesCount)")
+            self.totalBytesReadCount = self.totalBytesReadCount + data.count
             return data
         }
+        else if self.downloadBoundStreams.input.hasBytesAvailable == false && self.downloadDidFinsish == false {
+            let semaphore: DispatchSemaphore! = DispatchSemaphore(value: 0)
+            self.blockRead = { block in
+                print("lallalaalla")
+                semaphore.signal()
+            }
+            semaphore.wait()
+        }
+        
         return nil
     }
 
@@ -135,16 +135,13 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         }
         if code == 200 {
             resolver.fulfill(self)
-            self.task?.cancel()
         }
         guard 200...299 ~= code! else {
             resolver.reject(HiveError.failure(des: String(data: data, encoding: .utf8)))
             self.task?.cancel()
             return
         }
-        
         self.allBytesCount = self.allBytesCount + data.count
-        
         let dataSize = data.count
         var totalBytesWritten = 0
         
@@ -158,12 +155,17 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
                     let bytesWritten: Int = self.downloadBoundStreams.output.write(buffer, maxLength: leaveBytesCount)
                     totalBytesWritten = totalBytesWritten + bytesWritten
                     print("totalBytesWritten = \(totalBytesWritten), data count = \(dataSize)")
+                    self.blockRead?(true)
                 }
             }
         }
     }
     
     public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        if let _ = error {
+            self.requestBlock?(HiveError.netWork(des: error))
+            return
+        }
         let response = task.response as? HTTPURLResponse
         let code = response?.statusCode
         guard code != nil else {
@@ -174,9 +176,9 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
             if code == 401 {
                 self.authFailure?(HiveError.failure(des: "code: 401"))
                 self.task?.cancel()
-            return
+                return
             }
-            resolver.reject(HiveError.failure(des: "code: 401"))
+            resolver.reject(HiveError.failure(des: "code: \(code)"))
             return
         }
         print("DID COMPLETE WITH ERROR")
@@ -190,7 +192,6 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     var uploadBoundStreams: BoundStreams
     var task: URLSessionTask? = nil
     let BUFFER_SIZE = 32768
-
     typealias RequestBlock = (_ error: HiveError) -> Void
     private var requestBlock : RequestBlock?
     
