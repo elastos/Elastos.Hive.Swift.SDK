@@ -19,7 +19,7 @@ class FileTest: XCTestCase {
                 print(err)
             })
             
-            for _ in 0...40 {
+            for _ in 0...400000 {
                     try writer.write(data: message1.data(using: .utf8)!, { err in
                         print(err)
                     })
@@ -41,24 +41,27 @@ class FileTest: XCTestCase {
                 XCTFail()
                 lock.fulfill()
             }
-        self.wait(for: [lock], timeout: 1000.0)
+        self.wait(for: [lock], timeout: 100000000.0)
         Thread.sleep(forTimeInterval: 5.0)
     }
     
     func test_1Download_1() {
         let lock = XCTestExpectation(description: "wait for test.")
+
         _ = file?.download("hive/testIos13.txt").done{ [self] output in
             let fileurl = creaFile()
             while !output.didLoadFinish {
-                if let data = output.read() {
+                if let data = output.read({ error in
+                    print(error)
+                }){
                     print("prepare to write \(data.count)")
                     if let fileHandle = try? FileHandle(forWritingTo: fileurl) {
                         fileHandle.seekToEndOfFile()
                         fileHandle.write(data)
                         fileHandle.closeFile()
-                        print("11")
                     } else {
-                        print("nil")
+                        XCTFail()
+                        lock.fulfill()
                     }
                 }
             }
@@ -70,7 +73,7 @@ class FileTest: XCTestCase {
         }
         self.wait(for: [lock], timeout: 1000.0)
     }
-    
+    /*
     func test_1Download_2() {
         let lock = XCTestExpectation(description: "wait for test.")
         _ = file?.download("hive/testIos.txt").done{ [self] output in
@@ -96,7 +99,7 @@ class FileTest: XCTestCase {
         }
         self.wait(for: [lock], timeout: 1000.0)
     }
-
+*/
     func test_2Delete() {
         let lock = XCTestExpectation(description: "wait for test.")
         _ = file?.delete("hive/testIos_delete01.txt").done{ re in
