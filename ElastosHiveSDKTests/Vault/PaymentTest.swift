@@ -6,10 +6,26 @@ import ElastosDIDSDK
 class PaymentTest: XCTestCase {
     private var payment: Payment?
     
+    private let planName = "Free"
+    private let priceName = "Rookie"
+    private let orderId = "5fb5f1be9284ff39688ea77e"
+
     func test0_GetPaymentInfo() {
         let lock = XCTestExpectation(description: "wait for test.")
         _ = payment?.getPaymentInfo().done{ info in
             print(info)
+            lock.fulfill()
+        }.catch{ error in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+    
+    func test2_getPricingPlan() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        _ = payment?.getPricingPlan(planName).done{ plan in
+            print(plan)
             lock.fulfill()
         }.catch{ error in
             XCTFail()
