@@ -84,6 +84,7 @@
 		1127463424FE3386007D6356 /* ScriptClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1127463224FE3386007D6356 /* ScriptClient.swift */; };
 		1129C19424052CC500CD77F2 /* Alamofire+Synchronous.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1129C19324052CC500CD77F2 /* Alamofire+Synchronous.swift */; };
 		1129C19524052CC500CD77F2 /* Alamofire+Synchronous.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1129C19324052CC500CD77F2 /* Alamofire+Synchronous.swift */; };
+		112C4DA7256C0B4A006ECB8E /* VaultHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112C4DA6256C0B4A006ECB8E /* VaultHelper.swift */; };
 		1137942E227ED9AD004A1F65 /* ElastosHiveSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A39C496F225399860027BDF9 /* ElastosHiveSDK.framework */; };
 		11474817255E156C00D158B7 /* DApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11474816255E156B00D158B7 /* DApp.swift */; };
 		11474828255E1C7100D158B7 /* Entity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11474827255E1C7100D158B7 /* Entity.swift */; };
@@ -261,6 +262,7 @@
 		1127462F24FE3369007D6356 /* FileClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileClient.swift; sourceTree = "<group>"; };
 		1127463224FE3386007D6356 /* ScriptClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptClient.swift; sourceTree = "<group>"; };
 		1129C19324052CC500CD77F2 /* Alamofire+Synchronous.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Alamofire+Synchronous.swift"; sourceTree = "<group>"; };
+		112C4DA6256C0B4A006ECB8E /* VaultHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultHelper.swift; sourceTree = "<group>"; };
 		11379429227ED9AD004A1F65 /* ElastosHiveSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ElastosHiveSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1137942D227ED9AD004A1F65 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		11474816255E156B00D158B7 /* DApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DApp.swift; sourceTree = "<group>"; };
@@ -621,6 +623,7 @@
 				114FD83F2297CF7600467E38 /* Authenticator.swift */,
 				A39CB4BE2292854000535E43 /* HiveCallback.swift */,
 				1170FB132502019C0049E81D /* Vault.swift */,
+				112C4DA6256C0B4A006ECB8E /* VaultHelper.swift */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -1020,6 +1023,7 @@
 				114FD8402297CF7700467E38 /* Authenticator.swift in Sources */,
 				11E92CE52560DFF5007EFC95 /* UploadExecutable.swift in Sources */,
 				118F2D9C250F31A700447A0A /* DbUpdateQuery.swift in Sources */,
+				112C4DA7256C0B4A006ECB8E /* VaultHelper.swift in Sources */,
 				11E573FE22C4C33400F85419 /* Dictionary.swift in Sources */,
 				11496C65251B1E37002DE4F0 /* Date.swift in Sources */,
 				1127462D24FE3343007D6356 /* DatabaseClient.swift in Sources */,

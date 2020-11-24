@@ -204,13 +204,21 @@ class FileTest: XCTestCase {
         do {
             user = try UserFactory.createUser1()
             let lock = XCTestExpectation(description: "wait for test.")
-            user!.client.getVault(OWNERDID).done { [self] vault in
+            user?.client.createVault(OWNERDID, user?.provider).done{ vault in
+
                 self.file = (vault.files as! FileClient)
                 lock.fulfill()
             }.catch { error in
                 print(error)
                 lock.fulfill()
             }
+//            user!.client.getVault(OWNERDID, user?.provider).done { [self] vault in
+//                self.file = (vault.files as! FileClient)
+//                lock.fulfill()
+//            }.catch { error in
+//                print(error)
+//                lock.fulfill()
+//            }
             self.wait(for: [lock], timeout: 100.0)
         } catch {
             XCTFail()
