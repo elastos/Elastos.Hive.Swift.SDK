@@ -30,14 +30,17 @@ public class Vault: NSObject {
 
     private var _vaultProvider: String
     private var _ownerDid: String
+    private var authHelper: VaultAuthHelper
+    private var vaultHelper: VaultHelper
 
     init(_ authHelper: VaultAuthHelper, _ vaultProvider: String, _ ownerDid: String) {
         self._files = FileClient(authHelper)
         self._database = DatabaseClient(authHelper)
         self._scripting = ScriptClient(authHelper)
-
+        self.authHelper = authHelper
         self._vaultProvider = vaultProvider
         self._ownerDid = ownerDid
+        self.vaultHelper = VaultHelper(authHelper)
     }
 
     public var providerAddress: String {
@@ -74,6 +77,10 @@ public class Vault: NSObject {
 
     public var scripting: ScriptingProtocol {
         return _scripting
+    }
+    
+    func useTrial() -> HivePromise<Bool> {
+        return self.vaultHelper.useTrial()
     }
 }
 

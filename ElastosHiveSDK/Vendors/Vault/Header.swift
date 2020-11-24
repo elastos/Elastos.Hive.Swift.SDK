@@ -14,6 +14,6 @@ class Header {
     }
     func headers() -> HTTPHeaders {
         let accesstoken: String = (self.auther as! VaultAuthHelper).token?.accessToken ?? ""
-        return ["Content-Type": "application/json;charset=UTF-8", "Authorization": "token \(accesstoken)", "Transfer-Encoding": "chunked", "Connection": "Keep-Alive"]
+        return ["Content-Type": "application/json;charset=UTF-8", "Authorization": "token \(accesstoken)"]
     }
 }

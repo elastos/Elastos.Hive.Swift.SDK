@@ -72,22 +72,32 @@ public class HiveClientHandle: NSObject {
         return HiveClientHandle(withOptions)
     }
 
-    public func getVault(_ ownerDid: String) -> HivePromise<Vault> {
+    private func newVault(_ provider: String, _ ownerDid: String) -> Vault {
+        let authHelper = VaultAuthHelper(ownerDid, provider, localDataPath, authenticationDIDDocument, authentcationHandler)
+        return Vault(authHelper, provider, ownerDid)
+    }
+    
+    public func createVault(_ ownerDid: String, _ providerAddress: String?) -> HivePromise<Vault>{
         return HivePromise<Vault> { resolver in
-            var vaultProvider = ""
-            _ = HiveClientHandle.getVaultProvider(ownerDid).done { [self] provider in
-                vaultProvider = provider
-                
-                //vaultProvider = "http://192.168.1.6:5000" // TMP BPI
-//                vaultProvider = "http://192.168.199.180:5000" // TMP BPI
+            var vault: Vault?
+            _ = getVaultProvider(ownerDid, providerAddress).then{ provider -> HivePromise<Bool> in
+                vault = self.newVault(provider, ownerDid)
+                return vault!.useTrial()
+            }.done{ success in
+                resolver.fulfill(vault!)
+            }.catch{ error in
+                resolver.reject(error)
+            }
+        }
+    }
 
-                var vault: Vault
-                guard vaultProvider != "" else {
-                    resolver.reject(HiveError.providerIsNil(des: "Please set provider first. provider is nil."))
-                    return
-                }
-                let authHelper = VaultAuthHelper(ownerDid, vaultProvider, localDataPath, authenticationDIDDocument, authentcationHandler)
-                vault = Vault(authHelper, vaultProvider, ownerDid)
+    public func getVault(_ ownerDid: String, _ providerAddress: String?) -> HivePromise<Vault> {
+        return HivePromise<Vault> { resolver in
+            _ = getVaultProvider(ownerDid, providerAddress).done { [self] provider in
+                let vault = newVault(provider, ownerDid)
+                // todo: vault.getUsingPricePlan()
+                // if(null == vault.getUsingPricePlan())
+                //        throw new VaultNotFoundException()
                 resolver.fulfill(vault)
             }
             .catch{ error in
@@ -96,12 +106,17 @@ public class HiveClientHandle: NSObject {
         }
     }
 
-    public class func getVaultProvider(_ ownerDid: String) -> HivePromise<String> {
+    public func getVaultProvider(_ ownerDid: String, _ providerAddress: String?) -> HivePromise<String> {
 
         return HivePromise<String> { resolver in
             let globalQueue = DispatchQueue.global()
             globalQueue.async {
                 var vaultProvider: String?
+                
+                if let _ = providerAddress {
+                    resolver.fulfill(providerAddress!)
+                    return
+                }
                 do {
                     let did = try DID(ownerDid)
                     let doc = try did.resolve()

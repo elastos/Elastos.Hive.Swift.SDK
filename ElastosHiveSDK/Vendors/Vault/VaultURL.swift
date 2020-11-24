@@ -136,4 +136,9 @@ class VaultURL {
     func call() -> String {
         return baseUrl + "/api/v1/scripting/run_script"
     }
+    
+    func create() -> String {
+        return baseUrl + "/api/v1/service/vault/create"
+    }
+    
 }

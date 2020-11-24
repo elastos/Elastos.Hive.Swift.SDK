@@ -9,8 +9,17 @@ public class UserFactory {
     var resolverDidSetup = false
     var presentationInJWT: PresentationInJWT?
     var client: HiveClientHandle
+    var storePath: String
+    var ownerDid: String
+    var resolveUrl: String
+    var provider: String
 
-    init(_ userDidOpt: Options, _ appInstanceDidOpt: Options, _ tokenCachePath: String) throws {
+    init(_ userDidOpt: Options,
+         _ appInstanceDidOpt: Options,
+         _ ownerDid: String,
+         _ resolveUrl: String,
+         _ provider: String,
+         _ tokenCachePath: String) throws {
         presentationInJWT = try PresentationInJWT(userDidOpt, appInstanceDidOpt)
         if !resolverDidSetup {
             try HiveClientHandle.setupResolver(RESOLVER_URL, UserFactory.didCachePath)
@@ -21,14 +30,23 @@ public class UserFactory {
         _ = options.setAuthenticator(VaultAuthenticator())
         _ = options.setAuthenticationDIDDocument((presentationInJWT?.doc)!)
         client = try HiveClientHandle.createInstance(withOptions: options)
+        self.storePath = tokenCachePath
+        self.ownerDid = ownerDid
+        self.resolveUrl = resolveUrl
+        self.provider = provider
     }
-
-    class func createFactory(_ userDidOpt: Options, _ appInstanceDidOpt: Options, _ tokenCachePath: String) throws -> UserFactory {
-        return try UserFactory(userDidOpt, appInstanceDidOpt, tokenCachePath)
+    
+    class func createFactory(_ userDidOpt: Options,
+                             _ appInstanceDidOpt: Options,
+                             _ ownerDid: String,
+                             _ resolveUrl: String,
+                             _ provider: String,
+                             _ tokenCachePath: String) throws -> UserFactory {
+        return try UserFactory(userDidOpt, appInstanceDidOpt,ownerDid, resolveUrl,provider, tokenCachePath)
     }
 
     class func createUser1() throws -> UserFactory {
-        let user1 = "\(NSHomeDirectory())/Library/Caches/store" + "/" + "user1"
+        let user2path = "\(NSHomeDirectory())/Library/Caches/store" + "/" + "user1"
         let userDidOpt = Options()
         userDidOpt.name = userDid1_name
         userDidOpt.mnemonic = userDid1_mn
@@ -40,12 +58,11 @@ public class UserFactory {
         appInstanceDidOpt.mnemonic = appInstance1_mn
         appInstanceDidOpt.phrasepass = appInstance1_phrasepass
         appInstanceDidOpt.storepass = appInstance1_storepass
-
-        return try UserFactory(userDidOpt, appInstanceDidOpt, user1)
+        return try UserFactory(userDidOpt, appInstanceDidOpt, userDid2, TEST_RESOLVER_URL, DEVELOP_PROVIDER, user2path)
     }
 
     class func createUser2() throws -> UserFactory {
-        let user2 = "\(NSHomeDirectory())/Library/Caches/store" + "/" + "user2"
+        let user1Path = "\(NSHomeDirectory())/Library/Caches/store" + "/" + "user2"
         let userDidOpt = Options()
         userDidOpt.name = userDid2_name
         userDidOpt.mnemonic = userDid2_mn
@@ -58,6 +75,6 @@ public class UserFactory {
         appInstanceDidOpt.phrasepass = appInstance2_phrasepass
         appInstanceDidOpt.storepass = appInstance2_storepass
 
-        return try UserFactory(userDidOpt, appInstanceDidOpt, user2)
+        return try UserFactory(userDidOpt, appInstanceDidOpt,userDid2, MAIN_RESOLVER_URL, RELEASE_PROVIDER, user1Path)
     }
 }
