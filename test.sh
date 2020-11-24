@@ -1,4 +1,4 @@
-wget https://github.com/elastos/Elastos.NET.Hive.Swift.SDK/releases/download/release-v1.0.2/Antlr4.framework.zip;
+wget https://github.com/elastos/Elastos.NET.Hive.Swift.SDK/releases/download/alpha-v2.01/Antlr4.framework.zip;
 tar -xzf Antlr4.framework.zip;
 
 cd ElastosHiveSDKTests
