@@ -21,6 +21,7 @@ Pod::Spec.new do |s|
   s.source       = {'http':'https://github.com/elastos/Elastos.NET.Hive.Swift.SDK/releases/download/release-v1.0.0/ElastosHive-framework.zip'}
   s.vendored_frameworks = 'ElastosHive-framework/*.framework'
   s.source_files = 'ElastosHive-framework/ElastosHiveSDK.framework/**/*.h'
-
+  s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
+  s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
 
 end
