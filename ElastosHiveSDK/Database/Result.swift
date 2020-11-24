@@ -29,21 +29,19 @@ public class Result: NSObject {
         case array
         case dictionary
     }
-    var result: [String: JSON] = [: ]
+    var paramars: JSON = [: ]
 
     init(_ json: JSON) {
         super.init()
-        json.forEach { key, value in
-            self.result[key] = value
-        }
+        paramars = json
      }
 
     func get(_ name: String) -> JSON? {
-        return result[name]
+        return paramars[name]
     }
 
     public func serialize() throws -> String {
-        let j: JSON = ["result": result]
+        let j: JSON = ["result": paramars]
         let data = try JSONSerialization.data(withJSONObject: j["result"].dictionaryObject as Any, options: [])
         guard let paramStr = String(data: data, encoding: .utf8) else {
             return ""

@@ -53,7 +53,8 @@ class DBTest: XCTestCase {
             json = try co.serialize()
             co = try CountOptions.deserialize(json)
             json2 = try co.serialize()
-
+            XCTAssertEqual(json.count, json2.count)
+            
             collation = Collation()
             collation = collation.locale("en_us")
                 .alternate(Alternate.SHIFTED)
@@ -80,13 +81,15 @@ class DBTest: XCTestCase {
             json = try cco.serialize()
             cco = try CreateCollectionOptions.deserialize(json)
             json2 = try cco.serialize()
-
+            XCTAssertEqual(json.count, json2.count)
+            
             var dopt = DeleteOptions()
             _ = try dopt.collation(collation)
             json = try dopt.serialize()
             dopt = try DeleteOptions.deserialize(json)
             json2 = try dopt.serialize()
-
+            XCTAssertEqual(json.count, json2.count)
+            
             var fo = FindOptions()
             let projection = "{\"name\":\"mkyong\", \"age\":37, \"c\":[\"adc\",\"zfy\",\"aaa\"], \"d\": {\"foo\": 1, \"bar\": 2}}"
             let data = projection.data(using: String.Encoding.utf8)
@@ -101,13 +104,15 @@ class DBTest: XCTestCase {
             json = try fo.serialize()
             fo = try FindOptions.deserialize(json)
             json2 = try fo.serialize()
-
+            XCTAssertEqual(json.count, json2.count)
+            
             var io = InsertOptions()
             _ = io.bypassDocumentValidation(true)
             json = try io.serialize()
             io = try InsertOptions.deserialize(json)
             json2 = try io.serialize()
-
+            XCTAssertEqual(json.count, json2.count)
+            
             var uo = UpdateOptions()
             _ = try uo.bypassDocumentValidation(value: true)
                 .collation(value: collation)
@@ -115,6 +120,7 @@ class DBTest: XCTestCase {
             json = try uo.serialize()
             uo = try UpdateOptions.deserialize(json)
             json2 = try uo.serialize()
+            XCTAssertEqual(json.count, json2.count)
         } catch {
             print(error)
             XCTFail()
