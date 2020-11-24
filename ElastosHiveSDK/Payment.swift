@@ -56,4 +56,32 @@ public class Payment: NSObject {
         let info = PricingInfo.deserialize(json)
         return info
     }
+
+    /// Get vault pricing plan information by plan name
+    /// - Returns: the instance of PricingPlan
+    public func getPricingPlan(_ planName: String) -> HivePromise<PricingPlan> {
+        return HivePromise<PricingPlan> { resover in
+            _ = self.authHelper.checkValid().done { [self] _ in
+                do {
+                    resover.fulfill(try getPricingPlansImp(planName, 0))
+                }
+                catch {
+                    resover.reject(error)
+                }
+            }
+        }
+    }
+    
+    private func getPricingPlansImp(_ planName: String, _ tryAgain: Int) throws -> PricingPlan {
+        let url = VaultURL.sharedInstance.pricingPlan(planName)
+        let response = Alamofire.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
+        let json = try VaultApi.handlerJsonResponse(response)
+        let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+        
+        if tryLogin {
+            return try getPricingPlansImp(planName, 1)
+        }
+        let plan = PricingPlan.deserialize(json)
+        return plan
+    }
 }

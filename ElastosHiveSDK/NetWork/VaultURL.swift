@@ -152,4 +152,9 @@ class VaultURL {
     func vaultPackageInfo() -> String {
         return baseUrl + "/api/v1/payment/vault_package_info"
     }
+    
+    func pricingPlan(_ name: String) -> String {
+        return baseUrl + "/api/v1/payment/vault_pricing_plan?name=\(name)"
+    }
+    
 }
