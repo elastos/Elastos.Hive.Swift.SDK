@@ -71,4 +71,8 @@ public class UsingPlan: Result {
                         options: .mutableContainers) as? [String : Any] ?? [: ]
         return UsingPlan(JSON(paramars))
     }
+    
+    class func deserialize(_ content: JSON) -> UsingPlan {
+        return UsingPlan(content)
+    }
 }
