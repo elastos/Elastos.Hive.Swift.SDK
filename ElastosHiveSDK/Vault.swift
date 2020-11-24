@@ -26,6 +26,7 @@ public class Vault: NSObject {
     private var _files: FilesProtocol
     private var _database: DatabaseProtocol
     private var _scripting: ScriptingProtocol
+    private var _version: Version
     private var _keyValues: KeyValuesProtocol?
 
     private var _vaultProvider: String
@@ -41,6 +42,15 @@ public class Vault: NSObject {
         self._vaultProvider = vaultProvider
         self._ownerDid = ownerDid
         self.vaultHelper = VaultHelper(authHelper)
+        self._version = Version(authHelper)
+    }
+    
+    public func nodeVersion() -> HivePromise<String> {
+        return _version.version()
+    }
+    
+    public func nodeLastCommitId() -> HivePromise<String> {
+        return _version.lastCommitId()
     }
 
     /// Get vault provider address

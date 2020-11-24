@@ -140,5 +140,12 @@ class VaultURL {
     func create() -> String {
         return baseUrl + "/api/v1/service/vault/create"
     }
+ 
+    func version() -> String {
+        return baseUrl + "/api/v1/hive/version"
+    }
     
+    func commitId() -> String {
+        return baseUrl + "/api/v1/hive/commithash"
+    }
 }
