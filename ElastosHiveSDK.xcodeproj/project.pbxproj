@@ -34,6 +34,8 @@
 		1103757A23FF96BF004216D0 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103757823FF96BF004216D0 /* Log.swift */; };
 		1103757C23FF96C7004216D0 /* Persistent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103757B23FF96C7004216D0 /* Persistent.swift */; };
 		1103757D23FF96C7004216D0 /* Persistent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103757B23FF96C7004216D0 /* Persistent.swift */; };
+		111BD898256CDAA700746A51 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111BD897256CDAA700746A51 /* Version.swift */; };
+		111BD89B256CE08600746A51 /* VersionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111BD89A256CE08600746A51 /* VersionTest.swift */; };
 		111CA54B252027760030D39C /* TestError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111CA54A252027760030D39C /* TestError.swift */; };
 		111CA6DC252097CB0030D39C /* DummyAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111CA6D9252097CB0030D39C /* DummyAdapter.swift */; };
 		111D477924ED0C1200B7462B /* VaultAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D477824ED0C1200B7462B /* VaultAuthHelper.swift */; };
@@ -233,6 +235,8 @@
 		1103757523FF96B5004216D0 /* ConnectHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConnectHelper.swift; path = Core/ConnectHelper.swift; sourceTree = "<group>"; };
 		1103757823FF96BF004216D0 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		1103757B23FF96C7004216D0 /* Persistent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Persistent.swift; path = Core/Persistent.swift; sourceTree = "<group>"; };
+		111BD897256CDAA700746A51 /* Version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
+		111BD89A256CE08600746A51 /* VersionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionTest.swift; sourceTree = "<group>"; };
 		111CA54A252027760030D39C /* TestError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestError.swift; sourceTree = "<group>"; };
 		111CA6D9252097CB0030D39C /* DummyAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DummyAdapter.swift; sourceTree = "<group>"; };
 		111D477824ED0C1200B7462B /* VaultAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultAuthHelper.swift; sourceTree = "<group>"; };
@@ -387,6 +391,7 @@
 				1170FB19250507C70049E81D /* DBTest.swift */,
 				118F2D82250F1A7200447A0A /* ScriptTest.swift */,
 				118F2DAC25105C3700447A0A /* FileTest.swift */,
+				111BD89A256CE08600746A51 /* VersionTest.swift */,
 				118F2D84250F1ABA00447A0A /* Constance.swift */,
 				1154C308255E36D500FE1E53 /* UserFactory.swift */,
 			);
@@ -621,6 +626,7 @@
 				1127462F24FE3369007D6356 /* FileClient.swift */,
 				1127463224FE3386007D6356 /* ScriptClient.swift */,
 				1170FB132502019C0049E81D /* Vault.swift */,
+				111BD897256CDAA700746A51 /* Version.swift */,
 				112C4DA6256C0B4A006ECB8E /* VaultHelper.swift */,
 				1103757B23FF96C7004216D0 /* Persistent.swift */,
 				1103757523FF96B5004216D0 /* ConnectHelper.swift */,
@@ -886,6 +892,7 @@
 				1154C309255E36D500FE1E53 /* UserFactory.swift in Sources */,
 				11474832255E291D00D158B7 /* PresentationInJWT.swift in Sources */,
 				11474828255E1C7100D158B7 /* Entity.swift in Sources */,
+				111BD89B256CE08600746A51 /* VersionTest.swift in Sources */,
 				1170FB1A250507C70049E81D /* DBTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -985,6 +992,7 @@
 				11C9EAE5254A637500080995 /* InsertOneResult.swift in Sources */,
 				111D47F424F7A30300B7462B /* Executable.swift in Sources */,
 				118F2DA2250F332700447A0A /* QueryHasResultsCondition.swift in Sources */,
+				111BD898256CDAA700746A51 /* Version.swift in Sources */,
 				118F2D9F250F32B100447A0A /* OrCondition.swift in Sources */,
 				1170FB112501D21C0049E81D /* Result.swift in Sources */,
 				118F2D8A250F264900447A0A /* AggregatedExecutable.swift in Sources */,
