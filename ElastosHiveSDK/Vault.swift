@@ -43,38 +43,47 @@ public class Vault: NSObject {
         self.vaultHelper = VaultHelper(authHelper)
     }
 
+    /// Get vault provider address
     public var providerAddress: String {
         return _vaultProvider
     }
 
+    /// Get vault owner did
     public var ownerDid: String {
         return _ownerDid
     }
 
-    public var appDid: String {
-        return "TODO"
+    /// Get application id
+    public var appDid: String? {
+        return self.authHelper.appId
     }
 
-    public var appInstanceDid: String {
-        return "TODO"
+    /// Get application did
+    public var appInstanceDid: String? {
+        return self.authHelper.appInstanceDid
     }
 
-    public var userDid: String {
-        return "TODO"
+    /// Get user did
+    public var userDid: String? {
+        return self.authHelper.userDid
     }
 
+    /// Get the interface as database instance
     public var database: DatabaseProtocol {
         return _database
     }
 
+    /// Get the interface as Files instance
     public var files: FilesProtocol {
         return _files
     }
 
+    /// Get interface as KeyValues instance
     public var keyValues: KeyValuesProtocol {
         return _keyValues!
     }
 
+    /// Get interface as Scripting instance
     public var scripting: ScriptingProtocol {
         return _scripting
     }
