@@ -162,7 +162,6 @@
 		11D26F7022CA3B8200E4099A /* HiveError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C499422539C9C0027BDF9 /* HiveError.swift */; };
 		11D26F7222CA3B8800E4099A /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114FD83F2297CF7600467E38 /* Authenticator.swift */; };
 		11D26F7722CA3B8800E4099A /* HiveClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FD3C80228000EE0031413A /* HiveClient.swift */; };
-		11D26F8222CA3B8800E4099A /* HiveCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39CB4BE2292854000535E43 /* HiveCallback.swift */; };
 		11E573FE22C4C33400F85419 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FA22C4C33400F85419 /* Dictionary.swift */; };
 		11E573FF22C4C33400F85419 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FB22C4C33400F85419 /* String.swift */; };
 		11E92CE12560D8B2007EFC95 /* FileExecutable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E92CE02560D8B2007EFC95 /* FileExecutable.swift */; };
@@ -176,7 +175,6 @@
 		A37F893D23C72B2600F6C11E /* HiveClientOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37F893C23C72B2600F6C11E /* HiveClientOptions.swift */; };
 		A39C4980225399860027BDF9 /* ElastosHiveSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = A39C4972225399860027BDF9 /* ElastosHiveSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A39C499E22539C9C0027BDF9 /* HiveError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C499422539C9C0027BDF9 /* HiveError.swift */; };
-		A39CB4BF2292854000535E43 /* HiveCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39CB4BE2292854000535E43 /* HiveCallback.swift */; };
 		A3D9D41323C9671C003B602E /* FilesProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D9D41023C9671C003B602E /* FilesProtocol.swift */; };
 		A3D9D41623C96DA1003B602E /* KeyValuesProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D9D41523C96DA1003B602E /* KeyValuesProtocol.swift */; };
 		A3E13E85240E449A002569B1 /* FilesProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D9D41023C9671C003B602E /* FilesProtocol.swift */; };
@@ -231,10 +229,10 @@
 /* Begin PBXFileReference section */
 		0DB068EABA0DB13AB595055A /* Pods_ElastosHiveSDKTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ElastosHiveSDKTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1103756C23FF9689004216D0 /* DataResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataResponse.swift; path = Result/DataResponse.swift; sourceTree = "<group>"; };
-		1103756F23FF96A0004216D0 /* LogLevel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LogLevel.swift; path = Core/LogLevel.swift; sourceTree = "<group>"; };
+		1103756F23FF96A0004216D0 /* LogLevel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogLevel.swift; sourceTree = "<group>"; };
 		1103757223FF96AB004216D0 /* AuthToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuthToken.swift; path = Core/AuthToken.swift; sourceTree = "<group>"; };
 		1103757523FF96B5004216D0 /* ConnectHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConnectHelper.swift; path = Core/ConnectHelper.swift; sourceTree = "<group>"; };
-		1103757823FF96BF004216D0 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Log.swift; path = Core/Log.swift; sourceTree = "<group>"; };
+		1103757823FF96BF004216D0 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		1103757B23FF96C7004216D0 /* Persistent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Persistent.swift; path = Core/Persistent.swift; sourceTree = "<group>"; };
 		111CA54A252027760030D39C /* TestError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestError.swift; sourceTree = "<group>"; };
 		111CA6D9252097CB0030D39C /* DummyAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DummyAdapter.swift; sourceTree = "<group>"; };
@@ -326,7 +324,6 @@
 		A39C4972225399860027BDF9 /* ElastosHiveSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ElastosHiveSDK.h; sourceTree = "<group>"; };
 		A39C4973225399860027BDF9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A39C499422539C9C0027BDF9 /* HiveError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HiveError.swift; path = Core/HiveError.swift; sourceTree = "<group>"; };
-		A39CB4BE2292854000535E43 /* HiveCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HiveCallback.swift; path = Core/HiveCallback.swift; sourceTree = "<group>"; };
 		A3D9D41023C9671C003B602E /* FilesProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FilesProtocol.swift; path = Protocols/FilesProtocol.swift; sourceTree = "<group>"; };
 		A3D9D41523C96DA1003B602E /* KeyValuesProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KeyValuesProtocol.swift; path = Protocols/KeyValuesProtocol.swift; sourceTree = "<group>"; };
 		A3FD3C80228000EE0031413A /* HiveClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HiveClient.swift; path = Core/HiveClient.swift; sourceTree = "<group>"; };
@@ -383,22 +380,6 @@
 				118E277D256546E3004EECF1 /* Antlr4.framework */,
 			);
 			path = Externals;
-			sourceTree = "<group>";
-		};
-		111D477724EBA5B400B7462B /* Vault */ = {
-			isa = PBXGroup;
-			children = (
-				1127462C24FE3343007D6356 /* DatabaseClient.swift */,
-				1127463224FE3386007D6356 /* ScriptClient.swift */,
-				1127462F24FE3369007D6356 /* FileClient.swift */,
-				111D477824ED0C1200B7462B /* VaultAuthHelper.swift */,
-				111D478A24EE810A00B7462B /* VaultURL.swift */,
-				111D478D24F399AC00B7462B /* VaultApi.swift */,
-				111D479224F4E2C300B7462B /* VaultAuthInfoStoreImpl.swift */,
-				1170FBA02508D35A0049E81D /* Header.swift */,
-			);
-			name = Vault;
-			path = Vendors/Vault;
 			sourceTree = "<group>";
 		};
 		111D477B24EE4B0700B7462B /* Vault */ = {
@@ -497,6 +478,25 @@
 			path = SwiftyJSON;
 			sourceTree = "<group>";
 		};
+		1151E99F256CCBDC00024303 /* NetWork */ = {
+			isa = PBXGroup;
+			children = (
+				1170FBA02508D35A0049E81D /* Header.swift */,
+				111D478A24EE810A00B7462B /* VaultURL.swift */,
+				111D478D24F399AC00B7462B /* VaultApi.swift */,
+			);
+			path = NetWork;
+			sourceTree = "<group>";
+		};
+		1151E9A0256CCC6000024303 /* Log */ = {
+			isa = PBXGroup;
+			children = (
+				1103757823FF96BF004216D0 /* Log.swift */,
+				1103756F23FF96A0004216D0 /* LogLevel.swift */,
+			);
+			path = Log;
+			sourceTree = "<group>";
+		};
 		1170FB2825073CD60049E81D /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -593,10 +593,11 @@
 		A39C4971225399860027BDF9 /* ElastosHiveSDK */ = {
 			isa = PBXGroup;
 			children = (
+				1151E9A0256CCC6000024303 /* Log */,
+				1151E99F256CCBDC00024303 /* NetWork */,
 				1147720723F678BD00C7C36F /* SwiftyJSON */,
 				11E573F922C4C33400F85419 /* Extension */,
 				111D47C924F7902600B7462B /* Database */,
-				A39C499122539C880027BDF9 /* Vendors */,
 				A39C498E22539C5E0027BDF9 /* Errors */,
 				111D47EE24F7A17A00B7462B /* File */,
 				A37F893523C72ABB00F6C11E /* Protocols */,
@@ -613,17 +614,19 @@
 		A39C498D22539C560027BDF9 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				1103757B23FF96C7004216D0 /* Persistent.swift */,
-				1103757823FF96BF004216D0 /* Log.swift */,
-				1103757523FF96B5004216D0 /* ConnectHelper.swift */,
+				114FD83F2297CF7600467E38 /* Authenticator.swift */,
+				111D477824ED0C1200B7462B /* VaultAuthHelper.swift */,
+				111D479224F4E2C300B7462B /* VaultAuthInfoStoreImpl.swift */,
 				1103757223FF96AB004216D0 /* AuthToken.swift */,
-				1103756F23FF96A0004216D0 /* LogLevel.swift */,
 				A3FD3C80228000EE0031413A /* HiveClient.swift */,
 				A37F893C23C72B2600F6C11E /* HiveClientOptions.swift */,
-				114FD83F2297CF7600467E38 /* Authenticator.swift */,
-				A39CB4BE2292854000535E43 /* HiveCallback.swift */,
+				1127462C24FE3343007D6356 /* DatabaseClient.swift */,
+				1127462F24FE3369007D6356 /* FileClient.swift */,
+				1127463224FE3386007D6356 /* ScriptClient.swift */,
 				1170FB132502019C0049E81D /* Vault.swift */,
 				112C4DA6256C0B4A006ECB8E /* VaultHelper.swift */,
+				1103757B23FF96C7004216D0 /* Persistent.swift */,
+				1103757523FF96B5004216D0 /* ConnectHelper.swift */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -634,14 +637,6 @@
 				A39C499422539C9C0027BDF9 /* HiveError.swift */,
 			);
 			name = Errors;
-			sourceTree = "<group>";
-		};
-		A39C499122539C880027BDF9 /* Vendors */ = {
-			isa = PBXGroup;
-			children = (
-				111D477724EBA5B400B7462B /* Vault */,
-			);
-			name = Vendors;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -951,7 +946,6 @@
 				1127463424FE3386007D6356 /* ScriptClient.swift in Sources */,
 				111D47EA24F7940600B7462B /* UpdateResult.swift in Sources */,
 				118F2D94250F2A8600447A0A /* DbDeleteQuery.swift in Sources */,
-				11D26F8222CA3B8800E4099A /* HiveCallback.swift in Sources */,
 				11D26F7022CA3B8200E4099A /* HiveError.swift in Sources */,
 				1103757A23FF96BF004216D0 /* Log.swift in Sources */,
 				111D478C24EE810A00B7462B /* VaultURL.swift in Sources */,
@@ -1034,7 +1028,6 @@
 				1129C19424052CC500CD77F2 /* Alamofire+Synchronous.swift in Sources */,
 				111D47D424F7906F00B7462B /* DeleteOptions.swift in Sources */,
 				111D47E924F7940600B7462B /* UpdateResult.swift in Sources */,
-				A39CB4BF2292854000535E43 /* HiveCallback.swift in Sources */,
 				1170FB0E2501CEF70049E81D /* VaultIndex.swift in Sources */,
 				115E82E7251A4495004DCB1E /* MinKey.swift in Sources */,
 				111D47FD24F8B63C00B7462B /* Options.swift in Sources */,
