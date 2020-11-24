@@ -31,42 +31,36 @@ public class Version: NSObject {
     
     public func version() -> HivePromise<String> {
         return HivePromise<String> { resolver in
-            let url = VaultURL.sharedInstance.version()
-            let response = Alamofire.request(url, method: .get, encoding: JSONEncoding.default).responseJSON()
-            switch response.result {
-            case .success(let re):
-                let json = JSON(re)
-                if VaultApi.checkResponseIsError(json) {
+            DispatchQueue.global().async {
+                let url = VaultURL.sharedInstance.version()
+                let response = Alamofire.request(url, method: .get, encoding: JSONEncoding.default).responseJSON()
+                do {
+                    let json = try VaultApi.handlerJsonResponse(response)
+                    _ = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: 1)
                     let version = json["version"].stringValue
                     resolver.fulfill(version)
                 }
-                else {
-                    let errorStr = HiveError.praseError(json)
-                    resolver.reject(HiveError.failure(des: errorStr))
+                catch {
+                    resolver.reject(error)
                 }
-            case .failure(let error):
-                resolver.reject(HiveError.netWork(des: error))
             }
         }
     }
     
     public func lastCommitId() -> HivePromise<String> {
         return HivePromise<String> { resolver in
-            let url = VaultURL.sharedInstance.commitId()
-            let response = Alamofire.request(url, method: .get, encoding: JSONEncoding.default).responseJSON()
-            switch response.result {
-            case .success(let re):
-                let json = JSON(re)
-                if VaultApi.checkResponseIsError(json) {
-                    let version = json["commit_hash"].stringValue
-                    resolver.fulfill(version)
+            DispatchQueue.global().async {
+                let url = VaultURL.sharedInstance.commitId()
+                let response = Alamofire.request(url, method: .get, encoding: JSONEncoding.default).responseJSON()
+                do {
+                    let json = try VaultApi.handlerJsonResponse(response)
+                    _ = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: 1)
+                    let commiteId = json["commit_hash"].stringValue
+                    resolver.fulfill(commiteId)
                 }
-                else {
-                    let errorStr = HiveError.praseError(json)
-                    resolver.reject(HiveError.failure(des: errorStr))
+                catch {
+                    resolver.reject(error)
                 }
-            case .failure(let error):
-                resolver.reject(HiveError.netWork(des: error))
             }
         }
     }
