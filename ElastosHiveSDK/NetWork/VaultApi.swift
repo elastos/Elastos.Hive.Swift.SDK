@@ -124,4 +124,30 @@ class VaultApi: NSObject {
             return false
         }
     }
+    
+    class func handlerJsonResponse(_  response: DataResponse<Any>)throws -> JSON {
+        switch response.result {
+        case .success(let re):
+            let json = JSON(re)
+            return json
+        case .failure(let error):
+            throw error
+        }
+    }
+    
+    class func handlerJsonResponseCanRelogin(_  json: JSON, tryAgain: Int) throws -> Bool {
+        let status = json["_status"].stringValue
+        if status == "ERR" {
+            let errorCode = json["_error"]["code"].intValue
+            let errorMessage = json["_error"]["message"].stringValue
+            if errorCode == 401 && errorMessage == "auth failed" && tryAgain < 1 {
+                return true
+            } else {
+                throw HiveError.failure(des: HiveError.praseError(json))
+            }
+        }
+        else {
+            return false
+        }
+    }
 }
