@@ -24,10 +24,34 @@ import Foundation
 
 public class PaymentSettings: Result {
     private let RECEIVING_ELAADDRESS = "receivingELAAddress"
+    private let WAIT_PAYMENT_TIMEOUT = "wait_payment_timeout"
+    private let WAIT_TX_TIMEOUT = "wait_tx_timeout"
     
     public var receivingELAAddress: String {
         return paramars[RECEIVING_ELAADDRESS].stringValue
     }
     
+    public var waitPaymentTimeout: Int {
+        return paramars[WAIT_PAYMENT_TIMEOUT].intValue
+    }
+    
+    public var waitTxTimeout: Int {
+        return paramars[WAIT_TX_TIMEOUT].intValue
+    }
+    
+    public class func deserialize(_ content: String) throws -> PaymentSettings {
+        let data = content.data(using: String.Encoding.utf8)
+        let paramars = try JSONSerialization
+            .jsonObject(with: data!,
+                        options: .mutableContainers) as? [String : Any] ?? [: ]
+        let json = JSON(paramars)
+        let setting = PaymentSettings(json)
+        return setting
+    }
+    
+    class func deserialize(_ content: JSON) -> PaymentSettings {
+        let setting = PaymentSettings(content)
+        return setting
+    }
 }
 

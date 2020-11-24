@@ -56,4 +56,8 @@ public class PricingPlan: Result {
                         options: .mutableContainers) as? [String : Any] ?? [: ]
         return PricingPlan(JSON(paramars))
     }
+    
+    class func deserialize(_ content: JSON) -> PricingPlan {
+        return PricingPlan(content)
+    }
 }

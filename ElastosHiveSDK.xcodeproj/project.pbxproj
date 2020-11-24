@@ -42,6 +42,7 @@
 		111BD8A8256CED7B00746A51 /* PricingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111BD8A7256CED7B00746A51 /* PricingInfo.swift */; };
 		111BD8AB256CED8600746A51 /* PricingPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111BD8AA256CED8600746A51 /* PricingPlan.swift */; };
 		111BD8AE256CED9100746A51 /* UsingPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111BD8AD256CED9100746A51 /* UsingPlan.swift */; };
+		111BD8B1256D011400746A51 /* Payment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111BD8B0256D011400746A51 /* Payment.swift */; };
 		111CA54B252027760030D39C /* TestError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111CA54A252027760030D39C /* TestError.swift */; };
 		111CA6DC252097CB0030D39C /* DummyAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111CA6D9252097CB0030D39C /* DummyAdapter.swift */; };
 		111D477924ED0C1200B7462B /* VaultAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D477824ED0C1200B7462B /* VaultAuthHelper.swift */; };
@@ -115,6 +116,7 @@
 		115E82F1251A4553004DCB1E /* RegularExpression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115E82EF251A4553004DCB1E /* RegularExpression.swift */; };
 		115E82F3251A4590004DCB1E /* Timestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115E82F2251A4590004DCB1E /* Timestamp.swift */; };
 		115E82F4251A4590004DCB1E /* Timestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115E82F2251A4590004DCB1E /* Timestamp.swift */; };
+		1163D8E4256D667800F3DC98 /* PaymentTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1163D8E3256D667800F3DC98 /* PaymentTest.swift */; };
 		1170FB052501CB3F0049E81D /* WriteConcern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FB042501CB3F0049E81D /* WriteConcern.swift */; };
 		1170FB062501CB3F0049E81D /* WriteConcern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FB042501CB3F0049E81D /* WriteConcern.swift */; };
 		1170FB082501CCD30049E81D /* ReadConcern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FB072501CCD30049E81D /* ReadConcern.swift */; };
@@ -249,6 +251,7 @@
 		111BD8A7256CED7B00746A51 /* PricingInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricingInfo.swift; sourceTree = "<group>"; };
 		111BD8AA256CED8600746A51 /* PricingPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricingPlan.swift; sourceTree = "<group>"; };
 		111BD8AD256CED9100746A51 /* UsingPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsingPlan.swift; sourceTree = "<group>"; };
+		111BD8B0256D011400746A51 /* Payment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payment.swift; sourceTree = "<group>"; };
 		111CA54A252027760030D39C /* TestError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestError.swift; sourceTree = "<group>"; };
 		111CA6D9252097CB0030D39C /* DummyAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DummyAdapter.swift; sourceTree = "<group>"; };
 		111D477824ED0C1200B7462B /* VaultAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultAuthHelper.swift; sourceTree = "<group>"; };
@@ -292,6 +295,7 @@
 		115E82EC251A44BC004DCB1E /* ObjectId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectId.swift; sourceTree = "<group>"; };
 		115E82EF251A4553004DCB1E /* RegularExpression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegularExpression.swift; sourceTree = "<group>"; };
 		115E82F2251A4590004DCB1E /* Timestamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timestamp.swift; sourceTree = "<group>"; };
+		1163D8E3256D667800F3DC98 /* PaymentTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentTest.swift; sourceTree = "<group>"; };
 		1170FB042501CB3F0049E81D /* WriteConcern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteConcern.swift; sourceTree = "<group>"; };
 		1170FB072501CCD30049E81D /* ReadConcern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadConcern.swift; sourceTree = "<group>"; };
 		1170FB0A2501CD2F0049E81D /* ReadPreference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadPreference.swift; sourceTree = "<group>"; };
@@ -416,6 +420,7 @@
 				1170FB19250507C70049E81D /* DBTest.swift */,
 				118F2D82250F1A7200447A0A /* ScriptTest.swift */,
 				118F2DAC25105C3700447A0A /* FileTest.swift */,
+				1163D8E3256D667800F3DC98 /* PaymentTest.swift */,
 				111BD89A256CE08600746A51 /* VersionTest.swift */,
 				118F2D84250F1ABA00447A0A /* Constance.swift */,
 				1154C308255E36D500FE1E53 /* UserFactory.swift */,
@@ -651,6 +656,7 @@
 				1127462C24FE3343007D6356 /* DatabaseClient.swift */,
 				1127462F24FE3369007D6356 /* FileClient.swift */,
 				1127463224FE3386007D6356 /* ScriptClient.swift */,
+				111BD8B0256D011400746A51 /* Payment.swift */,
 				1170FB132502019C0049E81D /* Vault.swift */,
 				111BD897256CDAA700746A51 /* Version.swift */,
 				112C4DA6256C0B4A006ECB8E /* VaultHelper.swift */,
@@ -918,6 +924,7 @@
 				1154C309255E36D500FE1E53 /* UserFactory.swift in Sources */,
 				11474832255E291D00D158B7 /* PresentationInJWT.swift in Sources */,
 				11474828255E1C7100D158B7 /* Entity.swift in Sources */,
+				1163D8E4256D667800F3DC98 /* PaymentTest.swift in Sources */,
 				111BD89B256CE08600746A51 /* VersionTest.swift in Sources */,
 				1170FB1A250507C70049E81D /* DBTest.swift in Sources */,
 			);
@@ -1053,6 +1060,7 @@
 				112C4DA7256C0B4A006ECB8E /* VaultHelper.swift in Sources */,
 				11E573FE22C4C33400F85419 /* Dictionary.swift in Sources */,
 				11496C65251B1E37002DE4F0 /* Date.swift in Sources */,
+				111BD8B1256D011400746A51 /* Payment.swift in Sources */,
 				1127462D24FE3343007D6356 /* DatabaseClient.swift in Sources */,
 				11ED682A22FF1078004C17D0 /* ElastosHiveSDK.swift in Sources */,
 				1127463324FE3386007D6356 /* ScriptClient.swift in Sources */,

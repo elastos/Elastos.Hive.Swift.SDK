@@ -25,6 +25,7 @@ import Foundation
 public typealias HivePromise = Promise
 private var _providerCache: [String: String] = [: ]
 private var _vaultCache: [DID: Vault]?
+let HiveVaultQueue = DispatchQueue(label: "org.elastos.hivesdk.queue", qos: .default, attributes: .concurrent, autoreleaseFrequency: .workItem)
 @objc(HiveClient)
 public class HiveClientHandle: NSObject {
     private static var _reslover: String = "http://api.elastos.io:20606" // Default
@@ -37,6 +38,7 @@ public class HiveClientHandle: NSObject {
     private var cachedProviders: [String: Any] = [: ]
 
     init(_ options: HiveClientOptions) {
+        PromiseKit.conf.Q = (map: HiveVaultQueue, return: HiveVaultQueue)
         self.authenticationDIDDocument = options.authenticationDIDDocument
         self.authentcationHandler = options.authenicator!
         self.localDataPath = options.localPath

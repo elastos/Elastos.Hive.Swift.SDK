@@ -148,4 +148,8 @@ class VaultURL {
     func commitId() -> String {
         return baseUrl + "/api/v1/hive/commithash"
     }
+    
+    func vaultPackageInfo() -> String {
+        return baseUrl + "/api/v1/payment/vault_package_info"
+    }
 }

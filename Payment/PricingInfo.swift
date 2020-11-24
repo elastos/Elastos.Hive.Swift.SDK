@@ -26,15 +26,16 @@ public class PricingInfo: Result {
     private let PRICINGPLANS = "pricingPlans"
     private let PAYMENTSETTINGS = "paymentSettings"
     private var _pricingPlans: Array<PricingPlan> = [ ]
+    private var _paymentSettings: PaymentSettings?
     
     public var pricingPlans: Array<PricingPlan> {
       return _pricingPlans
     }
     
-    public var paymentSettings: String {
-        return paramars[PAYMENTSETTINGS].stringValue
+    public var paymentSettings: PaymentSettings? {
+        return _paymentSettings
     }
-    
+
     public class func deserialize(_ content: String) throws -> PricingInfo {
         let data = content.data(using: String.Encoding.utf8)
         let paramars = try JSONSerialization
@@ -46,6 +47,16 @@ public class PricingInfo: Result {
             let plan = PricingPlan(item)
             info._pricingPlans.append(plan)
         }
+        return info
+    }
+    
+    class func deserialize(_ content: JSON) -> PricingInfo {
+        let info = PricingInfo(content)
+        for item in content["pricingPlans"].arrayValue {
+            let plan = PricingPlan.deserialize(item)
+            info._pricingPlans.append(plan)
+        }
+        info._paymentSettings = PaymentSettings.deserialize(content["paymentSettings"])
         return info
     }
 }

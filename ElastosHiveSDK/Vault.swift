@@ -28,6 +28,7 @@ public class Vault: NSObject {
     private var _scripting: ScriptingProtocol
     private var _version: Version
     private var _keyValues: KeyValuesProtocol?
+    private var _payment: Payment
 
     private var _vaultProvider: String
     private var _ownerDid: String
@@ -43,6 +44,7 @@ public class Vault: NSObject {
         self._ownerDid = ownerDid
         self.vaultHelper = VaultHelper(authHelper)
         self._version = Version(authHelper)
+        self._payment = Payment(authHelper)
     }
     
     public func nodeVersion() -> HivePromise<String> {
@@ -96,6 +98,11 @@ public class Vault: NSObject {
     /// Get interface as Scripting instance
     public var scripting: ScriptingProtocol {
         return _scripting
+    }
+    
+    /// Get interface as Payment instance
+    public var payment: Payment {
+        return _payment
     }
     
     func useTrial() -> HivePromise<Bool> {
