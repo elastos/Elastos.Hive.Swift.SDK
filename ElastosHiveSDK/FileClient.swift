@@ -474,12 +474,6 @@ public class FileClient: NSObject, FilesProtocol {
         }
     }
 
-    public func hash(_ path: String, handler: HiveCallback<String>) -> HivePromise<String> {
-        return authHelper.checkValid().then { _ -> HivePromise<String> in
-            return self.hashImp(path, tryAgain: 0)
-        }
-    }
-
     private func hashImp(_ path: String, tryAgain: Int) -> HivePromise<String> {
         return HivePromise<String> { resolver in
             let url = VaultURL.sharedInstance.hash(path)
