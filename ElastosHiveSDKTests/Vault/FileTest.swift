@@ -9,7 +9,7 @@ class FileTest: XCTestCase {
     
     func test_0Upload() {
         let lock = XCTestExpectation(description: "wait for test.")
-        _ = file?.upload("hive/testIos13.txt").done { writer in
+        _ = file?.upload("hive/testIos.txt").done { writer in
             
             let shortMessage = "ABCEFGH"
             let message1 = "*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())"
@@ -19,7 +19,7 @@ class FileTest: XCTestCase {
                 print(err)
             })
             
-            for _ in 0...400000 {
+            for _ in 0...40 {
                     try writer.write(data: message1.data(using: .utf8)!, { err in
                         print(err)
                     })
@@ -30,9 +30,10 @@ class FileTest: XCTestCase {
                 try writer.write(data: "message2".data(using: .utf8)!, { err in
                     print(err)
                 })
-//                try writer.write(data: message2.data(using: .utf8)!)
-//                try writer.write(data: "message2".data(using: .utf8)!)
-                
+            try writer.write(data: message2.data(using: .utf8)!, { err in
+                print(err)
+            })
+
                 writer.close()
                 
                 XCTAssertNotNil(writer)
@@ -48,7 +49,7 @@ class FileTest: XCTestCase {
     func test_1Download_1() {
         let lock = XCTestExpectation(description: "wait for test.")
 
-        _ = file?.download("hive/testIos13.txt").done{ [self] output in
+        _ = file?.download("hive/testIos.txt").done{ [self] output in
             let fileurl = creaFile()
             while !output.didLoadFinish {
                 if let data = output.read({ error in
@@ -73,33 +74,7 @@ class FileTest: XCTestCase {
         }
         self.wait(for: [lock], timeout: 1000.0)
     }
-    /*
-    func test_1Download_2() {
-        let lock = XCTestExpectation(description: "wait for test.")
-        _ = file?.download("hive/testIos.txt").done{ [self] output in
-            let fileurl = creaFile()
-            while !output.didLoadFinish {
-                if let data = output.read(42760) {
-                    print("prepare to write \(data.count)")
-                    if let fileHandle = try? FileHandle(forWritingTo: fileurl) {
-                        fileHandle.seekToEndOfFile()
-                        fileHandle.write(data)
-                        fileHandle.closeFile()
-                        print("11")
-                    } else {
-                        print("nil")
-                    }
-                }
-            }
-            output.close()
-            lock.fulfill()
-        }.catch{ error in
-            XCTFail()
-            lock.fulfill()
-        }
-        self.wait(for: [lock], timeout: 1000.0)
-    }
-*/
+
     func test_2Delete() {
         let lock = XCTestExpectation(description: "wait for test.")
         _ = file?.delete("hive/testIos_delete01.txt").done{ re in
@@ -212,13 +187,6 @@ class FileTest: XCTestCase {
                 print(error)
                 lock.fulfill()
             }
-//            user!.client.getVault(OWNERDID, user?.provider).done { [self] vault in
-//                self.file = (vault.files as! FileClient)
-//                lock.fulfill()
-//            }.catch { error in
-//                print(error)
-//                lock.fulfill()
-//            }
             self.wait(for: [lock], timeout: 100.0)
         } catch {
             XCTFail()

@@ -125,7 +125,6 @@
 		1170FBA22508D35B0049E81D /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FBA02508D35A0049E81D /* Header.swift */; };
 		11749D9F24082FB1007B8F32 /* OutputStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11749D9E24082FB1007B8F32 /* OutputStream.swift */; };
 		11749DA024082FB1007B8F32 /* OutputStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11749D9E24082FB1007B8F32 /* OutputStream.swift */; };
-		11749DA224083D63007B8F32 /* TestResultHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11749DA124083D63007B8F32 /* TestResultHandler.swift */; };
 		118E277E256546E3004EECF1 /* Antlr4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118E277D256546E3004EECF1 /* Antlr4.framework */; platformFilter = ios; };
 		118E278125654711004EECF1 /* Antlr4.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 118E277D256546E3004EECF1 /* Antlr4.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		118E27B82566C851004EECF1 /* Antlr4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118E277D256546E3004EECF1 /* Antlr4.framework */; };
@@ -287,7 +286,6 @@
 		1170FB9E25073D360049E81D /* ijUnD4KeRpeBUFmcEDCbhxMTJRzUYCQCZM */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ijUnD4KeRpeBUFmcEDCbhxMTJRzUYCQCZM; sourceTree = "<group>"; };
 		1170FBA02508D35A0049E81D /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 		11749D9E24082FB1007B8F32 /* OutputStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputStream.swift; sourceTree = "<group>"; };
-		11749DA124083D63007B8F32 /* TestResultHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestResultHandler.swift; sourceTree = "<group>"; };
 		118E277D256546E3004EECF1 /* Antlr4.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Antlr4.framework; sourceTree = "<group>"; };
 		118F2D82250F1A7200447A0A /* ScriptTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptTest.swift; sourceTree = "<group>"; };
 		118F2D84250F1ABA00447A0A /* Constance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constance.swift; sourceTree = "<group>"; };
@@ -465,7 +463,6 @@
 				1170FB2825073CD60049E81D /* Resources */,
 				111D477B24EE4B0700B7462B /* Vault */,
 				1137942D227ED9AD004A1F65 /* Info.plist */,
-				11749DA124083D63007B8F32 /* TestResultHandler.swift */,
 			);
 			path = ElastosHiveSDKTests;
 			sourceTree = "<group>";
@@ -881,7 +878,6 @@
 			files = (
 				11474817255E156C00D158B7 /* DApp.swift in Sources */,
 				1147482E255E27F200D158B7 /* DIDApp.swift in Sources */,
-				11749DA224083D63007B8F32 /* TestResultHandler.swift in Sources */,
 				111CA6DC252097CB0030D39C /* DummyAdapter.swift in Sources */,
 				118F2DAD25105C3700447A0A /* FileTest.swift in Sources */,
 				111CA54B252027760030D39C /* TestError.swift in Sources */,
