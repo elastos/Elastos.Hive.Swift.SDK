@@ -238,4 +238,32 @@ public class Payment: NSObject {
         }
         return orderArray
     }
+
+    /// Get using price plan
+    /// - Returns: user's using price plan
+    public func getUsingPricePlan() -> HivePromise<UsingPlan> {
+        HivePromise<UsingPlan> { resolver in
+            _ = authHelper.checkValid().done { [self] _ in
+                do {
+                    try resolver.fulfill(getUsingPricePlanImp(0))
+                }
+                catch {
+                    resolver.reject(error)
+                }
+            }
+        }
+    }
+    
+    private func getUsingPricePlanImp(_ tryAgain: Int) throws -> UsingPlan {
+        let url = VaultURL.sharedInstance.serviceInfo()
+        let response = Alamofire.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
+        let json = try VaultApi.handlerJsonResponse(response)
+        let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+        
+        if tryLogin {
+            try self.authHelper.reLogin()
+            return try getUsingPricePlanImp(1)
+        }
+        return UsingPlan.deserialize(json["vault_service_info"])
+    }
 }
