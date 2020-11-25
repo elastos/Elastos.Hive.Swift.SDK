@@ -51,6 +51,7 @@ public class Payment: NSObject {
         let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
         
         if tryLogin {
+            try self.authHelper.reLogin()
             return try getAllPricingPlansImp(1)
         }
         let info = PricingInfo.deserialize(json)
@@ -79,6 +80,7 @@ public class Payment: NSObject {
         let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
         
         if tryLogin {
+            try self.authHelper.reLogin()
             return try getPricingPlansImp(planName, 1)
         }
         let plan = PricingPlan.deserialize(json)
@@ -107,6 +109,7 @@ public class Payment: NSObject {
         let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
         
         if tryLogin {
+            try self.authHelper.reLogin()
             return try getPaymentVersionImp(1)
         }
         return json["version"].stringValue
@@ -136,6 +139,7 @@ public class Payment: NSObject {
         let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
         
         if tryLogin {
+            try self.authHelper.reLogin()
             return try placeOrderImp(priceName, 1)
         }
         return json["order_id"].stringValue
@@ -146,7 +150,7 @@ public class Payment: NSObject {
     /// - Returns: the order id
     public func payOrder(_ orderId: String, _ txids: Array<String>) -> HivePromise<Bool> {
         HivePromise<Bool> { resolver in
-           _ = authHelper.checkValid().done { [self] _ in
+            _ = authHelper.checkValid().done { [self] _ in
                 do {
                     try resolver.fulfill(payOrderImp(orderId, txids, 0))
                 }
@@ -165,8 +169,39 @@ public class Payment: NSObject {
         let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
         
         if tryLogin {
+            try self.authHelper.reLogin()
             return try payOrderImp(orderId, txids, 1)
         }
         return true
+    }
+    
+    /// Get order information of vault service purchase
+    /// - Parameter orderId: orderId
+    /// - Returns: ture, if success
+    public func getOrder(_ orderId: String) -> HivePromise<Order> {
+        HivePromise<Order> { resolver in
+            _ = authHelper.checkValid().done { [self] _ in
+                do {
+                    try resolver.fulfill(getOrderImp(orderId, 0))
+                }
+                catch {
+                    resolver.reject(error)
+                }
+            }
+        }
+    }
+    
+    private func getOrderImp(_ orderId: String, _ tryAgain: Int) throws -> Order {
+        let url = VaultURL.sharedInstance.orderInfo(orderId)
+        let response = Alamofire.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
+        let json = try VaultApi.handlerJsonResponse(response)
+        let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+        
+        if tryLogin {
+            try self.authHelper.reLogin()
+            return try getOrderImp(orderId, 1)
+        }
+        
+        return Order.deserialize(json["order_info"])
     }
 }
