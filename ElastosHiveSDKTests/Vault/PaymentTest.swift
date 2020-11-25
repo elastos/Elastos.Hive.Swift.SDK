@@ -22,7 +22,7 @@ class PaymentTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
     
-    func test2_getPricingPlan() {
+    func test1_getPricingPlan() {
         let lock = XCTestExpectation(description: "wait for test.")
         _ = payment?.getPricingPlan(planName).done{ plan in
             print(plan)
@@ -38,6 +38,18 @@ class PaymentTest: XCTestCase {
         let lock = XCTestExpectation(description: "wait for test.")
         _ = payment?.getPaymentVersion().done{ version in
             print(version)
+            lock.fulfill()
+        }.catch{ error in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+    
+    func test3_placeOrder() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        _ = payment?.placeOrder(priceName).done{ order_id in
+            print(order_id)
             lock.fulfill()
         }.catch{ error in
             XCTFail()

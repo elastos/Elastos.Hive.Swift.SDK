@@ -137,7 +137,7 @@ class VaultURL {
         return baseUrl + "/api/v1/scripting/run_script"
     }
     
-    func create() -> String {
+    func createFreeVault() -> String {
         return baseUrl + "/api/v1/service/vault/create"
     }
  
@@ -161,8 +161,8 @@ class VaultURL {
         return baseUrl + "/api/v1/payment/version"
     }
     
-    func serviceVaultCreate() -> String {
-        return baseUrl + "/api/v1/service/vault/create"
+    func createOrder() -> String {
+        return baseUrl + "/api/v1/payment/create_vault_package_order"
     }
     
 }
