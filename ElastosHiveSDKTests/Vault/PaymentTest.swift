@@ -73,6 +73,18 @@ class PaymentTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
     
+    func test6_getOrder() {
+            let lock = XCTestExpectation(description: "wait for test.")
+            _ = payment?.getOrder(orderId).done{ order in
+                print(order)
+                lock.fulfill()
+            }.catch{ error in
+                XCTFail()
+                lock.fulfill()
+            }
+            self.wait(for: [lock], timeout: 1000.0)
+        }
+    
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         do {

@@ -247,6 +247,46 @@ public class VaultAuthHelper: ConnectHelper {
         }
     }
 
+    func reLogin() throws {
+        let jsonstr = _authenticationDIDDocument!.toString()
+        let data = jsonstr.data(using: .utf8)
+        let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
+        var params = ["document": json as Any] as [String: Any]
+        var url = VaultURL.sharedInstance.signIn()
+        let header = ["Content-Type": "application/json;charset=UTF-8"]
+        
+        var response = Alamofire.request(url,
+                          method: .post,
+                          parameters: params as Parameters,
+                          encoding: JSONEncoding.default,
+                          headers: header).responseJSON()
+        var responseJson = try VaultApi.handlerJsonResponse(response)
+        let challenge = responseJson["challenge"].stringValue
+        let semaphore: DispatchSemaphore = DispatchSemaphore(value: 0)
+        var err: String = ""
+        var authToken = ""
+        self.requestAuthToken(self._authenticationHandler!, challenge).done { aToken in
+            authToken = aToken
+            semaphore.signal()
+        }.catch { error in
+            semaphore.signal()
+            err = error.localizedDescription
+        }
+        semaphore.wait()
+        guard err == "" else {
+            throw HiveError.getAuthToken(des: err)
+        }
+        
+        url = VaultURL.sharedInstance.auth()
+        params = ["jwt": authToken]
+        response = Alamofire.request(url,
+                            method: .post,
+                            parameters: params,
+                            encoding: JSONEncoding.default).responseJSON()
+        responseJson = try VaultApi.handlerJsonResponse(response)
+        try self.sotre(responseJson)
+    }
+    
     private func delete() {
         token = AuthToken("", "", "")
         let json = [ACCESS_TOKEN_KEY: token!.accessToken,
