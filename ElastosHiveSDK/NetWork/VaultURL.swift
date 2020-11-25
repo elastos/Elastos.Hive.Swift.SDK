@@ -164,5 +164,13 @@ class VaultURL {
     func createOrder() -> String {
         return baseUrl + "/api/v1/payment/create_vault_package_order"
     }
+   
+    func payOrder() -> String {
+        return baseUrl + "/api/v1/payment/pay_vault_package_order"
+    }
+    
+    func orderInfo(_ order_id: String) -> String {
+        return baseUrl + "/api/v1/payment/vault_package_order?order_id=\(order_id)"
+    }
     
 }

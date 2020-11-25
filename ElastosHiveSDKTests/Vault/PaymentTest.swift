@@ -8,12 +8,13 @@ class PaymentTest: XCTestCase {
     
     private let planName = "Free"
     private let priceName = "Rookie"
-    private let orderId = "5fb5f1be9284ff39688ea77e"
+    private var orderId = "5fbdf4ee46c829dc73a9a3d2"
+    private var txid = "d7f35a35764a7c4f58a0698429425a73fa2e364daa30c0e7393857dd5b966b65"
 
     func test0_GetPaymentInfo() {
         let lock = XCTestExpectation(description: "wait for test.")
         _ = payment?.getPaymentInfo().done{ info in
-            print(info)
+            print(info)// ETJqK7o7gBhzypmNJ1MstAHU2q77fo78jg
             lock.fulfill()
         }.catch{ error in
             XCTFail()
@@ -46,10 +47,24 @@ class PaymentTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
     
-    func test3_placeOrder() {
+    func test4_placeOrder() {
         let lock = XCTestExpectation(description: "wait for test.")
         _ = payment?.placeOrder(priceName).done{ order_id in
-            print(order_id)
+            print(order_id) // 5fbdf4ee46c829dc73a9a3d2
+            self.orderId = order_id
+            lock.fulfill()
+        }.catch{ error in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+
+    func test5_payOrder() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        let txids = [txid]
+        _ = payment?.payOrder(orderId, txids).done{ result in
+            print(result)
             lock.fulfill()
         }.catch{ error in
             XCTFail()
@@ -61,7 +76,7 @@ class PaymentTest: XCTestCase {
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         do {
-            user = try UserFactory.createUser1()
+            user = try UserFactory.createUser2()
             let lock = XCTestExpectation(description: "wait for test.")
             user?.client.createVault(OWNERDID, user?.provider).done{ vault in
 

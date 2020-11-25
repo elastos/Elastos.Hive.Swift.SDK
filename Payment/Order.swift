@@ -26,7 +26,7 @@ public class Order: Result {
     private let ORDER_ID = "order_id"
     private let DID = "did"
     private let APP_ID = "app_id"
-    private static let PRICING_INFO = "PRICING_INFO"
+    private static let PRICING_INFO = "pricing_info"
     private let PAY_TXIDS = "pay_txids"
     private let STATE = "state"
     private let CREAT_TIME = "creat_time"
@@ -81,6 +81,13 @@ public class Order: Result {
         let json = JSON(paramars)
         let order = Order(json)
         order._packageInfo = PricingPlan(json[PRICING_INFO])
+        
+        return order
+    }
+    
+    class func deserialize(_ content: JSON) -> Order {
+        let order = Order(content)
+        order._packageInfo = PricingPlan.deserialize(content[PRICING_INFO])
         
         return order
     }
