@@ -177,4 +177,7 @@ class VaultURL {
         return baseUrl + "/api/v1/payment/vault_package_order_list"
     }
     
+    func serviceInfo() -> String {
+        return baseUrl + "/api/v1/service/vault"
+    }
 }

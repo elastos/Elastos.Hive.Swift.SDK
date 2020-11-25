@@ -52,8 +52,8 @@ public class UsingPlan: Result {
         return paramars[MODIFY_TIME].floatValue
     }
     
-    public var startTime: Float {
-        return paramars[START_TIME].floatValue
+    public var startTime: Int {
+        return paramars[START_TIME].intValue
     }
     
     public var endTime: Float {
