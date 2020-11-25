@@ -84,4 +84,29 @@ public class Payment: NSObject {
         let plan = PricingPlan.deserialize(json)
         return plan
     }
+    
+    public func getPaymentVersion() -> HivePromise<String> {
+        HivePromise<String> { resolver in
+           _ = authHelper.checkValid().done { [self] _ in
+                do {
+                    try resolver.fulfill(getPaymentVersionImp(0))
+                }
+                catch {
+                    resolver.reject(error)
+                }
+            }
+        }
+    }
+    
+    private func getPaymentVersionImp(_ tryAgain: Int) throws -> String {
+        let url = VaultURL.sharedInstance.paymentVersion()
+        let response = Alamofire.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
+        let json = try VaultApi.handlerJsonResponse(response)
+        let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+        
+        if tryLogin {
+            return try getPaymentVersionImp(1)
+        }
+        return json["version"].stringValue
+    }
 }
