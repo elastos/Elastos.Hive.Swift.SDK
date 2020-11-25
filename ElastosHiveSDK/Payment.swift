@@ -140,4 +140,33 @@ public class Payment: NSObject {
         }
         return json["order_id"].stringValue
     }
+    
+    /// Create a order of pricing plan
+    /// - Parameter priceName: priceName
+    /// - Returns: the order id
+    public func payOrder(_ orderId: String, _ txids: Array<String>) -> HivePromise<Bool> {
+        HivePromise<Bool> { resolver in
+           _ = authHelper.checkValid().done { [self] _ in
+                do {
+                    try resolver.fulfill(payOrderImp(orderId, txids, 0))
+                }
+                catch {
+                    resolver.reject(error)
+                }
+            }
+        }
+    }
+    
+    private func payOrderImp(_ orderId: String, _ txids: Array<String>, _ tryAgain: Int) throws -> Bool {
+        let url = VaultURL.sharedInstance.payOrder()
+        let params = ["order_id": orderId, "pay_txids": txids] as [String : Any]
+        let response = Alamofire.request(url, method: .post, parameters: params, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
+        let json = try VaultApi.handlerJsonResponse(response)
+        let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+        
+        if tryLogin {
+            return try payOrderImp(orderId, txids, 1)
+        }
+        return true
+    }
 }

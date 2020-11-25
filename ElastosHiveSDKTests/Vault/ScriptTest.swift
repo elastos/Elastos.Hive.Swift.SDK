@@ -134,7 +134,7 @@ class ScriptTest: XCTestCase {
             self.wait(for: [lock], timeout: 10000.0)
     }
 
-    func test7_callOtherScript() {
+    func test07_callOtherScript() {
         let lock = XCTestExpectation(description: "wait for test.")
         scripting?.call(noConditionName, "appId", String.self).done{ str in
             print(str)
@@ -147,7 +147,7 @@ class ScriptTest: XCTestCase {
         self.wait(for: [lock], timeout: 10000.0)
     }
 
-    func test8_setUploadScript() {
+    func test08_setUploadScript() {
         let lock = XCTestExpectation(description: "wait for test.")
         let executable = "{\"type\":\"fileUpload\",\"name\":\"upload_file\",\"output\":true,\"body\":{\"path\":\"$params.path\"}}"
         scripting?.registerScript("upload_file", RawExecutable(executable: executable)).done{ re in
