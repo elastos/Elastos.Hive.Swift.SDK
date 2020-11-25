@@ -85,6 +85,8 @@ public class Payment: NSObject {
         return plan
     }
     
+    /// Get payment version
+    /// - Returns: payment vresion
     public func getPaymentVersion() -> HivePromise<String> {
         HivePromise<String> { resolver in
            _ = authHelper.checkValid().done { [self] _ in
@@ -108,5 +110,34 @@ public class Payment: NSObject {
             return try getPaymentVersionImp(1)
         }
         return json["version"].stringValue
+    }
+
+    /// Create a order of pricing plan
+    /// - Parameter priceName: priceName
+    /// - Returns: the order id
+    public func placeOrder(_ priceName: String) -> HivePromise<String> {
+        HivePromise<String> { resolver in
+           _ = authHelper.checkValid().done { [self] _ in
+                do {
+                    try resolver.fulfill(placeOrderImp(priceName, 0))
+                }
+                catch {
+                    resolver.reject(error)
+                }
+            }
+        }
+    }
+    
+    private func placeOrderImp(_ priceName: String, _ tryAgain: Int) throws -> String {
+        let url = VaultURL.sharedInstance.createOrder()
+        let params = ["pricing_name": priceName]
+        let response = Alamofire.request(url, method: .post, parameters: params, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
+        let json = try VaultApi.handlerJsonResponse(response)
+        let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+        
+        if tryLogin {
+            return try placeOrderImp(priceName, 1)
+        }
+        return json["order_id"].stringValue
     }
 }
