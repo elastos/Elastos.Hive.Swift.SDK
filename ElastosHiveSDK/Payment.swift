@@ -204,4 +204,38 @@ public class Payment: NSObject {
         
         return Order.deserialize(json["order_info"])
     }
+    
+    /// Get user order information list of vault service purchase
+    /// - Returns: order list
+    public func getAllOrders() -> HivePromise<Array<Order>> {
+        HivePromise<Array<Order>> { resolver in
+            _ = authHelper.checkValid().done { [self] _ in
+                do {
+                    try resolver.fulfill(getAllOrdersImp(0))
+                }
+                catch {
+                    resolver.reject(error)
+                }
+            }
+        }
+    }
+    
+    private func getAllOrdersImp(_ tryAgain: Int) throws -> Array<Order> {
+        let url = VaultURL.sharedInstance.orderList()
+        let response = Alamofire.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
+        let json = try VaultApi.handlerJsonResponse(response)
+        let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+        
+        if tryLogin {
+            try self.authHelper.reLogin()
+            return try getAllOrdersImp(1)
+        }
+        let arrrayJson = json["order_info_list"].arrayValue
+        var orderArray: Array<Order> = [ ]
+        arrrayJson.forEach { itemJson in
+            let order = Order.deserialize(itemJson)
+            orderArray.append(order)
+        }
+        return orderArray
+    }
 }

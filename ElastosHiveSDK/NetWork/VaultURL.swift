@@ -173,4 +173,8 @@ class VaultURL {
         return baseUrl + "/api/v1/payment/vault_package_order?order_id=\(order_id)"
     }
     
+    func orderList() -> String {
+        return baseUrl + "/api/v1/payment/vault_package_order_list"
+    }
+    
 }
