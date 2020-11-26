@@ -108,5 +108,9 @@ public class Vault: NSObject {
     func useTrial() -> HivePromise<Bool> {
         return self.vaultHelper.useTrial()
     }
+    
+    func getUsingPricePlan() -> HivePromise<UsingPlan> {
+        return self.payment.getUsingPricePlan()
+    }
 }
 

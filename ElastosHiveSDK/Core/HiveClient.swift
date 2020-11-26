@@ -44,10 +44,20 @@ public class HiveClientHandle: NSObject {
         self.localDataPath = options.localPath
     }
 
+    /// Constructor without parameters
+    /// resolver url and cache path use default value:
+    /// http://api.elastos.io:20606
+    /// \(NSHomeDirectory())/Library/Caches/didCache
+    /// - Throws: throw an error, when an error occurs
     public class func setupResolver() throws {
         try setupResolver(_reslover, _cacheDir)
     }
 
+    /// Recommendation for cache dir:
+    /// - Parameters:
+    ///   - resolver: resolver the DIDResolver object
+    ///   - cacheDir: cacheDir the cache path name
+    /// - Throws: throw an error, when an error occurs
     public class func setupResolver(_ resolver: String, _ cacheDir: String) throws {
         guard resolver != "" else {
             throw HiveError.failure(des: "resolver is not nil.")
@@ -67,6 +77,10 @@ public class HiveClientHandle: NSObject {
         //ResolverCache.reset() // 删除了整个路径 ！！！！
     }
 
+    /// Create a Client instance
+    /// - Parameter withOptions: authentication options
+    /// - Throws: throw an error, when an error occurs
+    /// - Returns: client instance
     public static func createInstance(withOptions: HiveClientOptions) throws -> HiveClientHandle {
         guard resolverDidSetup else {
             throw HiveError.failure(des: "Setup did resolver first")
@@ -79,6 +93,11 @@ public class HiveClientHandle: NSObject {
         return Vault(authHelper, provider, ownerDid)
     }
     
+    /// Create Vault
+    /// - Parameters:
+    ///   - ownerDid: ownerDid
+    ///   - providerAddress: provider address
+    /// - Returns: vault instance
     public func createVault(_ ownerDid: String, _ providerAddress: String?) -> HivePromise<Vault>{
         return HivePromise<Vault> { resolver in
             var vault: Vault?
@@ -93,13 +112,20 @@ public class HiveClientHandle: NSObject {
         }
     }
 
+    /// Get Vault
+    /// - Parameters:
+    ///   - ownerDid: vault owner did
+    ///   - providerAddress: provider address
+    /// - Returns: vault instance
     public func getVault(_ ownerDid: String, _ providerAddress: String?) -> HivePromise<Vault> {
         return HivePromise<Vault> { resolver in
             _ = getVaultProvider(ownerDid, providerAddress).done { [self] provider in
                 let vault = newVault(provider, ownerDid)
-                // todo: vault.getUsingPricePlan()
-                // if(null == vault.getUsingPricePlan())
-                //        throw new VaultNotFoundException()
+                vault.getUsingPricePlan().done { plan in
+                    resolver.fulfill(vault)
+                }.catch { error in
+                    resolver.reject(error)
+                }
                 resolver.fulfill(vault)
             }
             .catch{ error in
@@ -108,6 +134,11 @@ public class HiveClientHandle: NSObject {
         }
     }
 
+    /// Tries to find a vault address in the public DID document of the given user's DID.
+    /// - Parameters:
+    ///   - ownerDid: ownerDid the owner did for the vault
+    ///   - providerAddress: the vault address in String
+    /// - Returns: the vault address in String
     public func getVaultProvider(_ ownerDid: String, _ providerAddress: String?) -> HivePromise<String> {
 
         return HivePromise<String> { resolver in
@@ -140,9 +171,5 @@ public class HiveClientHandle: NSObject {
                 }
             }
         }
-    }
-
-    public class func setVaultProvider(_ ownerDid: String, _ vaultAddress: String) {
-        _providerCache[ownerDid] = vaultAddress
     }
 }

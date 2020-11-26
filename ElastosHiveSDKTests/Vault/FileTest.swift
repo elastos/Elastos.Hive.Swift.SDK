@@ -179,11 +179,10 @@ class FileTest: XCTestCase {
         do {
             user = try UserFactory.createUser1()
             let lock = XCTestExpectation(description: "wait for test.")
-            user?.client.createVault(OWNERDID, user?.provider).done{ vault in
-
+            user?.client.getVault(OWNERDID, user?.provider).done{ vault in
                 self.file = (vault.files as! FileClient)
                 lock.fulfill()
-            }.catch { error in
+            }.catch{ error in
                 print(error)
                 lock.fulfill()
             }
