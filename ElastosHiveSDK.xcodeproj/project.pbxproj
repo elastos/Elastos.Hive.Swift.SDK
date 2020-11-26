@@ -22,6 +22,8 @@
 
 /* Begin PBXBuildFile section */
 		0D94ED2D06BBCAE410D0273C /* Pods_ElastosHiveSDKTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DB068EABA0DB13AB595055A /* Pods_ElastosHiveSDKTests.framework */; };
+		110357E3256FA3CA003F639F /* FileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110357E2256FA3CA003F639F /* FileReader.swift */; };
+		110357E7256FA420003F639F /* FileWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110357E6256FA420003F639F /* FileWriter.swift */; };
 		1103756D23FF9689004216D0 /* DataResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103756C23FF9689004216D0 /* DataResponse.swift */; };
 		1103756E23FF9689004216D0 /* DataResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103756C23FF9689004216D0 /* DataResponse.swift */; };
 		1103757023FF96A0004216D0 /* LogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103756F23FF96A0004216D0 /* LogLevel.swift */; };
@@ -236,6 +238,8 @@
 
 /* Begin PBXFileReference section */
 		0DB068EABA0DB13AB595055A /* Pods_ElastosHiveSDKTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ElastosHiveSDKTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		110357E2256FA3CA003F639F /* FileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileReader.swift; sourceTree = "<group>"; };
+		110357E6256FA420003F639F /* FileWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileWriter.swift; sourceTree = "<group>"; };
 		1103756C23FF9689004216D0 /* DataResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataResponse.swift; path = Result/DataResponse.swift; sourceTree = "<group>"; };
 		1103756F23FF96A0004216D0 /* LogLevel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogLevel.swift; sourceTree = "<group>"; };
 		1103757223FF96AB004216D0 /* AuthToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuthToken.swift; path = Core/AuthToken.swift; sourceTree = "<group>"; };
@@ -514,6 +518,8 @@
 				1170FBA02508D35A0049E81D /* Header.swift */,
 				111D478A24EE810A00B7462B /* VaultURL.swift */,
 				111D478D24F399AC00B7462B /* VaultApi.swift */,
+				110357E2256FA3CA003F639F /* FileReader.swift */,
+				110357E6256FA420003F639F /* FileWriter.swift */,
 			);
 			path = NetWork;
 			sourceTree = "<group>";
@@ -1041,12 +1047,14 @@
 				115E82F3251A4590004DCB1E /* Timestamp.swift in Sources */,
 				1103757C23FF96C7004216D0 /* Persistent.swift in Sources */,
 				1170FBA12508D35A0049E81D /* Header.swift in Sources */,
+				110357E7256FA420003F639F /* FileWriter.swift in Sources */,
 				11FD496D2561AC9B00A108D2 /* DownloadExecutable.swift in Sources */,
 				111D477924ED0C1200B7462B /* VaultAuthHelper.swift in Sources */,
 				115E82F0251A4553004DCB1E /* RegularExpression.swift in Sources */,
 				11E573FF22C4C33400F85419 /* String.swift in Sources */,
 				111D47FA24F7A79800B7462B /* Condition.swift in Sources */,
 				111D478E24F399AC00B7462B /* VaultApi.swift in Sources */,
+				110357E3256FA3CA003F639F /* FileReader.swift in Sources */,
 				111D47E624F7927D00B7462B /* InsertManyResult.swift in Sources */,
 				A3D9D41623C96DA1003B602E /* KeyValuesProtocol.swift in Sources */,
 				118F2D99250F2CF400447A0A /* DbInsertQuery.swift in Sources */,

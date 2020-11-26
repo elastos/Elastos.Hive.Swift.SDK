@@ -168,13 +168,6 @@ public class VaultAuthHelper: ConnectHelper {
         _persistent.upateContent(json as Dictionary<String, Any>)
     }
 
-    private func nodeAuth(_ jwt: String) -> HivePromise<JSON> {
-        VaultURL.sharedInstance.resetVaultApi(baseUrl: _nodeUrl)
-        let url = VaultURL.sharedInstance.auth()
-        let param = ["jwt": jwt]
-       return VaultApi.nodeAuth(url: url, parameters: param)
-    }
-
     func signIn() throws {
         let jsonstr = _authenticationDIDDocument!.toString()
         let data = jsonstr.data(using: .utf8)
