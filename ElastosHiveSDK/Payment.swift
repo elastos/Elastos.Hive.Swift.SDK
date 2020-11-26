@@ -149,121 +149,117 @@ public class Payment: NSObject {
     /// - Parameter priceName: priceName
     /// - Returns: the order id
     public func payOrder(_ orderId: String, _ txids: Array<String>) -> HivePromise<Bool> {
-        HivePromise<Bool> { resolver in
-            _ = authHelper.checkValid().done { [self] _ in
-                do {
-                    try resolver.fulfill(payOrderImp(orderId, txids, 0))
-                }
-                catch {
-                    resolver.reject(error)
-                }
-            }
+        return self.authHelper.checkValid().then { [self] _ -> HivePromise<Bool> in
+            return payOrderImp(orderId, txids, 0)
         }
     }
     
-    private func payOrderImp(_ orderId: String, _ txids: Array<String>, _ tryAgain: Int) throws -> Bool {
-        let url = VaultURL.sharedInstance.payOrder()
-        let params = ["order_id": orderId, "pay_txids": txids] as [String : Any]
-        let response = Alamofire.request(url, method: .post, parameters: params, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
-        let json = try VaultApi.handlerJsonResponse(response)
-        let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
-        
-        if tryLogin {
-            try self.authHelper.signIn()
-            return try payOrderImp(orderId, txids, 1)
+    private func payOrderImp(_ orderId: String, _ txids: Array<String>, _ tryAgain: Int) -> HivePromise<Bool> {
+        return HivePromise<Bool> { resolver in
+            let url = VaultURL.sharedInstance.payOrder()
+            let params = ["order_id": orderId, "pay_txids": txids] as [String : Any]
+            let response = Alamofire.request(url, method: .post, parameters: params, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
+            let json = try VaultApi.handlerJsonResponse(response)
+            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            
+            if tryLogin {
+                try self.authHelper.signIn()
+                payOrderImp(orderId, txids, 1).done { success in
+                    resolver.fulfill(success)
+                }
+                .catch { error in
+                    resolver.reject(error)
+                }
+            }
+            resolver.fulfill(true)
         }
-        return true
     }
     
     /// Get order information of vault service purchase
     /// - Parameter orderId: orderId
     /// - Returns: ture, if success
     public func getOrder(_ orderId: String) -> HivePromise<Order> {
-        HivePromise<Order> { resolver in
-            _ = authHelper.checkValid().done { [self] _ in
-                do {
-                    try resolver.fulfill(getOrderImp(orderId, 0))
-                }
-                catch {
-                    resolver.reject(error)
-                }
-            }
+        return self.authHelper.checkValid().then { [self] _ -> HivePromise<Order> in
+            return getOrderImp(orderId, 0)
         }
     }
     
-    private func getOrderImp(_ orderId: String, _ tryAgain: Int) throws -> Order {
-        let url = VaultURL.sharedInstance.orderInfo(orderId)
-        let response = Alamofire.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
-        let json = try VaultApi.handlerJsonResponse(response)
-        let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
-        
-        if tryLogin {
-            try self.authHelper.signIn()
-            return try getOrderImp(orderId, 1)
+    private func getOrderImp(_ orderId: String, _ tryAgain: Int) -> HivePromise<Order> {
+        return HivePromise<Order> { resolver in
+            let url = VaultURL.sharedInstance.orderInfo(orderId)
+            let response = Alamofire.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
+            let json = try VaultApi.handlerJsonResponse(response)
+            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            
+            if tryLogin {
+                try self.authHelper.signIn()
+                getOrderImp(orderId, 1).done { oreder in
+                    resolver.fulfill(oreder)
+                }.catch { error in
+                    resolver.reject(error)
+                }
+            }
+            resolver.fulfill(Order.deserialize(json["order_info"]))
         }
-        
-        return Order.deserialize(json["order_info"])
     }
     
     /// Get user order information list of vault service purchase
     /// - Returns: order list
     public func getAllOrders() -> HivePromise<Array<Order>> {
-        HivePromise<Array<Order>> { resolver in
-            _ = authHelper.checkValid().done { [self] _ in
-                do {
-                    try resolver.fulfill(getAllOrdersImp(0))
-                }
-                catch {
-                    resolver.reject(error)
-                }
-            }
+        return self.authHelper.checkValid().then { [self] _ -> HivePromise<Array<Order>> in
+            return getAllOrdersImp(0)
         }
     }
     
-    private func getAllOrdersImp(_ tryAgain: Int) throws -> Array<Order> {
-        let url = VaultURL.sharedInstance.orderList()
-        let response = Alamofire.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
-        let json = try VaultApi.handlerJsonResponse(response)
-        let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
-        
-        if tryLogin {
-            try self.authHelper.signIn()
-            return try getAllOrdersImp(1)
+    private func getAllOrdersImp(_ tryAgain: Int) -> HivePromise<Array<Order>> {
+        return HivePromise<Array<Order>> { resolver in
+            let url = VaultURL.sharedInstance.orderList()
+            let response = Alamofire.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
+            let json = try VaultApi.handlerJsonResponse(response)
+            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            
+            if tryLogin {
+                try self.authHelper.signIn()
+                getAllOrdersImp(1).done { list in
+                    resolver.fulfill(list)
+                }.catch { error in
+                    resolver.reject(error)
+                }
+            }
+            let arrrayJson = json["order_info_list"].arrayValue
+            var orderArray: Array<Order> = [ ]
+            arrrayJson.forEach { itemJson in
+                let order = Order.deserialize(itemJson)
+                orderArray.append(order)
+            }
+            resolver.fulfill(orderArray)
         }
-        let arrrayJson = json["order_info_list"].arrayValue
-        var orderArray: Array<Order> = [ ]
-        arrrayJson.forEach { itemJson in
-            let order = Order.deserialize(itemJson)
-            orderArray.append(order)
-        }
-        return orderArray
     }
 
     /// Get using price plan
     /// - Returns: user's using price plan
     public func getUsingPricePlan() -> HivePromise<UsingPlan> {
-        HivePromise<UsingPlan> { resolver in
-            _ = authHelper.checkValid().done { [self] _ in
-                do {
-                    try resolver.fulfill(getUsingPricePlanImp(0))
-                }
-                catch {
-                    resolver.reject(error)
-                }
-            }
+        return self.authHelper.checkValid().then { [self] _ -> HivePromise<UsingPlan> in
+            return getUsingPricePlanImp(0)
         }
     }
     
-    private func getUsingPricePlanImp(_ tryAgain: Int) throws -> UsingPlan {
-        let url = VaultURL.sharedInstance.serviceInfo()
-        let response = Alamofire.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
-        let json = try VaultApi.handlerJsonResponse(response)
-        let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
-        
-        if tryLogin {
-            try self.authHelper.signIn()
-            return try getUsingPricePlanImp(1)
+    private func getUsingPricePlanImp(_ tryAgain: Int) -> HivePromise<UsingPlan> {
+        return HivePromise<UsingPlan> { resolver in
+            let url = VaultURL.sharedInstance.serviceInfo()
+            let response = Alamofire.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
+            let json = try VaultApi.handlerJsonResponse(response)
+            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            
+            if tryLogin {
+                try self.authHelper.signIn()
+                getUsingPricePlanImp(1).done { plan in
+                    resolver.fulfill(plan)
+                }.catch { (error) in
+                    resolver.reject(error)
+                }
+            }
+            resolver.fulfill(UsingPlan.deserialize(json["vault_service_info"]))
         }
-        return UsingPlan.deserialize(json["vault_service_info"])
     }
 }

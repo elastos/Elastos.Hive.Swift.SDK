@@ -26,6 +26,7 @@ public class Version: NSObject {
     private var authHelper: VaultAuthHelper
     
     init(_ authHelper: VaultAuthHelper) {
+        PromiseKit.conf.Q = (map: HiveVaultQueue, return: HiveVaultQueue)
         self.authHelper = authHelper
     }
     
