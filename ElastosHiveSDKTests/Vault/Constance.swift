@@ -1,22 +1,12 @@
 
-
 import Foundation
-
 
 let TEST_RESOLVER_URL = "http://api.elastos.io:21606" //Test Net
 let MAIN_RESOLVER_URL = "http://api.elastos.io:20606" //Main Net
 
 let LOCAL_PROVIDER = "http://127.0.0.1:5000"
 let RELEASE_PROVIDER = "https://hive1.trinity-tech.io" // release
-let DEVELOP_PROVIDER = "https://hive1.trinity-tech.io" // develop
-
-//var OWNERDID = "did:elastos:iUKm1X5ckSKQFg41gQv3yUPQhvQRygKjz4"
-let OWNERDID = "did:elastos:ioRGDwhAB2v4mc8nNuuu78AXNUvv13fMQQ"
-//let PROVIDER = "http://localhost:5000/"
-let PROVIDER = "https://hive1.trinity-tech.io"
-//let PROVIDER = "https://hive2.trinity-tech.io"
-let localDataPath = "\(NSHomeDirectory())/Library/Caches/store"
-let didCachePath = "\(NSHomeDirectory())/Library/Caches/DIDStore"
+let DEVELOP_PROVIDER = "https://hive.yoopig.com" // develop
 
 //user1
 //https://hive1.trinity-tech.io
@@ -46,6 +36,33 @@ let appInstance2_name = "testapp1"
 let appInstance2_mn = "venture link adapt field priority extend depart endless right lamp sudden fringe"
 let appInstance2_phrasepass = "password"
 let appInstance2_storepass = "password"
+
+//user3
+//[didapp3] My new DID created: did:elastos:ijYUBb36yCXU6yzhydnkCCAXh7ZRW4X85J
+let userDid3 = "did:elastos:ijYUBb36yCXU6yzhydnkCCAXh7ZRW4X85J"
+let userDid3_name = "didapp3"
+let userDid3_mn = "gallery input work twice helmet mesh decline cushion same garbage art bullet"
+let userDid3_phrasepass = "password"
+let userDid3_storepass = "password"
+
+let appInstance3_name = "testapp3"
+let appInstance3_mn = "trend music thumb what erupt near apology exotic surge item field awake"
+let appInstance3_phrasepass = "password"
+let appInstance3_storepass = "password"
+
+//user4
+//[didapp4] My new DID created: did:elastos:iqk3KLebgiiP46uyoKevYQJB7PZcs2iTLz
+let userDid4 = "did:elastos:iqk3KLebgiiP46uyoKevYQJB7PZcs2iTLz"
+let userDid4_name = "didapp4"
+let userDid4_mn = "exist recycle people endless spin split enact dance weasel abstract idle adult"
+let userDid4_phrasepass = "password"
+let userDid4_storepass = "password"
+
+//[testapp4] My new DID created: did:elastos:iZYDUV7GvhYpvPp1aic1peqMVd3raqtHi2
+let appInstance4_name = "testapp4"
+let appInstance4_mn = "network check illness dutch police stove other junior arrive sniff engage lamp"
+let appInstance4_phrasepass = "password"
+let appInstance4_storepass = "password"
 
 //================================================================
 
