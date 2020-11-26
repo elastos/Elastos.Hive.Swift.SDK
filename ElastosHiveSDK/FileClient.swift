@@ -90,15 +90,6 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
             self.totalBytesReadCount = self.totalBytesReadCount + data.count
             return data
         }
-        else if self.downloadBoundStreams.input.hasBytesAvailable == false && self.downloadDidFinsish == false {
-            let semaphore: DispatchSemaphore! = DispatchSemaphore(value: 0)
-            self.blockRead = { block in
-                print("lallalaalla")
-                semaphore.signal()
-            }
-            semaphore.wait()
-        }
-        
         return nil
     }
 
@@ -181,7 +172,7 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
             resolver.reject(HiveError.failure(des: "code: \(code)"))
             return
         }
-        print("DID COMPLETE WITH ERROR")
+//        print("DID COMPLETE WITH ERROR")
         self.downloadDidFinsish = true
         downloadBoundStreams.output.close()
     }
@@ -362,229 +353,192 @@ public class FileClient: NSObject, FilesProtocol {
 
     public func delete(_ path: String) -> HivePromise<Bool> {
         return authHelper.checkValid().then { _ -> HivePromise<Bool> in
-            return self.deleteImp(path, tryAgain: 0)
+            return self.deleteImp(path, 0)
         }
     }
 
-    private func deleteImp(_ remoteFile: String, tryAgain: Int) -> HivePromise<Bool> {
+    private func deleteImp(_ remoteFile: String, _ tryAgain: Int) -> HivePromise<Bool> {
         HivePromise<Bool> { resolver in
             let param = ["path": remoteFile]
             let url = VaultURL.sharedInstance.deleteFileOrFolder()
-            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
-                if !VaultApi.checkResponseIsError(json) {
-                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
-                        self.authHelper.retryLogin().then { success -> HivePromise<Bool> in
-                            return self.deleteImp(remoteFile, tryAgain: 1)
-                        }.done { result in
-                            resolver.fulfill(result)
-                        }.catch { error in
-                            resolver.reject(error)
-                        }
-                    } else {
-                        let errorStr = HiveError.praseError(json)
-                        Log.e(FileClient.TAG, "delete ERROR: ", errorStr)
-                        resolver.reject(HiveError.failure(des: errorStr))
-                    }
+
+            let response = Alamofire.request(url,
+                                method: .post,
+                                parameters: param,
+                                encoding: JSONEncoding.default,
+                                headers: Header(authHelper).headers()).responseJSON()
+        
+            let json = try VaultApi.handlerJsonResponse(response)
+            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+
+            if tryLogin {
+                try self.authHelper.signIn()
+                deleteImp(remoteFile, 1).done { success in
+                    resolver.fulfill(success)
+                }.catch { error in
+                    resolver.reject(error)
                 }
-                else {
-                    resolver.fulfill(true)
-                }
-            }.catch { error in
-                Log.e(FileClient.TAG, "delete ERROR: ", HiveError.description(error as! HiveError))
-                resolver.reject(error)
             }
+            resolver.fulfill(true)
         }
     }
 
     public func move(_ src: String, _ dest: String) -> HivePromise<Bool> {
         return authHelper.checkValid().then { _ -> HivePromise<Bool> in
-            return self.moveImp(src, dest, tryAgain: 0)
+            return self.moveImp(src, dest, 0)
         }
     }
 
-    private func moveImp(_ src: String, _ dest: String, tryAgain: Int) -> HivePromise<Bool> {
+    private func moveImp(_ src: String, _ dest: String, _ tryAgain: Int) -> HivePromise<Bool> {
         HivePromise<Bool> { resolver in
             let url = VaultURL.sharedInstance.move()
             let param = ["src_path": src, "dst_path": dest]
-            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
-                if !VaultApi.checkResponseIsError(json) {
-                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
-                        self.authHelper.retryLogin().then { success -> HivePromise<Bool> in
-                            return self.moveImp(src, dest, tryAgain: 1)
-                        }.done { result in
-                            resolver.fulfill(result)
-                        }.catch { error in
-                            resolver.reject(error)
-                        }
-                    } else {
-                        let errorStr = HiveError.praseError(json)
-                        Log.e(FileClient.TAG, "move ERROR: ", errorStr)
-                        resolver.reject(HiveError.failure(des: errorStr))
-                    }
+            let response = Alamofire.request(url,
+                                method: .post,
+                                parameters: param,
+                                encoding: JSONEncoding.default,
+                                headers: Header(authHelper).headers()).responseJSON()
+            let json = try VaultApi.handlerJsonResponse(response)
+            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+
+            if tryLogin {
+                try self.authHelper.signIn()
+                moveImp(src, dest, 1).done { success in
+                    resolver.fulfill(success)
+                }.catch { error in
+                    resolver.reject(error)
                 }
-                else {
-                    resolver.fulfill(true)
-                }
-            }.catch { error in
-                Log.e(FileClient.TAG, "move ERROR: ", HiveError.description(error as! HiveError))
-                resolver.reject(error)
             }
+            resolver.fulfill(true)
         }
     }
 
     public func copy(_ src: String, _ dest: String) -> HivePromise<Bool> {
         return authHelper.checkValid().then { _ -> HivePromise<Bool> in
-            return self.copyImp(src, dest, tryAgain: 0)
+            return self.copyImp(src, dest, 0)
         }
     }
 
-    private func copyImp(_ src: String, _ dest: String, tryAgain: Int) -> HivePromise<Bool> {
+    private func copyImp(_ src: String, _ dest: String, _ tryAgain: Int) -> HivePromise<Bool> {
         HivePromise<Bool> { resolver in
             let url = VaultURL.sharedInstance.move()
             let param = ["src_path": src, "dst_path": dest]
-            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
-                if !VaultApi.checkResponseIsError(json) {
-                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
-                        self.authHelper.retryLogin().then { success -> HivePromise<Bool> in
-                            return self.copyImp(src, dest, tryAgain: 1)
-                        }.done { result in
-                            resolver.fulfill(result)
-                        }.catch { error in
-                            resolver.reject(error)
-                        }
-                    } else {
-                        let errorStr = HiveError.praseError(json)
-                        Log.e(FileClient.TAG, "copy ERROR: ", errorStr)
-                        resolver.reject(HiveError.failure(des: errorStr))
-                    }
+            let response = Alamofire.request(url,
+                                method: .post,
+                                parameters: param,
+                                encoding: JSONEncoding.default,
+                                headers: Header(authHelper).headers()).responseJSON()
+            let json = try VaultApi.handlerJsonResponse(response)
+            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+
+            if tryLogin {
+                try self.authHelper.signIn()
+                copyImp(src, dest, 1).done { success in
+                    resolver.fulfill(success)
+                }.catch { error in
+                    resolver.reject(error)
                 }
-                else {
-                    resolver.fulfill(true)
-                }
-            }.catch { error in
-                Log.e(FileClient.TAG, "copy ERROR: ", HiveError.description(error as! HiveError))
-                resolver.reject(error)
             }
+            resolver.fulfill(true)
         }
     }
 
     public func hash(_ path: String) -> HivePromise<String> {
         return authHelper.checkValid().then { _ -> HivePromise<String> in
-            return self.hashImp(path, tryAgain: 0)
+            return self.hashImp(path, 0)
         }
     }
 
-    private func hashImp(_ path: String, tryAgain: Int) -> HivePromise<String> {
+    private func hashImp(_ path: String, _ tryAgain: Int) -> HivePromise<String> {
         return HivePromise<String> { resolver in
             let url = VaultURL.sharedInstance.hash(path)
-            VaultApi.request(url: url, method: .get, headers: Header(authHelper).headers()).done { json in
-                if !VaultApi.checkResponseIsError(json) {
-                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
-                        self.authHelper.retryLogin().then { success -> HivePromise<String> in
-                            return self.hashImp(path, tryAgain: 1)
-                        }.done { result in
-                            resolver.fulfill(result)
-                        }.catch { error in
-                            resolver.reject(error)
-                        }
-                    } else {
-                        let errorStr = HiveError.praseError(json)
-                        Log.e(FileClient.TAG, "hash ERROR: ", errorStr)
-                        resolver.reject(HiveError.failure(des: errorStr))
-                    }
+            let response = Alamofire.request(url,
+                                method: .get,
+                                encoding: JSONEncoding.default,
+                                headers: Header(authHelper).headers()).responseJSON()
+            let json = try VaultApi.handlerJsonResponse(response)
+            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+
+            if tryLogin {
+                try self.authHelper.signIn()
+                hashImp(path, 1).done { sha256 in
+                    resolver.fulfill(sha256)
+                }.catch { error in
+                    resolver.reject(error)
                 }
-                else {
-                    resolver.fulfill(json["SHA256"].stringValue)
-                }
-            }.catch { error in
-                Log.e(FileClient.TAG, "hash ERROR: ", HiveError.description(error as! HiveError))
-                resolver.reject(error)
             }
+            resolver.fulfill(json["SHA256"].stringValue)
         }
     }
 
     public func list(_ path: String) -> HivePromise<Array<FileInfo>> {
         return authHelper.checkValid().then { _ -> HivePromise<Array<FileInfo>> in
-            return self.listImp(path, tryAgain: 0)
+            return self.listImp(path, 0)
         }
     }
 
-    private func listImp(_ path: String, tryAgain: Int) -> HivePromise<Array<FileInfo>> {
+    private func listImp(_ path: String, _ tryAgain: Int) -> HivePromise<Array<FileInfo>> {
         return HivePromise<Array<FileInfo>> { resolver in
             let url = VaultURL.sharedInstance.list(path)
-            VaultApi.request(url: url, method: .get, headers: Header(authHelper).headers()).done { json in
-                if !VaultApi.checkResponseIsError(json) {
-                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
-                        self.authHelper.retryLogin().then { success -> HivePromise<Array<FileInfo>> in
-                            return self.listImp(path, tryAgain: 1)
-                        }.done { result in
-                            resolver.fulfill(result)
-                        }.catch { error in
-                            resolver.reject(error)
-                        }
-                    } else {
-                        let errorStr = HiveError.praseError(json)
-                        Log.e(FileClient.TAG, "list ERROR: ", errorStr)
-                        resolver.reject(HiveError.failure(des: errorStr))
-                    }
+            let response = Alamofire.request(url,
+                                method: .get,
+                                encoding: JSONEncoding.default,
+                                headers: Header(authHelper).headers()).responseJSON()
+            let json = try VaultApi.handlerJsonResponse(response)
+            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+
+            if tryLogin {
+                try self.authHelper.signIn()
+                listImp(path, 1).done { list in
+                    resolver.fulfill(list)
+                }.catch { error in
+                    resolver.reject(error)
                 }
-                else {
-                    let arraryInfo = json["file_info_list"].arrayValue
-                    var fileList = [FileInfo]()
-                    arraryInfo.forEach { j in
-                        let info = FileInfo()
-                        info.setName(j["name"].stringValue)
-                        info.setSize(j["size"].intValue)
-                        info.setLastModify(j["last_modify"].stringValue)
-                        info.setType(j["type"].stringValue)
-                        fileList.append(info)
-                    }
-                    resolver.fulfill(fileList)
-                }
-            }.catch { error in
-                Log.e(FileClient.TAG, "list ERROR: ", HiveError.description(error as! HiveError))
-                resolver.reject(error)
             }
+            let arraryInfo = json["file_info_list"].arrayValue
+            var fileList = [FileInfo]()
+            arraryInfo.forEach { j in
+                let info = FileInfo()
+                info.setName(j["name"].stringValue)
+                info.setSize(j["size"].intValue)
+                info.setLastModify(j["last_modify"].stringValue)
+                info.setType(j["type"].stringValue)
+                fileList.append(info)
+            }
+            resolver.fulfill(fileList)
         }
     }
 
     public func stat(_ path: String) -> HivePromise<FileInfo> {
         return authHelper.checkValid().then { _ -> HivePromise<FileInfo> in
-            return self.statImp(path, tryAgain: 0)
+            return self.statImp(path, 0)
         }
     }
 
-    private func statImp(_ path: String, tryAgain: Int) -> HivePromise<FileInfo>{
+    private func statImp(_ path: String, _ tryAgain: Int) -> HivePromise<FileInfo>{
         return HivePromise<FileInfo> { resolver in
             let url = VaultURL.sharedInstance.stat(path)
-            VaultApi.request(url: url, method: .get, headers: Header(authHelper).headers()).done { json in
-                if !VaultApi.checkResponseIsError(json) {
-                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
-                        self.authHelper.retryLogin().then { success -> HivePromise<FileInfo> in
-                            return self.statImp(path, tryAgain: 1)
-                        }.done { result in
-                            resolver.fulfill(result)
-                        }.catch { error in
-                            resolver.reject(error)
-                        }
-                    } else {
-                        let errorStr = HiveError.praseError(json)
-                        Log.e(FileClient.TAG, "stat ERROR: ", errorStr)
-                        resolver.reject(HiveError.failure(des: errorStr))
-                    }
-                }
-                else {
-                    let info = FileInfo()
-                    info.setName(json["name"].stringValue)
-                    info.setSize(json["size"].intValue)
-                    info.setLastModify(json["last_modify"].stringValue)
-                    info.setType(json["type"].stringValue)
+            let response = Alamofire.request(url,
+                                method: .get,
+                                encoding: JSONEncoding.default,
+                                headers: Header(authHelper).headers()).responseJSON()
+            let json = try VaultApi.handlerJsonResponse(response)
+            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+
+            if tryLogin {
+                try self.authHelper.signIn()
+                statImp(path, 1).done { info in
                     resolver.fulfill(info)
+                }.catch { error in
+                    resolver.reject(error)
                 }
-            }.catch { error in
-                Log.e(FileClient.TAG, "stat ERROR: ", HiveError.description(error as! HiveError))
-                resolver.reject(error)
             }
+            let info = FileInfo()
+            info.setName(json["name"].stringValue)
+            info.setSize(json["size"].intValue)
+            info.setLastModify(json["last_modify"].stringValue)
+            info.setType(json["type"].stringValue)
+            resolver.fulfill(info)
         }
     }
 }

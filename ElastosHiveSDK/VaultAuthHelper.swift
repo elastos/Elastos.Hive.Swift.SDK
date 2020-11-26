@@ -82,18 +82,15 @@ public class VaultAuthHelper: ConnectHelper {
 
         VaultURL.sharedInstance.resetVaultApi(baseUrl: _nodeUrl)
     }
-
+    
     public override func checkValid() -> HivePromise<Void> {
         return HivePromise<Void> { resolver in
-            let globalQueue = DispatchQueue.global()
-            globalQueue.async {
-                do {
-                    try self.doCheckExpired()
-                    resolver.fulfill(Void())
-                }
-                catch {
-                    resolver.reject(error)
-                }
+            do {
+                try self.doCheckExpired()
+                resolver.fulfill(Void())
+            }
+            catch {
+                resolver.reject(error)
             }
         }
     }
@@ -103,53 +100,6 @@ public class VaultAuthHelper: ConnectHelper {
         tryRestoreToken()
         if token == nil || token!.isExpired() {
             try signIn()
-        }
-    }
-
-    func signIn() throws {
-
-        let json = _authenticationDIDDocument!.toString()
-        let data = json.data(using: .utf8)
-        let json0 = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
-
-        let param = ["document": json0]
-        let url = VaultURL.sharedInstance.signIn()
-        var challenge = ""
-        var erro: HiveError?
-        let header = ["Content-Type": "application/json;charset=UTF-8"]
-        var semaphore: DispatchSemaphore! = DispatchSemaphore(value: 0)
-        VaultApi.requestWithSignIn(url: url, parameters: param as Parameters, headers: header)
-            .done { re in
-                challenge = re["challenge"].stringValue
-                semaphore.signal()
-        }.catch { err in
-            erro = err as? HiveError
-            semaphore.signal()
-        }
-        semaphore.wait()
-        guard erro == nil else {
-            throw erro!
-        }
-        if self._authenticationHandler != nil {
-            try self.verifyToken(challenge)
-        }
-        semaphore = DispatchSemaphore(value: 0)
-        requestAuthToken(self._authenticationHandler!, challenge).then { aToken -> HivePromise<JSON> in
-            return self.nodeAuth(aToken)
-        }.done { re in
-            do {
-                try self.sotre(re)
-            } catch {
-                erro = error as? HiveError
-            }
-            semaphore.signal()
-        }.catch { error in
-            erro = error as? HiveError
-            semaphore.signal()
-        }
-        semaphore.wait()
-        guard erro == nil else {
-            throw erro!
         }
     }
 
@@ -225,29 +175,7 @@ public class VaultAuthHelper: ConnectHelper {
        return VaultApi.nodeAuth(url: url, parameters: param)
     }
 
-    func retryLogin() -> HivePromise<Bool> {
-        HivePromise<Bool> { resolver in
-            let json = _authenticationDIDDocument!.toString()
-            let data = json.data(using: .utf8)
-            let json0 = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
-            let param = ["document": json0]
-            let url = VaultURL.sharedInstance.signIn()
-            let header = ["Content-Type": "application/json;charset=UTF-8"]
-            VaultApi.requestWithSignIn(url: url, parameters: param as Parameters, headers: header).then { json -> HivePromise<String> in
-                let challenge = json["challenge"].stringValue
-                return self.requestAuthToken(self._authenticationHandler!, challenge)
-            }.then { authToken -> HivePromise<JSON> in
-                return self.nodeAuth(authToken)
-            }.done { json in
-                try self.sotre(json)
-                resolver.fulfill(true)
-            }.catch { error in
-                resolver.reject(error)
-            }
-        }
-    }
-
-    func reLogin() throws {
+    func signIn() throws {
         let jsonstr = _authenticationDIDDocument!.toString()
         let data = jsonstr.data(using: .utf8)
         let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
@@ -285,6 +213,18 @@ public class VaultAuthHelper: ConnectHelper {
                             encoding: JSONEncoding.default).responseJSON()
         responseJson = try VaultApi.handlerJsonResponse(response)
         try self.sotre(responseJson)
+    }
+    
+    func retryLogin() -> HivePromise<Bool> {
+        return HivePromise<Bool> { resolver in
+            do {
+                try signIn()
+                resolver.fulfill(true)
+            }
+            catch {
+                resolver.reject(error)
+            }
+        }
     }
     
     private func delete() {

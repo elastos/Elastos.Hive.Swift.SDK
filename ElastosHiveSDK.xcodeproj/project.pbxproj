@@ -137,7 +137,6 @@
 		11749DA024082FB1007B8F32 /* OutputStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11749D9E24082FB1007B8F32 /* OutputStream.swift */; };
 		118E277E256546E3004EECF1 /* Antlr4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118E277D256546E3004EECF1 /* Antlr4.framework */; platformFilter = ios; };
 		118E278125654711004EECF1 /* Antlr4.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 118E277D256546E3004EECF1 /* Antlr4.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		118E27B82566C851004EECF1 /* Antlr4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118E277D256546E3004EECF1 /* Antlr4.framework */; };
 		118E27BC2566C86B004EECF1 /* Antlr4.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 118E277D256546E3004EECF1 /* Antlr4.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		118F2D83250F1A7200447A0A /* ScriptTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2D82250F1A7200447A0A /* ScriptTest.swift */; };
 		118F2D85250F1ABA00447A0A /* Constance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2D84250F1ABA00447A0A /* Constance.swift */; };
@@ -372,7 +371,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				118E27B82566C851004EECF1 /* Antlr4.framework in Frameworks */,
 				6DDA50FA35E7A18E5EF0C90E /* Pods_ElastosHiveSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

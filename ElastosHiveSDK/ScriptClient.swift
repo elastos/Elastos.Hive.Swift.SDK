@@ -32,18 +32,18 @@ public class ScriptClient: ScriptingProtocol {
 
     public func registerScript(_ name: String, _ executable: Executable) -> HivePromise<Bool> {
         return authHelper.checkValid().then { _ -> HivePromise<Bool> in
-            return self.registerScriptImp(name, nil, executable, tryAgain: 0)
+            return self.registerScriptImp(name, nil, executable, 0)
         }
     }
 
     public func registerScript(_ name: String, _ condition: Condition, _ executable: Executable) -> HivePromise<Bool> {
 
         return authHelper.checkValid().then { _ -> HivePromise<Bool> in
-            return self.registerScriptImp(name, condition, executable, tryAgain: 0)
+            return self.registerScriptImp(name, condition, executable, 0)
         }
     }
 
-    private func registerScriptImp(_ name: String, _ accessCondition: Condition?, _ executable: Executable, tryAgain: Int) -> HivePromise<Bool> {
+    private func registerScriptImp(_ name: String, _ accessCondition: Condition?, _ executable: Executable, _ tryAgain: Int) -> HivePromise<Bool> {
         HivePromise<Bool> { resolver in
 
             var param = ["name": name] as [String : Any]
@@ -52,57 +52,51 @@ public class ScriptClient: ScriptingProtocol {
             }
             param["executable"] = try executable.jsonSerialize()
             let url = VaultURL.sharedInstance.registerScript()
-            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
-                if !VaultApi.checkResponseIsError(json) {
-                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
-                        self.authHelper.retryLogin().then { success -> HivePromise<Bool> in
-                            return self.registerScriptImp(name, accessCondition, executable, tryAgain: 1)
-                        }.done { result in
-                            resolver.fulfill(result)
-                        }.catch { error in
-                            resolver.reject(error)
-                        }
-                    } else {
-                        let errorStr = HiveError.praseError(json)
-                        Log.e(ScriptClient.TAG, "registerScript ERROR: ", errorStr)
-                        resolver.reject(HiveError.failure(des: errorStr))
-                    }
+            let response = Alamofire.request(url,
+                                method: .post,
+                                parameters: param,
+                                encoding: JSONEncoding.default,
+                                headers: Header(authHelper).headers()).responseJSON()
+            let json = try VaultApi.handlerJsonResponse(response)
+            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+
+            if tryLogin {
+                try self.authHelper.signIn()
+                registerScriptImp(name, accessCondition, executable, 1).done { success in
+                    resolver.fulfill(success)
+                }.catch { error in
+                    resolver.reject(error)
                 }
-                else {
-                    resolver.fulfill(true)
-                }
-            }.catch { error in
-                Log.e(ScriptClient.TAG, "registerScript ERROR: ", HiveError.description(error as! HiveError))
-                resolver.reject(error)
             }
+            resolver.fulfill(true)
         }
     }
 
     public func call<T>(_ scriptName: String, _ resultType: T.Type) -> HivePromise<T> {
         return authHelper.checkValid().then { _ -> HivePromise<T> in
-            return self.callWithAppDidImp(scriptName, appDid: nil, resultType, tryAgain: 0)
+            return self.callWithAppDidImp(scriptName, appDid: nil, resultType, 0)
         }
     }
 
     public func call<T>(_ scriptName: String, _ params: [String : Any], _ resultType: T.Type) -> HivePromise<T> {
         return authHelper.checkValid().then { _ -> HivePromise<T> in
-            return self.callWithAppDidImp(scriptName, params: params, appDid: nil, resultType, tryAgain: 0)
+            return self.callWithAppDidImp(scriptName, params: params, appDid: nil, resultType, 0)
         }
     }
 
     public func call<T>(_ scriptName: String, _ appDid: String, _ resultType: T.Type) -> Promise<T> {
         return authHelper.checkValid().then { _ -> HivePromise<T> in
-            return self.callWithAppDidImp(scriptName, appDid: appDid,  resultType, tryAgain: 0)
+            return self.callWithAppDidImp(scriptName, appDid: appDid,  resultType, 0)
         }
     }
 
     public func call<T>(_ scriptName: String, _ params: [String : Any], _ appDid: String, _ resultType: T.Type) -> HivePromise<T> {
         return authHelper.checkValid().then { _ -> HivePromise<T> in
-            return self.callWithAppDidImp(scriptName, params: params, appDid: appDid, resultType, tryAgain: 0)
+            return self.callWithAppDidImp(scriptName, params: params, appDid: appDid, resultType, 0)
         }
     }
 
-    private func callWithAppDidImp<T>(_ scriptName: String, params: [String : Any]? = nil, appDid: String?, _ resultType: T.Type, tryAgain: Int) -> HivePromise<T> {
+    private func callWithAppDidImp<T>(_ scriptName: String, params: [String : Any]? = nil, appDid: String?, _ resultType: T.Type, _ tryAgain: Int) -> HivePromise<T> {
         return HivePromise<T> { resolver in
             var param = ["name": scriptName] as [String : Any]
             let ownerDid = authHelper.ownerDid
@@ -117,47 +111,41 @@ public class ScriptClient: ScriptingProtocol {
                 param["params"] = params!
             }
             let url = VaultURL.sharedInstance.call()
-            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
-                if !VaultApi.checkResponseIsError(json) {
-                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
-                        self.authHelper.retryLogin().then { success -> HivePromise<T> in
-                            return self.callWithAppDidImp(scriptName, params: params, appDid: appDid, resultType, tryAgain: tryAgain)
-                        }.done { result in
-                            resolver.fulfill(result)
-                        }.catch { e in
-                            resolver.reject(e)
-                        }
-                    } else {
-                        let errorStr = HiveError.praseError(json)
-                        Log.e(ScriptClient.TAG, "call ERROR: ", errorStr)
-                        resolver.reject(HiveError.failure(des: errorStr))
-                    }
+            let response = Alamofire.request(url,
+                                method: .post,
+                                parameters: param,
+                                encoding: JSONEncoding.default,
+                                headers: Header(authHelper).headers()).responseJSON()
+            let json = try VaultApi.handlerJsonResponse(response)
+            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+
+            if tryLogin {
+                try self.authHelper.signIn()
+                callWithAppDidImp(scriptName, params: params, appDid: appDid, resultType, 1).done { result in
+                    resolver.fulfill(result)
+                }.catch { error in
+                    resolver.reject(error)
                 }
-                else {
-                    if resultType.self == OutputStream.self {
-                        let data = try JSONSerialization.data(withJSONObject: json.dictionaryObject as Any, options: [])
-                        let outputStream = OutputStream(toMemory: ())
-                        outputStream.open()
-                        self.writeData(data: data, outputStream: outputStream, maxLengthPerWrite: 1024)
-                        outputStream.close()
-                        resolver.fulfill(outputStream as! T)
-                    }
-                    // The String type
-                    else if resultType.self == String.self {
-                        let dic = json.dictionaryObject
-                        let data = try JSONSerialization.data(withJSONObject: dic as Any, options: [])
-                        let str = String(data: data, encoding: String.Encoding.utf8)
-                        resolver.fulfill(str as! T)
-                    }
-                    // the Data type
-                    else {
-                        let data = try JSONSerialization.data(withJSONObject: json.dictionaryObject as Any, options: [])
-                        resolver.fulfill(data as! T)
-                    }
-                }
-            }.catch { error in
-                Log.e(ScriptClient.TAG, "call ERROR: ", HiveError.description(error as! HiveError))
-                resolver.reject(error)
+            }
+            if resultType.self == OutputStream.self {
+                let data = try JSONSerialization.data(withJSONObject: json.dictionaryObject as Any, options: [])
+                let outputStream = OutputStream(toMemory: ())
+                outputStream.open()
+                self.writeData(data: data, outputStream: outputStream, maxLengthPerWrite: 1024)
+                outputStream.close()
+                resolver.fulfill(outputStream as! T)
+            }
+            // The String type
+            else if resultType.self == String.self {
+                let dic = json.dictionaryObject
+                let data = try JSONSerialization.data(withJSONObject: dic as Any, options: [])
+                let str = String(data: data, encoding: String.Encoding.utf8)
+                resolver.fulfill(str as! T)
+            }
+            // the Data type
+            else {
+                let data = try JSONSerialization.data(withJSONObject: json.dictionaryObject as Any, options: [])
+                resolver.fulfill(data as! T)
             }
         }
     }
@@ -170,7 +158,7 @@ public class ScriptClient: ScriptingProtocol {
             case .DOWNLOAD:
                 return self.downloadImp(scriptName: name, param: params, type: type, resultType: resultType, tryAgain: 0)
             case .PROPERTIES:
-                return self.callWithAppDidImp(name, params: params, appDid: nil, resultType, tryAgain: 0)
+                return self.callWithAppDidImp(name, params: params, appDid: nil, resultType, 0)
             }
         }
     }
