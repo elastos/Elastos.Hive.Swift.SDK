@@ -20,9 +20,13 @@ public class UserFactory {
          _ resolveUrl: String,
          _ provider: String,
          _ tokenCachePath: String) throws {
+        self.storePath = tokenCachePath
+        self.ownerDid = ownerDid
+        self.resolveUrl = resolveUrl
+        self.provider = provider
         presentationInJWT = try PresentationInJWT(userDidOpt, appInstanceDidOpt)
         if !resolverDidSetup {
-            try HiveClientHandle.setupResolver(RESOLVER_URL, UserFactory.didCachePath)
+            try HiveClientHandle.setupResolver(resolveUrl, UserFactory.didCachePath)
             resolverDidSetup = true
         }
         let options = HiveClientOptions()
@@ -30,10 +34,6 @@ public class UserFactory {
         _ = options.setAuthenticator(VaultAuthenticator())
         _ = options.setAuthenticationDIDDocument((presentationInJWT?.doc)!)
         client = try HiveClientHandle.createInstance(withOptions: options)
-        self.storePath = tokenCachePath
-        self.ownerDid = ownerDid
-        self.resolveUrl = resolveUrl
-        self.provider = provider
     }
     
     class func createFactory(_ userDidOpt: Options,
