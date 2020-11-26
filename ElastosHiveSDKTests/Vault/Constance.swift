@@ -8,13 +8,13 @@ let MAIN_RESOLVER_URL = "http://api.elastos.io:20606" //Main Net
 
 let LOCAL_PROVIDER = "http://127.0.0.1:5000"
 let RELEASE_PROVIDER = "https://hive1.trinity-tech.io" // release
-let DEVELOP_PROVIDER = "https://hive.yoopig.com" // develop
+let DEVELOP_PROVIDER = "https://hive1.trinity-tech.io" // develop
 
 //var OWNERDID = "did:elastos:iUKm1X5ckSKQFg41gQv3yUPQhvQRygKjz4"
 let OWNERDID = "did:elastos:ioRGDwhAB2v4mc8nNuuu78AXNUvv13fMQQ"
 //let PROVIDER = "http://localhost:5000/"
-//let PROVIDER = "https://hive1.trinity-tech.io"
-let PROVIDER = "https://hive2.trinity-tech.io"
+let PROVIDER = "https://hive1.trinity-tech.io"
+//let PROVIDER = "https://hive2.trinity-tech.io"
 let localDataPath = "\(NSHomeDirectory())/Library/Caches/store"
 let didCachePath = "\(NSHomeDirectory())/Library/Caches/DIDStore"
 

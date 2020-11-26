@@ -74,6 +74,7 @@ public class VaultAuthHelper: ConnectHelper {
     }
 
     public init(_ ownerDid: String, _ nodeUrl: String, _ storePath: String, _ authenticationDIDDocument: DIDDocument, _ handler: Authenticator?) {
+        PromiseKit.conf.Q = (map: HiveVaultQueue, return: HiveVaultQueue)
         _authenticationDIDDocument = authenticationDIDDocument
         _authenticationHandler = handler
         _ownerDid = ownerDid
