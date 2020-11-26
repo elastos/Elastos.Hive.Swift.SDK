@@ -372,7 +372,7 @@ class DBTest: XCTestCase {
         do {
             user = try UserFactory.createUser1()
             let lock = XCTestExpectation(description: "wait for test.")
-            user!.client.getVault(OWNERDID, user?.provider).done { [self] vault in
+            user!.client.getVault(user!.ownerDid, user?.provider).done { [self] vault in
                 self.database = (vault.database as! DatabaseClient)
                 lock.fulfill()
             }.catch { error in

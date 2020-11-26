@@ -234,7 +234,7 @@ class ScriptTest: XCTestCase {
         do {
             user = try UserFactory.createUser1()
             let lock = XCTestExpectation(description: "wait for test.")
-            user!.client.getVault(OWNERDID, user?.provider).done { [self] vault in
+            user!.client.getVault(user!.ownerDid, user?.provider).done { [self] vault in
                 self.scripting = (vault.scripting as! ScriptClient)
                 lock.fulfill()
             }.catch { error in
