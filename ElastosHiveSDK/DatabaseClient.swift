@@ -32,17 +32,17 @@ public class DatabaseClient: DatabaseProtocol {
     
     public func createCollection(_ name: String) -> HivePromise<Bool> {
         return authHelper.checkValid().then { _ -> HivePromise<Bool> in
-            return self.createColImp(name, nil, tryAgain: 0)
+            return self.createColImp(name, nil, 0)
         }
     }
 
     public func createCollection(_ name: String, options: CreateCollectionOptions) -> HivePromise<Bool> {
         return authHelper.checkValid().then { _ -> HivePromise<Bool> in
-            return self.createColImp(name, options, tryAgain: 0)
+            return self.createColImp(name, options, 0)
         }
     }
 
-    private func createColImp(_ collection: String, _ options: CreateCollectionOptions?, tryAgain: Int) -> HivePromise<Bool> {
+    private func createColImp(_ collection: String, _ options: CreateCollectionOptions?, _ tryAgain: Int) -> HivePromise<Bool> {
         HivePromise<Bool> { resolver in
             var param: [String: Any] = ["collection": collection]
             if options != nil {
@@ -50,80 +50,62 @@ public class DatabaseClient: DatabaseProtocol {
                     param["options"] = try options!.jsonSerialize()
                 }
             }
-            let header = Header(authHelper)
             let url = VaultURL.sharedInstance.mongoDBSetup()
-            
-            VaultApi.request(url: url, parameters: param, headers: header.headers()).done { json in
-                if !VaultApi.checkResponseIsError(json) {
-                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
-                        self.authHelper.retryLogin().then { success -> HivePromise<Bool> in
-                            return self.createColImp(collection, options, tryAgain: 1)
-                        }.done { success in
-                            resolver.fulfill(true)
-                        }.catch { error in
-                            resolver.reject(error)
-                        }
-                    } else {
-                        let errorStr = HiveError.praseError(json)
-                        Log.e(DatabaseClient.TAG, "createCollection ERROR: ", errorStr)
-                        resolver.reject(HiveError.failure(des: errorStr))
-                    }
+            let response = Alamofire.request(url,
+                                method: .post,
+                                parameters: param,
+                                encoding: JSONEncoding.default,
+                                headers: Header(authHelper).headers()).responseJSON()
+            let json = try VaultApi.handlerJsonResponse(response)
+            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            if tryLogin {
+                try self.authHelper.signIn()
+                createColImp(collection, options, 1).done { success in
+                    resolver.fulfill(success)
+                }.catch { error in
+                    resolver.reject(error)
                 }
-                else {
-                    resolver.fulfill(true)
-                }
-            }.catch { error in
-                Log.e(DatabaseClient.TAG, "createCollection ERROR: ", HiveError.description(error as! HiveError))
-                resolver.reject(error)
             }
+            resolver.fulfill(true)
         }
     }
 
     public func deleteCollection(_ name: String) -> HivePromise<Bool> {
         return authHelper.checkValid().then { _ -> HivePromise<Bool> in
-            return self.deleteColImp(name, tryAgain: 0)
+            return self.deleteColImp(name, 0)
         }
     }
 
-    private func deleteColImp(_ collection: String, tryAgain: Int) -> HivePromise<Bool> {
+    private func deleteColImp(_ collection: String, _ tryAgain: Int) -> HivePromise<Bool> {
         return HivePromise<Bool> { resolver in
             let param = ["collection": collection]
-            let header = Header(authHelper)
             let url = VaultURL.sharedInstance.deleteMongoDBCollection()
-            
-            VaultApi.request(url: url, parameters: param, headers: header.headers()).done { json in
-                if !VaultApi.checkResponseIsError(json) {
-                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
-                        self.authHelper.retryLogin().then { success -> HivePromise<Bool> in
-                            return self.deleteColImp(collection, tryAgain: 1)
-                        }.done { success in
-                            resolver.fulfill(true)
-                        }.catch { error in
-                            resolver.reject(error)
-                        }
-                    } else {
-                        let errorStr = HiveError.praseError(json)
-                        Log.e(DatabaseClient.TAG, "deleteCollection ERROR: ", errorStr)
-                        resolver.reject(HiveError.failure(des: errorStr))
-                    }
+            let response = Alamofire.request(url,
+                                method: .post,
+                                parameters: param,
+                                encoding: JSONEncoding.default,
+                                headers: Header(authHelper).headers()).responseJSON()
+            let json = try VaultApi.handlerJsonResponse(response)
+            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            if tryLogin {
+                try self.authHelper.signIn()
+                deleteColImp(collection, 1).done { success in
+                    resolver.fulfill(success)
+                }.catch { error in
+                    resolver.reject(error)
                 }
-                else {
-                    resolver.fulfill(true)
-                }
-            }.catch { error in
-                Log.e(DatabaseClient.TAG, "deleteCollection ERROR: ", HiveError.description(error as! HiveError))
-                resolver.reject(error)
             }
+            resolver.fulfill(true)
         }
     }
 
     public func insertOne(_ collection: String, _ doc: [String : Any], options: InsertOptions?) -> HivePromise<InsertOneResult> {
         return authHelper.checkValid().then { _ -> HivePromise<InsertOneResult> in
-            return self.insertOneImp(collection, doc, options, tryAgain: 0)
+            return self.insertOneImp(collection, doc, options, 0)
         }
     }
     
-    private func insertOneImp(_ collection: String, _ doc: [String: Any], _ options: InsertOptions?, tryAgain: Int) -> HivePromise<InsertOneResult> {
+    private func insertOneImp(_ collection: String, _ doc: [String: Any], _ options: InsertOptions?, _ tryAgain: Int) -> HivePromise<InsertOneResult> {
         HivePromise<InsertOneResult> { resolver in
             var param = ["collection": collection, "document": doc] as [String : Any]
             if options != nil {
@@ -132,359 +114,288 @@ public class DatabaseClient: DatabaseProtocol {
                 }
             }
             let url = VaultURL.sharedInstance.insertOne()
-            
-            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
-                if !VaultApi.checkResponseIsError(json) {
-                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
-                        self.authHelper.retryLogin().then { success -> HivePromise<InsertOneResult> in
-                            return self.insertOneImp(collection, doc, options, tryAgain: 1)
-                        }.done { insertResult in
-                            resolver.fulfill(insertResult)
-                        }.catch { error in
-                            resolver.reject(error)
-                        }
-                    } else {
-                        let errorStr = HiveError.praseError(json)
-                        Log.e(DatabaseClient.TAG, "insertOne ERROR: ", errorStr)
-                        resolver.reject(HiveError.failure(des: errorStr))
-                    }
+            let response = Alamofire.request(url,
+                                method: .post,
+                                parameters: param,
+                                encoding: JSONEncoding.default,
+                                headers: Header(authHelper).headers()).responseJSON()
+            let json = try VaultApi.handlerJsonResponse(response)
+            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            if tryLogin {
+                try self.authHelper.signIn()
+                insertOneImp(collection, doc, options,1).done { oneresult in
+                    resolver.fulfill(oneresult)
+                }.catch { error in
+                    resolver.reject(error)
                 }
-                else {
-                    let insertOneResult = InsertOneResult(json)
-                    resolver.fulfill(insertOneResult)
-                }
-            }.catch { error in
-                Log.e(DatabaseClient.TAG, "insertOne ERROR: ", HiveError.description(error as! HiveError))
-                resolver.reject(error)
             }
+            let insertOneResult = InsertOneResult(json)
+            resolver.fulfill(insertOneResult)
         }
     }
 
     public func insertMany(_ collection: String, _ docs: Array<[String : Any]>, options: InsertOptions) -> HivePromise<InsertManyResult> {
         return authHelper.checkValid().then { _ -> HivePromise<InsertManyResult> in
-            return self.insertManyImp(collection, docs, options, tryAgain: 0)
+            return self.insertManyImp(collection, docs, options, 0)
         }
     }
 
-    private func insertManyImp(_ collection: String, _ doc: Array<[String: Any]>, _ options: InsertOptions, tryAgain: Int) -> HivePromise<InsertManyResult> {
+    private func insertManyImp(_ collection: String, _ doc: Array<[String: Any]>, _ options: InsertOptions, _ tryAgain: Int) -> HivePromise<InsertManyResult> {
         HivePromise<InsertManyResult> { resolver in
             var param = ["collection": collection, "document": doc] as [String : Any]
             if try options.jsonSerialize().count != 0 {
                 param["options"] = try options.jsonSerialize()
             }
             let url = VaultURL.sharedInstance.insertMany()
-            
-            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
-                if !VaultApi.checkResponseIsError(json) {
-                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
-                        self.authHelper.retryLogin().then { success -> HivePromise<InsertManyResult> in
-                            return self.insertManyImp(collection, doc, options, tryAgain: 1)
-                        }.done { insertResult in
-                            resolver.fulfill(insertResult)
-                        }.catch { error in
-                            resolver.reject(error)
-                        }
-                    } else {
-                        let errorStr = HiveError.praseError(json)
-                        Log.e(DatabaseClient.TAG, "insertMany ERROR: ", errorStr)
-                        resolver.reject(HiveError.failure(des: errorStr))
-                    }
+            let response = Alamofire.request(url,
+                                method: .post,
+                                parameters: param,
+                                encoding: JSONEncoding.default,
+                                headers: Header(authHelper).headers()).responseJSON()
+            let json = try VaultApi.handlerJsonResponse(response)
+            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            if tryLogin {
+                try self.authHelper.signIn()
+                insertManyImp(collection, doc, options, 1).done { manyresult in
+                    resolver.fulfill(manyresult)
+                }.catch { error in
+                    resolver.reject(error)
                 }
-                else {
-                    let insertManyResult = InsertManyResult(json)
-                    resolver.fulfill(insertManyResult)
-                }
-            }.catch { error in
-                Log.e(DatabaseClient.TAG, "insertMany ERROR: ", HiveError.description(error as! HiveError))
-                resolver.reject(error)
             }
+            let insertManyResult = InsertManyResult(json)
+            resolver.fulfill(insertManyResult)
         }
     }
 
     public func countDocuments(_ collection: String, _ query: [String : Any], options: CountOptions) -> HivePromise<Int> {
         return authHelper.checkValid().then { _ -> HivePromise<Int> in
-            return self.countDocumentsImp(collection, query, options, tryAgain: 0)
+            return self.countDocumentsImp(collection, query, options, 0)
         }
     }
 
-    private func countDocumentsImp(_ collection: String, _ query: [String: Any], _ options: CountOptions, tryAgain: Int) -> HivePromise<Int> {
+    private func countDocumentsImp(_ collection: String, _ query: [String: Any], _ options: CountOptions, _ tryAgain: Int) -> HivePromise<Int> {
         return HivePromise<Int> { resolver in
             var param = ["collection": collection, "filter": query] as [String : Any]
             if try options.jsonSerialize().count != 0 {
                 param["options"] = try options.jsonSerialize()
             }
             let url = VaultURL.sharedInstance.countDocuments()
-
-            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
-                if !VaultApi.checkResponseIsError(json) {
-                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
-                        self.authHelper.retryLogin().then { success -> HivePromise<Int> in
-                            return self.countDocumentsImp(collection, query, options, tryAgain: 1)
-                        }.done { result in
-                            resolver.fulfill(result)
-                        }.catch { error in
-                            resolver.reject(error)
-                        }
-                    } else {
-                        let errorStr = HiveError.praseError(json)
-                        Log.e(DatabaseClient.TAG, "countDocuments ERROR: ", errorStr)
-                        resolver.reject(HiveError.failure(des: errorStr))
-                    }
+            let response = Alamofire.request(url,
+                                method: .post,
+                                parameters: param,
+                                encoding: JSONEncoding.default,
+                                headers: Header(authHelper).headers()).responseJSON()
+            let json = try VaultApi.handlerJsonResponse(response)
+            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            if tryLogin {
+                try self.authHelper.signIn()
+                countDocumentsImp(collection, query, options, 1).done { manyresult in
+                    resolver.fulfill(manyresult)
+                }.catch { error in
+                    resolver.reject(error)
                 }
-                else {
-                    resolver.fulfill(json["count"].intValue)
-                }
-            }.catch { error in
-                Log.e(DatabaseClient.TAG, "countDocuments ERROR: ", HiveError.description(error as! HiveError))
-                resolver.reject(error)
             }
+            resolver.fulfill(json["count"].intValue)
         }
     }
 
     public func findOne(_ collection: String, _ query: [String : Any], options: FindOptions) -> HivePromise<[String : Any]> {
         return authHelper.checkValid().then { _ -> HivePromise<[String: Any]> in
-            return self.findOneImp(collection, query, options, tryAgain: 0)
+            return self.findOneImp(collection, query, options, 0)
         }
     }
 
-    private func findOneImp(_ collection: String, _ query: [String: Any], _ options: FindOptions, tryAgain: Int) -> HivePromise<[String: Any]> {
+    private func findOneImp(_ collection: String, _ query: [String: Any], _ options: FindOptions, _ tryAgain: Int) -> HivePromise<[String: Any]> {
         return HivePromise<[String: Any]> { resolver in
             var param = ["collection": collection, "filter": query] as [String : Any]
             if try options.jsonSerialize().count != 0 {
                 param["options"] = try options.jsonSerialize()
             }
             let url = VaultURL.sharedInstance.findOne()
-
-            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).get { json in
-                if !VaultApi.checkResponseIsError(json) {
-                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
-                        self.authHelper.retryLogin().then { success -> HivePromise<[String: Any]> in
-                            return self.findOneImp(collection, query, options, tryAgain: 1)
-                        }.done { result in
-                            resolver.fulfill(result)
-                        }.catch { error in
-                            resolver.reject(error)
-                        }
-                    } else {
-                        let errorStr = HiveError.praseError(json)
-                        Log.e(DatabaseClient.TAG, "findOne ERROR: ", errorStr)
-                        resolver.reject(HiveError.failure(des: errorStr))
-                    }
+            let response = Alamofire.request(url,
+                                method: .post,
+                                parameters: param,
+                                encoding: JSONEncoding.default,
+                                headers: Header(authHelper).headers()).responseJSON()
+            let json = try VaultApi.handlerJsonResponse(response)
+            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            if tryLogin {
+                try self.authHelper.signIn()
+                findOneImp(collection, query, options, 1).done { result in
+                    resolver.fulfill(result)
+                }.catch { error in
+                    resolver.reject(error)
                 }
-                else {
-                    resolver.fulfill(json.dictionaryObject!)
-                }
-            }.catch { error in
-                resolver.reject(error)
             }
+            resolver.fulfill(json.dictionaryObject!)
         }
     }
 
     public func findMany(_ collection: String, _ query: [String : Any], options: FindOptions) -> HivePromise<Array<[String : Any]>> {
         return authHelper.checkValid().then { _ -> HivePromise<Array<[String : Any]>> in
-            return self.findManyImp(collection, query, options, tryAgain: 0)
+            return self.findManyImp(collection, query, options, 0)
         }
     }
 
-    private func findManyImp(_ collection: String, _ query: [String: Any], _ options: FindOptions, tryAgain: Int) -> HivePromise<Array<[String: Any]>> {
+    private func findManyImp(_ collection: String, _ query: [String: Any], _ options: FindOptions, _ tryAgain: Int) -> HivePromise<Array<[String: Any]>> {
         return HivePromise<Array<[String: Any]>> { resolver in
             var param = ["collection": collection, "filter": query] as [String : Any]
             if try options.jsonSerialize().count != 0 {
                 param["options"] = try options.jsonSerialize()
             }
             let url = VaultURL.sharedInstance.findMany()
-
-            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).get { json in
-                if !VaultApi.checkResponseIsError(json) {
-                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
-                        self.authHelper.retryLogin().then { success -> HivePromise<Array<[String: Any]>> in
-                            return self.findManyImp(collection, query, options, tryAgain: 1)
-                        }.done { result in
-                            resolver.fulfill(result)
-                        }.catch { error in
-                            resolver.reject(error)
-                        }
-                    } else {
-                        let errorStr = HiveError.praseError(json)
-                        Log.e(DatabaseClient.TAG, "findMany ERROR: ", errorStr)
-                        resolver.reject(HiveError.failure(des: errorStr))
-                    }
+            let response = Alamofire.request(url,
+                                method: .post,
+                                parameters: param,
+                                encoding: JSONEncoding.default,
+                                headers: Header(authHelper).headers()).responseJSON()
+            let json = try VaultApi.handlerJsonResponse(response)
+            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            if tryLogin {
+                try self.authHelper.signIn()
+                findManyImp(collection, query, options, 1).done { list in
+                    resolver.fulfill(list)
+                }.catch { error in
+                    resolver.reject(error)
                 }
-                else {
-                    var items: [Dictionary<String, Any>] = []
-                    json["items"].arrayValue.forEach { json in
-                        items.append(json.dictionaryObject!)
-                    }
-                    resolver.fulfill(items)
-                }
-            }.catch { error in
-                Log.e(DatabaseClient.TAG, "findMany ERROR: ", HiveError.description(error as! HiveError))
-                resolver.reject(error)
             }
+            var items: [Dictionary<String, Any>] = []
+            json["items"].arrayValue.forEach { json in
+                items.append(json.dictionaryObject!)
+            }
+            resolver.fulfill(items)
         }
     }
 
     public func updateOne(_ collection: String, _ filter: [String : Any], _ update: [String : Any], options: UpdateOptions) -> HivePromise<UpdateResult> {
         return authHelper.checkValid().then { _ -> HivePromise<UpdateResult> in
-            return self.updateOneImp(collection, filter, update, options, tryAgain: 0)
+            return self.updateOneImp(collection, filter, update, options, 0)
         }
     }
 
-    private func updateOneImp(_ collection: String, _ filter: [String: Any], _ update: [String: Any], _ options: UpdateOptions, tryAgain: Int) -> HivePromise<UpdateResult> {
+    private func updateOneImp(_ collection: String, _ filter: [String: Any], _ update: [String: Any], _ options: UpdateOptions, _ tryAgain: Int) -> HivePromise<UpdateResult> {
         return HivePromise<UpdateResult> { resolver in
             var param = ["collection": collection, "filter": filter, "update": update] as [String : Any]
             if try options.jsonSerialize().count != 0 {
                 param["options"] = try options.jsonSerialize()
             }
             let url = VaultURL.sharedInstance.updateOne()
-
-            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).get { json in
-                if !VaultApi.checkResponseIsError(json) {
-                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
-                        self.authHelper.retryLogin().then { success -> HivePromise<UpdateResult> in
-                            return self.updateOneImp(collection, filter, update, options, tryAgain: 1)
-                        }.done { result in
-                            resolver.fulfill(result)
-                        }.catch { error in
-                            resolver.reject(error)
-                        }
-                    } else {
-                        let errorStr = HiveError.praseError(json)
-                        Log.e(DatabaseClient.TAG, "updateOne error: ", errorStr)
-                        resolver.reject(HiveError.failure(des: errorStr))
-                    }
+            let response = Alamofire.request(url,
+                                method: .post,
+                                parameters: param,
+                                encoding: JSONEncoding.default,
+                                headers: Header(authHelper).headers()).responseJSON()
+            let json = try VaultApi.handlerJsonResponse(response)
+            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            if tryLogin {
+                try self.authHelper.signIn()
+                updateOneImp(collection, filter, update, options, 1).done { result in
+                    resolver.fulfill(result)
+                }.catch { error in
+                    resolver.reject(error)
                 }
-                else {
-                    let updateRe = UpdateResult(json)
-                    resolver.fulfill(updateRe)
-                }
-            }.catch { error in
-                Log.e(DatabaseClient.TAG, "updateOne error: ", HiveError.description(error as! HiveError))
-                resolver.reject(error)
             }
+            let updateRe = UpdateResult(json)
+            resolver.fulfill(updateRe)
         }
     }
 
     public func updateMany(_ collection: String, _ filter: [String : Any], _ update: [String : Any], options: UpdateOptions) -> HivePromise<UpdateResult> {
         return authHelper.checkValid().then { _ -> HivePromise<UpdateResult> in
-            return self.updateManyImp(collection, filter, update, options, tryAgain: 0)
+            return self.updateManyImp(collection, filter, update, options, 0)
         }
     }
 
-    private func updateManyImp(_ collection: String, _ filter: [String: Any], _ update: [String: Any], _ options: UpdateOptions, tryAgain: Int) -> HivePromise<UpdateResult>{
+    private func updateManyImp(_ collection: String, _ filter: [String: Any], _ update: [String: Any], _ options: UpdateOptions, _ tryAgain: Int) -> HivePromise<UpdateResult>{
         return HivePromise<UpdateResult> { resolver in
             var param = ["collection": collection, "filter": filter, "update": update] as [String : Any]
             if try options.jsonSerialize().count != 0 {
                 param["options"] = try options.jsonSerialize()
             }
             let url = VaultURL.sharedInstance.updateMany()
-
-            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).get { json in
-                if !VaultApi.checkResponseIsError(json) {
-                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
-                        self.authHelper.retryLogin().then { success -> HivePromise<UpdateResult> in
-                            return self.updateManyImp(collection, filter, update, options, tryAgain: 1)
-                        }.done { result in
-                            resolver.fulfill(result)
-                        }.catch { error in
-                            resolver.reject(error)
-                        }
-                    } else {
-                        let errorStr = HiveError.praseError(json)
-                        Log.e(DatabaseClient.TAG, "updateMany ERROR: ", errorStr)
-                        resolver.reject(HiveError.failure(des: errorStr))
-                    }
+            let response = Alamofire.request(url,
+                                method: .post,
+                                parameters: param,
+                                encoding: JSONEncoding.default,
+                                headers: Header(authHelper).headers()).responseJSON()
+            let json = try VaultApi.handlerJsonResponse(response)
+            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            if tryLogin {
+                try self.authHelper.signIn()
+                updateManyImp(collection, filter, update, options, 1).done { result in
+                    resolver.fulfill(result)
+                }.catch { error in
+                    resolver.reject(error)
                 }
-                else {
-                    let updateRe = UpdateResult(json)
-                    resolver.fulfill(updateRe)
-                }
-            }.catch { error in
-                Log.e(DatabaseClient.TAG, "updateMany ERROR: ", HiveError.description(error as! HiveError))
-                resolver.reject(error)
             }
+            let updateRe = UpdateResult(json)
+            resolver.fulfill(updateRe)
         }
     }
 
     public func deleteOne(_ collection: String, _ filter: [String : Any], options: DeleteOptions) -> HivePromise<DeleteResult> {
         return authHelper.checkValid().then { _ -> HivePromise<DeleteResult> in
-            return self.deleteOneImp(collection, filter, options, tryAgain: 0)
+            return self.deleteOneImp(collection, filter, options, 0)
         }
     }
 
-    private func deleteOneImp(_ collection: String, _ filter: [String: Any], _ options: DeleteOptions, tryAgain: Int) -> HivePromise<DeleteResult>{
+    private func deleteOneImp(_ collection: String, _ filter: [String: Any], _ options: DeleteOptions, _ tryAgain: Int) -> HivePromise<DeleteResult>{
         return HivePromise<DeleteResult> { resolver in
             var param = ["collection": collection, "filter": filter] as [String : Any]
             if try options.jsonSerialize().count != 0 {
                 param["options"] = try options.jsonSerialize()
             }
             let url = VaultURL.sharedInstance.deleteOne()
-
-            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).done { json in
-                if !VaultApi.checkResponseIsError(json) {
-                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
-                        self.authHelper.retryLogin().then { success -> HivePromise<DeleteResult> in
-                            return self.deleteOneImp(collection, filter, options, tryAgain: 1)
-                        }.done { result in
-                            resolver.fulfill(result)
-                        }.catch { error in
-                            resolver.reject(error)
-                        }
-                    } else {
-                        let errorStr = HiveError.praseError(json)
-                        Log.e(DatabaseClient.TAG, "deleteOne ERROR: ", errorStr)
-                        resolver.reject(HiveError.failure(des: errorStr))
-                    }
+            let response = Alamofire.request(url,
+                                method: .post,
+                                parameters: param,
+                                encoding: JSONEncoding.default,
+                                headers: Header(authHelper).headers()).responseJSON()
+            let json = try VaultApi.handlerJsonResponse(response)
+            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            if tryLogin {
+                try self.authHelper.signIn()
+                deleteOneImp(collection, filter, options, 1).done { result in
+                    resolver.fulfill(result)
+                }.catch { error in
+                    resolver.reject(error)
                 }
-                else {
-                    let deleteRe = DeleteResult(json)
-                    resolver.fulfill(deleteRe)
-                }
-            }.catch { error in
-                Log.e(DatabaseClient.TAG, "deleteOne ERROR: ", HiveError.description(error as! HiveError))
-                resolver.reject(error)
             }
+            let deleteRe = DeleteResult(json)
+            resolver.fulfill(deleteRe)
         }
     }
 
     public func deleteMany(_ collection: String, _ filter: [String : Any], options: DeleteOptions) -> HivePromise<DeleteResult> {
         return authHelper.checkValid().then { _ -> HivePromise<DeleteResult> in
-            return self.deleteManyImp(collection, filter, options, tryAgain: 0)
+            return self.deleteManyImp(collection, filter, options, 0)
         }
     }
 
-    private func deleteManyImp(_ collection: String, _ filter: [String: Any], _ options: DeleteOptions, tryAgain: Int) -> HivePromise<DeleteResult>{
+    private func deleteManyImp(_ collection: String, _ filter: [String: Any], _ options: DeleteOptions, _ tryAgain: Int) -> HivePromise<DeleteResult>{
         return HivePromise<DeleteResult> { resolver in
             var param = ["collection": collection, "filter": filter] as [String : Any]
             if try options.jsonSerialize().count != 0 {
                 param["options"] = try options.jsonSerialize()
             }
             let url = VaultURL.sharedInstance.deleteMany()
-
-            VaultApi.request(url: url, parameters: param, headers: Header(authHelper).headers()).get { json in
-                if !VaultApi.checkResponseIsError(json) {
-                    if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
-                        self.authHelper.retryLogin().then { success -> HivePromise<DeleteResult> in
-                            return self.deleteManyImp(collection, filter, options, tryAgain: 1)
-                        }.done { result in
-                            resolver.fulfill(result)
-                        }.catch { error in
-                            resolver.reject(error)
-                        }
-                    } else {
-                        let errorStr = HiveError.praseError(json)
-                        Log.e(DatabaseClient.TAG, "deleteMany ERROR: ", errorStr)
-                        resolver.reject(HiveError.failure(des: errorStr))
-                    }
+            let response = Alamofire.request(url,
+                                method: .post,
+                                parameters: param,
+                                encoding: JSONEncoding.default,
+                                headers: Header(authHelper).headers()).responseJSON()
+            let json = try VaultApi.handlerJsonResponse(response)
+            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            if tryLogin {
+                try self.authHelper.signIn()
+                deleteOneImp(collection, filter, options, 1).done { result in
+                    resolver.fulfill(result)
+                }.catch { error in
+                    resolver.reject(error)
                 }
-                else {
-                    let deleteRe = DeleteResult(json)
-                    resolver.fulfill(deleteRe)
-                }
-            }.catch { error in
-                Log.e(DatabaseClient.TAG, "deleteMany ERROR: ", HiveError.description(error as! HiveError))
-                resolver.reject(error)
             }
+            let deleteRe = DeleteResult(json)
+            resolver.fulfill(deleteRe)
         }
     }
 }

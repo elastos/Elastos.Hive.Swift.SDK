@@ -32,87 +32,87 @@ public class Payment: NSObject {
     /// Get vault's payment info
     /// - Returns: Pricing info
     public func getPaymentInfo() -> HivePromise<PricingInfo> {
-        return HivePromise<PricingInfo> { resover in
-            _ = self.authHelper.checkValid().done { [self] _ in
-                do {
-                    resover.fulfill(try getAllPricingPlansImp(0))
-                }
-                catch {
-                    resover.reject(error)
-                }
-            }
+        return self.authHelper.checkValid().then { [self] _ -> HivePromise<PricingInfo> in
+            return getAllPricingPlansImp(0)
         }
     }
-
-    private func getAllPricingPlansImp(_ tryAgain: Int) throws -> PricingInfo {
-        let url = VaultURL.sharedInstance.vaultPackageInfo()
-        let response = Alamofire.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
-        let json = try VaultApi.handlerJsonResponse(response)
-        let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
-        
-        if tryLogin {
-            try self.authHelper.reLogin()
-            return try getAllPricingPlansImp(1)
+    
+    private func getAllPricingPlansImp(_ tryAgain: Int) -> HivePromise<PricingInfo> {
+        return HivePromise<PricingInfo> { resolver in
+            
+            let url = VaultURL.sharedInstance.vaultPackageInfo()
+            let response = Alamofire.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
+            let json = try VaultApi.handlerJsonResponse(response)
+            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            
+            if tryLogin {
+                try self.authHelper.signIn()
+                getAllPricingPlansImp(1).done { result in
+                    resolver.fulfill(result)
+                }.catch { error in
+                    resolver.reject(error)
+                }
+            }
+            let info = PricingInfo.deserialize(json)
+            resolver.fulfill(info)
         }
-        let info = PricingInfo.deserialize(json)
-        return info
     }
 
     /// Get vault pricing plan information by plan name
     /// - Returns: the instance of PricingPlan
     public func getPricingPlan(_ planName: String) -> HivePromise<PricingPlan> {
-        return HivePromise<PricingPlan> { resover in
-            _ = self.authHelper.checkValid().done { [self] _ in
-                do {
-                    resover.fulfill(try getPricingPlansImp(planName, 0))
-                }
-                catch {
-                    resover.reject(error)
-                }
-            }
+        return self.authHelper.checkValid().then { [self] _ -> HivePromise<PricingPlan> in
+            return getPricingPlansImp(planName, 0)
         }
     }
     
-    private func getPricingPlansImp(_ planName: String, _ tryAgain: Int) throws -> PricingPlan {
-        let url = VaultURL.sharedInstance.pricingPlan(planName)
-        let response = Alamofire.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
-        let json = try VaultApi.handlerJsonResponse(response)
-        let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
-        
-        if tryLogin {
-            try self.authHelper.reLogin()
-            return try getPricingPlansImp(planName, 1)
+    private func getPricingPlansImp(_ planName: String, _ tryAgain: Int) -> HivePromise<PricingPlan> {
+        return HivePromise<PricingPlan> { resolver in
+            let url = VaultURL.sharedInstance.pricingPlan(planName)
+            let response = Alamofire.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
+            let json = try VaultApi.handlerJsonResponse(response)
+            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            
+            if tryLogin {
+                try self.authHelper.signIn()
+                getPricingPlansImp(planName, 1).done { result in
+                    resolver.fulfill(result)
+                }
+                .catch { error in
+                    resolver.reject(error)
+                }
+            }
+            let plan = PricingPlan.deserialize(json)
+            resolver.fulfill(plan)
         }
-        let plan = PricingPlan.deserialize(json)
-        return plan
     }
     
     /// Get payment version
     /// - Returns: payment vresion
     public func getPaymentVersion() -> HivePromise<String> {
-        HivePromise<String> { resolver in
-           _ = authHelper.checkValid().done { [self] _ in
-                do {
-                    try resolver.fulfill(getPaymentVersionImp(0))
-                }
-                catch {
-                    resolver.reject(error)
-                }
-            }
+        return authHelper.checkValid().then { [self] _ -> HivePromise<String> in
+            return getPaymentVersionImp(0)
         }
     }
     
-    private func getPaymentVersionImp(_ tryAgain: Int) throws -> String {
-        let url = VaultURL.sharedInstance.paymentVersion()
-        let response = Alamofire.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
-        let json = try VaultApi.handlerJsonResponse(response)
-        let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
-        
-        if tryLogin {
-            try self.authHelper.reLogin()
-            return try getPaymentVersionImp(1)
+    private func getPaymentVersionImp(_ tryAgain: Int) -> HivePromise<String> {
+        return HivePromise<String> { resolver in
+            let url = VaultURL.sharedInstance.paymentVersion()
+            let response = Alamofire.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
+            let json = try VaultApi.handlerJsonResponse(response)
+            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            
+            if tryLogin {
+                try self.authHelper.signIn()
+                getPaymentVersionImp(1).done { result in
+                    resolver.fulfill(result)
+                }
+                .catch { error in
+                    resolver.reject(error)
+                }
+            }
+            resolver.fulfill(json["version"].stringValue)
         }
-        return json["version"].stringValue
     }
 
     /// Create a order of pricing plan
@@ -139,7 +139,7 @@ public class Payment: NSObject {
         let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
         
         if tryLogin {
-            try self.authHelper.reLogin()
+            try self.authHelper.signIn()
             return try placeOrderImp(priceName, 1)
         }
         return json["order_id"].stringValue
@@ -169,7 +169,7 @@ public class Payment: NSObject {
         let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
         
         if tryLogin {
-            try self.authHelper.reLogin()
+            try self.authHelper.signIn()
             return try payOrderImp(orderId, txids, 1)
         }
         return true
@@ -198,7 +198,7 @@ public class Payment: NSObject {
         let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
         
         if tryLogin {
-            try self.authHelper.reLogin()
+            try self.authHelper.signIn()
             return try getOrderImp(orderId, 1)
         }
         
@@ -227,7 +227,7 @@ public class Payment: NSObject {
         let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
         
         if tryLogin {
-            try self.authHelper.reLogin()
+            try self.authHelper.signIn()
             return try getAllOrdersImp(1)
         }
         let arrrayJson = json["order_info_list"].arrayValue
@@ -261,7 +261,7 @@ public class Payment: NSObject {
         let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
         
         if tryLogin {
-            try self.authHelper.reLogin()
+            try self.authHelper.signIn()
             return try getUsingPricePlanImp(1)
         }
         return UsingPlan.deserialize(json["vault_service_info"])
