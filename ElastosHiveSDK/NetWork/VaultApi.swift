@@ -68,4 +68,34 @@ class VaultApi: NSObject {
             return false
         }
     }
+    
+    class func handlerDataResponse(_  result: DataResponse<Data>, _ tryAgain: Int)throws -> Bool {
+        if result.result.isSuccess {
+            let code = result.response?.statusCode
+            guard let _ = code else {
+                throw HiveError.failure(des: "Unknow error.")
+            }
+            
+            guard 200...299 ~= code! else {
+                if result.response?.statusCode == 401 && tryAgain < 1  {
+                    return true
+                }
+                else {
+                    if result.result.error != nil {
+                        throw HiveError.netWork(des: result.result.error)
+                    }
+                    else if result.data != nil{
+                        throw HiveError.failure(des: String(data: result.data!, encoding: .utf8))
+                    }
+                    else {
+                        throw HiveError.failure(des: "scripting download ERROR: ")
+                    }
+                }
+            }
+        }
+        else {
+            throw HiveError.failure(des: result.result.error?.localizedDescription)
+        }
+        return false
+    }
 }

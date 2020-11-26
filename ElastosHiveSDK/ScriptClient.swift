@@ -175,47 +175,39 @@ public class ScriptClient: ScriptingProtocol {
             }, usingThreshold: UInt64.init(), to: url, method: .post, headers: Header(authHelper).headers()) { result in
                 switch result {
                 case .success(let upload, _, _):
-                    upload.responseJSON { response in
-                        let json = JSON(response.result.value as Any)
-                        if !VaultApi.checkResponseIsError(json) {
-                            if VaultApi.checkResponseCanRetryLogin(json, tryAgain: tryAgain) {
-                                self.authHelper.retryLogin().then { success -> HivePromise<T> in
-                                    return self.uploadImp(filePath: filePath, param: param, type: type, resultType: resultType, tryAgain: 1)
-                                }.done { result in
+                    upload.responseJSON { [self] response in
+                        do {
+                            let json = JSON(response.result.value as Any)
+                            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+                            if tryLogin {
+                                try self.authHelper.signIn()
+                                uploadImp(filePath: filePath, param: param, type: type, resultType: resultType, tryAgain: 1).done { result in
                                     resolver.fulfill(result)
-                                }.catch { e in
-                                    resolver.reject(e)
+                                }.catch { error in
+                                    resolver.reject(error)
                                 }
-                            } else {
-                                let errorStr = HiveError.praseError(json)
-                                Log.e(ScriptClient.TAG, "upload ERROR: ", errorStr)
-                                resolver.reject(HiveError.failure(des: errorStr))
+                            }
+                            if resultType.self == OutputStream.self {
+                                let data = try JSONSerialization.data(withJSONObject: json.dictionaryObject as Any, options: [])
+                                let outputStream = OutputStream(toMemory: ())
+                                outputStream.open()
+                                self.writeData(data: data, outputStream: outputStream, maxLengthPerWrite: 1024)
+                                outputStream.close()
+                                resolver.fulfill(outputStream as! T)
+                            }
+                            else if resultType.self == String.self {
+                                let dic = json.dictionaryObject
+                                let data = try JSONSerialization.data(withJSONObject: dic as Any, options: [])
+                                let str = String(data: data, encoding: String.Encoding.utf8)
+                                resolver.fulfill(str as! T)
+                            }
+                            else {
+                                let data = try JSONSerialization.data(withJSONObject: json.dictionaryObject as Any, options: [])
+                                resolver.fulfill(data as! T)
                             }
                         }
-                        else {
-                            do {
-                                if resultType.self == OutputStream.self {
-                                    let data = try JSONSerialization.data(withJSONObject: json.dictionaryObject as Any, options: [])
-                                    let outputStream = OutputStream(toMemory: ())
-                                    outputStream.open()
-                                    self.writeData(data: data, outputStream: outputStream, maxLengthPerWrite: 1024)
-                                    outputStream.close()
-                                    resolver.fulfill(outputStream as! T)
-                                }
-                                else if resultType.self == String.self {
-                                    let dic = json.dictionaryObject
-                                    let data = try JSONSerialization.data(withJSONObject: dic as Any, options: [])
-                                    let str = String(data: data, encoding: String.Encoding.utf8)
-                                    resolver.fulfill(str as! T)
-                                }
-                                else {
-                                    let data = try JSONSerialization.data(withJSONObject: json.dictionaryObject as Any, options: [])
-                                    resolver.fulfill(data as! T)
-                                }
-                            } catch {
-                                Log.e(ScriptClient.TAG, "upload ERROR: ", error.localizedDescription)
-                                resolver.reject(HiveError.failure(des: error.localizedDescription))
-                            }
+                        catch {
+                            resolver.reject(error)
                         }
                     }
                 case .failure(let encodingError):
@@ -233,56 +225,39 @@ public class ScriptClient: ScriptingProtocol {
             if param.count > 0 {
                 params["params"] = param
             }
-            Alamofire.request(url,
-                              method: .post,
-                              parameters: params,
-                              encoding: JSONEncoding.default,
-                              headers: Header(authHelper).headers())
-                .responseData { result in
-                    if result.result.isSuccess {
-                        if result.response?.statusCode != 200 {
-                            if result.response?.statusCode == 401 && tryAgain < 1  {
-                                self.authHelper.retryLogin().then { success -> HivePromise<T> in
-                                    return self.downloadImp(scriptName: scriptName, param: param, type: type, resultType: resultType, tryAgain: 1)
-                                }.done { result in
-                                    resolver.fulfill(result)
-                                }.catch { e in
-                                    resolver.reject(e)
-                                }
-                            }
-                            else {
-                                if result.result.error != nil {
-                                    resolver.reject(HiveError.netWork(des: result.result.error))
-                                }
-                                else if result.data != nil{
-                                    resolver.reject(HiveError.failure(des: String(data: result.data!, encoding: .utf8)))
-                                }
-                                else {
-                                    resolver.reject(HiveError.failure(des: "scripting download ERROR: "))
-                                }
-                            }
-                            return
-                        }
-
-                        if resultType.self == OutputStream.self {
-                            let outputStream = OutputStream(toMemory: ())
-                            outputStream.open()
-                            self.writeData(data: result.data!, outputStream: outputStream, maxLengthPerWrite: 1024)
-                            outputStream.close()
-                            resolver.fulfill(outputStream as! T)
-                        }
-                        else if resultType.self == String.self {
-                            let str = String(data: result.data!, encoding: String.Encoding.utf8)
-                            resolver.fulfill(str as! T)
-                        }
-                        else {
-                            resolver.fulfill(result.data as! T)
-                        }
-                    }
-                    else {
-                        resolver.reject(HiveError.failure(des: result.result.error?.localizedDescription))
+            let response = Alamofire.request(url,
+                                             method: .post,
+                                             parameters: params,
+                                             encoding: JSONEncoding.default,
+                                             headers: Header(authHelper).headers()).responseData()
+            
+            do {
+                let relogin = try VaultApi.handlerDataResponse(response, tryAgain)
+                if relogin {
+                    self.downloadImp(scriptName: scriptName, param: param, type: type, resultType: resultType, tryAgain: tryAgain).done { result in
+                        resolver.fulfill(result)
+                    }.catch { error in
+                        resolver.reject(error)
                     }
                 }
+                if resultType.self == OutputStream.self {
+                    let outputStream = OutputStream(toMemory: ())
+                    outputStream.open()
+                    self.writeData(data: response.data!, outputStream: outputStream, maxLengthPerWrite: 1024)
+                    outputStream.close()
+                    resolver.fulfill(outputStream as! T)
+                }
+                else if resultType.self == String.self {
+                    let str = String(data: response.data!, encoding: String.Encoding.utf8)
+                    resolver.fulfill(str as! T)
+                }
+                else {
+                    resolver.fulfill(response.data as! T)
+                }
+            }
+            catch {
+                resolver.reject(error)
+            }
         }
     }
 
