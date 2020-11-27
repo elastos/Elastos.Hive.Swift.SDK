@@ -85,22 +85,28 @@ public class VaultAuthHelper: ConnectHelper {
     }
     
     public override func checkValid() -> HivePromise<Void> {
-        return HivePromise<Void> { resolver in
-            do {
-                try self.doCheckExpired()
-                resolver.fulfill(Void())
-            }
-            catch {
-                resolver.reject(error)
-            }
-        }
+        return doCheckExpired()
     }
 
-    private func doCheckExpired() throws {
-        _connectState = false
-        tryRestoreToken()
-        if token == nil || token!.isExpired() {
-            try signIn()
+    private func doCheckExpired() -> HivePromise<Void> {
+        return HivePromise<Void> { resolver in
+            
+            _connectState = false
+            tryRestoreToken()
+            if !Thread.isMainThread {
+                try signIn()
+                resolver.fulfill(Void())
+                return
+            }
+            DispatchQueue.global().async { [self] in
+                do {
+                    try signIn()
+                    resolver.fulfill(Void())
+                }
+                catch {
+                    resolver.reject(error)
+                }
+            }
         }
     }
 
@@ -211,13 +217,8 @@ public class VaultAuthHelper: ConnectHelper {
     
     func retryLogin() -> HivePromise<Bool> {
         return HivePromise<Bool> { resolver in
-            do {
-                try signIn()
-                resolver.fulfill(true)
-            }
-            catch {
-                resolver.reject(error)
-            }
+            try signIn()
+            resolver.fulfill(true)
         }
     }
     

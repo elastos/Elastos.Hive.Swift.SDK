@@ -227,7 +227,7 @@ public class DatabaseClient: DatabaseProtocol {
                     resolver.reject(error)
                 }
             }
-            resolver.fulfill(json.dictionaryObject!)
+            resolver.fulfill(json["items"].dictionaryObject ?? [: ])
         }
     }
 

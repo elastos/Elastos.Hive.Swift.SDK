@@ -161,6 +161,17 @@ class ScriptTest: XCTestCase {
         self.wait(for: [lock], timeout: 10000.0)
     }
 
+    func test09_callStringType() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        scripting?.call(noConditionName, Dictionary<String, Any>.self).done{ re in
+            lock.fulfill()
+        }.catch{ err in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 10000.0)
+    }
+    
     func test12_uploadFile() {
         let lock = XCTestExpectation(description: "wait for test.")
         let params = ["name": "upload_file", "params":["group_id": ["$oid": "5f8d9dfe2f4c8b7a6f8ec0f1"], "path": "test.txt"]] as [String : Any]
