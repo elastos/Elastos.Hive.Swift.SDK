@@ -22,7 +22,7 @@
 
 import Foundation
 
-public protocol PaymentProtocol: NSObject {
+public protocol PaymentProtocol {
 
     /// Get vault's payment info
     /// PricingPlan list

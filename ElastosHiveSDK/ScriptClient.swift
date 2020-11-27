@@ -142,6 +142,15 @@ public class ScriptClient: ScriptingProtocol {
                 let str = String(data: data, encoding: String.Encoding.utf8)
                 resolver.fulfill(str as! T)
             }
+            // The Dictionary type
+            else if resultType.self == Dictionary<String, Any>.self {
+                let dic = json.dictionaryObject
+                resolver.fulfill(dic as! T)
+            }
+            // The JSON type
+            else if resultType.self == JSON.self {
+                resolver.fulfill(json as! T)
+            }
             // the Data type
             else {
                 let data = try JSONSerialization.data(withJSONObject: json.dictionaryObject as Any, options: [])

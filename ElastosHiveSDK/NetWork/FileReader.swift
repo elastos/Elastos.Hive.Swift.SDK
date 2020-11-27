@@ -86,7 +86,6 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
                 return nil
             }
             let data = Data.init(bytes: buffer, count: readBytesCount)
-            print("read \(readBytesCount)")
             self.totalBytesReadCount = self.totalBytesReadCount + data.count
             return data
         }
@@ -103,7 +102,6 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     }
     
     public func close() {
-        print("CLOSING OUTPUT STREAM")
         downloadBoundStreams.input.close()
     }
     
@@ -145,7 +143,6 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
                     leaveBytesCount = leaveBytesCount < BUFFER_SIZE ? leaveBytesCount : BUFFER_SIZE
                     let bytesWritten: Int = self.downloadBoundStreams.output.write(buffer, maxLength: leaveBytesCount)
                     totalBytesWritten = totalBytesWritten + bytesWritten
-                    print("totalBytesWritten = \(totalBytesWritten), data count = \(dataSize)")
                     self.blockRead?(true)
                 }
             }
@@ -172,7 +169,6 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
             resolver.reject(HiveError.failure(des: "code: \(code ?? 0)"))
             return
         }
-//        print("DID COMPLETE WITH ERROR")
         self.downloadDidFinsish = true
         downloadBoundStreams.output.close()
     }

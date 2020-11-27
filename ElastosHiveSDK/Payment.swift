@@ -119,30 +119,29 @@ public class Payment: PaymentProtocol {
     /// - Parameter priceName: priceName
     /// - Returns: the order id
     public func placeOrder(_ priceName: String) -> HivePromise<String> {
-        HivePromise<String> { resolver in
-           _ = authHelper.checkValid().done { [self] _ in
-                do {
-                    try resolver.fulfill(placeOrderImp(priceName, 0))
-                }
-                catch {
-                    resolver.reject(error)
-                }
-            }
+        return self.authHelper.checkValid().then { [self] _ -> HivePromise<String> in
+            return placeOrderImp(priceName, 0)
         }
     }
     
-    private func placeOrderImp(_ priceName: String, _ tryAgain: Int) throws -> String {
-        let url = VaultURL.sharedInstance.createOrder()
-        let params = ["pricing_name": priceName]
-        let response = Alamofire.request(url, method: .post, parameters: params, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
-        let json = try VaultApi.handlerJsonResponse(response)
-        let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
-        
-        if tryLogin {
-            try self.authHelper.signIn()
-            return try placeOrderImp(priceName, 1)
+    private func placeOrderImp(_ priceName: String, _ tryAgain: Int) -> HivePromise<String> {
+        return HivePromise<String> { resolver in
+            let url = VaultURL.sharedInstance.createOrder()
+            let params = ["pricing_name": priceName]
+            let response = Alamofire.request(url, method: .post, parameters: params, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
+            let json = try VaultApi.handlerJsonResponse(response)
+            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            
+            if tryLogin {
+                try self.authHelper.signIn()
+                placeOrderImp(priceName, 1).done { orderId in
+                    resolver.fulfill(orderId)
+                }.catch { error in
+                    resolver.reject(error)
+                }
+            }
+            resolver.fulfill(json["order_id"].stringValue)
         }
-        return json["order_id"].stringValue
     }
     
     /// Create a order of pricing plan

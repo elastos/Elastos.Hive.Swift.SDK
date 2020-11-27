@@ -65,15 +65,12 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         var totalBytesWritten = 0
         var availableRetries = 5
         while totalBytesWritten < dataSize {
-            print("TRYING TO WRITE \(dataSize) BYTES OF DATA")
             
             let remainingBytesToWrite = dataSize - totalBytesWritten
 
             // Keep reading the input buffer at the position we haven't read yet (advanced by).
             let bytesWritten = data.advanced(by: totalBytesWritten).withUnsafeBytes() { (buffer: UnsafePointer<UInt8>) -> Int in
-                //print("SPACE AVAILABLE? \(self.uploadBoundStreams.output.hasSpaceAvailable)")
 
-                print("WRITING")
                 return self.uploadBoundStreams.output.write(buffer, maxLength: min(dataSize, remainingBytesToWrite))
             }
 
@@ -83,19 +80,13 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
                     throw HiveError.failure(des: "Failed to write data after several attempts")
                 }
 
-                print("Failed to write data, retrying...")
-
                 availableRetries = availableRetries - 1
                 Thread.sleep(forTimeInterval: 1.0)
             }
             else {
                 totalBytesWritten = totalBytesWritten + bytesWritten
-                
-                print("WROTE \(bytesWritten) bytes")
             }
         }
-        
-        print("ALL DATA WRITTEN BY WRITE()")
     }
     
     public func flush() {
@@ -103,7 +94,6 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     }
     
     public func close() {
-        print("CLOSING OUTPUT STREAM")
         uploadBoundStreams.output.close()
     }
     
@@ -119,11 +109,9 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
             self.requestBlock?(HiveError.failure(des: String(data: data, encoding: .utf8)))
             return
         }
-        print("Upload success.")
     }
     
     public func urlSession(_ session: URLSession, task: URLSessionTask, needNewBodyStream completionHandler: @escaping (InputStream?) -> Void) {
-        print("NEW BODY NEEDED")
         // Provides the input stream to the back end API request. This input stream is filled by our output stream when we write data into it.
         completionHandler(uploadBoundStreams.input)
     }
@@ -133,6 +121,5 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
             self.requestBlock?(HiveError.netWork(des: error))
             return
         }
-        print("DID COMPLETE WITHOUT ERROR")
     }
 }
