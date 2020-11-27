@@ -71,7 +71,7 @@ extension HiveError {
         let code = json["_error"]["code"].intValue
         let message = json["_error"]["message"].stringValue
 
-        var dic = ["_status": status, "_error": ["code": code, "message": message]] as [String : Any]
+        let dic = ["_status": status, "_error": ["code": code, "message": message]] as [String : Any]
         let data = try? JSONSerialization.data(withJSONObject: dic as Any, options: [])
         guard data != nil else {
             return ""

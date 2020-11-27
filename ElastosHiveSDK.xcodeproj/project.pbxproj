@@ -55,10 +55,6 @@
 		111D478F24F399AC00B7462B /* VaultApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D478D24F399AC00B7462B /* VaultApi.swift */; };
 		111D479324F4E2C300B7462B /* VaultAuthInfoStoreImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D479224F4E2C300B7462B /* VaultAuthInfoStoreImpl.swift */; };
 		111D479424F4E2C300B7462B /* VaultAuthInfoStoreImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D479224F4E2C300B7462B /* VaultAuthInfoStoreImpl.swift */; };
-		111D47C124F78E8200B7462B /* DatabaseProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47C024F78E8100B7462B /* DatabaseProtocol.swift */; };
-		111D47C224F78E8200B7462B /* DatabaseProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47C024F78E8100B7462B /* DatabaseProtocol.swift */; };
-		111D47C424F78EDF00B7462B /* ScriptingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47C324F78EDF00B7462B /* ScriptingProtocol.swift */; };
-		111D47C524F78EDF00B7462B /* ScriptingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47C324F78EDF00B7462B /* ScriptingProtocol.swift */; };
 		111D47CB24F7904100B7462B /* Collation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47CA24F7904100B7462B /* Collation.swift */; };
 		111D47CC24F7904100B7462B /* Collation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47CA24F7904100B7462B /* Collation.swift */; };
 		111D47CE24F7905100B7462B /* CountOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47CD24F7905100B7462B /* CountOptions.swift */; };
@@ -172,6 +168,9 @@
 		11D26F7022CA3B8200E4099A /* HiveError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39C499422539C9C0027BDF9 /* HiveError.swift */; };
 		11D26F7222CA3B8800E4099A /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114FD83F2297CF7600467E38 /* Authenticator.swift */; };
 		11D26F7722CA3B8800E4099A /* HiveClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FD3C80228000EE0031413A /* HiveClient.swift */; };
+		11E3C24D25709282000175F1 /* DatabaseProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E3C24B25709282000175F1 /* DatabaseProtocol.swift */; };
+		11E3C24E25709282000175F1 /* ScriptingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E3C24C25709282000175F1 /* ScriptingProtocol.swift */; };
+		11E3C251257092B9000175F1 /* PaymentProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E3C250257092B9000175F1 /* PaymentProtocol.swift */; };
 		11E573FE22C4C33400F85419 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FA22C4C33400F85419 /* Dictionary.swift */; };
 		11E573FF22C4C33400F85419 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FB22C4C33400F85419 /* String.swift */; };
 		11E92CE12560D8B2007EFC95 /* FileExecutable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E92CE02560D8B2007EFC95 /* FileExecutable.swift */; };
@@ -261,8 +260,6 @@
 		111D478A24EE810A00B7462B /* VaultURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultURL.swift; sourceTree = "<group>"; };
 		111D478D24F399AC00B7462B /* VaultApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultApi.swift; sourceTree = "<group>"; };
 		111D479224F4E2C300B7462B /* VaultAuthInfoStoreImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultAuthInfoStoreImpl.swift; sourceTree = "<group>"; };
-		111D47C024F78E8100B7462B /* DatabaseProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseProtocol.swift; sourceTree = "<group>"; };
-		111D47C324F78EDF00B7462B /* ScriptingProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptingProtocol.swift; sourceTree = "<group>"; };
 		111D47CA24F7904100B7462B /* Collation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collation.swift; sourceTree = "<group>"; };
 		111D47CD24F7905100B7462B /* CountOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountOptions.swift; sourceTree = "<group>"; };
 		111D47D024F7906100B7462B /* CreateCollectionOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCollectionOptions.swift; sourceTree = "<group>"; };
@@ -327,6 +324,9 @@
 		11C9EAE4254A637500080995 /* InsertOneResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertOneResult.swift; sourceTree = "<group>"; };
 		11D26F3C22CA3B3300E4099A /* ElastosHiveSDK_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ElastosHiveSDK_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		11D26F3E22CA3B3300E4099A /* ElastosHiveSDK_macOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ElastosHiveSDK_macOS.h; sourceTree = "<group>"; };
+		11E3C24B25709282000175F1 /* DatabaseProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DatabaseProtocol.swift; path = Protocols/DatabaseProtocol.swift; sourceTree = "<group>"; };
+		11E3C24C25709282000175F1 /* ScriptingProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScriptingProtocol.swift; path = Protocols/ScriptingProtocol.swift; sourceTree = "<group>"; };
+		11E3C250257092B9000175F1 /* PaymentProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PaymentProtocol.swift; path = Protocols/PaymentProtocol.swift; sourceTree = "<group>"; };
 		11E573FA22C4C33400F85419 /* Dictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
 		11E573FB22C4C33400F85419 /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		11E92CE02560D8B2007EFC95 /* FileExecutable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileExecutable.swift; sourceTree = "<group>"; };
@@ -596,10 +596,11 @@
 		A37F893523C72ABB00F6C11E /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
-				111D47C024F78E8100B7462B /* DatabaseProtocol.swift */,
+				11E3C24B25709282000175F1 /* DatabaseProtocol.swift */,
+				11E3C24C25709282000175F1 /* ScriptingProtocol.swift */,
 				A3D9D41023C9671C003B602E /* FilesProtocol.swift */,
 				A3D9D41523C96DA1003B602E /* KeyValuesProtocol.swift */,
-				111D47C324F78EDF00B7462B /* ScriptingProtocol.swift */,
+				11E3C250257092B9000175F1 /* PaymentProtocol.swift */,
 			);
 			name = Protocols;
 			sourceTree = "<group>";
@@ -958,7 +959,6 @@
 				118F2DA0250F32B100447A0A /* OrCondition.swift in Sources */,
 				1170FB122501D21C0049E81D /* Result.swift in Sources */,
 				118F2D8B250F264900447A0A /* AggregatedExecutable.swift in Sources */,
-				111D47C524F78EDF00B7462B /* ScriptingProtocol.swift in Sources */,
 				1170FB062501CB3F0049E81D /* WriteConcern.swift in Sources */,
 				111D47F524F7A30300B7462B /* Executable.swift in Sources */,
 				1170FB092501CCD30049E81D /* ReadConcern.swift in Sources */,
@@ -989,7 +989,6 @@
 				11D26F7022CA3B8200E4099A /* HiveError.swift in Sources */,
 				1103757A23FF96BF004216D0 /* Log.swift in Sources */,
 				111D478C24EE810A00B7462B /* VaultURL.swift in Sources */,
-				111D47C224F78E8200B7462B /* DatabaseProtocol.swift in Sources */,
 				1170FB0F2501CEF70049E81D /* VaultIndex.swift in Sources */,
 				115E82E8251A4495004DCB1E /* MinKey.swift in Sources */,
 				111D47FE24F8B63C00B7462B /* Options.swift in Sources */,
@@ -1024,7 +1023,6 @@
 				118F2D96250F2C3500447A0A /* DbFindQuery.swift in Sources */,
 				A3D9D41323C9671C003B602E /* FilesProtocol.swift in Sources */,
 				A37F893D23C72B2600F6C11E /* HiveClientOptions.swift in Sources */,
-				111D47C424F78EDF00B7462B /* ScriptingProtocol.swift in Sources */,
 				11E92CE12560D8B2007EFC95 /* FileExecutable.swift in Sources */,
 				111BD8AE256CED9100746A51 /* UsingPlan.swift in Sources */,
 				1170FB142502019C0049E81D /* Vault.swift in Sources */,
@@ -1034,6 +1032,7 @@
 				111BD898256CDAA700746A51 /* Version.swift in Sources */,
 				118F2D9F250F32B100447A0A /* OrCondition.swift in Sources */,
 				1170FB112501D21C0049E81D /* Result.swift in Sources */,
+				11E3C24E25709282000175F1 /* ScriptingProtocol.swift in Sources */,
 				118F2D8A250F264900447A0A /* AggregatedExecutable.swift in Sources */,
 				1170FB052501CB3F0049E81D /* WriteConcern.swift in Sources */,
 				1103757923FF96BF004216D0 /* Log.swift in Sources */,
@@ -1055,10 +1054,12 @@
 				111D47FA24F7A79800B7462B /* Condition.swift in Sources */,
 				111D478E24F399AC00B7462B /* VaultApi.swift in Sources */,
 				110357E3256FA3CA003F639F /* FileReader.swift in Sources */,
+				11E3C24D25709282000175F1 /* DatabaseProtocol.swift in Sources */,
 				111D47E624F7927D00B7462B /* InsertManyResult.swift in Sources */,
 				A3D9D41623C96DA1003B602E /* KeyValuesProtocol.swift in Sources */,
 				118F2D99250F2CF400447A0A /* DbInsertQuery.swift in Sources */,
 				118F2D8D250F28BA00447A0A /* RawExecutable.swift in Sources */,
+				11E3C251257092B9000175F1 /* PaymentProtocol.swift in Sources */,
 				111D47E324F7910100B7462B /* UpdateOptions.swift in Sources */,
 				114FD8402297CF7700467E38 /* Authenticator.swift in Sources */,
 				11E92CE52560DFF5007EFC95 /* UploadExecutable.swift in Sources */,
@@ -1083,7 +1084,6 @@
 				A3FD3C81228000EE0031413A /* HiveClient.swift in Sources */,
 				111D478B24EE810A00B7462B /* VaultURL.swift in Sources */,
 				11E92CED2560E228007EFC95 /* HashExecutable.swift in Sources */,
-				111D47C124F78E8200B7462B /* DatabaseProtocol.swift in Sources */,
 				111D479324F4E2C300B7462B /* VaultAuthInfoStoreImpl.swift in Sources */,
 				1170FB0B2501CD2F0049E81D /* ReadPreference.swift in Sources */,
 				111BD89F256CED4C00746A51 /* Order.swift in Sources */,

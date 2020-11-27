@@ -22,7 +22,7 @@
 
 import Foundation
 
-public class Payment: NSObject {
+public class Payment: PaymentProtocol {
     private var authHelper: VaultAuthHelper
     
     public init(_ authHelper: VaultAuthHelper) {
