@@ -22,6 +22,8 @@
 
 import Foundation
 
+/// Authentication options, include:
+/// AuthenticationHandler, DIDDocument, data cache path
 @objc(HiveClientOptions)
 public class HiveClientOptions: NSObject {
     private var _authenticator: Authenticator?
