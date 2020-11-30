@@ -51,7 +51,6 @@ class VaultHelper: NSObject {
             case .failure(let err):
             resolver.reject(HiveError.netWork(des: err))
             }
-            print(response)
         }
     }
 }

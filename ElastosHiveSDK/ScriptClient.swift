@@ -58,9 +58,9 @@ public class ScriptClient: ScriptingProtocol {
                                 encoding: JSONEncoding.default,
                                 headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
-            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
 
-            if tryLogin {
+            if isRelogin {
                 try self.authHelper.signIn()
                 registerScriptImp(name, accessCondition, executable, 1).done { success in
                     resolver.fulfill(success)
@@ -117,9 +117,9 @@ public class ScriptClient: ScriptingProtocol {
                                 encoding: JSONEncoding.default,
                                 headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
-            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
 
-            if tryLogin {
+            if isRelogin {
                 try self.authHelper.signIn()
                 callWithAppDidImp(scriptName, params: params, appDid: appDid, resultType, 1).done { result in
                     resolver.fulfill(result)
@@ -176,19 +176,23 @@ public class ScriptClient: ScriptingProtocol {
         return HivePromise<T> { resolver in
             let url = VaultURL.sharedInstance.call()
             Alamofire.upload(multipartFormData: { (multipartFormData) in
-                let data: Data = try! Data(contentsOf: URL(fileURLWithPath: filePath))
-                multipartFormData.append(data, withName: "data", fileName: "test.txt", mimeType: "multipart/form-data")
-                let data1 = try? JSONSerialization.data(withJSONObject: param, options: [])
-                let str = String(data: data1!, encoding: String.Encoding.utf8)
-                multipartFormData.append(str!.data(using: .utf8)!, withName: "metadata" )
+                do {
+                    let data: Data = try Data(contentsOf: URL(fileURLWithPath: filePath))
+                    multipartFormData.append(data, withName: "data", fileName: "test.txt", mimeType: "multipart/form-data")
+                    let data1 = try JSONSerialization.data(withJSONObject: param, options: [])
+                    let str = String(data: data1, encoding: String.Encoding.utf8)
+                    multipartFormData.append(str!.data(using: .utf8)!, withName: "metadata" )
+                } catch {
+                    resolver.reject(error)
+                }
             }, usingThreshold: UInt64.init(), to: url, method: .post, headers: Header(authHelper).headers()) { result in
                 switch result {
                 case .success(let upload, _, _):
                     upload.responseJSON { [self] response in
                         do {
                             let json = JSON(response.result.value as Any)
-                            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
-                            if tryLogin {
+                            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+                            if isRelogin {
                                 try self.authHelper.signIn()
                                 uploadImp(filePath: filePath, param: param, type: type, resultType: resultType, tryAgain: 1).done { result in
                                     resolver.fulfill(result)
