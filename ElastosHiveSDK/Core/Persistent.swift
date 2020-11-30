@@ -21,6 +21,6 @@
 */
 
 public protocol Persistent {
-    func parseFrom() -> Dictionary<String, Any>
-    func upateContent(_ json: Dictionary<String, Any>)
+    func parseFrom() throws -> Dictionary<String, Any>
+    func upateContent(_ json: Dictionary<String, Any>) throws
 }

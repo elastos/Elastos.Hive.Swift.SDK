@@ -92,7 +92,7 @@ public class VaultAuthHelper: ConnectHelper {
         return HivePromise<Void> { resolver in
             
             _connectState = false
-            tryRestoreToken()
+            try tryRestoreToken()
             if token != nil && !(token!.isExpired()) {
                 resolver.fulfill(Void())
                 return
@@ -125,20 +125,20 @@ public class VaultAuthHelper: ConnectHelper {
         let aud = claims.getAudience()
         let did = _authenticationDIDDocument?.subject.description
         if did == nil || aud == nil || did! != aud! {
-            throw HiveError.failure(des: "authenticationDIDDocument's subject is not equal to audience")
+            throw HiveError.jwtVerify(des: "authenticationDIDDocument's subject is not equal to audience")
         }
         let currentTime = Date()
         guard let _ = exp else {
             return
         }
         if currentTime > exp! {
-            throw HiveError.failure(des: "challenge token is expiration.")
+            throw HiveError.jwtVerify(des: "challenge token is expiration.")
         }
     }
 
-    private func tryRestoreToken() {
+    private func tryRestoreToken() throws {
         self.token = nil
-        let json = JSON(_persistent.parseFrom())
+        let json = try JSON(_persistent.parseFrom())
         _userDid = json[USER_DID_KEY].stringValue
         _appId = json[APP_ID_KEY].stringValue
         _appInstanceDid = json[APP_INSTANCE_DID_KEY].stringValue
@@ -176,7 +176,7 @@ public class VaultAuthHelper: ConnectHelper {
                     USER_DID_KEY: _userDid,
                     APP_ID_KEY: _appId,
                     APP_INSTANCE_DID_KEY: _appInstanceDid]
-        _persistent.upateContent(json as Dictionary<String, Any>)
+        try _persistent.upateContent(json as Dictionary<String, Any>)
     }
 
     func signIn() throws {
@@ -207,7 +207,7 @@ public class VaultAuthHelper: ConnectHelper {
         }
         semaphore.wait()
         guard err == "" else {
-            throw HiveError.getAuthToken(des: err)
+            throw HiveError.accessAuthToken(des: err)
         }
         
         url = VaultURL.sharedInstance.auth()
@@ -217,6 +217,7 @@ public class VaultAuthHelper: ConnectHelper {
                             parameters: params,
                             encoding: JSONEncoding.default).responseJSON()
         responseJson = try VaultApi.handlerJsonResponse(response)
+        _ = try VaultApi.handlerJsonResponseCanRelogin(responseJson, tryAgain: 1)
         try self.sotre(responseJson)
     }
     
@@ -227,7 +228,7 @@ public class VaultAuthHelper: ConnectHelper {
         }
     }
     
-    private func delete() {
+    private func delete() throws {
         token = AuthToken("", "", "")
         let json = [ACCESS_TOKEN_KEY: token!.accessToken,
                     EXPIRES_AT_KEY: token!.expiredTime,
@@ -235,6 +236,6 @@ public class VaultAuthHelper: ConnectHelper {
                     USER_DID_KEY: "",
                     APP_ID_KEY: "",
                     APP_INSTANCE_DID_KEY: ""]
-        _persistent.upateContent(json as Dictionary<String, Any>)
+        try _persistent.upateContent(json as Dictionary<String, Any>)
     }
 }

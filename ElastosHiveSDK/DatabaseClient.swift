@@ -57,8 +57,8 @@ public class DatabaseClient: DatabaseProtocol {
                                 encoding: JSONEncoding.default,
                                 headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
-            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
-            if tryLogin {
+            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            if isRelogin {
                 try self.authHelper.signIn()
                 createColImp(collection, options, 1).done { success in
                     resolver.fulfill(success)
@@ -86,8 +86,8 @@ public class DatabaseClient: DatabaseProtocol {
                                 encoding: JSONEncoding.default,
                                 headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
-            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
-            if tryLogin {
+            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            if isRelogin {
                 try self.authHelper.signIn()
                 deleteColImp(collection, 1).done { success in
                     resolver.fulfill(success)
@@ -120,8 +120,8 @@ public class DatabaseClient: DatabaseProtocol {
                                 encoding: JSONEncoding.default,
                                 headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
-            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
-            if tryLogin {
+            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            if isRelogin {
                 try self.authHelper.signIn()
                 insertOneImp(collection, doc, options,1).done { oneresult in
                     resolver.fulfill(oneresult)
@@ -153,8 +153,8 @@ public class DatabaseClient: DatabaseProtocol {
                                 encoding: JSONEncoding.default,
                                 headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
-            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
-            if tryLogin {
+            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            if isRelogin {
                 try self.authHelper.signIn()
                 insertManyImp(collection, doc, options, 1).done { manyresult in
                     resolver.fulfill(manyresult)
@@ -186,8 +186,8 @@ public class DatabaseClient: DatabaseProtocol {
                                 encoding: JSONEncoding.default,
                                 headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
-            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
-            if tryLogin {
+            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            if isRelogin {
                 try self.authHelper.signIn()
                 countDocumentsImp(collection, query, options, 1).done { manyresult in
                     resolver.fulfill(manyresult)
@@ -218,8 +218,8 @@ public class DatabaseClient: DatabaseProtocol {
                                 encoding: JSONEncoding.default,
                                 headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
-            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
-            if tryLogin {
+            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            if isRelogin {
                 try self.authHelper.signIn()
                 findOneImp(collection, query, options, 1).done { result in
                     resolver.fulfill(result)
@@ -250,8 +250,8 @@ public class DatabaseClient: DatabaseProtocol {
                                 encoding: JSONEncoding.default,
                                 headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
-            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
-            if tryLogin {
+            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            if isRelogin {
                 try self.authHelper.signIn()
                 findManyImp(collection, query, options, 1).done { list in
                     resolver.fulfill(list)
@@ -293,8 +293,8 @@ public class DatabaseClient: DatabaseProtocol {
                                 encoding: JSONEncoding.default,
                                 headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
-            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
-            if tryLogin {
+            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            if isRelogin {
                 try self.authHelper.signIn()
                 updateOneImp(collection, filter, update, options, 1).done { result in
                     resolver.fulfill(result)
@@ -326,8 +326,8 @@ public class DatabaseClient: DatabaseProtocol {
                                 encoding: JSONEncoding.default,
                                 headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
-            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
-            if tryLogin {
+            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            if isRelogin {
                 try self.authHelper.signIn()
                 updateManyImp(collection, filter, update, options, 1).done { result in
                     resolver.fulfill(result)
@@ -359,8 +359,8 @@ public class DatabaseClient: DatabaseProtocol {
                                 encoding: JSONEncoding.default,
                                 headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
-            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
-            if tryLogin {
+            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            if isRelogin {
                 try self.authHelper.signIn()
                 deleteOneImp(collection, filter, options, 1).done { result in
                     resolver.fulfill(result)
@@ -392,8 +392,8 @@ public class DatabaseClient: DatabaseProtocol {
                                 encoding: JSONEncoding.default,
                                 headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
-            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
-            if tryLogin {
+            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            if isRelogin {
                 try self.authHelper.signIn()
                 deleteOneImp(collection, filter, options, 1).done { result in
                     resolver.fulfill(result)

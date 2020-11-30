@@ -45,7 +45,7 @@ public class FileClient: NSObject, FilesProtocol {
                 resolver.fulfill(writer!)
             }
             else {
-                resolver.reject(HiveError.failure(des: "Invalid url format"))
+                resolver.reject(HiveError.IllegalArgument(des: "Invalid url format."))
             }
         }
     }
@@ -58,24 +58,24 @@ public class FileClient: NSObject, FilesProtocol {
 
     private func downloadImp(_ remoteFile: String, tryAgain: Int) -> HivePromise<FileReader> {
         return HivePromise<FileReader> { resolver in
-            if let url = URL(string: VaultURL.sharedInstance.download(remoteFile)) {
-                reader = FileReader(url: url, authHelper: authHelper, resolver: resolver)
-                reader?.authFailure = { error in
-                    if tryAgain >= 1 {
-                        resolver.reject(error)
-                        return
-                    }
-                    self.authHelper.retryLogin().then { success -> HivePromise<FileReader> in
-                        return self.downloadImp(remoteFile, tryAgain: 1)
-                    }.done { result in
-                        resolver.fulfill(result)
-                    }.catch { error in
-                        resolver.reject(error)
-                    }
-                }
+            let url = URL(string: VaultURL.sharedInstance.download(remoteFile))
+            guard (url != nil) else {
+                resolver.reject(HiveError.IllegalArgument(des: "Invalid url format."))
+                return
             }
-            else {
-                resolver.reject(HiveError.failure(des: "Invalid url format"))
+            reader = FileReader(url: url!, authHelper: authHelper, resolver: resolver)
+            reader?.authFailure = { error in
+                if tryAgain >= 1 {
+                    resolver.reject(error)
+                    return
+                }
+                self.authHelper.retryLogin().then { success -> HivePromise<FileReader> in
+                    return self.downloadImp(remoteFile, tryAgain: 1)
+                }.done { result in
+                    resolver.fulfill(result)
+                }.catch { error in
+                    resolver.reject(error)
+                }
             }
         }
     }
@@ -98,9 +98,9 @@ public class FileClient: NSObject, FilesProtocol {
                                 headers: Header(authHelper).headers()).responseJSON()
         
             let json = try VaultApi.handlerJsonResponse(response)
-            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
 
-            if tryLogin {
+            if isRelogin {
                 try self.authHelper.signIn()
                 deleteImp(remoteFile, 1).done { success in
                     resolver.fulfill(success)
@@ -128,9 +128,9 @@ public class FileClient: NSObject, FilesProtocol {
                                 encoding: JSONEncoding.default,
                                 headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
-            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
 
-            if tryLogin {
+            if isRelogin {
                 try self.authHelper.signIn()
                 moveImp(src, dest, 1).done { success in
                     resolver.fulfill(success)
@@ -158,9 +158,9 @@ public class FileClient: NSObject, FilesProtocol {
                                 encoding: JSONEncoding.default,
                                 headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
-            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
 
-            if tryLogin {
+            if isRelogin {
                 try self.authHelper.signIn()
                 copyImp(src, dest, 1).done { success in
                     resolver.fulfill(success)
@@ -186,9 +186,9 @@ public class FileClient: NSObject, FilesProtocol {
                                 encoding: JSONEncoding.default,
                                 headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
-            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
 
-            if tryLogin {
+            if isRelogin {
                 try self.authHelper.signIn()
                 hashImp(path, 1).done { sha256 in
                     resolver.fulfill(sha256)
@@ -214,9 +214,9 @@ public class FileClient: NSObject, FilesProtocol {
                                 encoding: JSONEncoding.default,
                                 headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
-            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
 
-            if tryLogin {
+            if isRelogin {
                 try self.authHelper.signIn()
                 listImp(path, 1).done { list in
                     resolver.fulfill(list)
@@ -252,9 +252,9 @@ public class FileClient: NSObject, FilesProtocol {
                                 encoding: JSONEncoding.default,
                                 headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
-            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
 
-            if tryLogin {
+            if isRelogin {
                 try self.authHelper.signIn()
                 statImp(path, 1).done { info in
                     resolver.fulfill(info)

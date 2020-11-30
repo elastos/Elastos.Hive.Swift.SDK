@@ -27,12 +27,11 @@ public enum HiveError: Error {
     case invalidatedBuilder(des: String?)
     case failure(des: String?)
     case IllegalArgument(des: String?)
-    case no_rpc_node_available(des: String?)
     case netWork(des: Error?)
-    case failureWithDic(des: Dictionary<String, Any>?)
     case unsupportedOperation(des: String?)
     case providerIsNil(des: String?)
-    case getAuthToken(des: String?)
+    case accessAuthToken(des: String?)
+    case jwtVerify(des: String?)
 }
 
 extension HiveError {
@@ -47,21 +46,15 @@ extension HiveError {
             return des ?? ""
         case .IllegalArgument(let des):
             return des ?? ""
-        case .no_rpc_node_available(let des):
-            return des ?? ""
         case .netWork(let des):
             return des.debugDescription
-        case .failureWithDic(let des):
-            let data = try? JSONSerialization.data(withJSONObject: des as Any, options: [])
-            guard data != nil else {
-                return ""
-            }
-            return String(data: data!, encoding: String.Encoding.utf8)!
         case .unsupportedOperation(let des):
             return des ?? ""
         case .providerIsNil(des: let des):
             return des ?? ""
-        case .getAuthToken(let des):
+        case .accessAuthToken(let des):
+            return des ?? ""
+        case .jwtVerify(let des):
             return des ?? ""
         }
     }

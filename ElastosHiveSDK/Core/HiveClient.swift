@@ -60,10 +60,10 @@ public class HiveClientHandle: NSObject {
     /// - Throws: throw an error, when an error occurs
     public class func setupResolver(_ resolver: String, _ cacheDir: String) throws {
         guard resolver != "" else {
-            throw HiveError.failure(des: "resolver is not nil.")
+            throw HiveError.IllegalArgument(des: "resolver is not nil.")
         }
         guard cacheDir != "" else {
-            throw HiveError.failure(des: "cacheDir is not nil.")
+            throw HiveError.IllegalArgument(des: "cacheDir is not nil.")
         }
 
         guard !HiveClientHandle.resolverDidSetup else {
@@ -83,7 +83,7 @@ public class HiveClientHandle: NSObject {
     /// - Returns: client instance
     public static func createInstance(withOptions: HiveClientOptions) throws -> HiveClientHandle {
         guard resolverDidSetup else {
-            throw HiveError.failure(des: "Setup did resolver first")
+            throw HiveError.IllegalArgument(des: "Setup did resolver first")
         }
         return HiveClientHandle(withOptions)
     }

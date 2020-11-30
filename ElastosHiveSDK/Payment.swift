@@ -43,9 +43,9 @@ public class Payment: PaymentProtocol {
             let url = VaultURL.sharedInstance.vaultPackageInfo()
             let response = Alamofire.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
-            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
             
-            if tryLogin {
+            if isRelogin {
                 try self.authHelper.signIn()
                 getAllPricingPlansImp(1).done { result in
                     resolver.fulfill(result)
@@ -71,9 +71,9 @@ public class Payment: PaymentProtocol {
             let url = VaultURL.sharedInstance.pricingPlan(planName)
             let response = Alamofire.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
-            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
             
-            if tryLogin {
+            if isRelogin {
                 try self.authHelper.signIn()
                 getPricingPlansImp(planName, 1).done { result in
                     resolver.fulfill(result)
@@ -100,9 +100,9 @@ public class Payment: PaymentProtocol {
             let url = VaultURL.sharedInstance.paymentVersion()
             let response = Alamofire.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
-            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
             
-            if tryLogin {
+            if isRelogin {
                 try self.authHelper.signIn()
                 getPaymentVersionImp(1).done { result in
                     resolver.fulfill(result)
@@ -130,9 +130,9 @@ public class Payment: PaymentProtocol {
             let params = ["pricing_name": priceName]
             let response = Alamofire.request(url, method: .post, parameters: params, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
-            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
             
-            if tryLogin {
+            if isRelogin {
                 try self.authHelper.signIn()
                 placeOrderImp(priceName, 1).done { orderId in
                     resolver.fulfill(orderId)
@@ -159,9 +159,9 @@ public class Payment: PaymentProtocol {
             let params = ["order_id": orderId, "pay_txids": txids] as [String : Any]
             let response = Alamofire.request(url, method: .post, parameters: params, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
-            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
             
-            if tryLogin {
+            if isRelogin {
                 try self.authHelper.signIn()
                 payOrderImp(orderId, txids, 1).done { success in
                     resolver.fulfill(success)
@@ -188,9 +188,9 @@ public class Payment: PaymentProtocol {
             let url = VaultURL.sharedInstance.orderInfo(orderId)
             let response = Alamofire.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
-            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
             
-            if tryLogin {
+            if isRelogin {
                 try self.authHelper.signIn()
                 getOrderImp(orderId, 1).done { oreder in
                     resolver.fulfill(oreder)
@@ -215,9 +215,9 @@ public class Payment: PaymentProtocol {
             let url = VaultURL.sharedInstance.orderList()
             let response = Alamofire.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
-            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
             
-            if tryLogin {
+            if isRelogin {
                 try self.authHelper.signIn()
                 getAllOrdersImp(1).done { list in
                     resolver.fulfill(list)
@@ -248,9 +248,9 @@ public class Payment: PaymentProtocol {
             let url = VaultURL.sharedInstance.serviceInfo()
             let response = Alamofire.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
-            let tryLogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
             
-            if tryLogin {
+            if isRelogin {
                 try self.authHelper.signIn()
                 getUsingPricePlanImp(1).done { plan in
                     resolver.fulfill(plan)
