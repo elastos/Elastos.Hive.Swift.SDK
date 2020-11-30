@@ -35,9 +35,9 @@ public protocol DatabaseProtocol {
 
     func countDocuments(_ collection: String, _ query: [String: Any], options: CountOptions) -> HivePromise<Int>
 
-    func findOne(_ collection: String, _ query: [String: Any], options: FindOptions) -> HivePromise<[String: Any]>
+    func findOne(_ collection: String, _ query: [String: Any], options: FindOptions) -> HivePromise<[String: Any]?>
 
-    func findMany(_ collection: String, _ query: [String: Any], options: FindOptions) -> HivePromise<Array<[String: Any]>>
+    func findMany(_ collection: String, _ query: [String: Any], options: FindOptions) -> HivePromise<Array<[String: Any]>?>
 
     func updateOne(_ collection: String, _ filter: [String: Any], _ update: [String: Any], options: UpdateOptions) -> HivePromise<UpdateResult>
 
