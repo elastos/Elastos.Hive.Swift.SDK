@@ -93,6 +93,10 @@ public class VaultAuthHelper: ConnectHelper {
             
             _connectState = false
             tryRestoreToken()
+            if token != nil && !(token!.isExpired()) {
+                resolver.fulfill(Void())
+                return
+            }
             if !Thread.isMainThread {
                 try signIn()
                 resolver.fulfill(Void())

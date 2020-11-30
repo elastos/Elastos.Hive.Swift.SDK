@@ -199,14 +199,14 @@ public class DatabaseClient: DatabaseProtocol {
         }
     }
 
-    public func findOne(_ collection: String, _ query: [String : Any], options: FindOptions) -> HivePromise<[String : Any]> {
-        return authHelper.checkValid().then { _ -> HivePromise<[String: Any]> in
+    public func findOne(_ collection: String, _ query: [String : Any], options: FindOptions) -> HivePromise<[String : Any]?> {
+        return authHelper.checkValid().then { _ -> HivePromise<[String: Any]?> in
             return self.findOneImp(collection, query, options, 0)
         }
     }
 
-    private func findOneImp(_ collection: String, _ query: [String: Any], _ options: FindOptions, _ tryAgain: Int) -> HivePromise<[String: Any]> {
-        return HivePromise<[String: Any]> { resolver in
+    private func findOneImp(_ collection: String, _ query: [String: Any], _ options: FindOptions, _ tryAgain: Int) -> HivePromise<[String: Any]?> {
+        return HivePromise<[String: Any]?> { resolver in
             var param = ["collection": collection, "filter": query] as [String : Any]
             if try options.jsonSerialize().count != 0 {
                 param["options"] = try options.jsonSerialize()
@@ -227,18 +227,18 @@ public class DatabaseClient: DatabaseProtocol {
                     resolver.reject(error)
                 }
             }
-            resolver.fulfill(json["items"].dictionaryObject ?? [: ])
+            resolver.fulfill(json["items"].dictionaryObject)
         }
     }
 
-    public func findMany(_ collection: String, _ query: [String : Any], options: FindOptions) -> HivePromise<Array<[String : Any]>> {
-        return authHelper.checkValid().then { _ -> HivePromise<Array<[String : Any]>> in
+    public func findMany(_ collection: String, _ query: [String : Any], options: FindOptions) -> HivePromise<Array<[String : Any]>?> {
+        return authHelper.checkValid().then { _ -> HivePromise<Array<[String : Any]>?> in
             return self.findManyImp(collection, query, options, 0)
         }
     }
 
-    private func findManyImp(_ collection: String, _ query: [String: Any], _ options: FindOptions, _ tryAgain: Int) -> HivePromise<Array<[String: Any]>> {
-        return HivePromise<Array<[String: Any]>> { resolver in
+    private func findManyImp(_ collection: String, _ query: [String: Any], _ options: FindOptions, _ tryAgain: Int) -> HivePromise<Array<[String: Any]>?> {
+        return HivePromise<Array<[String: Any]>?> { resolver in
             var param = ["collection": collection, "filter": query] as [String : Any]
             if try options.jsonSerialize().count != 0 {
                 param["options"] = try options.jsonSerialize()
@@ -261,9 +261,16 @@ public class DatabaseClient: DatabaseProtocol {
             }
             var items: [Dictionary<String, Any>] = []
             json["items"].arrayValue.forEach { json in
-                items.append(json.dictionaryObject!)
+                guard json.dictionaryObject == nil else {
+                    items.append(json.dictionaryObject!)
+                    return
+                }
             }
-            resolver.fulfill(items)
+            guard items.count == 0 else {
+                resolver.fulfill(items)
+                return
+            }
+            resolver.fulfill(nil)
         }
     }
 

@@ -142,8 +142,7 @@ public class HiveClientHandle: NSObject {
     public func getVaultProvider(_ ownerDid: String, _ providerAddress: String?) -> HivePromise<String> {
 
         return HivePromise<String> { resolver in
-            let globalQueue = DispatchQueue.global()
-            globalQueue.async {
+            DispatchQueue.global().async {
                 var vaultProvider: String?
                 
                 if let _ = providerAddress {
