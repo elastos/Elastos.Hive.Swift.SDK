@@ -119,16 +119,13 @@ public class HiveClientHandle: NSObject {
     /// - Returns: vault instance
     public func getVault(_ ownerDid: String, _ providerAddress: String?) -> HivePromise<Vault> {
         return HivePromise<Vault> { resolver in
-            _ = getVaultProvider(ownerDid, providerAddress).done { [self] provider in
-                let vault = newVault(provider, ownerDid)
-                vault.getUsingPricePlan().done { plan in
-                    resolver.fulfill(vault)
-                }.catch { error in
-                    resolver.reject(error)
-                }
-                resolver.fulfill(vault)
-            }
-            .catch{ error in
+            var vault: Vault?
+            _ = getVaultProvider(ownerDid, providerAddress).then{ [self] provider -> HivePromise<UsingPlan> in
+                vault = newVault(provider, ownerDid)
+                return vault!.getUsingPricePlan()
+            }.done{ plan in
+                resolver.fulfill(vault!)
+            }.catch{ error in
                 resolver.reject(error)
             }
         }
