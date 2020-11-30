@@ -92,7 +92,7 @@ public class VaultAuthHelper: ConnectHelper {
         return HivePromise<Void> { resolver in
             
             _connectState = false
-//            tryRestoreToken()
+            tryRestoreToken()
             if token != nil && !(token!.isExpired()) {
                 resolver.fulfill(Void())
                 return
