@@ -23,7 +23,6 @@
 import Foundation
 
 public typealias HivePromise = Promise
-private var _providerCache: [String: String] = [: ]
 private var _vaultCache: [DID: Vault]?
 let HiveVaultQueue = DispatchQueue(label: "org.elastos.hivesdk.queue", qos: .default, attributes: .concurrent, autoreleaseFrequency: .workItem)
 @objc(HiveClient)
@@ -140,10 +139,10 @@ public class HiveClientHandle: NSObject {
 
         return HivePromise<String> { resolver in
             DispatchQueue.global().async {
-                var vaultProvider: String?
+                var vaultProvider = providerAddress
                 
-                if let _ = providerAddress {
-                    resolver.fulfill(providerAddress!)
+                guard vaultProvider != nil else {
+                    resolver.fulfill(vaultProvider!)
                     return
                 }
                 do {
@@ -152,13 +151,10 @@ public class HiveClientHandle: NSObject {
                     let services = doc?.selectServices(byType: "HiveVault")
                     if services != nil && services!.count > 0 {
                         vaultProvider = services![0].endpoint
-                        _providerCache[ownerDid] = vaultProvider
                     }
-                    else {
-                        vaultProvider = _providerCache[ownerDid]
-                    }
-                    if vaultProvider == nil {
-                        vaultProvider = ""
+                    guard vaultProvider != nil else {
+                        resolver.reject(HiveError.providerIsNil(des: "provider is not set."))
+                        return
                     }
                     resolver.fulfill(vaultProvider!)
                 }
