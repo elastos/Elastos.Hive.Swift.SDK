@@ -29,14 +29,21 @@ public enum ScriptingType {
 }
 
 public protocol ScriptingProtocol {
+    
+    /// Lets the vault owner register a script on his vault for a given app.
+    /// The script is built on the client side, then serialized and stored on the hive back-end.
+    /// Later on, anyone, including the vault owner or external users,
+    ///  can use Scripting.call() to execute one of those scripts and get results/data.
     func registerScript(_ name: String, _ executable: Executable) -> HivePromise<Bool>
+    
     func registerScript(_ name: String, _ condition: Condition, _ executable: Executable) -> HivePromise<Bool>
 
-    func call<T>(_ scriptName: String, _ resultType: T.Type) -> HivePromise<T>
-    func call<T>(_ scriptName: String, _ params: [String: Any], _ resultType: T.Type) -> HivePromise<T>
-
-    func call<T>(_ scriptName: String, _ appDid: String, _ resultType: T.Type) -> HivePromise<T>
-    func call<T>(_ scriptName: String, _ params: [String: Any], _ appDid: String, _ resultType: T.Type) -> HivePromise<T>
-
-    func call<T>(_ name: String, _ params: [String: Any], _ type: ScriptingType, _ resultType: T.Type) -> HivePromise<T>
+    /// Executes a previously registered server side script using Scripting.setScript(). Vault owner or external users are
+    /// - Parameters:
+    ///   - name: the call's script name
+    ///   - config: CallConfig instance.
+    ///   - resultType: String、 Data、 JSON、 Dictionry<String, Any> for GeneralCallConfig,
+    ///   FileReader for DownloadCallConfig,
+    ///   FileWriter for UploadCallConfig
+    func callScript<T>(_ name: String, _ config: CallConfig?, _ resultType: T.Type) -> HivePromise<T>
 }

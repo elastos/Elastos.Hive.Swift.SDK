@@ -8,8 +8,8 @@ class ScriptTest: XCTestCase {
     private var scripting: ScriptClient?
     private var noConditionName: String = "get_groups"
     private var withConditionName: String = "get_group_messages"
-
-    func test1_Condition() {
+    private let testTextFilePath = "/Users/liaihong/Desktop/test.txt"
+    func test01_Condition() {
         do {
             let json = "{\"name\":\"mkyong\", \"age\":37, \"c\":[\"adc\",\"zfy\",\"aaa\"], \"d\": {\"foo\": 1, \"bar\": 2}}"
             let data = json.data(using: String.Encoding.utf8)
@@ -40,7 +40,7 @@ class ScriptTest: XCTestCase {
         }
     }
 
-    func test2_Executable() {
+    func test02_Executable() {
         do {
             let json = "{\"name\":\"mkyong\", \"age\":37, \"c\":[\"adc\",\"zfy\",\"aaa\"], \"d\": {\"foo\": 1, \"bar\": 2}}"
             let data = json.data(using: String.Encoding.utf8)
@@ -111,7 +111,7 @@ class ScriptTest: XCTestCase {
 
     func test05_callStringType() {
         let lock = XCTestExpectation(description: "wait for test.")
-        scripting?.call(noConditionName, String.self).done{ re in
+        scripting?.callScript(noConditionName, nil, String.self).done{ re in
             lock.fulfill()
         }.catch{ err in
             XCTFail()
@@ -122,7 +122,7 @@ class ScriptTest: XCTestCase {
 
     func test06_callDataType() {
         let lock = XCTestExpectation(description: "wait for test.")
-        scripting?.call(noConditionName, Data.self).done{ data in
+        scripting?.callScript(noConditionName, nil, Data.self).done{ data in
             let rejson = try JSONSerialization.jsonObject(with: data , options: .mutableContainers) as AnyObject
             print(rejson)
             XCTAssertTrue(true)
@@ -136,7 +136,7 @@ class ScriptTest: XCTestCase {
 
     func test07_callOtherScript() {
         let lock = XCTestExpectation(description: "wait for test.")
-        scripting?.call(noConditionName, "appId", String.self).done{ str in
+        scripting?.callScript(noConditionName, nil, String.self).done{ str in
             print(str)
             XCTAssertTrue(true)
             lock.fulfill()
@@ -147,7 +147,7 @@ class ScriptTest: XCTestCase {
         self.wait(for: [lock], timeout: 10000.0)
     }
 
-    func test08_setUploadScript() {
+    func test08_returnError() {
         let lock = XCTestExpectation(description: "wait for test.")
         let executable = "{\"type\":\"fileUpload\",\"name\":\"upload_file\",\"output\":true,\"body\":{\"path\":\"$params.path\"}}"
         scripting?.registerScript("upload_file", RawExecutable(executable: executable)).done{ re in
@@ -161,9 +161,22 @@ class ScriptTest: XCTestCase {
         self.wait(for: [lock], timeout: 10000.0)
     }
 
-    func test09_callStringType() {
+    func test09_callDictionaryType() {
         let lock = XCTestExpectation(description: "wait for test.")
-        scripting?.call(noConditionName, Dictionary<String, Any>.self).done{ re in
+        scripting?.callScript(noConditionName, nil, Dictionary<String, Any>.self).done{ re in
+            lock.fulfill()
+        }.catch{ err in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 10000.0)
+    }
+   
+    func test11_setUploadScript() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        let executable = UploadExecutable(name: "upload_file", path: "$params.path", output: true)
+        scripting!.registerScript("upload_file", executable).done { re in
+            XCTAssertTrue(re)
             lock.fulfill()
         }.catch{ err in
             XCTFail()
@@ -174,8 +187,10 @@ class ScriptTest: XCTestCase {
     
     func test12_uploadFile() {
         let lock = XCTestExpectation(description: "wait for test.")
-        let params = ["name": "upload_file", "params":["group_id": ["$oid": "5f8d9dfe2f4c8b7a6f8ec0f1"], "path": "test.txt"]] as [String : Any]
-        scripting!.call("/Users/liaihong/Desktop/test.txt", params, ScriptingType.UPLOAD, String.self).done { re in
+        let scriptName = "upload_file"
+        let params = ["group_id": ["$oid": "5f8d9dfe2f4c8b7a6f8ec0f1"], "path": "test.txt"] as [String : Any]
+        let uploadCallConfig = UploadCallConfig(params, testTextFilePath)
+        scripting!.callScript(scriptName, uploadCallConfig, String.self).done { re in
             print(re)
             lock.fulfill()
         }.catch{ err in
@@ -201,9 +216,10 @@ class ScriptTest: XCTestCase {
 
     func test14_downloadFile() {
         let params = ["group_id": ["$oid": "5f497bb83bd36ab235d82e6a"], "path": "test.txt"] as [String : Any]
+        let downloadCallConfig = DownloadCallConfig(params)
         let lock = XCTestExpectation(description: "wait for test.")
-        scripting!.call("download_file", params, ScriptingType.DOWNLOAD, String.self).done { success in
-//            print(success)
+        scripting!.callScript("download_file", downloadCallConfig, String.self).done { success in
+            print("success")
             lock.fulfill()
         }.catch { error in
             XCTFail()
@@ -229,8 +245,9 @@ class ScriptTest: XCTestCase {
 
     func test16_getFileInfo() {
         let params = ["group_id": ["$oid": "5f497bb83bd36ab235d82e6a"], "path": "test.txt"] as [String : Any]
+        let generalCallConfig = GeneralCallConfig(params)
         let lock = XCTestExpectation(description: "wait for test.")
-        scripting!.call("get_file_info", params, ScriptingType.PROPERTIES, String.self).done { success in
+        scripting!.callScript("get_file_info", generalCallConfig, String.self).done { success in
             print(success)
             lock.fulfill()
         }.catch { error in

@@ -72,43 +72,42 @@ public class ScriptClient: ScriptingProtocol {
         }
     }
 
-    public func call<T>(_ scriptName: String, _ resultType: T.Type) -> HivePromise<T> {
-        return authHelper.checkValid().then { _ -> HivePromise<T> in
-            return self.callWithAppDidImp(scriptName, appDid: nil, resultType, 0)
+    public func callScript<T>(_ name: String, _ config: CallConfig?, _ resultType: T.Type) -> HivePromise<T> {
+        return self.authHelper.checkValid().then { _ -> HivePromise<T> in
+            if config == nil {
+                return self.callScriptImpl(name, nil, resultType, 0)
+            }
+            else if config!.isKind(of: UploadCallConfig.self) {
+                return self.uploadImp(name, config! as! UploadCallConfig, resultType, 0)
+            }
+            else if config!.isKind(of: DownloadCallConfig.self) {
+                return self.downloadImp(name, config! as! DownloadCallConfig, resultType, 0)
+            }
+            else if config!.isKind(of: GeneralCallConfig.self) {
+                return self.callScriptImpl(name, (config! as! GeneralCallConfig), resultType, 0)
+            }
+            else {
+                // This code will never be executed.
+                return self.callScriptImpl(name, config as? GeneralCallConfig, resultType, 0)
+            }
         }
     }
 
-    public func call<T>(_ scriptName: String, _ params: [String : Any], _ resultType: T.Type) -> HivePromise<T> {
-        return authHelper.checkValid().then { _ -> HivePromise<T> in
-            return self.callWithAppDidImp(scriptName, params: params, appDid: nil, resultType, 0)
-        }
-    }
-
-    public func call<T>(_ scriptName: String, _ appDid: String, _ resultType: T.Type) -> Promise<T> {
-        return authHelper.checkValid().then { _ -> HivePromise<T> in
-            return self.callWithAppDidImp(scriptName, appDid: appDid,  resultType, 0)
-        }
-    }
-
-    public func call<T>(_ scriptName: String, _ params: [String : Any], _ appDid: String, _ resultType: T.Type) -> HivePromise<T> {
-        return authHelper.checkValid().then { _ -> HivePromise<T> in
-            return self.callWithAppDidImp(scriptName, params: params, appDid: appDid, resultType, 0)
-        }
-    }
-
-    private func callWithAppDidImp<T>(_ scriptName: String, params: [String : Any]? = nil, appDid: String?, _ resultType: T.Type, _ tryAgain: Int) -> HivePromise<T> {
+    private func callScriptImpl<T>(_ scriptName: String, _ config: GeneralCallConfig?, _ resultType: T.Type, _ tryAgain: Int) -> HivePromise<T> {
         return HivePromise<T> { resolver in
             var param = ["name": scriptName] as [String : Any]
+            if config != nil && config?.params != nil {
+                param["params"] = config!.params!
+            }
+            
             let ownerDid = authHelper.ownerDid
             if ownerDid != nil{
                 var dic = ["target_did": ownerDid!]
+                let appDid = config?.appDid
                 if let _ = appDid {
                     dic["target_app_did"] = appDid!
                 }
                 param["context"] = dic
-            }
-            if let _ = params {
-                param["params"] = params!
             }
             let url = VaultURL.sharedInstance.call()
             let response = Alamofire.request(url,
@@ -121,7 +120,7 @@ public class ScriptClient: ScriptingProtocol {
 
             if isRelogin {
                 try self.authHelper.signIn()
-                callWithAppDidImp(scriptName, params: params, appDid: appDid, resultType, 1).done { result in
+                callScriptImpl(scriptName, config, resultType, 1).done { result in
                     resolver.fulfill(result)
                 }.catch { error in
                     resolver.reject(error)
@@ -158,27 +157,18 @@ public class ScriptClient: ScriptingProtocol {
             }
         }
     }
-
-    public func call<T>(_ name: String, _ params: [String : Any], _ type: ScriptingType, _ resultType: T.Type) -> HivePromise<T> {
-        return self.authHelper.checkValid().then { _ -> HivePromise<T> in
-            switch type {
-            case .UPLOAD:
-                return self.uploadImp(filePath: name, param: params, type: type, resultType: resultType, tryAgain: 0)
-            case .DOWNLOAD:
-                return self.downloadImp(scriptName: name, param: params, type: type, resultType: resultType, tryAgain: 0)
-            case .PROPERTIES:
-                return self.callWithAppDidImp(name, params: params, appDid: nil, resultType, 0)
-            }
-        }
-    }
-
-    private func uploadImp<T>(filePath: String, param: [String: Any], type: ScriptingType, resultType: T.Type, tryAgain: Int) -> HivePromise<T> {
+    
+    private func uploadImp<T>(_ scriptName: String, _ config: UploadCallConfig, _ resultType: T.Type, _ tryAgain: Int) -> HivePromise<T> {
         return HivePromise<T> { resolver in
             let url = VaultURL.sharedInstance.call()
             Alamofire.upload(multipartFormData: { (multipartFormData) in
                 do {
-                    let data: Data = try Data(contentsOf: URL(fileURLWithPath: filePath))
+                    let data: Data = try Data(contentsOf: URL(fileURLWithPath: config.filePath))
                     multipartFormData.append(data, withName: "data", fileName: "test.txt", mimeType: "multipart/form-data")
+                    var param: [String: Any] = ["name": scriptName]
+                    if let _ = config.params {
+                        param["params"] = config.params!
+                    }
                     let data1 = try JSONSerialization.data(withJSONObject: param, options: [])
                     let str = String(data: data1, encoding: String.Encoding.utf8)
                     multipartFormData.append(str!.data(using: .utf8)!, withName: "metadata" )
@@ -194,7 +184,7 @@ public class ScriptClient: ScriptingProtocol {
                             let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
                             if isRelogin {
                                 try self.authHelper.signIn()
-                                uploadImp(filePath: filePath, param: param, type: type, resultType: resultType, tryAgain: 1).done { result in
+                                uploadImp(scriptName, config, resultType, 1).done { result in
                                     resolver.fulfill(result)
                                 }.catch { error in
                                     resolver.reject(error)
@@ -231,12 +221,12 @@ public class ScriptClient: ScriptingProtocol {
         }
     }
 
-    private func downloadImp<T>(scriptName: String, param: [String: Any], type: ScriptingType, resultType: T.Type, tryAgain: Int) -> HivePromise<T> {
+    private func downloadImp<T>(_ scriptName: String, _ config: DownloadCallConfig, _ resultType: T.Type, _ tryAgain: Int) -> HivePromise<T> {
         return HivePromise<T> { resolver in
             let url = VaultURL.sharedInstance.call()
             var params = ["name": scriptName] as [String : Any]
-            if param.count > 0 {
-                params["params"] = param
+            if config.params != nil && config.params!.count > 0 {
+                params["params"] = config.params!
             }
             let response = Alamofire.request(url,
                                              method: .post,
@@ -247,7 +237,8 @@ public class ScriptClient: ScriptingProtocol {
             do {
                 let relogin = try VaultApi.handlerDataResponse(response, tryAgain)
                 if relogin {
-                    self.downloadImp(scriptName: scriptName, param: param, type: type, resultType: resultType, tryAgain: tryAgain).done { result in
+                    try self.authHelper.signIn()
+                    self.downloadImp(scriptName, config, resultType, 1).done { result in
                         resolver.fulfill(result)
                     }.catch { error in
                         resolver.reject(error)

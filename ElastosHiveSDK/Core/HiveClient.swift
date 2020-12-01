@@ -141,7 +141,7 @@ public class HiveClientHandle: NSObject {
             DispatchQueue.global().async {
                 var vaultProvider = providerAddress
                 
-                guard vaultProvider != nil else {
+                guard vaultProvider == nil else {
                     resolver.fulfill(vaultProvider!)
                     return
                 }
