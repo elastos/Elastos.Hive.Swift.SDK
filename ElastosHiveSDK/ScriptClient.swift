@@ -126,16 +126,8 @@ public class ScriptClient: ScriptingProtocol {
                     resolver.reject(error)
                 }
             }
-            if resultType.self == OutputStream.self {
-                let data = try JSONSerialization.data(withJSONObject: json.dictionaryObject as Any, options: [])
-                let outputStream = OutputStream(toMemory: ())
-                outputStream.open()
-                self.writeData(data: data, outputStream: outputStream, maxLengthPerWrite: 1024)
-                outputStream.close()
-                resolver.fulfill(outputStream as! T)
-            }
             // The String type
-            else if resultType.self == String.self {
+            if resultType.self == String.self {
                 let dic = json.dictionaryObject
                 let data = try JSONSerialization.data(withJSONObject: dic as Any, options: [])
                 let str = String(data: data, encoding: String.Encoding.utf8)
@@ -260,21 +252,5 @@ public class ScriptClient: ScriptingProtocol {
                 }
             }
         }
-    }
-
-    private func writeData(data: Data, outputStream: OutputStream, maxLengthPerWrite: Int) {
-        let size = data.count
-        data.withUnsafeBytes({(bytes: UnsafePointer<UInt8>) in
-            var bytesWritten = 0
-            while bytesWritten < size {
-                var maxLength = maxLengthPerWrite
-                if size - bytesWritten < maxLengthPerWrite {
-                    maxLength = size - bytesWritten
-                }
-                let n = outputStream.write(bytes.advanced(by: bytesWritten), maxLength: maxLength)
-                bytesWritten += n
-                print(n)
-            }
-        })
     }
 }
