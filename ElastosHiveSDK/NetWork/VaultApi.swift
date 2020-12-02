@@ -43,7 +43,14 @@ class VaultApi: NSObject {
         }
     }
     
-    class func handlerJsonResponse(_  response: DataResponse<Any>)throws -> JSON {
+    class func printDebugLogForNetwork(_ response: DataResponse<Any>) {
+        Log.d("Hive Debug ==> request url ->", response.request?.url as Any)
+        Log.d("Hive Debug ==> request headers ->", (response.request?.allHTTPHeaderFields) as Any)
+        Log.d("Hive Debug ==> response Code ->", response.response?.statusCode as Any)
+        Log.d("Hive Debug ==> response body ->", response.result.debugDescription)
+    }
+    
+    class func handlerJsonResponse(_ response: DataResponse<Any>)throws -> JSON {
         switch response.result {
         case .success(let re):
             let json = JSON(re)

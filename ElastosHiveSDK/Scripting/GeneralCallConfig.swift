@@ -27,13 +27,13 @@ public class GeneralCallConfig: CallConfig {
     
     /// Construction method
     /// - Parameter params: params
-    convenience init() {
+    public convenience init() {
         self.init(nil, nil)
     }
     
     /// Construction method
     /// - Parameter params: params
-    convenience init(_ params: Dictionary<String, Any>) {
+    public convenience init(_ params: Dictionary<String, Any>) {
         self.init(nil, params)
     }
     

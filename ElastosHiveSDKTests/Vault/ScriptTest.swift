@@ -91,7 +91,7 @@ class ScriptTest: XCTestCase {
 
     func test04_registerWithCondition() {
         do {
-            let datafilter = "{\"_id\":\"$params.group_id\",\"friends\":\"$caller_did\"}".data(using: String.Encoding.utf8)
+            let datafilter = "{\"_id\":\"$params.group_id\",\"friends\":\"$callScripter_did\"}".data(using: String.Encoding.utf8)
             let filter = try JSONSerialization.jsonObject(with: datafilter!,options: .mutableContainers) as? [String : Any]
             let executable: DbFindQuery = DbFindQuery("get_groups", "test_group", filter!)
             let condition: QueryHasResultsCondition = QueryHasResultsCondition("verify_user_permission", "test_group", filter!)
@@ -301,7 +301,8 @@ class ScriptTest: XCTestCase {
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         do {
-            user = try UserFactory.createUser3()
+            Log.setLevel(.Debug)
+            user = try UserFactory.createUser1()
             let lock = XCTestExpectation(description: "wait for test.")
             user!.client.getVault(user!.ownerDid, user?.provider).done { [self] vault in
                 self.scripting = (vault.scripting as! ScriptClient)
