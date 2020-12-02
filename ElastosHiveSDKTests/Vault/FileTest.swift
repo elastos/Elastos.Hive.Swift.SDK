@@ -34,7 +34,9 @@ class FileTest: XCTestCase {
                 print(err)
             })
 
-                writer.close()
+            writer.close { (success, error) in
+                print(success)
+            }
                 
                 XCTAssertNotNil(writer)
                 lock.fulfill()
@@ -53,7 +55,7 @@ class FileTest: XCTestCase {
             let fileurl = creaFile()
             while !output.didLoadFinish {
                 if let data = output.read({ error in
-                    print(error)
+                    print(error as Any)
                 }){
                     print("prepare to write \(data.count)")
                     if let fileHandle = try? FileHandle(forWritingTo: fileurl) {
@@ -66,7 +68,9 @@ class FileTest: XCTestCase {
                     }
                 }
             }
-            output.close()
+            output.close { (success, error) in
+                print(success)
+            }
             lock.fulfill()
         }.catch{ error in
             XCTFail()
