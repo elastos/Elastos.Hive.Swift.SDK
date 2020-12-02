@@ -193,36 +193,42 @@ class ScriptTest: XCTestCase {
         scripting!.callScript(scriptName, uploadCallConfig, FileWriter.self).done { writer in
             let shortMessage = "POIUYTREWQ"
             let message1 = "*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())"
-            let message2 = " ABCD ABCD ABCD ABCD 1234 5678 9009 8765"
+            let message2 = " ABCD ABCD ABCD ABCD 1234 5678 9009 8765 00"
             
             try writer.write(data: shortMessage.data(using: .utf8)!, { err in
                 print(err)
             })
             
-            for _ in 0...40 {
+            for _ in 0...40000 {
                     try writer.write(data: message1.data(using: .utf8)!, { err in
+                        print("error 1")
                         print(err)
                     })
                 }
                 try writer.write(data: message2.data(using: .utf8)!, { err in
+                    print("error 2")
                     print(err)
                 })
                 try writer.write(data: "message2".data(using: .utf8)!, { err in
+                    print("error 3")
                     print(err)
                 })
             try writer.write(data: message2.data(using: .utf8)!, { err in
+                print("error 4")
                 print(err)
             })
 
-                writer.close()
-                
-                XCTAssertNotNil(writer)
-            lock.fulfill()
+            writer.close { (success, error) in
+                lock.fulfill()
+                print(success)
+            }
+            
+            XCTAssertNotNil(writer)
         }.catch{ err in
             XCTFail()
             lock.fulfill()
         }
-        self.wait(for: [lock], timeout: 10000.0)
+        self.wait(for: [lock], timeout: 10000000.0)
     }
 
     func test13_setDownloadScript() {
@@ -260,8 +266,10 @@ class ScriptTest: XCTestCase {
                     }
                 }
             }
-            reader.close()
-            lock.fulfill()
+            reader.close { (success, error) in
+                lock.fulfill()
+                print(success)
+            }
         }.catch { error in
             XCTFail()
             lock.fulfill()
@@ -302,9 +310,9 @@ class ScriptTest: XCTestCase {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         do {
             Log.setLevel(.Debug)
-            user = try UserFactory.createUser1()
+            user = try UserFactory.createUser3()
             let lock = XCTestExpectation(description: "wait for test.")
-            user!.client.getVault(user!.ownerDid, user?.provider).done { [self] vault in
+            user?.client.createVault(user!.ownerDid, user?.provider).done { [self] vault in
                 self.scripting = (vault.scripting as! ScriptClient)
                 lock.fulfill()
             }.catch { error in

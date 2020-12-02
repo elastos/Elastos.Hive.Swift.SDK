@@ -37,18 +37,18 @@ let appInstance2_mn = "venture link adapt field priority extend depart endless r
 let appInstance2_phrasepass = "password"
 let appInstance2_storepass = "password"
 
-//user3
-//[didapp3] My new DID created: did:elastos:ijYUBb36yCXU6yzhydnkCCAXh7ZRW4X85J
-let userDid3 = "did:elastos:ijYUBb36yCXU6yzhydnkCCAXh7ZRW4X85J"
-let userDid3_name = "didapp3"
-let userDid3_mn = "gallery input work twice helmet mesh decline cushion same garbage art bullet"
-let userDid3_phrasepass = "password"
-let userDid3_storepass = "password"
-
-let appInstance3_name = "testapp3"
-let appInstance3_mn = "trend music thumb what erupt near apology exotic surge item field awake"
-let appInstance3_phrasepass = "password"
-let appInstance3_storepass = "password"
+////user3
+////[didapp3] My new DID created: did:elastos:ijYUBb36yCXU6yzhydnkCCAXh7ZRW4X85J
+//let userDid3 = "did:elastos:ijYUBb36yCXU6yzhydnkCCAXh7ZRW4X85J"
+//let userDid3_name = "didapp3"
+//let userDid3_mn = "gallery input work twice helmet mesh decline cushion same garbage art bullet"
+//let userDid3_phrasepass = "password"
+//let userDid3_storepass = "password"
+//
+//let appInstance3_name = "testapp3"
+//let appInstance3_mn = "trend music thumb what erupt near apology exotic surge item field awake"
+//let appInstance3_phrasepass = "password"
+//let appInstance3_storepass = "password"
 
 //user4
 //[didapp4] My new DID created: did:elastos:iqk3KLebgiiP46uyoKevYQJB7PZcs2iTLz
@@ -81,17 +81,18 @@ let appInstance4_storepass = "password"
 //let appInstance1_phrasepass = "password"
 //let appInstance1_storepass = "password"
 //
-////user2
-////did:elastos:ijsuXewbiRytAhoWcGhhYJ87LNzALoiX9K
-//////http://api.elastos.io:20606
-//let userDid2 = "did:elastos:ijsuXewbiRytAhoWcGhhYJ87LNzALoiX9K"
-//let userDid2_name = "didapp1"
-//let userDid2_mn = "horror task escape shock suffer burger celery behave exist predict board famous"
-//let userDid2_phrasepass = "password"
-//let userDid2_storepass = "password"
-//
-////did:elastos:inc6Pb9eVQFDcPgoX9iR1Dp7TPbYfT6hzY
-//let appInstance2_name = "testapp1"
-//let appInstance2_mn = "venture link adapt field priority extend depart endless right lamp sudden fringe"
-//let appInstance2_phrasepass = "password"
-//let appInstance2_storepass = "password"
+
+//user3
+//did:elastos:ijsuXewbiRytAhoWcGhhYJ87LNzALoiX9K
+////http://api.elastos.io:20606
+let userDid3 = "did:elastos:ijsuXewbiRytAhoWcGhhYJ87LNzALoiX9K"
+let userDid3_name = "didapp1"
+let userDid3_mn = "horror task escape shock suffer burger celery behave exist predict board famous"
+let userDid3_phrasepass = "password"
+let userDid3_storepass = "password"
+
+//did:elastos:inc6Pb9eVQFDcPgoX9iR1Dp7TPbYfT6hzY
+let appInstance3_name = "testapp1"
+let appInstance3_mn = "venture link adapt field priority extend depart endless right lamp sudden fringe"
+let appInstance3_phrasepass = "password"
+let appInstance3_storepass = "password"

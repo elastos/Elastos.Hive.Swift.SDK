@@ -28,8 +28,10 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     var task: URLSessionTask? = nil
     let BUFFER_SIZE = 32768
     typealias RequestBlock = (_ error: HiveError) -> Void
-    private var requestBlock : RequestBlock?
-    
+    typealias HandleBlock = (_ success: Bool, _ error: HiveError?) -> Void
+    private var writerBlock : RequestBlock?
+    private var writerCompleteWithError: HandleBlock?
+    var index = 0
     init(url: URL, authHelper: VaultAuthHelper) {
         var input: InputStream? = nil
         var output: OutputStream? = nil
@@ -62,7 +64,7 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     }
     
     public func write(data: Data, _ error: @escaping (_ error: HiveError) -> Void) throws {
-        self.requestBlock = error
+        self.writerBlock = error
         let dataSize = data.count
         var totalBytesWritten = 0
         var availableRetries = 5
@@ -95,7 +97,8 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         // TODO: maybe on ios nothing to do here.
     }
     
-    public func close() {
+    public func close(_ didCompleteWithError: @escaping (_ success: Bool, _ error: HiveError?) -> Void) {
+        self.writerCompleteWithError = didCompleteWithError
         uploadBoundStreams.output.close()
     }
     
@@ -106,11 +109,13 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         Log.d("Hive Debug ==> response body ->", response?.debugDescription as Any)
         let code = response?.statusCode
         guard code != nil else {
-            self.requestBlock?(HiveError.failure(des: "unknow error."))
+            self.writerBlock?(HiveError.failure(des: "unknow error."))
+            self.writerCompleteWithError?(false, HiveError.failure(des: "unknow error."))
             return
         }
         guard 200...299 ~= code! else {
-            self.requestBlock?(HiveError.failure(des: String(data: data, encoding: .utf8)))
+            self.writerBlock?(HiveError.failure(des: String(data: data, encoding: .utf8)))
+            self.writerCompleteWithError?(false, HiveError.failure(des: String(data: data, encoding: .utf8)))
             return
         }
     }
@@ -121,9 +126,15 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     }
 
     public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        guard error != nil else {
-            self.requestBlock?(HiveError.netWork(des: error))
+        let response = task.response as? HTTPURLResponse
+        Log.d("Hive Debug ==> response Code ->", response?.statusCode as Any)
+        Log.d("Hive Debug ==> response body ->", response as Any)
+        guard error == nil else {
+            self.writerBlock?(HiveError.netWork(des: error))
+            self.writerCompleteWithError?(false, HiveError.netWork(des: error))
             return
         }
+        self.writerCompleteWithError?(true, nil)
+        Log.d("Hive Debug ==> upload success", "")
     }
 }
