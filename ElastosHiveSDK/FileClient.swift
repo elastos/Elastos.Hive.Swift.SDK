@@ -63,7 +63,7 @@ public class FileClient: NSObject, FilesProtocol {
                 resolver.reject(HiveError.IllegalArgument(des: "Invalid url format."))
                 return
             }
-            reader = FileReader(url: url!, authHelper: authHelper, resolver: resolver)
+            reader = FileReader(url: url!, authHelper: authHelper, method: .get, resolver: resolver)
             reader?.authFailure = { error in
                 if tryAgain >= 1 {
                     resolver.reject(error)

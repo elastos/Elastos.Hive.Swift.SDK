@@ -79,4 +79,23 @@ public class UserFactory {
 
         return try UserFactory(userDidOpt, appInstanceDidOpt, DEVELOP_PROVIDER, TEST_RESOLVER_URL, userDid2, user2Path)
     }
+    
+    //node 环境
+    class func createUser3() throws -> UserFactory {
+        let user3Path = "\(NSHomeDirectory())/Library/Caches/store" + "/" + "user3"
+        let userDidOpt = Options()
+        userDidOpt.name = userDid3_name
+        userDidOpt.mnemonic = userDid3_mn
+        userDidOpt.phrasepass = userDid3_phrasepass
+        userDidOpt.storepass = userDid3_storepass
+
+        let appInstanceDidOpt = Options()
+        appInstanceDidOpt.name = appInstance3_name
+        appInstanceDidOpt.mnemonic = appInstance3_mn
+        appInstanceDidOpt.phrasepass = appInstance3_phrasepass
+        appInstanceDidOpt.storepass = appInstance3_storepass
+
+        return try UserFactory(userDidOpt, appInstanceDidOpt, LOCAL_PROVIDER, MAIN_RESOLVER_URL, userDid3, user3Path)
+    }
 }
+

@@ -44,7 +44,7 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     typealias BlockRead = (_ block: Bool) -> Void
     private var blockRead : BlockRead?
     
-    init(url: URL, authHelper: VaultAuthHelper, resolver: Resolver<FileReader>) {
+    init(url: URL, authHelper: VaultAuthHelper, method: HTTPMethod, resolver: Resolver<FileReader>) {
         var input: InputStream? = nil
         var output: OutputStream? = nil
         self.resolver = resolver
@@ -66,7 +66,7 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         let config = URLSessionConfiguration.default
         let operationQueue = OperationQueue()
         let session = URLSession(configuration: config, delegate: self, delegateQueue: operationQueue)
-        let request = try! URLRequest(url: url, method: .get, headers: Header(authHelper).headersStream())
+        let request = try! URLRequest(url: url, method: method, headers: Header(authHelper).headersStream())
         task = session.dataTask(with: request)
         
         self.task?.resume()

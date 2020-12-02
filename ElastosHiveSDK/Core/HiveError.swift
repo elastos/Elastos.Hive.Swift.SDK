@@ -32,6 +32,7 @@ public enum HiveError: Error {
     case providerIsNil(des: String?)
     case accessAuthToken(des: String?)
     case jwtVerify(des: String?)
+    case transactionIdIsNil(des: String?)
 }
 
 extension HiveError {
@@ -55,6 +56,8 @@ extension HiveError {
         case .accessAuthToken(let des):
             return des ?? ""
         case .jwtVerify(let des):
+            return des ?? ""
+        case .transactionIdIsNil(let des):
             return des ?? ""
         }
     }

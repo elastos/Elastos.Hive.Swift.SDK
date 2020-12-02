@@ -4,7 +4,7 @@ import Foundation
 let TEST_RESOLVER_URL = "http://api.elastos.io:21606" //Test Net
 let MAIN_RESOLVER_URL = "http://api.elastos.io:20606" //Main Net
 
-let LOCAL_PROVIDER = "http://127.0.0.1:5000"
+let LOCAL_PROVIDER = "http://192.168.199.180:5000"
 let RELEASE_PROVIDER = "https://hive1.trinity-tech.io" // release
 let DEVELOP_PROVIDER = "https://hive.yoopig.com" // develop
 

@@ -160,107 +160,104 @@ public class ScriptClient: ScriptingProtocol {
     
     private func uploadImp<T>(_ scriptName: String, _ config: UploadCallConfig, _ resultType: T.Type, _ tryAgain: Int) -> HivePromise<T> {
         return HivePromise<T> { resolver in
-            let url = VaultURL.sharedInstance.call()
-            Alamofire.upload(multipartFormData: { (multipartFormData) in
-                do {
-                    let data: Data = try Data(contentsOf: URL(fileURLWithPath: config.filePath))
-                    multipartFormData.append(data, withName: "data", fileName: "test.txt", mimeType: "multipart/form-data")
-                    var param: [String: Any] = ["name": scriptName]
-                    if let _ = config.params {
-                        param["params"] = config.params!
-                    }
-                    let data1 = try JSONSerialization.data(withJSONObject: param, options: [])
-                    let str = String(data: data1, encoding: String.Encoding.utf8)
-                    multipartFormData.append(str!.data(using: .utf8)!, withName: "metadata" )
-                } catch {
-                    resolver.reject(error)
-                }
-            }, usingThreshold: UInt64.init(), to: url, method: .post, headers: Header(authHelper).headers()) { result in
-                switch result {
-                case .success(let upload, _, _):
-                    upload.responseJSON { [self] response in
-                        do {
-                            let json = JSON(response.result.value as Any)
-                            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
-                            if isRelogin {
-                                try self.authHelper.signIn()
-                                uploadImp(scriptName, config, resultType, 1).done { result in
-                                    resolver.fulfill(result)
-                                }.catch { error in
-                                    resolver.reject(error)
-                                }
-                            }
-                            if resultType.self == OutputStream.self {
-                                let data = try JSONSerialization.data(withJSONObject: json.dictionaryObject as Any, options: [])
-                                let outputStream = OutputStream(toMemory: ())
-                                outputStream.open()
-                                self.writeData(data: data, outputStream: outputStream, maxLengthPerWrite: 1024)
-                                outputStream.close()
-                                resolver.fulfill(outputStream as! T)
-                            }
-                            else if resultType.self == String.self {
-                                let dic = json.dictionaryObject
-                                let data = try JSONSerialization.data(withJSONObject: dic as Any, options: [])
-                                let str = String(data: data, encoding: String.Encoding.utf8)
-                                resolver.fulfill(str as! T)
-                            }
-                            else {
-                                let data = try JSONSerialization.data(withJSONObject: json.dictionaryObject as Any, options: [])
-                                resolver.fulfill(data as! T)
-                            }
-                        }
-                        catch {
-                            resolver.reject(error)
-                        }
-                    }
-                case .failure(let encodingError):
-                    Log.e(ScriptClient.TAG, "upload ERROR: ", encodingError.localizedDescription)
-                    resolver.reject(HiveError.failure(des: encodingError.localizedDescription))
-                }
-            }
+            let transactionId = try uploadFirstImp(scriptName, config, 0)
+            let writer = try uploadImp(transactionId)
+            resolver.fulfill(writer as! T)
+        }
+    }
+    
+    private func uploadFirstImp(_ scriptName: String, _ config: UploadCallConfig, _ tryAgain: Int) throws -> String {
+        
+        var param = ["name": scriptName] as [String : Any]
+        if config.params != nil {
+            param["params"] = config.params!
+        }
+        let url = VaultURL.sharedInstance.call()
+        let response = Alamofire.request(url,
+                            method: .post,
+                            parameters: param,
+                            encoding: JSONEncoding.default,
+                            headers: Header(authHelper).headers()).responseJSON()
+        let json = try VaultApi.handlerJsonResponse(response)
+        let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+        if isRelogin {
+            try self.authHelper.signIn()
+            return try uploadFirstImp(scriptName, config, 1)
+        }
+        // "upload_file" is same as the name of executable in registerScript()
+        let transactionId = json["upload_file"]["transaction_id"].stringValue
+        guard transactionId != "" else {
+            throw HiveError.transactionIdIsNil(des: "transactionId is nil.")
+        }
+        return transactionId
+    }
+    
+    private func uploadImp(_ transactionId: String) throws -> FileWriter {
+        if let url = URL(string: VaultURL.sharedInstance.runScriptUpload(transactionId)) {
+            let writer = FileWriter(url: url, authHelper: authHelper)
+            return writer
+        }
+        else {
+            throw HiveError.IllegalArgument(des: "Invalid url format.")
         }
     }
 
     private func downloadImp<T>(_ scriptName: String, _ config: DownloadCallConfig, _ resultType: T.Type, _ tryAgain: Int) -> HivePromise<T> {
-        return HivePromise<T> { resolver in
-            let url = VaultURL.sharedInstance.call()
-            var params = ["name": scriptName] as [String : Any]
-            if config.params != nil && config.params!.count > 0 {
-                params["params"] = config.params!
-            }
-            let response = Alamofire.request(url,
-                                             method: .post,
-                                             parameters: params,
-                                             encoding: JSONEncoding.default,
-                                             headers: Header(authHelper).headers()).responseData()
-            
-            do {
-                let relogin = try VaultApi.handlerDataResponse(response, tryAgain)
-                if relogin {
-                    try self.authHelper.signIn()
-                    self.downloadImp(scriptName, config, resultType, 1).done { result in
-                        resolver.fulfill(result)
-                    }.catch { error in
-                        resolver.reject(error)
-                    }
-                }
-                if resultType.self == OutputStream.self {
-                    let outputStream = OutputStream(toMemory: ())
-                    outputStream.open()
-                    self.writeData(data: response.data!, outputStream: outputStream, maxLengthPerWrite: 1024)
-                    outputStream.close()
-                    resolver.fulfill(outputStream as! T)
-                }
-                else if resultType.self == String.self {
-                    let str = String(data: response.data!, encoding: String.Encoding.utf8)
-                    resolver.fulfill(str as! T)
-                }
-                else {
-                    resolver.fulfill(response.data as! T)
-                }
-            }
-            catch {
+        HivePromise<T> { resolver in
+            let transactionId = try downloadFirstImp(scriptName, config, 0)
+            downloadImp(transactionId, 0).done { reader in
+                resolver.fulfill(reader as! T)
+            }.catch { error in
                 resolver.reject(error)
+            }
+        }
+    }
+
+    private func downloadFirstImp(_ scriptName: String, _ config: DownloadCallConfig, _ tryAgain: Int) throws -> String {
+        
+        var param = ["name": scriptName] as [String : Any]
+        if config.params != nil {
+            param["params"] = config.params!
+        }
+        let url = VaultURL.sharedInstance.call()
+        let response = Alamofire.request(url,
+                            method: .post,
+                            parameters: param,
+                            encoding: JSONEncoding.default,
+                            headers: Header(authHelper).headers()).responseJSON()
+        let json = try VaultApi.handlerJsonResponse(response)
+        let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+        if isRelogin {
+            try self.authHelper.signIn()
+            return try downloadFirstImp(scriptName, config, 1)
+        }
+        let transactionId = json["download_file"]["transaction_id"].stringValue
+        guard transactionId != "" else {
+            throw HiveError.transactionIdIsNil(des: "transactionId is nil.")
+        }
+        return transactionId
+    }
+    
+    private func downloadImp(_ transactionId: String, _ tryAgain: Int) -> HivePromise<FileReader> {
+        HivePromise<FileReader> { resolver in
+            let url = URL(string: VaultURL.sharedInstance.runScriptDownload(transactionId))
+            guard (url != nil) else {
+                resolver.reject(HiveError.IllegalArgument(des: "Invalid url format."))
+                return
+            }
+            let reader = FileReader(url: url!, authHelper: authHelper, method: .post, resolver: resolver)
+            reader.authFailure = { error in
+                if tryAgain >= 1 {
+                    resolver.reject(error)
+                    return
+                }
+                self.authHelper.retryLogin().then { success -> HivePromise<FileReader> in
+                    return self.downloadImp(transactionId, 1)
+                }.done { result in
+                    resolver.fulfill(result)
+                }.catch { error in
+                    resolver.reject(error)
+                }
             }
         }
     }
