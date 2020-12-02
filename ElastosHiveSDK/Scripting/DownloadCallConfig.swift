@@ -27,7 +27,7 @@ public class DownloadCallConfig: CallConfig {
     
     /// Construction method
     /// - Parameter params: params
-    convenience init(_ params: Dictionary<String, Any>) {
+    public convenience init(_ params: Dictionary<String, Any>) {
         self.init(nil, params)
     }
     

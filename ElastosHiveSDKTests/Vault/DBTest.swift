@@ -370,7 +370,8 @@ class DBTest: XCTestCase {
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         do {
-            user = try UserFactory.createUser3()
+            Log.setLevel(.Debug)
+            user = try UserFactory.createUser1()
             let lock = XCTestExpectation(description: "wait for test.")
             user!.client.getVault(user!.ownerDid, user?.provider).done { [self] vault in
                 self.database = (vault.database as! DatabaseClient)

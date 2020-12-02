@@ -55,6 +55,8 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         var request = try! URLRequest(url: url, method: .post, headers: Header(authHelper).headersStream())
         request.addValue("chunked", forHTTPHeaderField: "Transfer-Encoding")
         task = session.uploadTask(withStreamedRequest: request)
+        Log.d("Hive Debug ==> request url ->", request.url as Any)
+        Log.d("Hive Debug ==> request headers ->", (request.allHTTPHeaderFields) as Any)
         
         self.task?.resume()
     }
@@ -100,6 +102,8 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
         // "{\"_status\":\"OK\"}\n"
         let response = dataTask.response as? HTTPURLResponse
+        Log.d("Hive Debug ==> response Code ->", response?.statusCode as Any)
+        Log.d("Hive Debug ==> response body ->", response?.debugDescription as Any)
         let code = response?.statusCode
         guard code != nil else {
             self.requestBlock?(HiveError.failure(des: "unknow error."))

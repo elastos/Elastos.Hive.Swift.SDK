@@ -35,6 +35,7 @@ public class Version: NSObject {
             let url = VaultURL.sharedInstance.version()
             Alamofire.request(url, method: .get, encoding: JSONEncoding.default).responseJSON { response in
                 do {
+                    VaultApi.printDebugLogForNetwork(response)
                     let json = try VaultApi.handlerJsonResponse(response)
                     _ = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: 1)
                     let version = json["version"].stringValue
@@ -52,6 +53,7 @@ public class Version: NSObject {
             let url = VaultURL.sharedInstance.commitId()
             Alamofire.request(url, method: .get, encoding: JSONEncoding.default).responseJSON { response in
                 do {
+                    VaultApi.printDebugLogForNetwork(response)
                     let json = try VaultApi.handlerJsonResponse(response)
                     _ = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: 1)
                     let commiteId = json["commit_hash"].stringValue

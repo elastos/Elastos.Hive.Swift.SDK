@@ -26,7 +26,7 @@ import Foundation
 public class UploadCallConfig: CallConfig {
     private var _filePath: String
     
-    convenience init(_ params: Dictionary<String, Any>, _ filePath: String) {
+    public convenience init(_ params: Dictionary<String, Any>, _ filePath: String) {
         self.init(nil, params, filePath)
     }
 
