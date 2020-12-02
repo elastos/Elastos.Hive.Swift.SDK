@@ -76,7 +76,7 @@ class ScriptTest: XCTestCase {
 
             let executable: DbFindQuery = DbFindQuery("get_groups", "groups", filter!, options!)
             let lock = XCTestExpectation(description: "wait for test.")
-            scripting!.registerScript(noConditionName, executable).done { re in
+            scripting?.registerScript(noConditionName, executable).done { re in
                 XCTAssertTrue(re)
                 lock.fulfill()
             }.catch { error in
@@ -188,10 +188,35 @@ class ScriptTest: XCTestCase {
     func test12_uploadFile() {
         let lock = XCTestExpectation(description: "wait for test.")
         let scriptName = "upload_file"
-        let params = ["group_id": ["$oid": "5f8d9dfe2f4c8b7a6f8ec0f1"], "path": "test.txt"] as [String : Any]
+        let params = ["group_id": ["$oid": "5f8d9dfe2f4c8b7a6f8ec0f1"], "path": "upload_test.txt"] as [String : Any]
         let uploadCallConfig = UploadCallConfig(params, testTextFilePath)
-        scripting!.callScript(scriptName, uploadCallConfig, String.self).done { re in
-            print(re)
+        scripting!.callScript(scriptName, uploadCallConfig, FileWriter.self).done { writer in
+            let shortMessage = "POIUYTREWQ"
+            let message1 = "*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())"
+            let message2 = " ABCD ABCD ABCD ABCD 1234 5678 9009 8765"
+            
+            try writer.write(data: shortMessage.data(using: .utf8)!, { err in
+                print(err)
+            })
+            
+            for _ in 0...40 {
+                    try writer.write(data: message1.data(using: .utf8)!, { err in
+                        print(err)
+                    })
+                }
+                try writer.write(data: message2.data(using: .utf8)!, { err in
+                    print(err)
+                })
+                try writer.write(data: "message2".data(using: .utf8)!, { err in
+                    print(err)
+                })
+            try writer.write(data: message2.data(using: .utf8)!, { err in
+                print(err)
+            })
+
+                writer.close()
+                
+                XCTAssertNotNil(writer)
             lock.fulfill()
         }.catch{ err in
             XCTFail()
@@ -215,11 +240,27 @@ class ScriptTest: XCTestCase {
     }
 
     func test14_downloadFile() {
-        let params = ["group_id": ["$oid": "5f497bb83bd36ab235d82e6a"], "path": "test.txt"] as [String : Any]
+        let params = ["group_id": ["$oid": "5f497bb83bd36ab235d82e6a"], "path": "upload_test.txt"] as [String : Any]
         let downloadCallConfig = DownloadCallConfig(params)
         let lock = XCTestExpectation(description: "wait for test.")
-        scripting!.callScript("download_file", downloadCallConfig, String.self).done { success in
-            print("success")
+        scripting!.callScript("download_file", downloadCallConfig, FileReader.self).done { [self] reader in
+            let fileurl = creaFile()
+            while !reader.didLoadFinish {
+                if let data = reader.read({ error in
+                    print(error)
+                }){
+                    print("prepare to write \(data.count)")
+                    if let fileHandle = try? FileHandle(forWritingTo: fileurl) {
+                        fileHandle.seekToEndOfFile()
+                        fileHandle.write(data)
+                        fileHandle.closeFile()
+                    } else {
+                        XCTFail()
+                        lock.fulfill()
+                    }
+                }
+            }
+            reader.close()
             lock.fulfill()
         }.catch { error in
             XCTFail()
@@ -260,7 +301,7 @@ class ScriptTest: XCTestCase {
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         do {
-            user = try UserFactory.createUser1()
+            user = try UserFactory.createUser3()
             let lock = XCTestExpectation(description: "wait for test.")
             user!.client.getVault(user!.ownerDid, user?.provider).done { [self] vault in
                 self.scripting = (vault.scripting as! ScriptClient)
@@ -273,6 +314,21 @@ class ScriptTest: XCTestCase {
         } catch {
             XCTFail()
         }
+    }
+    
+    func creaFile() -> URL {
+        let dir = FileManager.default.urls(for: FileManager.SearchPathDirectory.cachesDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).last
+        let fileurl = dir?.appendingPathComponent("scripting_download_file.txt")
+        if !FileManager.default.fileExists(atPath: fileurl!.path) {
+            FileManager.default.createFile(atPath: fileurl!.path, contents: nil, attributes: nil)
+        }
+        else {
+            try? FileManager.default.removeItem(atPath: fileurl!.path)
+            FileManager.default.createFile(atPath: fileurl!.path, contents: nil, attributes: nil)
+        }
+        
+        print("fileurl == \(fileurl)")
+        return fileurl!
     }
 
     override func tearDownWithError() throws {
