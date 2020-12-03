@@ -104,6 +104,9 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     
     public func close(_ didCompleteWithError: @escaping (_ success: Bool, _ error: HiveError?) -> Void) {
         self.readerCompleteWithError = didCompleteWithError
+        if didLoadFinish {
+            self.readerCompleteWithError?(true, nil)
+        }
         downloadBoundStreams.input.close()
     }
     
@@ -173,6 +176,12 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
             if code == 401 {
                 self.authFailure?(HiveError.failure(des: "code: 401"))
                 self.task?.cancel()
+                return
+            }
+            else if code == 404 {
+                self.readerBlock?(HiveError.fileNotFound(des: "file not found."))
+                self.readerCompleteWithError?(false, HiveError.fileNotFound(des: "file not found."))
+                resolver.reject(HiveError.fileNotFound(des: "file not found."))
                 return
             }
             self.readerBlock?(HiveError.netWork(des: error))

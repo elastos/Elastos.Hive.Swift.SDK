@@ -19,7 +19,7 @@ class FileTest: XCTestCase {
                 print(err)
             })
             
-            for _ in 0...40 {
+            for _ in 0...4 {
                     try writer.write(data: message1.data(using: .utf8)!, { err in
                         print(err)
                     })

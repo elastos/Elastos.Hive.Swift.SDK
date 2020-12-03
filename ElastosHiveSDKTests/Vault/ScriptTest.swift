@@ -199,7 +199,7 @@ class ScriptTest: XCTestCase {
                 print(err)
             })
             
-            for _ in 0...40000 {
+            for _ in 0...4 {
                     try writer.write(data: message1.data(using: .utf8)!, { err in
                         print("error 1")
                         print(err)

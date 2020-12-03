@@ -31,7 +31,7 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     typealias HandleBlock = (_ success: Bool, _ error: HiveError?) -> Void
     private var writerBlock : RequestBlock?
     private var writerCompleteWithError: HandleBlock?
-    var index = 0
+    var uploadDidFinsish: Bool = false
     init(url: URL, authHelper: VaultAuthHelper) {
         var input: InputStream? = nil
         var output: OutputStream? = nil
@@ -99,6 +99,9 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     
     public func close(_ didCompleteWithError: @escaping (_ success: Bool, _ error: HiveError?) -> Void) {
         self.writerCompleteWithError = didCompleteWithError
+        if uploadDidFinsish {
+            self.writerCompleteWithError?(true, nil)
+        }
         uploadBoundStreams.output.close()
     }
     
@@ -134,6 +137,7 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
             self.writerCompleteWithError?(false, HiveError.netWork(des: error))
             return
         }
+        self.uploadDidFinsish = true
         self.writerCompleteWithError?(true, nil)
         Log.d("Hive Debug ==> upload success", "")
     }
