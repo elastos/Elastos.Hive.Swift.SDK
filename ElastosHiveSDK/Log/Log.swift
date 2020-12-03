@@ -22,10 +22,10 @@
 
 import Foundation
 
-internal class Log {
+public class Log {
     private static var logLevel = HiveLogLevel.Info
 
-    internal static func setLevel(_ level: HiveLogLevel) {
+    public static func setLevel(_ level: HiveLogLevel) {
         logLevel = level
     }
 
@@ -33,12 +33,6 @@ internal class Log {
         if (logLevel >= HiveLogLevel.Debug) {
             let log = String(format: " D/\(tag):\(format)", arguments: args)
             NSLog(log)
-        }
-    }
-
-    internal static func d(_ tag: String, _ arg: Any) {
-        if (logLevel >= HiveLogLevel.Debug) {
-            print("\nD/\(tag): \(arg)")
         }
     }
 

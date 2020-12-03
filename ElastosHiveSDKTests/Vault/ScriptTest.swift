@@ -219,10 +219,16 @@ class ScriptTest: XCTestCase {
             })
 
             writer.close { (success, error) in
-                lock.fulfill()
-                print(success)
+                if success {
+                    XCTAssertTrue(success)
+                    lock.fulfill()
+                }
+                else {
+                    print(error)
+                    XCTFail()
+                    lock.fulfill()
+                }
             }
-            
             XCTAssertNotNil(writer)
         }.catch{ err in
             XCTFail()

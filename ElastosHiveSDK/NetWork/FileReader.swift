@@ -67,8 +67,8 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         let session = URLSession(configuration: config, delegate: self, delegateQueue: operationQueue)
         let request = try! URLRequest(url: url, method: method, headers: Header(authHelper).headersStream())
         task = session.dataTask(with: request)
-        Log.d("Hive Debug ==> request url ->", request.url as Any)
-        Log.d("Hive Debug ==> request headers ->", (request.allHTTPHeaderFields) as Any)
+        Log.d("Hive Debug ==> request url ->", request.url?.description ?? "")
+        Log.d("Hive Debug ==> request headers ->", request.allHTTPHeaderFields?.debugDescription ?? "")
         
         self.task?.resume()
     }
@@ -120,7 +120,7 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
 
         let response = dataTask.response as? HTTPURLResponse
-        Log.d("Hive Debug ==> didReceive ->", response as Any)
+        Log.d("Hive Debug ==> didReceive ->", response.debugDescription )
         let code = response?.statusCode
         guard code != nil else {
             self.resolver.reject(HiveError.failure(des: "unkonw error."))
@@ -156,8 +156,8 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     
     public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         let response = task.response as? HTTPURLResponse
-        Log.d("Hive Debug ==> response Code ->", response?.statusCode as Any)
-        Log.d("Hive Debug ==> didCompleteWithError ->", response as Any)
+        Log.d("Hive Debug ==> response Code ->", response?.statusCode.description ?? "")
+        Log.d("Hive Debug ==> didCompleteWithError ->", response?.description ?? "")
         if let _ = error {
             self.readerBlock?(HiveError.netWork(des: error))
             self.readerCompleteWithError?(false, HiveError.netWork(des: error))
