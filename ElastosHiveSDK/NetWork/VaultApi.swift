@@ -44,9 +44,9 @@ class VaultApi: NSObject {
     }
     
     class func printDebugLogForNetwork(_ response: DataResponse<Any>) {
-        Log.d("Hive Debug ==> request url ->", response.request?.url as Any)
-        Log.d("Hive Debug ==> request headers ->", (response.request?.allHTTPHeaderFields) as Any)
-        Log.d("Hive Debug ==> response Code ->", response.response?.statusCode as Any)
+        Log.d("Hive Debug ==> request url ->", response.request?.url?.debugDescription ?? "")
+        Log.d("Hive Debug ==> request headers ->", response.request?.allHTTPHeaderFields?.debugDescription ?? "")
+        Log.d("Hive Debug ==> response Code ->", response.response?.statusCode.description ?? "")
         Log.d("Hive Debug ==> response body ->", response.result.debugDescription)
     }
     

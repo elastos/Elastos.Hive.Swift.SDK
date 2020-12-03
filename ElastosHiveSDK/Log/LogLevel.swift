@@ -26,7 +26,7 @@ import Foundation
  Hive log level to control or filter log output
  */
 @objc(HiveLogLevel)
-internal enum HiveLogLevel : Int, CustomStringConvertible {
+public enum HiveLogLevel : Int, CustomStringConvertible {
 
     /// Log level None
     /// Indicate disable log output.
