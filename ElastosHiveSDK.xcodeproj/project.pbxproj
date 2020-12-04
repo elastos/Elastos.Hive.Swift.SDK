@@ -36,14 +36,14 @@
 		1103757A23FF96BF004216D0 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103757823FF96BF004216D0 /* Log.swift */; };
 		1103757C23FF96C7004216D0 /* Persistent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103757B23FF96C7004216D0 /* Persistent.swift */; };
 		1103757D23FF96C7004216D0 /* Persistent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103757B23FF96C7004216D0 /* Persistent.swift */; };
+		1112421C2579E5CC002BFAEB /* OrderState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111242162579E5CB002BFAEB /* OrderState.swift */; };
+		1112421D2579E5CC002BFAEB /* PricingPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111242172579E5CB002BFAEB /* PricingPlan.swift */; };
+		1112421E2579E5CC002BFAEB /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111242182579E5CB002BFAEB /* Order.swift */; };
+		1112421F2579E5CC002BFAEB /* PaymentSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111242192579E5CB002BFAEB /* PaymentSettings.swift */; };
+		111242202579E5CC002BFAEB /* PricingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1112421A2579E5CB002BFAEB /* PricingInfo.swift */; };
+		111242212579E5CC002BFAEB /* UsingPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1112421B2579E5CB002BFAEB /* UsingPlan.swift */; };
 		111BD898256CDAA700746A51 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111BD897256CDAA700746A51 /* Version.swift */; };
 		111BD89B256CE08600746A51 /* VersionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111BD89A256CE08600746A51 /* VersionTest.swift */; };
-		111BD89F256CED4C00746A51 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111BD89E256CED4C00746A51 /* Order.swift */; };
-		111BD8A2256CED6000746A51 /* OrderState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111BD8A1256CED6000746A51 /* OrderState.swift */; };
-		111BD8A5256CED6D00746A51 /* PaymentSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111BD8A4256CED6D00746A51 /* PaymentSettings.swift */; };
-		111BD8A8256CED7B00746A51 /* PricingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111BD8A7256CED7B00746A51 /* PricingInfo.swift */; };
-		111BD8AB256CED8600746A51 /* PricingPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111BD8AA256CED8600746A51 /* PricingPlan.swift */; };
-		111BD8AE256CED9100746A51 /* UsingPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111BD8AD256CED9100746A51 /* UsingPlan.swift */; };
 		111BD8B1256D011400746A51 /* Payment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111BD8B0256D011400746A51 /* Payment.swift */; };
 		111CA54B252027760030D39C /* TestError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111CA54A252027760030D39C /* TestError.swift */; };
 		111CA6DC252097CB0030D39C /* DummyAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111CA6D9252097CB0030D39C /* DummyAdapter.swift */; };
@@ -248,14 +248,14 @@
 		1103757523FF96B5004216D0 /* ConnectHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectHelper.swift; sourceTree = "<group>"; };
 		1103757823FF96BF004216D0 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		1103757B23FF96C7004216D0 /* Persistent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Persistent.swift; sourceTree = "<group>"; };
+		111242162579E5CB002BFAEB /* OrderState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderState.swift; sourceTree = "<group>"; };
+		111242172579E5CB002BFAEB /* PricingPlan.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PricingPlan.swift; sourceTree = "<group>"; };
+		111242182579E5CB002BFAEB /* Order.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
+		111242192579E5CB002BFAEB /* PaymentSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentSettings.swift; sourceTree = "<group>"; };
+		1112421A2579E5CB002BFAEB /* PricingInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PricingInfo.swift; sourceTree = "<group>"; };
+		1112421B2579E5CB002BFAEB /* UsingPlan.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsingPlan.swift; sourceTree = "<group>"; };
 		111BD897256CDAA700746A51 /* Version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
 		111BD89A256CE08600746A51 /* VersionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionTest.swift; sourceTree = "<group>"; };
-		111BD89E256CED4C00746A51 /* Order.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
-		111BD8A1256CED6000746A51 /* OrderState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderState.swift; sourceTree = "<group>"; };
-		111BD8A4256CED6D00746A51 /* PaymentSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentSettings.swift; sourceTree = "<group>"; };
-		111BD8A7256CED7B00746A51 /* PricingInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricingInfo.swift; sourceTree = "<group>"; };
-		111BD8AA256CED8600746A51 /* PricingPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricingPlan.swift; sourceTree = "<group>"; };
-		111BD8AD256CED9100746A51 /* UsingPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsingPlan.swift; sourceTree = "<group>"; };
 		111BD8B0256D011400746A51 /* Payment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payment.swift; sourceTree = "<group>"; };
 		111CA54A252027760030D39C /* TestError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestError.swift; sourceTree = "<group>"; };
 		111CA6D9252097CB0030D39C /* DummyAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DummyAdapter.swift; sourceTree = "<group>"; };
@@ -389,18 +389,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		111BD89D256CEC4300746A51 /* Payment */ = {
+		111242152579E5CB002BFAEB /* Payment */ = {
 			isa = PBXGroup;
 			children = (
-				111BD89E256CED4C00746A51 /* Order.swift */,
-				111BD8A1256CED6000746A51 /* OrderState.swift */,
-				111BD8A4256CED6D00746A51 /* PaymentSettings.swift */,
-				111BD8A7256CED7B00746A51 /* PricingInfo.swift */,
-				111BD8AA256CED8600746A51 /* PricingPlan.swift */,
-				111BD8AD256CED9100746A51 /* UsingPlan.swift */,
+				111242162579E5CB002BFAEB /* OrderState.swift */,
+				111242172579E5CB002BFAEB /* PricingPlan.swift */,
+				111242182579E5CB002BFAEB /* Order.swift */,
+				111242192579E5CB002BFAEB /* PaymentSettings.swift */,
+				1112421A2579E5CB002BFAEB /* PricingInfo.swift */,
+				1112421B2579E5CB002BFAEB /* UsingPlan.swift */,
 			);
 			path = Payment;
-			sourceTree = SOURCE_ROOT;
+			sourceTree = "<group>";
 		};
 		111CA6D7252097CB0030D39C /* DID */ = {
 			isa = PBXGroup;
@@ -649,17 +649,17 @@
 		A39C4971225399860027BDF9 /* ElastosHiveSDK */ = {
 			isa = PBXGroup;
 			children = (
-				119B26C1257735FA0084B859 /* Errors */,
-				11E573F922C4C33400F85419 /* Extension */,
-				1147720723F678BD00C7C36F /* SwiftyJSON */,
-				1151E99F256CCBDC00024303 /* NetWork */,
-				1151E9A0256CCC6000024303 /* Log */,
-				A37F893523C72ABB00F6C11E /* Protocols */,
 				A37F892E23C7278A00F6C11E /* Result */,
+				1151E9A0256CCC6000024303 /* Log */,
+				1151E99F256CCBDC00024303 /* NetWork */,
+				1147720723F678BD00C7C36F /* SwiftyJSON */,
+				11E573F922C4C33400F85419 /* Extension */,
+				119B26C1257735FA0084B859 /* Errors */,
+				111242152579E5CB002BFAEB /* Payment */,
+				A37F893523C72ABB00F6C11E /* Protocols */,
 				111D47EE24F7A17A00B7462B /* File */,
 				111D47F224F7A2EB00B7462B /* Scripting */,
 				111D47C924F7902600B7462B /* Database */,
-				111BD89D256CEC4300746A51 /* Payment */,
 				114FD83F2297CF7600467E38 /* Authenticator.swift */,
 				111D477824ED0C1200B7462B /* VaultAuthHelper.swift */,
 				111D479224F4E2C300B7462B /* VaultAuthInfoStoreImpl.swift */,
@@ -1013,21 +1013,22 @@
 			files = (
 				111D47CE24F7905100B7462B /* CountOptions.swift in Sources */,
 				115E82ED251A44BC004DCB1E /* ObjectId.swift in Sources */,
+				1112421C2579E5CC002BFAEB /* OrderState.swift in Sources */,
 				111D47F024F7A18900B7462B /* FileInfo.swift in Sources */,
 				1127463024FE3369007D6356 /* FileClient.swift in Sources */,
 				11E92CE92560E1D4007EFC95 /* PropertiesExecutable.swift in Sources */,
+				1112421E2579E5CC002BFAEB /* Order.swift in Sources */,
 				1103756D23FF9689004216D0 /* DataResponse.swift in Sources */,
 				1103757323FF96AB004216D0 /* AuthToken.swift in Sources */,
-				111BD8A2256CED6000746A51 /* OrderState.swift in Sources */,
 				119B26C3257735FA0084B859 /* HiveError.swift in Sources */,
 				111D47EC24F794A500B7462B /* DeleteResult.swift in Sources */,
 				1147720923F678BD00C7C36F /* SwiftyJSON.swift in Sources */,
 				111D47DA24F7908D00B7462B /* FindOptions.swift in Sources */,
 				118F2D96250F2C3500447A0A /* DbFindQuery.swift in Sources */,
+				111242202579E5CC002BFAEB /* PricingInfo.swift in Sources */,
 				A3D9D41323C9671C003B602E /* FilesProtocol.swift in Sources */,
 				A37F893D23C72B2600F6C11E /* HiveClientOptions.swift in Sources */,
 				11E92CE12560D8B2007EFC95 /* FileExecutable.swift in Sources */,
-				111BD8AE256CED9100746A51 /* UsingPlan.swift in Sources */,
 				1170FB142502019C0049E81D /* Vault.swift in Sources */,
 				11C9EAE5254A637500080995 /* InsertOneResult.swift in Sources */,
 				111D47F424F7A30300B7462B /* Executable.swift in Sources */,
@@ -1040,7 +1041,6 @@
 				1170FB052501CB3F0049E81D /* WriteConcern.swift in Sources */,
 				1103757923FF96BF004216D0 /* Log.swift in Sources */,
 				111D47D124F7906100B7462B /* CreateCollectionOptions.swift in Sources */,
-				111BD8A5256CED6D00746A51 /* PaymentSettings.swift in Sources */,
 				1170FB082501CCD30049E81D /* ReadConcern.swift in Sources */,
 				1103757623FF96B5004216D0 /* ConnectHelper.swift in Sources */,
 				115E82EA251A44AA004DCB1E /* MaxKey.swift in Sources */,
@@ -1059,9 +1059,11 @@
 				110357E3256FA3CA003F639F /* FileReader.swift in Sources */,
 				11E3C24D25709282000175F1 /* DatabaseProtocol.swift in Sources */,
 				111D47E624F7927D00B7462B /* InsertManyResult.swift in Sources */,
+				1112421F2579E5CC002BFAEB /* PaymentSettings.swift in Sources */,
 				A3D9D41623C96DA1003B602E /* KeyValuesProtocol.swift in Sources */,
 				118F2D99250F2CF400447A0A /* DbInsertQuery.swift in Sources */,
 				118F2D8D250F28BA00447A0A /* RawExecutable.swift in Sources */,
+				111242212579E5CC002BFAEB /* UsingPlan.swift in Sources */,
 				11E3C251257092B9000175F1 /* PaymentProtocol.swift in Sources */,
 				111D47E324F7910100B7462B /* UpdateOptions.swift in Sources */,
 				114FD8402297CF7700467E38 /* Authenticator.swift in Sources */,
@@ -1075,22 +1077,20 @@
 				11ED682A22FF1078004C17D0 /* ElastosHiveSDK.swift in Sources */,
 				1127463324FE3386007D6356 /* ScriptClient.swift in Sources */,
 				118F2D93250F2A8600447A0A /* DbDeleteQuery.swift in Sources */,
+				1112421D2579E5CC002BFAEB /* PricingPlan.swift in Sources */,
 				1129C19424052CC500CD77F2 /* Alamofire+Synchronous.swift in Sources */,
 				111D47D424F7906F00B7462B /* DeleteOptions.swift in Sources */,
 				111D47E924F7940600B7462B /* UpdateResult.swift in Sources */,
 				1170FB0E2501CEF70049E81D /* VaultIndex.swift in Sources */,
-				111BD8A8256CED7B00746A51 /* PricingInfo.swift in Sources */,
 				119B26BC257630770084B859 /* DownloadCallConfig.swift in Sources */,
 				115E82E7251A4495004DCB1E /* MinKey.swift in Sources */,
 				111D47FD24F8B63C00B7462B /* Options.swift in Sources */,
-				111BD8AB256CED8600746A51 /* PricingPlan.swift in Sources */,
 				A3FD3C81228000EE0031413A /* HiveClient.swift in Sources */,
 				119B26BF2576308F0084B859 /* GeneralCallConfig.swift in Sources */,
 				111D478B24EE810A00B7462B /* VaultURL.swift in Sources */,
 				11E92CED2560E228007EFC95 /* HashExecutable.swift in Sources */,
 				111D479324F4E2C300B7462B /* VaultAuthInfoStoreImpl.swift in Sources */,
 				1170FB0B2501CD2F0049E81D /* ReadPreference.swift in Sources */,
-				111BD89F256CED4C00746A51 /* Order.swift in Sources */,
 				1103757023FF96A0004216D0 /* LogLevel.swift in Sources */,
 				11749D9F24082FB1007B8F32 /* OutputStream.swift in Sources */,
 				119B26B9257630590084B859 /* UploadCallConfig.swift in Sources */,
