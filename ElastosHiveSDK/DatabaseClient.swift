@@ -51,7 +51,7 @@ public class DatabaseClient: DatabaseProtocol {
                 }
             }
             let url = VaultURL.sharedInstance.mongoDBSetup()
-            let response = Alamofire.request(url,
+            let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
@@ -80,7 +80,7 @@ public class DatabaseClient: DatabaseProtocol {
         return HivePromise<Bool> { resolver in
             let param = ["collection": collection]
             let url = VaultURL.sharedInstance.deleteMongoDBCollection()
-            let response = Alamofire.request(url,
+            let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
@@ -114,7 +114,7 @@ public class DatabaseClient: DatabaseProtocol {
                 }
             }
             let url = VaultURL.sharedInstance.insertOne()
-            let response = Alamofire.request(url,
+            let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
@@ -147,7 +147,7 @@ public class DatabaseClient: DatabaseProtocol {
                 param["options"] = try options.jsonSerialize()
             }
             let url = VaultURL.sharedInstance.insertMany()
-            let response = Alamofire.request(url,
+            let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
@@ -180,7 +180,7 @@ public class DatabaseClient: DatabaseProtocol {
                 param["options"] = try options.jsonSerialize()
             }
             let url = VaultURL.sharedInstance.countDocuments()
-            let response = Alamofire.request(url,
+            let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
@@ -212,7 +212,7 @@ public class DatabaseClient: DatabaseProtocol {
                 param["options"] = try options.jsonSerialize()
             }
             let url = VaultURL.sharedInstance.findOne()
-            let response = Alamofire.request(url,
+            let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
@@ -244,7 +244,7 @@ public class DatabaseClient: DatabaseProtocol {
                 param["options"] = try options.jsonSerialize()
             }
             let url = VaultURL.sharedInstance.findMany()
-            let response = Alamofire.request(url,
+            let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
@@ -287,7 +287,7 @@ public class DatabaseClient: DatabaseProtocol {
                 param["options"] = try options.jsonSerialize()
             }
             let url = VaultURL.sharedInstance.updateOne()
-            let response = Alamofire.request(url,
+            let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
@@ -320,7 +320,7 @@ public class DatabaseClient: DatabaseProtocol {
                 param["options"] = try options.jsonSerialize()
             }
             let url = VaultURL.sharedInstance.updateMany()
-            let response = Alamofire.request(url,
+            let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
@@ -353,7 +353,7 @@ public class DatabaseClient: DatabaseProtocol {
                 param["options"] = try options.jsonSerialize()
             }
             let url = VaultURL.sharedInstance.deleteOne()
-            let response = Alamofire.request(url,
+            let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
@@ -386,7 +386,7 @@ public class DatabaseClient: DatabaseProtocol {
                 param["options"] = try options.jsonSerialize()
             }
             let url = VaultURL.sharedInstance.deleteMany()
-            let response = Alamofire.request(url,
+            let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,

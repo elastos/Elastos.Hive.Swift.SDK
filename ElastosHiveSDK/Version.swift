@@ -33,7 +33,7 @@ public class Version: NSObject {
     public func version() -> HivePromise<String> {
         return HivePromise<String> { resolver in
             let url = VaultURL.sharedInstance.version()
-            Alamofire.request(url, method: .get, encoding: JSONEncoding.default).responseJSON { response in
+            AF.request(url, method: .get, encoding: JSONEncoding.default).responseJSON { response in
                 do {
                     VaultApi.printDebugLogForNetwork(response)
                     let json = try VaultApi.handlerJsonResponse(response)
@@ -51,7 +51,7 @@ public class Version: NSObject {
     public func lastCommitId() -> HivePromise<String> {
         return HivePromise<String> { resolver in
             let url = VaultURL.sharedInstance.commitId()
-            Alamofire.request(url, method: .get, encoding: JSONEncoding.default).responseJSON { response in
+            AF.request(url, method: .get, encoding: JSONEncoding.default).responseJSON { response in
                 do {
                     VaultApi.printDebugLogForNetwork(response)
                     let json = try VaultApi.handlerJsonResponse(response)

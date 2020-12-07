@@ -57,8 +57,8 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         var request = try! URLRequest(url: url, method: .post, headers: Header(authHelper).headersStream())
         request.addValue("chunked", forHTTPHeaderField: "Transfer-Encoding")
         task = session.uploadTask(withStreamedRequest: request)
-        Log.d("Hive Debug ==> request url ->", request.url?.description ?? "")
-        Log.d("Hive Debug ==> request headers ->", request.allHTTPHeaderFields?.description ?? "")
+        Log.d("Hive Debug ==> request url ->", request.url as Any)
+        Log.d("Hive Debug ==> request headers ->", request.allHTTPHeaderFields as Any)
         
         self.task?.resume()
     }
@@ -108,8 +108,8 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
         // "{\"_status\":\"OK\"}\n"
         let response = dataTask.response as? HTTPURLResponse
-        Log.d("Hive Debug ==> response Code ->", response?.statusCode.description ?? "")
-        Log.d("Hive Debug ==> response body ->", response?.debugDescription ?? "")
+        Log.d("Hive Debug ==> response Code ->", response?.statusCode as Any)
+        Log.d("Hive Debug ==> response body ->", response as Any)
         let code = response?.statusCode
         guard code != nil else {
             self.writerBlock?(HiveError.failure(des: "unknow error."))
@@ -130,8 +130,8 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
 
     public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         let response = task.response as? HTTPURLResponse
-        Log.d("Hive Debug ==> response Code ->", response?.statusCode.description ?? "")
-        Log.d("Hive Debug ==> response body ->", response?.description ?? "")
+        Log.d("Hive Debug ==> response Code ->", response?.statusCode as Any)
+        Log.d("Hive Debug ==> response body ->", response as Any)
         guard error == nil else {
             self.writerBlock?(HiveError.netWork(des: error))
             self.writerCompleteWithError?(false, HiveError.netWork(des: error))

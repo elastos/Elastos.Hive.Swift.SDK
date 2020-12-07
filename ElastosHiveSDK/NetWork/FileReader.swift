@@ -67,8 +67,8 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         let session = URLSession(configuration: config, delegate: self, delegateQueue: operationQueue)
         let request = try! URLRequest(url: url, method: method, headers: Header(authHelper).headersStream())
         task = session.dataTask(with: request)
-        Log.d("Hive Debug ==> request url ->", request.url?.description ?? "")
-        Log.d("Hive Debug ==> request headers ->", request.allHTTPHeaderFields?.debugDescription ?? "")
+        Log.d("Hive Debug ==> request url ->", request.url as Any)
+        Log.d("Hive Debug ==> request headers ->", request.allHTTPHeaderFields as Any)
         
         self.task?.resume()
     }
@@ -159,8 +159,8 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     
     public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         let response = task.response as? HTTPURLResponse
-        Log.d("Hive Debug ==> response Code ->", response?.statusCode.description ?? "")
-        Log.d("Hive Debug ==> didCompleteWithError ->", response?.description ?? "")
+        Log.d("Hive Debug ==> response Code ->", response?.statusCode as Any)
+        Log.d("Hive Debug ==> didCompleteWithError ->", response as Any)
         if let _ = error {
             self.readerBlock?(HiveError.netWork(des: error))
             self.readerCompleteWithError?(false, HiveError.netWork(des: error))
