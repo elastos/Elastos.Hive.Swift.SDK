@@ -23,4 +23,5 @@
 public protocol Persistent {
     func parseFrom() throws -> Dictionary<String, Any>
     func upateContent(_ json: Dictionary<String, Any>) throws
+    func deleteContent() throws
 }

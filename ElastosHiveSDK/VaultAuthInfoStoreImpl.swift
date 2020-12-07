@@ -60,4 +60,16 @@ class VaultAuthInfoStoreImpl: Persistent {
         let data = try JSONSerialization.data(withJSONObject: json, options: [])
         try data.write(to: URL(fileURLWithPath: realyPath))
     }
+    
+    func deleteContent() throws {
+        let tokenPath = storePath + "token/"
+        let fileName = (ownerDid + provider).md5
+        let fileManager = FileManager.default
+        let rePath = tokenPath + fileName
+        let exist: Bool = fileManager.fileExists(atPath: rePath)
+        if exist {
+            print(rePath)
+            try fileManager.removeItem(atPath: rePath)
+        }
+    }
 }

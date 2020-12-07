@@ -227,14 +227,7 @@ public class VaultAuthHelper: ConnectHelper {
         }
     }
     
-    private func delete() throws {
-        token = AuthToken("", "", "")
-        let json = [ACCESS_TOKEN_KEY: token!.accessToken,
-                    EXPIRES_AT_KEY: token!.expiredTime,
-                    TOKEN_TYPE_KEY: "token",
-                    USER_DID_KEY: "",
-                    APP_ID_KEY: "",
-                    APP_INSTANCE_DID_KEY: ""]
-        try _persistent.upateContent(json as Dictionary<String, Any>)
+    public func removeToken() throws {
+        try _persistent.deleteContent()
     }
 }
