@@ -148,6 +148,10 @@ public class HiveClientHandle: NSObject {
                 do {
                     let did = try DID(ownerDid)
                     let doc = try did.resolve()
+                    guard let _ = doc else {
+                        resolver.reject(HiveError.didNotPublished(des: "did Not Published."))
+                        return
+                    }
                     let services = doc?.selectServices(byType: "HiveVault")
                     if services != nil && services!.count > 0 {
                         vaultProvider = services![0].endpoint
