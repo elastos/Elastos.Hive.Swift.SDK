@@ -34,6 +34,7 @@ public enum HiveError: Error {
     case jwtVerify(des: String?)
     case transactionIdIsNil(des: String?)
     case fileNotFound(des: String?)
+    case didNotPublished(des: String?)
 }
 
 extension HiveError {
@@ -61,6 +62,8 @@ extension HiveError {
         case .transactionIdIsNil(let des):
             return des ?? ""
         case .fileNotFound(let des):
+            return des ?? ""
+        case .didNotPublished(let des):
             return des ?? ""
         }
     }
