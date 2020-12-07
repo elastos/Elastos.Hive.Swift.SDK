@@ -43,7 +43,7 @@ class VaultHelper: NSObject {
     func useTrialImp() -> HivePromise<Bool> {
         return HivePromise { resolver in
             let url = VaultURL.sharedInstance.createFreeVault()
-            let response = Alamofire.request(url, method: .post, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
+            let response = AF.request(url, method: .post, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
             switch response.result {
             case .success(let re):
             let json = JSON(re)

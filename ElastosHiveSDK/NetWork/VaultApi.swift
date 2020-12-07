@@ -43,14 +43,14 @@ class VaultApi: NSObject {
         }
     }
     
-    class func printDebugLogForNetwork(_ response: DataResponse<Any>) {
-        Log.d("Hive Debug ==> request url ->", response.request?.url?.debugDescription ?? "")
-        Log.d("Hive Debug ==> request headers ->", response.request?.allHTTPHeaderFields?.debugDescription ?? "")
-        Log.d("Hive Debug ==> response Code ->", response.response?.statusCode.description ?? "")
-        Log.d("Hive Debug ==> response body ->", response.result.debugDescription)
+    class func printDebugLogForNetwork(_ response: AFDataResponse<Any>) {
+        Log.d("Hive Debug ==> request url ->", response.request?.url as Any)
+        Log.d("Hive Debug ==> request headers ->", response.request?.allHTTPHeaderFields as Any)
+        Log.d("Hive Debug ==> response Code ->", response.response?.statusCode as Any)
+        Log.d("Hive Debug ==> response body ->", response.result)
     }
     
-    class func handlerJsonResponse(_ response: DataResponse<Any>)throws -> JSON {
+    class func handlerJsonResponse(_ response: AFDataResponse<Any>)throws -> JSON {
         switch response.result {
         case .success(let re):
             let json = JSON(re)
@@ -74,35 +74,5 @@ class VaultApi: NSObject {
         else {
             return false
         }
-    }
-    
-    class func handlerDataResponse(_  result: DataResponse<Data>, _ tryAgain: Int)throws -> Bool {
-        if result.result.isSuccess {
-            let code = result.response?.statusCode
-            guard let _ = code else {
-                throw HiveError.failure(des: "Unknow error.")
-            }
-            
-            guard 200...299 ~= code! else {
-                if result.response?.statusCode == 401 && tryAgain < 1  {
-                    return true
-                }
-                else {
-                    if result.result.error != nil {
-                        throw HiveError.netWork(des: result.result.error)
-                    }
-                    else if result.data != nil{
-                        throw HiveError.failure(des: String(data: result.data!, encoding: .utf8))
-                    }
-                    else {
-                        throw HiveError.failure(des: "scripting download ERROR: ")
-                    }
-                }
-            }
-        }
-        else {
-            throw HiveError.failure(des: result.result.error?.localizedDescription)
-        }
-        return false
     }
 }

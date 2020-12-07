@@ -57,7 +57,7 @@ class FileTest: XCTestCase {
                 if let data = output.read({ error in
                     print(error as Any)
                 }){
-                    print("prepare to write \(data.count)")
+//                    print("prepare to write \(data.count)")
                     if let fileHandle = try? FileHandle(forWritingTo: fileurl) {
                         fileHandle.seekToEndOfFile()
                         fileHandle.write(data)

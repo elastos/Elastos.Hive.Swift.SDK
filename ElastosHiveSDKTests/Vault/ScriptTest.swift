@@ -261,7 +261,7 @@ class ScriptTest: XCTestCase {
                 if let data = reader.read({ error in
                     print(error)
                 }){
-                    print("prepare to write \(data.count)")
+//                    print("prepare to write \(data.count)")
                     if let fileHandle = try? FileHandle(forWritingTo: fileurl) {
                         fileHandle.seekToEndOfFile()
                         fileHandle.write(data)
@@ -316,7 +316,7 @@ class ScriptTest: XCTestCase {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         do {
             Log.setLevel(.Debug)
-            user = try UserFactory.createUser3()
+            user = try UserFactory.createUser1()
             let lock = XCTestExpectation(description: "wait for test.")
             user?.client.createVault(user!.ownerDid, user?.provider).done { [self] vault in
                 self.scripting = (vault.scripting as! ScriptClient)

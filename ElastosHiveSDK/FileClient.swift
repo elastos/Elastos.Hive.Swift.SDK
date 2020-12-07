@@ -91,7 +91,7 @@ public class FileClient: NSObject, FilesProtocol {
             let param = ["path": remoteFile]
             let url = VaultURL.sharedInstance.deleteFileOrFolder()
 
-            let response = Alamofire.request(url,
+            let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
@@ -122,7 +122,7 @@ public class FileClient: NSObject, FilesProtocol {
         HivePromise<Bool> { resolver in
             let url = VaultURL.sharedInstance.move()
             let param = ["src_path": src, "dst_path": dest]
-            let response = Alamofire.request(url,
+            let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
@@ -152,7 +152,7 @@ public class FileClient: NSObject, FilesProtocol {
         HivePromise<Bool> { resolver in
             let url = VaultURL.sharedInstance.move()
             let param = ["src_path": src, "dst_path": dest]
-            let response = Alamofire.request(url,
+            let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
@@ -181,7 +181,7 @@ public class FileClient: NSObject, FilesProtocol {
     private func hashImp(_ path: String, _ tryAgain: Int) -> HivePromise<String> {
         return HivePromise<String> { resolver in
             let url = VaultURL.sharedInstance.hash(path)
-            let response = Alamofire.request(url,
+            let response = AF.request(url,
                                 method: .get,
                                 encoding: JSONEncoding.default,
                                 headers: Header(authHelper).headers()).responseJSON()
@@ -209,7 +209,7 @@ public class FileClient: NSObject, FilesProtocol {
     private func listImp(_ path: String, _ tryAgain: Int) -> HivePromise<Array<FileInfo>> {
         return HivePromise<Array<FileInfo>> { resolver in
             let url = VaultURL.sharedInstance.list(path)
-            let response = Alamofire.request(url,
+            let response = AF.request(url,
                                 method: .get,
                                 encoding: JSONEncoding.default,
                                 headers: Header(authHelper).headers()).responseJSON()
@@ -247,7 +247,7 @@ public class FileClient: NSObject, FilesProtocol {
     private func statImp(_ path: String, _ tryAgain: Int) -> HivePromise<FileInfo>{
         return HivePromise<FileInfo> { resolver in
             let url = VaultURL.sharedInstance.stat(path)
-            let response = Alamofire.request(url,
+            let response = AF.request(url,
                                 method: .get,
                                 encoding: JSONEncoding.default,
                                 headers: Header(authHelper).headers()).responseJSON()

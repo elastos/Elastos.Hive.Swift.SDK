@@ -52,7 +52,7 @@ public class ScriptClient: ScriptingProtocol {
             }
             param["executable"] = try executable.jsonSerialize()
             let url = VaultURL.sharedInstance.registerScript()
-            let response = Alamofire.request(url,
+            let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
@@ -110,7 +110,7 @@ public class ScriptClient: ScriptingProtocol {
                 param["context"] = dic
             }
             let url = VaultURL.sharedInstance.call()
-            let response = Alamofire.request(url,
+            let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
@@ -165,7 +165,7 @@ public class ScriptClient: ScriptingProtocol {
             param["params"] = config.params!
         }
         let url = VaultURL.sharedInstance.call()
-        let response = Alamofire.request(url,
+        let response = AF.request(url,
                             method: .post,
                             parameters: param,
                             encoding: JSONEncoding.default,
@@ -212,7 +212,7 @@ public class ScriptClient: ScriptingProtocol {
             param["params"] = config.params!
         }
         let url = VaultURL.sharedInstance.call()
-        let response = Alamofire.request(url,
+        let response = AF.request(url,
                             method: .post,
                             parameters: param,
                             encoding: JSONEncoding.default,
