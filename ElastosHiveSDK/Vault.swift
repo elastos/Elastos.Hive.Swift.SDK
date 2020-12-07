@@ -112,5 +112,9 @@ public class Vault: NSObject {
     func getUsingPricePlan() -> HivePromise<UsingPlan> {
         return self.payment.getUsingPricePlan()
     }
+    
+    public func revokeAccessToken() throws {
+        return try authHelper.removeToken()
+    }
 }
 
