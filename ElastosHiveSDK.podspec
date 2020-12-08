@@ -23,10 +23,6 @@ Pod::Spec.new do |s|
   s.xcconfig = { 'FRAMEWORK_SEARCH_PATHS' => '"${PODS_CONFIGURATION_BUILD_DIR}/ElastosHiveSDK"' }
   s.dependency 'Alamofire','~> 5.0'
   s.dependency 'PromiseKit','~> 6.9'
-  s.dependency 'BlueRSA', '~> 1.0'
-  s.dependency 'LoggerAPI','~> 1.7'
-  s.dependency 'KituraContracts','~> 1.1'
-  s.dependency 'BlueCryptor', '~> 1.0'
   s.dependency 'ElastosDIDSDK', '~> 1.2'
   s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
   s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
