@@ -25,9 +25,11 @@ import Foundation
 public class ScriptClient: ScriptingProtocol {
     private static let TAG = "ScriptClient"
     private var authHelper: VaultAuthHelper
+    private var vaultUrl: VaultURL
 
     public init(_ authHelper: VaultAuthHelper) {
         self.authHelper = authHelper
+        self.vaultUrl = self.authHelper.vaultUrl
     }
 
     public func registerScript(_ name: String, _ executable: Executable) -> HivePromise<Bool> {
@@ -51,7 +53,7 @@ public class ScriptClient: ScriptingProtocol {
                 param["accessCondition"] = try accessCondition!.jsonSerialize()
             }
             param["executable"] = try executable.jsonSerialize()
-            let url = VaultURL.sharedInstance.registerScript()
+            let url = vaultUrl.registerScript()
             let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
@@ -109,7 +111,7 @@ public class ScriptClient: ScriptingProtocol {
                 }
                 param["context"] = dic
             }
-            let url = VaultURL.sharedInstance.call()
+            let url = vaultUrl.call()
             let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
@@ -164,7 +166,7 @@ public class ScriptClient: ScriptingProtocol {
         if config.params != nil {
             param["params"] = config.params!
         }
-        let url = VaultURL.sharedInstance.call()
+        let url = vaultUrl.call()
         let response = AF.request(url,
                             method: .post,
                             parameters: param,
@@ -185,7 +187,7 @@ public class ScriptClient: ScriptingProtocol {
     }
     
     private func uploadImp(_ transactionId: String) throws -> FileWriter {
-        if let url = URL(string: VaultURL.sharedInstance.runScriptUpload(transactionId)) {
+        if let url = URL(string: vaultUrl.runScriptUpload(transactionId)) {
             let writer = FileWriter(url: url, authHelper: authHelper)
             return writer
         }
@@ -211,7 +213,7 @@ public class ScriptClient: ScriptingProtocol {
         if config.params != nil {
             param["params"] = config.params!
         }
-        let url = VaultURL.sharedInstance.call()
+        let url = vaultUrl.call()
         let response = AF.request(url,
                             method: .post,
                             parameters: param,
@@ -232,7 +234,7 @@ public class ScriptClient: ScriptingProtocol {
     
     private func downloadImp(_ transactionId: String, _ tryAgain: Int) -> HivePromise<FileReader> {
         HivePromise<FileReader> { resolver in
-            let url = URL(string: VaultURL.sharedInstance.runScriptDownload(transactionId))
+            let url = URL(string: vaultUrl.runScriptDownload(transactionId))
             guard (url != nil) else {
                 resolver.reject(HiveError.IllegalArgument(des: "Invalid url format."))
                 return

@@ -25,14 +25,16 @@ import Foundation
 public class Version: NSObject {
     private var authHelper: VaultAuthHelper
     
+    private var vaultUrl: VaultURL
     init(_ authHelper: VaultAuthHelper) {
         PromiseKit.conf.Q = (map: HiveVaultQueue, return: HiveVaultQueue)
         self.authHelper = authHelper
+        self.vaultUrl = authHelper.vaultUrl
     }
     
     public func version() -> HivePromise<String> {
         return HivePromise<String> { resolver in
-            let url = VaultURL.sharedInstance.version()
+            let url = vaultUrl.version()
             AF.request(url, method: .get, encoding: JSONEncoding.default).responseJSON { response in
                 do {
                     VaultApi.printDebugLogForNetwork(response)
@@ -50,7 +52,7 @@ public class Version: NSObject {
     
     public func lastCommitId() -> HivePromise<String> {
         return HivePromise<String> { resolver in
-            let url = VaultURL.sharedInstance.commitId()
+            let url = vaultUrl.commitId()
             AF.request(url, method: .get, encoding: JSONEncoding.default).responseJSON { response in
                 do {
                     VaultApi.printDebugLogForNetwork(response)

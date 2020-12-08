@@ -25,9 +25,11 @@ import Foundation
 public class DatabaseClient: DatabaseProtocol {
     private static let TAG = "DatabaseClient"
     private var authHelper: VaultAuthHelper
+    private var vaultUrl: VaultURL
 
     public init(_ authHelper: VaultAuthHelper) {
         self.authHelper = authHelper
+        self.vaultUrl = authHelper.vaultUrl
     }
     
     public func createCollection(_ name: String) -> HivePromise<Bool> {
@@ -50,7 +52,7 @@ public class DatabaseClient: DatabaseProtocol {
                     param["options"] = try options!.jsonSerialize()
                 }
             }
-            let url = VaultURL.sharedInstance.mongoDBSetup()
+            let url = vaultUrl.mongoDBSetup()
             let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
@@ -79,7 +81,7 @@ public class DatabaseClient: DatabaseProtocol {
     private func deleteColImp(_ collection: String, _ tryAgain: Int) -> HivePromise<Bool> {
         return HivePromise<Bool> { resolver in
             let param = ["collection": collection]
-            let url = VaultURL.sharedInstance.deleteMongoDBCollection()
+            let url = vaultUrl.deleteMongoDBCollection()
             let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
@@ -113,7 +115,7 @@ public class DatabaseClient: DatabaseProtocol {
                     param["options"] = try options!.jsonSerialize()
                 }
             }
-            let url = VaultURL.sharedInstance.insertOne()
+            let url = vaultUrl.insertOne()
             let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
@@ -146,7 +148,7 @@ public class DatabaseClient: DatabaseProtocol {
             if try options.jsonSerialize().count != 0 {
                 param["options"] = try options.jsonSerialize()
             }
-            let url = VaultURL.sharedInstance.insertMany()
+            let url = vaultUrl.insertMany()
             let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
@@ -179,7 +181,7 @@ public class DatabaseClient: DatabaseProtocol {
             if try options.jsonSerialize().count != 0 {
                 param["options"] = try options.jsonSerialize()
             }
-            let url = VaultURL.sharedInstance.countDocuments()
+            let url = vaultUrl.countDocuments()
             let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
@@ -211,7 +213,7 @@ public class DatabaseClient: DatabaseProtocol {
             if try options.jsonSerialize().count != 0 {
                 param["options"] = try options.jsonSerialize()
             }
-            let url = VaultURL.sharedInstance.findOne()
+            let url = vaultUrl.findOne()
             let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
@@ -243,7 +245,7 @@ public class DatabaseClient: DatabaseProtocol {
             if try options.jsonSerialize().count != 0 {
                 param["options"] = try options.jsonSerialize()
             }
-            let url = VaultURL.sharedInstance.findMany()
+            let url = vaultUrl.findMany()
             let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
@@ -286,7 +288,7 @@ public class DatabaseClient: DatabaseProtocol {
             if try options.jsonSerialize().count != 0 {
                 param["options"] = try options.jsonSerialize()
             }
-            let url = VaultURL.sharedInstance.updateOne()
+            let url = vaultUrl.updateOne()
             let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
@@ -319,7 +321,7 @@ public class DatabaseClient: DatabaseProtocol {
             if try options.jsonSerialize().count != 0 {
                 param["options"] = try options.jsonSerialize()
             }
-            let url = VaultURL.sharedInstance.updateMany()
+            let url = vaultUrl.updateMany()
             let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
@@ -352,7 +354,7 @@ public class DatabaseClient: DatabaseProtocol {
             if try options.jsonSerialize().count != 0 {
                 param["options"] = try options.jsonSerialize()
             }
-            let url = VaultURL.sharedInstance.deleteOne()
+            let url = vaultUrl.deleteOne()
             let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
@@ -385,7 +387,7 @@ public class DatabaseClient: DatabaseProtocol {
             if try options.jsonSerialize().count != 0 {
                 param["options"] = try options.jsonSerialize()
             }
-            let url = VaultURL.sharedInstance.deleteMany()
+            let url = vaultUrl.deleteMany()
             let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
