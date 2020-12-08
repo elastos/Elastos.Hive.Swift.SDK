@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
 
   s.name         = 'ElastosHiveSDK'
-  s.version      = '1.0.0'
+  s.version      = '2.0.2'
   s.summary      = 'Elastos Hive iOS SDK Distribution.'
   s.swift_version = '4.2'
   s.description  = 'Elastos hive ios sdk framework distribution.'
@@ -18,9 +18,16 @@ Pod::Spec.new do |s|
   s.author       = { 'hive-dev' => 'support@elastos.org' }
   s.platform     = :ios, '9.0'
   s.ios.deployment_target = '9.0'
-  s.source       = {'http':'https://github.com/elastos/Elastos.NET.Hive.Swift.SDK/releases/download/release-v1.0.0/ElastosHive-framework.zip'}
-  s.vendored_frameworks = 'ElastosHive-framework/*.framework'
-  s.source_files = 'ElastosHive-framework/ElastosHiveSDK.framework/**/*.h'
+  s.source = {:git => 'https://github.com/elastos/Elastos.NET.Hive.Swift.SDK.git', :tag => s.version}
+  s.source_files = 'ElastosHiveSDK/**/*.swift'
+  s.xcconfig = { 'FRAMEWORK_SEARCH_PATHS' => '"${PODS_CONFIGURATION_BUILD_DIR}/ElastosHiveSDK"' }
+  s.dependency 'Alamofire','~> 5.0'
+  s.dependency 'PromiseKit','~> 6.9'
+  s.dependency 'BlueRSA', '~> 1.0'
+  s.dependency 'LoggerAPI','~> 1.7'
+  s.dependency 'KituraContracts','~> 1.1'
+  s.dependency 'BlueCryptor', '~> 1.0'
+  s.dependency 'ElastosDIDSDK', '~> 1.2'
   s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
   s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
 
