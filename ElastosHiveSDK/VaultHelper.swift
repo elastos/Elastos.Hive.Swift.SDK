@@ -24,8 +24,11 @@ import Foundation
 
 class VaultHelper: NSObject {
     private var authHelper: VaultAuthHelper
+    private var vaultUrl: VaultURL
+
     public init(_ authHelper: VaultAuthHelper) {
         self.authHelper = authHelper
+        self.vaultUrl = authHelper.vaultUrl
     }
     
     func useTrial() -> HivePromise<Bool> {
@@ -42,7 +45,7 @@ class VaultHelper: NSObject {
     
     func useTrialImp() -> HivePromise<Bool> {
         return HivePromise { resolver in
-            let url = VaultURL.sharedInstance.createFreeVault()
+            let url = vaultUrl.createFreeVault()
             let response = AF.request(url, method: .post, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
             switch response.result {
             case .success(let re):

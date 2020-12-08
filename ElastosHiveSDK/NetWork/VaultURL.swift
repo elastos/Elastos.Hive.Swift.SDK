@@ -25,9 +25,10 @@ import Foundation
 class VaultURL {
 
     private var baseUrl: String = ""
-    static let sharedInstance = VaultURL()
 
-    init() {}
+    init(_ baseUrl: String) {
+        self.baseUrl = baseUrl
+    }
 
     public func resetVaultApi(baseUrl: String) {
         self.baseUrl = baseUrl

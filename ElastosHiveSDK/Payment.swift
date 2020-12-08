@@ -25,8 +25,10 @@ import Foundation
 public class Payment: PaymentProtocol {
     private var authHelper: VaultAuthHelper
     
+    private var vaultUrl: VaultURL
     public init(_ authHelper: VaultAuthHelper) {
         self.authHelper = authHelper
+        self.vaultUrl = authHelper.vaultUrl
     }
     
     /// Get vault's payment info
@@ -40,7 +42,7 @@ public class Payment: PaymentProtocol {
     private func getAllPricingPlansImp(_ tryAgain: Int) -> HivePromise<PricingInfo> {
         return HivePromise<PricingInfo> { resolver in
             
-            let url = VaultURL.sharedInstance.vaultPackageInfo()
+            let url = vaultUrl.vaultPackageInfo()
             let response = AF.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
             let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
@@ -68,7 +70,7 @@ public class Payment: PaymentProtocol {
     
     private func getPricingPlansImp(_ planName: String, _ tryAgain: Int) -> HivePromise<PricingPlan> {
         return HivePromise<PricingPlan> { resolver in
-            let url = VaultURL.sharedInstance.pricingPlan(planName)
+            let url = vaultUrl.pricingPlan(planName)
             let response = AF.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
             let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
@@ -97,7 +99,7 @@ public class Payment: PaymentProtocol {
     
     private func getPaymentVersionImp(_ tryAgain: Int) -> HivePromise<String> {
         return HivePromise<String> { resolver in
-            let url = VaultURL.sharedInstance.paymentVersion()
+            let url = vaultUrl.paymentVersion()
             let response = AF.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
             let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
@@ -126,7 +128,7 @@ public class Payment: PaymentProtocol {
     
     private func placeOrderImp(_ priceName: String, _ tryAgain: Int) -> HivePromise<String> {
         return HivePromise<String> { resolver in
-            let url = VaultURL.sharedInstance.createOrder()
+            let url = vaultUrl.createOrder()
             let params = ["pricing_name": priceName]
             let response = AF.request(url, method: .post, parameters: params, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
@@ -155,7 +157,7 @@ public class Payment: PaymentProtocol {
     
     private func payOrderImp(_ orderId: String, _ txids: Array<String>, _ tryAgain: Int) -> HivePromise<Bool> {
         return HivePromise<Bool> { resolver in
-            let url = VaultURL.sharedInstance.payOrder()
+            let url = vaultUrl.payOrder()
             let params = ["order_id": orderId, "pay_txids": txids] as [String : Any]
             let response = AF.request(url, method: .post, parameters: params, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
@@ -185,7 +187,7 @@ public class Payment: PaymentProtocol {
     
     private func getOrderImp(_ orderId: String, _ tryAgain: Int) -> HivePromise<Order> {
         return HivePromise<Order> { resolver in
-            let url = VaultURL.sharedInstance.orderInfo(orderId)
+            let url = vaultUrl.orderInfo(orderId)
             let response = AF.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
             let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
@@ -212,7 +214,7 @@ public class Payment: PaymentProtocol {
     
     private func getAllOrdersImp(_ tryAgain: Int) -> HivePromise<Array<Order>> {
         return HivePromise<Array<Order>> { resolver in
-            let url = VaultURL.sharedInstance.orderList()
+            let url = vaultUrl.orderList()
             let response = AF.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
             let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
@@ -245,7 +247,7 @@ public class Payment: PaymentProtocol {
     
     private func getUsingPricePlanImp(_ tryAgain: Int) -> HivePromise<UsingPlan> {
         return HivePromise<UsingPlan> { resolver in
-            let url = VaultURL.sharedInstance.serviceInfo()
+            let url = vaultUrl.serviceInfo()
             let response = AF.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
             let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)

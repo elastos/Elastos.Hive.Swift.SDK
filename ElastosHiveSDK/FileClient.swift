@@ -28,8 +28,10 @@ public class FileClient: NSObject, FilesProtocol {
     var writer: FileWriter? = nil
     var reader: FileReader? = nil
     
+    private var vaultUrl: VaultURL
     public init(_ authHelper: VaultAuthHelper) {
         self.authHelper = authHelper
+        self.vaultUrl = authHelper.vaultUrl
     }
 
     public func upload(_ path: String) -> HivePromise<FileWriter> {
@@ -40,7 +42,7 @@ public class FileClient: NSObject, FilesProtocol {
     
     private func uploadImp(_ path: String, tryAgain: Int) -> HivePromise<FileWriter> {
         return HivePromise<FileWriter> { resolver in
-            if let url = URL(string: VaultURL.sharedInstance.upload(path)) {
+            if let url = URL(string: vaultUrl.upload(path)) {
                 writer = FileWriter(url: url, authHelper: authHelper)
                 resolver.fulfill(writer!)
             }
@@ -58,7 +60,7 @@ public class FileClient: NSObject, FilesProtocol {
 
     private func downloadImp(_ remoteFile: String, tryAgain: Int) -> HivePromise<FileReader> {
         return HivePromise<FileReader> { resolver in
-            let url = URL(string: VaultURL.sharedInstance.download(remoteFile))
+            let url = URL(string: vaultUrl.download(remoteFile))
             guard (url != nil) else {
                 resolver.reject(HiveError.IllegalArgument(des: "Invalid url format."))
                 return
@@ -89,7 +91,7 @@ public class FileClient: NSObject, FilesProtocol {
     private func deleteImp(_ remoteFile: String, _ tryAgain: Int) -> HivePromise<Bool> {
         HivePromise<Bool> { resolver in
             let param = ["path": remoteFile]
-            let url = VaultURL.sharedInstance.deleteFileOrFolder()
+            let url = vaultUrl.deleteFileOrFolder()
 
             let response = AF.request(url,
                                 method: .post,
@@ -120,7 +122,7 @@ public class FileClient: NSObject, FilesProtocol {
 
     private func moveImp(_ src: String, _ dest: String, _ tryAgain: Int) -> HivePromise<Bool> {
         HivePromise<Bool> { resolver in
-            let url = VaultURL.sharedInstance.move()
+            let url = vaultUrl.move()
             let param = ["src_path": src, "dst_path": dest]
             let response = AF.request(url,
                                 method: .post,
@@ -150,7 +152,7 @@ public class FileClient: NSObject, FilesProtocol {
 
     private func copyImp(_ src: String, _ dest: String, _ tryAgain: Int) -> HivePromise<Bool> {
         HivePromise<Bool> { resolver in
-            let url = VaultURL.sharedInstance.move()
+            let url = vaultUrl.move()
             let param = ["src_path": src, "dst_path": dest]
             let response = AF.request(url,
                                 method: .post,
@@ -180,7 +182,7 @@ public class FileClient: NSObject, FilesProtocol {
 
     private func hashImp(_ path: String, _ tryAgain: Int) -> HivePromise<String> {
         return HivePromise<String> { resolver in
-            let url = VaultURL.sharedInstance.hash(path)
+            let url = vaultUrl.hash(path)
             let response = AF.request(url,
                                 method: .get,
                                 encoding: JSONEncoding.default,
@@ -208,7 +210,7 @@ public class FileClient: NSObject, FilesProtocol {
 
     private func listImp(_ path: String, _ tryAgain: Int) -> HivePromise<Array<FileInfo>> {
         return HivePromise<Array<FileInfo>> { resolver in
-            let url = VaultURL.sharedInstance.list(path)
+            let url = vaultUrl.list(path)
             let response = AF.request(url,
                                 method: .get,
                                 encoding: JSONEncoding.default,
@@ -246,7 +248,7 @@ public class FileClient: NSObject, FilesProtocol {
 
     private func statImp(_ path: String, _ tryAgain: Int) -> HivePromise<FileInfo>{
         return HivePromise<FileInfo> { resolver in
-            let url = VaultURL.sharedInstance.stat(path)
+            let url = vaultUrl.stat(path)
             let response = AF.request(url,
                                 method: .get,
                                 encoding: JSONEncoding.default,
