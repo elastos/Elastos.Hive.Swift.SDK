@@ -22,7 +22,6 @@
 
 import Foundation
 
-public typealias HivePromise = Promise
 private var _vaultCache: [DID: Vault]?
 let HiveVaultQueue = DispatchQueue(label: "org.elastos.hivesdk.queue", qos: .default, attributes: .concurrent, autoreleaseFrequency: .workItem)
 @objc(HiveClient)
@@ -97,10 +96,10 @@ public class HiveClientHandle: NSObject {
     ///   - ownerDid: ownerDid
     ///   - providerAddress: provider address
     /// - Returns: vault instance
-    public func createVault(_ ownerDid: String, _ providerAddress: String?) -> HivePromise<Vault>{
-        return HivePromise<Vault> { resolver in
+    public func createVault(_ ownerDid: String, _ providerAddress: String?) -> Promise<Vault>{
+        return Promise<Vault> { resolver in
             var vault: Vault?
-            _ = getVaultProvider(ownerDid, providerAddress).then{ provider -> HivePromise<Bool> in
+            _ = getVaultProvider(ownerDid, providerAddress).then{ provider -> Promise<Bool> in
                 vault = self.newVault(provider, ownerDid)
                 return vault!.useTrial()
             }.done{ success in
@@ -116,10 +115,10 @@ public class HiveClientHandle: NSObject {
     ///   - ownerDid: vault owner did
     ///   - providerAddress: provider address
     /// - Returns: vault instance
-    public func getVault(_ ownerDid: String, _ providerAddress: String?) -> HivePromise<Vault> {
-        return HivePromise<Vault> { resolver in
+    public func getVault(_ ownerDid: String, _ providerAddress: String?) -> Promise<Vault> {
+        return Promise<Vault> { resolver in
             var vault: Vault?
-            _ = getVaultProvider(ownerDid, providerAddress).then{ [self] provider -> HivePromise<UsingPlan> in
+            _ = getVaultProvider(ownerDid, providerAddress).then{ [self] provider -> Promise<UsingPlan> in
                 vault = newVault(provider, ownerDid)
                 return vault!.getUsingPricePlan()
             }.done{ plan in
@@ -135,9 +134,9 @@ public class HiveClientHandle: NSObject {
     ///   - ownerDid: ownerDid the owner did for the vault
     ///   - providerAddress: the vault address in String
     /// - Returns: the vault address in String
-    public func getVaultProvider(_ ownerDid: String, _ providerAddress: String?) -> HivePromise<String> {
+    public func getVaultProvider(_ ownerDid: String, _ providerAddress: String?) -> Promise<String> {
 
-        return HivePromise<String> { resolver in
+        return Promise<String> { resolver in
             DispatchQueue.global().async {
                 var vaultProvider = providerAddress
                 

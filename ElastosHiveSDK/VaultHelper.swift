@@ -31,9 +31,9 @@ class VaultHelper: NSObject {
         self.vaultUrl = authHelper.vaultUrl
     }
     
-    func useTrial() -> HivePromise<Bool> {
-        return HivePromise<Bool> { resolver in
-            authHelper.checkValid().then { [self] _ -> HivePromise<Bool> in
+    func useTrial() -> Promise<Bool> {
+        return Promise<Bool> { resolver in
+            authHelper.checkValid().then { [self] _ -> Promise<Bool> in
                 return useTrialImp()
             }.done { success in
                 resolver.fulfill(success)
@@ -43,8 +43,8 @@ class VaultHelper: NSObject {
         }
     }
     
-    func useTrialImp() -> HivePromise<Bool> {
-        return HivePromise { resolver in
+    func useTrialImp() -> Promise<Bool> {
+        return Promise { resolver in
             let url = vaultUrl.createFreeVault()
             let response = AF.request(url, method: .post, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
             switch response.result {

@@ -85,12 +85,12 @@ public class VaultAuthHelper: ConnectHelper {
         self.vaultUrl = VaultURL(_nodeUrl)
     }
     
-    public override func checkValid() -> HivePromise<Void> {
+    public override func checkValid() -> Promise<Void> {
         return doCheckExpired()
     }
 
-    private func doCheckExpired() -> HivePromise<Void> {
-        return HivePromise<Void> { resolver in
+    private func doCheckExpired() -> Promise<Void> {
+        return Promise<Void> { resolver in
             
             _connectState = false
             try tryRestoreToken()
@@ -115,7 +115,7 @@ public class VaultAuthHelper: ConnectHelper {
         }
     }
 
-    private func requestAuthToken(_ handler: Authenticator, _ challenge: String) -> HivePromise<String> {
+    private func requestAuthToken(_ handler: Authenticator, _ challenge: String) -> Promise<String> {
         return handler.requestAuthentication(challenge)
     }
 
@@ -221,8 +221,8 @@ public class VaultAuthHelper: ConnectHelper {
         try self.sotre(responseJson)
     }
     
-    func retryLogin() -> HivePromise<Bool> {
-        return HivePromise<Bool> { resolver in
+    func retryLogin() -> Promise<Bool> {
+        return Promise<Bool> { resolver in
             try signIn()
             resolver.fulfill(true)
         }

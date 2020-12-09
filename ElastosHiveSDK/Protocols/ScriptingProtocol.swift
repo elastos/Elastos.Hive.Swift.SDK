@@ -34,15 +34,15 @@ public protocol ScriptingProtocol {
     /// The script is built on the client side, then serialized and stored on the hive back-end.
     /// Later on, anyone, including the vault owner or external users,
     ///  can use Scripting.call() to execute one of those scripts and get results/data.
-    func registerScript(_ name: String, _ executable: Executable) -> HivePromise<Bool>
+    func registerScript(_ name: String, _ executable: Executable) -> Promise<Bool>
     
-    func registerScript(_ name: String, _ condition: Condition, _ executable: Executable) -> HivePromise<Bool>
+    func registerScript(_ name: String, _ condition: Condition, _ executable: Executable) -> Promise<Bool>
 
     /// Executes a previously registered server side script using Scripting.setScript(). Vault owner or external users are
     /// - Parameters:
     ///   - name: the call's script name
     ///   - resultType: String、 Data、 JSON、 Dictionry<String, Any>
-    func callScript<T>(_ name: String, _ params: [String: Any]?, _ appDid: String?, _ resultType: T.Type) -> HivePromise<T>
+    func callScript<T>(_ name: String, _ params: [String: Any]?, _ appDid: String?, _ resultType: T.Type) -> Promise<T>
     
     /// Run a script to upload a file NOTE:
     /// The upload works a bit differently compared to other types of executable queries
@@ -50,12 +50,12 @@ public protocol ScriptingProtocol {
     ///  First, register a script on the vault, then you call this api to actually upload the file
     /// - Parameters:
     ///   - transactionId: transactionId
-    func uploadFile(_ transactionId: String) -> HivePromise<FileWriter>
+    func uploadFile(_ transactionId: String) -> Promise<FileWriter>
     
     /// Run a script to download a file NOTE:
     /// The download works a bit differently compared to other types of executable queries
     /// because there are two steps to this executable.
     /// First, register a script on the vault, then you call this api to actually upload the file
     /// - Parameter transactionId: transactionId
-    func downloadFile(_ transactionId: String) -> HivePromise<FileReader>
+    func downloadFile(_ transactionId: String) -> Promise<FileReader>
 }

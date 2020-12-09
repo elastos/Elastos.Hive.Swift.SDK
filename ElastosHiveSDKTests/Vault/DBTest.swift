@@ -4,8 +4,8 @@ import XCTest
 import ElastosDIDSDK
 
 class VaultAuthenticator: Authenticator {
-    func requestAuthentication(_ jwtToken: String) -> HivePromise<String> {
-        return HivePromise<String> { resolver in
+    func requestAuthentication(_ jwtToken: String) -> Promise<String> {
+        return Promise<String> { resolver in
             do{
                 let authtoken = try user?.presentationInJWT!.getAuthToken(jwtToken)
                 print("authtoken = \(authtoken)")

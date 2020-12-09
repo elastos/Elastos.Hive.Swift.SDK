@@ -189,7 +189,7 @@ class ScriptTest: XCTestCase {
         let lock = XCTestExpectation(description: "wait for test.")
         let params = ["group_id": ["$oid": "5f8d9dfe2f4c8b7a6f8ec0f1"], "path": "upload_test.txt"] as [String : Any]
         let scriptName = "upload_file"
-        scripting?.callScript(scriptName, params, nil, JSON.self).then({ json -> HivePromise<FileWriter> in
+        scripting?.callScript(scriptName, params, nil, JSON.self).then({ json -> Promise<FileWriter> in
             let transactionId = json[scriptName]["transaction_id"].stringValue
             return (self.scripting?.uploadFile(transactionId))!
         }).done{ writer in
@@ -255,7 +255,7 @@ class ScriptTest: XCTestCase {
         let params = ["group_id": ["$oid": "5f497bb83bd36ab235d82e6a"], "path": "upload_test.txt"] as [String : Any]
         let scriptName = "download_file"
         let lock = XCTestExpectation(description: "wait for test.")
-        scripting?.callScript(scriptName, params, nil, JSON.self).then({ [self] json -> HivePromise<FileReader> in
+        scripting?.callScript(scriptName, params, nil, JSON.self).then({ [self] json -> Promise<FileReader> in
             return (scripting?.downloadFile(json[scriptName]["transaction_id"].stringValue))!
         }).done{ [self] reader in
             let fileurl = creaFile()

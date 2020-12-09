@@ -23,19 +23,19 @@
 import Foundation
 
 public protocol FilesProtocol {
-    func upload(_ path: String) -> HivePromise<FileWriter>
+    func upload(_ path: String) -> Promise<FileWriter>
     
-    func download(_ path: String) -> HivePromise<FileReader>
+    func download(_ path: String) -> Promise<FileReader>
 
-    func delete(_ path: String) -> HivePromise<Bool>
+    func delete(_ path: String) -> Promise<Bool>
 
-    func move(_ src: String, _ dest: String) -> HivePromise<Bool>
+    func move(_ src: String, _ dest: String) -> Promise<Bool>
 
-    func copy(_ src: String, _ dest: String) -> HivePromise<Bool>
+    func copy(_ src: String, _ dest: String) -> Promise<Bool>
 
-    func hash(_ path: String) -> HivePromise<String>
+    func hash(_ path: String) -> Promise<String>
 
-    func list(_ path: String) -> HivePromise<Array<FileInfo>>
+    func list(_ path: String) -> Promise<Array<FileInfo>>
 
-    func stat(_ path: String) -> HivePromise<FileInfo>
+    func stat(_ path: String) -> Promise<FileInfo>
 }
