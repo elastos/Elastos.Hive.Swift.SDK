@@ -74,38 +74,21 @@ public class ScriptClient: ScriptingProtocol {
         }
     }
 
-    public func callScript<T>(_ name: String, _ config: CallConfig?, _ resultType: T.Type) -> HivePromise<T> {
+    public func callScript<T>(_ name: String, _ params: [String : Any]?, _ appDid: String?, _ resultType: T.Type) -> Promise<T> {
         return self.authHelper.checkValid().then { _ -> HivePromise<T> in
-            if config == nil {
-                return self.callScriptImpl(name, nil, resultType, 0)
-            }
-            else if config!.isKind(of: UploadCallConfig.self) {
-                return self.uploadImp(name, config! as! UploadCallConfig, resultType, 0)
-            }
-            else if config!.isKind(of: DownloadCallConfig.self) {
-                return self.downloadImp(name, config! as! DownloadCallConfig, resultType, 0)
-            }
-            else if config!.isKind(of: GeneralCallConfig.self) {
-                return self.callScriptImpl(name, (config! as! GeneralCallConfig), resultType, 0)
-            }
-            else {
-                // This code will never be executed.
-                return self.callScriptImpl(name, config as? GeneralCallConfig, resultType, 0)
-            }
+            return self.callScriptImpl(name, params, appDid, resultType, 0)
         }
     }
 
-    private func callScriptImpl<T>(_ scriptName: String, _ config: GeneralCallConfig?, _ resultType: T.Type, _ tryAgain: Int) -> HivePromise<T> {
+    private func callScriptImpl<T>(_ scriptName: String, _ params: [String: Any]?, _ appDid: String?, _ resultType: T.Type, _ tryAgain: Int) -> HivePromise<T> {
         return HivePromise<T> { resolver in
             var param = ["name": scriptName] as [String : Any]
-            if config != nil && config?.params != nil {
-                param["params"] = config!.params!
+            if let _ = params {
+                param["params"] = params
             }
             
-            let ownerDid = authHelper.ownerDid
-            if ownerDid != nil{
-                var dic = ["target_did": ownerDid!]
-                let appDid = config?.appDid
+            if let ownerDid = authHelper.ownerDid {
+                var dic = ["target_did": ownerDid]
                 if let _ = appDid {
                     dic["target_app_did"] = appDid!
                 }
@@ -122,7 +105,7 @@ public class ScriptClient: ScriptingProtocol {
 
             if isRelogin {
                 try self.authHelper.signIn()
-                callScriptImpl(scriptName, config, resultType, 1).done { result in
+                callScriptImpl(scriptName, params, appDid, resultType, 1).done { result in
                     resolver.fulfill(result)
                 }.catch { error in
                     resolver.reject(error)
@@ -152,88 +135,32 @@ public class ScriptClient: ScriptingProtocol {
         }
     }
     
-    private func uploadImp<T>(_ scriptName: String, _ config: UploadCallConfig, _ resultType: T.Type, _ tryAgain: Int) -> HivePromise<T> {
-        return HivePromise<T> { resolver in
-            let transactionId = try uploadFirstImp(scriptName, config, 0)
-            let writer = try uploadImp(transactionId)
-            resolver.fulfill(writer as! T)
+    public func uploadFile(_ transactionId: String) -> HivePromise<FileWriter> {
+        return self.authHelper.checkValid().then { _ -> HivePromise<FileWriter> in
+            return self.uploadImp(transactionId)
         }
     }
     
-    private func uploadFirstImp(_ scriptName: String, _ config: UploadCallConfig, _ tryAgain: Int) throws -> String {
-        
-        var param = ["name": scriptName] as [String : Any]
-        if config.params != nil {
-            param["params"] = config.params!
-        }
-        let url = vaultUrl.call()
-        let response = AF.request(url,
-                            method: .post,
-                            parameters: param,
-                            encoding: JSONEncoding.default,
-                            headers: Header(authHelper).headers()).responseJSON()
-        let json = try VaultApi.handlerJsonResponse(response)
-        let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
-        if isRelogin {
-            try self.authHelper.signIn()
-            return try uploadFirstImp(scriptName, config, 1)
-        }
-        // "upload_file" is same as the name of executable in registerScript()
-        let transactionId = json["upload_file"]["transaction_id"].stringValue
-        guard transactionId != "" else {
-            throw HiveError.transactionIdIsNil(des: "transactionId is nil.")
-        }
-        return transactionId
-    }
-    
-    private func uploadImp(_ transactionId: String) throws -> FileWriter {
-        if let url = URL(string: vaultUrl.runScriptUpload(transactionId)) {
-            let writer = FileWriter(url: url, authHelper: authHelper)
-            return writer
-        }
-        else {
-            throw HiveError.IllegalArgument(des: "Invalid url format.")
-        }
-    }
-
-    private func downloadImp<T>(_ scriptName: String, _ config: DownloadCallConfig, _ resultType: T.Type, _ tryAgain: Int) -> HivePromise<T> {
-        HivePromise<T> { resolver in
-            let transactionId = try downloadFirstImp(scriptName, config, 0)
-            downloadImp(transactionId, 0).done { reader in
-                resolver.fulfill(reader as! T)
-            }.catch { error in
-                resolver.reject(error)
+    private func uploadImp(_ transactionId: String) -> HivePromise<FileWriter> {
+        return HivePromise<FileWriter> { resolver in
+            if let url = URL(string: vaultUrl.runScriptUpload(transactionId)) {
+                let writer = FileWriter(url: url, authHelper: authHelper)
+                resolver.fulfill(writer)
+            }
+            else {
+                throw HiveError.IllegalArgument(des: "Invalid url format.")
             }
         }
     }
 
-    private func downloadFirstImp(_ scriptName: String, _ config: DownloadCallConfig, _ tryAgain: Int) throws -> String {
-        
-        var param = ["name": scriptName] as [String : Any]
-        if config.params != nil {
-            param["params"] = config.params!
+    public func downloadFile(_ transactionId: String) -> Promise<FileReader> {
+        return self.authHelper.checkValid().then { _ -> HivePromise<FileReader> in
+            return self.downloadImp(transactionId, 0)
         }
-        let url = vaultUrl.call()
-        let response = AF.request(url,
-                            method: .post,
-                            parameters: param,
-                            encoding: JSONEncoding.default,
-                            headers: Header(authHelper).headers()).responseJSON()
-        let json = try VaultApi.handlerJsonResponse(response)
-        let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
-        if isRelogin {
-            try self.authHelper.signIn()
-            return try downloadFirstImp(scriptName, config, 1)
-        }
-        let transactionId = json["download_file"]["transaction_id"].stringValue
-        guard transactionId != "" else {
-            throw HiveError.transactionIdIsNil(des: "transactionId is nil.")
-        }
-        return transactionId
     }
     
     private func downloadImp(_ transactionId: String, _ tryAgain: Int) -> HivePromise<FileReader> {
-        HivePromise<FileReader> { resolver in
+        return HivePromise<FileReader> { resolver in
             let url = URL(string: vaultUrl.runScriptDownload(transactionId))
             guard (url != nil) else {
                 resolver.reject(HiveError.IllegalArgument(des: "Invalid url format."))

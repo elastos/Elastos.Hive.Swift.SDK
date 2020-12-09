@@ -158,10 +158,6 @@
 		118F2DA5250F33AB00447A0A /* RawCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2DA4250F33AB00447A0A /* RawCondition.swift */; };
 		118F2DA6250F33AB00447A0A /* RawCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2DA4250F33AB00447A0A /* RawCondition.swift */; };
 		118F2DAD25105C3700447A0A /* FileTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2DAC25105C3700447A0A /* FileTest.swift */; };
-		119B26B625762C610084B859 /* CallConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 119B26B525762C610084B859 /* CallConfig.swift */; };
-		119B26B9257630590084B859 /* UploadCallConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 119B26B8257630590084B859 /* UploadCallConfig.swift */; };
-		119B26BC257630770084B859 /* DownloadCallConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 119B26BB257630770084B859 /* DownloadCallConfig.swift */; };
-		119B26BF2576308F0084B859 /* GeneralCallConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 119B26BE2576308F0084B859 /* GeneralCallConfig.swift */; };
 		119B26C3257735FA0084B859 /* HiveError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 119B26C2257735FA0084B859 /* HiveError.swift */; };
 		119B29812578EBD90084B859 /* ElastosDIDSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119B29802578EBD90084B859 /* ElastosDIDSDK.framework */; };
 		119B29B02578EE9C0084B859 /* ElastosDIDSDK.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 119B29802578EBD90084B859 /* ElastosDIDSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -322,10 +318,6 @@
 		118F2DA1250F332700447A0A /* QueryHasResultsCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryHasResultsCondition.swift; sourceTree = "<group>"; };
 		118F2DA4250F33AB00447A0A /* RawCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawCondition.swift; sourceTree = "<group>"; };
 		118F2DAC25105C3700447A0A /* FileTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTest.swift; sourceTree = "<group>"; };
-		119B26B525762C610084B859 /* CallConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallConfig.swift; sourceTree = "<group>"; };
-		119B26B8257630590084B859 /* UploadCallConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadCallConfig.swift; sourceTree = "<group>"; };
-		119B26BB257630770084B859 /* DownloadCallConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadCallConfig.swift; sourceTree = "<group>"; };
-		119B26BE2576308F0084B859 /* GeneralCallConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralCallConfig.swift; sourceTree = "<group>"; };
 		119B26C2257735FA0084B859 /* HiveError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HiveError.swift; sourceTree = "<group>"; };
 		119B29802578EBD90084B859 /* ElastosDIDSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ElastosDIDSDK.framework; sourceTree = "<group>"; };
 		11C9EAE4254A637500080995 /* InsertOneResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertOneResult.swift; sourceTree = "<group>"; };
@@ -496,10 +488,6 @@
 				11E92CE82560E1D4007EFC95 /* PropertiesExecutable.swift */,
 				11E92CEC2560E228007EFC95 /* HashExecutable.swift */,
 				11FD496C2561AC9B00A108D2 /* DownloadExecutable.swift */,
-				119B26B525762C610084B859 /* CallConfig.swift */,
-				119B26B8257630590084B859 /* UploadCallConfig.swift */,
-				119B26BB257630770084B859 /* DownloadCallConfig.swift */,
-				119B26BE2576308F0084B859 /* GeneralCallConfig.swift */,
 			);
 			path = Scripting;
 			sourceTree = "<group>";
@@ -1084,20 +1072,16 @@
 				111D47D424F7906F00B7462B /* DeleteOptions.swift in Sources */,
 				111D47E924F7940600B7462B /* UpdateResult.swift in Sources */,
 				1170FB0E2501CEF70049E81D /* VaultIndex.swift in Sources */,
-				119B26BC257630770084B859 /* DownloadCallConfig.swift in Sources */,
 				115E82E7251A4495004DCB1E /* MinKey.swift in Sources */,
 				111D47FD24F8B63C00B7462B /* Options.swift in Sources */,
 				A3FD3C81228000EE0031413A /* HiveClient.swift in Sources */,
-				119B26BF2576308F0084B859 /* GeneralCallConfig.swift in Sources */,
 				111D478B24EE810A00B7462B /* VaultURL.swift in Sources */,
 				11E92CED2560E228007EFC95 /* HashExecutable.swift in Sources */,
 				111D479324F4E2C300B7462B /* VaultAuthInfoStoreImpl.swift in Sources */,
 				1170FB0B2501CD2F0049E81D /* ReadPreference.swift in Sources */,
 				1103757023FF96A0004216D0 /* LogLevel.swift in Sources */,
 				11749D9F24082FB1007B8F32 /* OutputStream.swift in Sources */,
-				119B26B9257630590084B859 /* UploadCallConfig.swift in Sources */,
 				118F2D90250F29C400447A0A /* AndCondition.swift in Sources */,
-				119B26B625762C610084B859 /* CallConfig.swift in Sources */,
 				118F2DA5250F33AB00447A0A /* RawCondition.swift in Sources */,
 				111D47CB24F7904100B7462B /* Collation.swift in Sources */,
 			);

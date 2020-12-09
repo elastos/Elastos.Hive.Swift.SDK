@@ -111,7 +111,7 @@ class ScriptTest: XCTestCase {
 
     func test05_callStringType() {
         let lock = XCTestExpectation(description: "wait for test.")
-        scripting?.callScript(noConditionName, nil, String.self).done{ re in
+        scripting?.callScript(noConditionName, nil, nil, String.self).done{ re in
             lock.fulfill()
         }.catch{ err in
             XCTFail()
@@ -122,7 +122,7 @@ class ScriptTest: XCTestCase {
 
     func test06_callDataType() {
         let lock = XCTestExpectation(description: "wait for test.")
-        scripting?.callScript(noConditionName, nil, Data.self).done{ data in
+        scripting?.callScript(noConditionName, nil, nil, Data.self).done{ data in
             let rejson = try JSONSerialization.jsonObject(with: data , options: .mutableContainers) as AnyObject
             print(rejson)
             XCTAssertTrue(true)
@@ -136,7 +136,7 @@ class ScriptTest: XCTestCase {
 
     func test07_callOtherScript() {
         let lock = XCTestExpectation(description: "wait for test.")
-        scripting?.callScript(noConditionName, nil, String.self).done{ str in
+        scripting?.callScript(noConditionName, nil, nil, String.self).done{ str in
             print(str)
             XCTAssertTrue(true)
             lock.fulfill()
@@ -163,7 +163,7 @@ class ScriptTest: XCTestCase {
 
     func test09_callDictionaryType() {
         let lock = XCTestExpectation(description: "wait for test.")
-        scripting?.callScript(noConditionName, nil, Dictionary<String, Any>.self).done{ re in
+        scripting?.callScript(noConditionName, nil,nil, Dictionary<String, Any>.self).done{ re in
             lock.fulfill()
         }.catch{ err in
             XCTFail()
@@ -187,13 +187,15 @@ class ScriptTest: XCTestCase {
     
     func test12_uploadFile() {
         let lock = XCTestExpectation(description: "wait for test.")
-        let scriptName = "upload_file"
         let params = ["group_id": ["$oid": "5f8d9dfe2f4c8b7a6f8ec0f1"], "path": "upload_test.txt"] as [String : Any]
-        let uploadCallConfig = UploadCallConfig(params, testTextFilePath)
-        scripting!.callScript(scriptName, uploadCallConfig, FileWriter.self).done { writer in
+        let scriptName = "upload_file"
+        scripting?.callScript(scriptName, params, nil, JSON.self).then({ json -> HivePromise<FileWriter> in
+            let transactionId = json[scriptName]["transaction_id"].stringValue
+            return (self.scripting?.uploadFile(transactionId))!
+        }).done{ writer in
             let shortMessage = "POIUYTREWQ"
             let message1 = "*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())*** \(Date())"
-            let message2 = " ABCD ABCD ABCD ABCD 1234 5678 9009 8765 00"
+            let message2 = " ABCD ABCD ABCD ABCD 1234 5678 9009 8765 0099"
             
             try writer.write(data: shortMessage.data(using: .utf8)!, { err in
                 print(err)
@@ -224,17 +226,15 @@ class ScriptTest: XCTestCase {
                     lock.fulfill()
                 }
                 else {
-                    print(error)
+                    print(error as Any)
                     XCTFail()
                     lock.fulfill()
                 }
             }
-            XCTAssertNotNil(writer)
-        }.catch{ err in
-            XCTFail()
+        }.catch{ error in
             lock.fulfill()
         }
-        self.wait(for: [lock], timeout: 10000000.0)
+        self.wait(for: [lock], timeout: 10000.0)
     }
 
     func test13_setDownloadScript() {
@@ -253,15 +253,16 @@ class ScriptTest: XCTestCase {
 
     func test14_downloadFile() {
         let params = ["group_id": ["$oid": "5f497bb83bd36ab235d82e6a"], "path": "upload_test.txt"] as [String : Any]
-        let downloadCallConfig = DownloadCallConfig(params)
+        let scriptName = "download_file"
         let lock = XCTestExpectation(description: "wait for test.")
-        scripting!.callScript("download_file", downloadCallConfig, FileReader.self).done { [self] reader in
+        scripting?.callScript(scriptName, params, nil, JSON.self).then({ [self] json -> HivePromise<FileReader> in
+            return (scripting?.downloadFile(json[scriptName]["transaction_id"].stringValue))!
+        }).done{ [self] reader in
             let fileurl = creaFile()
             while !reader.didLoadFinish {
                 if let data = reader.read({ error in
                     print(error)
                 }){
-//                    print("prepare to write \(data.count)")
                     if let fileHandle = try? FileHandle(forWritingTo: fileurl) {
                         fileHandle.seekToEndOfFile()
                         fileHandle.write(data)
@@ -276,7 +277,7 @@ class ScriptTest: XCTestCase {
                 lock.fulfill()
                 print(success)
             }
-        }.catch { error in
+        }.catch{ error in
             XCTFail()
             lock.fulfill()
         }
@@ -300,9 +301,8 @@ class ScriptTest: XCTestCase {
 
     func test16_getFileInfo() {
         let params = ["group_id": ["$oid": "5f497bb83bd36ab235d82e6a"], "path": "test.txt"] as [String : Any]
-        let generalCallConfig = GeneralCallConfig(params)
         let lock = XCTestExpectation(description: "wait for test.")
-        scripting!.callScript("get_file_info", generalCallConfig, String.self).done { success in
+        scripting!.callScript("get_file_info", params, nil, String.self).done { success in
             print(success)
             lock.fulfill()
         }.catch { error in

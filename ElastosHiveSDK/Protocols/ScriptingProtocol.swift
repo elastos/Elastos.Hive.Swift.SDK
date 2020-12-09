@@ -41,9 +41,21 @@ public protocol ScriptingProtocol {
     /// Executes a previously registered server side script using Scripting.setScript(). Vault owner or external users are
     /// - Parameters:
     ///   - name: the call's script name
-    ///   - config: CallConfig instance.
-    ///   - resultType: String、 Data、 JSON、 Dictionry<String, Any> for GeneralCallConfig,
-    ///   FileReader for DownloadCallConfig,
-    ///   FileWriter for UploadCallConfig
-    func callScript<T>(_ name: String, _ config: CallConfig?, _ resultType: T.Type) -> HivePromise<T>
+    ///   - resultType: String、 Data、 JSON、 Dictionry<String, Any>
+    func callScript<T>(_ name: String, _ params: [String: Any]?, _ appDid: String?, _ resultType: T.Type) -> HivePromise<T>
+    
+    /// Run a script to upload a file NOTE:
+    /// The upload works a bit differently compared to other types of executable queries
+    /// because there are two steps to this executable.
+    ///  First, register a script on the vault, then you call this api to actually upload the file
+    /// - Parameters:
+    ///   - transactionId: transactionId
+    func uploadFile(_ transactionId: String) -> HivePromise<FileWriter>
+    
+    /// Run a script to download a file NOTE:
+    /// The download works a bit differently compared to other types of executable queries
+    /// because there are two steps to this executable.
+    /// First, register a script on the vault, then you call this api to actually upload the file
+    /// - Parameter transactionId: transactionId
+    func downloadFile(_ transactionId: String) -> HivePromise<FileReader>
 }

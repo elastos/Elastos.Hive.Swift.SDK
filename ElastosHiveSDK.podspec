@@ -16,14 +16,13 @@ Pod::Spec.new do |s|
   s.homepage     = 'https://www.elastos.org'
   s.license      = { :type => 'MIT', :file => 'ElastosCarrier-framework/LICENSE' }
   s.author       = { 'hive-dev' => 'support@elastos.org' }
-  s.platform     = :ios, '9.0'
-  s.ios.deployment_target = '9.0'
+  s.platform     = :ios, '11.0'
+  s.ios.deployment_target = '11.0'
   s.source = {:git => 'https://github.com/elastos/Elastos.NET.Hive.Swift.SDK.git', :tag => s.version}
   s.source_files = 'ElastosHiveSDK/**/*.swift'
-  s.xcconfig = { 'FRAMEWORK_SEARCH_PATHS' => '"${PODS_CONFIGURATION_BUILD_DIR}/ElastosHiveSDK"' }
   s.dependency 'Alamofire','~> 5.0'
   s.dependency 'PromiseKit','~> 6.9'
-  s.dependency 'ElastosDIDSDK', '~> 1.2'
+  s.dependency 'ElastosDIDSDK', '~> 1.5'
   s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
   s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
 
