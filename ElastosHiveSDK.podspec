@@ -9,12 +9,12 @@
 Pod::Spec.new do |s|
 
   s.name         = 'ElastosHiveSDK'
-  s.version      = '2.0.2'
+  s.version      = '2.0.3'
   s.summary      = 'Elastos Hive iOS SDK Distribution.'
   s.swift_version = '4.2'
   s.description  = 'Elastos hive ios sdk framework distribution.'
   s.homepage     = 'https://www.elastos.org'
-  s.license      = { :type => 'MIT', :file => 'ElastosCarrier-framework/LICENSE' }
+  s.license      = { :type => 'MIT', :file => 'LICENSE' }
   s.author       = { 'hive-dev' => 'support@elastos.org' }
   s.platform     = :ios, '11.0'
   s.ios.deployment_target = '11.0'
