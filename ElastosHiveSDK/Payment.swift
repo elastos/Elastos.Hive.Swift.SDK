@@ -33,14 +33,14 @@ public class Payment: PaymentProtocol {
     
     /// Get vault's payment info
     /// - Returns: Pricing info
-    public func getPaymentInfo() -> HivePromise<PricingInfo> {
-        return self.authHelper.checkValid().then { [self] _ -> HivePromise<PricingInfo> in
+    public func getPaymentInfo() -> Promise<PricingInfo> {
+        return self.authHelper.checkValid().then { [self] _ -> Promise<PricingInfo> in
             return getAllPricingPlansImp(0)
         }
     }
     
-    private func getAllPricingPlansImp(_ tryAgain: Int) -> HivePromise<PricingInfo> {
-        return HivePromise<PricingInfo> { resolver in
+    private func getAllPricingPlansImp(_ tryAgain: Int) -> Promise<PricingInfo> {
+        return Promise<PricingInfo> { resolver in
             
             let url = vaultUrl.vaultPackageInfo()
             let response = AF.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
@@ -62,14 +62,14 @@ public class Payment: PaymentProtocol {
 
     /// Get vault pricing plan information by plan name
     /// - Returns: the instance of PricingPlan
-    public func getPricingPlan(_ planName: String) -> HivePromise<PricingPlan> {
-        return self.authHelper.checkValid().then { [self] _ -> HivePromise<PricingPlan> in
+    public func getPricingPlan(_ planName: String) -> Promise<PricingPlan> {
+        return self.authHelper.checkValid().then { [self] _ -> Promise<PricingPlan> in
             return getPricingPlansImp(planName, 0)
         }
     }
     
-    private func getPricingPlansImp(_ planName: String, _ tryAgain: Int) -> HivePromise<PricingPlan> {
-        return HivePromise<PricingPlan> { resolver in
+    private func getPricingPlansImp(_ planName: String, _ tryAgain: Int) -> Promise<PricingPlan> {
+        return Promise<PricingPlan> { resolver in
             let url = vaultUrl.pricingPlan(planName)
             let response = AF.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
@@ -91,14 +91,14 @@ public class Payment: PaymentProtocol {
     
     /// Get payment version
     /// - Returns: payment vresion
-    public func getPaymentVersion() -> HivePromise<String> {
-        return authHelper.checkValid().then { [self] _ -> HivePromise<String> in
+    public func getPaymentVersion() -> Promise<String> {
+        return authHelper.checkValid().then { [self] _ -> Promise<String> in
             return getPaymentVersionImp(0)
         }
     }
     
-    private func getPaymentVersionImp(_ tryAgain: Int) -> HivePromise<String> {
-        return HivePromise<String> { resolver in
+    private func getPaymentVersionImp(_ tryAgain: Int) -> Promise<String> {
+        return Promise<String> { resolver in
             let url = vaultUrl.paymentVersion()
             let response = AF.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
@@ -120,14 +120,14 @@ public class Payment: PaymentProtocol {
     /// Create a order of pricing plan
     /// - Parameter priceName: priceName
     /// - Returns: the order id
-    public func placeOrder(_ priceName: String) -> HivePromise<String> {
-        return self.authHelper.checkValid().then { [self] _ -> HivePromise<String> in
+    public func placeOrder(_ priceName: String) -> Promise<String> {
+        return self.authHelper.checkValid().then { [self] _ -> Promise<String> in
             return placeOrderImp(priceName, 0)
         }
     }
     
-    private func placeOrderImp(_ priceName: String, _ tryAgain: Int) -> HivePromise<String> {
-        return HivePromise<String> { resolver in
+    private func placeOrderImp(_ priceName: String, _ tryAgain: Int) -> Promise<String> {
+        return Promise<String> { resolver in
             let url = vaultUrl.createOrder()
             let params = ["pricing_name": priceName]
             let response = AF.request(url, method: .post, parameters: params, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
@@ -149,14 +149,14 @@ public class Payment: PaymentProtocol {
     /// Create a order of pricing plan
     /// - Parameter priceName: priceName
     /// - Returns: the order id
-    public func payOrder(_ orderId: String, _ txids: Array<String>) -> HivePromise<Bool> {
-        return self.authHelper.checkValid().then { [self] _ -> HivePromise<Bool> in
+    public func payOrder(_ orderId: String, _ txids: Array<String>) -> Promise<Bool> {
+        return self.authHelper.checkValid().then { [self] _ -> Promise<Bool> in
             return payOrderImp(orderId, txids, 0)
         }
     }
     
-    private func payOrderImp(_ orderId: String, _ txids: Array<String>, _ tryAgain: Int) -> HivePromise<Bool> {
-        return HivePromise<Bool> { resolver in
+    private func payOrderImp(_ orderId: String, _ txids: Array<String>, _ tryAgain: Int) -> Promise<Bool> {
+        return Promise<Bool> { resolver in
             let url = vaultUrl.payOrder()
             let params = ["order_id": orderId, "pay_txids": txids] as [String : Any]
             let response = AF.request(url, method: .post, parameters: params, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
@@ -179,14 +179,14 @@ public class Payment: PaymentProtocol {
     /// Get order information of vault service purchase
     /// - Parameter orderId: orderId
     /// - Returns: ture, if success
-    public func getOrder(_ orderId: String) -> HivePromise<Order> {
-        return self.authHelper.checkValid().then { [self] _ -> HivePromise<Order> in
+    public func getOrder(_ orderId: String) -> Promise<Order> {
+        return self.authHelper.checkValid().then { [self] _ -> Promise<Order> in
             return getOrderImp(orderId, 0)
         }
     }
     
-    private func getOrderImp(_ orderId: String, _ tryAgain: Int) -> HivePromise<Order> {
-        return HivePromise<Order> { resolver in
+    private func getOrderImp(_ orderId: String, _ tryAgain: Int) -> Promise<Order> {
+        return Promise<Order> { resolver in
             let url = vaultUrl.orderInfo(orderId)
             let response = AF.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
@@ -206,14 +206,14 @@ public class Payment: PaymentProtocol {
     
     /// Get user order information list of vault service purchase
     /// - Returns: order list
-    public func getAllOrders() -> HivePromise<Array<Order>> {
-        return self.authHelper.checkValid().then { [self] _ -> HivePromise<Array<Order>> in
+    public func getAllOrders() -> Promise<Array<Order>> {
+        return self.authHelper.checkValid().then { [self] _ -> Promise<Array<Order>> in
             return getAllOrdersImp(0)
         }
     }
     
-    private func getAllOrdersImp(_ tryAgain: Int) -> HivePromise<Array<Order>> {
-        return HivePromise<Array<Order>> { resolver in
+    private func getAllOrdersImp(_ tryAgain: Int) -> Promise<Array<Order>> {
+        return Promise<Array<Order>> { resolver in
             let url = vaultUrl.orderList()
             let response = AF.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
@@ -239,14 +239,14 @@ public class Payment: PaymentProtocol {
 
     /// Get using price plan
     /// - Returns: user's using price plan
-    public func getUsingPricePlan() -> HivePromise<UsingPlan> {
-        return self.authHelper.checkValid().then { [self] _ -> HivePromise<UsingPlan> in
+    public func getUsingPricePlan() -> Promise<UsingPlan> {
+        return self.authHelper.checkValid().then { [self] _ -> Promise<UsingPlan> in
             return getUsingPricePlanImp(0)
         }
     }
     
-    private func getUsingPricePlanImp(_ tryAgain: Int) -> HivePromise<UsingPlan> {
-        return HivePromise<UsingPlan> { resolver in
+    private func getUsingPricePlanImp(_ tryAgain: Int) -> Promise<UsingPlan> {
+        return Promise<UsingPlan> { resolver in
             let url = vaultUrl.serviceInfo()
             let response = AF.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)

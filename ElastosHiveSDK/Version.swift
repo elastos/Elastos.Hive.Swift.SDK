@@ -32,8 +32,8 @@ public class Version: NSObject {
         self.vaultUrl = authHelper.vaultUrl
     }
     
-    public func version() -> HivePromise<String> {
-        return HivePromise<String> { resolver in
+    public func version() -> Promise<String> {
+        return Promise<String> { resolver in
             let url = vaultUrl.version()
             AF.request(url, method: .get, encoding: JSONEncoding.default).responseJSON { response in
                 do {
@@ -50,8 +50,8 @@ public class Version: NSObject {
         }
     }
     
-    public func lastCommitId() -> HivePromise<String> {
-        return HivePromise<String> { resolver in
+    public func lastCommitId() -> Promise<String> {
+        return Promise<String> { resolver in
             let url = vaultUrl.commitId()
             AF.request(url, method: .get, encoding: JSONEncoding.default).responseJSON { response in
                 do {

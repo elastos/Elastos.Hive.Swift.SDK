@@ -47,11 +47,11 @@ public class Vault: NSObject {
         self._payment = Payment(authHelper)
     }
     
-    public func nodeVersion() -> HivePromise<String> {
+    public func nodeVersion() -> Promise<String> {
         return _version.version()
     }
     
-    public func nodeLastCommitId() -> HivePromise<String> {
+    public func nodeLastCommitId() -> Promise<String> {
         return _version.lastCommitId()
     }
 
@@ -105,11 +105,11 @@ public class Vault: NSObject {
         return _payment
     }
     
-    func useTrial() -> HivePromise<Bool> {
+    func useTrial() -> Promise<Bool> {
         return self.vaultHelper.useTrial()
     }
     
-    func getUsingPricePlan() -> HivePromise<UsingPlan> {
+    func getUsingPricePlan() -> Promise<UsingPlan> {
         return self.payment.getUsingPricePlan()
     }
     

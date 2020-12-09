@@ -32,21 +32,21 @@ public class ScriptClient: ScriptingProtocol {
         self.vaultUrl = self.authHelper.vaultUrl
     }
 
-    public func registerScript(_ name: String, _ executable: Executable) -> HivePromise<Bool> {
-        return authHelper.checkValid().then { _ -> HivePromise<Bool> in
+    public func registerScript(_ name: String, _ executable: Executable) -> Promise<Bool> {
+        return authHelper.checkValid().then { _ -> Promise<Bool> in
             return self.registerScriptImp(name, nil, executable, 0)
         }
     }
 
-    public func registerScript(_ name: String, _ condition: Condition, _ executable: Executable) -> HivePromise<Bool> {
+    public func registerScript(_ name: String, _ condition: Condition, _ executable: Executable) -> Promise<Bool> {
 
-        return authHelper.checkValid().then { _ -> HivePromise<Bool> in
+        return authHelper.checkValid().then { _ -> Promise<Bool> in
             return self.registerScriptImp(name, condition, executable, 0)
         }
     }
 
-    private func registerScriptImp(_ name: String, _ accessCondition: Condition?, _ executable: Executable, _ tryAgain: Int) -> HivePromise<Bool> {
-        HivePromise<Bool> { resolver in
+    private func registerScriptImp(_ name: String, _ accessCondition: Condition?, _ executable: Executable, _ tryAgain: Int) -> Promise<Bool> {
+        Promise<Bool> { resolver in
 
             var param = ["name": name] as [String : Any]
             if let _ = accessCondition {
@@ -75,13 +75,13 @@ public class ScriptClient: ScriptingProtocol {
     }
 
     public func callScript<T>(_ name: String, _ params: [String : Any]?, _ appDid: String?, _ resultType: T.Type) -> Promise<T> {
-        return self.authHelper.checkValid().then { _ -> HivePromise<T> in
+        return self.authHelper.checkValid().then { _ -> Promise<T> in
             return self.callScriptImpl(name, params, appDid, resultType, 0)
         }
     }
 
-    private func callScriptImpl<T>(_ scriptName: String, _ params: [String: Any]?, _ appDid: String?, _ resultType: T.Type, _ tryAgain: Int) -> HivePromise<T> {
-        return HivePromise<T> { resolver in
+    private func callScriptImpl<T>(_ scriptName: String, _ params: [String: Any]?, _ appDid: String?, _ resultType: T.Type, _ tryAgain: Int) -> Promise<T> {
+        return Promise<T> { resolver in
             var param = ["name": scriptName] as [String : Any]
             if let _ = params {
                 param["params"] = params
@@ -135,14 +135,14 @@ public class ScriptClient: ScriptingProtocol {
         }
     }
     
-    public func uploadFile(_ transactionId: String) -> HivePromise<FileWriter> {
-        return self.authHelper.checkValid().then { _ -> HivePromise<FileWriter> in
+    public func uploadFile(_ transactionId: String) -> Promise<FileWriter> {
+        return self.authHelper.checkValid().then { _ -> Promise<FileWriter> in
             return self.uploadImp(transactionId)
         }
     }
     
-    private func uploadImp(_ transactionId: String) -> HivePromise<FileWriter> {
-        return HivePromise<FileWriter> { resolver in
+    private func uploadImp(_ transactionId: String) -> Promise<FileWriter> {
+        return Promise<FileWriter> { resolver in
             if let url = URL(string: vaultUrl.runScriptUpload(transactionId)) {
                 let writer = FileWriter(url: url, authHelper: authHelper)
                 resolver.fulfill(writer)
@@ -154,13 +154,13 @@ public class ScriptClient: ScriptingProtocol {
     }
 
     public func downloadFile(_ transactionId: String) -> Promise<FileReader> {
-        return self.authHelper.checkValid().then { _ -> HivePromise<FileReader> in
+        return self.authHelper.checkValid().then { _ -> Promise<FileReader> in
             return self.downloadImp(transactionId, 0)
         }
     }
     
-    private func downloadImp(_ transactionId: String, _ tryAgain: Int) -> HivePromise<FileReader> {
-        return HivePromise<FileReader> { resolver in
+    private func downloadImp(_ transactionId: String, _ tryAgain: Int) -> Promise<FileReader> {
+        return Promise<FileReader> { resolver in
             let url = URL(string: vaultUrl.runScriptDownload(transactionId))
             guard (url != nil) else {
                 resolver.reject(HiveError.IllegalArgument(des: "Invalid url format."))
@@ -172,7 +172,7 @@ public class ScriptClient: ScriptingProtocol {
                     resolver.reject(error)
                     return
                 }
-                self.authHelper.retryLogin().then { success -> HivePromise<FileReader> in
+                self.authHelper.retryLogin().then { success -> Promise<FileReader> in
                     return self.downloadImp(transactionId, 1)
                 }.done { result in
                     resolver.fulfill(result)

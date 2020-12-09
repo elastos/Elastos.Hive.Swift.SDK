@@ -34,14 +34,14 @@ public class FileClient: NSObject, FilesProtocol {
         self.vaultUrl = authHelper.vaultUrl
     }
 
-    public func upload(_ path: String) -> HivePromise<FileWriter> {
-        return authHelper.checkValid().then { _ -> HivePromise<FileWriter> in
+    public func upload(_ path: String) -> Promise<FileWriter> {
+        return authHelper.checkValid().then { _ -> Promise<FileWriter> in
             return self.uploadImp(path, tryAgain: 0)
         }
     }
     
-    private func uploadImp(_ path: String, tryAgain: Int) -> HivePromise<FileWriter> {
-        return HivePromise<FileWriter> { resolver in
+    private func uploadImp(_ path: String, tryAgain: Int) -> Promise<FileWriter> {
+        return Promise<FileWriter> { resolver in
             if let url = URL(string: vaultUrl.upload(path)) {
                 writer = FileWriter(url: url, authHelper: authHelper)
                 resolver.fulfill(writer!)
@@ -52,14 +52,14 @@ public class FileClient: NSObject, FilesProtocol {
         }
     }
     
-    public func download(_ path: String) -> HivePromise<FileReader> {
-        return authHelper.checkValid().then { _ -> HivePromise<FileReader> in
+    public func download(_ path: String) -> Promise<FileReader> {
+        return authHelper.checkValid().then { _ -> Promise<FileReader> in
             return self.downloadImp(path, tryAgain: 0)
         }
     }
 
-    private func downloadImp(_ remoteFile: String, tryAgain: Int) -> HivePromise<FileReader> {
-        return HivePromise<FileReader> { resolver in
+    private func downloadImp(_ remoteFile: String, tryAgain: Int) -> Promise<FileReader> {
+        return Promise<FileReader> { resolver in
             let url = URL(string: vaultUrl.download(remoteFile))
             guard (url != nil) else {
                 resolver.reject(HiveError.IllegalArgument(des: "Invalid url format."))
@@ -71,7 +71,7 @@ public class FileClient: NSObject, FilesProtocol {
                     resolver.reject(error)
                     return
                 }
-                self.authHelper.retryLogin().then { success -> HivePromise<FileReader> in
+                self.authHelper.retryLogin().then { success -> Promise<FileReader> in
                     return self.downloadImp(remoteFile, tryAgain: 1)
                 }.done { result in
                     resolver.fulfill(result)
@@ -82,14 +82,14 @@ public class FileClient: NSObject, FilesProtocol {
         }
     }
 
-    public func delete(_ path: String) -> HivePromise<Bool> {
-        return authHelper.checkValid().then { _ -> HivePromise<Bool> in
+    public func delete(_ path: String) -> Promise<Bool> {
+        return authHelper.checkValid().then { _ -> Promise<Bool> in
             return self.deleteImp(path, 0)
         }
     }
 
-    private func deleteImp(_ remoteFile: String, _ tryAgain: Int) -> HivePromise<Bool> {
-        HivePromise<Bool> { resolver in
+    private func deleteImp(_ remoteFile: String, _ tryAgain: Int) -> Promise<Bool> {
+        Promise<Bool> { resolver in
             let param = ["path": remoteFile]
             let url = vaultUrl.deleteFileOrFolder()
 
@@ -114,14 +114,14 @@ public class FileClient: NSObject, FilesProtocol {
         }
     }
 
-    public func move(_ src: String, _ dest: String) -> HivePromise<Bool> {
-        return authHelper.checkValid().then { _ -> HivePromise<Bool> in
+    public func move(_ src: String, _ dest: String) -> Promise<Bool> {
+        return authHelper.checkValid().then { _ -> Promise<Bool> in
             return self.moveImp(src, dest, 0)
         }
     }
 
-    private func moveImp(_ src: String, _ dest: String, _ tryAgain: Int) -> HivePromise<Bool> {
-        HivePromise<Bool> { resolver in
+    private func moveImp(_ src: String, _ dest: String, _ tryAgain: Int) -> Promise<Bool> {
+        Promise<Bool> { resolver in
             let url = vaultUrl.move()
             let param = ["src_path": src, "dst_path": dest]
             let response = AF.request(url,
@@ -144,14 +144,14 @@ public class FileClient: NSObject, FilesProtocol {
         }
     }
 
-    public func copy(_ src: String, _ dest: String) -> HivePromise<Bool> {
-        return authHelper.checkValid().then { _ -> HivePromise<Bool> in
+    public func copy(_ src: String, _ dest: String) -> Promise<Bool> {
+        return authHelper.checkValid().then { _ -> Promise<Bool> in
             return self.copyImp(src, dest, 0)
         }
     }
 
-    private func copyImp(_ src: String, _ dest: String, _ tryAgain: Int) -> HivePromise<Bool> {
-        HivePromise<Bool> { resolver in
+    private func copyImp(_ src: String, _ dest: String, _ tryAgain: Int) -> Promise<Bool> {
+        Promise<Bool> { resolver in
             let url = vaultUrl.move()
             let param = ["src_path": src, "dst_path": dest]
             let response = AF.request(url,
@@ -174,14 +174,14 @@ public class FileClient: NSObject, FilesProtocol {
         }
     }
 
-    public func hash(_ path: String) -> HivePromise<String> {
-        return authHelper.checkValid().then { _ -> HivePromise<String> in
+    public func hash(_ path: String) -> Promise<String> {
+        return authHelper.checkValid().then { _ -> Promise<String> in
             return self.hashImp(path, 0)
         }
     }
 
-    private func hashImp(_ path: String, _ tryAgain: Int) -> HivePromise<String> {
-        return HivePromise<String> { resolver in
+    private func hashImp(_ path: String, _ tryAgain: Int) -> Promise<String> {
+        return Promise<String> { resolver in
             let url = vaultUrl.hash(path)
             let response = AF.request(url,
                                 method: .get,
@@ -202,14 +202,14 @@ public class FileClient: NSObject, FilesProtocol {
         }
     }
 
-    public func list(_ path: String) -> HivePromise<Array<FileInfo>> {
-        return authHelper.checkValid().then { _ -> HivePromise<Array<FileInfo>> in
+    public func list(_ path: String) -> Promise<Array<FileInfo>> {
+        return authHelper.checkValid().then { _ -> Promise<Array<FileInfo>> in
             return self.listImp(path, 0)
         }
     }
 
-    private func listImp(_ path: String, _ tryAgain: Int) -> HivePromise<Array<FileInfo>> {
-        return HivePromise<Array<FileInfo>> { resolver in
+    private func listImp(_ path: String, _ tryAgain: Int) -> Promise<Array<FileInfo>> {
+        return Promise<Array<FileInfo>> { resolver in
             let url = vaultUrl.list(path)
             let response = AF.request(url,
                                 method: .get,
@@ -240,14 +240,14 @@ public class FileClient: NSObject, FilesProtocol {
         }
     }
 
-    public func stat(_ path: String) -> HivePromise<FileInfo> {
-        return authHelper.checkValid().then { _ -> HivePromise<FileInfo> in
+    public func stat(_ path: String) -> Promise<FileInfo> {
+        return authHelper.checkValid().then { _ -> Promise<FileInfo> in
             return self.statImp(path, 0)
         }
     }
 
-    private func statImp(_ path: String, _ tryAgain: Int) -> HivePromise<FileInfo>{
-        return HivePromise<FileInfo> { resolver in
+    private func statImp(_ path: String, _ tryAgain: Int) -> Promise<FileInfo>{
+        return Promise<FileInfo> { resolver in
             let url = vaultUrl.stat(path)
             let response = AF.request(url,
                                 method: .get,

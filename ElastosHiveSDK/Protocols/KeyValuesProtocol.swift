@@ -23,19 +23,19 @@
 import Foundation
 
 public protocol KeyValuesProtocol {
-    func putValue(_ aValue: String, forKey: String) -> HivePromise<Void>
+    func putValue(_ aValue: String, forKey: String) -> Promise<Void>
 
-    func putValue(_ aValue: Data, forKey: String) -> HivePromise<Void>
+    func putValue(_ aValue: Data, forKey: String) -> Promise<Void>
 
-    func setValue(_ newValue: String, forKey: String) -> HivePromise<Void>
+    func setValue(_ newValue: String, forKey: String) -> Promise<Void>
 
-    func setValue(_ newValue: Data, forKey: String) -> HivePromise<Void>
+    func setValue(_ newValue: Data, forKey: String) -> Promise<Void>
 
-    func values(ofKey: String) -> HivePromise<Array<Data>>
+    func values(ofKey: String) -> Promise<Array<Data>>
 
-    // func values(ofKey: String) -> HivePromise<Array<String>>
-    // func values(ofKey: String, handler: HiveCallback<Array<String>>) -> HivePromise<Array<String>>
+    // func values(ofKey: String) -> Promise<Array<String>>
+    // func values(ofKey: String, handler: HiveCallback<Array<String>>) -> Promise<Array<String>>
 
-    func deleteValues(forKey: String) -> HivePromise<Void>
+    func deleteValues(forKey: String) -> Promise<Void>
 }
 

@@ -25,7 +25,7 @@ import Foundation
 @objc(AuthHelper)
 public class ConnectHelper: NSObject {
     
-    public func checkValid() -> HivePromise<Void> {
-        return HivePromise<Void>(error: HiveError.failure(des: "Dummy"))
+    public func checkValid() -> Promise<Void> {
+        return Promise<Void>(error: HiveError.failure(des: "Dummy"))
     }
 }
