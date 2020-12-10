@@ -46,6 +46,7 @@ public class VaultAuthHelper: ConnectHelper {
     var _authenticationHandler: Authenticator?
     var vaultUrl: VaultURL
 
+    let lock = NSLock()
     public var ownerDid: String? {
         return _ownerDid
     }
@@ -86,6 +87,7 @@ public class VaultAuthHelper: ConnectHelper {
     }
     
     public override func checkValid() -> Promise<Void> {
+        lock.lock()
         return doCheckExpired()
     }
 
@@ -96,19 +98,23 @@ public class VaultAuthHelper: ConnectHelper {
             try tryRestoreToken()
             if token != nil && !(token!.isExpired()) {
                 resolver.fulfill(Void())
+                lock.unlock()
                 return
             }
             if !Thread.isMainThread {
                 try signIn()
+                lock.unlock()
                 resolver.fulfill(Void())
                 return
             }
             DispatchQueue.global().async { [self] in
                 do {
                     try signIn()
+                    lock.unlock()
                     resolver.fulfill(Void())
                 }
                 catch {
+                    lock.unlock()
                     resolver.reject(error)
                 }
             }
@@ -138,7 +144,6 @@ public class VaultAuthHelper: ConnectHelper {
     }
 
     private func tryRestoreToken() throws {
-        self.token = nil
         let json = try JSON(_persistent.parseFrom())
         _userDid = json[USER_DID_KEY].stringValue
         _appId = json[APP_ID_KEY].stringValue
@@ -230,5 +235,6 @@ public class VaultAuthHelper: ConnectHelper {
     
     public func removeToken() throws {
         try _persistent.deleteContent()
+        self.token = nil
     }
 }
