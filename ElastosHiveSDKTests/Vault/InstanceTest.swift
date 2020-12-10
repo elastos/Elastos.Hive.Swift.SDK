@@ -30,8 +30,12 @@ class InstanceTest: XCTestCase {
             let p5 = database?.createCollection(collectionName)
 
             let p6 = database?.createCollection(collectionName)
+            let p7 = database?.createCollection(collectionName)
+            let p8 = database?.createCollection(collectionName)
+            let p9 = database?.createCollection(collectionName)
             
-            when(resolved: p1!, p2!, p3!, p4!, p5!, p6!).done { re in
+            
+            when(resolved: p1!, p2!, p3!, p4!, p5!, p6!, p7!, p8!, p9!).done { re in
                 XCTAssertTrue(true)
                 lock.fulfill()
             }
