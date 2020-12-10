@@ -76,7 +76,6 @@ public class VaultAuthHelper: ConnectHelper {
     }
 
     public init(_ ownerDid: String, _ nodeUrl: String, _ storePath: String, _ authenticationDIDDocument: DIDDocument, _ handler: Authenticator?) {
-        PromiseKit.conf.Q = (map: HiveVaultQueue, return: HiveVaultQueue)
         _authenticationDIDDocument = authenticationDIDDocument
         _authenticationHandler = handler
         _ownerDid = ownerDid
@@ -88,12 +87,15 @@ public class VaultAuthHelper: ConnectHelper {
     
     public override func checkValid() -> Promise<Void> {
         lock.lock()
-        return doCheckExpired()
+        return Promise().then { [self] _ -> Promise<Void> in
+            return doCheckExpired()
+        }
     }
 
     private func doCheckExpired() -> Promise<Void> {
         return Promise<Void> { resolver in
             
+            assert(!Thread.isMainThread)
             _connectState = false
             try tryRestoreToken()
             if token != nil && !(token!.isExpired()) {
@@ -101,23 +103,9 @@ public class VaultAuthHelper: ConnectHelper {
                 lock.unlock()
                 return
             }
-            if !Thread.isMainThread {
-                try signIn()
-                lock.unlock()
-                resolver.fulfill(Void())
-                return
-            }
-            DispatchQueue.global().async { [self] in
-                do {
-                    try signIn()
-                    lock.unlock()
-                    resolver.fulfill(Void())
-                }
-                catch {
-                    lock.unlock()
-                    resolver.reject(error)
-                }
-            }
+            try signIn()
+            lock.unlock()
+            resolver.fulfill(Void())
         }
     }
 
