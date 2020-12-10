@@ -87,7 +87,7 @@ public class VaultAuthHelper: ConnectHelper {
     
     public override func checkValid() -> Promise<Void> {
         lock.lock()
-        return Promise().then { [self] _ -> Promise<Void> in
+        return DispatchQueue.global().async(.promise){ 0 }.then { [self] _ -> Promise<Void> in
             return doCheckExpired()
         }
     }

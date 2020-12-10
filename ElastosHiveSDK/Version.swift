@@ -32,7 +32,7 @@ public class Version: NSObject {
     }
     
     public func version() -> Promise<String> {
-        return Promise().then { [self] _ -> Promise<String> in
+        return DispatchQueue.global().async(.promise){ 0 }.then { [self] _ -> Promise<String> in
             return versionImp()
         }
     }
@@ -50,7 +50,8 @@ public class Version: NSObject {
     }
     
     public func lastCommitId() -> Promise<String> {
-        return Promise().then { [self] _ -> Promise<String> in
+        
+        return DispatchQueue.global().async(.promise){ 0 }.then { [self] _ -> Promise<String> in
             return lastCommitIdImp()
         }
     }
