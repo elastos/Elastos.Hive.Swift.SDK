@@ -27,44 +27,44 @@ public class Version: NSObject {
     
     private var vaultUrl: VaultURL
     init(_ authHelper: VaultAuthHelper) {
-        PromiseKit.conf.Q = (map: HiveVaultQueue, return: HiveVaultQueue)
         self.authHelper = authHelper
         self.vaultUrl = authHelper.vaultUrl
     }
     
     public func version() -> Promise<String> {
+        return DispatchQueue.global().async(.promise){ 0 }.then { [self] _ -> Promise<String> in
+            return versionImp()
+        }
+    }
+    
+    private func versionImp() -> Promise<String> {
         return Promise<String> { resolver in
             let url = vaultUrl.version()
-            AF.request(url, method: .get, encoding: JSONEncoding.default).responseJSON { response in
-                do {
-                    VaultApi.printDebugLogForNetwork(response)
-                    let json = try VaultApi.handlerJsonResponse(response)
-                    _ = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: 1)
-                    let version = json["version"].stringValue
-                    resolver.fulfill(version)
-                }
-                catch {
-                    resolver.reject(error)
-                }
-            }
+            let response = AF.request(url, method: .get, encoding: JSONEncoding.default).responseJSON()
+            VaultApi.printDebugLogForNetwork(response)
+            let json = try VaultApi.handlerJsonResponse(response)
+            _ = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: 1)
+            let version = json["version"].stringValue
+            resolver.fulfill(version)
         }
     }
     
     public func lastCommitId() -> Promise<String> {
+        
+        return DispatchQueue.global().async(.promise){ 0 }.then { [self] _ -> Promise<String> in
+            return lastCommitIdImp()
+        }
+    }
+    
+    private func lastCommitIdImp() -> Promise<String> {
         return Promise<String> { resolver in
             let url = vaultUrl.commitId()
-            AF.request(url, method: .get, encoding: JSONEncoding.default).responseJSON { response in
-                do {
-                    VaultApi.printDebugLogForNetwork(response)
-                    let json = try VaultApi.handlerJsonResponse(response)
-                    _ = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: 1)
-                    let commiteId = json["commit_hash"].stringValue
-                    resolver.fulfill(commiteId)
-                }
-                catch {
-                    resolver.reject(error)
-                }
-            }
+            let response = AF.request(url, method: .get, encoding: JSONEncoding.default).responseJSON()
+            VaultApi.printDebugLogForNetwork(response)
+            let json = try VaultApi.handlerJsonResponse(response)
+            _ = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: 1)
+            let commiteId = json["commit_hash"].stringValue
+            resolver.fulfill(commiteId)
         }
     }
 }

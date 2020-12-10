@@ -32,14 +32,8 @@ class VaultHelper: NSObject {
     }
     
     func useTrial() -> Promise<Bool> {
-        return Promise<Bool> { resolver in
-            authHelper.checkValid().then { [self] _ -> Promise<Bool> in
-                return useTrialImp()
-            }.done { success in
-                resolver.fulfill(success)
-            }.catch { error in
-                resolver.reject(error)
-            }
+        return authHelper.checkValid().then { [self] _ -> Promise<Bool> in
+            return useTrialImp()
         }
     }
     
