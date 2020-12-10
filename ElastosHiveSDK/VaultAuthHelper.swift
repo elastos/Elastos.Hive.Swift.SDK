@@ -86,26 +86,27 @@ public class VaultAuthHelper: ConnectHelper {
     }
     
     public override func checkValid() -> Promise<Void> {
-        lock.lock()
-        return DispatchQueue.global().async(.promise){ 0 }.then { [self] _ -> Promise<Void> in
-            return doCheckExpired()
+        return DispatchQueue.global().async(.promise){ [self] in
+            lock.lock()
+            try doCheckExpired()
         }
     }
 
-    private func doCheckExpired() -> Promise<Void> {
-        return Promise<Void> { resolver in
-            
+    private func doCheckExpired() throws {
+        do {
             assert(!Thread.isMainThread)
             _connectState = false
             try tryRestoreToken()
             if token != nil && !(token!.isExpired()) {
-                resolver.fulfill(Void())
                 lock.unlock()
                 return
             }
             try signIn()
             lock.unlock()
-            resolver.fulfill(Void())
+        }
+        catch {
+            lock.unlock()
+            throw error
         }
     }
 
