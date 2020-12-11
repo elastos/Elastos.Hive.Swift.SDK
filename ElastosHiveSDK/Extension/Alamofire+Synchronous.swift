@@ -43,8 +43,14 @@ extension DataRequest {
         self.response(queue: DispatchQueue.global(qos: .default), responseSerializer: responseSerializer) { response in
             
             result = response
+            var httpbody: [String: Any]?
+            if let requestBody = result?.request?.httpBody {
+                httpbody = try! JSONSerialization.jsonObject(with: requestBody, options: []) as? [String: Any]
+            }
+            
             Log.d("Hive Debug ==> request url ->", response.request?.url as Any)
             Log.d("Hive Debug ==> request headers ->", result.request?.allHTTPHeaderFields as Any)
+            Log.d("Hive Debug ==> request httpBody ->", httpbody as Any)
             Log.d("Hive Debug ==> response Code ->", result.response?.statusCode.description as Any)
             Log.d("Hive Debug ==> response body ->", result.result)
             semaphore.signal()
