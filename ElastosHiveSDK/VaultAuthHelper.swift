@@ -160,9 +160,26 @@ public class VaultAuthHelper: ConnectHelper {
         let jp = try JwtParserBuilder().build()
         let c = try jp.parseClaimsJwt(access_token).claims
         let exp = c.getExpiration()
-        setUserDid(c.get(key: "userDid") as! String)
-        setAppId(c.get(key:"appId") as! String)
-        setAppInstanceDid(c.get(key:"appInstanceDid") as! String)
+        var userDid: String?
+        var appDid: String?
+        if let propos = c.get(key:"props") as? String {
+            if let dict = try? JSONSerialization.jsonObject(with: propos.data(using: .utf8)!, options: .mutableContainers)  {
+                let json = JSON(dict)
+                userDid = json["userDid"].stringValue
+                appDid = json["appDid"].stringValue
+            }
+        }
+        if let _ = userDid {
+            setUserDid(userDid!)
+        }
+        if let _ = appDid {
+            setAppId(appDid! )
+        }
+        
+        if let appInstanceDid = c.getAudience() {
+            setAppInstanceDid(appInstanceDid)
+        }
+        
         let expiresTime: String = Date.convertToUTCStringFromDate(exp!)
         token = AuthToken("", json[ACCESS_TOKEN_KEY].stringValue, expiresTime)
         let json = [ACCESS_TOKEN_KEY: token!.accessToken,
