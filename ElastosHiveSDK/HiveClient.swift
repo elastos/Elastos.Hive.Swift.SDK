@@ -30,16 +30,13 @@ public class HiveClientHandle: NSObject {
     private static var _cacheDir: String = "\(NSHomeDirectory())/Library/Caches/didCache" // Default
     private static var resolverDidSetup: Bool = false // Default
 
-    private var authenticationDIDDocument: DIDDocument
-    private var authentcationHandler: Authenticator
-    private var localDataPath: String
-    private var cachedProviders: [String: Any] = [: ]
+    private var authenticationShim: AuthenticationShim
+    private var context: HiveContext
 
-    init(_ options: HiveClientOptions) {
+    init(_ context: HiveContext) {
         PromiseKit.conf.Q = (map: HiveVaultQueue, return: HiveVaultQueue)
-        self.authenticationDIDDocument = options.authenticationDIDDocument
-        self.authentcationHandler = options.authenicator!
-        self.localDataPath = options.localPath
+        self.authenticationShim = AuthenticationShim(context)
+        self.context = context
     }
 
     /// Constructor without parameters
@@ -72,99 +69,116 @@ public class HiveClientHandle: NSObject {
         _cacheDir = cacheDir
         try DIDBackend.initializeInstance(_reslover, _cacheDir)
         resolverDidSetup = true
-        //ResolverCache.reset() // 删除了整个路径 ！！！！
+        try ResolverCache.reset() // 删除了整个路径 ！！！！
     }
 
     /// Create a Client instance
     /// - Parameter withOptions: authentication options
     /// - Throws: throw an error, when an error occurs
     /// - Returns: client instance
-    public static func createInstance(withOptions: HiveClientOptions) throws -> HiveClientHandle {
+    public static func createInstance(withContext: HiveContext) throws -> HiveClientHandle {
         guard resolverDidSetup else {
             throw HiveError.IllegalArgument(des: "Setup did resolver first")
         }
-        return HiveClientHandle(withOptions)
+        return HiveClientHandle(withContext)
     }
 
-    private func newVault(_ provider: String, _ ownerDid: String) -> Vault {
-        let authHelper = VaultAuthHelper(ownerDid, provider, localDataPath, authenticationDIDDocument, authentcationHandler)
-        return Vault(authHelper, provider, ownerDid)
-    }
-    
-    /// Create Vault
+    /// Create Vault for user with specified DID.
+    /// Try to create a vault on target provider address with following steps:
+    ///  - Get the target provider address
+    ///  - Check whether the vault is already existed on target provider, otherwise
+    ///  - Create a new vault on target provider with free pricing plan.
     /// - Parameters:
-    ///   - ownerDid: ownerDid
-    ///   - providerAddress: provider address
+    ///   - ownerDid: The owner did that want to create a vault
+    ///   - providerAddress: The preferred provider address to use
     /// - Returns: vault instance
-    public func createVault(_ ownerDid: String, _ providerAddress: String?) -> Promise<Vault>{
+    public func createVault(_ ownerDid: String, _ preferredProviderAddress: String?) -> Promise<Vault>{
+        return getVaultProvider(ownerDid, preferredProviderAddress).then{ provider -> Promise<Vault?> in
+            let authHelper = VaultAuthHelper(self.context,
+                                             ownerDid,
+                                             provider,
+                                             self.authenticationShim)
+            let vault = Vault(authHelper, provider, ownerDid)
+            return vault.checkVaultExist()
+        }.then{ vault -> Promise<Vault> in
+            guard vault != nil else {
+                throw HiveError.vaultAlreadyExistException(des: "Vault already existed.")
+            }
+            return vault!.requestToCreateVault()
+        }
+    }
+
+    /// get Vault instance with specified DID.
+    /// Try to get a vault on target provider address with following steps:
+    ///   - Get the target provider address
+    ///   - Create a new vaule of local instance..
+    /// - Parameters:
+    ///   - ownerDid: The owner did related to target vault
+    ///   - preferredProviderAddress: The preferred target provider address
+    /// - Returns: vault instance.
+    public func getVault(_ ownerDid: String, _ preferredProviderAddress: String?) -> Promise<Vault> {
         return Promise<Vault> { resolver in
-            var vault: Vault?
-            _ = getVaultProvider(ownerDid, providerAddress).then{ provider -> Promise<Bool> in
-                vault = self.newVault(provider, ownerDid)
-                return vault!.useTrial()
-            }.done{ success in
-                resolver.fulfill(vault!)
+            _ = getVaultProvider(ownerDid, preferredProviderAddress).done{ provider in
+                let authHelper = VaultAuthHelper(self.context,
+                                                ownerDid,
+                                                provider,
+                                                self.authenticationShim)
+                resolver.fulfill(Vault(authHelper, provider, ownerDid))
             }.catch{ error in
                 resolver.reject(error)
             }
         }
     }
 
-    /// Get Vault
+    /// Try to acquire provider address for the specific user DID with rules with sequence orders:
+    ///  - Use 'preferredProviderAddress' first when it's being with real value; Otherwise
+    ///  - Resolve DID document according to the ownerDid from DID sidechain,
+    ///  and find if there are more than one "HiveVault" services, then would
+    ///   choose the first one service point as target provider address. Otherwise
+    ///   - It means no service endpoints declared on this DID Document, then would throw the
+    ///   corresponding exception.
     /// - Parameters:
-    ///   - ownerDid: vault owner did
-    ///   - providerAddress: provider address
-    /// - Returns: vault instance
-    public func getVault(_ ownerDid: String, _ providerAddress: String?) -> Promise<Vault> {
-        return Promise<Vault> { resolver in
-            var vault: Vault?
-            _ = getVaultProvider(ownerDid, providerAddress).then{ [self] provider -> Promise<UsingPlan> in
-                vault = newVault(provider, ownerDid)
-                return vault!.getUsingPricePlan()
-            }.done{ plan in
-                resolver.fulfill(vault!)
-            }.catch{ error in
-                resolver.reject(error)
-            }
-        }
-    }
-
-    /// Tries to find a vault address in the public DID document of the given user's DID.
-    /// - Parameters:
-    ///   - ownerDid: ownerDid the owner did for the vault
-    ///   - providerAddress: the vault address in String
-    /// - Returns: the vault address in String
-    public func getVaultProvider(_ ownerDid: String, _ providerAddress: String?) -> Promise<String> {
-
+    ///   - ownerDid: The owner did that want be set provider address
+    ///   - providerAddress: The preferred provider address to use
+    /// - Returns: The provider address
+    public func getVaultProvider(_ ownerDid: String, _ preferredProviderAddress: String?) -> Promise<String> {
         return Promise<String> { resolver in
             DispatchQueue.global().async {
-                var vaultProvider = providerAddress
                 
-                guard vaultProvider == nil else {
-                    resolver.fulfill(vaultProvider!)
+                /// Choose 'preferredProviderAddress' as target provider address if it's with value
+                if preferredProviderAddress != nil {
+                    resolver.fulfill(preferredProviderAddress!)
                     return
                 }
                 do {
                     let did = try DID(ownerDid)
                     let doc = try did.resolve()
                     guard let _ = doc else {
-                        resolver.reject(HiveError.didNotPublished(des: "did Not Published."))
+                        resolver.reject(HiveError.providerNotFound(des: "The DID document \(ownerDid) has not published."))
                         return
                     }
                     let services = doc?.selectServices(byType: "HiveVault")
-                    if services != nil && services!.count > 0 {
-                        vaultProvider = services![0].endpoint
-                    }
-                    guard vaultProvider != nil else {
-                        resolver.reject(HiveError.providerIsNil(des: "provider is not set."))
+                    if services == nil || services!.count == 0 {
+                        resolver.reject(HiveError.providerNotFound(des: "No 'HiveVault' services declared on DID document \(ownerDid)"))
                         return
                     }
-                    resolver.fulfill(vaultProvider!)
+                    resolver.fulfill(services![0].endpoint)
                 }
                 catch {
                     resolver.reject(error)
                 }
             }
         }
+    }
+}
+
+public class AuthenticationShim: InternalHandler {
+    private var context: HiveContext
+    init(_ context: HiveContext) {
+        self.context = context
+    }
+    
+    public func authenticate(_ context: HiveContext, _ jwtToken: String) -> Promise<String> {
+        return context.getAuthorization(jwtToken)
     }
 }

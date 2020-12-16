@@ -3,21 +3,6 @@ import XCTest
 @testable import ElastosHiveSDK
 import ElastosDIDSDK
 
-class VaultAuthenticator: Authenticator {
-    func requestAuthentication(_ jwtToken: String) -> Promise<String> {
-        return Promise<String> { resolver in
-            do{
-                let authtoken = try user?.presentationInJWT!.getAuthToken(jwtToken)
-                print("authtoken = \(authtoken)")
-                resolver.fulfill(authtoken!)
-            }
-            catch {
-                resolver.reject(error)
-            }
-        }
-    }
-}
-
 public var user: UserFactory?
 class DBTest: XCTestCase {
     private var client: HiveClientHandle?
@@ -373,7 +358,7 @@ class DBTest: XCTestCase {
             Log.setLevel(.Debug)
             user = try UserFactory.createUser1()
             let lock = XCTestExpectation(description: "wait for test.")
-            user!.client.getVault(user!.ownerDid, user?.provider).done { [self] vault in
+            user!.client.getVault(user!.userFactoryOpt.ownerDid, user?.userFactoryOpt.provider).done { [self] vault in
                 self.database = (vault.database as! DatabaseClient)
                 lock.fulfill()
             }.catch { error in

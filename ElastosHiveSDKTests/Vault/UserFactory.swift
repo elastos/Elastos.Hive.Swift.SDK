@@ -3,46 +3,52 @@ import XCTest
 @testable import ElastosHiveSDK
 import ElastosDIDSDK
 
+class UserContext: HiveContext {
+    private var option: UserOptions
+    private var presentationInJWT: PresentationInJWT
+    init(_ option: UserOptions, _ pjwt: PresentationInJWT) {
+        self.option = option
+        self.presentationInJWT = pjwt
+    }
+    func getLocalDataDir() -> String {
+        return self.option.storePath
+    }
+    
+    func getAppInstanceDocument() -> DIDDocument {
+        return self.presentationInJWT.doc!
+    }
+    
+    func getAuthorization(_ jwtToken: String) -> Promise<String> {
+        return self.presentationInJWT.getAuthToken(jwtToken)
+    }
+}
+
 public class UserFactory {
     static let didCachePath = "didCache"
     var vault: Vault?
     var resolverDidSetup = false
-    var presentationInJWT: PresentationInJWT?
+    var presentationInJWT: PresentationInJWT
     var client: HiveClientHandle
-    var storePath: String
-    var ownerDid: String
-    var resolveUrl: String
-    var provider: String
+    var userFactoryOpt: UserOptions
 
     init(_ userDidOpt: Options,
          _ appInstanceDidOpt: Options,
-         _ provider: String,
-         _ resolveUrl: String,
-         _ ownerDid: String,
-         _ tokenCachePath: String) throws {
-        self.storePath = tokenCachePath
-        self.ownerDid = ownerDid
-        self.resolveUrl = resolveUrl
-        self.provider = provider
+         _ userFactoryOpt: UserOptions) throws {
+        self.userFactoryOpt = userFactoryOpt
+
         presentationInJWT = try PresentationInJWT(userDidOpt, appInstanceDidOpt)
         if !resolverDidSetup {
-            try HiveClientHandle.setupResolver(resolveUrl, UserFactory.didCachePath)
+            try HiveClientHandle.setupResolver(userFactoryOpt.resolveUrl, UserFactory.didCachePath)
             resolverDidSetup = true
         }
-        let options = HiveClientOptions()
-        _ = options.setLocalDataPath(tokenCachePath)
-        _ = options.setAuthenticator(VaultAuthenticator())
-        _ = options.setAuthenticationDIDDocument((presentationInJWT?.doc)!)
-        client = try HiveClientHandle.createInstance(withOptions: options)
+        let contenxt = UserContext(userFactoryOpt, presentationInJWT)
+        client = try HiveClientHandle.createInstance(withContext: contenxt)
     }
     
     class func createFactory(_ userDidOpt: Options,
                              _ appInstanceDidOpt: Options,
-                             _ ownerDid: String,
-                             _ resolveUrl: String,
-                             _ provider: String,
-                             _ tokenCachePath: String) throws -> UserFactory {
-        return try UserFactory(userDidOpt, appInstanceDidOpt,ownerDid, resolveUrl,provider, tokenCachePath)
+                             _ userFactoryOpt: UserOptions) throws -> UserFactory {
+        return try UserFactory(userDidOpt, appInstanceDidOpt, userFactoryOpt)
     }
     
     //release环境（MainNet + https://hive1.trinity-tech.io + userDid1）
@@ -59,7 +65,13 @@ public class UserFactory {
         appInstanceDidOpt.mnemonic = appInstance1_mn
         appInstanceDidOpt.phrasepass = appInstance1_phrasepass
         appInstanceDidOpt.storepass = appInstance1_storepass
-        return try UserFactory(userDidOpt, appInstanceDidOpt, RELEASE_PROVIDER, MAIN_RESOLVER_URL, userDid1, user1path)
+        
+        let userFactoryOpt = UserOptions()
+        userFactoryOpt.provider = RELEASE_PROVIDER
+        userFactoryOpt.resolveUrl = MAIN_RESOLVER_URL
+        userFactoryOpt.ownerDid = userDid1
+        userFactoryOpt.storePath = user1path
+        return try UserFactory(userDidOpt, appInstanceDidOpt, userFactoryOpt)
     }
 
     //develope 环境
@@ -76,8 +88,13 @@ public class UserFactory {
         appInstanceDidOpt.mnemonic = appInstance2_mn
         appInstanceDidOpt.phrasepass = appInstance2_phrasepass
         appInstanceDidOpt.storepass = appInstance2_storepass
-
-        return try UserFactory(userDidOpt, appInstanceDidOpt, DEVELOP_PROVIDER, TEST_RESOLVER_URL, userDid2, user2Path)
+        
+        let userFactoryOpt = UserOptions()
+        userFactoryOpt.provider = DEVELOP_PROVIDER
+        userFactoryOpt.resolveUrl = TEST_RESOLVER_URL
+        userFactoryOpt.ownerDid = userDid2
+        userFactoryOpt.storePath = user2Path
+        return try UserFactory(userDidOpt, appInstanceDidOpt, userFactoryOpt)
     }
     
     //node 环境
@@ -95,7 +112,18 @@ public class UserFactory {
         appInstanceDidOpt.phrasepass = appInstance3_phrasepass
         appInstanceDidOpt.storepass = appInstance3_storepass
 
-        return try UserFactory(userDidOpt, appInstanceDidOpt, LOCAL_PROVIDER, MAIN_RESOLVER_URL, userDid3, user3Path)
+        let userFactoryOpt = UserOptions()
+        userFactoryOpt.provider = LOCAL_PROVIDER
+        userFactoryOpt.resolveUrl = MAIN_RESOLVER_URL
+        userFactoryOpt.ownerDid = userDid3
+        userFactoryOpt.storePath = user3Path
+        return try UserFactory(userDidOpt, appInstanceDidOpt, userFactoryOpt)
     }
 }
 
+class UserOptions {
+    var storePath: String = ""
+    var ownerDid: String = ""
+    var resolveUrl: String = ""
+    var provider: String = ""
+}

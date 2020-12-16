@@ -1,5 +1,6 @@
 import Foundation
 import ElastosDIDSDK
+import PromiseKit
 
 class PresentationInJWT: NSObject {
     var userDidApp: DIDApp?
@@ -19,8 +20,28 @@ class PresentationInJWT: NSObject {
         appInstanceDidApp = DApp(appInstanceDidOpt.name, appInstanceDidOpt.mnemonic, PresentationInJWT.adapter, appInstanceDidOpt.phrasepass, appInstanceDidOpt.storepass)
         doc = try appInstanceDidApp!.getDocument()!
     }
-
-    func getAuthToken(_ jwtToken: String) throws -> String {
+    
+    func getAuthToken(_ jwtToken: String) -> Promise<String> {
+        return Promise{ resolver in
+            DispatchQueue.global().async { [self] in
+                do {
+                    let claims = try JwtParserBuilder().build().parseClaimsJwt(jwtToken).claims
+                    let iss = claims.getIssuer()
+                    let nonce = claims.get(key: "nonce") as? String
+                    
+                    let vc = try userDidApp?.issueDiplomaFor(appInstanceDidApp!)
+                    let vp: VerifiablePresentation = try appInstanceDidApp!.createPresentation(vc!, iss!, nonce!)
+                    let token = try appInstanceDidApp!.createToken(vp, iss!)
+                    resolver.fulfill(token)
+                }
+                catch{
+                    resolver.reject(error)
+                }
+            }
+        }
+    }
+    
+  /*func getAuthToken(_ jwtToken: String) throws -> String {
         let claims = try JwtParserBuilder().build().parseClaimsJwt(jwtToken).claims
         let iss = claims.getIssuer()
         let nonce = claims.get(key: "nonce") as? String
@@ -29,7 +50,7 @@ class PresentationInJWT: NSObject {
         let vp: VerifiablePresentation = try appInstanceDidApp!.createPresentation(vc!, iss!, nonce!)
         let token = try appInstanceDidApp!.createToken(vp, iss!)
         return token
-    }
+    }*/
 }
 
 class Options {

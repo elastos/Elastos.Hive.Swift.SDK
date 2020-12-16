@@ -30,21 +30,22 @@ public class Vault: NSObject {
     private var _keyValues: KeyValuesProtocol?
     private var _payment: Payment
 
-    private var _vaultProvider: String
+    private var _providerAddress: String
     private var _ownerDid: String
     private var authHelper: VaultAuthHelper
     private var vaultHelper: VaultHelper
 
-    init(_ authHelper: VaultAuthHelper, _ vaultProvider: String, _ ownerDid: String) {
+    init(_ authHelper: VaultAuthHelper, _ providerAddress: String, _ ownerDid: String) {
         self._files = FileClient(authHelper)
         self._database = DatabaseClient(authHelper)
         self._scripting = ScriptClient(authHelper)
-        self.authHelper = authHelper
-        self._vaultProvider = vaultProvider
-        self._ownerDid = ownerDid
-        self.vaultHelper = VaultHelper(authHelper)
         self._version = Version(authHelper)
         self._payment = Payment(authHelper)
+        self.vaultHelper = VaultHelper(authHelper)
+        
+        self.authHelper = authHelper
+        self._providerAddress = providerAddress
+        self._ownerDid = ownerDid
     }
     
     public func nodeVersion() -> Promise<String> {
@@ -57,7 +58,7 @@ public class Vault: NSObject {
 
     /// Get vault provider address
     public var providerAddress: String {
-        return _vaultProvider
+        return _providerAddress
     }
 
     /// Get vault owner did
@@ -105,12 +106,24 @@ public class Vault: NSObject {
         return _payment
     }
     
-    func useTrial() -> Promise<Bool> {
-        return self.vaultHelper.useTrial()
+    func requestToCreateVault() -> Promise<Vault> {
+        return Promise { reslover in
+            self.vaultHelper.requestToCreateVault().done { success in
+                reslover.fulfill(self)
+            }.catch { error in
+                reslover.reject(error)
+            }
+        }
     }
-    
-    func getUsingPricePlan() -> Promise<UsingPlan> {
-        return self.payment.getUsingPricePlan()
+
+    func checkVaultExist() -> Promise<Vault?> {
+        return Promise { reslover in
+            self.vaultHelper.vaultExist().done { success in
+                reslover.fulfill(success ? nil : self)
+            }.catch { error in
+                reslover.reject(error)
+            }
+        }
     }
     
     public func revokeAccessToken() throws {

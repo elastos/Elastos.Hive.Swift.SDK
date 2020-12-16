@@ -115,7 +115,7 @@ class PaymentTest: XCTestCase {
             Log.setLevel(.Debug)
             user = try UserFactory.createUser1()
             let lock = XCTestExpectation(description: "wait for test.")
-            user?.client.createVault(user!.ownerDid, user?.provider).done{ vault in
+            user?.client.getVault(user!.userFactoryOpt.ownerDid, user?.userFactoryOpt.provider).done{ vault in
 
                 self.payment = (vault.payment)
                 lock.fulfill()
