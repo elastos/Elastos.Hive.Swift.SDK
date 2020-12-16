@@ -36,7 +36,7 @@ class VersionTest: XCTestCase {
             Log.setLevel(.Debug)
             user = try UserFactory.createUser1()
             let lock = XCTestExpectation(description: "wait for test.")
-            user?.client.getVault(user!.ownerDid, user?.provider).done{ vault in
+            user?.client.getVault(user!.userFactoryOpt.ownerDid, user?.userFactoryOpt.provider).done{ vault in
                 self.vault = vault
                 lock.fulfill()
             }.catch{ error in

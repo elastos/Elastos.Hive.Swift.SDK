@@ -35,7 +35,7 @@ class Entity: NSObject {
         }
 
         // Initialize the root identity.
-        try store!.initializePrivateIdentity(using: Mnemonic.ENGLISH, mnemonic: mnemonic, passPhrase: phrasepass, storePassword: storepass)
+        try store!.initializePrivateIdentity(using: Mnemonic.DID_ENGLISH, mnemonic: mnemonic, passPhrase: phrasepass, storePassword: storepass)
     }
 
     func initDid() throws {

@@ -22,6 +22,7 @@
 
 import Foundation
 
+let lock = NSLock()
 @inline(__always) private func TAG() -> String { return "VaultAuthHelper" }
 public class VaultAuthHelper: ConnectHelper {
     let USER_DID_KEY: String = "user_did"
@@ -38,15 +39,14 @@ public class VaultAuthHelper: ConnectHelper {
     private var _appInstanceDid: String?
 
     var token: AuthToken?
+    var vaultUrl: VaultURL
     private var _connectState: Bool = false
     private var _persistent: Persistent
     private var _nodeUrl: String
 
-    private var _authenticationDIDDocument: DIDDocument?
-    var _authenticationHandler: Authenticator?
-    var vaultUrl: VaultURL
+    private var context: HiveContext
+    private var authenticationShim: AuthenticationShim
 
-    let lock = NSLock()
     public var ownerDid: String? {
         return _ownerDid
     }
@@ -75,13 +75,12 @@ public class VaultAuthHelper: ConnectHelper {
         _appInstanceDid = appInstanceDid
     }
 
-    public init(_ ownerDid: String, _ nodeUrl: String, _ storePath: String, _ authenticationDIDDocument: DIDDocument, _ handler: Authenticator?) {
-        _authenticationDIDDocument = authenticationDIDDocument
-        _authenticationHandler = handler
+    public init(_ context: HiveContext, _ ownerDid: String, _ nodeUrl: String, _ shim: AuthenticationShim) {
+        self.context = context
         _ownerDid = ownerDid
         _nodeUrl = nodeUrl
-        _persistent = VaultAuthInfoStoreImpl(ownerDid, nodeUrl, storePath)
-        
+        self.authenticationShim = shim
+        _persistent = VaultAuthInfoStoreImpl(ownerDid, nodeUrl, self.context.getLocalDataDir())
         self.vaultUrl = VaultURL(_nodeUrl)
     }
     
@@ -111,7 +110,7 @@ public class VaultAuthHelper: ConnectHelper {
     }
 
     private func requestAuthToken(_ handler: Authenticator, _ challenge: String) -> Promise<String> {
-        return handler.requestAuthentication(challenge)
+        return handler.authenticationChallenge(challenge)
     }
 
     private func verifyToken(_ jwtToken: String) throws {
@@ -119,8 +118,8 @@ public class VaultAuthHelper: ConnectHelper {
         let claims = try jwtParser.parseClaimsJwt(jwtToken).claims
         let exp = claims.getExpiration()
         let aud = claims.getAudience()
-        let did = _authenticationDIDDocument?.subject.description
-        if did == nil || aud == nil || did! != aud! {
+        let did = self.context.getAppInstanceDocument().subject.description
+        if aud == nil || did != aud! {
             throw HiveError.jwtVerify(des: "authenticationDIDDocument's subject is not equal to audience")
         }
         let currentTime = Date()
@@ -192,24 +191,25 @@ public class VaultAuthHelper: ConnectHelper {
     }
 
     func signIn() throws {
-        let jsonstr = _authenticationDIDDocument!.toString()
+        let jsonstr = self.context.getAppInstanceDocument().description
         let data = jsonstr.data(using: .utf8)
         let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
-        var params = ["document": json as Any] as [String: Any]
-        var url = vaultUrl.signIn()
+        let params = ["document": json as Any] as [String: Any]
+        let url = vaultUrl.signIn()
         
-        var response = AF.request(url,
+        let response = AF.request(url,
                           method: .post,
                           parameters: params as Parameters,
                           encoding: JSONEncoding.default,
                           headers: Header.init(self).NormalHeaders()).responseJSON()
-        var responseJson = try VaultApi.handlerJsonResponse(response)
+        let responseJson = try VaultApi.handlerJsonResponse(response)
         _ = try VaultApi.handlerJsonResponseCanRelogin(responseJson, tryAgain: 1)
         let challenge = responseJson["challenge"].stringValue
+        try verifyToken(challenge)
         let semaphore: DispatchSemaphore = DispatchSemaphore(value: 0)
         var err: String = ""
         var authToken = ""
-        self.requestAuthToken(self._authenticationHandler!, challenge).done { aToken in
+        authenticationShim.authenticate(self.context, challenge).done { aToken in
             authToken = aToken
             semaphore.signal()
         }.catch { error in
@@ -220,14 +220,17 @@ public class VaultAuthHelper: ConnectHelper {
         guard err == "" else {
             throw HiveError.accessAuthToken(des: err)
         }
-        
-        url = vaultUrl.auth()
-        params = ["jwt": authToken]
-        response = AF.request(url,
+        try nodeAuth(authToken)
+    }
+    
+    private func nodeAuth(_ token: String) throws {
+        let url = vaultUrl.auth()
+        let params = ["jwt": token]
+        let response = AF.request(url,
                             method: .post,
                             parameters: params,
                             encoding: JSONEncoding.default).responseJSON()
-        responseJson = try VaultApi.handlerJsonResponse(response)
+        let responseJson = try VaultApi.handlerJsonResponse(response)
         _ = try VaultApi.handlerJsonResponseCanRelogin(responseJson, tryAgain: 1)
         try self.sotre(responseJson)
     }
