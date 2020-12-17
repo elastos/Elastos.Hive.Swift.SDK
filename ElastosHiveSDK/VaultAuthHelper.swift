@@ -109,10 +109,6 @@ public class VaultAuthHelper: ConnectHelper {
         }
     }
 
-    private func requestAuthToken(_ handler: Authenticator, _ challenge: String) -> Promise<String> {
-        return handler.authenticationChallenge(challenge)
-    }
-
     private func verifyToken(_ jwtToken: String) throws {
         let jwtParser = try JwtParserBuilder().build()
         let claims = try jwtParser.parseClaimsJwt(jwtToken).claims
