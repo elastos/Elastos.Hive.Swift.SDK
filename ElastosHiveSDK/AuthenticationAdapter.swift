@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2019 Elastos Foundation
+* Copyright (c) 2020 Elastos Foundation
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@
 */
 
 import Foundation
-
-public protocol Authenticator {
-    func requestAuthentication(_ jwtToken: String) -> Promise<String>
+public protocol AuthenticationAdapter {
+    
+    func authenticate(_ context: HiveContext, _ jwtToken: String) -> Promise<String>
 }

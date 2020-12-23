@@ -102,7 +102,6 @@
 		11496C65251B1E37002DE4F0 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11496C64251B1E37002DE4F0 /* Date.swift */; };
 		11496C66251B1E37002DE4F0 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11496C64251B1E37002DE4F0 /* Date.swift */; };
 		114E612D2510DD24003673FF /* test.txt in Resources */ = {isa = PBXBuildFile; fileRef = 114E612C2510DD23003673FF /* test.txt */; };
-		114FD8402297CF7700467E38 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114FD83F2297CF7600467E38 /* Authenticator.swift */; };
 		1154C309255E36D500FE1E53 /* UserFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1154C308255E36D500FE1E53 /* UserFactory.swift */; };
 		115E82E7251A4495004DCB1E /* MinKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115E82E6251A4495004DCB1E /* MinKey.swift */; };
 		115E82E8251A4495004DCB1E /* MinKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115E82E6251A4495004DCB1E /* MinKey.swift */; };
@@ -131,7 +130,7 @@
 		1170FB9F25073D360049E81D /* ijUnD4KeRpeBUFmcEDCbhxMTJRzUYCQCZM in Resources */ = {isa = PBXBuildFile; fileRef = 1170FB9E25073D360049E81D /* ijUnD4KeRpeBUFmcEDCbhxMTJRzUYCQCZM */; };
 		1170FBA12508D35A0049E81D /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FBA02508D35A0049E81D /* Header.swift */; };
 		1170FBA22508D35B0049E81D /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FBA02508D35A0049E81D /* Header.swift */; };
-		11724C0E2589E0E200B27285 /* InternalHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11724C0D2589E0E200B27285 /* InternalHandler.swift */; };
+		11724C0E2589E0E200B27285 /* AuthenticationAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11724C0D2589E0E200B27285 /* AuthenticationAdapter.swift */; };
 		11724C112589E13700B27285 /* HiveContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11724C102589E13700B27285 /* HiveContext.swift */; };
 		11749D9F24082FB1007B8F32 /* OutputStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11749D9E24082FB1007B8F32 /* OutputStream.swift */; };
 		11749DA024082FB1007B8F32 /* OutputStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11749D9E24082FB1007B8F32 /* OutputStream.swift */; };
@@ -166,8 +165,8 @@
 		11D26F4022CA3B3300E4099A /* ElastosHiveSDK_macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 11D26F3E22CA3B3300E4099A /* ElastosHiveSDK_macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		11D26F4422CA3B4B00E4099A /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FA22C4C33400F85419 /* Dictionary.swift */; };
 		11D26F4522CA3B4B00E4099A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FB22C4C33400F85419 /* String.swift */; };
-		11D26F7222CA3B8800E4099A /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114FD83F2297CF7600467E38 /* Authenticator.swift */; };
 		11D26F7722CA3B8800E4099A /* HiveClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FD3C80228000EE0031413A /* HiveClient.swift */; };
+		11E05B0325935B2E00BF71B1 /* SdkVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E05B0225935B2E00BF71B1 /* SdkVersion.swift */; };
 		11E3C24D25709282000175F1 /* DatabaseProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E3C24B25709282000175F1 /* DatabaseProtocol.swift */; };
 		11E3C24E25709282000175F1 /* ScriptingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E3C24C25709282000175F1 /* ScriptingProtocol.swift */; };
 		11E3C251257092B9000175F1 /* PaymentProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E3C250257092B9000175F1 /* PaymentProtocol.swift */; };
@@ -283,7 +282,6 @@
 		1147720823F678BD00C7C36F /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		11496C64251B1E37002DE4F0 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		114E612C2510DD23003673FF /* test.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test.txt; sourceTree = "<group>"; };
-		114FD83F2297CF7600467E38 /* Authenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Authenticator.swift; sourceTree = "<group>"; };
 		1154C308255E36D500FE1E53 /* UserFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFactory.swift; sourceTree = "<group>"; };
 		115E82E6251A4495004DCB1E /* MinKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinKey.swift; sourceTree = "<group>"; };
 		115E82E9251A44AA004DCB1E /* MaxKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaxKey.swift; sourceTree = "<group>"; };
@@ -300,7 +298,7 @@
 		1170FB19250507C70049E81D /* DBTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBTest.swift; sourceTree = "<group>"; };
 		1170FB9E25073D360049E81D /* ijUnD4KeRpeBUFmcEDCbhxMTJRzUYCQCZM */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ijUnD4KeRpeBUFmcEDCbhxMTJRzUYCQCZM; sourceTree = "<group>"; };
 		1170FBA02508D35A0049E81D /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
-		11724C0D2589E0E200B27285 /* InternalHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalHandler.swift; sourceTree = "<group>"; };
+		11724C0D2589E0E200B27285 /* AuthenticationAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationAdapter.swift; sourceTree = "<group>"; };
 		11724C102589E13700B27285 /* HiveContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiveContext.swift; sourceTree = "<group>"; };
 		11749D9E24082FB1007B8F32 /* OutputStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputStream.swift; sourceTree = "<group>"; };
 		118F2D82250F1A7200447A0A /* ScriptTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptTest.swift; sourceTree = "<group>"; };
@@ -322,6 +320,7 @@
 		11D1F4E7257E395300BC5A54 /* InstanceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstanceTest.swift; sourceTree = "<group>"; };
 		11D26F3C22CA3B3300E4099A /* ElastosHiveSDK_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ElastosHiveSDK_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		11D26F3E22CA3B3300E4099A /* ElastosHiveSDK_macOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ElastosHiveSDK_macOS.h; sourceTree = "<group>"; };
+		11E05B0225935B2E00BF71B1 /* SdkVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SdkVersion.swift; sourceTree = "<group>"; };
 		11E3C24B25709282000175F1 /* DatabaseProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DatabaseProtocol.swift; path = Protocols/DatabaseProtocol.swift; sourceTree = "<group>"; };
 		11E3C24C25709282000175F1 /* ScriptingProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScriptingProtocol.swift; path = Protocols/ScriptingProtocol.swift; sourceTree = "<group>"; };
 		11E3C250257092B9000175F1 /* PaymentProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PaymentProtocol.swift; path = Protocols/PaymentProtocol.swift; sourceTree = "<group>"; };
@@ -644,22 +643,22 @@
 				111D47EE24F7A17A00B7462B /* File */,
 				111D47F224F7A2EB00B7462B /* Scripting */,
 				111D47C924F7902600B7462B /* Database */,
-				114FD83F2297CF7600467E38 /* Authenticator.swift */,
-				11724C0D2589E0E200B27285 /* InternalHandler.swift */,
+				11724C0D2589E0E200B27285 /* AuthenticationAdapter.swift */,
 				111D477824ED0C1200B7462B /* VaultAuthHelper.swift */,
-				111D479224F4E2C300B7462B /* VaultAuthInfoStoreImpl.swift */,
 				1103757223FF96AB004216D0 /* AuthToken.swift */,
 				A3FD3C80228000EE0031413A /* HiveClient.swift */,
-				11724C102589E13700B27285 /* HiveContext.swift */,
+				1103757523FF96B5004216D0 /* ConnectHelper.swift */,
 				1127462C24FE3343007D6356 /* DatabaseClient.swift */,
 				1127462F24FE3369007D6356 /* FileClient.swift */,
-				1127463224FE3386007D6356 /* ScriptClient.swift */,
+				11724C102589E13700B27285 /* HiveContext.swift */,
 				111BD8B0256D011400746A51 /* Payment.swift */,
+				111D479224F4E2C300B7462B /* VaultAuthInfoStoreImpl.swift */,
+				1127463224FE3386007D6356 /* ScriptClient.swift */,
+				11E05B0225935B2E00BF71B1 /* SdkVersion.swift */,
 				1170FB132502019C0049E81D /* Vault.swift */,
 				111BD897256CDAA700746A51 /* Version.swift */,
 				112C4DA6256C0B4A006ECB8E /* VaultHelper.swift */,
 				1103757B23FF96C7004216D0 /* Persistent.swift */,
-				1103757523FF96B5004216D0 /* ConnectHelper.swift */,
 				A39C4972225399860027BDF9 /* ElastosHiveSDK.h */,
 				11ED682922FF1077004C17D0 /* ElastosHiveSDK.swift */,
 				A39C4973225399860027BDF9 /* Info.plist */,
@@ -981,7 +980,6 @@
 				111D47FE24F8B63C00B7462B /* Options.swift in Sources */,
 				1103757123FF96A0004216D0 /* LogLevel.swift in Sources */,
 				111D479424F4E2C300B7462B /* VaultAuthInfoStoreImpl.swift in Sources */,
-				11D26F7222CA3B8800E4099A /* Authenticator.swift in Sources */,
 				1103757723FF96B5004216D0 /* ConnectHelper.swift in Sources */,
 				1170FB0C2501CD2F0049E81D /* ReadPreference.swift in Sources */,
 				1103757D23FF96C7004216D0 /* Persistent.swift in Sources */,
@@ -1015,6 +1013,7 @@
 				11E92CE12560D8B2007EFC95 /* FileExecutable.swift in Sources */,
 				1170FB142502019C0049E81D /* Vault.swift in Sources */,
 				11C9EAE5254A637500080995 /* InsertOneResult.swift in Sources */,
+				11E05B0325935B2E00BF71B1 /* SdkVersion.swift in Sources */,
 				111D47F424F7A30300B7462B /* Executable.swift in Sources */,
 				118F2DA2250F332700447A0A /* QueryHasResultsCondition.swift in Sources */,
 				111BD898256CDAA700746A51 /* Version.swift in Sources */,
@@ -1035,7 +1034,7 @@
 				1103757C23FF96C7004216D0 /* Persistent.swift in Sources */,
 				1170FBA12508D35A0049E81D /* Header.swift in Sources */,
 				110357E7256FA420003F639F /* FileWriter.swift in Sources */,
-				11724C0E2589E0E200B27285 /* InternalHandler.swift in Sources */,
+				11724C0E2589E0E200B27285 /* AuthenticationAdapter.swift in Sources */,
 				11FD496D2561AC9B00A108D2 /* DownloadExecutable.swift in Sources */,
 				111D477924ED0C1200B7462B /* VaultAuthHelper.swift in Sources */,
 				115E82F0251A4553004DCB1E /* RegularExpression.swift in Sources */,
@@ -1052,7 +1051,6 @@
 				111242212579E5CC002BFAEB /* UsingPlan.swift in Sources */,
 				11E3C251257092B9000175F1 /* PaymentProtocol.swift in Sources */,
 				111D47E324F7910100B7462B /* UpdateOptions.swift in Sources */,
-				114FD8402297CF7700467E38 /* Authenticator.swift in Sources */,
 				11E92CE52560DFF5007EFC95 /* UploadExecutable.swift in Sources */,
 				118F2D9C250F31A700447A0A /* DbUpdateQuery.swift in Sources */,
 				112C4DA7256C0B4A006ECB8E /* VaultHelper.swift in Sources */,

@@ -30,12 +30,12 @@ public class HiveClientHandle: NSObject {
     private static var _cacheDir: String = "\(NSHomeDirectory())/Library/Caches/didCache" // Default
     private static var resolverDidSetup: Bool = false // Default
 
-    private var authenticationShim: AuthenticationShim
+    private var authenticationAdapterImpl: AuthenticationAdapterImpl
     private var context: HiveContext
 
     init(_ context: HiveContext) {
         PromiseKit.conf.Q = (map: HiveVaultQueue, return: HiveVaultQueue)
-        self.authenticationShim = AuthenticationShim(context)
+        self.authenticationAdapterImpl = AuthenticationAdapterImpl(context)
         self.context = context
     }
 
@@ -62,8 +62,8 @@ public class HiveClientHandle: NSObject {
         }
 
         guard !HiveClientHandle.resolverDidSetup else {
-//            throw HiveError.failue(des: "Resolver already setuped")
-            return
+            throw HiveError.failure(des: "Resolver already setuped")
+//            return
         }
         _reslover = resolver
         _cacheDir = cacheDir
@@ -97,7 +97,7 @@ public class HiveClientHandle: NSObject {
             let authHelper = VaultAuthHelper(self.context,
                                              ownerDid,
                                              provider,
-                                             self.authenticationShim)
+                                             self.authenticationAdapterImpl)
             let vault = Vault(authHelper, provider, ownerDid)
             return vault.checkVaultExist()
         }.then{ vault -> Promise<Vault> in
@@ -122,7 +122,7 @@ public class HiveClientHandle: NSObject {
                 let authHelper = VaultAuthHelper(self.context,
                                                 ownerDid,
                                                 provider,
-                                                self.authenticationShim)
+                                                self.authenticationAdapterImpl)
                 resolver.fulfill(Vault(authHelper, provider, ownerDid))
             }.catch{ error in
                 resolver.reject(error)
@@ -133,14 +133,14 @@ public class HiveClientHandle: NSObject {
     /// Try to acquire provider address for the specific user DID with rules with sequence orders:
     ///  - Use 'preferredProviderAddress' first when it's being with real value; Otherwise
     ///  - Resolve DID document according to the ownerDid from DID sidechain,
-    ///  and find if there are more than one "HiveVault" services, then would
-    ///   choose the first one service point as target provider address. Otherwise
-    ///   - It means no service endpoints declared on this DID Document, then would throw the
-    ///   corresponding exception.
-    /// - Parameters:
-    ///   - ownerDid: The owner did that want be set provider address
-    ///   - providerAddress: The preferred provider address to use
-    /// - Returns: The provider address
+    ///    and find if there are more than one "HiveVault" services, then would
+    ///    choose the first one service point as target provider address. Otherwise
+    ///  - It means no service endpoints declared on this DID Document, then would throw the
+    ///    corresponding exception.
+    ///  - Parameters:
+    ///  - ownerDid: The owner did that want be set provider address
+    ///  - providerAddress: The preferred provider address to use
+    ///  - Returns: The provider address
     public func getVaultProvider(_ ownerDid: String, _ preferredProviderAddress: String?) -> Promise<String> {
         return Promise<String> { resolver in
             DispatchQueue.global().async {
@@ -172,7 +172,7 @@ public class HiveClientHandle: NSObject {
     }
 }
 
-public class AuthenticationShim: InternalHandler {
+public class AuthenticationAdapterImpl: AuthenticationAdapter {
     private var context: HiveContext
     init(_ context: HiveContext) {
         self.context = context

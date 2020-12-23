@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2020 Elastos Foundation
+* Copyright (c) 2019 Elastos Foundation
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,27 @@
 */
 
 import Foundation
-public protocol InternalHandler {
+
+public class SdkVersion: NSObject {
     
-    func authenticate(_ context: HiveContext, _ jwtToken: String) -> Promise<String>
+    private let SDK_VERSION = "alpha-v2.0.7"
+
+    private let LATEST_COMMIT_ID = "ccaeb81"
+
+    private let COMMIT_BRANCH = "master"
+    
+    /// Get version
+    public var version: String {
+        return SDK_VERSION
+    }
+    
+    /// Get latest commitId
+    public var latestCommitId: String {
+        return LATEST_COMMIT_ID
+    }
+    
+    /// Get commit branch
+    public var commitBranch : String {
+        return COMMIT_BRANCH
+    }
 }
