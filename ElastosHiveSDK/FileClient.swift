@@ -114,16 +114,16 @@ public class FileClient: NSObject, FilesProtocol {
         }
     }
 
-    public func move(_ src: String, _ dest: String) -> Promise<Bool> {
+    public func move(_ source: String, _ target: String) -> Promise<Bool> {
         return authHelper.checkValid().then { _ -> Promise<Bool> in
-            return self.moveImp(src, dest, 0)
+            return self.moveImp(source, target, 0)
         }
     }
 
-    private func moveImp(_ src: String, _ dest: String, _ tryAgain: Int) -> Promise<Bool> {
+    private func moveImp(_ source: String, _ target: String, _ tryAgain: Int) -> Promise<Bool> {
         Promise<Bool> { resolver in
             let url = vaultUrl.move()
-            let param = ["src_path": src, "dst_path": dest]
+            let param = ["src_path": source, "dst_path": target]
             let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
@@ -134,7 +134,7 @@ public class FileClient: NSObject, FilesProtocol {
 
             if isRelogin {
                 try self.authHelper.signIn()
-                moveImp(src, dest, 1).done { success in
+                moveImp(source, target, 1).done { success in
                     resolver.fulfill(success)
                 }.catch { error in
                     resolver.reject(error)
@@ -144,16 +144,16 @@ public class FileClient: NSObject, FilesProtocol {
         }
     }
 
-    public func copy(_ src: String, _ dest: String) -> Promise<Bool> {
+    public func copy(_ source: String, _ target: String) -> Promise<Bool> {
         return authHelper.checkValid().then { _ -> Promise<Bool> in
-            return self.copyImp(src, dest, 0)
+            return self.copyImp(source, target, 0)
         }
     }
 
-    private func copyImp(_ src: String, _ dest: String, _ tryAgain: Int) -> Promise<Bool> {
+    private func copyImp(_ source: String, _ target: String, _ tryAgain: Int) -> Promise<Bool> {
         Promise<Bool> { resolver in
             let url = vaultUrl.move()
-            let param = ["src_path": src, "dst_path": dest]
+            let param = ["src_path": source, "dst_path": target]
             let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
@@ -164,7 +164,7 @@ public class FileClient: NSObject, FilesProtocol {
 
             if isRelogin {
                 try self.authHelper.signIn()
-                copyImp(src, dest, 1).done { success in
+                copyImp(source, target, 1).done { success in
                     resolver.fulfill(success)
                 }.catch { error in
                     resolver.reject(error)

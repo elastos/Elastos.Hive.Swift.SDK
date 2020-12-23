@@ -22,9 +22,12 @@
 
 import Foundation
 
+/// Provides author-related functionality
 @objc(AuthHelper)
 public class ConnectHelper: NSObject {
     
+    ///  Check access token isExpired
+    /// - Returns: `Void` if expired
     public func checkValid() -> Promise<Void> {
         return Promise<Void>(error: HiveError.failure(des: "Dummy"))
     }
