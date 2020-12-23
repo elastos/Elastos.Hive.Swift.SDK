@@ -37,6 +37,7 @@ public enum HiveError: Error {
     case providerNotFound(des: String?)
     case authorizationIsNil(des: String?)
     case vaultAlreadyExistException(des: String?)
+    case challengeIsNil(des: String?)
 }
 
 extension HiveError {
@@ -70,6 +71,8 @@ extension HiveError {
         case .authorizationIsNil(let des):
             return des ?? ""
         case .vaultAlreadyExistException(let des):
+            return des ?? ""
+        case .challengeIsNil(let des):
             return des ?? ""
         }
     }
