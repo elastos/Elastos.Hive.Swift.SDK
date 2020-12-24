@@ -62,8 +62,8 @@ public class HiveClientHandle: NSObject {
         }
 
         guard !HiveClientHandle.resolverDidSetup else {
-            throw HiveError.failure(des: "Resolver already setuped")
-//            return
+//            throw HiveError.failure(des: "Resolver already setuped")
+            return
         }
         _reslover = resolver
         _cacheDir = cacheDir
