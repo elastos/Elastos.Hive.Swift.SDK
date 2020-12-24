@@ -1,7 +1,7 @@
 import Foundation
 import ElastosDIDSDK
 
-class DummyAdapter: DIDAdapter, DIDResolver {
+public class DummyAdapter: DIDAdapter, DIDResolver {
     
     private var verbose: Bool = false
     private var idtxs: Array<IDTransactionInfo> = []
@@ -25,7 +25,7 @@ class DummyAdapter: DIDAdapter, DIDResolver {
         return str
     }
 
-    func createIdTransaction(_ payload: String, _ memo: String?) throws {
+    public func createIdTransaction(_ payload: String, _ memo: String?) throws {
         
         do {
             let request: IDChainRequest = try IDChainRequest.fromJson(payload)
@@ -91,7 +91,7 @@ class DummyAdapter: DIDAdapter, DIDResolver {
         }
     }
 
-    func resolve(_ requestId: String, _ did: String, _ all: Bool) throws -> Data {
+    public func resolve(_ requestId: String, _ did: String, _ all: Bool) throws -> Data {
         
         if (verbose) {
             print("Resolve: " + did + "...")

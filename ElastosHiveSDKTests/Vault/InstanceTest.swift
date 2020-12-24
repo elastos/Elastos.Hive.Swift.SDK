@@ -21,18 +21,18 @@ class InstanceTest: XCTestCase {
         do {
             print("testAuth ========== star")
             try self.vault?.revokeAccessToken()
-            let p1 = database?.createCollection(collectionName)
-            let p2 = database?.createCollection(collectionName)
-            let p3 = database?.createCollection(collectionName)
+            let p1 = database?.createCollection(collectionName, options: nil)
+            let p2 = database?.createCollection(collectionName, options: nil)
+            let p3 = database?.createCollection(collectionName, options: nil)
 
-            let p4 = database?.createCollection(collectionName)
+            let p4 = database?.createCollection(collectionName, options: nil)
 
-            let p5 = database?.createCollection(collectionName)
+            let p5 = database?.createCollection(collectionName, options: nil)
 
-            let p6 = database?.createCollection(collectionName)
-            let p7 = database?.createCollection(collectionName)
-            let p8 = database?.createCollection(collectionName)
-            let p9 = database?.createCollection(collectionName)
+            let p6 = database?.createCollection(collectionName, options: nil)
+            let p7 = database?.createCollection(collectionName, options: nil)
+            let p8 = database?.createCollection(collectionName, options: nil)
+            let p9 = database?.createCollection(collectionName, options: nil)
             
             
             when(resolved: p1!, p2!, p3!, p4!, p5!, p6!, p7!, p8!, p9!).done { re in
@@ -67,7 +67,7 @@ class InstanceTest: XCTestCase {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         do {
             Log.setLevel(.Debug)
-            user = try UserFactory.createUser1()
+            user = try AppInstanceFactory.createUser1()
             let lock = XCTestExpectation(description: "wait for test.")
             user!.client.getVault(user!.userFactoryOpt.ownerDid, user?.userFactoryOpt.provider).done { [self] vault in
                 self.database = (vault.database as! DatabaseClient)

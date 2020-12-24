@@ -23,7 +23,7 @@ class UserContext: HiveContext {
     }
 }
 
-public class UserFactory {
+public class AppInstanceFactory {
     static let didCachePath = "didCache"
     var vault: Vault?
     var resolverDidSetup = false
@@ -31,36 +31,36 @@ public class UserFactory {
     var client: HiveClientHandle
     var userFactoryOpt: UserOptions
 
-    init(_ userDidOpt: Options,
-         _ appInstanceDidOpt: Options,
+    init(_ userDidOpt: PresentationInJWTOptions,
+         _ appInstanceDidOpt: PresentationInJWTOptions,
          _ userFactoryOpt: UserOptions) throws {
         self.userFactoryOpt = userFactoryOpt
 
         presentationInJWT = try PresentationInJWT(userDidOpt, appInstanceDidOpt)
         if !resolverDidSetup {
-            try HiveClientHandle.setupResolver(userFactoryOpt.resolveUrl, UserFactory.didCachePath)
+            try HiveClientHandle.setupResolver(userFactoryOpt.resolveUrl, AppInstanceFactory.didCachePath)
             resolverDidSetup = true
         }
         let contenxt = UserContext(userFactoryOpt, presentationInJWT)
         client = try HiveClientHandle.createInstance(withContext: contenxt)
     }
     
-    class func createFactory(_ userDidOpt: Options,
-                             _ appInstanceDidOpt: Options,
-                             _ userFactoryOpt: UserOptions) throws -> UserFactory {
-        return try UserFactory(userDidOpt, appInstanceDidOpt, userFactoryOpt)
+    class func createFactory(_ userDidOpt: PresentationInJWTOptions,
+                             _ appInstanceDidOpt: PresentationInJWTOptions,
+                             _ userFactoryOpt: UserOptions) throws -> AppInstanceFactory {
+        return try AppInstanceFactory(userDidOpt, appInstanceDidOpt, userFactoryOpt)
     }
     
     //release环境（MainNet + https://hive1.trinity-tech.io + userDid1）
-    class func createUser1() throws -> UserFactory {
+    class func createUser1() throws -> AppInstanceFactory {
         let user1path = "\(NSHomeDirectory())/Library/Caches/store" + "/" + "user1"
-        let userDidOpt = Options()
+        let userDidOpt = PresentationInJWTOptions()
         userDidOpt.name = userDid1_name
         userDidOpt.mnemonic = userDid1_mn
         userDidOpt.phrasepass = userDid1_phrasepass
         userDidOpt.storepass = userDid1_storepass
 
-        let appInstanceDidOpt = Options()
+        let appInstanceDidOpt = PresentationInJWTOptions()
         appInstanceDidOpt.name = appInstance1_name
         appInstanceDidOpt.mnemonic = appInstance1_mn
         appInstanceDidOpt.phrasepass = appInstance1_phrasepass
@@ -71,19 +71,19 @@ public class UserFactory {
         userFactoryOpt.resolveUrl = MAIN_RESOLVER_URL
         userFactoryOpt.ownerDid = userDid1
         userFactoryOpt.storePath = user1path
-        return try UserFactory(userDidOpt, appInstanceDidOpt, userFactoryOpt)
+        return try AppInstanceFactory(userDidOpt, appInstanceDidOpt, userFactoryOpt)
     }
 
     //develope 环境
-    class func createUser2() throws -> UserFactory {
+    class func createUser2() throws -> AppInstanceFactory {
         let user2Path = "\(NSHomeDirectory())/Library/Caches/store" + "/" + "user2"
-        let userDidOpt = Options()
+        let userDidOpt = PresentationInJWTOptions()
         userDidOpt.name = userDid2_name
         userDidOpt.mnemonic = userDid2_mn
         userDidOpt.phrasepass = userDid2_phrasepass
         userDidOpt.storepass = userDid2_storepass
 
-        let appInstanceDidOpt = Options()
+        let appInstanceDidOpt = PresentationInJWTOptions()
         appInstanceDidOpt.name = appInstance2_name
         appInstanceDidOpt.mnemonic = appInstance2_mn
         appInstanceDidOpt.phrasepass = appInstance2_phrasepass
@@ -94,19 +94,19 @@ public class UserFactory {
         userFactoryOpt.resolveUrl = TEST_RESOLVER_URL
         userFactoryOpt.ownerDid = userDid2
         userFactoryOpt.storePath = user2Path
-        return try UserFactory(userDidOpt, appInstanceDidOpt, userFactoryOpt)
+        return try AppInstanceFactory(userDidOpt, appInstanceDidOpt, userFactoryOpt)
     }
     
     //node 环境
-    class func createUser3() throws -> UserFactory {
+    class func createUser3() throws -> AppInstanceFactory {
         let user3Path = "\(NSHomeDirectory())/Library/Caches/store" + "/" + "user3"
-        let userDidOpt = Options()
+        let userDidOpt = PresentationInJWTOptions()
         userDidOpt.name = userDid3_name
         userDidOpt.mnemonic = userDid3_mn
         userDidOpt.phrasepass = userDid3_phrasepass
         userDidOpt.storepass = userDid3_storepass
 
-        let appInstanceDidOpt = Options()
+        let appInstanceDidOpt = PresentationInJWTOptions()
         appInstanceDidOpt.name = appInstance3_name
         appInstanceDidOpt.mnemonic = appInstance3_mn
         appInstanceDidOpt.phrasepass = appInstance3_phrasepass
@@ -117,7 +117,7 @@ public class UserFactory {
         userFactoryOpt.resolveUrl = MAIN_RESOLVER_URL
         userFactoryOpt.ownerDid = userDid3
         userFactoryOpt.storePath = user3Path
-        return try UserFactory(userDidOpt, appInstanceDidOpt, userFactoryOpt)
+        return try AppInstanceFactory(userDidOpt, appInstanceDidOpt, userFactoryOpt)
     }
 }
 
