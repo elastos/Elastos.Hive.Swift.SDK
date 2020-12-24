@@ -1,10 +1,10 @@
 import Foundation
 import ElastosDIDSDK
 
-class DIDApp: Entity {
+public class DIDApp: Entity {
     var issuer: VerifiableCredentialIssuer?
 
-    override init(_ name: String, _ mnemonic: String, _ adapter: DummyAdapter, _ phrasepass: String, _ storepass: String) {
+    public override init(_ name: String, _ mnemonic: String, _ adapter: DummyAdapter, _ phrasepass: String, _ storepass: String) {
         super.init(name, mnemonic, adapter, phrasepass, storepass)
         do {
             issuer = try VerifiableCredentialIssuer(getDocument()!)
@@ -13,7 +13,7 @@ class DIDApp: Entity {
         }
     }
 
-    func issueDiplomaFor(_ dapp: DApp) throws -> VerifiableCredential {
+    public func issueDiplomaFor(_ dapp: DApp) throws -> VerifiableCredential {
         let subject = ["appDid": dapp.appId]
         let userCalendar = Calendar.current
         var components = DateComponents()

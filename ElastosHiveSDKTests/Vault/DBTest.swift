@@ -3,7 +3,7 @@ import XCTest
 @testable import ElastosHiveSDK
 import ElastosDIDSDK
 
-public var user: UserFactory?
+public var user: AppInstanceFactory?
 class DBTest: XCTestCase {
     private var client: HiveClientHandle?
     private var database: DatabaseClient?
@@ -162,7 +162,7 @@ class DBTest: XCTestCase {
 
     func test04_CreateCol() {
         let lock = XCTestExpectation(description: "wait for test.")
-        database?.createCollection(collectionName).done{ success in
+        database?.createCollection(collectionName, options: nil).done{ success in
             XCTAssertTrue(success)
             lock.fulfill()
         }.catch{ e in
@@ -356,7 +356,7 @@ class DBTest: XCTestCase {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         do {
             Log.setLevel(.Debug)
-            user = try UserFactory.createUser1()
+            user = try AppInstanceFactory.createUser1()
             let lock = XCTestExpectation(description: "wait for test.")
             user!.client.getVault(user!.userFactoryOpt.ownerDid, user?.userFactoryOpt.provider).done { [self] vault in
                 self.database = (vault.database as! DatabaseClient)

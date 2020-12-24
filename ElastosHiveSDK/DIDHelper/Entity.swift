@@ -1,7 +1,7 @@
 import Foundation
 import ElastosDIDSDK
 
-class Entity: NSObject {
+public class Entity: NSObject {
     var phrasepass: String
     var storepass: String
     var name: String
@@ -9,7 +9,7 @@ class Entity: NSObject {
     var did: DID?
     var adapter: DummyAdapter
 
-    init(_ name: String, _ mnemonic: String, _ adapter: DummyAdapter, _ phrasepass: String, _ storepass: String) {
+   public init(_ name: String, _ mnemonic: String, _ adapter: DummyAdapter, _ phrasepass: String, _ storepass: String) {
         self.phrasepass = phrasepass
         self.storepass = storepass
         self.name = name
@@ -23,7 +23,7 @@ class Entity: NSObject {
         }
     }
 
-    func initPrivateIdentity(_ mnemonic: String) throws {
+    public func initPrivateIdentity(_ mnemonic: String) throws {
         let storePath = "\(NSHomeDirectory())/Library/Caches/store" + "/" + name
         print(storePath)
         // Create a fake adapter, just print the tx payload to console.
@@ -38,7 +38,7 @@ class Entity: NSObject {
         try store!.initializePrivateIdentity(using: Mnemonic.DID_ENGLISH, mnemonic: mnemonic, passPhrase: phrasepass, storePassword: storepass)
     }
 
-    func initDid() throws {
+    public func initDid() throws {
         // Check the DID store already contains owner's DID(with private key).
         let dids = try store!.listDids(using: DIDStore.DID_HAS_PRIVATEKEY)
         for d in dids {
@@ -57,7 +57,7 @@ class Entity: NSObject {
         try store!.publishDid(for: did!, using: storepass)
     }
 
-    func getDocument() throws -> DIDDocument? {
+    public func getDocument() throws -> DIDDocument? {
         return try store!.loadDid(did!)
     }
 }

@@ -34,7 +34,7 @@ class VersionTest: XCTestCase {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         do {
             Log.setLevel(.Debug)
-            user = try UserFactory.createUser1()
+            user = try AppInstanceFactory.createUser1()
             let lock = XCTestExpectation(description: "wait for test.")
             user?.client.getVault(user!.userFactoryOpt.ownerDid, user?.userFactoryOpt.provider).done{ vault in
                 self.vault = vault
