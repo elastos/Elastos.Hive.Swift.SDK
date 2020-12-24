@@ -1,10 +1,10 @@
 import Foundation
 import ElastosDIDSDK
 
-class DApp: Entity {
+public class DApp: Entity {
     public var appId = "appId"
 
-    override init(_ name: String, _ mnemonic: String, _ adapter: DummyAdapter, _ phrasepass: String, _ storepass: String) {
+    public override init(_ name: String, _ mnemonic: String, _ adapter: DummyAdapter, _ phrasepass: String, _ storepass: String) {
         super.init(name, mnemonic, adapter, phrasepass, storepass)
     }
 
@@ -18,7 +18,7 @@ class DApp: Entity {
         return vp
     }
 
-    func createToken(_ vp: VerifiablePresentation, _ hiveDid: String) throws -> String {
+    public func createToken(_ vp: VerifiablePresentation, _ hiveDid: String) throws -> String {
         let iat = Date()
         let nbf = iat
         let userCalendar = Calendar.current
