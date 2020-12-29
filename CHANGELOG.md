@@ -1,3 +1,15 @@
+12/29/2020 Li Aihong liaihong@trinity-tech.io
+
+**version 2.1.0**, main changes to previous version:
+
+```markdown
+- Integrate the new OAuth flow for applications to sign-in back-end node services with elastos DIDs; 
+- Provide streaming-based files APIs to upload/download files to/from the specified vault service; 
+- Provide MongoDB compatible APIs to access and store data to vault service; 
+- Provide scripting APIs to customized rules with the given purpose for the specific data field for others to access it via invoking that scripts; 
+- Provides pricing plans APIs to purchase the vault service on user's need.
+```
+
 03/29/2020 Li Aihong liaihong@trinity-tech.io
 
 **version 1.0.0**, main changes to previous version:
