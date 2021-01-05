@@ -120,7 +120,7 @@ public class VaultAuthHelper: ConnectHelper {
                           method: .post,
                           parameters: params as Parameters,
                           encoding: JSONEncoding.default,
-                          headers: Header.init(self).NormalHeaders()).responseJSON()
+                          headers: HiveHeader.init(self).NormalHeaders()).responseJSON()
         let responseJson = try VaultApi.handlerJsonResponse(response)
         _ = try VaultApi.handlerJsonResponseCanRelogin(responseJson, tryAgain: 1)
         let challenge = responseJson["challenge"].stringValue

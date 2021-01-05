@@ -54,7 +54,7 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         config.requestCachePolicy = .reloadIgnoringLocalCacheData
         let operationQueue = OperationQueue() // Run in a background queue to not block the main operations (main thread)
         let session = URLSession(configuration: config, delegate: self, delegateQueue: operationQueue)
-        var request = try! URLRequest(url: url, method: .post, headers: Header(authHelper).headersStream())
+        var request = try! URLRequest(url: url, method: .post, headers: HiveHeader(authHelper).headersStream())
         request.addValue("chunked", forHTTPHeaderField: "Transfer-Encoding")
         task = session.uploadTask(withStreamedRequest: request)
         Log.d("Hive Debug ==> request url ->", request.url as Any)
