@@ -97,7 +97,7 @@ public class FileClient: NSObject, FilesProtocol {
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
-                                headers: Header(authHelper).headers()).responseJSON()
+                                headers: HiveHeader(authHelper).headers()).responseJSON()
         
             let json = try VaultApi.handlerJsonResponse(response)
             let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
@@ -128,7 +128,7 @@ public class FileClient: NSObject, FilesProtocol {
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
-                                headers: Header(authHelper).headers()).responseJSON()
+                                headers: HiveHeader(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
             let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
 
@@ -158,7 +158,7 @@ public class FileClient: NSObject, FilesProtocol {
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
-                                headers: Header(authHelper).headers()).responseJSON()
+                                headers: HiveHeader(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
             let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
 
@@ -186,7 +186,7 @@ public class FileClient: NSObject, FilesProtocol {
             let response = AF.request(url,
                                 method: .get,
                                 encoding: JSONEncoding.default,
-                                headers: Header(authHelper).headers()).responseJSON()
+                                headers: HiveHeader(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
             let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
 
@@ -214,7 +214,7 @@ public class FileClient: NSObject, FilesProtocol {
             let response = AF.request(url,
                                 method: .get,
                                 encoding: JSONEncoding.default,
-                                headers: Header(authHelper).headers()).responseJSON()
+                                headers: HiveHeader(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
             let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
 
@@ -252,7 +252,7 @@ public class FileClient: NSObject, FilesProtocol {
             let response = AF.request(url,
                                 method: .get,
                                 encoding: JSONEncoding.default,
-                                headers: Header(authHelper).headers()).responseJSON()
+                                headers: HiveHeader(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
             let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
 
