@@ -1,3 +1,11 @@
+01/05/2020 Li Aihong liaihong@trinity-tech.io
+
+**version 2.1.1**, main changes to previous version:
+
+```markdown
+- Add 'vaultNotFound' exception when vault is not created.  
+```
+
 12/29/2020 Li Aihong liaihong@trinity-tech.io
 
 **version 2.1.0**, main changes to previous version:
