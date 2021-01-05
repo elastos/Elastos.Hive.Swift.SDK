@@ -128,6 +128,10 @@ public class InsertQuery {
 
         jsonGenerator.writeStartObject()
         jsonGenerator.writeStringField("collection", collection)
+        let checker = JSONSerialization.isValidJSONObject(doc)
+        guard checker else {
+            throw HiveError.jsonSerializationInvalidType(des: "HiveSDK serializate: JSONSerialization Invalid type in JSON.")
+        }
         let data = try JSONSerialization.data(withJSONObject: doc, options: [])
         guard let jsonString = String(data: data, encoding: .utf8) else {
             return ""
