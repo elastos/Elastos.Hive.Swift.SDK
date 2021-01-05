@@ -57,7 +57,7 @@ public class DatabaseClient: DatabaseProtocol {
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
-                                headers: Header(authHelper).headers()).responseJSON()
+                                headers: HiveHeader(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
             let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
             if isRelogin {
@@ -86,7 +86,7 @@ public class DatabaseClient: DatabaseProtocol {
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
-                                headers: Header(authHelper).headers()).responseJSON()
+                                headers: HiveHeader(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
             let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
             if isRelogin {
@@ -120,7 +120,7 @@ public class DatabaseClient: DatabaseProtocol {
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
-                                headers: Header(authHelper).headers()).responseJSON()
+                                headers: HiveHeader(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
             let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
             if isRelogin {
@@ -153,7 +153,7 @@ public class DatabaseClient: DatabaseProtocol {
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
-                                headers: Header(authHelper).headers()).responseJSON()
+                                headers: HiveHeader(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
             let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
             if isRelogin {
@@ -186,7 +186,7 @@ public class DatabaseClient: DatabaseProtocol {
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
-                                headers: Header(authHelper).headers()).responseJSON()
+                                headers: HiveHeader(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
             let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
             if isRelogin {
@@ -218,7 +218,7 @@ public class DatabaseClient: DatabaseProtocol {
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
-                                headers: Header(authHelper).headers()).responseJSON()
+                                headers: HiveHeader(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
             let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
             if isRelogin {
@@ -250,7 +250,7 @@ public class DatabaseClient: DatabaseProtocol {
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
-                                headers: Header(authHelper).headers()).responseJSON()
+                                headers: HiveHeader(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
             let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
             if isRelogin {
@@ -293,7 +293,7 @@ public class DatabaseClient: DatabaseProtocol {
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
-                                headers: Header(authHelper).headers()).responseJSON()
+                                headers: HiveHeader(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
             let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
             if isRelogin {
@@ -326,7 +326,7 @@ public class DatabaseClient: DatabaseProtocol {
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
-                                headers: Header(authHelper).headers()).responseJSON()
+                                headers: HiveHeader(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
             let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
             if isRelogin {
@@ -359,7 +359,7 @@ public class DatabaseClient: DatabaseProtocol {
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
-                                headers: Header(authHelper).headers()).responseJSON()
+                                headers: HiveHeader(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
             let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
             if isRelogin {
@@ -392,7 +392,7 @@ public class DatabaseClient: DatabaseProtocol {
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
-                                headers: Header(authHelper).headers()).responseJSON()
+                                headers: HiveHeader(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
             let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
             if isRelogin {
