@@ -24,9 +24,9 @@ import Foundation
 
 public class SdkVersion: NSObject {
     
-    private let SDK_VERSION = "alpha-v2.0.7"
+    private let SDK_VERSION = "2.1.1"
 
-    private let LATEST_COMMIT_ID = "ccaeb81"
+    private let LATEST_COMMIT_ID = "d47d190"
 
     private let COMMIT_BRANCH = "master"
     
