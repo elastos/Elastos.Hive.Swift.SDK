@@ -113,8 +113,12 @@ public class ScriptClient: ScriptingProtocol {
             }
             // The String type
             if resultType.self == String.self {
-                let dic = json.dictionaryObject
-                let data = try JSONSerialization.data(withJSONObject: dic as Any, options: [])
+                let dic = json.dictionaryObject as Any
+                let checker = JSONSerialization.isValidJSONObject(dic)
+                guard checker else {
+                    throw HiveError.jsonSerializationInvalidType(des: "HiveSDK serializate: JSONSerialization Invalid type in JSON.")
+                }
+                let data = try JSONSerialization.data(withJSONObject: dic, options: [])
                 let str = String(data: data, encoding: String.Encoding.utf8)
                 resolver.fulfill(str as! T)
             }
@@ -129,7 +133,12 @@ public class ScriptClient: ScriptingProtocol {
             }
             // the Data type
             else {
-                let data = try JSONSerialization.data(withJSONObject: json.dictionaryObject as Any, options: [])
+                let result = json.dictionaryObject as Any
+                let checker = JSONSerialization.isValidJSONObject(result)
+                guard checker else {
+                    throw HiveError.jsonSerializationInvalidType(des: "HiveSDK serializate: JSONSerialization Invalid type in JSON.")
+                }
+                let data = try JSONSerialization.data(withJSONObject: result, options: [])
                 resolver.fulfill(data as! T)
             }
         }

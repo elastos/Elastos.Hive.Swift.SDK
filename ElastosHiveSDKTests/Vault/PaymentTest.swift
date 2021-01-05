@@ -15,6 +15,11 @@ class PaymentTest: XCTestCase {
         let lock = XCTestExpectation(description: "wait for test.")
         _ = payment?.getPaymentInfo().done{ info in
             print(info)// ETJqK7o7gBhzypmNJ1MstAHU2q77fo78jg
+            let infoStr = try! info.serialize()
+            print("info = \(infoStr)")
+            let data = infoStr.data(using: String.Encoding.utf8)
+            let dict = try? JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as? [String : Any] 
+            print(dict)
             lock.fulfill()
         }.catch{ error in
             XCTFail()

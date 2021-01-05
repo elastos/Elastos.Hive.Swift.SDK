@@ -57,6 +57,10 @@ class VaultAuthInfoStoreImpl: Persistent {
             try fileManager.createDirectory(atPath: String(perpath), withIntermediateDirectories: true, attributes: nil)
             fileManager.createFile(atPath: realyPath, contents: nil, attributes: nil)
         }
+        let checker = JSONSerialization.isValidJSONObject(json)
+        guard checker else {
+            throw HiveError.jsonSerializationInvalidType(des: "HiveSDK serializate: JSONSerialization Invalid type in JSON.")
+        }
         let data = try JSONSerialization.data(withJSONObject: json, options: [])
         try data.write(to: URL(fileURLWithPath: realyPath))
     }
