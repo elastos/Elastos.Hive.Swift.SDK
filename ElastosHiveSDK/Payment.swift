@@ -250,6 +250,9 @@ public class Payment: PaymentProtocol {
             let url = vaultUrl.serviceInfo()
             let response = AF.request(url, method: .get, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
+            if json.isEmpty || json["vault_service_info"].isEmpty {
+                throw HiveError.vaultNotFound(des: "vault not found.")
+            }
             let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
             
             if isRelogin {
