@@ -3,7 +3,7 @@
 import Foundation
 import ElastosDIDSDK
 import PromiseKit
-import ElastosHiveSDK
+//import ElastosHiveSDK
 
 public class UserHiveContext: HiveContext {
     private var localDataDir: String

@@ -40,7 +40,7 @@ class VaultHelper: NSObject {
     private func requestToCreateVaultImpl() -> Promise<Bool> {
         return Promise { resolver in
             let url = vaultUrl.createFreeVault()
-            let response = AF.request(url, method: .post, encoding: JSONEncoding.default, headers: Header(authHelper).headers()).responseJSON()
+            let response = AF.request(url, method: .post, encoding: JSONEncoding.default, headers: HiveHeader(authHelper).headers()).responseJSON()
             switch response.result {
             case .success(let re):
             let json = JSON(re)
@@ -65,7 +65,7 @@ class VaultHelper: NSObject {
                             method: .get,
                             parameters: nil,
                             encoding: JSONEncoding.default,
-                            headers: Header(authHelper).headers()).responseJSON()
+                            headers: HiveHeader(authHelper).headers()).responseJSON()
         let json = try VaultApi.handlerJsonResponse(response)
         let ret = json["vault_service_info"]
         reslover.fulfill(ret.count != 0)
