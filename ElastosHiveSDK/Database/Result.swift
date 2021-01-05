@@ -42,7 +42,13 @@ public class Result: NSObject {
 
     public func serialize() throws -> String {
         let j: JSON = ["result": paramars]
-        let data = try JSONSerialization.data(withJSONObject: j["result"].dictionaryObject as Any, options: [])
+        let json = j["result"].dictionaryObject as Any
+        let checker = JSONSerialization.isValidJSONObject(json)
+        guard checker else {
+            print("error = \(json)")
+            throw HiveError.jsonSerializationInvalidType(des: "HiveSDK serializate: JSONSerialization Invalid type in JSON.")
+        }
+        let data = try JSONSerialization.data(withJSONObject: json, options: [])
         guard let paramStr = String(data: data, encoding: .utf8) else {
             return ""
         }

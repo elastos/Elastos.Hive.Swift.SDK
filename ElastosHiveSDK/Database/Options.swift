@@ -94,6 +94,10 @@ public class Options<T>: NSObject {
 
     public func serialize() throws -> String {
         try handleOtherParames()
+        let checker = JSONSerialization.isValidJSONObject(param)
+        guard checker else {
+            throw HiveError.jsonSerializationInvalidType(des: "HiveSDK serializate: JSONSerialization Invalid type in JSON.")
+        }
         let data = try JSONSerialization.data(withJSONObject: param, options: [])
         guard let paramStr = String(data: data, encoding: .utf8) else {
             return ""

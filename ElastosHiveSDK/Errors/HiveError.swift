@@ -38,8 +38,10 @@ public enum HiveError: Error {
     case authorizationIsNil(des: String?)
     case vaultAlreadyExistException(des: String?)
     case challengeIsNil(des: String?)
+    case jsonSerializationInvalidType(des: String?)
 }
 
+// jsonSerializationInvalidType
 extension HiveError {
 
    public static func description(_ error: HiveError) -> String {
@@ -73,6 +75,8 @@ extension HiveError {
         case .vaultAlreadyExistException(let des):
             return des ?? ""
         case .challengeIsNil(let des):
+            return des ?? ""
+        case .jsonSerializationInvalidType(let des):
             return des ?? ""
         }
     }

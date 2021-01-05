@@ -47,7 +47,15 @@ public class UpdateQuery  {
         let jsonGenerator = JsonGenerator()
         jsonGenerator.writeStartObject()
         jsonGenerator.writeStringField("collection", collection)
-        var data = try JSONSerialization.data(withJSONObject: filter, options: [])
+        var checker = JSONSerialization.isValidJSONObject(filter)
+        guard checker else {
+            throw HiveError.jsonSerializationInvalidType(des: "HiveSDK serializate: JSONSerialization Invalid type in JSON.")
+        }
+        checker = JSONSerialization.isValidJSONObject(filter)
+        guard checker else {
+            throw HiveError.jsonSerializationInvalidType(des: "HiveSDK serializate: JSONSerialization Invalid type in JSON.")
+        }
+        var data = try JSONSerialization.data(withJSONObject: update, options: [])
         guard let jsonString = String(data: data, encoding: .utf8) else {
             return ""
         }
