@@ -154,12 +154,12 @@ public class HiveClientHandle: NSObject {
                     let did = try DID(ownerDid)
                     let doc = try did.resolve()
                     guard let _ = doc else {
-                        resolver.reject(HiveError.providerNotFound(des: "The DID document \(ownerDid) has not published."))
+                        resolver.reject(HiveError.providerNotSet(des: "The DID document \(ownerDid) has not published."))
                         return
                     }
                     let services = doc?.selectServices(byType: "HiveVault")
                     if services == nil || services!.count == 0 {
-                        resolver.reject(HiveError.providerNotFound(des: "No 'HiveVault' services declared on DID document \(ownerDid)"))
+                        resolver.reject(HiveError.providerNotSet(des: "No 'HiveVault' services declared on DID document \(ownerDid)"))
                         return
                     }
                     resolver.fulfill(services![0].endpoint)
