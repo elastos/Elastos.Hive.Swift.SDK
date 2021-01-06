@@ -34,7 +34,7 @@ public enum HiveError: Error {
     case jwtVerify(des: String?)
     case transactionIdIsNil(des: String?)
     case fileNotFound(des: String?)
-    case providerNotFound(des: String?)
+    case providerNotSet(des: String?)
     case authorizationIsNil(des: String?)
     case vaultAlreadyExistException(des: String?)
     case challengeIsNil(des: String?)
