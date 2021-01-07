@@ -3,7 +3,7 @@ import XCTest
 @testable import ElastosHiveSDK
 import ElastosDIDSDK
 
-class UserContext: HiveContext {
+class UserContext: ApplicationContext {
     private var option: UserOptions
     private var presentationInJWT: PresentationInJWT
     init(_ option: UserOptions, _ pjwt: PresentationInJWT) {
