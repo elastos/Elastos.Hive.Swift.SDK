@@ -23,5 +23,5 @@
 import Foundation
 public protocol AuthenticationAdapter {
     
-    func authenticate(_ context: HiveContext, _ jwtToken: String) -> Promise<String>
+    func authenticate(_ context: ApplicationContext, _ jwtToken: String) -> Promise<String>
 }

@@ -126,7 +126,7 @@
 		1170FBA12508D35A0049E81D /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FBA02508D35A0049E81D /* Header.swift */; };
 		1170FBA22508D35B0049E81D /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FBA02508D35A0049E81D /* Header.swift */; };
 		11724C0E2589E0E200B27285 /* AuthenticationAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11724C0D2589E0E200B27285 /* AuthenticationAdapter.swift */; };
-		11724C112589E13700B27285 /* HiveContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11724C102589E13700B27285 /* HiveContext.swift */; };
+		11724C112589E13700B27285 /* ApplicationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11724C102589E13700B27285 /* ApplicationContext.swift */; };
 		11749D9F24082FB1007B8F32 /* OutputStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11749D9E24082FB1007B8F32 /* OutputStream.swift */; };
 		11749DA024082FB1007B8F32 /* OutputStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11749D9E24082FB1007B8F32 /* OutputStream.swift */; };
 		118F2D83250F1A7200447A0A /* ScriptTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2D82250F1A7200447A0A /* ScriptTest.swift */; };
@@ -300,7 +300,7 @@
 		1170FB9E25073D360049E81D /* ijUnD4KeRpeBUFmcEDCbhxMTJRzUYCQCZM */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ijUnD4KeRpeBUFmcEDCbhxMTJRzUYCQCZM; sourceTree = "<group>"; };
 		1170FBA02508D35A0049E81D /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 		11724C0D2589E0E200B27285 /* AuthenticationAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationAdapter.swift; sourceTree = "<group>"; };
-		11724C102589E13700B27285 /* HiveContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiveContext.swift; sourceTree = "<group>"; };
+		11724C102589E13700B27285 /* ApplicationContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationContext.swift; sourceTree = "<group>"; };
 		11749D9E24082FB1007B8F32 /* OutputStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputStream.swift; sourceTree = "<group>"; };
 		118F2D82250F1A7200447A0A /* ScriptTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptTest.swift; sourceTree = "<group>"; };
 		118F2D84250F1ABA00447A0A /* Constance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constance.swift; sourceTree = "<group>"; };
@@ -669,7 +669,7 @@
 				1103757523FF96B5004216D0 /* ConnectHelper.swift */,
 				1127462C24FE3343007D6356 /* DatabaseClient.swift */,
 				1127462F24FE3369007D6356 /* FileClient.swift */,
-				11724C102589E13700B27285 /* HiveContext.swift */,
+				11724C102589E13700B27285 /* ApplicationContext.swift */,
 				111BD8B0256D011400746A51 /* Payment.swift */,
 				111D479224F4E2C300B7462B /* VaultAuthInfoStoreImpl.swift */,
 				1127463224FE3386007D6356 /* ScriptClient.swift */,
@@ -1043,7 +1043,7 @@
 				1170FB052501CB3F0049E81D /* WriteConcern.swift in Sources */,
 				1103757923FF96BF004216D0 /* Log.swift in Sources */,
 				111D47D124F7906100B7462B /* CreateCollectionOptions.swift in Sources */,
-				11724C112589E13700B27285 /* HiveContext.swift in Sources */,
+				11724C112589E13700B27285 /* ApplicationContext.swift in Sources */,
 				1170FB082501CCD30049E81D /* ReadConcern.swift in Sources */,
 				1103757623FF96B5004216D0 /* ConnectHelper.swift in Sources */,
 				115E82EA251A44AA004DCB1E /* MaxKey.swift in Sources */,

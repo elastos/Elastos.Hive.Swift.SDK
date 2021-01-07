@@ -5,7 +5,7 @@ import ElastosDIDSDK
 import PromiseKit
 //import ElastosHiveSDK
 
-public class UserHiveContext: HiveContext {
+public class UserHiveContext: ApplicationContext {
     private var localDataDir: String
     private var presentationInJWT: PresentationInJWT
     
