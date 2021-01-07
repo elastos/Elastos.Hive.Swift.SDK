@@ -25,6 +25,7 @@ import Foundation
 let lock = NSLock()
 @inline(__always) private func TAG() -> String { return "VaultAuthHelper" }
 public class VaultAuthHelper: ConnectHelper {
+    
     let USER_DID_KEY: String = "user_did"
     let APP_ID_KEY: String = "app_id"
     let APP_INSTANCE_DID_KEY: String = "app_instance_did"
@@ -33,6 +34,7 @@ public class VaultAuthHelper: ConnectHelper {
     let REFRESH_TOKEN_KEY: String = "refresh_token"
     let TOKEN_TYPE_KEY: String = "token_type"
     let EXPIRES_AT_KEY: String = "expires_at"
+    
     private var _ownerDid: String?
     private var _userDid: String?
     private var _appId: String?
@@ -44,7 +46,7 @@ public class VaultAuthHelper: ConnectHelper {
     private var _persistent: Persistent
     private var _nodeUrl: String
 
-    private var context: HiveContext
+    private var context: ApplicationContext
     private var authenticationAdapterImpl: AuthenticationAdapterImpl
 
     public var ownerDid: String? {
@@ -75,7 +77,7 @@ public class VaultAuthHelper: ConnectHelper {
         _appInstanceDid = appInstanceDid
     }
 
-    public init(_ context: HiveContext, _ ownerDid: String, _ nodeUrl: String, _ shim: AuthenticationAdapterImpl) {
+    public init(_ context: ApplicationContext, _ ownerDid: String, _ nodeUrl: String, _ shim: AuthenticationAdapterImpl) {
         self.context = context
         self._ownerDid = ownerDid
         self._nodeUrl = nodeUrl
