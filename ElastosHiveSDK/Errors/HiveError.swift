@@ -69,7 +69,7 @@ extension HiveError {
             return des ?? ""
         case .fileNotFound(let des):
             return des ?? ""
-        case .providerNotFound(let des):
+        case .providerNotSet(let des):
             return des ?? ""
         case .authorizationIsNil(let des):
             return des ?? ""

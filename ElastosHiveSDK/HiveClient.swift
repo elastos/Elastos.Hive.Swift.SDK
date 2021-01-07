@@ -31,9 +31,9 @@ public class HiveClientHandle: NSObject {
     private static var resolverDidSetup: Bool = false // Default
 
     private var authenticationAdapterImpl: AuthenticationAdapterImpl
-    private var context: HiveContext
+    private var context: ApplicationContext
 
-    init(_ context: HiveContext) {
+    init(_ context: ApplicationContext) {
         PromiseKit.conf.Q = (map: HiveVaultQueue, return: HiveVaultQueue)
         self.authenticationAdapterImpl = AuthenticationAdapterImpl(context)
         self.context = context
@@ -55,10 +55,10 @@ public class HiveClientHandle: NSObject {
     /// - Throws: throw an error, when an error occurs
     public class func setupResolver(_ resolver: String, _ cacheDir: String) throws {
         guard resolver != "" else {
-            throw HiveError.IllegalArgument(des: "resolver is not nil.")
+            throw HiveError.IllegalArgument(des: "resolver should not be nil.")
         }
         guard cacheDir != "" else {
-            throw HiveError.IllegalArgument(des: "cacheDir is not nil.")
+            throw HiveError.IllegalArgument(des: "cacheDir should not be nil.")
         }
 
         guard !HiveClientHandle.resolverDidSetup else {
@@ -76,7 +76,7 @@ public class HiveClientHandle: NSObject {
     /// - Parameter withOptions: authentication options
     /// - Throws: throw an error, when an error occurs
     /// - Returns: client instance
-    public static func createInstance(withContext: HiveContext) throws -> HiveClientHandle {
+    public static func createInstance(withContext: ApplicationContext) throws -> HiveClientHandle {
         guard resolverDidSetup else {
             throw HiveError.IllegalArgument(des: "Setup did resolver first")
         }
@@ -173,12 +173,12 @@ public class HiveClientHandle: NSObject {
 }
 
 public class AuthenticationAdapterImpl: AuthenticationAdapter {
-    private var context: HiveContext
-    init(_ context: HiveContext) {
+    private var context: ApplicationContext
+    init(_ context: ApplicationContext) {
         self.context = context
     }
     
-    public func authenticate(_ context: HiveContext, _ jwtToken: String) -> Promise<String> {
+    public func authenticate(_ context: ApplicationContext, _ jwtToken: String) -> Promise<String> {
         return context.getAuthorization(jwtToken)
     }
 }

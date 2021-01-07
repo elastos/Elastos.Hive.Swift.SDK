@@ -22,7 +22,7 @@
 
 import Foundation
 
-public protocol HiveContext {
+public protocol ApplicationContext {
 
     /// token cache path
     func getLocalDataDir() -> String
