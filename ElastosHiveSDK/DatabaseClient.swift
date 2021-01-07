@@ -31,12 +31,6 @@ public class DatabaseClient: DatabaseProtocol {
         self.authHelper = authHelper
         self.vaultUrl = authHelper.vaultUrl
     }
-    
-//    public func createCollection(_ name: String) -> Promise<Bool> {
-//        return authHelper.checkValid().then { _ -> Promise<Bool> in
-//            return self.createColImp(name, nil, 0)
-//        }
-//    }
 
     public func createCollection(_ name: String, options: CreateCollectionOptions?) -> Promise<Bool> {
         return authHelper.checkValid().then { _ -> Promise<Bool> in
