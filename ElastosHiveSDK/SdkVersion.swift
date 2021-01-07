@@ -26,18 +26,11 @@ public class SdkVersion: NSObject {
     
     private let SDK_VERSION = "2.1.1"
 
-    private let LATEST_COMMIT_ID = "d47d190"
-
     private let COMMIT_BRANCH = "master"
     
     /// Get version
     public var version: String {
         return SDK_VERSION
-    }
-    
-    /// Get latest commitId
-    public var latestCommitId: String {
-        return LATEST_COMMIT_ID
     }
     
     /// Get commit branch
