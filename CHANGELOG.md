@@ -1,4 +1,12 @@
-01/05/2020 Li Aihong liaihong@trinity-tech.io
+01/11/2021 Li Aihong liaihong@trinity-tech.io
+
+**version 2.1.2**, main changes to previous version:
+
+```markdown
+- Add new anonimity options for registerScript.  
+```
+
+01/05/2021 Li Aihong liaihong@trinity-tech.io
 
 **version 2.1.1**, main changes to previous version:
 
