@@ -32,23 +32,25 @@ public class ScriptClient: ScriptingProtocol {
         self.vaultUrl = self.authHelper.vaultUrl
     }
 
-    public func registerScript(_ name: String, _ executable: Executable) -> Promise<Bool> {
+    public func registerScript(_ name: String, _ executable: Executable, _ allowAnonymousUser: Bool, _ allowAnonymousApp: Bool) -> Promise<Bool> {
         return authHelper.checkValid().then { _ -> Promise<Bool> in
-            return self.registerScriptImp(name, nil, executable, 0)
+            return self.registerScriptImp(name, nil, executable, allowAnonymousUser, allowAnonymousApp, 0)
         }
     }
 
-    public func registerScript(_ name: String, _ condition: Condition, _ executable: Executable) -> Promise<Bool> {
+    public func registerScript(_ name: String, _ condition: Condition, _ executable: Executable, _ allowAnonymousUser: Bool, _ allowAnonymousApp: Bool) -> Promise<Bool> {
 
         return authHelper.checkValid().then { _ -> Promise<Bool> in
-            return self.registerScriptImp(name, condition, executable, 0)
+            return self.registerScriptImp(name, condition, executable, allowAnonymousUser, allowAnonymousApp, 0)
         }
     }
 
-    private func registerScriptImp(_ name: String, _ accessCondition: Condition?, _ executable: Executable, _ tryAgain: Int) -> Promise<Bool> {
+    private func registerScriptImp(_ name: String, _ accessCondition: Condition?, _ executable: Executable,_ allowAnonymousUser: Bool, _ allowAnonymousApp: Bool, _ tryAgain: Int) -> Promise<Bool> {
         Promise<Bool> { resolver in
 
             var param = ["name": name] as [String : Any]
+            param["allowAnonymousUser"] = allowAnonymousUser
+            param["allowAnonymousApp"] = allowAnonymousApp
             if let _ = accessCondition {
                 param["accessCondition"] = try accessCondition!.jsonSerialize()
             }
@@ -64,7 +66,7 @@ public class ScriptClient: ScriptingProtocol {
 
             if isRelogin {
                 try self.authHelper.signIn()
-                registerScriptImp(name, accessCondition, executable, 1).done { success in
+                registerScriptImp(name, accessCondition, executable, allowAnonymousUser, allowAnonymousApp, 1).done { success in
                     resolver.fulfill(success)
                 }.catch { error in
                     resolver.reject(error)
