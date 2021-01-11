@@ -24,9 +24,9 @@ import Foundation
 
 public class SdkVersion: NSObject {
     
-    private let SDK_VERSION = "2.1.1"
+    private let SDK_VERSION = "2.1.2"
 
-    private let COMMIT_BRANCH = "master"
+    private let COMMIT_BRANCH = "release-v2.1"
     
     /// Get version
     public var version: String {
