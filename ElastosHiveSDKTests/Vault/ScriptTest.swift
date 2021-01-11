@@ -76,7 +76,7 @@ class ScriptTest: XCTestCase {
 
             let executable: DbFindQuery = DbFindQuery("get_groups", "groups", filter!, options!)
             let lock = XCTestExpectation(description: "wait for test.")
-            scripting?.registerScript(noConditionName, executable).done { re in
+            scripting?.registerScript(noConditionName, executable, false, false).done { re in
                 XCTAssertTrue(re)
                 lock.fulfill()
             }.catch { error in
@@ -96,7 +96,7 @@ class ScriptTest: XCTestCase {
             let executable: DbFindQuery = DbFindQuery("get_groups", "test_group", filter!)
             let condition: QueryHasResultsCondition = QueryHasResultsCondition("verify_user_permission", "test_group", filter!)
             let lock = XCTestExpectation(description: "wait for test.")
-            scripting!.registerScript(withConditionName, condition, executable).done { re in
+            scripting!.registerScript(withConditionName, condition, executable, false, false).done { re in
                 XCTAssertTrue(re)
                 lock.fulfill()
             }.catch { error in
@@ -150,7 +150,7 @@ class ScriptTest: XCTestCase {
     func test08_returnError() {
         let lock = XCTestExpectation(description: "wait for test.")
         let executable = "{\"type\":\"fileUpload\",\"name\":\"upload_file\",\"output\":true,\"body\":{\"path\":\"$params.path\"}}"
-        scripting?.registerScript("upload_file", RawExecutable(executable: executable)).done{ re in
+        scripting?.registerScript("upload_file", RawExecutable(executable: executable), false, false).done{ re in
             print(re)
             XCTAssertTrue(true)
             lock.fulfill()
@@ -175,7 +175,7 @@ class ScriptTest: XCTestCase {
     func test11_setUploadScript() {
         let lock = XCTestExpectation(description: "wait for test.")
         let executable = UploadExecutable(name: "upload_file", path: "$params.path", output: true)
-        scripting!.registerScript("upload_file", executable).done { re in
+        scripting!.registerScript("upload_file", executable, false, false).done { re in
             XCTAssertTrue(re)
             lock.fulfill()
         }.catch{ err in
@@ -241,7 +241,7 @@ class ScriptTest: XCTestCase {
         let executable = DownloadExecutable(name: "download_file", path: "$params.path", output: true)
 
         let lock = XCTestExpectation(description: "wait for test.")
-        scripting!.registerScript("download_file", executable).done { success in
+        scripting!.registerScript("download_file", executable, false, false).done { success in
             XCTAssertTrue(success)
             lock.fulfill()
         }.catch { error in
@@ -289,7 +289,7 @@ class ScriptTest: XCTestCase {
         let propertiesExecutable = PropertiesExecutable(name: "file_properties", path: "$params.path")
         let executable = AggregatedExecutable("file_properties_and_hash", [hashExecutable, propertiesExecutable])
         let lock = XCTestExpectation(description: "wait for test.")
-        scripting!.registerScript("get_file_info", executable).done { success in
+        scripting!.registerScript("get_file_info", executable, false, false).done { success in
             XCTAssertTrue(success)
             lock.fulfill()
         }.catch { error in

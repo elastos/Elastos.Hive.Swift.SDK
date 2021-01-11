@@ -34,9 +34,9 @@ public protocol ScriptingProtocol {
     /// The script is built on the client side, then serialized and stored on the hive back-end.
     /// Later on, anyone, including the vault owner or external users,
     ///  can use Scripting.call() to execute one of those scripts and get results/data.
-    func registerScript(_ name: String, _ executable: Executable) -> Promise<Bool>
+    func registerScript(_ name: String, _ executable: Executable, _ allowAnonymousUser: Bool, _ allowAnonymousApp: Bool) -> Promise<Bool>
     
-    func registerScript(_ name: String, _ condition: Condition, _ executable: Executable) -> Promise<Bool>
+    func registerScript(_ name: String, _ condition: Condition, _ executable: Executable, _ allowAnonymousUser: Bool, _ allowAnonymousApp: Bool) -> Promise<Bool>
 
     /// Executes a previously registered server side script using Scripting.setScript(). Vault owner or external users are
     /// - Parameters:
