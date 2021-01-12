@@ -25,3 +25,8 @@ public protocol AuthenticationAdapter {
     
     func authenticate(_ context: ApplicationContext, _ jwtToken: String) -> Promise<String>
 }
+
+@objc
+public protocol ObjectCAuthenticationAdapter {
+    func authenticate(_ context: ObjectCApplicationContext, _ jwtToken: String) -> AnyPromise
+}

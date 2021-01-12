@@ -24,6 +24,7 @@ import Foundation
 
 let lock = NSLock()
 @inline(__always) private func TAG() -> String { return "VaultAuthHelper" }
+@objc(VaultAuthHelper)
 public class VaultAuthHelper: ConnectHelper {
     
     let USER_DID_KEY: String = "user_did"
@@ -46,33 +47,43 @@ public class VaultAuthHelper: ConnectHelper {
     private var _persistent: Persistent
     private var _nodeUrl: String
 
-    private var context: ApplicationContext
-    private var authenticationAdapterImpl: AuthenticationAdapterImpl
+    private var context: ApplicationContext?
+    private var authenticationAdapterImpl: AuthenticationAdapterImpl?
+    // adapter object-c
+    private var objectCContext: ObjectCApplicationContext?
+    private var objectCAuthenticationAdapterImpl: ObjectCAuthenticationAdapterImpl?
 
+    @objc
     public var ownerDid: String? {
         return _ownerDid
     }
 
+    @objc
     public var userDid: String? {
         return _userDid
     }
 
+    @objc
     public func setUserDid(_ userDid: String) {
         _userDid = userDid
     }
 
+    @objc
     public var appId: String? {
         return _appId
     }
 
+    @objc
     public func setAppId(_ appId: String) {
         _appId = appId
     }
 
+    @objc
     public var appInstanceDid: String? {
         return _appInstanceDid
     }
 
+    @objc
     public func setAppInstanceDid(_ appInstanceDid: String) {
         _appInstanceDid = appInstanceDid
     }
@@ -82,7 +93,17 @@ public class VaultAuthHelper: ConnectHelper {
         self._ownerDid = ownerDid
         self._nodeUrl = nodeUrl
         self.authenticationAdapterImpl = shim
-        self._persistent = VaultAuthInfoStoreImpl(ownerDid, nodeUrl, self.context.getLocalDataDir())
+        self._persistent = VaultAuthInfoStoreImpl(ownerDid, nodeUrl, self.context!.getLocalDataDir())
+        self.vaultUrl = VaultURL(_nodeUrl)
+    }
+    
+    @objc
+    public init(_ context: ObjectCApplicationContext, _ ownerDid: String, _ nodeUrl: String, _ shim: ObjectCAuthenticationAdapterImpl) {
+        self.objectCContext = context
+        self._ownerDid = ownerDid
+        self._nodeUrl = nodeUrl
+        self.objectCAuthenticationAdapterImpl = shim
+        self._persistent = VaultAuthInfoStoreImpl(ownerDid, nodeUrl, self.objectCContext!.getLocalDataDir())
         self.vaultUrl = VaultURL(_nodeUrl)
     }
     
@@ -112,7 +133,14 @@ public class VaultAuthHelper: ConnectHelper {
     }
 
     func signIn() throws {
-        let jsonstr = self.context.getAppInstanceDocument().description
+        var jsonstr = ""
+        if let _ = context {
+            jsonstr = self.context!.getAppInstanceDocument().description
+        }
+        // adapter object-c
+        if let _ = objectCContext {
+            jsonstr = self.objectCContext!.getAppInstanceDocument().description
+        }
         let data = jsonstr.data(using: .utf8)
         let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
         let params = ["document": json as Any] as [String: Any]
@@ -133,14 +161,27 @@ public class VaultAuthHelper: ConnectHelper {
         let semaphore: DispatchSemaphore = DispatchSemaphore(value: 0)
         var err: String = ""
         var authToken = ""
-        authenticationAdapterImpl.authenticate(self.context, challenge).done { aToken in
-            authToken = aToken
-            semaphore.signal()
-        }.catch { error in
-            semaphore.signal()
-            err = error.localizedDescription
+        if let _ = context {
+            authenticationAdapterImpl!.authenticate(self.context!, challenge).done { aToken in
+                authToken = aToken
+                semaphore.signal()
+            }.catch { error in
+                semaphore.signal()
+                err = error.localizedDescription
+            }
+            semaphore.wait()
         }
-        semaphore.wait()
+        // adapter object-c
+        if let _ = objectCContext {
+            objectCAuthenticationAdapterImpl!.authenticate(self.objectCContext!, challenge).done { aToken in
+                authToken = aToken as! String
+                semaphore.signal()
+            }.catch { error in
+                semaphore.signal()
+                err = error.localizedDescription
+            }
+            semaphore.wait()
+        }
         guard err == "" else {
             throw HiveError.accessAuthToken(des: err)
         }
@@ -152,7 +193,14 @@ public class VaultAuthHelper: ConnectHelper {
         let claims = try jwtParser.parseClaimsJwt(jwtToken).claims
         let exp = claims.getExpiration()
         let aud = claims.getAudience()
-        let did = self.context.getAppInstanceDocument().subject.description
+        var did = ""
+        if let _ = context {
+            did = self.context!.getAppInstanceDocument().subject.description
+        }
+        // adapter object-c
+        if let _ = objectCContext {
+            did = self.objectCContext!.getAppInstanceDocument().subject.description
+        }
         if aud == nil || did != aud! {
             throw HiveError.jwtVerify(des: "authenticationDIDDocument's subject is not equal to audience")
         }

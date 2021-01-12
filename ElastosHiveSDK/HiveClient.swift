@@ -182,3 +182,16 @@ public class AuthenticationAdapterImpl: AuthenticationAdapter {
         return context.getAuthorization(jwtToken)
     }
 }
+
+@objc
+public class ObjectCAuthenticationAdapterImpl: NSObject {
+    private var context: ObjectCApplicationContext
+    init(_ context: ObjectCApplicationContext) {
+        self.context = context
+    }
+    
+    @objc
+    public func authenticate(_ context: ObjectCApplicationContext, _ jwtToken: String) -> AnyPromise {
+        return context.getAuthorization(jwtToken)
+    }
+}

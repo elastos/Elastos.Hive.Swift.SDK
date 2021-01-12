@@ -34,3 +34,16 @@ public protocol ApplicationContext {
     func getAuthorization(_ jwtToken: String) -> Promise<String>
 }
 
+/// adapter object-c
+@objc
+public protocol ObjectCApplicationContext {
+
+    /// token cache path
+    func getLocalDataDir() -> String
+    
+    /// app instance DIDDocument
+    func getAppInstanceDocument() -> DIDDocument
+    
+    /// This is the interface to make authorization from users, and it would be provided by application.
+    func getAuthorization(_ jwtToken: String) -> AnyPromise
+}
