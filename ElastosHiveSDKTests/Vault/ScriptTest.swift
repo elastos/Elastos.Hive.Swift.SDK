@@ -5,7 +5,7 @@ import ElastosDIDSDK
 
 class ScriptTest: XCTestCase {
     private var client: HiveClientHandle?
-    private var scripting: ScriptClient?
+    private var scripting: Script?
     private var noConditionName: String = "get_groups"
     private var withConditionName: String = "get_group_messages"
     private let testTextFilePath = "/Users/liaihong/Desktop/test.txt"
@@ -319,7 +319,7 @@ class ScriptTest: XCTestCase {
             user = try AppInstanceFactory.createUser1()
             let lock = XCTestExpectation(description: "wait for test.")
             user?.client.getVault(user!.userFactoryOpt.ownerDid, user?.userFactoryOpt.provider).done { [self] vault in
-                self.scripting = (vault.scripting as! ScriptClient)
+                self.scripting = (vault.scripting as! Script)
                 lock.fulfill()
             }.catch { error in
                 print(error)

@@ -22,7 +22,7 @@
 
 import Foundation
 
-public class DatabaseClient: DatabaseProtocol {
+public class Database: DatabaseProtocol {
     private static let TAG = "DatabaseClient"
     private var authHelper: VaultAuthHelper
     private var vaultUrl: VaultURL

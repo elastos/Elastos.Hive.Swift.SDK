@@ -36,9 +36,9 @@ public class Vault: NSObject {
     private var vaultHelper: VaultHelper
 
     init(_ authHelper: VaultAuthHelper, _ providerAddress: String, _ ownerDid: String) {
-        self._files = FileClient(authHelper)
-        self._database = DatabaseClient(authHelper)
-        self._scripting = ScriptClient(authHelper)
+        self._files = File(authHelper)
+        self._database = Database(authHelper)
+        self._scripting = Script(authHelper)
         self._version = Version(authHelper)
         self._payment = Payment(authHelper)
         self.vaultHelper = VaultHelper(authHelper)
