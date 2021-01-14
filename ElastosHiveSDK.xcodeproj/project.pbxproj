@@ -82,12 +82,12 @@
 		111D47FB24F7A79800B7462B /* Condition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47F924F7A79800B7462B /* Condition.swift */; };
 		111D47FD24F8B63C00B7462B /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47FC24F8B63C00B7462B /* Options.swift */; };
 		111D47FE24F8B63C00B7462B /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47FC24F8B63C00B7462B /* Options.swift */; };
-		1127462D24FE3343007D6356 /* DatabaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1127462C24FE3343007D6356 /* DatabaseClient.swift */; };
-		1127462E24FE3343007D6356 /* DatabaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1127462C24FE3343007D6356 /* DatabaseClient.swift */; };
-		1127463024FE3369007D6356 /* FileClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1127462F24FE3369007D6356 /* FileClient.swift */; };
-		1127463124FE3369007D6356 /* FileClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1127462F24FE3369007D6356 /* FileClient.swift */; };
-		1127463324FE3386007D6356 /* ScriptClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1127463224FE3386007D6356 /* ScriptClient.swift */; };
-		1127463424FE3386007D6356 /* ScriptClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1127463224FE3386007D6356 /* ScriptClient.swift */; };
+		1127462D24FE3343007D6356 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1127462C24FE3343007D6356 /* Database.swift */; };
+		1127462E24FE3343007D6356 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1127462C24FE3343007D6356 /* Database.swift */; };
+		1127463024FE3369007D6356 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1127462F24FE3369007D6356 /* File.swift */; };
+		1127463124FE3369007D6356 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1127462F24FE3369007D6356 /* File.swift */; };
+		1127463324FE3386007D6356 /* Script.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1127463224FE3386007D6356 /* Script.swift */; };
+		1127463424FE3386007D6356 /* Script.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1127463224FE3386007D6356 /* Script.swift */; };
 		1129C19424052CC500CD77F2 /* Alamofire+Synchronous.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1129C19324052CC500CD77F2 /* Alamofire+Synchronous.swift */; };
 		1129C19524052CC500CD77F2 /* Alamofire+Synchronous.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1129C19324052CC500CD77F2 /* Alamofire+Synchronous.swift */; };
 		112C4DA7256C0B4A006ECB8E /* VaultHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112C4DA6256C0B4A006ECB8E /* VaultHelper.swift */; };
@@ -269,9 +269,9 @@
 		111D47F324F7A30300B7462B /* Executable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Executable.swift; sourceTree = "<group>"; };
 		111D47F924F7A79800B7462B /* Condition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Condition.swift; sourceTree = "<group>"; };
 		111D47FC24F8B63C00B7462B /* Options.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
-		1127462C24FE3343007D6356 /* DatabaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseClient.swift; sourceTree = "<group>"; };
-		1127462F24FE3369007D6356 /* FileClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileClient.swift; sourceTree = "<group>"; };
-		1127463224FE3386007D6356 /* ScriptClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptClient.swift; sourceTree = "<group>"; };
+		1127462C24FE3343007D6356 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
+		1127462F24FE3369007D6356 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		1127463224FE3386007D6356 /* Script.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Script.swift; sourceTree = "<group>"; };
 		1129C19324052CC500CD77F2 /* Alamofire+Synchronous.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Alamofire+Synchronous.swift"; sourceTree = "<group>"; };
 		112C4DA6256C0B4A006ECB8E /* VaultHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultHelper.swift; sourceTree = "<group>"; };
 		11379429227ED9AD004A1F65 /* ElastosHiveSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ElastosHiveSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -667,12 +667,12 @@
 				1103757223FF96AB004216D0 /* AuthToken.swift */,
 				A3FD3C80228000EE0031413A /* HiveClient.swift */,
 				1103757523FF96B5004216D0 /* ConnectHelper.swift */,
-				1127462C24FE3343007D6356 /* DatabaseClient.swift */,
-				1127462F24FE3369007D6356 /* FileClient.swift */,
+				1127462C24FE3343007D6356 /* Database.swift */,
+				1127462F24FE3369007D6356 /* File.swift */,
 				11724C102589E13700B27285 /* ApplicationContext.swift */,
 				111BD8B0256D011400746A51 /* Payment.swift */,
 				111D479224F4E2C300B7462B /* VaultAuthInfoStoreImpl.swift */,
-				1127463224FE3386007D6356 /* ScriptClient.swift */,
+				1127463224FE3386007D6356 /* Script.swift */,
 				11E05B0225935B2E00BF71B1 /* SdkVersion.swift */,
 				1170FB132502019C0049E81D /* Vault.swift */,
 				111BD897256CDAA700746A51 /* Version.swift */,
@@ -944,7 +944,7 @@
 				11ED682B22FF1078004C17D0 /* ElastosHiveSDK.swift in Sources */,
 				115E82EE251A44BC004DCB1E /* ObjectId.swift in Sources */,
 				111D47CF24F7905100B7462B /* CountOptions.swift in Sources */,
-				1127463124FE3369007D6356 /* FileClient.swift in Sources */,
+				1127463124FE3369007D6356 /* File.swift in Sources */,
 				111D47F124F7A18900B7462B /* FileInfo.swift in Sources */,
 				1147720A23F678BD00C7C36F /* SwiftyJSON.swift in Sources */,
 				1103756E23FF9689004216D0 /* DataResponse.swift in Sources */,
@@ -981,10 +981,10 @@
 				118F2D8E250F28BA00447A0A /* RawExecutable.swift in Sources */,
 				11D26F7722CA3B8800E4099A /* HiveClient.swift in Sources */,
 				118F2D9D250F31A700447A0A /* DbUpdateQuery.swift in Sources */,
-				1127462E24FE3343007D6356 /* DatabaseClient.swift in Sources */,
+				1127462E24FE3343007D6356 /* Database.swift in Sources */,
 				11496C66251B1E37002DE4F0 /* Date.swift in Sources */,
 				111D47D524F7906F00B7462B /* DeleteOptions.swift in Sources */,
-				1127463424FE3386007D6356 /* ScriptClient.swift in Sources */,
+				1127463424FE3386007D6356 /* Script.swift in Sources */,
 				111D47EA24F7940600B7462B /* UpdateResult.swift in Sources */,
 				118F2D94250F2A8600447A0A /* DbDeleteQuery.swift in Sources */,
 				1103757A23FF96BF004216D0 /* Log.swift in Sources */,
@@ -1014,7 +1014,7 @@
 				1112421C2579E5CC002BFAEB /* OrderState.swift in Sources */,
 				111D47F024F7A18900B7462B /* FileInfo.swift in Sources */,
 				11D3C68925A4A4EC00317F4B /* UserVaultAuthHelper.swift in Sources */,
-				1127463024FE3369007D6356 /* FileClient.swift in Sources */,
+				1127463024FE3369007D6356 /* File.swift in Sources */,
 				11E92CE92560E1D4007EFC95 /* PropertiesExecutable.swift in Sources */,
 				1112421E2579E5CC002BFAEB /* Order.swift in Sources */,
 				1103756D23FF9689004216D0 /* DataResponse.swift in Sources */,
@@ -1077,9 +1077,9 @@
 				11E573FE22C4C33400F85419 /* Dictionary.swift in Sources */,
 				11496C65251B1E37002DE4F0 /* Date.swift in Sources */,
 				111BD8B1256D011400746A51 /* Payment.swift in Sources */,
-				1127462D24FE3343007D6356 /* DatabaseClient.swift in Sources */,
+				1127462D24FE3343007D6356 /* Database.swift in Sources */,
 				11ED682A22FF1078004C17D0 /* ElastosHiveSDK.swift in Sources */,
-				1127463324FE3386007D6356 /* ScriptClient.swift in Sources */,
+				1127463324FE3386007D6356 /* Script.swift in Sources */,
 				118F2D93250F2A8600447A0A /* DbDeleteQuery.swift in Sources */,
 				1112421D2579E5CC002BFAEB /* PricingPlan.swift in Sources */,
 				1129C19424052CC500CD77F2 /* Alamofire+Synchronous.swift in Sources */,

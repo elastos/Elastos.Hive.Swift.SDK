@@ -5,7 +5,7 @@ import ElastosDIDSDK
 
 class InstanceTest: XCTestCase {
     private var vault: Vault?
-    private var database: DatabaseClient?
+    private var database: Database?
     private let collectionName = "works"
 
     func test_GetVaultInstance() {
@@ -70,7 +70,7 @@ class InstanceTest: XCTestCase {
             user = try AppInstanceFactory.createUser1()
             let lock = XCTestExpectation(description: "wait for test.")
             user!.client.getVault(user!.userFactoryOpt.ownerDid, user?.userFactoryOpt.provider).done { [self] vault in
-                self.database = (vault.database as! DatabaseClient)
+                self.database = (vault.database as! Database)
                 lock.fulfill()
             }.catch { error in
                 print(error)

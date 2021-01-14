@@ -6,7 +6,7 @@ import ElastosDIDSDK
 public var user: AppInstanceFactory?
 class DBTest: XCTestCase {
     private var client: HiveClientHandle?
-    private var database: DatabaseClient?
+    private var database: Database?
     private let collectionName = "works"
 
     func test01_DbOptions() {
@@ -162,8 +162,13 @@ class DBTest: XCTestCase {
 
     func test04_CreateCol() {
         let lock = XCTestExpectation(description: "wait for test.")
-        database?.createCollection(collectionName, options: nil).done{ success in
-            XCTAssertTrue(success)
+        let docNode = ["author": "john doe1", "title": "Eve for Dummies1"]
+        let insertOptions = InsertOptions()
+        _ = insertOptions.bypassDocumentValidation(false).ordered(true)
+        database?.createCollection(collectionName, options: nil).then{ _ -> Promise<InsertOneResult> in
+            return self.database!.insertOne("samples", docNode, options: insertOptions)
+        }.done{ result in
+                print(result)
             lock.fulfill()
         }.catch{ e in
             XCTFail()
@@ -359,7 +364,7 @@ class DBTest: XCTestCase {
             user = try AppInstanceFactory.createUser1()
             let lock = XCTestExpectation(description: "wait for test.")
             user!.client.getVault(user!.userFactoryOpt.ownerDid, user?.userFactoryOpt.provider).done { [self] vault in
-                self.database = (vault.database as! DatabaseClient)
+                self.database = (vault.database as! Database)
                 lock.fulfill()
             }.catch { error in
                 print(error)

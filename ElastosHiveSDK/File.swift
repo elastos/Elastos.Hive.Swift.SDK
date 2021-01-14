@@ -22,7 +22,7 @@
 
 import Foundation
 
-public class FileClient: NSObject, FilesProtocol {
+public class File: NSObject, FilesProtocol {
     private static let TAG = "FileClient"
     private var authHelper: VaultAuthHelper
     var writer: FileWriter? = nil

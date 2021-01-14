@@ -9,7 +9,7 @@ How-to use APIs
 a.g. :
 
 ```
-class UserContext: ApplicationContext {
+class MockAppContext: ApplicationContext {
     private var appInstanceDoc: DIDDocument
     private var hiveDataDir: String
     init(_ appInstanceDoc: DIDDocument, _ hiveDataDir: String) {
@@ -31,7 +31,7 @@ class UserContext: ApplicationContext {
     }
 }
 ```
-With you have the class **UserContext**, then can create a **HiveClient** instance with the sample below:
+With you have the class **MocAppContext**, then can create a **HiveClient** instance with the sample below:
 ```
 let contenxt = UserContext(appInstanceDoc, hiveDataDir)
 client = try HiveClientHandle.createInstance(withContext: contenxt)
@@ -39,14 +39,14 @@ client = try HiveClientHandle.createInstance(withContext: contenxt)
 
 ####  2. Acquire vault instance
 
-With **Client**, the next step is to create a specific **vault** instance, and also can acquire the captabilty interface  that you require to use it to access data on the vault in the next. For instance here to get **Files** interface:
+With **HiveClient**, the next step is to create a specific **vault** instance, and also can acquire the captabilty interface  that you require to use it to access data on the vault in the next. For instance here to get **Files** interface:
 
 ```
 let targetDID = TARGET-USER-DID
 let targetProvider = "https://hive1.trinity-tech.io"
 
 client.getVault(targetDID, targetProvider).done{ vault in
-    self.files = (vault.files as! FileClient)
+    self.files = (vault.files as! File)
     print("Provider address: \(vault.providerAddress)")
     print("vault owner DID : \(vault.ownerDid)")
     print("getAppInstanceDid: \(vault.appInstanceDid)")
@@ -116,9 +116,8 @@ files.download("hive/testIos.txt").done{ [self] output in
         print(success)
         print(error)
     }
-    lock.fulfill()
 }.catch{ error in
-
+    print(error)
 }
 ```
 #### 3. Delete file
@@ -129,7 +128,7 @@ Delete remote file, you can refer to the following example:
 files.delete("hive/testIos_delete01.txt").done{ re in
     print("success")
 }.catch{ error in
-    print("error")
+    print(error)
 }
 ```
 
@@ -141,7 +140,7 @@ Move/rename remote file, refer to the following example:
 files.move("hive/f1/testIos_copy_1.txt", "hive/f2/f3/testIos_move_1.txt").done{ re in
     print("success")
 }.catch{ error in
-    print("error")
+    print(error)
 }
 ```
 
@@ -153,7 +152,7 @@ Copy remote file, refer to the following example:
 files.copy("hive/testIos.txt", "hive/f1/testIos_copy_1.txt").done{ re in
     print("success")
 }.catch{ error in
-    print("error")
+    print(error)
 }
 ```
 #### 6. Get file hash
@@ -164,7 +163,7 @@ Get remote file hash, refer to the following example:
 files.hash("hive/f2/f3/testIos_move_1.txt").done{ hash in
     print("hash = \(hash)")
 }.catch{ error in
-    print("error")
+    print(error)
 }
 ```
 

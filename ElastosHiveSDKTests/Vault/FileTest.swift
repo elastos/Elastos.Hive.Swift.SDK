@@ -5,7 +5,7 @@ import ElastosDIDSDK
 
 class FileTest: XCTestCase {
     private var client: HiveClientHandle?
-    private var file: FileClient?
+    private var file: File?
     
     func test_0Upload() {
         let lock = XCTestExpectation(description: "wait for test.")
@@ -185,7 +185,7 @@ class FileTest: XCTestCase {
             user = try AppInstanceFactory.createUser1()
             let lock = XCTestExpectation(description: "wait for test.")
             user?.client.getVault(user!.userFactoryOpt.ownerDid, user?.userFactoryOpt.provider).done{ vault in
-                self.file = (vault.files as! FileClient)
+                self.file = (vault.files as! File)
                 lock.fulfill()
             }.catch{ error in
                 print(error)
