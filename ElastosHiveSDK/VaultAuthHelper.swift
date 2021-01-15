@@ -50,8 +50,8 @@ public class VaultAuthHelper: ConnectHelper {
     private var context: ApplicationContext?
     private var authenticationAdapterImpl: AuthenticationAdapterImpl?
     // adapter object-c
-    private var objectCContext: ObjectCApplicationContext?
-    private var objectCAuthenticationAdapterImpl: ObjectCAuthenticationAdapterImpl?
+    private var objectCContext: ApplicationContextUsingObjectC?
+    private var objectCAuthenticationAdapterImpl: AuthenticationAdapterUsingObjectCImpl?
 
     @objc
     public var ownerDid: String? {
@@ -98,7 +98,7 @@ public class VaultAuthHelper: ConnectHelper {
     }
     
     @objc
-    public init(_ context: ObjectCApplicationContext, _ ownerDid: String, _ nodeUrl: String, _ shim: ObjectCAuthenticationAdapterImpl) {
+    public init(_ context: ApplicationContextUsingObjectC, _ ownerDid: String, _ nodeUrl: String, _ shim: AuthenticationAdapterUsingObjectCImpl) {
         self.objectCContext = context
         self._ownerDid = ownerDid
         self._nodeUrl = nodeUrl
@@ -112,6 +112,21 @@ public class VaultAuthHelper: ConnectHelper {
             lock.lock()
             try doCheckExpired()
         }
+    }
+    
+    @objc
+    public func checkValidUsingObjectC() -> AnyPromise {
+        
+        return AnyPromise(__resolverBlock: { [self] resolver in
+            DispatchQueue.global().async{
+                do {
+                    lock.lock()
+                    try doCheckExpired()
+                } catch let error  {
+                    resolver(error)
+                }
+            }
+        })
     }
 
     private func doCheckExpired() throws {
@@ -291,6 +306,7 @@ public class VaultAuthHelper: ConnectHelper {
         }
     }
     
+    @objc
     public func removeToken() throws {
         try _persistent.deleteContent()
         self.token = nil

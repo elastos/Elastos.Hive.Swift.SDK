@@ -36,7 +36,7 @@ public protocol ApplicationContext {
 
 /// adapter object-c
 @objc
-public protocol ObjectCApplicationContext {
+public protocol ApplicationContextUsingObjectC {
 
     /// token cache path
     func getLocalDataDir() -> String

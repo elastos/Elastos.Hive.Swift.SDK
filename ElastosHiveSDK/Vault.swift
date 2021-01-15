@@ -22,6 +22,7 @@
 
 import Foundation
 
+@objc
 public class Vault: NSObject {
     private var _files: FilesProtocol
     private var _database: DatabaseProtocol
@@ -126,6 +127,18 @@ public class Vault: NSObject {
         }
     }
     
+    @objc
+    func checkVaultExistUsingObjectC() -> AnyPromise {
+        return AnyPromise(__resolverBlock: { [self] resolver in
+            self.vaultHelper.vaultExist().done { success in
+                resolver(success ? nil : self)
+            }.catch { error in
+                resolver(error)
+            }
+        })
+    }
+    
+    @objc
     public func revokeAccessToken() throws {
         return try authHelper.removeToken()
     }

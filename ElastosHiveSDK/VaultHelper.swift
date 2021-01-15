@@ -57,6 +57,21 @@ class VaultHelper: NSObject {
         }
     }
     
+    @objc
+    public func vaultExistUsingObjectC() -> AnyPromise {
+        return AnyPromise(__resolverBlock: { [self] resolver in
+            
+            authHelper.checkValid().then { [self] _ -> Promise<Bool> in
+                return vaultExistImpl()
+            }.done { result in
+                resolver(result)
+            }
+            .catch { error in
+                resolver(error)
+            }
+        })
+    }
+    
     private func vaultExistImpl() -> Promise<Bool> {
         return Promise { reslover in
 

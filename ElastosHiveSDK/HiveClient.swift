@@ -26,12 +26,16 @@ private var _vaultCache: [DID: Vault]?
 let HiveVaultQueue = DispatchQueue(label: "org.elastos.hivesdk.queue", qos: .default, attributes: .concurrent, autoreleaseFrequency: .workItem)
 @objc(HiveClient)
 public class HiveClientHandle: NSObject {
+    private let TAG = "HiveClientHandle"
+    
     private static var _reslover: String = "http://api.elastos.io:20606" // Default
     private static var _cacheDir: String = "\(NSHomeDirectory())/Library/Caches/didCache" // Default
     private static var resolverDidSetup: Bool = false // Default
 
-    private var authenticationAdapterImpl: AuthenticationAdapterImpl
-    private var context: ApplicationContext
+    private var authenticationAdapterImpl: AuthenticationAdapterImpl?
+    private var authenticationAdapterUsingObjectCImpl: AuthenticationAdapterUsingObjectCImpl?
+    private var context: ApplicationContext?
+    private var contextUsingObjectC: ApplicationContextUsingObjectC?
 
     init(_ context: ApplicationContext) {
         PromiseKit.conf.Q = (map: HiveVaultQueue, return: HiveVaultQueue)
@@ -39,11 +43,18 @@ public class HiveClientHandle: NSObject {
         self.context = context
     }
 
+    init(_ context: ApplicationContextUsingObjectC) {
+        PromiseKit.conf.Q = (map: HiveVaultQueue, return: HiveVaultQueue)
+        self.authenticationAdapterUsingObjectCImpl = AuthenticationAdapterUsingObjectCImpl(context)
+        self.contextUsingObjectC = context
+    }
+    
     /// Constructor without parameters
     /// resolver url and cache path use default value:
     /// http://api.elastos.io:20606
     /// \(NSHomeDirectory())/Library/Caches/didCache
     /// - Throws: throw an error, when an error occurs
+    @objc
     public class func setupResolver() throws {
         try setupResolver(_reslover, _cacheDir)
     }
@@ -53,6 +64,7 @@ public class HiveClientHandle: NSObject {
     ///   - resolver: resolver the DIDResolver object
     ///   - cacheDir: cacheDir the cache path name
     /// - Throws: throw an error, when an error occurs
+    @objc
     public class func setupResolver(_ resolver: String, _ cacheDir: String) throws {
         guard resolver != "" else {
             throw HiveError.IllegalArgument(des: "resolver should not be nil.")
@@ -82,6 +94,14 @@ public class HiveClientHandle: NSObject {
         }
         return HiveClientHandle(withContext)
     }
+    
+    @objc
+    public static func createInstanceUsingObjectC(withContext: ApplicationContextUsingObjectC) throws -> HiveClientHandle {
+        guard resolverDidSetup else {
+            throw HiveError.IllegalArgument(des: "Setup did resolver first")
+        }
+        return HiveClientHandle(withContext)
+    }
 
     /// Create Vault for user with specified DID.
     /// Try to create a vault on target provider address with following steps:
@@ -93,11 +113,19 @@ public class HiveClientHandle: NSObject {
     ///   - providerAddress: The preferred provider address to use
     /// - Returns: vault instance
     public func createVault(_ ownerDid: String, _ preferredProviderAddress: String?) -> Promise<Vault>{
-        return getVaultProvider(ownerDid, preferredProviderAddress).then{ provider -> Promise<Vault?> in
-            let authHelper = VaultAuthHelper(self.context,
+        return getVaultProvider(ownerDid, preferredProviderAddress).then{ [self] provider -> Promise<Vault?> in
+            guard let _ = context else {
+                Log.e(TAG, "context is nil.")
+                throw HiveError.IllegalArgument(des: "context is nil.")
+            }
+            guard let _ = authenticationAdapterImpl else {
+                Log.e(TAG, "authenticationAdapter is nil.")
+                throw HiveError.IllegalArgument(des: "authenticationAdapter is nil.")
+            }
+            let authHelper = VaultAuthHelper(self.context!,
                                              ownerDid,
                                              provider,
-                                             self.authenticationAdapterImpl)
+                                             self.authenticationAdapterImpl!)
             let vault = Vault(authHelper, provider, ownerDid)
             return vault.checkVaultExist()
         }.then{ vault -> Promise<Vault> in
@@ -106,6 +134,37 @@ public class HiveClientHandle: NSObject {
             }
             return vault!.requestToCreateVault()
         }
+    }
+    
+    @objc
+    public func createVaultUsingObjectC(_ ownerDid: String, _ preferredProviderAddress: String?) -> AnyPromise {
+        return AnyPromise(__resolverBlock: { [self] resolver in
+            getVaultProvider(ownerDid, preferredProviderAddress).then { [self] provider -> Promise<Vault?> in
+                guard let _ = contextUsingObjectC else {
+                    Log.e(TAG, "context is nil.")
+                    throw HiveError.IllegalArgument(des: "context is nil.")
+                }
+                guard let _ = authenticationAdapterUsingObjectCImpl else {
+                    Log.e(TAG, "authenticationAdapter is nil.")
+                    throw HiveError.IllegalArgument(des: "authenticationAdapter is nil.")
+                }
+                let authHelper = VaultAuthHelper(self.contextUsingObjectC!,
+                                                 ownerDid,
+                                                 provider,
+                                                 self.authenticationAdapterUsingObjectCImpl!)
+                let vault = Vault(authHelper, provider, ownerDid)
+                return vault.checkVaultExist()
+            }.then { vault -> Promise<Vault> in
+                guard vault != nil else {
+                    throw HiveError.vaultAlreadyExistException(des: "Vault already existed.")
+                }
+                return vault!.requestToCreateVault()
+            }.done { vault in
+                resolver(vault)
+            }.catch { error in
+                resolver(error)
+            }
+        })
     }
 
     /// get Vault instance with specified DID.
@@ -118,16 +177,49 @@ public class HiveClientHandle: NSObject {
     /// - Returns: vault instance.
     public func getVault(_ ownerDid: String, _ preferredProviderAddress: String?) -> Promise<Vault> {
         return Promise<Vault> { resolver in
+            guard let _ = context else {
+                Log.e(TAG, "context is nil.")
+                throw HiveError.IllegalArgument(des: "context is nil.")
+            }
+            guard let _ = authenticationAdapterImpl else {
+                Log.e(TAG, "authenticationAdapter is nil.")
+                throw HiveError.IllegalArgument(des: "authenticationAdapter is nil.")
+            }
             _ = getVaultProvider(ownerDid, preferredProviderAddress).done{ provider in
-                let authHelper = VaultAuthHelper(self.context,
-                                                ownerDid,
-                                                provider,
-                                                self.authenticationAdapterImpl)
+                let authHelper = VaultAuthHelper(self.context!,
+                                                 ownerDid,
+                                                 provider,
+                                                 self.authenticationAdapterImpl!)
                 resolver.fulfill(Vault(authHelper, provider, ownerDid))
             }.catch{ error in
                 resolver.reject(error)
             }
         }
+    }
+    
+    @objc
+    public func getVaultUsingObjectC(_ ownerDid: String, _ preferredProviderAddress: String?) -> AnyPromise {
+        return AnyPromise(__resolverBlock: { [self] resolver in
+            guard let _ = contextUsingObjectC else {
+                Log.e(TAG, "context is nil.")
+                resolver(HiveError.IllegalArgument(des: "context is nil."))
+                return
+            }
+            guard let _ = authenticationAdapterUsingObjectCImpl else {
+                Log.e(TAG, "authenticationAdapter is nil.")
+                resolver(HiveError.IllegalArgument(des: "authenticationAdapter is nil."))
+                return
+            }
+            _ = getVaultProvider(ownerDid, preferredProviderAddress).done{ provider in
+                let authHelper = VaultAuthHelper(self.contextUsingObjectC!,
+                                                 ownerDid,
+                                                 provider,
+                                                 self.authenticationAdapterUsingObjectCImpl!)
+                resolver(Vault(authHelper, provider, ownerDid))
+            }.catch{ error in
+                resolver(error)
+            }
+        })
     }
 
     /// Try to acquire provider address for the specific user DID with rules with sequence orders:
@@ -143,32 +235,45 @@ public class HiveClientHandle: NSObject {
     ///  - Returns: The provider address
     public func getVaultProvider(_ ownerDid: String, _ preferredProviderAddress: String?) -> Promise<String> {
         return Promise<String> { resolver in
-            DispatchQueue.global().async {
-                
-                /// Choose 'preferredProviderAddress' as target provider address if it's with value
-                if preferredProviderAddress != nil {
-                    resolver.fulfill(preferredProviderAddress!)
-                    return
-                }
+            DispatchQueue.global().async { [self] in
                 do {
-                    let did = try DID(ownerDid)
-                    let doc = try did.resolve()
-                    guard let _ = doc else {
-                        resolver.reject(HiveError.providerNotSet(des: "The DID document \(ownerDid) has not published."))
-                        return
-                    }
-                    let services = doc?.selectServices(byType: "HiveVault")
-                    if services == nil || services!.count == 0 {
-                        resolver.reject(HiveError.providerNotSet(des: "No 'HiveVault' services declared on DID document \(ownerDid)"))
-                        return
-                    }
-                    resolver.fulfill(services![0].endpoint)
+                    resolver.fulfill(try loadPreferredProviderAddress(ownerDid, preferredProviderAddress))
                 }
                 catch {
                     resolver.reject(error)
                 }
             }
         }
+    }
+    
+    public func getVaultProviderUsingObjectC(_ ownerDid: String, _ preferredProviderAddress: String?) -> AnyPromise{
+        return AnyPromise(__resolverBlock: { resolver in
+            DispatchQueue.global().async { [self] in
+                do {
+                    resolver(try loadPreferredProviderAddress(ownerDid, preferredProviderAddress))
+                }
+                catch {
+                    resolver(error)
+                }
+            }
+        })
+    }
+    
+    private func loadPreferredProviderAddress(_ ownerDid: String, _ preferredProviderAddress: String?) throws -> String {
+        /// Choose 'preferredProviderAddress' as target provider address if it's with value
+        if preferredProviderAddress != nil {
+            return preferredProviderAddress!
+        }
+        let did = try DID(ownerDid)
+        let doc = try did.resolve()
+        guard let _ = doc else {
+            throw HiveError.providerNotSet(des: "The DID document \(ownerDid) has not published.")
+        }
+        let services = doc?.selectServices(byType: "HiveVault")
+        if services == nil || services!.count == 0 {
+            throw HiveError.providerNotSet(des: "No 'HiveVault' services declared on DID document \(ownerDid)")
+        }
+        return services![0].endpoint
     }
 }
 
@@ -184,14 +289,14 @@ public class AuthenticationAdapterImpl: AuthenticationAdapter {
 }
 
 @objc
-public class ObjectCAuthenticationAdapterImpl: NSObject {
-    private var context: ObjectCApplicationContext
-    init(_ context: ObjectCApplicationContext) {
+public class AuthenticationAdapterUsingObjectCImpl: NSObject {
+    private var context: ApplicationContextUsingObjectC
+    init(_ context: ApplicationContextUsingObjectC) {
         self.context = context
     }
     
     @objc
-    public func authenticate(_ context: ObjectCApplicationContext, _ jwtToken: String) -> AnyPromise {
+    public func authenticate(_ context: ApplicationContextUsingObjectC, _ jwtToken: String) -> AnyPromise {
         return context.getAuthorization(jwtToken)
     }
 }
