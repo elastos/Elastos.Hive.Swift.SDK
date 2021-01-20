@@ -39,6 +39,7 @@ public class VaultAuthHelper: ConnectHelper {
     private var _userDid: String?
     private var _appId: String?
     private var _appInstanceDid: String?
+    private var _serviceDid: String?
 
     var token: AuthToken?
     var vaultUrl: VaultURL
@@ -75,6 +76,14 @@ public class VaultAuthHelper: ConnectHelper {
 
     public func setAppInstanceDid(_ appInstanceDid: String) {
         _appInstanceDid = appInstanceDid
+    }
+    
+    public var serviceDid: String? {
+        return _serviceDid
+    }
+
+    public func setServiceDid(_ serviceDid: String) {
+        _serviceDid = serviceDid
     }
 
     public init(_ context: ApplicationContext, _ ownerDid: String, _ nodeUrl: String, _ shim: AuthenticationAdapterImpl) {
@@ -163,6 +172,7 @@ public class VaultAuthHelper: ConnectHelper {
         if currentTime > exp! {
             throw HiveError.jwtVerify(des: "challenge token is expiration.")
         }
+        _serviceDid = claims.getIssuer()
     }
 
     private func tryRestoreToken() throws {
@@ -170,7 +180,7 @@ public class VaultAuthHelper: ConnectHelper {
         _userDid = json[USER_DID_KEY].stringValue
         _appId = json[APP_ID_KEY].stringValue
         _appInstanceDid = json[APP_INSTANCE_DID_KEY].stringValue
-
+        
         var accessToken = ""
         var expiredTime = ""
         var refreshToken = ""

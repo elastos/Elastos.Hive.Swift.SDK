@@ -194,4 +194,20 @@ class VaultURL {
     func serviceInfo() -> String {
         return baseUrl + "/api/v1/service/vault"
     }
+    
+    func state() -> String {
+        return baseUrl + "/backup/state"
+    }
+    
+    func save() -> String {
+        return baseUrl + "/backup/save_to_node"
+    }
+    
+    func restore() -> String {
+        return baseUrl + "/backup/restore_from_node"
+    }
+    
+    func activate() -> String {
+        return baseUrl + "/backup/activate_to_vault"
+    }
 }
