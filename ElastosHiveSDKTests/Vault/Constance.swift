@@ -7,6 +7,8 @@ let MAIN_RESOLVER_URL = "http://api.elastos.io:20606" //Main Net
 let LOCAL_PROVIDER = "http://192.168.199.180:5000"
 let RELEASE_PROVIDER = "https://hive1.trinity-tech.io" // release
 let DEVELOP_PROVIDER = "https://hive.yoopig.com" // develop
+let DEVELOP_TEST1_PROVIDER = "https://hive-testnet1.trinity-tech.io" // developing
+let DEVELOP_TEST2_PROVIDER = "https://hive-testnet2.trinity-tech.io" // developing
 
 //user1
 //https://hive1.trinity-tech.io
