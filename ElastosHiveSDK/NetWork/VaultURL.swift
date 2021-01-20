@@ -50,6 +50,7 @@ class VaultURL {
         return baseUrl + "/api/v1/sync/setup/google_drive"
     }
 
+    // db
     func mongoDBSetup() -> String {
         return baseUrl + "/api/v1/db/create_collection"
     }
@@ -97,7 +98,8 @@ class VaultURL {
     func deleteMany() -> String {
         return baseUrl + "/api/v1/db/delete_many"
     }
-
+    
+    // files
     func upload(_ path: String) -> String {
         return baseUrl + "/api/v1/files/upload/" + path
     }
@@ -130,6 +132,7 @@ class VaultURL {
         return baseUrl + "/api/v1/files/properties?path=" + path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
     }
 
+    // scripting
     func registerScript() -> String {
         return baseUrl + "/api/v1/scripting/set_script"
     }
@@ -154,7 +157,8 @@ class VaultURL {
     func createFreeVault() -> String {
         return baseUrl + "/api/v1/service/vault/create"
     }
- 
+    
+    // version
     func version() -> String {
         return baseUrl + "/api/v1/hive/version"
     }
@@ -163,6 +167,7 @@ class VaultURL {
         return baseUrl + "/api/v1/hive/commithash"
     }
     
+    // payment
     func vaultPackageInfo() -> String {
         return baseUrl + "/api/v1/payment/vault_package_info"
     }
@@ -195,19 +200,49 @@ class VaultURL {
         return baseUrl + "/api/v1/service/vault"
     }
     
+    // backup
     func state() -> String {
-        return baseUrl + "/backup/state"
+        return baseUrl + "/api/v1/backup/state"
     }
     
     func save() -> String {
-        return baseUrl + "/backup/save_to_node"
+        return baseUrl + "/api/v1/backup/save_to_node"
     }
     
     func restore() -> String {
-        return baseUrl + "/backup/restore_from_node"
+        return baseUrl + "/api/v1/backup/restore_from_node"
     }
     
     func activate() -> String {
-        return baseUrl + "/backup/activate_to_vault"
+        return baseUrl + "/api/v1/backup/activate_to_vault"
+    }
+    
+    // service
+    func createVault() -> String {
+        return baseUrl + "/api/v1/service/vault/create"
+    }
+    
+    func removeVault() -> String {
+        return baseUrl + "/api/v1/service/vault/remove"
+    }
+    
+    func freezeVault() -> String {
+        return baseUrl + "/api/v1/service/vault/freeze"
+    }
+    
+    func unfreezeVault() -> String {
+        return baseUrl + "/api/v1/service/vault/unfreeze"
+    }
+
+    func vaultServiceInfo() -> String {
+        return baseUrl + "/api/v1/service/vault"
+    }
+    
+    func createBackupVault() -> String {
+        return baseUrl + "/api/v1/service/vault_backup/create"
+    }
+
+    func backupVaultInfo() -> String {
+        return baseUrl + "/api/v1/service/vault_backup"
     }
 }
