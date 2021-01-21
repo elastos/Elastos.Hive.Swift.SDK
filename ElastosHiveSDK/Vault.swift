@@ -106,26 +106,26 @@ public class Vault: NSObject {
         return _payment
     }
     
-    func requestToCreateVault() -> Promise<Vault> {
-        return Promise { reslover in
-            self.vaultHelper.requestToCreateVault().done { success in
-                reslover.fulfill(self)
-            }.catch { error in
-                reslover.reject(error)
-            }
-        }
-    }
-
-    func checkVaultExist() -> Promise<Vault?> {
-        return Promise { reslover in
-            self.vaultHelper.vaultExist().done { success in
-                reslover.fulfill(success ? nil : self)
-            }.catch { error in
-                reslover.reject(error)
-            }
-        }
-    }
-    
+//    func requestToCreateVault() -> Promise<Vault> {
+//        return Promise { reslover in
+//            self.vaultHelper.requestToCreateVault().done { success in
+//                reslover.fulfill(self)
+//            }.catch { error in
+//                reslover.reject(error)
+//            }
+//        }
+//    }
+//
+//    func checkVaultExist() -> Promise<Vault?> {
+//        return Promise { reslover in
+//            self.vaultHelper.vaultExist().done { success in
+//                reslover.fulfill(success ? nil : self)
+//            }.catch { error in
+//                reslover.reject(error)
+//            }
+//        }
+//    }
+//
     public func revokeAccessToken() throws {
         return try authHelper.removeToken()
     }
