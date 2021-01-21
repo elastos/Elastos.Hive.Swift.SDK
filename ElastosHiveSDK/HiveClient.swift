@@ -82,31 +82,31 @@ public class HiveClientHandle: NSObject {
         }
         return HiveClientHandle(withContext)
     }
-
-    /// Create Vault for user with specified DID.
-    /// Try to create a vault on target provider address with following steps:
-    ///  - Get the target provider address
-    ///  - Check whether the vault is already existed on target provider, otherwise
-    ///  - Create a new vault on target provider with free pricing plan.
-    /// - Parameters:
-    ///   - ownerDid: The owner did that want to create a vault
-    ///   - providerAddress: The preferred provider address to use
-    /// - Returns: vault instance
-    public func createVault(_ ownerDid: String, _ preferredProviderAddress: String?) -> Promise<Vault>{
-        return getVaultProvider(ownerDid, preferredProviderAddress).then{ provider -> Promise<Vault?> in
-            let authHelper = VaultAuthHelper(self.context,
-                                             ownerDid,
-                                             provider,
-                                             self.authenticationAdapterImpl)
-            let vault = Vault(authHelper, provider, ownerDid)
-            return vault.checkVaultExist()
-        }.then{ vault -> Promise<Vault> in
-            guard vault != nil else {
-                throw HiveError.vaultAlreadyExistException(des: "Vault already existed.")
-            }
-            return vault!.requestToCreateVault()
-        }
-    }
+//
+//    /// Create Vault for user with specified DID.
+//    /// Try to create a vault on target provider address with following steps:
+//    ///  - Get the target provider address
+//    ///  - Check whether the vault is already existed on target provider, otherwise
+//    ///  - Create a new vault on target provider with free pricing plan.
+//    /// - Parameters:
+//    ///   - ownerDid: The owner did that want to create a vault
+//    ///   - providerAddress: The preferred provider address to use
+//    /// - Returns: vault instance
+//    public func createVault(_ ownerDid: String, _ preferredProviderAddress: String?) -> Promise<Vault>{
+//        return getVaultProvider(ownerDid, preferredProviderAddress).then{ provider -> Promise<Vault?> in
+//            let authHelper = VaultAuthHelper(self.context,
+//                                             ownerDid,
+//                                             provider,
+//                                             self.authenticationAdapterImpl)
+//            let vault = Vault(authHelper, provider, ownerDid)
+//            return vault.checkVaultExist()
+//        }.then{ vault -> Promise<Vault> in
+//            guard vault != nil else {
+//                throw HiveError.vaultAlreadyExistException(des: "Vault already existed.")
+//            }
+//            return vault!.requestToCreateVault()
+//        }
+//    }
 
     /// get Vault instance with specified DID.
     /// Try to get a vault on target provider address with following steps:
@@ -129,7 +129,51 @@ public class HiveClientHandle: NSObject {
             }
         }
     }
+    
+    /// Get Backup instance with specified DID.
+    /// Try to get a vault on target provider address with following steps:
+    ///  - Get the target provider address
+    ///  - Create a new vaule of local instance..
+    /// - Parameters:
+    ///   - ownerDid: The owner did related to target vault
+    ///   - preferredProviderAddress: The preferred target provider address
+    /// - Returns: A new Backup instance.
+    public func getBackup(_ ownerDid: String, _ preferredProviderAddress: String?) -> Promise<Backup> {
+        return Promise<Backup> { resolver in
+            _ = getVaultProvider(ownerDid, preferredProviderAddress).done{ provider in
+                let authHelper = VaultAuthHelper(self.context,
+                                                 ownerDid,
+                                                 provider,
+                                                 self.authenticationAdapterImpl)
+                resolver.fulfill(Backup(authHelper))
+            }.catch{ error in
+                resolver.reject(error)
+            }
+        }
+    }
 
+    /// Manager instance with specified DID.
+    /// Try to get a vault on target provider address with following steps:
+    ///  - Get the target provider address
+    ///  - Create a new vaule of local instance..
+    /// - Parameters:
+    ///   - ownerDid: The owner did related to target vault
+    ///   - preferredProviderAddress: The preferred target provider address
+    /// - Returns: A new Manager instance.
+    public func getManager(_ ownerDid: String, _ preferredProviderAddress: String?) -> Promise<Manager> {
+        return Promise<Manager> { resolver in
+            _ = getVaultProvider(ownerDid, preferredProviderAddress).done{ provider in
+                let authHelper = VaultAuthHelper(self.context,
+                                                 ownerDid,
+                                                 provider,
+                                                 self.authenticationAdapterImpl)
+                resolver.fulfill(Manager(authHelper, provider, ownerDid))
+            }.catch{ error in
+                resolver.reject(error)
+            }
+        }
+    }
+    
     /// Try to acquire provider address for the specific user DID with rules with sequence orders:
     ///  - Use 'preferredProviderAddress' first when it's being with real value; Otherwise
     ///  - Resolve DID document according to the ownerDid from DID sidechain,
