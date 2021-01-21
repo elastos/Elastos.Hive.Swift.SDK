@@ -26,6 +26,7 @@ let lock = NSLock()
 @inline(__always) private func TAG() -> String { return "VaultAuthHelper" }
 public class VaultAuthHelper: ConnectHelper {
     
+    let SERVICE_DID: String = "service_did"
     let USER_DID_KEY: String = "user_did"
     let APP_ID_KEY: String = "app_id"
     let APP_INSTANCE_DID_KEY: String = "app_instance_did"
@@ -195,6 +196,7 @@ public class VaultAuthHelper: ConnectHelper {
         }
         if accessToken != "" && expiredTime != "" {
             self.token = AuthToken(refreshToken, accessToken, expiredTime)
+            setServiceDid(json[SERVICE_DID].stringValue)
         }
     }
 
@@ -230,7 +232,7 @@ public class VaultAuthHelper: ConnectHelper {
                     TOKEN_TYPE_KEY: "token",
                     USER_DID_KEY: _userDid,
                     APP_ID_KEY: _appId,
-                    APP_INSTANCE_DID_KEY: _appInstanceDid]
+                    APP_INSTANCE_DID_KEY: _appInstanceDid, SERVICE_DID: serviceDid]
         try _persistent.upateContent(json as Dictionary<String, Any>)
     }
     
