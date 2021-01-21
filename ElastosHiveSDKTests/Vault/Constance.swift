@@ -7,8 +7,8 @@ let MAIN_RESOLVER_URL = "http://api.elastos.io:20606" //Main Net
 let LOCAL_PROVIDER = "http://192.168.199.180:5000"
 let RELEASE_PROVIDER = "https://hive1.trinity-tech.io" // release
 let DEVELOP_PROVIDER = "https://hive.yoopig.com" // develop
-let DEVELOP_TEST1_PROVIDER = "https://hive-testnet1.trinity-tech.io" // developing
-let DEVELOP_TEST2_PROVIDER = "https://hive-testnet2.trinity-tech.io" // developing
+let DEVELOP_TEST_PROVIDER = "https://hive-testnet1.trinity-tech.io" // developing
+//let DEVELOP_TEST_PROVIDER = "https://hive-testnet2.trinity-tech.io" // developing
 
 //user1
 //https://hive1.trinity-tech.io
@@ -27,17 +27,40 @@ let appInstance1_storepass = "password"
 
 ////user2
 //did:elastos:iqcpzTBTbi27exRoP27uXMLNM1r3w3UwaL
-let userDid2 = "did:elastos:iqcpzTBTbi27exRoP27uXMLNM1r3w3UwaL"
-let userDid2_name = "didapp1"
-let userDid2_mn = "mammal basket grain fish strategy music fault lock flat first casino energy"
+let userDid2 = "did:elastos:icXtpDnZRSDrjmD5NQt6TYSphFRqoo2q6n"
+let userDid2_name = "developUser"
+let userDid2_mn = "social bundle noodle argue pencil file absent acoustic tennis weekend message notice"
 let userDid2_phrasepass = "password"
 let userDid2_storepass = "password"
 
-//did:elastos:inc6Pb9eVQFDcPgoX9iR1Dp7TPbYfT6hzY
-let appInstance2_name = "testapp1"
-let appInstance2_mn = "venture link adapt field priority extend depart endless right lamp sudden fringe"
+//did:elastos:imMY7uHc5WCDUhWCVaH5MtFFCBMegCaEYH
+let appInstance2_name = "developApp"
+let appInstance2_mn = "wash busy tell relief street maximum dumb fat legend end panic warrior"
 let appInstance2_phrasepass = "password"
 let appInstance2_storepass = "password"
+
+/*
+ userDid = did:elastos:icXtpDnZRSDrjmD5NQt6TYSphFRqoo2q6n
+ userName = developUser
+ userMn = social bundle noodle argue pencil file absent acoustic tennis weekend message notice
+ userPhrasepass = password
+ userStorepass = password
+
+ //did:elastos:imMY7uHc5WCDUhWCVaH5MtFFCBMegCaEYH
+ appName = developApp
+ appMn = wash busy tell relief street maximum dumb fat legend end panic warrior
+ appPhrasepass = password
+ appStorePass = password
+
+ ownerDid = did:elastos:icXtpDnZRSDrjmD5NQt6TYSphFRqoo2q6n
+ resolverUrl =  http://api.elastos.io:21606
+ provider = https://hive-testnet1.trinity-tech.io
+
+ targetDID = did:elastos:iiTvjocqh7C78KjWyDVk2C2kbueJvkuXTW
+ targetHost = https://hive-testnet2.trinity-tech.io
+
+ storePath = develop
+ */
 
 ////user3
 ////[didapp3] My new DID created: did:elastos:ijYUBb36yCXU6yzhydnkCCAXh7ZRW4X85J

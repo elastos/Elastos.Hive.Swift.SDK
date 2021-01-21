@@ -3,14 +3,42 @@ import XCTest
 @testable import ElastosHiveSDK
 import ElastosDIDSDK
 
+public class UserBackupAuthenticationHandler: BackupAuthenticationHandler {
+    private var presentationInJWT: PresentationInJWT
+
+    init(_ presentationInJWT: PresentationInJWT) {
+        self.presentationInJWT = presentationInJWT
+    }
+    
+    public func authorization(_ serviceDid: String) -> Promise<String> {
+        return Promise<String> { resolver in
+            resolver.fulfill(try presentationInJWT.getBackupVc(serviceDid))
+        }
+    }
+}
+
 public var factory: AppInstanceFactory?
 class BackupTest: XCTestCase {
     private var client: HiveClientHandle?
     private var backup: Backup?
     private var manager: Manager?
+    
     func testGetState() {
         let lock = XCTestExpectation(description: "wait for test.")
         backup?.state().done({ stste in
+            print(stste)
+            lock.fulfill()
+        }).catch({ error in
+            XCTFail()
+            lock.fulfill()
+        })
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+    
+    func testSave() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        let userBackupAuthenticationHandler = UserBackupAuthenticationHandler(user!.presentationInJWT)
+        backup?.save(userBackupAuthenticationHandler).done({ stste in
             print(stste)
             lock.fulfill()
         }).catch({ error in
