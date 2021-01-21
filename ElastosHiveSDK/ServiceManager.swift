@@ -37,7 +37,7 @@ public class ServiceManager: NSObject{
         }
     }
     
-    public func createVaultImp(_ tryAgain: Int) -> Promise<Bool> {
+    private func createVaultImp(_ tryAgain: Int) -> Promise<Bool> {
         return Promise<Bool> { resolver in
             let url = vaultUrl.createVault()
             let response = AF.request(url, method: .post, encoding: JSONEncoding.default, headers: HiveHeader(authHelper).headers()).responseJSON()
@@ -61,7 +61,7 @@ public class ServiceManager: NSObject{
         }
     }
     
-    public func removeVaultImp(_ tryAgain: Int) -> Promise<Bool> {
+    private func removeVaultImp(_ tryAgain: Int) -> Promise<Bool> {
         return Promise<Bool> { resolver in
             let url = vaultUrl.removeVault()
             let response = AF.request(url, method: .post, encoding: JSONEncoding.default, headers: HiveHeader(authHelper).headers()).responseJSON()
@@ -85,7 +85,7 @@ public class ServiceManager: NSObject{
         }
     }
     
-    public func freezeVaultImp(_ tryAgain: Int) -> Promise<Bool> {
+    private func freezeVaultImp(_ tryAgain: Int) -> Promise<Bool> {
         return Promise<Bool> { resolver in
             let url = vaultUrl.freezeVault()
             let response = AF.request(url, method: .post, encoding: JSONEncoding.default, headers: HiveHeader(authHelper).headers()).responseJSON()
@@ -109,7 +109,7 @@ public class ServiceManager: NSObject{
         }
     }
     
-    public func unfreezeVaultImp(_ tryAgain: Int) -> Promise<Bool> {
+    private func unfreezeVaultImp(_ tryAgain: Int) -> Promise<Bool> {
         return Promise<Bool> { resolver in
             let url = vaultUrl.unfreezeVault()
             let response = AF.request(url, method: .post, encoding: JSONEncoding.default, headers: HiveHeader(authHelper).headers()).responseJSON()
@@ -133,7 +133,7 @@ public class ServiceManager: NSObject{
         }
     }
     
-    public func vaultServiceInfoImp(_ tryAgain: Int) -> Promise<UsingPlan> {
+    private func vaultServiceInfoImp(_ tryAgain: Int) -> Promise<UsingPlan> {
         return Promise<UsingPlan> { resolver in
             let url = vaultUrl.vaultServiceInfo()
             let response = AF.request(url, method: .post, encoding: JSONEncoding.default, headers: HiveHeader(authHelper).headers()).responseJSON()
@@ -165,7 +165,7 @@ public class ServiceManager: NSObject{
         }
     }
     
-    public func createBackupVaultImp(_ tryAgain: Int) -> Promise<Bool> {
+    private func createBackupVaultImp(_ tryAgain: Int) -> Promise<Bool> {
         return Promise<Bool> { resolver in
             let url = vaultUrl.createBackupVault()
             let response = AF.request(url, method: .post, encoding: JSONEncoding.default, headers: HiveHeader(authHelper).headers()).responseJSON()
@@ -189,7 +189,7 @@ public class ServiceManager: NSObject{
         }
     }
     
-    public func backupServiceInfoImp(_ tryAgain: Int) -> Promise<BackupUsingPlan> {
+    private func backupServiceInfoImp(_ tryAgain: Int) -> Promise<BackupUsingPlan> {
         return Promise<BackupUsingPlan> { resolver in
             let url = vaultUrl.backupVaultInfo()
             let response = AF.request(url, method: .post, encoding: JSONEncoding.default, headers: HiveHeader(authHelper).headers()).responseJSON()
