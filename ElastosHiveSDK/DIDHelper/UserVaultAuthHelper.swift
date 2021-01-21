@@ -36,15 +36,19 @@ public class UserVaultAuthHelper: NSObject {
     }
     
     public init(_ userMnemonic: String, _ appMnemonic: String, _ localDataDir: String) throws {
-        let userDidOpt = PresentationInJWTOptions()
+        let userDidOpt = AppOptions()
         userDidOpt.mnemonic = userMnemonic
         userDidOpt.storepass = "storepass"
 
-        let appInstanceDidOpt = PresentationInJWTOptions()
+        let appInstanceDidOpt = AppOptions()
         appInstanceDidOpt.mnemonic = userMnemonic
         appInstanceDidOpt.storepass = "storepass"
         
-        presentationInJWT = try PresentationInJWT(userDidOpt, appInstanceDidOpt)
+       let backupOptions = BackupOptions()
+        backupOptions.targetHost = "https://hive-testnet2.trinity-tech.io"
+        backupOptions.targetDID = "did:elastos:iiTvjocqh7C78KjWyDVk2C2kbueJvkuXTW"
+        
+        presentationInJWT = try PresentationInJWT(userDidOpt, appInstanceDidOpt, backupOptions)
         self.localDataDir = localDataDir
     }
     
