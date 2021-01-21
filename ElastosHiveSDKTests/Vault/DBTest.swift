@@ -165,8 +165,8 @@ class DBTest: XCTestCase {
         let docNode = ["author": "john doe1", "title": "Eve for Dummies1"]
         let insertOptions = InsertOptions()
         _ = insertOptions.bypassDocumentValidation(false).ordered(true)
-        database?.createCollection(collectionName, options: nil).then{ _ -> Promise<InsertOneResult> in
-            return self.database!.insertOne("samples", docNode, options: insertOptions)
+        database?.createCollection(collectionName, options: nil).then{ [self] _ -> Promise<InsertOneResult> in
+            return self.database!.insertOne(collectionName, docNode, options: insertOptions)
         }.done{ result in
                 print(result)
             lock.fulfill()

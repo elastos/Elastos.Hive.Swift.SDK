@@ -6,6 +6,10 @@ import ElastosDIDSDK
 class UserContext: ApplicationContext {
     private var option: UserOptions
     private var presentationInJWT: PresentationInJWT
+    private var vault: Vault?
+    private var backup: Backup?
+    private var manager: Manager?
+    
     init(_ option: UserOptions, _ pjwt: PresentationInJWT) {
         self.option = option
         self.presentationInJWT = pjwt
@@ -90,7 +94,7 @@ public class AppInstanceFactory {
         appInstanceDidOpt.storepass = appInstance2_storepass
         
         let userFactoryOpt = UserOptions()
-        userFactoryOpt.provider = DEVELOP_PROVIDER
+        userFactoryOpt.provider = DEVELOP_TEST1_PROVIDER
         userFactoryOpt.resolveUrl = TEST_RESOLVER_URL
         userFactoryOpt.ownerDid = userDid2
         userFactoryOpt.storePath = user2Path
