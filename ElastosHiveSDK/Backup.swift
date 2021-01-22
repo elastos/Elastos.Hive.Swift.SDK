@@ -69,7 +69,6 @@ public class Backup: NSObject{
     private func saveImp(_ credential: String, _ tryAgain: Int) -> Promise<Bool> {
         return Promise<Bool> { resolver in
             let url = vaultUrl.save()
-            let cre = try credential.toDictionary()
             let param = ["backup_credential": credential]
             let response = AF.request(url, method: .post, parameters: param, encoding: JSONEncoding.default, headers: HiveHeader(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
@@ -93,7 +92,7 @@ public class Backup: NSObject{
     private func restoreImp(_ credential: String, _ tryAgain: Int) -> Promise<Bool> {
         return Promise<Bool> { resolver in
             let url = vaultUrl.restore()
-            let param = try credential.toDictionary()
+            let param = ["backup_credential": credential]
             let response = AF.request(url, method: .post, parameters: param, encoding: JSONEncoding.default, headers: HiveHeader(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
             let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
