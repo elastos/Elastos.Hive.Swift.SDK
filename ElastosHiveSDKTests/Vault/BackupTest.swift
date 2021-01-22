@@ -48,6 +48,19 @@ class BackupTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
 
+    func testRestore() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        let userBackupAuthenticationHandler = UserBackupAuthenticationHandler(user!.presentationInJWT)
+        backup?.restore(userBackupAuthenticationHandler).done({ stste in
+            print(stste)
+            lock.fulfill()
+        }).catch({ error in
+            XCTFail()
+            lock.fulfill()
+        })
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+    
     override func setUpWithError() throws {
         do {
             Log.setLevel(.Debug)
