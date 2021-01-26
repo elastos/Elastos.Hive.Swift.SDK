@@ -159,7 +159,7 @@ public class ServiceManager: NSObject{
         }
     }
     
-    public func createBackupVault() -> Promise<Bool> {
+    public func createBackup() -> Promise<Bool> {
         return authHelper.checkValid().then { _ -> Promise<Bool> in
             return self.createBackupVaultImp(0)
         }
