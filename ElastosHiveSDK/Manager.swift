@@ -45,7 +45,53 @@ public class Manager: NSObject{
         }
     }
     
-    public func checkVaultExist() -> Promise<Bool> {
+    public func destroyVault() -> Promise<Bool> {
+        return self.serviceManager.removeVault()
+    }
+    
+    public func freezeVault() -> Promise<Bool> {
+        return self.serviceManager.freezeVault()
+    }
+    
+    public func unfreezeVault() -> Promise<Bool> {
+        return self.serviceManager.unfreezeVault()
+    }
+    
+    public func createBackup() -> Promise<Backup> {
+        return Promise<Backup> { resolver in
+            checkBackupExist().done { exist in
+                resolver.fulfill(Backup(self.authHelper))
+            }.catch { error in
+                let e = error as? HiveError
+                if e == nil {
+                    resolver.reject(error)
+                    return
+                }
+                switch e {
+                case .vaultNotFound(_): do {
+                    self.serviceManager.createBackup().done { success in
+                        resolver.fulfill(Backup(self.authHelper))
+                    }.catch { error in
+                        resolver.reject(error)
+                    }
+                    return
+                }
+                default:
+                    resolver.reject(error)
+                }
+            }
+        }
+    }
+    
+    public func vaultServiceInfo() -> Promise<UsingPlan> {
+        return self.serviceManager.vaultServiceInfo()
+    }
+    
+    public func backupServiceInfo() -> Promise<BackupUsingPlan> {
+        return self.serviceManager.backupServiceInfo()
+    }
+
+    private func checkVaultExist() -> Promise<Bool> {
         return Promise<Bool> { resolver in
             self.serviceManager.vaultServiceInfo().done { success in
                 resolver.fulfill(true)
@@ -63,17 +109,7 @@ public class Manager: NSObject{
         }
     }
     
-    public func createBackup() -> Promise<Bool> {
-        return Promise<Bool> { resolver in
-            self.serviceManager.createBackupVault().done { success in
-                resolver.fulfill(true)
-            }.catch { error in
-                resolver.reject(error)
-            }
-        }
-    }
-    
-    public func checkBackupVaultExist() -> Promise<Bool> {
+    private func checkBackupExist() -> Promise<Bool> {
         return Promise<Bool> { resolver in
             self.serviceManager.backupServiceInfo().done { success in
                 resolver.fulfill(true)

@@ -122,6 +122,7 @@
 		116B2F5225B8292E00635D97 /* ServiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116B2F5025B8292E00635D97 /* ServiceManager.swift */; };
 		116B2F6225B8302200635D97 /* BackupUsingPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116B2F6125B8302200635D97 /* BackupUsingPlan.swift */; };
 		116B2F6325B8302200635D97 /* BackupUsingPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116B2F6125B8302200635D97 /* BackupUsingPlan.swift */; };
+		116B2F6725BA8EF200635D97 /* ManagerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116B2F6625BA8EF200635D97 /* ManagerTest.swift */; };
 		1170FB052501CB3F0049E81D /* WriteConcern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FB042501CB3F0049E81D /* WriteConcern.swift */; };
 		1170FB062501CB3F0049E81D /* WriteConcern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FB042501CB3F0049E81D /* WriteConcern.swift */; };
 		1170FB082501CCD30049E81D /* ReadConcern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FB072501CCD30049E81D /* ReadConcern.swift */; };
@@ -315,6 +316,7 @@
 		116B2F4C25B8281B00635D97 /* Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manager.swift; sourceTree = "<group>"; };
 		116B2F5025B8292E00635D97 /* ServiceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceManager.swift; sourceTree = "<group>"; };
 		116B2F6125B8302200635D97 /* BackupUsingPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupUsingPlan.swift; sourceTree = "<group>"; };
+		116B2F6625BA8EF200635D97 /* ManagerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagerTest.swift; sourceTree = "<group>"; };
 		1170FB042501CB3F0049E81D /* WriteConcern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteConcern.swift; sourceTree = "<group>"; };
 		1170FB072501CCD30049E81D /* ReadConcern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadConcern.swift; sourceTree = "<group>"; };
 		1170FB0A2501CD2F0049E81D /* ReadPreference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadPreference.swift; sourceTree = "<group>"; };
@@ -438,6 +440,7 @@
 			children = (
 				111CA54A252027760030D39C /* TestError.swift */,
 				116B2F4925B8259900635D97 /* BackupTest.swift */,
+				116B2F6625BA8EF200635D97 /* ManagerTest.swift */,
 				1170FB19250507C70049E81D /* DBTest.swift */,
 				118F2D82250F1A7200447A0A /* ScriptTest.swift */,
 				11C3210525CAAB5A001A3AAE /* HiveURLTest.swift */,
