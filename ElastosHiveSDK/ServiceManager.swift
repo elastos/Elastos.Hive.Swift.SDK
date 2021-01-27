@@ -136,7 +136,7 @@ public class ServiceManager: NSObject{
     private func vaultServiceInfoImp(_ tryAgain: Int) -> Promise<UsingPlan> {
         return Promise<UsingPlan> { resolver in
             let url = vaultUrl.vaultServiceInfo()
-            let response = AF.request(url, method: .post, encoding: JSONEncoding.default, headers: HiveHeader(authHelper).headers()).responseJSON()
+            let response = AF.request(url, method: .get, encoding: JSONEncoding.default, headers: HiveHeader(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
             let errorCode = json["_error"]["code"].intValue
             guard errorCode != 404 else {
@@ -192,7 +192,7 @@ public class ServiceManager: NSObject{
     private func backupServiceInfoImp(_ tryAgain: Int) -> Promise<BackupUsingPlan> {
         return Promise<BackupUsingPlan> { resolver in
             let url = vaultUrl.backupVaultInfo()
-            let response = AF.request(url, method: .post, encoding: JSONEncoding.default, headers: HiveHeader(authHelper).headers()).responseJSON()
+            let response = AF.request(url, method: .get, encoding: JSONEncoding.default, headers: HiveHeader(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
             let errorCode = json["_error"]["code"].intValue
             guard errorCode != 404 else {

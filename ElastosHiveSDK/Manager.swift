@@ -96,7 +96,11 @@ public class Manager: NSObject{
             self.serviceManager.vaultServiceInfo().done { success in
                 resolver.fulfill(true)
             }.catch { error in
-                let e = error as! HiveError
+                let e = error as? HiveError
+                if e == nil {
+                    resolver.reject(error)
+                    return
+                }
                 switch e {
                 case .vaultNotFound(_): do {
                     resolver.fulfill(false)
@@ -114,7 +118,11 @@ public class Manager: NSObject{
             self.serviceManager.backupServiceInfo().done { success in
                 resolver.fulfill(true)
             }.catch { error in
-                let e = error as! HiveError
+                let e = error as? HiveError
+                if e == nil {
+                    resolver.reject(error)
+                    return
+                }
                 switch e {
                 case .vaultNotFound(_): do {
                     resolver.fulfill(false)
