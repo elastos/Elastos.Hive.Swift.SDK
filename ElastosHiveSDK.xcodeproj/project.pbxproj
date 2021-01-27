@@ -413,13 +413,6 @@
 			path = Payment;
 			sourceTree = "<group>";
 		};
-		111CA6D7252097CB0030D39C /* DID */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = DID;
-			sourceTree = "<group>";
-		};
 		111CA6E2252097DC0030D39C /* Externals */ = {
 			isa = PBXGroup;
 			children = (
@@ -511,7 +504,6 @@
 			children = (
 				11E05B0E25942D5300BF71B1 /* DIDHelper */,
 				111CA6E2252097DC0030D39C /* Externals */,
-				111CA6D7252097CB0030D39C /* DID */,
 				1170FB2825073CD60049E81D /* Resources */,
 				111D477B24EE4B0700B7462B /* Vault */,
 				1137942D227ED9AD004A1F65 /* Info.plist */,
