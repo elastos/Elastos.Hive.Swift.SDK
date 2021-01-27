@@ -6,7 +6,7 @@ import ElastosDIDSDK
 class ManagerTest: XCTestCase {
     private var manager: Manager?
     
-    func testCreateVault() {
+    func test_0_CreateVault() {
         let lock = XCTestExpectation(description: "wait for test.")
         manager?.createVault().done({ success in
             print(success)
@@ -18,7 +18,7 @@ class ManagerTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
     
-    func testCreateBackup() {
+    func test_1_CreateBackup() {
         let lock = XCTestExpectation(description: "wait for test.")
         manager?.createBackup().done({ success in
             print(success)
@@ -30,66 +30,70 @@ class ManagerTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
     
-//    func testDestroyVault() {
-//        let lock = XCTestExpectation(description: "wait for test.")
-//        manager?.destroyVault().done({ success in
-//            print(success)
-//            lock.fulfill()
-//        }).catch({ error in
-//            XCTFail()
-//            lock.fulfill()
-//        })
-//        self.wait(for: [lock], timeout: 1000.0)
-//    }
+    func test_2_VaultServiceInfo() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        manager?.vaultServiceInfo().done({ success in
+            print(success)
+            lock.fulfill()
+        }).catch({ error in
+            XCTFail()
+            lock.fulfill()
+        })
+        self.wait(for: [lock], timeout: 1000.0)
+    }
     
-//    func testFreezeVault() {
-//        let lock = XCTestExpectation(description: "wait for test.")
-//        manager?.freezeVault().done({ success in
-//            print(success)
-//            lock.fulfill()
-//        }).catch({ error in
-//            XCTFail()
-//            lock.fulfill()
-//        })
-//        self.wait(for: [lock], timeout: 1000.0)
-//    }
-    /*
-     @Test
-     public void testFreezeVault() {
-         CompletableFuture<Boolean> future = managerApi.freezeVault()
-                 .handle((vault, throwable) -> (null == throwable));
-
-         try {
-             assertTrue(future.get());
-             assertTrue(future.isCompletedExceptionally() == false);
-             assertTrue(future.isDone());
-         } catch (Exception e) {
-             e.printStackTrace();
-             fail();
-         }
-     }
-     
-     @Test
-     public void testDestroyVault() {
-         CompletableFuture<Boolean> future = managerApi.destroyVault()
-                 .handle((vault, throwable) -> (null == throwable));
-
-         try {
-             assertTrue(future.get());
-             assertTrue(future.isCompletedExceptionally() == false);
-             assertTrue(future.isDone());
-         } catch (Exception e) {
-             e.printStackTrace();
-             fail();
-         }
-     }
-     */
+    func test_3_BackupServiceInfo() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        manager?.backupServiceInfo().done({ success in
+            print(success)
+            lock.fulfill()
+        }).catch({ error in
+            XCTFail()
+            lock.fulfill()
+        })
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+    func test_4_DestroyVault() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        manager?.destroyVault().done({ success in
+            print(success)
+            lock.fulfill()
+        }).catch({ error in
+            XCTFail()
+            lock.fulfill()
+        })
+        self.wait(for: [lock], timeout: 1000.0)
+    }
     
+    func test_5_FreezeVault() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        manager?.freezeVault().done({ success in
+            print(success)
+            lock.fulfill()
+        }).catch({ error in
+            XCTFail()
+            lock.fulfill()
+        })
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+    
+    func test_6_UnfreezeVault() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        manager?.unfreezeVault().done({ success in
+            print(success)
+            lock.fulfill()
+        }).catch({ error in
+            XCTFail()
+            lock.fulfill()
+        })
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         do {
             Log.setLevel(.Debug)
-            user = try AppInstanceFactory.createUser1()
+            user = try AppInstanceFactory.createUser2()
             let lock = XCTestExpectation(description: "wait for test.")
             user?.client.getManager(user!.userFactoryOpt.ownerDid, user?.userFactoryOpt.provider).done{ manager in
 

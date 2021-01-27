@@ -67,9 +67,9 @@ class BackupTest: XCTestCase {
             user = try AppInstanceFactory.createUser2()
             let lock = XCTestExpectation(description: "wait for test.")
             
-            user!.client.getManager(user!.userFactoryOpt.ownerDid, user?.userFactoryOpt.provider).then { manager -> Promise<Bool> in
+            user!.client.getManager(user!.userFactoryOpt.ownerDid, user?.userFactoryOpt.provider).then { manager -> Promise<Backup> in
                 return manager.createBackup()
-            }.then { success -> Promise<Backup> in
+            }.then { backup -> Promise<Backup> in
                 return user!.client.getBackup(user!.userFactoryOpt.ownerDid, user?.userFactoryOpt.provider)
             }.done { [self] backup in
                 self.backup = (backup )
