@@ -49,6 +49,13 @@ public class PresentationInJWT: NSObject {
         return vc!.description
     }
     
+    public var targetHost: String {
+        return backupOptions.targetHost
+    }
+    
+    public var targetDid: String {
+        return backupOptions.targetDID
+    }
   /*func getAuthToken(_ jwtToken: String) throws -> String {
         let claims = try JwtParserBuilder().build().parseClaimsJwt(jwtToken).claims
         let iss = claims.getIssuer()

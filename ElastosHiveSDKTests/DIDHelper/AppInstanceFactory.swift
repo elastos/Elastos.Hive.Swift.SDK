@@ -35,6 +35,14 @@ public class AppInstanceFactory {
     var client: HiveClientHandle
     var userFactoryOpt: ClientOptions
 
+    public var targetHost: String {
+        return self.presentationInJWT.targetHost
+    }
+    
+    public var targetDid: String {
+        return self.presentationInJWT.targetDid
+    }
+    
     init(_ userDidOpt: AppOptions,
          _ appInstanceDidOpt: AppOptions,
          _ backupOptions: BackupOptions,

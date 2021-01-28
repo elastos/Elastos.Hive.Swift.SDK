@@ -9,16 +9,40 @@ class MigrationTest: XCTestCase {
     
     func testMigration() {
         let lock = XCTestExpectation(description: "wait for test.")
-        manager?.freezeVault().done({ success in
+        let userBackupAuthenticationHandler = UserBackupAuthenticationHandler(user!.presentationInJWT)
+        manager?.freezeVault().then({ [self] success -> Promise<Bool> in
+            return backup!.save(userBackupAuthenticationHandler)
+        }).then({ [self] success -> Promise<Backup> in
+            var loop = true
+            while loop {
+                Thread.sleep(forTimeInterval: 5.00)
+                self.backup!.state().done({ st in
+                    print(st)
+                    if st.rawValue == "stop" {
+                        loop = false
+                    }
+                }).catch({ error in
+                    XCTFail()
+                    lock.fulfill()
+                })
+            }
+            return user!.client.getBackup(user!.targetDid, user!.targetHost)
+        }).then({ [self] backup -> Promise<Bool> in
+            return manager!.createVault().then({ vault -> Promise<Bool> in
+                return backup.active()
+            })
+//            return backup.active()
+        }).done({ success in
             print(success)
+            XCTAssertTrue(success)
             lock.fulfill()
         }).catch({ error in
             XCTFail()
             lock.fulfill()
         })
-        self.wait(for: [lock], timeout: 1000.0)
+        self.wait(for: [lock], timeout: 1000000.0)
     }
-    
+
     override func setUpWithError() throws {
         do {
             Log.setLevel(.Debug)
@@ -44,73 +68,3 @@ class MigrationTest: XCTestCase {
     }
 }
 
-
-
-/*
- public class MigrationTest {
-     @Test
-     public void testMigration() {
-         CompletableFuture<Booleasn> future = managerApi.freezeVault()
-                 .thenComposeAsync(aBoolean -> {
-                     BackupAuthenticationHandler handler = new BackupAuthenticationHandler() {
-                         @Override
-                         public CompletableFuture<String> getAuthorization(String serviceDid) {
-                             return CompletableFuture.supplyAsync(() ->
-                                     factory.getBackupVc(serviceDid));
-                         }
-
-                         @Override
-                         public String getTargetHost() {
-                             return factory.getTargetHost();
-                         }
-
-                         @Override
-                         public String getTargetDid() {
-                             return factory.getTargetDid();
-                         }
-                     };
-                     return backupApi.save(handler);
-                 }).thenApplyAsync(aBoolean -> {
-                     for (; ; ) {
-                         try {
-                             Thread.sleep(10 * 1000);
-                         } catch (InterruptedException e) {
-                             e.printStackTrace();
-                         }
-                         State state = backupApi.getState().join();
-                         if (state == State.STOP) {
-                             return true;
-                         }
-                     }
-                 }).thenComposeAsync(aBoolean -> backupApi.active())
-                 .handleAsync((aBoolean, throwable) -> {
-                     if (null != throwable) {
-                         throwable.printStackTrace();
-                     }
-                     return (aBoolean && (null == throwable));
-                 });
-
-
-         try {
-             assertTrue(future.get());
-             assertTrue(future.isCompletedExceptionally() == false);
-             assertTrue(future.isDone());
-         } catch (Exception e) {
-             e.printStackTrace();
-             fail();
-         }
-     }
-
-
-     private static AppInstanceFactory factory;
-     static Backup backupApi;
-     private static Manager managerApi;
-
-     @BeforeClass
-     public static void setUp() {
-         factory = AppInstanceFactory.configSelector();
-         managerApi = factory.getManager();
-         backupApi = factory.getBackup();
-     }
- }
- */

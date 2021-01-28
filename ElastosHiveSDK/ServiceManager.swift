@@ -39,6 +39,7 @@ public class ServiceManager: NSObject{
     
     private func createVaultImp(_ tryAgain: Int) -> Promise<Bool> {
         return Promise<Bool> { resolver in
+//            authHelper.vaultUrl.resetVaultApi(baseUrl: "https://hive-testnet2.trinity-tech.io")
             let url = vaultUrl.createVault()
             let response = AF.request(url, method: .post, encoding: JSONEncoding.default, headers: HiveHeader(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)

@@ -65,7 +65,7 @@ class VaultApi: NSObject {
         if status == "ERR" {
             let errorCode = json["_error"]["code"].intValue
             let errorMessage = json["_error"]["message"].stringValue
-            if errorCode == 401 && errorMessage == "auth failed" && tryAgain < 1 {
+            if errorCode == 401 && (errorMessage == "auth failed" || errorMessage == "Backup backup_to_vault auth failed") && tryAgain < 1 {
                 return true
             } else {
                 throw HiveError.failure(des: HiveError.praseError(json))
