@@ -21,7 +21,7 @@ public var factory: AppInstanceFactory?
 class BackupTest: XCTestCase {
     private var client: HiveClientHandle?
     private var backup: Backup?
-    private var manager: Manager?
+    private var manager: Management?
     
     func testGetState() {
         let lock = XCTestExpectation(description: "wait for test.")
@@ -68,6 +68,7 @@ class BackupTest: XCTestCase {
             let lock = XCTestExpectation(description: "wait for test.")
             
             user!.client.getManager(user!.userFactoryOpt.ownerDid, user?.userFactoryOpt.provider).then { manager -> Promise<Backup> in
+                self.manager = manager
                 return manager.createBackup()
             }.then { backup -> Promise<Backup> in
                 return user!.client.getBackup(user!.userFactoryOpt.ownerDid, user?.userFactoryOpt.provider)

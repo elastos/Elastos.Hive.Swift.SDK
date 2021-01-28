@@ -160,14 +160,14 @@ public class HiveClientHandle: NSObject {
     ///   - ownerDid: The owner did related to target vault
     ///   - preferredProviderAddress: The preferred target provider address
     /// - Returns: A new Manager instance.
-    public func getManager(_ ownerDid: String, _ preferredProviderAddress: String?) -> Promise<Manager> {
-        return Promise<Manager> { resolver in
+    public func getManager(_ ownerDid: String, _ preferredProviderAddress: String?) -> Promise<Management> {
+        return Promise<Management> { resolver in
             _ = getVaultProvider(ownerDid, preferredProviderAddress).done{ provider in
                 let authHelper = VaultAuthHelper(self.context,
                                                  ownerDid,
                                                  provider,
                                                  self.authenticationAdapterImpl)
-                resolver.fulfill(Manager(authHelper, provider, ownerDid))
+                resolver.fulfill(Management(authHelper, provider, ownerDid))
             }.catch{ error in
                 resolver.reject(error)
             }
