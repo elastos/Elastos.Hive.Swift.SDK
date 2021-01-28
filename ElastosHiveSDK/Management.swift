@@ -27,12 +27,14 @@ public class Management: NSObject{
     private var ownerDid: String
     private var authHelper: VaultAuthHelper
     private var serviceManager: ServiceManager
+    private var _payment: Payment
     
     init(_ authHelper: VaultAuthHelper, _ providerAddress: String, _ ownerDid: String) {
         self.providerAddress = providerAddress
         self.authHelper = authHelper
         self.ownerDid = ownerDid
         self.serviceManager = ServiceManager(authHelper)
+        self._payment = Payment(authHelper)
     }
     
     public func createVault() -> Promise<Vault> {
@@ -91,7 +93,7 @@ public class Management: NSObject{
         return self.serviceManager.backupServiceInfo()
     }
 
-    private func checkVaultExist() -> Promise<Bool> {
+    public func checkVaultExist() -> Promise<Bool> {
         return Promise<Bool> { resolver in
             self.serviceManager.vaultServiceInfo().done { success in
                 resolver.fulfill(true)
@@ -113,7 +115,7 @@ public class Management: NSObject{
         }
     }
     
-    private func checkBackupExist() -> Promise<Bool> {
+    public func checkBackupExist() -> Promise<Bool> {
         return Promise<Bool> { resolver in
             self.serviceManager.backupServiceInfo().done { success in
                 resolver.fulfill(true)
@@ -133,5 +135,9 @@ public class Management: NSObject{
                 }
             }
         }
+    }
+    
+    public func payment() -> Payment {
+        return self._payment
     }
 }
