@@ -8,7 +8,7 @@ class UserContext: ApplicationContext {
     private var presentationInJWT: PresentationInJWT
     private var vault: Vault?
     private var backup: Backup?
-    private var manager: Manager?
+    private var manager: Management?
     
     init(_ option: ClientOptions, _ pjwt: PresentationInJWT) {
         self.option = option
