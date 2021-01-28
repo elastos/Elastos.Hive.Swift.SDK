@@ -103,5 +103,32 @@ public class Backup: NSObject{
             resolver.fulfill(true)
         }
     }
+    
+    public func active() -> Promise<Bool> {
+        return authHelper.checkValid().then { [self] _ -> Promise<Bool> in
+            return activeImp(0)
+        }
+    }
+    
+    private func activeImp(_ tryAgain: Int) -> Promise<Bool> {
+        return Promise<Bool> { resolver in
+//            vaultUrl.resetVaultApi(baseUrl: "https://hive-testnet2.trinity-tech.io")
+            let url = vaultUrl.activate()
+            let param: [String: Any] = [: ]
+            let response = AF.request(url, method: .post, parameters: param, encoding: JSONEncoding.default, headers: HiveHeader(authHelper).headers()).responseJSON()
+            let json = try VaultApi.handlerJsonResponse(response)
+            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            
+            if isRelogin {
+                try self.authHelper.signIn()
+                activeImp(1).done { success in
+                    resolver.fulfill(success)
+                }.catch { error in
+                    resolver.reject(error)
+                }
+            }
+            resolver.fulfill(true)
+        }
+    }
 }
 
