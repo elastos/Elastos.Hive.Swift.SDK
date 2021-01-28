@@ -116,8 +116,8 @@
 		116B2F4625B7CB9300635D97 /* BackupAuthenticationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116B2F4525B7CB9300635D97 /* BackupAuthenticationHandler.swift */; };
 		116B2F4725B7CB9300635D97 /* BackupAuthenticationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116B2F4525B7CB9300635D97 /* BackupAuthenticationHandler.swift */; };
 		116B2F4A25B8259900635D97 /* BackupTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116B2F4925B8259900635D97 /* BackupTest.swift */; };
-		116B2F4D25B8281B00635D97 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116B2F4C25B8281B00635D97 /* Manager.swift */; };
-		116B2F4E25B8281B00635D97 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116B2F4C25B8281B00635D97 /* Manager.swift */; };
+		116B2F4D25B8281B00635D97 /* Management.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116B2F4C25B8281B00635D97 /* Management.swift */; };
+		116B2F4E25B8281B00635D97 /* Management.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116B2F4C25B8281B00635D97 /* Management.swift */; };
 		116B2F5125B8292E00635D97 /* ServiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116B2F5025B8292E00635D97 /* ServiceManager.swift */; };
 		116B2F5225B8292E00635D97 /* ServiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116B2F5025B8292E00635D97 /* ServiceManager.swift */; };
 		116B2F6225B8302200635D97 /* BackupUsingPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116B2F6125B8302200635D97 /* BackupUsingPlan.swift */; };
@@ -194,6 +194,7 @@
 		11ED682A22FF1078004C17D0 /* ElastosHiveSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED682922FF1077004C17D0 /* ElastosHiveSDK.swift */; };
 		11ED682B22FF1078004C17D0 /* ElastosHiveSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED682922FF1077004C17D0 /* ElastosHiveSDK.swift */; };
 		11FD496D2561AC9B00A108D2 /* DownloadExecutable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FD496C2561AC9B00A108D2 /* DownloadExecutable.swift */; };
+		11FD961825C1412B0027FC80 /* MigrationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FD961725C1412B0027FC80 /* MigrationTest.swift */; };
 		6DDA50FA35E7A18E5EF0C90E /* Pods_ElastosHiveSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D17AD36AC88E073FD2B2D930 /* Pods_ElastosHiveSDK.framework */; };
 		A39C4980225399860027BDF9 /* ElastosHiveSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = A39C4972225399860027BDF9 /* ElastosHiveSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A3D9D41323C9671C003B602E /* FilesProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D9D41023C9671C003B602E /* FilesProtocol.swift */; };
@@ -308,7 +309,7 @@
 		116B2F3425B6CFE300635D97 /* State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
 		116B2F4525B7CB9300635D97 /* BackupAuthenticationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupAuthenticationHandler.swift; sourceTree = "<group>"; };
 		116B2F4925B8259900635D97 /* BackupTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupTest.swift; sourceTree = "<group>"; };
-		116B2F4C25B8281B00635D97 /* Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manager.swift; sourceTree = "<group>"; };
+		116B2F4C25B8281B00635D97 /* Management.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Management.swift; sourceTree = "<group>"; };
 		116B2F5025B8292E00635D97 /* ServiceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceManager.swift; sourceTree = "<group>"; };
 		116B2F6125B8302200635D97 /* BackupUsingPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupUsingPlan.swift; sourceTree = "<group>"; };
 		116B2F6625BA8EF200635D97 /* ManagerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagerTest.swift; sourceTree = "<group>"; };
@@ -356,6 +357,7 @@
 		11E92CEC2560E228007EFC95 /* HashExecutable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashExecutable.swift; sourceTree = "<group>"; };
 		11ED682922FF1077004C17D0 /* ElastosHiveSDK.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElastosHiveSDK.swift; sourceTree = "<group>"; };
 		11FD496C2561AC9B00A108D2 /* DownloadExecutable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadExecutable.swift; sourceTree = "<group>"; };
+		11FD961725C1412B0027FC80 /* MigrationTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrationTest.swift; sourceTree = "<group>"; };
 		13C6D592C180032E4F31BEF6 /* Pods-ElastosHiveSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDK.debug.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDK/Pods-ElastosHiveSDK.debug.xcconfig"; sourceTree = "<group>"; };
 		2368C8CBAE94193EAF7DB87D /* Pods-ElastosHiveSDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDKTests.debug.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDKTests/Pods-ElastosHiveSDKTests.debug.xcconfig"; sourceTree = "<group>"; };
 		556E8D39E54EDBDFA4DEAD42 /* Pods-TestHost.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestHost.release.xcconfig"; path = "Target Support Files/Pods-TestHost/Pods-TestHost.release.xcconfig"; sourceTree = "<group>"; };
@@ -426,6 +428,7 @@
 				111CA54A252027760030D39C /* TestError.swift */,
 				116B2F4925B8259900635D97 /* BackupTest.swift */,
 				116B2F6625BA8EF200635D97 /* ManagerTest.swift */,
+				11FD961725C1412B0027FC80 /* MigrationTest.swift */,
 				1170FB19250507C70049E81D /* DBTest.swift */,
 				118F2D82250F1A7200447A0A /* ScriptTest.swift */,
 				118F2DAC25105C3700447A0A /* FileTest.swift */,
@@ -708,7 +711,7 @@
 				111D479224F4E2C300B7462B /* VaultAuthInfoStoreImpl.swift */,
 				1127463224FE3386007D6356 /* Script.swift */,
 				116B2F2F25B6C0F200635D97 /* Backup.swift */,
-				116B2F4C25B8281B00635D97 /* Manager.swift */,
+				116B2F4C25B8281B00635D97 /* Management.swift */,
 				116B2F5025B8292E00635D97 /* ServiceManager.swift */,
 				116B2F4525B7CB9300635D97 /* BackupAuthenticationHandler.swift */,
 				11E05B0225935B2E00BF71B1 /* SdkVersion.swift */,
@@ -967,6 +970,7 @@
 				118F2DAD25105C3700447A0A /* FileTest.swift in Sources */,
 				111CA54B252027760030D39C /* TestError.swift in Sources */,
 				116B2F4A25B8259900635D97 /* BackupTest.swift in Sources */,
+				11FD961825C1412B0027FC80 /* MigrationTest.swift in Sources */,
 				116B2F6725BA8EF200635D97 /* ManagerTest.swift in Sources */,
 				118F2D85250F1ABA00447A0A /* Constance.swift in Sources */,
 				118F2D83250F1A7200447A0A /* ScriptTest.swift in Sources */,
@@ -1017,7 +1021,7 @@
 				115E82F1251A4553004DCB1E /* RegularExpression.swift in Sources */,
 				111D477A24ED0C1200B7462B /* VaultAuthHelper.swift in Sources */,
 				111D47FB24F7A79800B7462B /* Condition.swift in Sources */,
-				116B2F4E25B8281B00635D97 /* Manager.swift in Sources */,
+				116B2F4E25B8281B00635D97 /* Management.swift in Sources */,
 				111D478F24F399AC00B7462B /* VaultApi.swift in Sources */,
 				111D47E724F7927D00B7462B /* InsertManyResult.swift in Sources */,
 				111D47E424F7910100B7462B /* UpdateOptions.swift in Sources */,
@@ -1116,7 +1120,7 @@
 				111D47E624F7927D00B7462B /* InsertManyResult.swift in Sources */,
 				1112421F2579E5CC002BFAEB /* PaymentSettings.swift in Sources */,
 				A3D9D41623C96DA1003B602E /* KeyValuesProtocol.swift in Sources */,
-				116B2F4D25B8281B00635D97 /* Manager.swift in Sources */,
+				116B2F4D25B8281B00635D97 /* Management.swift in Sources */,
 				118F2D99250F2CF400447A0A /* DbInsertQuery.swift in Sources */,
 				118F2D8D250F28BA00447A0A /* RawExecutable.swift in Sources */,
 				111242212579E5CC002BFAEB /* UsingPlan.swift in Sources */,

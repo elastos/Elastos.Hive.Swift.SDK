@@ -4,7 +4,7 @@ import XCTest
 import ElastosDIDSDK
 
 class ManagerTest: XCTestCase {
-    private var manager: Manager?
+    private var manager: Management?
     
     func test_0_CreateVault() {
         let lock = XCTestExpectation(description: "wait for test.")

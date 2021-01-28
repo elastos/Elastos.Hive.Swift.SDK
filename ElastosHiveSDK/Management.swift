@@ -22,7 +22,7 @@
 
 import Foundation
 
-public class Manager: NSObject{
+public class Management: NSObject{
     private var providerAddress: String
     private var ownerDid: String
     private var authHelper: VaultAuthHelper
