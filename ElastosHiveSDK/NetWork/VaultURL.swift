@@ -146,6 +146,11 @@ class VaultURL {
         return baseUrl + "/api/v1/scripting/run_script_download/\(transactionId)"
     }
     
+    func callScriptUrl(_ targetDid: String, _ appDid: String
+                        , _ scriptName: String, _ params: String) -> String {
+        return baseUrl + "/api/v1/scripting/run_script_url/" + targetDid + "@" + appDid + "/" + scriptName + "?params=" + params.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+    }
+    
     func createFreeVault() -> String {
         return baseUrl + "/api/v1/service/vault/create"
     }

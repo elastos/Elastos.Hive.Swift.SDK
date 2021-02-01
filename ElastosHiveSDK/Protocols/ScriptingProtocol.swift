@@ -44,6 +44,12 @@ public protocol ScriptingProtocol {
     ///   - resultType: String、 Data、 JSON、 Dictionry<String, Any>
     func callScript<T>(_ name: String, _ params: [String: Any]?, _ appDid: String?, _ resultType: T.Type) -> Promise<T>
     
+    /// Executes a previously registered server side script with a direct URL where the values can be passed as part of the query. Vault owner or external users are allowed to call scripts on someone's vault.
+    /// - Parameters:
+    ///   - name: The call's script name
+    ///   - resultType: String、 Data、 JSON、 Dictionry<String, Any>
+    func callScriptUrl<T>(_ name: String, _ params: String, _ appDid: String, _ resultType: T.Type) -> Promise<T>
+    
     /// Run a script to upload a file NOTE:
     /// The upload works a bit differently compared to other types of executable queries
     /// because there are two steps to this executable.
