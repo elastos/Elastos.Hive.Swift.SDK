@@ -23,6 +23,7 @@
 import Foundation
 
 public class Script: ScriptingProtocol {
+
     private static let TAG = "ScriptClient"
     private var authHelper: VaultAuthHelper
     private var vaultUrl: VaultURL
@@ -113,36 +114,73 @@ public class Script: ScriptingProtocol {
                     resolver.reject(error)
                 }
             }
-            // The String type
-            if resultType.self == String.self {
-                let dic = json.dictionaryObject as Any
-                let checker = JSONSerialization.isValidJSONObject(dic)
-                guard checker else {
-                    throw HiveError.jsonSerializationInvalidType(des: "HiveSDK serializate: JSONSerialization Invalid type in JSON.")
-                }
-                let data = try JSONSerialization.data(withJSONObject: dic, options: [])
-                let str = String(data: data, encoding: String.Encoding.utf8)
-                resolver.fulfill(str as! T)
+            resolver.fulfill(try handleResult(json, resultType))
+        }
+    }
+    
+    public func callScriptUrl<T>(_ name: String, _ params: String, _ appDid: String, _ resultType: T.Type) -> Promise<T> {
+        return self.authHelper.checkValid().then { _ -> Promise<T> in
+            return self.callScriptUrlImp(name, params, appDid, resultType, 0)
+        }
+    }
+    
+    private func callScriptUrlImp<T>(_ name: String, _ params: String, _ appDid: String, _ resultType: T.Type, _ tryAgain: Int) -> Promise<T> {
+        return Promise<T> { resolver in
+            let targetDid = self.authHelper.ownerDid
+            guard let _ = targetDid else {
+                throw HiveError.IllegalArgument(des: "targetDid is nil.")
             }
-            // The Dictionary type
-            else if resultType.self == Dictionary<String, Any>.self {
-                let dic = json.dictionaryObject
-                resolver.fulfill(dic as! T)
+            let url = vaultUrl.callScriptUrl(targetDid!, appDid, name, params)
+            let response = AF.request(url,
+                                method: .get,
+                                encoding: JSONEncoding.default,
+                                headers: HiveHeader(authHelper).headers()).responseData()
+            print(response)
+//                .responseJSON()
+//            let json = try VaultApi.handlerJsonResponse(response)
+//            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+//            if isRelogin {
+//                try self.authHelper.signIn()
+//                callScriptUrlImp(name, params, appDid, resultType, 1).done { result in
+//                    resolver.fulfill(result)
+//                }.catch { error in
+//                    resolver.reject(error)
+//                }
+//            }
+//            resolver.fulfill(try handleResult(json, resultType))
+        }
+    }
+
+    private func handleResult<T>(_ json: JSON, _ resultType: T.Type) throws -> T {
+        // The String type
+        if resultType.self == String.self {
+            let dic = json.dictionaryObject as Any
+            let checker = JSONSerialization.isValidJSONObject(dic)
+            guard checker else {
+                throw HiveError.jsonSerializationInvalidType(des: "HiveSDK serializate: JSONSerialization Invalid type in JSON.")
             }
-            // The JSON type
-            else if resultType.self == JSON.self {
-                resolver.fulfill(json as! T)
+            let data = try JSONSerialization.data(withJSONObject: dic, options: [])
+            let str = String(data: data, encoding: String.Encoding.utf8)
+            return str as! T
+        }
+        // The Dictionary type
+        else if resultType.self == Dictionary<String, Any>.self {
+            let dic = json.dictionaryObject
+            return dic as! T
+        }
+        // The JSON type
+        else if resultType.self == JSON.self {
+            return json as! T
+        }
+        // the Data type
+        else {
+            let result = json.dictionaryObject as Any
+            let checker = JSONSerialization.isValidJSONObject(result)
+            guard checker else {
+                throw HiveError.jsonSerializationInvalidType(des: "HiveSDK serializate: JSONSerialization Invalid type in JSON.")
             }
-            // the Data type
-            else {
-                let result = json.dictionaryObject as Any
-                let checker = JSONSerialization.isValidJSONObject(result)
-                guard checker else {
-                    throw HiveError.jsonSerializationInvalidType(des: "HiveSDK serializate: JSONSerialization Invalid type in JSON.")
-                }
-                let data = try JSONSerialization.data(withJSONObject: result, options: [])
-                resolver.fulfill(data as! T)
-            }
+            let data = try JSONSerialization.data(withJSONObject: result, options: [])
+            return data as! T
         }
     }
     
