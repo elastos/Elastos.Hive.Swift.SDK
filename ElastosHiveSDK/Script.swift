@@ -134,20 +134,18 @@ public class Script: ScriptingProtocol {
             let response = AF.request(url,
                                 method: .get,
                                 encoding: JSONEncoding.default,
-                                headers: HiveHeader(authHelper).headers()).responseData()
-            print(response)
-//                .responseJSON()
-//            let json = try VaultApi.handlerJsonResponse(response)
-//            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
-//            if isRelogin {
-//                try self.authHelper.signIn()
-//                callScriptUrlImp(name, params, appDid, resultType, 1).done { result in
-//                    resolver.fulfill(result)
-//                }.catch { error in
-//                    resolver.reject(error)
-//                }
-//            }
-//            resolver.fulfill(try handleResult(json, resultType))
+                                headers: HiveHeader(authHelper).headers()).responseJSON()
+            let json = try VaultApi.handlerJsonResponse(response)
+            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+            if isRelogin {
+                try self.authHelper.signIn()
+                callScriptUrlImp(name, params, appDid, resultType, 1).done { result in
+                    resolver.fulfill(result)
+                }.catch { error in
+                    resolver.reject(error)
+                }
+            }
+            resolver.fulfill(try handleResult(json, resultType))
         }
     }
 
