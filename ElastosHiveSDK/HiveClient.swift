@@ -170,6 +170,58 @@ public class HiveClientHandle: NSObject {
             }
         }
     }
+    
+    /// run script by hive url
+    /// - Parameters:
+    ///   - scriptUrl: scriptUrl hive://target_did@target_app_did/script_name?params={key=value}
+    ///   - resultType: resultType
+    /// - Returns:
+    public func callScriptUrl<T>(_ scriptUrl: String, _ resultType: T.Type) -> Promise<T> {
+        return parseHiveURL(scriptUrl).then { info -> Promise<T> in
+            return info.callScript(resultType)
+        }
+    }
+    
+    /// Convenient method that first calls a script by url using callScriptURL(), and expects the
+    /// JSON output to contain a file download information. If this is the case, the file download is
+    /// starting and a file reader is returned.
+    public func downloadFileByScriptUrl(_ scriptUrl: String) -> Promise<FileReader> {
+        var hiveUrlInfo: HiveURLInfo?
+        var txId: String = ""
+        var scriptName = ""
+        return parseHiveURL(scriptUrl).then { [self] hiveURLInfo -> Promise<JSON> in
+            hiveUrlInfo = hiveURLInfo
+            scriptName = hiveURLInfo.deserialize(scriptUrl).scriptName
+            return callScriptUrl(scriptUrl, JSON.self)
+        }.then { json -> Promise<Vault> in
+            txId = json[scriptName]["transaction_id"].stringValue
+            return hiveUrlInfo!.getVault()
+        }.then { vault -> Promise<FileReader> in
+            return vault.scripting.downloadFile(txId)
+        }
+    }
+
+    /// Parses a Hive standard url into a url info that can later be executed to get the result or the
+    /// target url.
+    ///
+    /// For example, later calling a url such as ...
+    /// hive://userdid:appdid/getAvatar
+    ///
+    /// ... results in a call to the "getAvatar" script, previously registered by "userdid" on his vault,
+    /// in the "appdid" scope. This is similar to calling:
+    ///  hiveClient.getVault(userdid).getScripting().call("getAvatar");
+    ///
+    ///  Usage example (assuming the url is a call to a getAvatar script that contains a FileDownload
+    ///  executable named "download"):
+    ///
+    ///  - let hiveURLInfo = hiveclient.parseHiveURL(urlstring)
+    ///  - let scriptOutput = await hiveURLInfo.callScript();
+    ///  - hiveURLInfo.getVault().getScripting().downloadFile(scriptOutput.items["download"].getTransferID())
+    public func parseHiveURL(_ scriptUrl: String) -> Promise<HiveURLInfo> {
+        return Promise<HiveURLInfo> { resolver in
+            resolver.fulfill(HiveURLInfo(scriptUrl, self, context, authenticationAdapterImpl))
+        }
+    }
 }
 
 public class AuthenticationAdapterImpl: AuthenticationAdapter {

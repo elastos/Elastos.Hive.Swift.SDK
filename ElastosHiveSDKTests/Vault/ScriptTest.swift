@@ -312,25 +312,6 @@ class ScriptTest: XCTestCase {
         self.wait(for: [lock], timeout: 10000.0)
     }
 
-    func test17_callScriptUrl() {
-        let hashExecutable = HashExecutable(name: "file_hash", path: "$params.path")
-        let propertiesExecutable = PropertiesExecutable(name: "file_properties", path: "$params.path")
-        let executable = AggregatedExecutable("file_properties_and_hash", [hashExecutable, propertiesExecutable])
-        let lock = XCTestExpectation(description: "wait for test.")
-        scripting!.registerScript("get_file_info", executable, false, false).then { [self] success -> Promise<String> in
-            let params = "{\"group_id\":{\"$oid\":\"5f497bb83bd36ab235d82e6a\"},\"path\":\"test.txt\"}"
-            return scripting!.callScriptUrl("get_file_info", params, "appId", String.self)
-        }.done { resultStr in
-            print(resultStr)
-            lock.fulfill()
-        }
-        .catch { error in
-            XCTFail()
-            lock.fulfill()
-        }
-        self.wait(for: [lock], timeout: 10000.0)
-    }
-
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         do {
