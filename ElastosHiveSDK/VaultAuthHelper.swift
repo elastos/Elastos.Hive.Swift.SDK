@@ -46,11 +46,12 @@ public class VaultAuthHelper: ConnectHelper {
     var vaultUrl: VaultURL
     private var _connectState: Bool = false
     private var _persistent: Persistent
-    private var _nodeUrl: String
+    private var _endPoint: String
 
     private var context: ApplicationContext
-    private var authenticationAdapterImpl: AuthenticationAdapterImpl
-
+    private var authenticationAdapter: AuthenticationAdapter
+    private var _storePath: String
+    
     public var ownerDid: String? {
         return _ownerDid
     }
@@ -86,14 +87,19 @@ public class VaultAuthHelper: ConnectHelper {
     public func setServiceDid(_ serviceDid: String) {
         _serviceDid = serviceDid
     }
+    
+    public var storePath: String {
+        return _storePath
+    }
 
-    public init(_ context: ApplicationContext, _ ownerDid: String, _ nodeUrl: String, _ shim: AuthenticationAdapterImpl) {
+    public init(_ context: ApplicationContext, _ ownerDid: String, _ endPoint: String, _ adapter: AuthenticationAdapter) {
         self.context = context
         self._ownerDid = ownerDid
-        self._nodeUrl = nodeUrl
-        self.authenticationAdapterImpl = shim
-        self._persistent = VaultAuthInfoStoreImpl(ownerDid, nodeUrl, self.context.getLocalDataDir())
-        self.vaultUrl = VaultURL(_nodeUrl)
+        self._endPoint = endPoint
+        self.authenticationAdapter = adapter
+        self._storePath = self.context.getLocalDataDir()
+        self._persistent = AuthPersistentImpl(ownerDid, endPoint, _storePath)
+        self.vaultUrl = VaultURL(_endPoint)
     }
     
     public override func checkValid() -> Promise<Void> {
@@ -143,7 +149,7 @@ public class VaultAuthHelper: ConnectHelper {
         let semaphore: DispatchSemaphore = DispatchSemaphore(value: 0)
         var err: String = ""
         var authToken = ""
-        authenticationAdapterImpl.authenticate(self.context, challenge).done { aToken in
+        authenticationAdapter.authenticate(self.context, challenge).done { aToken in
             authToken = aToken
             semaphore.signal()
         }.catch { error in
