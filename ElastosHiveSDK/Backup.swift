@@ -63,7 +63,7 @@ public class Backup: NSObject{
     
     public func save(_ handler: BackupAuthenticationHandler) -> Promise<Bool> {
         return authHelper.checkValid().then { [self] _ -> Promise<String> in
-            return handler.authorization(authHelper.serviceDid!)
+            return try getCredential(handler, "store")
         }.then { credential -> Promise<Bool> in
             return self.saveImp(credential, 0)
         }
@@ -84,28 +84,44 @@ public class Backup: NSObject{
         }
     }
     
-    private func getCredential(_ handler: BackupAuthenticationHandler, _ type: String) -> Promise<String> {
-        return Promise<String> { resolver in
-            let exTargetDid = handler.targetDid()
-            let exTargetHost = handler.targetHost()
-            self.targetDid = exTargetDid
-            self.targetHost = exTargetHost
-            self.type = type
-            let cacheCredential = try restoreCredential()
+    private func getCredential(_ handler: BackupAuthenticationHandler, _ type: String) throws -> Promise<String> {
+        let exTargetDid = handler.targetDid()
+        let exTargetHost = handler.targetHost()
+        self.targetDid = exTargetDid
+        self.targetHost = exTargetHost
+        self.type = type
+        let cacheCredential = try restoreCredential()
+        
+        if try (cacheCredential != "" && !checkExpired(cacheCredential)) {
+            return Promise.value(cacheCredential)
         }
+        return handler.authorization(authHelper.serviceDid!)
     }
     
-    private func restoreCredential()throws -> String {
+    private func checkExpired(_ cacheCredential: String) throws -> Bool {
+        let vc = try VerifiableCredential.fromJson(cacheCredential)
+        
+        return vc.isExpired
+    }
+    
+    private func restoreCredential() throws -> String {
         let persistent = BackupPersistentImpl(self.targetHost!, self.targetDid!, self.type!, self.authHelper.storePath)
         let json = try JSON(persistent.parseFrom())
         let credential_key = json["credential_key"].stringValue
         
         return credential_key
     }
+    
+    private func storeCredential(_ credential: String) throws {
+        let persistent = BackupPersistentImpl(self.targetHost!, self.targetDid!, self.type!, self.authHelper.storePath)
+        var json = try persistent.parseFrom()
+        json["credential_key"] = credential
+        try persistent.upateContent(json)
+    }
 
     public func restore(_ handler: BackupAuthenticationHandler) -> Promise<Bool> {
         return authHelper.checkValid().then { [self] _ -> Promise<String> in
-            return handler.authorization(authHelper.serviceDid!)
+            return try getCredential(handler, "restore")
         }.then { credential -> Promise<Bool> in
             return self.restoreImp(credential, 0)
         }
@@ -122,6 +138,7 @@ public class Backup: NSObject{
             if isRelogin {
                 try self.authHelper.signIn()
             }
+            try storeCredential(credential)
             resolver.fulfill(true)
         }
     }
