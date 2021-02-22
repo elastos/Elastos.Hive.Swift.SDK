@@ -24,5 +24,13 @@ import Foundation
 
 public protocol BackupAuthenticationHandler {
     
+    /// This is the interface to make authorization from users, and it would be provided by application.
+    /// - Parameter serviceDid: source service did
     func authorization(_ serviceDid: String) -> Promise<String>
+    
+    /// backup target host
+    func targetHost() -> String
+
+    /// backup target did
+    func targetDid() -> String
 }

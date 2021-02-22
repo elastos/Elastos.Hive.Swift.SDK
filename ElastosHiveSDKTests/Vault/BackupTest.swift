@@ -4,6 +4,14 @@ import XCTest
 import ElastosDIDSDK
 
 public class UserBackupAuthenticationHandler: BackupAuthenticationHandler {
+    public func targetHost() -> String {
+        return ""
+    }
+    
+    public func targetDid() -> String {
+        return ""
+    }
+    
     private var presentationInJWT: PresentationInJWT
 
     init(_ presentationInJWT: PresentationInJWT) {
