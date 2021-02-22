@@ -25,6 +25,9 @@ import Foundation
 public class Backup: NSObject{
     var authHelper: VaultAuthHelper
     private var vaultUrl: VaultURL
+    private var targetDid: String?
+    private var targetHost: String?
+    private var type: String?
 
     init(_ authHelper: VaultAuthHelper) {
         self.authHelper = authHelper
@@ -81,6 +84,25 @@ public class Backup: NSObject{
         }
     }
     
+    private func getCredential(_ handler: BackupAuthenticationHandler, _ type: String) -> Promise<String> {
+        return Promise<String> { resolver in
+            let exTargetDid = handler.targetDid()
+            let exTargetHost = handler.targetHost()
+            self.targetDid = exTargetDid
+            self.targetHost = exTargetHost
+            self.type = type
+            let cacheCredential = try restoreCredential()
+        }
+    }
+    
+    private func restoreCredential()throws -> String {
+        let persistent = BackupPersistentImpl(self.targetHost!, self.targetDid!, self.type!, self.authHelper.storePath)
+        let json = try JSON(persistent.parseFrom())
+        let credential_key = json["credential_key"].stringValue
+        
+        return credential_key
+    }
+
     public func restore(_ handler: BackupAuthenticationHandler) -> Promise<Bool> {
         return authHelper.checkValid().then { [self] _ -> Promise<String> in
             return handler.authorization(authHelper.serviceDid!)
