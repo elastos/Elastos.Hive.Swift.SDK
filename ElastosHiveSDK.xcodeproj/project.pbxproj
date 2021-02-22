@@ -96,7 +96,6 @@
 		1147720A23F678BD00C7C36F /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1147720823F678BD00C7C36F /* SwiftyJSON.swift */; };
 		11496C65251B1E37002DE4F0 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11496C64251B1E37002DE4F0 /* Date.swift */; };
 		11496C66251B1E37002DE4F0 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11496C64251B1E37002DE4F0 /* Date.swift */; };
-		114E612D2510DD24003673FF /* test.txt in Resources */ = {isa = PBXBuildFile; fileRef = 114E612C2510DD23003673FF /* test.txt */; };
 		1154C309255E36D500FE1E53 /* AppInstanceFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1154C308255E36D500FE1E53 /* AppInstanceFactory.swift */; };
 		115E82E7251A4495004DCB1E /* MinKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115E82E6251A4495004DCB1E /* MinKey.swift */; };
 		115E82E8251A4495004DCB1E /* MinKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115E82E6251A4495004DCB1E /* MinKey.swift */; };
@@ -136,7 +135,6 @@
 		1170FB142502019C0049E81D /* Vault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FB132502019C0049E81D /* Vault.swift */; };
 		1170FB152502019C0049E81D /* Vault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FB132502019C0049E81D /* Vault.swift */; };
 		1170FB1A250507C70049E81D /* DBTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FB19250507C70049E81D /* DBTest.swift */; };
-		1170FB9F25073D360049E81D /* ijUnD4KeRpeBUFmcEDCbhxMTJRzUYCQCZM in Resources */ = {isa = PBXBuildFile; fileRef = 1170FB9E25073D360049E81D /* ijUnD4KeRpeBUFmcEDCbhxMTJRzUYCQCZM */; };
 		1170FBA12508D35A0049E81D /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FBA02508D35A0049E81D /* Header.swift */; };
 		1170FBA22508D35B0049E81D /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FBA02508D35A0049E81D /* Header.swift */; };
 		11724C0E2589E0E200B27285 /* AuthenticationAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11724C0D2589E0E200B27285 /* AuthenticationAdapter.swift */; };
@@ -193,6 +191,15 @@
 		11E92CED2560E228007EFC95 /* HashExecutable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E92CEC2560E228007EFC95 /* HashExecutable.swift */; };
 		11ED682A22FF1078004C17D0 /* ElastosHiveSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED682922FF1077004C17D0 /* ElastosHiveSDK.swift */; };
 		11ED682B22FF1078004C17D0 /* ElastosHiveSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED682922FF1077004C17D0 /* ElastosHiveSDK.swift */; };
+		11F368E925E3A6190035FA7E /* MainNetUser.conf in Resources */ = {isa = PBXBuildFile; fileRef = 11F368D825E3A6180035FA7E /* MainNetUser.conf */; };
+		11F368EA25E3A6190035FA7E /* DevelopingNode.conf in Resources */ = {isa = PBXBuildFile; fileRef = 11F368D925E3A6180035FA7E /* DevelopingNode.conf */; };
+		11F368EE25E3A6190035FA7E /* Config.backup in Resources */ = {isa = PBXBuildFile; fileRef = 11F368E025E3A6180035FA7E /* Config.backup */; };
+		11F368EF25E3A6190035FA7E /* MainNetApp.conf in Resources */ = {isa = PBXBuildFile; fileRef = 11F368E125E3A6180035FA7E /* MainNetApp.conf */; };
+		11F368F025E3A6190035FA7E /* LocalNode.conf in Resources */ = {isa = PBXBuildFile; fileRef = 11F368E225E3A6180035FA7E /* LocalNode.conf */; };
+		11F368F125E3A6190035FA7E /* TestNetUser.conf in Resources */ = {isa = PBXBuildFile; fileRef = 11F368E325E3A6180035FA7E /* TestNetUser.conf */; };
+		11F368F225E3A6190035FA7E /* version.txt in Resources */ = {isa = PBXBuildFile; fileRef = 11F368E425E3A6190035FA7E /* version.txt */; };
+		11F368F325E3A6190035FA7E /* TestNetApp.conf in Resources */ = {isa = PBXBuildFile; fileRef = 11F368E525E3A6190035FA7E /* TestNetApp.conf */; };
+		11F368F425E3A6190035FA7E /* ProductionNode.conf in Resources */ = {isa = PBXBuildFile; fileRef = 11F368E625E3A6190035FA7E /* ProductionNode.conf */; };
 		11FD496D2561AC9B00A108D2 /* DownloadExecutable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FD496C2561AC9B00A108D2 /* DownloadExecutable.swift */; };
 		11FD961825C1412B0027FC80 /* MigrationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FD961725C1412B0027FC80 /* MigrationTest.swift */; };
 		6DDA50FA35E7A18E5EF0C90E /* Pods_ElastosHiveSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D17AD36AC88E073FD2B2D930 /* Pods_ElastosHiveSDK.framework */; };
@@ -297,7 +304,6 @@
 		11474831255E291D00D158B7 /* PresentationInJWT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationInJWT.swift; sourceTree = "<group>"; };
 		1147720823F678BD00C7C36F /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		11496C64251B1E37002DE4F0 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
-		114E612C2510DD23003673FF /* test.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test.txt; sourceTree = "<group>"; };
 		1154C308255E36D500FE1E53 /* AppInstanceFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInstanceFactory.swift; sourceTree = "<group>"; };
 		115E82E6251A4495004DCB1E /* MinKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinKey.swift; sourceTree = "<group>"; };
 		115E82E9251A44AA004DCB1E /* MaxKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaxKey.swift; sourceTree = "<group>"; };
@@ -320,7 +326,6 @@
 		1170FB102501D21C0049E81D /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		1170FB132502019C0049E81D /* Vault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vault.swift; sourceTree = "<group>"; };
 		1170FB19250507C70049E81D /* DBTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBTest.swift; sourceTree = "<group>"; };
-		1170FB9E25073D360049E81D /* ijUnD4KeRpeBUFmcEDCbhxMTJRzUYCQCZM */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ijUnD4KeRpeBUFmcEDCbhxMTJRzUYCQCZM; sourceTree = "<group>"; };
 		1170FBA02508D35A0049E81D /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 		11724C0D2589E0E200B27285 /* AuthenticationAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationAdapter.swift; sourceTree = "<group>"; };
 		11724C102589E13700B27285 /* ApplicationContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationContext.swift; sourceTree = "<group>"; };
@@ -356,6 +361,15 @@
 		11E92CE82560E1D4007EFC95 /* PropertiesExecutable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertiesExecutable.swift; sourceTree = "<group>"; };
 		11E92CEC2560E228007EFC95 /* HashExecutable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashExecutable.swift; sourceTree = "<group>"; };
 		11ED682922FF1077004C17D0 /* ElastosHiveSDK.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElastosHiveSDK.swift; sourceTree = "<group>"; };
+		11F368D825E3A6180035FA7E /* MainNetUser.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MainNetUser.conf; sourceTree = "<group>"; };
+		11F368D925E3A6180035FA7E /* DevelopingNode.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = DevelopingNode.conf; sourceTree = "<group>"; };
+		11F368E025E3A6180035FA7E /* Config.backup */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Config.backup; sourceTree = "<group>"; };
+		11F368E125E3A6180035FA7E /* MainNetApp.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MainNetApp.conf; sourceTree = "<group>"; };
+		11F368E225E3A6180035FA7E /* LocalNode.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LocalNode.conf; sourceTree = "<group>"; };
+		11F368E325E3A6180035FA7E /* TestNetUser.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TestNetUser.conf; sourceTree = "<group>"; };
+		11F368E425E3A6190035FA7E /* version.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = version.txt; sourceTree = "<group>"; };
+		11F368E525E3A6190035FA7E /* TestNetApp.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TestNetApp.conf; sourceTree = "<group>"; };
+		11F368E625E3A6190035FA7E /* ProductionNode.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ProductionNode.conf; sourceTree = "<group>"; };
 		11FD496C2561AC9B00A108D2 /* DownloadExecutable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadExecutable.swift; sourceTree = "<group>"; };
 		11FD961725C1412B0027FC80 /* MigrationTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrationTest.swift; sourceTree = "<group>"; };
 		13C6D592C180032E4F31BEF6 /* Pods-ElastosHiveSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDK.debug.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDK/Pods-ElastosHiveSDK.debug.xcconfig"; sourceTree = "<group>"; };
@@ -562,8 +576,16 @@
 		1170FB2825073CD60049E81D /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				114E612C2510DD23003673FF /* test.txt */,
-				1170FB9E25073D360049E81D /* ijUnD4KeRpeBUFmcEDCbhxMTJRzUYCQCZM */,
+				11F368DA25E3A6180035FA7E /* cache */,
+				11F368E025E3A6180035FA7E /* Config.backup */,
+				11F368D925E3A6180035FA7E /* DevelopingNode.conf */,
+				11F368E225E3A6180035FA7E /* LocalNode.conf */,
+				11F368E125E3A6180035FA7E /* MainNetApp.conf */,
+				11F368D825E3A6180035FA7E /* MainNetUser.conf */,
+				11F368E625E3A6190035FA7E /* ProductionNode.conf */,
+				11F368E525E3A6190035FA7E /* TestNetApp.conf */,
+				11F368E325E3A6180035FA7E /* TestNetUser.conf */,
+				11F368E425E3A6190035FA7E /* version.txt */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -615,6 +637,13 @@
 				11749D9E24082FB1007B8F32 /* OutputStream.swift */,
 			);
 			path = Extension;
+			sourceTree = "<group>";
+		};
+		11F368DA25E3A6180035FA7E /* cache */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = cache;
 			sourceTree = "<group>";
 		};
 		54606D10E83E614A3F17056C /* Frameworks */ = {
@@ -859,8 +888,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				114E612D2510DD24003673FF /* test.txt in Resources */,
-				1170FB9F25073D360049E81D /* ijUnD4KeRpeBUFmcEDCbhxMTJRzUYCQCZM in Resources */,
+				11F368E925E3A6190035FA7E /* MainNetUser.conf in Resources */,
+				11F368F325E3A6190035FA7E /* TestNetApp.conf in Resources */,
+				11F368F425E3A6190035FA7E /* ProductionNode.conf in Resources */,
+				11F368F025E3A6190035FA7E /* LocalNode.conf in Resources */,
+				11F368F225E3A6190035FA7E /* version.txt in Resources */,
+				11F368EF25E3A6190035FA7E /* MainNetApp.conf in Resources */,
+				11F368EA25E3A6190035FA7E /* DevelopingNode.conf in Resources */,
+				11F368EE25E3A6190035FA7E /* Config.backup in Resources */,
+				11F368F125E3A6190035FA7E /* TestNetUser.conf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
