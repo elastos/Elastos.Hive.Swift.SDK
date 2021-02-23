@@ -5,11 +5,11 @@ import ElastosDIDSDK
 
 public class UserBackupAuthenticationHandler: BackupAuthenticationHandler {
     public func targetHost() -> String {
-        return "https://hive-testnet2.trinity-tech.io"
+        return self.presentationInJWT.targetHost
     }
     
     public func targetDid() -> String {
-        return "did:elastos:iiTvjocqh7C78KjWyDVk2C2kbueJvkuXTW"
+        return self.presentationInJWT.targetDid
     }
     
     private var presentationInJWT: PresentationInJWT
