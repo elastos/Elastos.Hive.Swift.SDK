@@ -10,7 +10,7 @@ class MigrationTest: XCTestCase {
     func testMigration() {
         let lock = XCTestExpectation(description: "wait for test.")
         let userBackupAuthenticationHandler = UserBackupAuthenticationHandler(user!.presentationInJWT)
-        manager?.freezeVault().then({ [self] success -> Promise<Bool> in
+        manager?.createVault().then({ [self] vault -> Promise<Bool> in
             return backup!.save(userBackupAuthenticationHandler)
         }).then({ [self] success -> Promise<Backup> in
             var loop = true
