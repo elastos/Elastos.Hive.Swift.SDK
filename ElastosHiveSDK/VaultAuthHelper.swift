@@ -26,6 +26,7 @@ let lock = NSLock()
 @inline(__always) private func TAG() -> String { return "VaultAuthHelper" }
 public class VaultAuthHelper: ConnectHelper {
     
+    let SERVICE_DID: String = "service_did"
     let USER_DID_KEY: String = "user_did"
     let APP_ID_KEY: String = "app_id"
     let APP_INSTANCE_DID_KEY: String = "app_instance_did"
@@ -39,16 +40,18 @@ public class VaultAuthHelper: ConnectHelper {
     private var _userDid: String?
     private var _appId: String?
     private var _appInstanceDid: String?
+    private var _serviceDid: String?
 
     var token: AuthToken?
     var vaultUrl: VaultURL
     private var _connectState: Bool = false
     private var _persistent: Persistent
-    private var _nodeUrl: String
+    private var _endPoint: String
 
     private var context: ApplicationContext
-    private var authenticationAdapterImpl: AuthenticationAdapterImpl
-
+    private var authenticationAdapter: AuthenticationAdapter
+    private var _storePath: String
+    
     public var ownerDid: String? {
         return _ownerDid
     }
@@ -76,14 +79,27 @@ public class VaultAuthHelper: ConnectHelper {
     public func setAppInstanceDid(_ appInstanceDid: String) {
         _appInstanceDid = appInstanceDid
     }
+    
+    public var serviceDid: String? {
+        return _serviceDid
+    }
 
-    public init(_ context: ApplicationContext, _ ownerDid: String, _ nodeUrl: String, _ shim: AuthenticationAdapterImpl) {
+    public func setServiceDid(_ serviceDid: String) {
+        _serviceDid = serviceDid
+    }
+    
+    public var storePath: String {
+        return _storePath
+    }
+
+    public init(_ context: ApplicationContext, _ ownerDid: String, _ endPoint: String, _ adapter: AuthenticationAdapter) {
         self.context = context
         self._ownerDid = ownerDid
-        self._nodeUrl = nodeUrl
-        self.authenticationAdapterImpl = shim
-        self._persistent = VaultAuthInfoStoreImpl(ownerDid, nodeUrl, self.context.getLocalDataDir())
-        self.vaultUrl = VaultURL(_nodeUrl)
+        self._endPoint = endPoint
+        self.authenticationAdapter = adapter
+        self._storePath = self.context.getLocalDataDir()
+        self._persistent = AuthPersistentImpl(ownerDid, endPoint, _storePath)
+        self.vaultUrl = VaultURL(_endPoint)
     }
     
     public override func checkValid() -> Promise<Void> {
@@ -133,7 +149,7 @@ public class VaultAuthHelper: ConnectHelper {
         let semaphore: DispatchSemaphore = DispatchSemaphore(value: 0)
         var err: String = ""
         var authToken = ""
-        authenticationAdapterImpl.authenticate(self.context, challenge).done { aToken in
+        authenticationAdapter.authenticate(self.context, challenge).done { aToken in
             authToken = aToken
             semaphore.signal()
         }.catch { error in
@@ -163,6 +179,7 @@ public class VaultAuthHelper: ConnectHelper {
         if currentTime > exp! {
             throw HiveError.jwtVerify(des: "challenge token is expiration.")
         }
+        _serviceDid = claims.getIssuer()
     }
 
     private func tryRestoreToken() throws {
@@ -170,7 +187,7 @@ public class VaultAuthHelper: ConnectHelper {
         _userDid = json[USER_DID_KEY].stringValue
         _appId = json[APP_ID_KEY].stringValue
         _appInstanceDid = json[APP_INSTANCE_DID_KEY].stringValue
-
+        
         var accessToken = ""
         var expiredTime = ""
         var refreshToken = ""
@@ -185,6 +202,7 @@ public class VaultAuthHelper: ConnectHelper {
         }
         if accessToken != "" && expiredTime != "" {
             self.token = AuthToken(refreshToken, accessToken, expiredTime)
+            setServiceDid(json[SERVICE_DID].stringValue)
         }
     }
 
@@ -220,7 +238,7 @@ public class VaultAuthHelper: ConnectHelper {
                     TOKEN_TYPE_KEY: "token",
                     USER_DID_KEY: _userDid,
                     APP_ID_KEY: _appId,
-                    APP_INSTANCE_DID_KEY: _appInstanceDid]
+                    APP_INSTANCE_DID_KEY: _appInstanceDid, SERVICE_DID: serviceDid]
         try _persistent.upateContent(json as Dictionary<String, Any>)
     }
     

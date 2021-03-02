@@ -7,13 +7,15 @@ public class PresentationInJWT: NSObject {
     var appInstanceDidApp: DApp?
     var doc: DIDDocument?
     static var adapter: DummyAdapter = DummyAdapter()
+    var backupOptions: BackupOptions
 
     public func initDIDBackend() throws {
         let cacheDir = "\(NSHomeDirectory())/Library/Caches/store" + "/" + "didCache"
         try DIDBackend.initializeInstance(PresentationInJWT.adapter, cacheDir)
     }
 
-    public init(_ userDidOpt: PresentationInJWTOptions, _ appInstanceDidOpt: PresentationInJWTOptions) throws {
+    public init(_ userDidOpt: AppOptions, _ appInstanceDidOpt: AppOptions, _ backupOptions: BackupOptions) throws {
+        self.backupOptions = backupOptions
         super.init()
         try initDIDBackend()
         userDidApp = DIDApp(userDidOpt.name, userDidOpt.mnemonic, PresentationInJWT.adapter, userDidOpt.phrasepass, userDidOpt.storepass)
@@ -41,6 +43,19 @@ public class PresentationInJWT: NSObject {
         }
     }
     
+    public func getBackupVc(_ sourceDID: String) throws -> String {
+        let vc = try userDidApp?.issueBackupDiplomaFor(sourceDID, backupOptions.targetHost, backupOptions.targetDID)
+        print(vc?.description)
+        return vc!.description
+    }
+    
+    public var targetHost: String {
+        return backupOptions.targetHost
+    }
+    
+    public var targetDid: String {
+        return backupOptions.targetDID
+    }
   /*func getAuthToken(_ jwtToken: String) throws -> String {
         let claims = try JwtParserBuilder().build().parseClaimsJwt(jwtToken).claims
         let iss = claims.getIssuer()
@@ -53,13 +68,19 @@ public class PresentationInJWT: NSObject {
     }*/
 }
 
-public class PresentationInJWTOptions {
+public class AppOptions {
     var name: String = ""
     var mnemonic: String = ""
     var phrasepass: String = ""
     var storepass: String = ""
 
-    init() {
-
-    }
+    init() { }
 }
+
+public class BackupOptions {
+    var targetDID: String = ""
+    var targetHost: String = ""
+    
+    init() { }
+}
+

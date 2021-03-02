@@ -56,6 +56,17 @@ class VaultApi: NSObject {
             let json = JSON(re)
             return json
         case .failure(let error):
+            let e = error
+            switch e {
+            case .responseSerializationFailed(_):
+                var des = ""
+                if response.data != nil {
+                    des = String(data: response.data!, encoding: .utf8) ?? ""
+                }
+                let err = HiveError.responseSerializationFailed(des: des)
+                throw err
+            default: break
+            }
             throw error
         }
     }
@@ -65,7 +76,7 @@ class VaultApi: NSObject {
         if status == "ERR" {
             let errorCode = json["_error"]["code"].intValue
             let errorMessage = json["_error"]["message"].stringValue
-            if errorCode == 401 && errorMessage == "auth failed" && tryAgain < 1 {
+            if errorCode == 401 && (errorMessage == "auth failed" || errorMessage == "Backup backup_to_vault auth failed") && tryAgain < 1 {
                 return true
             } else {
                 throw HiveError.failure(des: HiveError.praseError(json))

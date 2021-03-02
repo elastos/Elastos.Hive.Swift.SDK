@@ -40,6 +40,7 @@ public enum HiveError: Error {
     case challengeIsNil(des: String?)
     case jsonSerializationInvalidType(des: String?)
     case vaultNotFound(des: String?)
+    case responseSerializationFailed(des: String?)
 }
 
 // jsonSerializationInvalidType
@@ -80,6 +81,8 @@ extension HiveError {
         case .jsonSerializationInvalidType(let des):
             return des ?? ""
         case .vaultNotFound(let des):
+            return des ?? ""
+        case .responseSerializationFailed(let des):
             return des ?? ""
         }
     }

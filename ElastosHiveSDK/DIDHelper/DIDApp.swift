@@ -32,4 +32,24 @@ public class DIDApp: Entity {
 
         return vc
     }
+    
+    public func issueBackupDiplomaFor(_ sourceDID: String, _ targetHost: String, _ targetDID: String)throws -> VerifiableCredential{
+        let subject = ["sourceDID": sourceDID, "targetHost": targetHost, "targetDID": targetDID]
+        let userCalendar = Calendar.current
+        var components = DateComponents()
+        components.year = 2025
+        let exp = userCalendar.date(from: components)
+        let cb = issuer!.editingVerifiableCredentialFor(did: try DID(sourceDID))
+        let vc = try cb.withId("backupId")
+            .withTypes("BackupCredential")
+            .withProperties(subject)
+            .withExpirationDate(exp!)
+            .sealed(using: storepass)
+
+        print("BackupCredential:")
+        let vcStr = vc.toString(true)
+        print(vcStr)
+        
+        return vc
+    }
 }
