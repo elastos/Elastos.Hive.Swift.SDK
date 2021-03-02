@@ -432,13 +432,6 @@
 			path = Payment;
 			sourceTree = "<group>";
 		};
-		111CA6E2252097DC0030D39C /* Externals */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Externals;
-			sourceTree = "<group>";
-		};
 		111D477B24EE4B0700B7462B /* Vault */ = {
 			isa = PBXGroup;
 			children = (
@@ -523,7 +516,6 @@
 			isa = PBXGroup;
 			children = (
 				11E05B0E25942D5300BF71B1 /* DIDHelper */,
-				111CA6E2252097DC0030D39C /* Externals */,
 				1170FB2825073CD60049E81D /* Resources */,
 				111D477B24EE4B0700B7462B /* Vault */,
 				1137942D227ED9AD004A1F65 /* Info.plist */,
@@ -579,7 +571,6 @@
 		1170FB2825073CD60049E81D /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				11F368DA25E3A6180035FA7E /* cache */,
 				11F368E025E3A6180035FA7E /* Config.backup */,
 				11F368D925E3A6180035FA7E /* DevelopingNode.conf */,
 				11F368E225E3A6180035FA7E /* LocalNode.conf */,
@@ -640,13 +631,6 @@
 				11749D9E24082FB1007B8F32 /* OutputStream.swift */,
 			);
 			path = Extension;
-			sourceTree = "<group>";
-		};
-		11F368DA25E3A6180035FA7E /* cache */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = cache;
 			sourceTree = "<group>";
 		};
 		54606D10E83E614A3F17056C /* Frameworks */ = {
