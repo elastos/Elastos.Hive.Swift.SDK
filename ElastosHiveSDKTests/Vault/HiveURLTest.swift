@@ -8,7 +8,7 @@ class HiveURLTest: XCTestCase {
     private var scripting: Script?
     private var noConditionName: String = "get_groups"
     private var withConditionName: String = "get_group_messages"
-    private let testTextFilePath = "/Users/liaihong/Desktop/test.txt"
+    private let testTextFilePath = "/Users/hanongyang/Desktop/test.txt"
     private let downloadUrl = "hive://did:elastos:icXtpDnZRSDrjmD5NQt6TYSphFRqoo2q6n@appId/scripting/download_file?params={\"path\":\"test.txt\"}"
     
     func test_0GetHiveURL() {

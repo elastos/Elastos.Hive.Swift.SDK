@@ -4,14 +4,20 @@ import XCTest
 import ElastosDIDSDK
 
 public class UserBackupAuthenticationHandler: BackupAuthenticationHandler {
+    public func authorization(_ serviceDid: String, _ targetDid: String, _ targetHost: String) -> Promise<String> {
+        return Promise<String> { resolver in
+            resolver.fulfill(try presentationInJWT.getBackupVc(serviceDid))
+        }
+    }
+    
     public func targetHost() -> String {
         return self.presentationInJWT.targetHost
     }
-    
+
     public func targetDid() -> String {
         return self.presentationInJWT.targetDid
     }
-    
+//
     private var presentationInJWT: PresentationInJWT
 
     init(_ presentationInJWT: PresentationInJWT) {
@@ -75,11 +81,11 @@ class BackupTest: XCTestCase {
             user = try AppInstanceFactory.createUser2()
             let lock = XCTestExpectation(description: "wait for test.")
             
-            user!.client.getManager(user!.userFactoryOpt.ownerDid, user?.userFactoryOpt.provider).then { manager -> Promise<Backup> in
+            user!.client.getManager(user!.userFactoryOpt.ownerDid, user!.userFactoryOpt.provider, user!.backupOptions.targetHost).then { manager -> Promise<Backup> in
                 self.manager = manager
                 return manager.createBackup()
             }.then { backup -> Promise<Backup> in
-                return user!.client.getBackup(user!.userFactoryOpt.ownerDid, user?.userFactoryOpt.provider)
+                return user!.client.getBackup(user!.userFactoryOpt.ownerDid, user!.userFactoryOpt.provider, user!.backupOptions.targetHost)
             }.done { [self] backup in
                 self.backup = (backup )
                 lock.fulfill()

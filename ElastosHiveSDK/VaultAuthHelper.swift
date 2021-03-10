@@ -48,7 +48,7 @@ public class VaultAuthHelper: ConnectHelper {
     private var _persistent: Persistent
     private var _endPoint: String
 
-    private var context: ApplicationContext
+    public var _context: ApplicationContext
     private var authenticationAdapter: AuthenticationAdapter
     private var _storePath: String
     
@@ -91,13 +91,17 @@ public class VaultAuthHelper: ConnectHelper {
     public var storePath: String {
         return _storePath
     }
+    
+    public var context: ApplicationContext {
+        return _context
+    }
 
     public init(_ context: ApplicationContext, _ ownerDid: String, _ endPoint: String, _ adapter: AuthenticationAdapter) {
-        self.context = context
+        self._context = context
         self._ownerDid = ownerDid
         self._endPoint = endPoint
         self.authenticationAdapter = adapter
-        self._storePath = self.context.getLocalDataDir()
+        self._storePath = self._context.getLocalDataDir()
         self._persistent = AuthPersistentImpl(ownerDid, endPoint, _storePath)
         self.vaultUrl = VaultURL(_endPoint)
     }
@@ -128,7 +132,7 @@ public class VaultAuthHelper: ConnectHelper {
     }
 
     func signIn() throws {
-        let jsonstr = self.context.getAppInstanceDocument().description
+        let jsonstr = self._context.getAppInstanceDocument().description
         let data = jsonstr.data(using: .utf8)
         let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
         let params = ["document": json as Any] as [String: Any]
@@ -149,7 +153,7 @@ public class VaultAuthHelper: ConnectHelper {
         let semaphore: DispatchSemaphore = DispatchSemaphore(value: 0)
         var err: String = ""
         var authToken = ""
-        authenticationAdapter.authenticate(self.context, challenge).done { aToken in
+        authenticationAdapter.authenticate(self._context, challenge).done { aToken in
             authToken = aToken
             semaphore.signal()
         }.catch { error in
@@ -168,7 +172,7 @@ public class VaultAuthHelper: ConnectHelper {
         let claims = try jwtParser.parseClaimsJwt(jwtToken).claims
         let exp = claims.getExpiration()
         let aud = claims.getAudience()
-        let did = self.context.getAppInstanceDocument().subject.description
+        let did = self._context.getAppInstanceDocument().subject.description
         if aud == nil || did != aud! {
             throw HiveError.jwtVerify(des: "authenticationDIDDocument's subject is not equal to audience")
         }

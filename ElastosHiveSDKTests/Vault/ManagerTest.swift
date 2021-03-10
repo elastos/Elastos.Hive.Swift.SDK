@@ -95,7 +95,7 @@ class ManagerTest: XCTestCase {
             Log.setLevel(.Debug)
             user = try AppInstanceFactory.createUser2()
             let lock = XCTestExpectation(description: "wait for test.")
-            user?.client.getManager(user!.userFactoryOpt.ownerDid, user?.userFactoryOpt.provider).done{ manager in
+            user?.client.getManager(user!.userFactoryOpt.ownerDid, user!.userFactoryOpt.provider, user!.backupOptions.targetHost).done{ manager in
 
                 self.manager = manager
                 lock.fulfill()
