@@ -6,11 +6,40 @@ import ElastosDIDSDK
 class MigrationTest: XCTestCase {
     private var backup: Backup?
     private var manager: Management?
+    private let collectionName = "migration_swift"
+    private let fileRemotePath = "migration_swift/test.txt"
+    private var vault: Vault?
+    private var database: Database?
     
     func testMigration() {
         let lock = XCTestExpectation(description: "wait for test.")
         let userBackupAuthenticationHandler = UserBackupAuthenticationHandler(user!.presentationInJWT)
         manager?.createVault().then({ [self] vault -> Promise<Bool> in
+            self.vault = vault
+            return manager!.unfreezeVault()
+        }).then({ [self] success -> Promise<Bool> in
+            return self.vault!.database.createCollection(collectionName, options: nil)
+        }).then({ [self] sucess -> Promise<InsertOneResult> in
+            let dic = ["author": "john doe1", "title": "Eve for Dummies1"]
+            let insertOptions = InsertOptions()
+            insertOptions.bypassDocumentValidation(false).ordered(true)
+            return self.vault!.database.insertOne(collectionName, dic, options: insertOptions)
+        }).then({ [self] result -> Promise<FileWriter> in
+            return self.vault!.files.upload(fileRemotePath)
+        }).then({ writer -> Promise<Bool> in
+            try writer.write(data: "migration test txt".data(using: .utf8)!, { err in
+                print(err)
+            })
+
+            writer.close { (success, error) in
+                print(success)
+            }
+            Thread.sleep(forTimeInterval: 5.0)
+            return Promise.value(true) // 模拟成功
+        })
+            .then({ [self] vault -> Promise<Bool> in
+            return manager!.freezeVault()
+        }).then({ [self] vault -> Promise<Bool> in
             return backup!.save(userBackupAuthenticationHandler)
         }).then({ [self] success -> Promise<Backup> in
             var loop = true
@@ -26,7 +55,7 @@ class MigrationTest: XCTestCase {
                     lock.fulfill()
                 })
             }
-            return user!.client.getBackup(user!.targetDid, user!.targetHost)
+            return user!.client.getBackup(user!.targetDid, user!.targetHost, user!.backupOptions.targetHost)
         }).then({ [self] backup -> Promise<Bool> in
             return manager!.createVault().then({ vault -> Promise<Bool> in
                 return backup.active()
@@ -49,11 +78,11 @@ class MigrationTest: XCTestCase {
             user = try AppInstanceFactory.createUser2()
             let lock = XCTestExpectation(description: "wait for test.")
             
-            user!.client.getManager(user!.userFactoryOpt.ownerDid, user?.userFactoryOpt.provider).then { manager -> Promise<Backup> in
+            user!.client.getManager(user!.userFactoryOpt.ownerDid, user!.userFactoryOpt.provider, user!.backupOptions.targetHost).then { manager -> Promise<Backup> in
                 self.manager = manager
                 return manager.createBackup()
             }.then { backup -> Promise<Backup> in
-                return user!.client.getBackup(user!.userFactoryOpt.ownerDid, user?.userFactoryOpt.provider)
+                return user!.client.getBackup(user!.userFactoryOpt.ownerDid, user!.userFactoryOpt.provider, user!.backupOptions.targetHost)
             }.done { [self] backup in
                 self.backup = (backup )
                 lock.fulfill()

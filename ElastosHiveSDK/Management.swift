@@ -25,16 +25,20 @@ import Foundation
 public class Management: NSObject{
     private var providerAddress: String
     private var ownerDid: String
+    private var targetHost: String
     private var authHelper: VaultAuthHelper
     private var serviceManager: ServiceManager
     private var _payment: Payment
+    private var version: Version
     
-    init(_ authHelper: VaultAuthHelper, _ providerAddress: String, _ ownerDid: String) {
+    init(_ authHelper: VaultAuthHelper, _ providerAddress: String, _ ownerDid: String, _ targetHost: String) {
         self.providerAddress = providerAddress
         self.authHelper = authHelper
         self.ownerDid = ownerDid
+        self.targetHost = targetHost
         self.serviceManager = ServiceManager(authHelper)
         self._payment = Payment(authHelper)
+        self.version = Version(authHelper)
     }
     
     public func createVault() -> Promise<Vault> {
@@ -62,7 +66,7 @@ public class Management: NSObject{
     public func createBackup() -> Promise<Backup> {
         return Promise<Backup> { resolver in
             checkBackupExist().done { exist in
-                resolver.fulfill(Backup(self.authHelper))
+                resolver.fulfill(Backup(self.authHelper, self.targetHost))
             }.catch { error in
                 let e = error as? HiveError
                 if e == nil {
@@ -72,7 +76,7 @@ public class Management: NSObject{
                 switch e {
                 case .vaultNotFound(_): do {
                     self.serviceManager.createBackup().done { success in
-                        resolver.fulfill(Backup(self.authHelper))
+                        resolver.fulfill(Backup(self.authHelper, self.targetHost))
                     }.catch { error in
                         resolver.reject(error)
                     }

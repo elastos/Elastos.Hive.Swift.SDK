@@ -120,7 +120,7 @@ class PaymentTest: XCTestCase {
             Log.setLevel(.Debug)
             user = try AppInstanceFactory.createUser1()
             let lock = XCTestExpectation(description: "wait for test.")
-            user?.client.getManager(user!.userFactoryOpt.ownerDid, user?.userFactoryOpt.provider).done{ manager in
+            user?.client.getManager(user!.userFactoryOpt.ownerDid, user!.userFactoryOpt.provider, user!.backupOptions.targetHost).done{ manager in
 
                 self.payment = manager.payment()
                 lock.fulfill()

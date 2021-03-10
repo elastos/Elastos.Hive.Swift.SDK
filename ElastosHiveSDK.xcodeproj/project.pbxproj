@@ -114,14 +114,12 @@
 		116B2F3625B6CFE300635D97 /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116B2F3425B6CFE300635D97 /* State.swift */; };
 		116B2F4625B7CB9300635D97 /* BackupAuthenticationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116B2F4525B7CB9300635D97 /* BackupAuthenticationHandler.swift */; };
 		116B2F4725B7CB9300635D97 /* BackupAuthenticationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116B2F4525B7CB9300635D97 /* BackupAuthenticationHandler.swift */; };
-		116B2F4A25B8259900635D97 /* BackupTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116B2F4925B8259900635D97 /* BackupTest.swift */; };
 		116B2F4D25B8281B00635D97 /* Management.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116B2F4C25B8281B00635D97 /* Management.swift */; };
 		116B2F4E25B8281B00635D97 /* Management.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116B2F4C25B8281B00635D97 /* Management.swift */; };
 		116B2F5125B8292E00635D97 /* ServiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116B2F5025B8292E00635D97 /* ServiceManager.swift */; };
 		116B2F5225B8292E00635D97 /* ServiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116B2F5025B8292E00635D97 /* ServiceManager.swift */; };
 		116B2F6225B8302200635D97 /* BackupUsingPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116B2F6125B8302200635D97 /* BackupUsingPlan.swift */; };
 		116B2F6325B8302200635D97 /* BackupUsingPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116B2F6125B8302200635D97 /* BackupUsingPlan.swift */; };
-		116B2F6725BA8EF200635D97 /* ManagerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116B2F6625BA8EF200635D97 /* ManagerTest.swift */; };
 		1170FB052501CB3F0049E81D /* WriteConcern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FB042501CB3F0049E81D /* WriteConcern.swift */; };
 		1170FB062501CB3F0049E81D /* WriteConcern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FB042501CB3F0049E81D /* WriteConcern.swift */; };
 		1170FB082501CCD30049E81D /* ReadConcern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FB072501CCD30049E81D /* ReadConcern.swift */; };
@@ -208,7 +206,9 @@
 		11F368FA25E3BC960035FA7E /* BackupPersistentImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F368F925E3BC960035FA7E /* BackupPersistentImpl.swift */; };
 		11F368FB25E3BC960035FA7E /* BackupPersistentImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F368F925E3BC960035FA7E /* BackupPersistentImpl.swift */; };
 		11FD496D2561AC9B00A108D2 /* DownloadExecutable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FD496C2561AC9B00A108D2 /* DownloadExecutable.swift */; };
-		11FD961825C1412B0027FC80 /* MigrationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FD961725C1412B0027FC80 /* MigrationTest.swift */; };
+		30DA78A125F84ACD00400C19 /* BackupTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116B2F4925B8259900635D97 /* BackupTest.swift */; };
+		30DA78A325F84AD300400C19 /* ManagerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116B2F6625BA8EF200635D97 /* ManagerTest.swift */; };
+		30DA78A425F84AD500400C19 /* MigrationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FD961725C1412B0027FC80 /* MigrationTest.swift */; };
 		6DDA50FA35E7A18E5EF0C90E /* Pods_ElastosHiveSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D17AD36AC88E073FD2B2D930 /* Pods_ElastosHiveSDK.framework */; };
 		A39C4980225399860027BDF9 /* ElastosHiveSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = A39C4972225399860027BDF9 /* ElastosHiveSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A3D9D41323C9671C003B602E /* FilesProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D9D41023C9671C003B602E /* FilesProtocol.swift */; };
@@ -1017,8 +1017,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				30DA78A425F84AD500400C19 /* MigrationTest.swift in Sources */,
 				11D1F4E8257E395300BC5A54 /* InstanceTest.swift in Sources */,
+				30DA78A125F84ACD00400C19 /* BackupTest.swift in Sources */,
 				118F2DAD25105C3700447A0A /* FileTest.swift in Sources */,
+				30DA78A325F84AD300400C19 /* ManagerTest.swift in Sources */,
 				111CA54B252027760030D39C /* TestError.swift in Sources */,
 				11C3210625CAAB5A001A3AAE /* HiveURLTest.swift in Sources */,
 				118F2D85250F1ABA00447A0A /* Constance.swift in Sources */,

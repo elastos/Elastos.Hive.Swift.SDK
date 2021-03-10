@@ -23,17 +23,24 @@
 import Foundation
 
 public enum State: String {
-    case STOP = "stop"
-    case BACKUP = "backup"
-    case RESTORE = "restore"
-    
-    var description: String {
-
-        switch self {
-        case .STOP: return "stop"
-        case .BACKUP: return "backup"
-        case .RESTORE: return "restore"
-        }
-    }
+    case SUCCESS
+    case FAILED
+    case BACKUP
+    case RESTORE
 }
+//public enum State: String {
+//    case STOP = "stop"
+//    case BACKUP = "backup"
+//    case RESTORE = "restore"
+//
+//    var description: String {
+//
+//        switch self {
+//        case .STOP: return "stop"
+//        case .BACKUP: return "backup"
+//        case .RESTORE: return "restore"
+//        }
+//    }
+//}
+
 

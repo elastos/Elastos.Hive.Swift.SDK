@@ -34,6 +34,7 @@ public class AppInstanceFactory {
     var presentationInJWT: PresentationInJWT
     var client: HiveClientHandle
     var userFactoryOpt: ClientOptions
+    var backupOptions: BackupOptions
 
     public var targetHost: String {
         return self.presentationInJWT.targetHost
@@ -48,6 +49,7 @@ public class AppInstanceFactory {
          _ backupOptions: BackupOptions,
          _ userFactoryOpt: ClientOptions) throws {
         self.userFactoryOpt = userFactoryOpt
+        self.backupOptions = backupOptions
 
         presentationInJWT = try PresentationInJWT(userDidOpt, appInstanceDidOpt, backupOptions)
         if !resolverDidSetup {

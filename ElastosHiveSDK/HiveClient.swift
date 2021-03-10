@@ -136,16 +136,17 @@ public class HiveClientHandle: NSObject {
     ///  - Create a new vaule of local instance..
     /// - Parameters:
     ///   - ownerDid: The owner did related to target vault
-    ///   - preferredProviderAddress: The preferred target provider address
+    ///   - providerAddress: The preferred target provider address
+    ///   - backupAddress: The backup target provider address
     /// - Returns: A new Backup instance.
-    public func getBackup(_ ownerDid: String, _ preferredProviderAddress: String?) -> Promise<Backup> {
+    public func getBackup(_ ownerDid: String, _ providerAddress: String, _ backupAddress: String) -> Promise<Backup> {
         return Promise<Backup> { resolver in
-            _ = getVaultProvider(ownerDid, preferredProviderAddress).done{ provider in
+            _ = getVaultProvider(ownerDid, providerAddress).done{ provider in
                 let authHelper = VaultAuthHelper(self.context,
                                                  ownerDid,
                                                  provider,
                                                  self.authenticationAdapterImpl)
-                resolver.fulfill(Backup(authHelper))
+                resolver.fulfill(Backup(authHelper, backupAddress))
             }.catch{ error in
                 resolver.reject(error)
             }
@@ -160,14 +161,14 @@ public class HiveClientHandle: NSObject {
     ///   - ownerDid: The owner did related to target vault
     ///   - preferredProviderAddress: The preferred target provider address
     /// - Returns: A new Manager instance.
-    public func getManager(_ ownerDid: String, _ preferredProviderAddress: String?) -> Promise<Management> {
+    public func getManager(_ ownerDid: String, _ preferredProviderAddress: String, _ backupAddress: String) -> Promise<Management> {
         return Promise<Management> { resolver in
             _ = getVaultProvider(ownerDid, preferredProviderAddress).done{ provider in
                 let authHelper = VaultAuthHelper(self.context,
                                                  ownerDid,
                                                  provider,
                                                  self.authenticationAdapterImpl)
-                resolver.fulfill(Management(authHelper, provider, ownerDid))
+                resolver.fulfill(Management(authHelper, provider, ownerDid, backupAddress))
             }.catch{ error in
                 resolver.reject(error)
             }
