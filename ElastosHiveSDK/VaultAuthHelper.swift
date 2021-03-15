@@ -23,7 +23,10 @@
 import Foundation
 
 let lock = NSLock()
+
 @inline(__always) private func TAG() -> String { return "VaultAuthHelper" }
+
+@available(*, deprecated, message: "deprecated")
 public class VaultAuthHelper: ConnectHelper {
     
     let SERVICE_DID: String = "service_did"
@@ -118,10 +121,10 @@ public class VaultAuthHelper: ConnectHelper {
             assert(!Thread.isMainThread)
             _connectState = false
             try tryRestoreToken()
-            if token != nil && !(token!.isExpired()) {
-                lock.unlock()
-                return
-            }
+//            if token != nil && !(token!.isExpired()) {
+//                lock.unlock()
+//                return
+//            }
             try signIn()
             lock.unlock()
         }
@@ -238,7 +241,7 @@ public class VaultAuthHelper: ConnectHelper {
         let expiresTime: String = Date.convertToUTCStringFromDate(exp!)
         token = AuthToken("", json[ACCESS_TOKEN_KEY].stringValue, expiresTime)
         let json = [ACCESS_TOKEN_KEY: token!.accessToken,
-                    EXPIRES_AT_KEY: token!.expiredTime,
+//                    EXPIRES_AT_KEY: token!.expiredTime,
                     TOKEN_TYPE_KEY: "token",
                     USER_DID_KEY: _userDid,
                     APP_ID_KEY: _appId,
