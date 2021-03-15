@@ -22,25 +22,15 @@
 
 import Foundation
 
-class AuthToken: NSObject {
-    var expiredIn: Int = -1 // always false
+public class AuthToken: NSObject {
     var accessToken: String
-    var refreshToken: String
-    var expiredTime: String
-
-     init(_ refreshToken: String, _ accessToken: String, _ experitime: String) {
+    var expiresTime: String
+    var tokenType: String
+    
+    init(_ accessToken: String, _ expiresTime: String, _ tokenType: String) {
         self.accessToken = accessToken
-        self.refreshToken = refreshToken
-        self.expiredTime = experitime
+        self.expiresTime = expiresTime
+        self.tokenType = tokenType
     }
-
-    func isExpired() -> Bool {
-        let currentSeconds = Int(Date().timeIntervalSince1970)
-        guard expiredTime.count != 10 else {
-            return "\(currentSeconds)" >= expiredTime
-        }
-        expiredIn = Date.convertTimeToTimeStamp(expiredTime)
-        return currentSeconds >= expiredIn
-//        return true
-    }
+    
 }

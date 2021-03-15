@@ -2,9 +2,9 @@
 import Foundation
 
 class HiveHeader {
-    private var auther: ConnectHelper
+    private var auther: ConnectHelper?
 
-    init(_ auther: ConnectHelper) {
+    init(_ auther: ConnectHelper?) {
         self.auther = auther
     }
 
