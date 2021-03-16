@@ -22,6 +22,9 @@
 
 import Foundation
 
+/**
+ old enum  ready to be deleted
+ */
 public enum ScriptingType {
     case UPLOAD
     case DOWNLOAD
@@ -29,6 +32,11 @@ public enum ScriptingType {
 }
 
 public protocol ScriptingProtocol {
+    
+    
+    /**
+     old method  ready to be deleted
+     */
     
     /// Lets the vault owner register a script on his vault for a given app.
     /// The script is built on the client side, then serialized and stored on the hive back-end.
