@@ -37,5 +37,5 @@ public protocol BackupProtocol {
 
     func stopRestore() -> Promise<Void>
 
-    func checkResult() -> Promise<BackupResult>
+    func checkResult() -> Promise<Void>
 }

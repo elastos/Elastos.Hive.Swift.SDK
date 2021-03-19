@@ -42,6 +42,9 @@ public enum HiveError: Error {
     case vaultNotFound(des: String?)
     case responseSerializationFailed(des: String?)
     case serviceDidIsNil(des: String?)
+    case providerNotFound(des: String?)
+
+    
 }
 
 // jsonSerializationInvalidType
@@ -87,8 +90,11 @@ extension HiveError {
             return des ?? ""
         case .serviceDidIsNil(let des):
             return des ?? ""
+        case .providerNotFound(let des):
+            return des ?? ""
         }
-    }
+
+}
 
     static func praseError(_ json: JSON) -> String {
         let status = json["_status"].stringValue

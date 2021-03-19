@@ -22,12 +22,12 @@
 
 import Foundation
 
-extension BaseAPI {
+extension HiveAPI {
     func signIn() -> String {
-        return self.baseURL + self.apiPath + "/did/sign_in";
+        return self.baseURL + self.apiPath + "/did/sign_in"
     }
     
     func auth() -> String {
-        return self.baseURL + self.apiPath + "/did/auth";
+        return self.baseURL + self.apiPath + "/did/auth"
     }
 }

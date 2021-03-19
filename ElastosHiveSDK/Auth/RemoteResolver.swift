@@ -23,6 +23,8 @@
 import Foundation
 import ObjectMapper
 
+//let lock = NSLock()
+
 public class AccessToken: Mappable {
     var accessToken: String?
     
@@ -40,7 +42,7 @@ public class RemoteResolver: TokenResolver {
 
     init(_ context: AppContext, _ vaultURL: VaultURL?) {
         self.context = context
-        self.contextProvider = context.getAppContextProvider()
+        self.contextProvider = context.appContextProvider
         self.vaultURL = vaultURL
     }
     
@@ -76,6 +78,12 @@ public class RemoteResolver: TokenResolver {
         _ = try verifyToken(jwtToken)
         
         return self.contextProvider.getAuthorization(jwtToken)
+    }
+    
+    public func checkValid() -> Promise<Void> {
+        return DispatchQueue.global().async(.promise){ [self] in
+            
+        }
     }
     
     private func verifyToken(_ jwtToken: String) throws -> Bool {
