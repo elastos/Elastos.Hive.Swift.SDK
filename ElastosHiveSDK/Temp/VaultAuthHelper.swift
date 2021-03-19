@@ -22,7 +22,7 @@
 
 import Foundation
 
-let lock = NSLock()
+//let lock = NSLock()
 
 @inline(__always) private func TAG() -> String { return "VaultAuthHelper" }
 
@@ -111,7 +111,7 @@ public class VaultAuthHelper: ConnectHelper {
     
     public override func checkValid() -> Promise<Void> {
         return DispatchQueue.global().async(.promise){ [self] in
-            lock.lock()
+//            lock.lock()
             try doCheckExpired()
         }
     }
@@ -126,10 +126,10 @@ public class VaultAuthHelper: ConnectHelper {
 //                return
 //            }
             try signIn()
-            lock.unlock()
+//            lock.unlock()
         }
         catch {
-            lock.unlock()
+//            lock.unlock()
             throw error
         }
     }

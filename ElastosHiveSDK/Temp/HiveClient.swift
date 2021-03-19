@@ -116,19 +116,19 @@ public class HiveClientHandle: NSObject {
     ///   - ownerDid: The owner did related to target vault
     ///   - preferredProviderAddress: The preferred target provider address
     /// - Returns: vault instance.
-    public func getVault(_ ownerDid: String, _ preferredProviderAddress: String?) -> Promise<Vault> {
-        return Promise<Vault> { resolver in
-            _ = getVaultProvider(ownerDid, preferredProviderAddress).done{ provider in
-                let authHelper = VaultAuthHelper(self.context,
-                                                ownerDid,
-                                                provider,
-                                                self.authenticationAdapterImpl)
-                resolver.fulfill(Vault(authHelper, provider, ownerDid))
-            }.catch{ error in
-                resolver.reject(error)
-            }
-        }
-    }
+//    public func getVault(_ ownerDid: String, _ preferredProviderAddress: String?) -> Promise<Vault> {
+//        return Promise<Vault> { resolver in
+//            _ = getVaultProvider(ownerDid, preferredProviderAddress).done{ provider in
+//                let authHelper = VaultAuthHelper(self.context,
+//                                                ownerDid,
+//                                                provider,
+//                                                self.authenticationAdapterImpl)
+//                resolver.fulfill(Vault(authHelper, provider, ownerDid))
+//            }.catch{ error in
+//                resolver.reject(error)
+//            }
+//        }
+//    }
     
     /// Get Backup instance with specified DID.
     /// Try to get a vault on target provider address with following steps:
@@ -221,30 +221,30 @@ public class HiveClientHandle: NSObject {
     ///   - scriptUrl: scriptUrl hive://target_did@target_app_did/script_name?params={key=value}
     ///   - resultType: resultType
     /// - Returns:
-    public func callScriptUrl<T>(_ scriptUrl: String, _ resultType: T.Type) -> Promise<T> {
-        return parseHiveURL(scriptUrl).then { info -> Promise<T> in
-            return info.callScript(resultType)
-        }
-    }
-    
-    /// Convenient method that first calls a script by url using callScriptURL(), and expects the
-    /// JSON output to contain a file download information. If this is the case, the file download is
-    /// starting and a file reader is returned.
-    public func downloadFileByScriptUrl(_ scriptUrl: String) -> Promise<FileReader> {
-        var hiveUrlInfo: HiveURLInfo?
-        var txId: String = ""
-        var scriptName = ""
-        return parseHiveURL(scriptUrl).then { [self] hiveURLInfo -> Promise<JSON> in
-            hiveUrlInfo = hiveURLInfo
-            scriptName = hiveURLInfo.deserialize(scriptUrl).scriptName
-            return callScriptUrl(scriptUrl, JSON.self)
-        }.then { json -> Promise<Vault> in
-            txId = json[scriptName]["transaction_id"].stringValue
-            return hiveUrlInfo!.getVault()
-        }.then { vault -> Promise<FileReader> in
-            return vault.scripting.downloadFile(txId)
-        }
-    }
+//    public func callScriptUrl<T>(_ scriptUrl: String, _ resultType: T.Type) -> Promise<T> {
+//        return parseHiveURL(scriptUrl).then { info -> Promise<T> in
+//            return info.callScript(resultType)
+//        }
+//    }
+//    
+//    /// Convenient method that first calls a script by url using callScriptURL(), and expects the
+//    /// JSON output to contain a file download information. If this is the case, the file download is
+//    /// starting and a file reader is returned.
+//    public func downloadFileByScriptUrl(_ scriptUrl: String) -> Promise<FileReader> {
+//        var hiveUrlInfo: HiveURLInfo?
+//        var txId: String = ""
+//        var scriptName = ""
+//        return parseHiveURL(scriptUrl).then { [self] hiveURLInfo -> Promise<JSON> in
+//            hiveUrlInfo = hiveURLInfo
+//            scriptName = hiveURLInfo.deserialize(scriptUrl).scriptName
+//            return callScriptUrl(scriptUrl, JSON.self)
+//        }.then { json -> Promise<Vault> in
+//            txId = json[scriptName]["transaction_id"].stringValue
+//            return hiveUrlInfo!.getVault()
+//        }.then { vault -> Promise<FileReader> in
+//            return vault.scripting.downloadFile(txId)
+//        }
+//    }
 
     /// Parses a Hive standard url into a url info that can later be executed to get the result or the
     /// target url.

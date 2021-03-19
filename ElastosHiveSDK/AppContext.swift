@@ -24,23 +24,25 @@ import Foundation
 
 public class AppContext {
     private static var resolverHasSetup: Bool = false
-    private var contextProvider: AppContextProvider
-    private var userDid: String?
-    private var providerAddress: String?
+    private var contextProvider: AppContextProvider?
+    private var _userDid: String?
+    private var _providerAddress: String?
     
     private var token: AuthToken?
     private var tokenResolver: TokenResolver?
+    private var _connectionManager: ConnectionManager?
 
-    public convenience init(_ provider: AppContextProvider, _ userDid: String?) {
-        self.init(provider, userDid, nil)
+    public convenience init(_ provider: AppContextProvider?, _ userDid: String?) {
+        self.init(provider!, userDid, nil)
     }
     
-    public init(_ provider: AppContextProvider, _ userDid: String?, _ providerAddress: String?) {
-        self.contextProvider = provider
-        self.userDid = userDid
-        self.providerAddress = providerAddress
+    public init(_ provider: AppContextProvider?, _ userDid: String?, _ providerAddress: String?) {
+        self.contextProvider = provider!
+        self._userDid = userDid
+        self._providerAddress = providerAddress
         self.tokenResolver = LocalResolver(self.providerAddress)
         self.tokenResolver?.setNextResolver(RemoteResolver(self, nil))
+        self._connectionManager = ConnectionManager(self)
     }
     
     public static func setupResover(_ resolver: String, _ cacheDir: String) throws {
@@ -54,20 +56,23 @@ public class AppContext {
         resolverHasSetup = true
     }
     
-    public func getAppContextProvider() -> AppContextProvider {
-        return self.contextProvider
+    public var appContextProvider: AppContextProvider {
+        return self.contextProvider!
     }
     
-    public func getUserDid() -> String? {
-        return self.userDid
+    public var userDid: String {
+        return self._userDid!
     }
     
-    public func getProviderAddress() -> String? {
-        return self.providerAddress
+    public var providerAddress: String {
+        return self._providerAddress!
+    }
+
+    public var connectionManager: ConnectionManager {
+        return self._connectionManager!
     }
     
     public static func build(_ provider: AppContextProvider) throws -> AppContext {
-
         guard provider.getLocalDataDir() != nil else {
             throw HiveError.IllegalArgument(des: "Missing method to acquire data location in AppContext provider")
         }
@@ -78,18 +83,26 @@ public class AppContext {
 
         return AppContext(provider, nil, nil)
     }
+    
+    public static func build(_ provider: AppContextProvider, _ userDid: String, _ providerAddress: String) throws -> AppContext {
+        guard provider.getLocalDataDir() != nil else {
+            throw HiveError.IllegalArgument(des: "Missing method to acquire data location in AppContext provider")
+        }
+        
+        guard provider.getAppInstanceDocument() != nil else {
+            throw HiveError.IllegalArgument(des: "Missing method to acquire App instance DID document in AppContext provider")
+        }
 
-    public static func getProviderAddress(_ targetDid: String) -> Promise<String> {
-        
-        return self.getProviderAddress(targetDid, nil)
-        
+        return AppContext(provider, userDid, providerAddress)
+    }
+
+    public func getProviderAddress(_ targetDid: String) -> Promise<String> {
+        return getProviderAddress(targetDid, nil)
     }
     
-    public static func getProviderAddress(_ targetDid: String, _ preferredProviderAddress: String?) -> Promise<String> {
-
-        return Promise<String> { resolver in
-            DispatchQueue.global().async {
-                
+    public func getProviderAddress(_ targetDid: String, _ preferredProviderAddress: String?) -> Promise<String> {
+        return Promise<Any>.async().then { _ -> Promise<String> in
+            return Promise<String> { resolver in
                 if preferredProviderAddress != nil {
                     resolver.fulfill(preferredProviderAddress!)
                     return
@@ -98,7 +111,7 @@ public class AppContext {
                     let did = try DID(targetDid)
                     let doc = try did.resolve()
                     guard doc != nil else {
-                        resolver.reject(HiveError.providerNotSet(des: "The DID document \(targetDid) has not published."))
+                        resolver.reject(HiveError.providerNotFound(des: "The DID \(targetDid) has not published onto sideChain"))
                         return
                     }
                     let services = doc?.selectServices(byType: "HiveVault")
@@ -107,12 +120,21 @@ public class AppContext {
                         return
                     }
                     resolver.fulfill(services![0].endpoint)
-                }
-                catch {
+                } catch {
                     resolver.reject(error)
                 }
             }
         }
     }
-
+    
+    public func getVault(_ ownerDid: String, _ preferredProviderAddress: String) -> Promise<Vault> {
+        return Promise<Any>.async().then { [self] _ -> Promise<String> in
+            return getProviderAddress(ownerDid, preferredProviderAddress)
+        }.then { (providerAddress) -> Promise<Vault> in
+            self._providerAddress = providerAddress
+            return Promise<Vault> { resolver in
+                resolver.fulfill(Vault(self, ownerDid, providerAddress))
+            }
+        }
+    }
 }

@@ -26,9 +26,9 @@ public protocol SubscriptionService {
     
     func subscribe<T>(_ pricingPlan: String, type: T.Type) -> Promise<T>
 
-    func unsubscribe() -> Promise<Void>
+    func unsubscribe() throws -> Promise<Void>
     
-    func deactivate() -> Promise<Void>
+    func deactivate() throws -> Promise<Void>
 
     func checkSubscription() -> Promise<Void>
   

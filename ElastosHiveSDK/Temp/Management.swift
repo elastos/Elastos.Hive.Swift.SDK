@@ -41,15 +41,15 @@ public class Management: NSObject{
         self.version = Version(authHelper)
     }
     
-    public func createVault() -> Promise<Vault> {
-        return Promise<Vault> { resolver in
-            self.serviceManager.createVault().done { success in
-                resolver.fulfill(Vault(self.authHelper, self.providerAddress, self.ownerDid))
-            }.catch { error in
-                resolver.reject(error)
-            }
-        }
-    }
+//    public func createVault() -> Promise<Vault> {
+//        return Promise<Vault> { resolver in
+//            self.serviceManager.createVault().done { success in
+////                resolver.fulfill(Vault(self.authHelper, self.providerAddress, self.ownerDid))
+//            }.catch { error in
+//                resolver.reject(error)
+//            }
+//        }
+//    }
     
     public func destroyVault() -> Promise<Bool> {
         return self.serviceManager.removeVault()

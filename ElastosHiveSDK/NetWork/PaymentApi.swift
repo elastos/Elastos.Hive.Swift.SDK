@@ -22,36 +22,36 @@
 
 import Foundation
 
-extension BaseAPI {
+extension HiveAPI {
     func getPackageInfo() -> String {
-        return self.baseURL + self.apiPath + "/payment/vault_package_info";
+        return self.baseURL + self.apiPath + "/payment/vault_package_info"
     }
     
-    func getPricingPlan() -> String {
-        return self.baseURL + self.apiPath + "/payment/vault_pricing_plan";
-    }
+    func getPricingPlan(_ name: String) -> String {
+        return self.baseURL + self.apiPath + "/payment/vault_pricing_plan?name=\(name)"
+    }    
     
     func createOrder() -> String {
-        return self.baseURL + self.apiPath + "/payment/create_vault_package_order";
+        return self.baseURL + self.apiPath + "/payment/create_vault_package_order"
     }
     
-    func payOrder() -> String {
-        return self.baseURL + self.apiPath + "/payment/pay_vault_package_order";
+    public var payOrder: String {
+        return self.baseURL + self.apiPath + "/payment/pay_vault_package_order"
     }
     
-    func getOrderInfo() -> String {
-        return self.baseURL + self.apiPath + "/payment/vault_package_order";
+    func orderInfo(_ orderId: String) -> String {
+        return self.baseURL + self.apiPath + "/payment/vault_package_order?order_id=\(orderId)"
     }
     
     func getOrderList() -> String {
-        return self.baseURL + self.apiPath + "/payment/vault_package_order_list";
+        return self.baseURL + self.apiPath + "/payment/vault_package_order_list"
     }
     
     func getServiceInfo() -> String {
-        return self.baseURL + self.apiPath + "/service/vault";
+        return self.baseURL + self.apiPath + "/service/vault"
     }
     
     func getPaymentVersion() -> String {
-        return self.baseURL + self.apiPath + "/payment/version";
+        return self.baseURL + self.apiPath + "/payment/version"
     }
 }

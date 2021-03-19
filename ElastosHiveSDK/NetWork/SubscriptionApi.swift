@@ -22,20 +22,20 @@
 
 import Foundation
 
-extension BaseAPI {
+extension HiveAPI {
     func createVault() -> String {
-        return self.baseURL + self.apiPath + "/service/vault/create";
+        return self.baseURL + self.apiPath + "/service/vault/create"
     }
     
     func freeze() -> String {
-        return self.baseURL + self.apiPath + "/service/vault/freeze";
+        return self.baseURL + self.apiPath + "/service/vault/freeze"
     }
     
     func unfreeze() -> String {
-        return self.baseURL + self.apiPath + "/service/vault/freeze";
+        return self.baseURL + self.apiPath + "/service/vault/freeze"
     }
     
     func removeVault() -> String {
-        return self.baseURL + self.apiPath + "/service/vault/remove";
+        return self.baseURL + self.apiPath + "/service/vault/remove"
     }
 }
