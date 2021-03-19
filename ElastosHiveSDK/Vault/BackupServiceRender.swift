@@ -22,25 +22,47 @@
 
 import Foundation
 
-extension HiveAPI {
-    func download(_ path: String) -> String {//dir.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-        return self.baseURL + self.apiPath + "/files/download?path=" + path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+// TODO
+public class BackupServiceRender: BackupProtocol {
+    var vault: Vault
+    
+    public init(_ vault: Vault) {
+        self.vault = vault
     }
     
-    func deleteFolder() -> String {
-        return self.baseURL + self.apiPath + "/api/v1/files/delete"
+    public func setupContext(_ context: BackupContext) -> Promise<Void> {
+        return Promise<Void> { resolver in
+            resolver.fulfill(Void())
+        }
     }
     
-    func move() -> String {
-        return self.baseURL + self.apiPath + "/files/move"
+    public func startBackup() -> Promise<Void> {
+        return Promise<Void> { resolver in
+            resolver.fulfill(Void())
+        }
     }
     
-    func copy() -> String {
-        return self.baseURL + self.apiPath + "/files/copy"
+    public func stopBackup() -> Promise<Void> {
+        return Promise<Void> { resolver in
+            resolver.fulfill(Void())
+        }
     }
     
-
-    func hash(_ path: String) -> String {
-        return self.baseURL + self.apiPath + "/files/file/hash?path=" + path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+    public func restoreFrom() -> Promise<Void> {
+        return Promise<Void> { resolver in
+            resolver.fulfill(Void())
+        }
+    }
+    
+    public func stopRestore() -> Promise<Void> {
+        return Promise<Void> { resolver in
+            resolver.fulfill(Void())
+        }
+    }
+    
+    public func checkResult() -> Promise<Void> {
+        return Promise<Void> { resolver in
+            resolver.fulfill(Void())
+        }
     }
 }

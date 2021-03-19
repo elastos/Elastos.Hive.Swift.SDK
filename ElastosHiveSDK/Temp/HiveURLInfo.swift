@@ -44,25 +44,25 @@ public class HiveURLInfo: NSObject {
         super.init()
     }
     
-    public func callScript<T>(_ resultType: T.Type) -> Promise<T> {
-        return getVault().then { [self] vault -> Promise<T> in
-            vault.scripting.callScriptUrl(urlInfo.scriptName, urlInfo.params, urlInfo.appDid, resultType)
-        }
-    }
+//    public func callScript<T>(_ resultType: T.Type) -> Promise<T> {
+//        return getVault().then { [self] vault -> Promise<T> in
+//            vault.scripting.callScriptUrl(urlInfo.scriptName, urlInfo.params, urlInfo.appDid, resultType)
+//        }
+//    }
     
-    public func getVault() -> Promise<Vault> {
-        return Promise<Vault> { resolver in
-            self.client.getVaultProvider(urlInfo.targetDid, "https://hive-testnet1.trinity-tech.io").done { [self] provider in
-                let authHelper = VaultAuthHelper(context, urlInfo.targetDid, provider,authenticationAdapter as! AuthenticationAdapterImpl)
-                let vault = Vault(authHelper, provider, urlInfo.targetDid)
-                resolver.fulfill(vault)
-            }
-            .catch { error in
-                resolver.reject(error)
-            }
-        }
-    }
-    
+//    public func getVault() -> Promise<Vault> {
+//        return Promise<Vault> { resolver in
+//            self.client.getVaultProvider(urlInfo.targetDid, "https://hive-testnet1.trinity-tech.io").done { [self] provider in
+//                let authHelper = VaultAuthHelper(context, urlInfo.targetDid, provider,authenticationAdapter as! AuthenticationAdapterImpl)
+//                let vault = Vault(authHelper, provider, urlInfo.targetDid)
+//                resolver.fulfill(vault)
+//            }
+//            .catch { error in
+//                resolver.reject(error)
+//            }
+//        }
+//    }
+//
     public func deserialize(_ hiveUrl: String) -> UrlInfo {
         return UrlInfo(hiveUrl)
     }

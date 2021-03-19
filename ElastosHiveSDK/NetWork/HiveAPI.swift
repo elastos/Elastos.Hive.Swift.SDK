@@ -22,25 +22,13 @@
 
 import Foundation
 
-extension HiveAPI {
-    func download(_ path: String) -> String {//dir.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-        return self.baseURL + self.apiPath + "/files/download?path=" + path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-    }
-    
-    func deleteFolder() -> String {
-        return self.baseURL + self.apiPath + "/api/v1/files/delete"
-    }
-    
-    func move() -> String {
-        return self.baseURL + self.apiPath + "/files/move"
-    }
-    
-    func copy() -> String {
-        return self.baseURL + self.apiPath + "/files/copy"
-    }
-    
+public class HiveAPI {
+    public var baseURL: String
+    public var apiPath: String
 
-    func hash(_ path: String) -> String {
-        return self.baseURL + self.apiPath + "/files/file/hash?path=" + path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+    public init(_ baseURL: String, _ apiPath: String) {
+        self.baseURL = baseURL
+        self.apiPath = apiPath
     }
 }
+

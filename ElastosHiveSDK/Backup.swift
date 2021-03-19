@@ -22,17 +22,28 @@
 
 import Foundation
 
-public class Backup: NSObject{
-    var authHelper: VaultAuthHelper
-    private var vaultUrl: VaultURL
+public class Backup: ServiceEndpoint {
+    private var _promotion: PromotionProtocol?
+    
+    public init(_ context: AppContext, _ userDid: String, _ providerAddress: String) {
+        super.init(context, providerAddress, userDid, userDid, nil)
+    }
+
+    public var promotion: PromotionProtocol {
+        return self._promotion!
+    }
+    
+    var authHelper: VaultAuthHelper?
+    private var vaultUrl: VaultURL?
     private var targetDid: String?
-    private var targetHost: String
+    private var targetHost: String?
     private var type: String?
 
     init(_ authHelper: VaultAuthHelper, _ targetHost: String) {
         self.authHelper = authHelper
         self.targetHost = targetHost
         self.vaultUrl = authHelper.vaultUrl
+        super.init(AppContext(nil, ""), nil, "", "", "")
     }
     
     public func getServiceDid() -> Promise<String> {
@@ -40,13 +51,13 @@ public class Backup: NSObject{
             return Promise.value(targetDid!)
         }
         return Promise { resolver in
-            let context = authHelper.context
+            let context = authHelper!.context
             let docStr = context.getAppInstanceDocument().toString()
             //            let paramStr = "{\"document\":\(docStr)}"
             let data = docStr.data(using: .utf8)
             let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
             let params = ["document": json as Any] as [String: Any]
-            let url = vaultUrl.signIn()
+            let url = vaultUrl!.signIn()
             
             AF.request(url,
                        method: .post,
@@ -75,26 +86,26 @@ public class Backup: NSObject{
     }
     
     public func state() -> Promise<State> {
-        return authHelper.checkValid().then { _ -> Promise<State> in
+        return authHelper!.checkValid().then { _ -> Promise<State> in
             return self.stateImp(0)
         }
     }
     
     private func stateImp(_ tryAgain: Int) -> Promise<State> {
         return Promise<State> { resolver in
-            let url = vaultUrl.state()
+            let url = vaultUrl!.state()
             let response = AF.request(url, method: .get, encoding: JSONEncoding.default, headers: HiveHeader(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
             let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
             
-            if isRelogin {
-                try self.authHelper.signIn()
-                stateImp(1).done { result in
-                    resolver.fulfill(result)
-                }.catch { error in
-                    resolver.reject(error)
-                }
-            }
+//            if isRelogin {
+//                try self.authHelper.signIn()
+//                stateImp(1).done { result in
+//                    resolver.fulfill(result)
+//                }.catch { error in
+//                    resolver.reject(error)
+//                }
+//            }
             let type = json["hive_backup_state"].stringValue
             let result = json["result"].stringValue
             switch (type) {
@@ -115,7 +126,7 @@ public class Backup: NSObject{
     }
     
     public func save(_ handler: BackupAuthenticationHandler) -> Promise<Bool> {
-        return authHelper.checkValid().then { [self] _ -> Promise<String> in
+        return authHelper!.checkValid().then { [self] _ -> Promise<String> in
             return try getCredential(handler, "store")
         }.then { credential -> Promise<Bool> in
             return self.saveImp(credential, 0)
@@ -124,14 +135,14 @@ public class Backup: NSObject{
     
     private func saveImp(_ credential: String, _ tryAgain: Int) -> Promise<Bool> {
         return Promise<Bool> { resolver in
-            let url = vaultUrl.save()
+            let url = vaultUrl!.save()
             let param = ["backup_credential": credential]
             let response = AF.request(url, method: .post, parameters: param, encoding: JSONEncoding.default, headers: HiveHeader(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
             let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
             
             if isRelogin {
-                try self.authHelper.signIn()
+                try self.authHelper!.signIn()
             }
             resolver.fulfill(true)
         }
@@ -146,7 +157,7 @@ public class Backup: NSObject{
                 if try (cacheCredential != "" && !checkExpired(cacheCredential)) {
                     resolver.fulfill(cacheCredential)
                 }
-                let result = handler.authorization(authHelper.serviceDid!, targetDid, targetHost)
+                let result = handler.authorization((authHelper?.serviceDid!)!, targetDid, targetHost!)
                 guard result.value != nil else {
                     resolver.reject(result.error == nil ? HiveError.IllegalArgument(des: "TODO") : result.error!)
                     return
@@ -166,7 +177,7 @@ public class Backup: NSObject{
     }
     
     private func restoreCredential() throws -> String {
-        let persistent = BackupPersistentImpl(self.targetHost, self.targetDid!, self.type!, self.authHelper.storePath)
+        let persistent = BackupPersistentImpl(self.targetHost!, self.targetDid!, self.type!, self.authHelper!.storePath)
         let json = try JSON(persistent.parseFrom())
         let credential_key = json["credential_key"].stringValue
         
@@ -174,14 +185,14 @@ public class Backup: NSObject{
     }
     
     private func storeCredential(_ credential: String) throws {
-        let persistent = BackupPersistentImpl(self.targetHost, self.targetDid!, self.type!, self.authHelper.storePath)
+        let persistent = BackupPersistentImpl(self.targetHost!, self.targetDid!, self.type!, self.authHelper!.storePath)
         var json = try persistent.parseFrom()
         json["credential_key"] = credential
         try persistent.upateContent(json)
     }
 
     public func restore(_ handler: BackupAuthenticationHandler) -> Promise<Bool> {
-        return authHelper.checkValid().then { [self] _ -> Promise<String> in
+        return authHelper!.checkValid().then { [self] _ -> Promise<String> in
             return getCredential(handler, "restore")
         }.then { credential -> Promise<Bool> in
             return self.restoreImp(credential, 0)
@@ -190,14 +201,14 @@ public class Backup: NSObject{
     
     private func restoreImp(_ credential: String, _ tryAgain: Int) -> Promise<Bool> {
         return Promise<Bool> { resolver in
-            let url = vaultUrl.restore()
+            let url = vaultUrl!.restore()
             let param = ["backup_credential": credential]
             let response = AF.request(url, method: .post, parameters: param, encoding: JSONEncoding.default, headers: HiveHeader(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
             let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
             
             if isRelogin {
-                try self.authHelper.signIn()
+                try self.authHelper!.signIn()
             }
             try storeCredential(credential)
             resolver.fulfill(true)
@@ -205,7 +216,7 @@ public class Backup: NSObject{
     }
     
     public func active() -> Promise<Bool> {
-        return authHelper.checkValid().then { [self] _ -> Promise<Bool> in
+        return authHelper!.checkValid().then { [self] _ -> Promise<Bool> in
             return activeImp(0)
         }
     }
@@ -213,14 +224,14 @@ public class Backup: NSObject{
     private func activeImp(_ tryAgain: Int) -> Promise<Bool> {
         return Promise<Bool> { resolver in
 //            vaultUrl.resetVaultApi(baseUrl: "https://hive-testnet2.trinity-tech.io")
-            let url = vaultUrl.activate()
+            let url = vaultUrl!.activate()
             let param: [String: Any] = [: ]
             let response = AF.request(url, method: .post, parameters: param, encoding: JSONEncoding.default, headers: HiveHeader(authHelper).headers()).responseJSON()
             let json = try VaultApi.handlerJsonResponse(response)
             let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
             
             if isRelogin {
-                try self.authHelper.signIn()
+                try self.authHelper!.signIn()
                 activeImp(1).done { success in
                     resolver.fulfill(success)
                 }.catch { error in

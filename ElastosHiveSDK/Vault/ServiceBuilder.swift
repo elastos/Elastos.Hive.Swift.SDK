@@ -22,13 +22,31 @@
 
 import Foundation
 
-public class BaseAPI {
-    public var baseURL: String
-    public var apiPath: String
+public class ServiceBuilder {
+    var vault: Vault
+    
+    init(_ vault: Vault) {
+        self.vault = vault
+    }
+    
+    func createFilesService() -> FilesServiceRender {
+        return FilesServiceRender(self.vault)
+    }
+    
+    func createDatabase() -> DatabaseServiceRender {
+        return DatabaseServiceRender(self.vault)
+    }
+    
+    func createScriptingService() -> ScriptingRender {
+        return ScriptingRender(self.vault)
+    }
 
-    public init(_ baseURL: String, _ apiPath: String) {
-        self.baseURL = baseURL
-        self.apiPath = apiPath
+    func createPubsubService() -> PubSubServiceRender {
+        return PubSubServiceRender(self.vault)
+    }
+
+    func createBackupService() -> BackupServiceRender {
+        return BackupServiceRender(self.vault)
     }
 }
 

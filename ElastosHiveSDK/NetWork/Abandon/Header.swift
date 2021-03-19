@@ -1,7 +1,7 @@
 
 import Foundation
 
-class HiveHeader {
+public class HiveHeader {
     private var auther: ConnectHelper?
 
     init(_ auther: ConnectHelper?) {

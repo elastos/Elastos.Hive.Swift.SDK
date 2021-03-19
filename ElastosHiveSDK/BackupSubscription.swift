@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2020 Elastos Foundation
+* Copyright (c) 2021 Elastos Foundation
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -21,26 +21,36 @@
 */
 
 import Foundation
+import ObjectMapper
 
-extension HiveAPI {
-    func download(_ path: String) -> String {//dir.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-        return self.baseURL + self.apiPath + "/files/download?path=" + path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-    }
+public class BackupInfo: Mappable {
+    public required init?(map: Map) {}
     
-    func deleteFolder() -> String {
-        return self.baseURL + self.apiPath + "/api/v1/files/delete"
-    }
-    
-    func move() -> String {
-        return self.baseURL + self.apiPath + "/files/move"
-    }
-    
-    func copy() -> String {
-        return self.baseURL + self.apiPath + "/files/copy"
-    }
-    
-
-    func hash(_ path: String) -> String {
-        return self.baseURL + self.apiPath + "/files/file/hash?path=" + path.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-    }
+    public func mapping(map: Map) {}
 }
+
+public class BackupSubscription {
+    private var render: SubscriptionRender
+    
+    init(_ context: AppContext, _ userDid: String, _ providerAddress: String) {
+        render = SubscriptionRender(context, providerAddress, userDid)
+    }
+    
+    func subscribe() throws -> Promise<BackupInfo> {
+        return try render.subscribe(nil, BackupInfo.self)
+    }
+    
+    func subscribe(_ pricingPlan: String) throws -> Promise<BackupInfo> {
+        return try render.subscribe(pricingPlan, BackupInfo.self)
+    }
+    
+    func activate(_ activate: String) throws -> Promise<Void> {
+        return try render.activate()
+    }
+
+    func deactivate(_ activate: String) throws -> Promise<Void> {
+        return try render.deactivate()
+    }
+    
+}
+
