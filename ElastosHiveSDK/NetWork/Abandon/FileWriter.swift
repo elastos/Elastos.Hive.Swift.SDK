@@ -23,7 +23,6 @@
 import Foundation
 
 public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URLSessionDataDelegate, StreamDelegate {
-    
     var uploadBoundStreams: BoundStreams
     var task: URLSessionTask? = nil
     let BUFFER_SIZE = 32768
@@ -32,10 +31,44 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     private var writerBlock : RequestBlock?
     private var writerCompleteWithError: HandleBlock?
     var uploadDidFinsish: Bool = false
-    init(url: URL, authHelper: VaultAuthHelper) {
+    let _connectionManager: ConnectionManager?
+    
+    init(_ uploadURL: URL, _ connectionManager: ConnectionManager) {
+        self._connectionManager = connectionManager
+        
         var input: InputStream? = nil
         var output: OutputStream? = nil
         
+        Stream.getBoundStreams(withBufferSize: BUFFER_SIZE,
+                               inputStream: &input,
+                               outputStream: &output)
+        
+        uploadBoundStreams = BoundStreams(input: input!, output: output!)
+
+        super.init()
+        
+        uploadBoundStreams.output.delegate = self
+        uploadBoundStreams.output.schedule(in: .current, forMode: .default)
+        uploadBoundStreams.output.open()
+        
+        let config = URLSessionConfiguration.default
+        config.requestCachePolicy = .reloadIgnoringLocalCacheData
+        let operationQueue = OperationQueue() // Run in a background queue to not block the main operations (main thread)
+        let session = URLSession(configuration: config, delegate: self, delegateQueue: operationQueue)
+        var request = try! URLRequest(url: uploadURL, method: .post, headers: self._connectionManager?.hiveHeader.headersStream())
+        request.addValue("chunked", forHTTPHeaderField: "Transfer-Encoding")
+        task = session.uploadTask(withStreamedRequest: request)
+        Log.d("Hive Debug ==> request url ->", request.url as Any)
+        Log.d("Hive Debug ==> request headers ->", request.allHTTPHeaderFields as Any)
+        
+        self.task?.resume()
+    }
+    
+    init(url: URL, authHelper: VaultAuthHelper) {
+        var input: InputStream? = nil
+        var output: OutputStream? = nil
+        self._connectionManager = nil
+
         Stream.getBoundStreams(withBufferSize: BUFFER_SIZE,
                                inputStream: &input,
                                outputStream: &output)

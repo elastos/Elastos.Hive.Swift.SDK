@@ -25,10 +25,12 @@ import Foundation
 public class ConnectionManager {
     private let defaultTimeout: Int = 30
     private var context: AppContext
-    public var hiveApi: HiveAPI?
-    public var hiveHeader: HiveHeader?
+    public var hiveApi: HiveAPI
+    public var hiveHeader: HiveHeader
     
-    init(_ context: AppContext) {
+    init(_ context: AppContext, _ baseURL: String, _ apiPath: String, _ hiveHeader: HiveHeader) {
         self.context = context
+        self.hiveApi = HiveAPI(baseURL, apiPath)
+        self.hiveHeader = hiveHeader
     }
 }

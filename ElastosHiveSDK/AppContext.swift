@@ -42,7 +42,7 @@ public class AppContext {
         self._providerAddress = providerAddress
         self.tokenResolver = LocalResolver(self.providerAddress)
         self.tokenResolver?.setNextResolver(RemoteResolver(self, nil))
-        self._connectionManager = ConnectionManager(self)
+        self._connectionManager = ConnectionManager(self, "", "", HiveHeader(nil))
     }
     
     public static func setupResover(_ resolver: String, _ cacheDir: String) throws {
