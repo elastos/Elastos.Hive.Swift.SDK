@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2020 Elastos Foundation
+* Copyright (c) 2021 Elastos Foundation
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -22,11 +22,26 @@
 
 import Foundation
 
-public protocol AppContextProvider {
+public class ScriptRunner: ServiceEndpoint {
+
+    public func downloadFile(_ transactionId: String) -> Promise<FileReader> {
+        return Promise<FileReader> { resolver in
+            let url = URL(string: self.connectionManager.hiveApi.runScriptDownload(transactionId))!
+            let reader = FileReader(url, self.connectionManager, resolver)
+            resolver.fulfill(reader)
+        }
+    }
     
-    func getLocalDataDir() -> String?
-
-    func getAppInstanceDocument() -> DIDDocument
-
-    func getAuthorization(_ jwtToken: String) -> Promise<String>
+ 
+    
+    public func uploadFile(_ transactionId: String) -> Promise<FileWriter> {
+        return Promise<FileWriter> { resolver in
+            if let url = URL(string: self.connectionManager.hiveApi.runScriptUpload(transactionId)) {
+                let writer = FileWriter(url, self.connectionManager)
+                resolver.fulfill(writer)
+            } else {
+                throw HiveError.IllegalArgument(des: "Invalid url format.")
+            }
+        }
+    }
 }

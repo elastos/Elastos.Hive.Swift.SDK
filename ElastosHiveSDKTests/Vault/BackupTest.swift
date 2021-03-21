@@ -2,7 +2,7 @@
 import XCTest
 @testable import ElastosHiveSDK
 import ElastosDIDSDK
-
+/*
 public class UserBackupAuthenticationHandler: BackupAuthenticationHandler {
     public func authorization(_ serviceDid: String, _ targetDid: String, _ targetHost: String) -> Promise<String> {
         return Promise<String> { resolver in
@@ -99,3 +99,4 @@ class BackupTest: XCTestCase {
         }
     }
 }
+*/

@@ -2,7 +2,7 @@
 import XCTest
 @testable import ElastosHiveSDK
 import ElastosDIDSDK
-
+/*
 class MigrationTest: XCTestCase {
     private var backup: Backup?
     private var manager: Management?
@@ -97,3 +97,4 @@ class MigrationTest: XCTestCase {
     }
 }
 
+*/

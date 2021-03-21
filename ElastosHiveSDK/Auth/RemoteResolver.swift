@@ -76,8 +76,18 @@ public class RemoteResolver: TokenResolver {
             throw HiveError.challengeIsNil(des: "Sign-in request failed")
         }
         _ = try verifyToken(jwtToken)
+        let semaphore: DispatchSemaphore = DispatchSemaphore(value: 0)
+        var authToken = ""
+        self.contextProvider.getAuthorization(jwtToken).done { token in
+            authToken = token
+            semaphore.signal()
+        }.catch { error in
+            // TODO: ERROR
+            semaphore.signal()
+        }
+        semaphore.wait()
         
-        return self.contextProvider.getAuthorization(jwtToken)
+        return authToken
     }
     
     public func checkValid() -> Promise<Void> {

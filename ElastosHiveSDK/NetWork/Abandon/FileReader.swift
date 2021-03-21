@@ -42,7 +42,40 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     var authFailure : RequestBlock?
     private var readerBlock : RequestBlock?
     private var readerCompleteWithError: HandleBlock?
-  
+    private var connectionManager: ConnectionManager?
+    
+    
+    public init(_ url: URL,_ connectionManager: ConnectionManager,_ resolver: Resolver<FileReader>) {
+        var input: InputStream? = nil
+        var output: OutputStream? = nil
+        self.connectionManager = connectionManager;
+        self.resolver = resolver
+        Stream.getBoundStreams(withBufferSize: BUFFER_SIZE,
+                               inputStream: &input,
+                               outputStream: &output)
+        
+        downloadBoundStreams = BoundStreams(input: input!, output: output!)
+        super.init()
+        
+        downloadBoundStreams.output.delegate = self
+        downloadBoundStreams.output.schedule(in: .current, forMode: .default)
+        downloadBoundStreams.output.open()
+        
+        downloadBoundStreams.input.delegate = self
+        downloadBoundStreams.input.schedule(in: .current, forMode: .default)
+        downloadBoundStreams.input.open()
+
+        let config = URLSessionConfiguration.default
+        let operationQueue = OperationQueue()
+        let session = URLSession(configuration: config, delegate: self, delegateQueue: operationQueue)
+        let request = try! URLRequest(url: url, method: .post, headers: self.connectionManager?.hiveHeader.headersStream())
+        task = session.dataTask(with: request)
+        Log.d("Hive Debug ==> request url ->", request.url as Any)
+        Log.d("Hive Debug ==> request headers ->", request.allHTTPHeaderFields as Any)
+        
+        self.task?.resume()
+    }
+
     init(url: URL, authHelper: VaultAuthHelper, method: HTTPMethod, resolver: Resolver<FileReader>) {
         var input: InputStream? = nil
         var output: OutputStream? = nil

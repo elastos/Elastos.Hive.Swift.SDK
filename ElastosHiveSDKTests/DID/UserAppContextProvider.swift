@@ -1,32 +1,60 @@
 
-
 import Foundation
 import ElastosDIDSDK
 import PromiseKit
-//import ElastosHiveSDK
+import ElastosHiveSDK
 
-public class UserHiveContext: ApplicationContext {
+public class UserAppContextProvider: AppContextProvider {
+    public var userDid: DIDApp
+    public var appInstanceDid: DApp
     private var localDataDir: String
-    private var presentationInJWT: PresentationInJWT
-    
-    init(_ localDataDir: String, _ pjwt: PresentationInJWT) {
-        self.localDataDir = localDataDir
-        self.presentationInJWT = pjwt
-    }
-    
-    public func getLocalDataDir() -> String {
-        return self.localDataDir
+    //    private var presentationInJWT: PresentationInJWT
+
+    public func getLocalDataDir() -> String? {
+        self.localDataDir
     }
     
     public func getAppInstanceDocument() -> DIDDocument {
-        return self.presentationInJWT.doc!
+        return try! appInstanceDid.getDocument()
     }
     
     public func getAuthorization(_ jwtToken: String) -> Promise<String> {
-        return self.presentationInJWT.getAuthToken(jwtToken)
+        return signAuthorization(jwtToken)
+    }
+    
+    //    init(_ localDataDir: String, _ pjwt: PresentationInJWT) {
+    //        self.localDataDir = localDataDir
+    //        self.presentationInJWT = pjwt
+    //    }
+    
+    init(_ path: String, _ didapp:DIDApp, _ dapp: DApp) {
+        self.localDataDir = path
+        self.userDid = didapp
+        self.appInstanceDid = dapp
+    }
+    
+    public func signAuthorization(_ jwtToken: String) -> Promise<String> {
+        return Promise{ resolver in
+            DispatchQueue.global().async { [self] in
+                do {
+                    let claims = try JwtParserBuilder().build().parseClaimsJwt(jwtToken).claims
+                    let iss = claims.getIssuer()
+                    let nonce = claims.get(key: "nonce") as? String
+                    
+                    let vc = try userDid.issueDiplomaFor(appInstanceDid)
+                    let vp: VerifiablePresentation = try appInstanceDid.createPresentation(vc, iss!, nonce!)
+                    let token = try appInstanceDid.createToken(vp, iss!)
+                    resolver.fulfill(token)
+                }
+                catch{
+                    resolver.reject(error)
+                }
+            }
+        }
     }
 }
 
+/*
 public class UserVaultAuthHelper: NSObject {
     let presentationInJWT: PresentationInJWT
     let localDataDir: String
@@ -72,3 +100,4 @@ public class UserVaultAuthHelper: NSObject {
     }
 }
 
+*/

@@ -2,7 +2,7 @@
 import XCTest
 @testable import ElastosHiveSDK
 import ElastosDIDSDK
-
+/*
 class PaymentTest: XCTestCase {
     private var payment: Payment?
     
@@ -151,3 +151,4 @@ class PaymentTest: XCTestCase {
     }
 
 }
+*/
