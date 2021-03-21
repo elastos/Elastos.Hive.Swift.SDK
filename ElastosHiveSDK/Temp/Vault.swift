@@ -62,6 +62,10 @@ public class Vault: ServiceEndpoint {
         return self._backupService!
     }
     
+    public var connectionManager: ConnectionManager {
+        return self._context.connectionManager
+    }
+    
 //    private var _files: FilesProtocol
 //    private var _database: DatabaseProtocol
 //    private var _scripting: ScriptingProtocol

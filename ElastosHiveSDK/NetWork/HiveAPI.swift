@@ -32,3 +32,9 @@ public class HiveAPI {
     }
 }
 
+extension String {
+    public func percentEncodingString() -> String {
+        return self.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+    }
+}
+

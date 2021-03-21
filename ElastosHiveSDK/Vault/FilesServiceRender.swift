@@ -22,13 +22,30 @@
 
 import Foundation
 
-// TODO
 public class FilesServiceRender: FilesProtocol {
-    var vault: Vault
+    let _connectionManager: ConnectionManager
     
     public init(_ vault: Vault) {
-        self.vault = vault
+        _connectionManager = vault.connectionManager
     }
+    
+    public func upload(_ path: String) -> Promise<FileWriter> {
+        return Promise<Any>.async().then { [self] _ -> Promise<FileWriter> in
+            return uploadImpl(path)
+        }
+    }
+    
+    public func uploadImpl(_ path: String) -> Promise<FileWriter> {
+        return Promise<FileWriter> { resolver in
+            if let url = URL(string: self._connectionManager.hiveApi.upload(path)) {
+                let writer: FileWriter = FileWriter(url, self._connectionManager)
+                resolver.fulfill(writer)
+            } else {
+                resolver.reject(HiveError.IllegalArgument(des: "Invalid url format."))
+            }
+        }
+    }
+    
     
     public func download(_ path: String) -> Promise<FileReader> {
         return Promise<FileReader> { resolver in
@@ -55,26 +72,81 @@ public class FilesServiceRender: FilesProtocol {
     }
     
     public func hash(_ path: String) -> Promise<String> {
+        return Promise<Any>.async().then { [self] _ -> Promise<String> in
+            return hashImpl(path)
+        }
+    }
+    
+    public func hashImpl(_ path: String) -> Promise<String> {
         return Promise<String> { resolver in
-            resolver.fulfill("")
+            let url = self._connectionManager.hiveApi.hash(path)
+            let response: JSON = try AF.request(url,
+                                method: .get,
+                                encoding: JSONEncoding.default,
+                                headers: self._connectionManager.hiveHeader.headers()).responseJSON().handlerJsonResponse()
+            resolver.fulfill(response["SHA256"].stringValue)
         }
     }
     
     public func list(_ path: String) -> Promise<Array<FileInfo>> {
+        return Promise<Any>.async().then { [self] _ -> Promise<Array<FileInfo>> in
+            return listImpl(path)
+        }
+    }
+    
+    public func listImpl(_ path: String) -> Promise<Array<FileInfo>> {
         return Promise<Array<FileInfo>> { resolver in
-            resolver.fulfill([false as! FileInfo])
+            let url = self._connectionManager.hiveApi.list(path)
+            let response: JSON = try AF.request(url,
+                                method: .get,
+                                encoding: JSONEncoding.default,
+                                headers: self._connectionManager.hiveHeader.headers()).responseJSON().handlerJsonResponse()
+            let fileInfoList = response["file_info_list"].arrayValue
+            var fileList = [FileInfo]()
+            fileInfoList.forEach { fileInfo in
+                let info = FileInfo()
+                info.setName(fileInfo["name"].stringValue)
+                info.setSize(fileInfo["size"].intValue)
+                info.setLastModify(fileInfo["last_modify"].stringValue)
+                info.setType(fileInfo["type"].stringValue)
+                fileList.append(info)
+            }
+            resolver.fulfill(fileList)
         }
     }
     
     public func stat(_ path: String) -> Promise<FileInfo> {
-        return Promise<FileInfo> { resolver in
-            resolver.fulfill(false as! FileInfo)
+        return Promise<Any>.async().then { [self] _ -> Promise<FileInfo> in
+            return statImpl(path)
         }
     }
     
-    public func upload(_ path: String) -> Promise<FileWriter> {
-        return Promise<FileWriter> { resolver in
-            resolver.fulfill(false as! FileWriter)
+    public func statImpl(_ path: String) -> Promise<FileInfo> {
+        return Promise<FileInfo> { resolver in
+            let url = self._connectionManager.hiveApi.properties(path)
+            let response = try AF.request(url,
+                                method: .get,
+                                encoding: JSONEncoding.default,
+                                headers: self._connectionManager.hiveHeader.headers()).responseJSON().handlerJsonResponse()
+            let info = FileInfo()
+            info.setName(response["name"].stringValue)
+            info.setSize(response["size"].intValue)
+            info.setLastModify(response["last_modify"].stringValue)
+            info.setType(response["type"].stringValue)
+            resolver.fulfill(info)
+        }
+    }
+}
+
+extension AFDataResponse {
+        
+    func handlerJsonResponse() throws -> JSON {
+        switch self.result {
+        case .success(let re):
+            let json = JSON(re)
+            return json
+        case .failure(let error):
+            throw error
         }
     }
 }
