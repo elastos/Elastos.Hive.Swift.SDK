@@ -2,7 +2,7 @@
 import XCTest
 @testable import ElastosHiveSDK
 import ElastosDIDSDK
-
+/*
 public var user: AppInstanceFactory?
 class DBTest: XCTestCase {
     private var client: HiveClientHandle?
@@ -393,3 +393,4 @@ class DBTest: XCTestCase {
     }
 
 }
+ */

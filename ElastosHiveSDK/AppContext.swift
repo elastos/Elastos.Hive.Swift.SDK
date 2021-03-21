@@ -64,8 +64,8 @@ public class AppContext {
         return self._userDid!
     }
     
-    public var providerAddress: String {
-        return self._providerAddress!
+    public var providerAddress: String? {
+        return self._providerAddress
     }
 
     public var connectionManager: ConnectionManager {

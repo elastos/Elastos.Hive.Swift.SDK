@@ -2,7 +2,7 @@
 import XCTest
 @testable import ElastosHiveSDK
 import ElastosDIDSDK
-
+/*
 class InstanceTest: XCTestCase {
     private var vault: Vault?
     private var database: Database?
@@ -83,3 +83,4 @@ class InstanceTest: XCTestCase {
     }
     
 }
+*/

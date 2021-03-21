@@ -23,9 +23,8 @@
 import Foundation
 
 public class ServiceEndpoint {
-    var _context: AppContext
-    
-    var _address: String?
+    private var _context: AppContext
+    var _providerAddress: String?
     var _userDid: String?
     var _targetDid: String?
     
@@ -39,14 +38,22 @@ public class ServiceEndpoint {
     /// This constructor will be embedded in the following service-grained extends:
     public init(_ context: AppContext, _ providerAddress: String?, _ userDid: String, _ targetDid: String?, _ targetAppDid: String?) {
         self._context = context
-        self._address = providerAddress
+        self._providerAddress = providerAddress
         self._userDid = userDid
         self._targetDid = targetDid
         self._targetAppDid = targetAppDid
     }
+    
+    public var providerAddress: String {
+        return _providerAddress!
+    }
 
     public var endpointAddress: String {
-        return _address!
+        return _providerAddress!
+    }
+    
+    public var appDid: String? {
+        return _targetAppDid
     }
     
     public var ownerDid: String? {
@@ -55,10 +62,6 @@ public class ServiceEndpoint {
     
     public var userDid: String {
         return _userDid!
-    }
-    
-    public var appDid: String? {
-        return nil
     }
     
     public var appInstanceDid: String? {
@@ -71,5 +74,13 @@ public class ServiceEndpoint {
     
     public var serviceInstanceDid: String? {
         return nil
+    }
+    
+    public var connectionManager: ConnectionManager {
+        return self._context.connectionManager
+    }
+    
+    public var context: AppContext {
+        return _context
     }
 }

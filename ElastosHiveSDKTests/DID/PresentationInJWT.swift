@@ -19,8 +19,12 @@ public class PresentationInJWT: NSObject {
         super.init()
         try initDIDBackend()
         userDidApp = DIDApp(userDidOpt.name, userDidOpt.mnemonic, PresentationInJWT.adapter, userDidOpt.phrasepass, userDidOpt.storepass)
-        appInstanceDidApp = DApp(appInstanceDidOpt.name, appInstanceDidOpt.mnemonic, PresentationInJWT.adapter, appInstanceDidOpt.phrasepass, appInstanceDidOpt.storepass)
-        doc = try appInstanceDidApp!.getDocument()!
+        appInstanceDidApp = try! DApp(appInstanceDidOpt.name, appInstanceDidOpt.mnemonic, PresentationInJWT.adapter, appInstanceDidOpt.phrasepass, appInstanceDidOpt.storepass)
+        doc = try appInstanceDidApp!.getDocument()
+    }
+   
+    public func getDoc() -> DIDDocument {
+        return doc!
     }
     
     public func getAuthToken(_ jwtToken: String) -> Promise<String> {
@@ -42,7 +46,7 @@ public class PresentationInJWT: NSObject {
             }
         }
     }
-    
+   
     public func getBackupVc(_ sourceDID: String) throws -> String {
         let vc = try userDidApp?.issueBackupDiplomaFor(sourceDID, backupOptions.targetHost, backupOptions.targetDID)
         print(vc?.description)
@@ -52,11 +56,12 @@ public class PresentationInJWT: NSObject {
     public var targetHost: String {
         return backupOptions.targetHost
     }
-    
+
     public var targetDid: String {
         return backupOptions.targetDID
     }
-  /*func getAuthToken(_ jwtToken: String) throws -> String {
+
+  func getAuthToken(_ jwtToken: String) throws -> String {
         let claims = try JwtParserBuilder().build().parseClaimsJwt(jwtToken).claims
         let iss = claims.getIssuer()
         let nonce = claims.get(key: "nonce") as? String
@@ -65,7 +70,7 @@ public class PresentationInJWT: NSObject {
         let vp: VerifiablePresentation = try appInstanceDidApp!.createPresentation(vc!, iss!, nonce!)
         let token = try appInstanceDidApp!.createToken(vp, iss!)
         return token
-    }*/
+    }
 }
 
 public class AppOptions {

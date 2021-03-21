@@ -2,7 +2,7 @@
 import XCTest
 @testable import ElastosHiveSDK
 import ElastosDIDSDK
-
+/*
 class UserContext: ApplicationContext {
     private var option: ClientOptions
     private var presentationInJWT: PresentationInJWT
@@ -157,3 +157,4 @@ class ClientOptions {
     var resolveUrl: String = ""
     var provider: String = ""
 }
+*/

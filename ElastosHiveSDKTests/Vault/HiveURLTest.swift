@@ -2,7 +2,7 @@
 import XCTest
 @testable import ElastosHiveSDK
 import ElastosDIDSDK
-
+/*
 class HiveURLTest: XCTestCase {
     private var client: HiveClientHandle?
     private var scripting: Script?
@@ -153,3 +153,4 @@ class HiveURLTest: XCTestCase {
         return fileurl!
     }
 }
+*/

@@ -1,6 +1,6 @@
 
 import Foundation
-
+/*
 let TEST_RESOLVER_URL = "http://api.elastos.io:21606" //Test Net
 let MAIN_RESOLVER_URL = "http://api.elastos.io:20606" //Main Net
 
@@ -121,3 +121,4 @@ let appInstance3_name = "testapp1"
 let appInstance3_mn = "venture link adapt field priority extend depart endless right lamp sudden fringe"
 let appInstance3_phrasepass = "password"
 let appInstance3_storepass = "password"
+*/

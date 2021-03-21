@@ -22,11 +22,25 @@
 
 import Foundation
 
-public protocol AppContextProvider {
+extension HiveAPI {
+    func registerScript() -> String {
+        return self.baseURL + self.apiPath + "/scripting/set_script"
+    }
     
-    func getLocalDataDir() -> String?
-
-    func getAppInstanceDocument() -> DIDDocument
-
-    func getAuthorization(_ jwtToken: String) -> Promise<String>
+    func callScript() -> String {
+        return self.baseURL + self.apiPath + "/scripting/run_script"
+    }
+    
+    func callScriptUrl(_ targetDid: String, _ appDid: String, _ scriptName: String, _ params: String) -> String {
+        return self.baseURL + self.apiPath + "/api/v1/scripting/run_script_url/" + targetDid + "@" + appDid + "/" + scriptName + "?params=" + params.percentEncodingString()
+    }
+    
+    func runScriptUpload(_ transactionId: String) -> String {
+        return self.baseURL + self.apiPath + "/scripting/run_script_upload/\(transactionId)"
+    }
+    
+    func runScriptDownload(_ transactionId: String) -> String {
+        return self.baseURL + self.apiPath + "/scripting/run_script_download/\(transactionId)"
+    }
+    
 }
