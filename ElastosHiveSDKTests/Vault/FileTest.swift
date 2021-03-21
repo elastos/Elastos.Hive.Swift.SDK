@@ -2,7 +2,7 @@
 import XCTest
 @testable import ElastosHiveSDK
 import ElastosDIDSDK
-
+/*
 class FileTest: XCTestCase {
     private var client: HiveClientHandle?
     private var file: File?
@@ -229,3 +229,4 @@ class FileTest: XCTestCase {
     }
     
 }
+*/

@@ -22,12 +22,13 @@
 
 import Foundation
 
-// TODO
 public class ScriptingRender: ScriptingProtocol {
-    var vault: Vault
+    let connectionManager: ConnectionManager
+    let scriptRunner: ScriptRunner
     
     public init(_ vault: Vault) {
-        self.vault = vault
+        self.connectionManager = vault.connectionManager
+        self.scriptRunner = ScriptRunner(vault.appContext, vault.providerAddress, vault.userDid, vault.ownerDid, vault.appDid)
     }
     
     public func registerScript(_ name: String, _ executable: Executable, _ allowAnonymousUser: Bool, _ allowAnonymousApp: Bool) -> Promise<Bool> {
@@ -35,6 +36,30 @@ public class ScriptingRender: ScriptingProtocol {
             resolver.fulfill(true)
         }
     }
+    
+//    private boolean registerScriptImpl(String name, Condition condition, Executable executable, boolean allowAnonymousUser, boolean allowAnonymousApp) {
+
+    
+    private func registerScriptImp(_ name: String, _ condition: Condition?, _ executable: Executable,_ allowAnonymousUser: Bool, _ allowAnonymousApp: Bool) -> Promise<Bool> {
+        Promise<Bool> { resolver in
+
+            var param = ["name": name] as [String : Any]
+            param["allowAnonymousUser"] = allowAnonymousUser
+            param["allowAnonymousApp"] = allowAnonymousApp
+            if let _ = condition {
+                param["accessCondition"] = try condition!.jsonSerialize()
+            }
+            param["executable"] = try executable.jsonSerialize()
+            let url = self.connectionManager.hiveApi.registerScript()
+            let response = try AF.request(url,
+                                method: .post,
+                                parameters: param,
+                                encoding: JSONEncoding.default,
+                                headers: self.connectionManager.hiveHeader.headers()).responseJSON().handlerJsonResponse()
+            resolver.fulfill(true)
+        }
+    }
+    
     
     public func registerScript(_ name: String, _ condition: Condition, _ executable: Executable, _ allowAnonymousUser: Bool, _ allowAnonymousApp: Bool) -> Promise<Bool> {
         return Promise<Bool> { resolver in

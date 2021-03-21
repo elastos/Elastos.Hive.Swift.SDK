@@ -1,11 +1,11 @@
 import Foundation
 import ElastosDIDSDK
 
-public class DApp: Entity {
+public class DApp: DIDEntity {
     public var appId = "appId"
 
-    public override init(_ name: String, _ mnemonic: String, _ adapter: DummyAdapter, _ phrasepass: String, _ storepass: String) {
-        super.init(name, mnemonic, adapter, phrasepass, storepass)
+    public override init(_ name: String, _ mnemonic: String, _ adapter: DummyAdapter, _ phrasepass: String, _ storepass: String) throws {
+        try super.init(name, mnemonic, adapter, phrasepass, storepass)
     }
 
     public func createPresentation(_ vc: VerifiableCredential, _ realm: String, _ nonce: String) throws -> VerifiablePresentation {
@@ -15,6 +15,11 @@ public class DApp: Entity {
 
         print("VerifiableCredential: ")
         print(vp.description)
+        
+        guard vp.isValid else {
+            throw DIDError.invalidState("Verifiable Presentation is invalid")
+        }
+        
         return vp
     }
 
@@ -27,7 +32,7 @@ public class DApp: Entity {
         let exp = userCalendar.date(from: components)
 
         // Create JWT token with presentation.
-        let token = try getDocument()!.jwtBuilder()
+        let token = try getDocument().jwtBuilder()
             .addHeader(key: Header.TYPE, value: Header.JWT_TYPE)
             .addHeader(key: "version", value: "1.0")
             .setSubject(sub: "DIDAuthResponse")

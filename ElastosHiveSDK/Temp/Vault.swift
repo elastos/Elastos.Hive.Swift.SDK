@@ -23,11 +23,11 @@
 import Foundation
 
 public class Vault: ServiceEndpoint {
-    var _filesService: FilesProtocol?
-    var _databaseService: DatabaseProtocol?
-    var _scripting: ScriptingProtocol?
-    var _pubsubService: PubSubProtocol?
-    var _backupService: BackupProtocol?
+    private var _filesService: FilesProtocol?
+    private var _databaseService: DatabaseProtocol?
+    private var _scripting: ScriptingProtocol?
+    private var _pubsubService: PubSubProtocol?
+    private var _backupService: BackupProtocol?
     
 //    public init (_ context: AppContext, _ myDid: String) {
 //        self.ini
@@ -62,9 +62,14 @@ public class Vault: ServiceEndpoint {
         return self._backupService!
     }
     
-    public var connectionManager: ConnectionManager {
-        return self._context.connectionManager
+    public override var connectionManager: ConnectionManager {
+        return self.context.connectionManager
     }
+    
+    var appContext: AppContext {
+        return self.context
+    }
+    
     
 //    private var _files: FilesProtocol
 //    private var _database: DatabaseProtocol

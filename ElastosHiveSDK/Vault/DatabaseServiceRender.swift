@@ -31,44 +31,32 @@ public class DatabaseServiceRender: DatabaseProtocol {
     }
     
     public func createCollection(_ name: String, options: CreateCollectionOptions?) -> Promise<Bool> {
-        return Promise<Bool> { resolver in
-            resolver.fulfill(false)
+        return Promise<Any>.async().then{ [self] _ -> Promise<Bool> in
+            return createColImp(name, options)
         }
-//        return Promise<Any>.async().then { [self] _ -> Promise<Bool> in
-//            return createColImp(name, options: options)
-//        }
     }
     
-//    private func createColImp(_ name: String, options: CreateCollectionOptions?) -> Promise<Bool> {
-//        return Promise<Bool> { resolver in
-//            var param: [String: Any] = ["collection": options]
-//            if options != nil {
-//                if try options!.jsonSerialize().count != 0 {
-//                    param["options"] = try options!.jsonSerialize()
-//                }
-//            }
-//            let url = vault.hiveUrl.createCollection()
-//
-//            let response = AF.request(url,
-//                                method: .post,
-//                                parameters: param,
-//                                encoding: JSONEncoding.default,
-//                                headers: HiveHeader(authHelper).headers()).responseJSON()
-//
-//            let json = try VaultApi.handlerJsonResponse(response)
-            /*
-             var param: [String: Any] = ["collection": collection]
-             if options != nil {
-                 if try options!.jsonSerialize().count != 0 {
-                     param["options"] = try options!.jsonSerialize()
-                 }
-             }
-             let url = vaultUrl.mongoDBSetup()
-             let response = AF.request(url,
-                                 method: .post,
-                                 parameters: param,
-                                 encoding: JSONEncoding.default,
-                                 headers: HiveHeader(authHelper).headers()).responseJSON()
+    private func createColImp(_ collection: String, _ options: CreateCollectionOptions?) -> Promise<Bool> {
+        return Promise<Bool> { result in
+            var param: [String: Any] = ["collection": collection]
+            if options != nil {
+                if try options!.jsonSerialize().count != 0 {
+                    param["options"] = try options!.jsonSerialize()
+                }
+            }
+            let url = self.vault.connectionManager.hiveApi.createCollection()
+            let response = AF.request(url,
+                                method: .post,
+                                parameters: param,
+                                encoding: JSONEncoding.default,
+                                headers: self.vault.connectionManager.hiveHeader.headers()).responseJSON()
+        }
+    }
+/*
+     private func createColImp(_ collection: String, _ options: CreateCollectionOptions?, _ tryAgain: Int) -> Promise<Bool> {
+         Promise<Bool> { resolver in
+
+             
              let json = try VaultApi.handlerJsonResponse(response)
              let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
              if isRelogin {
@@ -80,15 +68,8 @@ public class DatabaseServiceRender: DatabaseProtocol {
                  }
              }
              resolver.fulfill(true)
-             */
-//        }
-//    }
-    
-    /*
-     public CompletableFuture<Boolean> createCollection(String name, CreateCollectionOptions options) {
-         return CompletableFuture.supplyAsync(() -> createColImp(name));
+         }
      }
-
      private boolean createColImp(String collection) {
          try {
              Map<String, Object> map = new HashMap<>();

@@ -3,6 +3,7 @@ import XCTest
 @testable import ElastosHiveSDK
 import ElastosDIDSDK
 
+/*
 class ManagerTest: XCTestCase {
     private var manager: Management?
     
@@ -110,3 +111,4 @@ class ManagerTest: XCTestCase {
     }
 
 }
+*/

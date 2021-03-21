@@ -3,9 +3,10 @@ import XCTest
 @testable import ElastosHiveSDK
 import ElastosDIDSDK
 
+//let lock = NSLock()
 class DatabaseTest: XCTestCase {
     private var client: HiveClientHandle?
-    private var database: Database?
+    private var database: DatabaseServiceRender?
     private let collectionName = "works"
 
     func test01_DbOptions() {
@@ -196,13 +197,17 @@ class DatabaseTest: XCTestCase {
     
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
+        let lock = XCTestExpectation(description: "wait for test.")
         do {
+
             Log.setLevel(.Debug)
-            TestData.shared()
-            self.wait(for: [lock], timeout: 100.0)
+            database = TestData.shared().newVault().databaseService as! DatabaseServiceRender
+            lock.fulfill()
+
         } catch {
             XCTFail()
         }
+        self.wait(for: [lock], timeout: 100.0)
     }
     /*
      @BeforeClass
@@ -217,23 +222,4 @@ class DatabaseTest: XCTestCase {
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-
-    /*
-     @Test
-     public void test04_createCollection() {
-         CompletableFuture<Boolean> future = database.createCollection(collectionName, null)
-                 .handle((success, ex) -> (ex == null));
-
-         try {
-             assertTrue(future.get());
-             assertTrue(future.isCompletedExceptionally() == false);
-             assertTrue(future.isDone());
-         } catch (Exception e) {
-             e.printStackTrace();
-             fail();
-         }
-     }
-     */
-
-
 }
