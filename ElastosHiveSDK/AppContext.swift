@@ -27,9 +27,6 @@ public class AppContext {
     private var contextProvider: AppContextProvider?
     private var _userDid: String?
     private var _providerAddress: String?
-    
-//    private var token: AuthToken?
-//    private var tokenResolver: TokenResolver?
     private var _connectionManager: ConnectionManager?
 
     public convenience init(_ provider: AppContextProvider?, _ userDid: String?) {
@@ -40,7 +37,6 @@ public class AppContext {
         self.contextProvider = provider!
         self._userDid = userDid
         self._providerAddress = providerAddress
-        // TODO
         self._connectionManager = try! ConnectionManager(self, "https://hive-testnet1.trinity-tech.io", "/api/v1")
     }
     

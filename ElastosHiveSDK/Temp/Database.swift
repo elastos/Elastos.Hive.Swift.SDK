@@ -52,16 +52,6 @@ public class Database: DatabaseProtocol {
                                 parameters: param,
                                 encoding: JSONEncoding.default,
                                 headers: HiveHeader(authHelper).headers()).responseJSON()
-            let json = try VaultApi.handlerJsonResponse(response)
-            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
-            if isRelogin {
-                try self.authHelper.signIn()
-                createColImp(collection, options, 1).done { success in
-                    resolver.fulfill(success)
-                }.catch { error in
-                    resolver.reject(error)
-                }
-            }
             resolver.fulfill(true)
         }
     }

@@ -1,9 +1,7 @@
-
 import XCTest
 @testable import ElastosHiveSDK
 import ElastosDIDSDK
 
-//let lock = NSLock()
 class DatabaseTest: XCTestCase {
     private var client: HiveClientHandle?
     private var database: DatabaseServiceRender?
@@ -159,7 +157,8 @@ class DatabaseTest: XCTestCase {
             XCTFail()
         }
     }
-   
+    
+    // TODO
     func test03_DbDataTypes() {
         var values: [String: Any] = [: ]
         values["testDate"] = Date()
@@ -168,16 +167,13 @@ class DatabaseTest: XCTestCase {
         values["testObjectId"] = ObjectId("iiiiiiiidddddddd")
         values["testTimestamp"] = Timestamp(123456, 789)
         values["testRegex"] = RegularExpression("*FooBar", "all")
-        let data = try? JSONSerialization.data(withJSONObject: values as Any, options: [])
-        let json = String(data: data!, encoding: String.Encoding.utf8)!
-        
-// TODO:
-//        json = mapper.writeValueAsString(tdt);
-//        TestDBDataTypes tdt2 = mapper.readValue(json, TestDBDataTypes.class);
-//        String json2 = mapper.writeValueAsString(tdt2);
-//        assertEquals(json, json2);
+//        let data = try? JSONSerialization.data(withJSONObject: values as Any, options: [])
+//        let json = String(data: data!, encoding: String.Encoding.utf8)!
+//        print(json)
+//        XCTAssertTrue(true)
+
     }
-    
+
     func test04_createCollection() {
         let lock = XCTestExpectation(description: "wait for test.")
         let docNode = ["author": "john doe1", "title": "Eve for Dummies1"]
@@ -185,41 +181,180 @@ class DatabaseTest: XCTestCase {
         _ = insertOptions.bypassDocumentValidation(false).ordered(true)
         database?.createCollection(collectionName, options: nil).then{ [self] _ -> Promise<InsertOneResult> in
             return self.database!.insertOne(collectionName, docNode, options: insertOptions)
-        }.done{ result in
+        }.done { result in
                 print(result)
             lock.fulfill()
-        }.catch{ e in
+        }.catch { e in
             XCTFail()
             lock.fulfill()
         }
         self.wait(for: [lock], timeout: 1000.0)
     }
     
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    func test05_insertOne() {
+     
         let lock = XCTestExpectation(description: "wait for test.")
-        do {
-
-            Log.setLevel(.Debug)
-            database = TestData.shared().newVault().databaseService as! DatabaseServiceRender
+        let docNode = ["author": "john doe1", "title": "Eve for Dummies1"]
+        let insertOptions = InsertOptions()
+        _ = insertOptions.bypassDocumentValidation(false).ordered(true)
+        database?.insertOne(collectionName, docNode, options: insertOptions).done{ result in
+            XCTAssertTrue(true)
             lock.fulfill()
-
-        } catch {
+        }.catch{ error in
+            lock.fulfill()
             XCTFail()
         }
-        self.wait(for: [lock], timeout: 100.0)
+        self.wait(for: [lock], timeout: 1000.0)
     }
-    /*
-     @BeforeClass
-     public static void setUp() {
-         try {
-             database = TestData.getInstance().newVault().getDatabaseService();
-         } catch (HiveException | DIDException e) {
-             e.printStackTrace();
-         }
-     }
-     */
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+
+    func test06_insertMany() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        let docNode1 = ["author": "john doe2", "title": "Eve for Dummies2"]
+        let docNode2 = ["author": "john doe3", "title": "Eve for Dummies3"]
+        let insertOptions = InsertOptions()
+        _ = insertOptions.bypassDocumentValidation(false).ordered(true)
+        database?.insertMany(collectionName, [docNode1, docNode2], options: insertOptions).done{ result in
+            XCTAssertTrue(result.insertedIds().count > 0)
+            lock.fulfill()
+        }.catch{ error in
+            lock.fulfill()
+            XCTFail()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+    
+    func test07_findOne() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        let queryInfo = ["author": "john doe1"]
+
+        let findOptions = FindOptions()
+        _ = findOptions.skip(0)
+            .allowPartialResults(false)
+            .returnKey(false)
+            .batchSize(0)
+            .projection(["_id": false])
+        database?.findOne(collectionName, queryInfo, options: findOptions).done{ result in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ error in
+            lock.fulfill()
+            XCTFail()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+    
+    func test08_findMany() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        let queryInfo = ["author": "john doe1"]
+
+        let findOptions = FindOptions()
+        _ = findOptions.skip(0)
+            .allowPartialResults(false)
+            .returnKey(false)
+            .batchSize(0)
+            .projection(["_id": false])
+        database?.findMany(collectionName, queryInfo, options: findOptions).done{ result in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ error in
+            lock.fulfill()
+            XCTFail()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+    
+    func test09_countDoc() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        let filter = ["author": "john doe2"]
+        let options = CountOptions()
+        _ = options.limit(1).skip(0).maxTimeMS(1000000000)
+        database?.countDocuments(collectionName, filter, options: options).done{ result in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ error in
+            lock.fulfill()
+            XCTFail()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+
+    func test10_updateOne() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        let filterInfo = ["author": "john doe1"]
+        let update = ["$set": ["author": "john doe2_1", "title": "Eve for Dummies2"]]
+        let updateOptions = UpdateOptions()
+        _ = updateOptions.upsert(value: true).bypassDocumentValidation(value: false)
+        database?.updateOne(collectionName, filterInfo, update, options: updateOptions).done{ result in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ error in
+            lock.fulfill()
+            XCTFail()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+    
+    func test11_updateMany() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        let filterInfo = ["author": "john doe1"]
+        let update = ["$set":["author": "john doe2_1", "title": "Eve for Dummies2_1_1_2"]]
+        let updateOptions = UpdateOptions()
+        _ = updateOptions.upsert(value: true).bypassDocumentValidation(value: false)
+        database?.updateMany(collectionName, filterInfo, update, options: updateOptions).done{ result in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ error in
+            lock.fulfill()
+            XCTFail()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+    
+    func test12_deleteOne() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        let filterInfo = ["author": "john doe2"]
+        let deleteOptions = DeleteOptions()
+        database?.deleteOne(collectionName, filterInfo, options: deleteOptions).done{ result in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ error in
+            lock.fulfill()
+            XCTFail()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+    
+    func test13_deleteMany() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        let filterInfo = ["author": "john doe2"]
+        let deleteOptions = DeleteOptions()
+        database?.deleteMany(collectionName, filterInfo, options: deleteOptions).done{ result in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ error in
+            lock.fulfill()
+            XCTFail()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+
+    func test14_deleteCollection() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        database?.deleteCollection(collectionName).done{ result in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch{ error in
+            lock.fulfill()
+            XCTFail()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+    
+    override func setUpWithError() throws {
+        let lock = XCTestExpectation(description: "wait for test.")
+        Log.setLevel(.Debug)
+        database = (TestData.shared.newVault().databaseService as! DatabaseServiceRender)
+        lock.fulfill()
+        self.wait(for: [lock], timeout: 100.0)
     }
 }
