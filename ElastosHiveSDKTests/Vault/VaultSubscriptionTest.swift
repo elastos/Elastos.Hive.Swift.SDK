@@ -50,7 +50,7 @@ class VaultSubscriptionTest: XCTestCase {
     }
 
     override func setUpWithError() throws {
-        let testData: TestData = TestData.shared()
+        let testData: TestData = TestData.shared
         self.subscription = VaultSubscription(testData.appContext!, testData.ownerDid!, testData.providerAddress!, HiveAPI("", ""))
     }
 }
