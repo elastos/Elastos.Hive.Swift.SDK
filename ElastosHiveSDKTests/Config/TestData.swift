@@ -28,7 +28,6 @@ public class TestData {
     }
     
     public init () throws {
-        
         var file: String? = nil
         let bundle = Bundle(for: type(of: self))
         switch EnvironmentType.DEVELOPING {
@@ -36,11 +35,11 @@ public class TestData {
             file = bundle.path(forResource: "Developing", ofType: "conf")
         case .PRODUCTION:
             file = bundle.path(forResource: "Production", ofType: "conf")
-//            file = Bundle.main.path(forResource: "Production", ofType: "conf")
         case .LOCAL:
             file = bundle.path(forResource: "Local", ofType: "conf")
         }
         print(file)
+        
         guard let _ = file else {
             throw DIDError.illegalArgument("Couldn't find a PEM file named \(file)")
         }
@@ -49,16 +48,18 @@ public class TestData {
         print(json)
 
         let clientConfig = ClientConfig(JSON: json as! [String : Any])
-        try AppContext.setupResover(clientConfig!.resolverUrl!, "data/didCache")
+        
+        try AppContext.setupResover(clientConfig!.resolverUrl, "data/didCache")
         let adapter = DummyAdapter()
-        let applicationConfig = clientConfig!.application!
+        let applicationConfig = clientConfig!.application
         appInstanceDid = try DApp(applicationConfig.name!, applicationConfig.mnemonic!,  adapter,applicationConfig.passPhrase!, applicationConfig.storepass!)
-        let userConfig = clientConfig!.user!
+        let userConfig = clientConfig!.user
         self.userDid = DIDApp(userConfig.name!, userConfig.mnemonic!, adapter, userConfig.passPhrase!, userConfig.storepass!)
         self.nodeConfig = clientConfig!.nodeConfig
         let storePath = "\(NSHomeDirectory())/Library/Caches/data/store" + "/" + nodeConfig!.storePath!
 
-        appContext = try AppContext.build(UserAppContextProvider(storePath, userDid!, appInstanceDid!))
+        self.appContext = try AppContext.build(UserAppContextProvider(storePath, userDid!, appInstanceDid!), (nodeConfig?.ownerDid)! as String, (nodeConfig?.provider)! as String)
+//        self.appContext = try AppContext.build(UserAppContextProvider(storePath, userDid!, appInstanceDid!), nodeConfig?.ownerDid, nodeConfig?.provider) as! AppContext
     }
 
     public var ownerDid: String? {

@@ -125,7 +125,7 @@ public class SubscriptionRender: ServiceEndpoint, SubscriptionService, PaymentSe
             return Promise<Array<PricingPlan>> { resolver in
                 do {
                     let url = self.connectionManager.hiveApi.getPackageInfo()
-                    let response = AF.request(url, method: .get, encoding: JSONEncoding.default, headers: self.connectionManager.hiveHeader.headers()).responseJSON()
+                    let response = AF.request(url, method: .get, encoding: JSONEncoding.default, headers: try self.connectionManager.headers()).responseJSON()
                     let json = try VaultApi.handlerJsonResponse(response)
                     let plan = PricingPlan.deserialize(json)
                     resolver.fulfill([plan])
@@ -141,7 +141,7 @@ public class SubscriptionRender: ServiceEndpoint, SubscriptionService, PaymentSe
             return Promise<PricingPlan> { resolver in
                 do {
                     let url = self.connectionManager.hiveApi.getPricingPlan(planName)
-                    let response = AF.request(url, method: .get, encoding: JSONEncoding.default, headers: self.connectionManager.hiveHeader.headers()).responseJSON()
+                    let response = AF.request(url, method: .get, encoding: JSONEncoding.default, headers: try self.connectionManager.headers()).responseJSON()
                     let json = try VaultApi.handlerJsonResponse(response)
                     let plan = PricingPlan.deserialize(json)
                     resolver.fulfill(plan)
@@ -158,7 +158,7 @@ public class SubscriptionRender: ServiceEndpoint, SubscriptionService, PaymentSe
                 do {
                     let url = self.connectionManager.hiveApi.createOrder()
                     let params = ["pricing_name": planName]
-                    let response = AF.request(url, method: .post, parameters: params, encoding: JSONEncoding.default, headers: self.connectionManager.hiveHeader.headers()).responseJSON()
+                    let response = AF.request(url, method: .post, parameters: params, encoding: JSONEncoding.default, headers: try self.connectionManager.headers()).responseJSON()
                     let json = try VaultApi.handlerJsonResponse(response)
                     resolver.fulfill(Order.deserialize(json["order_info"]))
                 } catch {
@@ -173,7 +173,7 @@ public class SubscriptionRender: ServiceEndpoint, SubscriptionService, PaymentSe
             return Promise<Order> { resolver in
                 do {
                     let url = self.connectionManager.hiveApi.orderInfo(orderId)
-                    let response = AF.request(url, method: .get, encoding: JSONEncoding.default, headers: self.connectionManager.hiveHeader.headers()).responseJSON()
+                    let response = AF.request(url, method: .get, encoding: JSONEncoding.default, headers: try self.connectionManager.headers()).responseJSON()
                     let json = try VaultApi.handlerJsonResponse(response)
                     resolver.fulfill(Order.deserialize(json["order_info"]))
                 } catch {
@@ -189,7 +189,7 @@ public class SubscriptionRender: ServiceEndpoint, SubscriptionService, PaymentSe
                 do {
                     let url = self.connectionManager.hiveApi.payOrder
                     let params = ["order_id": orderId, "pay_txids": transId] as [String : Any]
-                    let response = AF.request(url, method: .post, parameters: params, encoding: JSONEncoding.default, headers: self.connectionManager.hiveHeader.headers()).responseJSON()
+                    let response = AF.request(url, method: .post, parameters: params, encoding: JSONEncoding.default, headers: try self.connectionManager.headers()).responseJSON()
                     let json = try VaultApi.handlerJsonResponse(response)
                     resolver.fulfill(Receipt(json))
                 } catch {

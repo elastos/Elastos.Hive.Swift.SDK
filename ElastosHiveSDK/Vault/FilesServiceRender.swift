@@ -83,7 +83,7 @@ public class FilesServiceRender: FilesProtocol {
             let response: JSON = try AF.request(url,
                                 method: .get,
                                 encoding: JSONEncoding.default,
-                                headers: self._connectionManager.hiveHeader.headers()).responseJSON().handlerJsonResponse()
+                                headers: self._connectionManager.headers()).responseJSON().handlerJsonResponse()
             resolver.fulfill(response["SHA256"].stringValue)
         }
     }
@@ -100,7 +100,7 @@ public class FilesServiceRender: FilesProtocol {
             let response: JSON = try AF.request(url,
                                 method: .get,
                                 encoding: JSONEncoding.default,
-                                headers: self._connectionManager.hiveHeader.headers()).responseJSON().handlerJsonResponse()
+                                headers: self._connectionManager.headers()).responseJSON().handlerJsonResponse()
             let fileInfoList = response["file_info_list"].arrayValue
             var fileList = [FileInfo]()
             fileInfoList.forEach { fileInfo in
@@ -127,7 +127,7 @@ public class FilesServiceRender: FilesProtocol {
             let response = try AF.request(url,
                                 method: .get,
                                 encoding: JSONEncoding.default,
-                                headers: self._connectionManager.hiveHeader.headers()).responseJSON().handlerJsonResponse()
+                                headers: self._connectionManager.headers()).responseJSON().handlerJsonResponse()
             let info = FileInfo()
             info.setName(response["name"].stringValue)
             info.setSize(response["size"].intValue)

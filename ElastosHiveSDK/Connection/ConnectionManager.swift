@@ -26,11 +26,27 @@ public class ConnectionManager {
     private let defaultTimeout: Int = 30
     private var context: AppContext
     public var hiveApi: HiveAPI
-    public var hiveHeader: HiveHeader
+    public var accessionToken: String?
+    var tokenResolver: TokenResolver
     
-    init(_ context: AppContext, _ baseURL: String, _ apiPath: String, _ hiveHeader: HiveHeader) {
+    init(_ context: AppContext, _ baseURL: String, _ apiPath: String) throws {
         self.context = context
         self.hiveApi = HiveAPI(baseURL, apiPath)
-        self.hiveHeader = hiveHeader
+        self.tokenResolver = try LocalResolver(context.userDid!, context.providerAddress!, context.appContextProvider.getLocalDataDir()!)
+        self.tokenResolver.setNextResolver(RemoteResolver(context, self))
+    }
+    
+    func headersStream() -> HTTPHeaders {
+        let accesstoken: String = self.accessionToken ?? ""
+        return ["Content-Type": "application/octet-stream", "Authorization": "token \(accesstoken)", "Transfer-Encoding": "chunked", "Connection": "Keep-Alive"]
+    }
+    
+    func headers() throws -> HTTPHeaders {
+        let accesstoken = try self.tokenResolver.getToken()!.accessToken
+        return ["Content-Type": "application/json;charset=UTF-8", "Authorization": "token \(accesstoken)"]
+    }
+    
+    func NormalHeaders() -> HTTPHeaders {
+        return ["Content-Type": "application/json;charset=UTF-8"]
     }
 }
