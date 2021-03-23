@@ -10,6 +10,8 @@ public enum EnvironmentType: Int {
 }
 
 public class TestData {
+    
+    static let shared: TestData = try! TestData()
     public var userDid: DIDApp?
     public var appInstanceDid: DApp?
     public var nodeConfig: NodeConfig?
@@ -23,9 +25,9 @@ public class TestData {
         }
     }
     
-    public static var testData: TestData {
-        return try! TestData()
-    }
+//    public static var testData: TestData {
+//        return try! TestData()
+//    }
     
     public init () throws {
         var file: String? = nil
@@ -68,9 +70,9 @@ public class TestData {
         }
     }
     
-    class func shared() -> TestData {
-        return testData
-    }
+//    class func shared() -> TestData {
+//        return testData
+//    }
     
     public func newVault() -> Vault {
         return Vault(appContext!, nodeConfig!.ownerDid!, nodeConfig!.provider!)
