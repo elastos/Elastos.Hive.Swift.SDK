@@ -36,35 +36,35 @@ public class AccessToken: Mappable {
 }
 
 public class RemoteResolver: TokenResolver {
-    private let context: AppContext
-    private let contextProvider: AppContextProvider
-    private let vaultURL: VaultURL?
 
-    init(_ context: AppContext, _ vaultURL: VaultURL?) {
-        self.context = context
+    private var contextProvider: AppContextProvider
+    private var connectionManager: ConnectionManager
+
+    init(_ context: AppContext, _ connectionManager: ConnectionManager) {
         self.contextProvider = context.appContextProvider
-        self.vaultURL = vaultURL
+        self.connectionManager = connectionManager
+    }
+
+    public func getToken() throws -> AuthToken? {
+        return try auth(signIn())
     }
     
-    public func getToken() -> AuthToken? {
-        return nil
-    }
-    public func saveToken() {
-            
+    public func invlidateToken() {
+        
     }
     
     public func setNextResolver(_ resolver: TokenResolver?) {
         
     }
     
-    private func sign() throws -> String {
+    private func signIn() throws -> String {
         let jsonstr = self.contextProvider.getAppInstanceDocument().description
         let data = jsonstr.data(using: .utf8)
-        let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: String]
+        let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
         let params = ["document": json]
         
         // TODO header design need improve
-        let response = AF.request(self.vaultURL!.signIn(),
+        let response = AF.request(self.connectionManager.hiveApi.signIn(),
                           method: .post,
                           parameters: params as Parameters,
                           encoding: JSONEncoding.default,
@@ -89,13 +89,7 @@ public class RemoteResolver: TokenResolver {
         
         return authToken
     }
-    
-    public func checkValid() -> Promise<Void> {
-        return DispatchQueue.global().async(.promise){ [self] in
-            
-        }
-    }
-    
+
     private func verifyToken(_ jwtToken: String) throws -> Bool {
         
         let jwtParser = try JwtParserBuilder().build()
@@ -115,26 +109,27 @@ public class RemoteResolver: TokenResolver {
     
     private func auth(_ token: String) throws -> AuthToken {
         let params = ["jwt": token]
-        let response = AF.request(self.vaultURL!.auth(),
+        let response = AF.request(self.connectionManager.hiveApi.auth(),
                             method: .post,
                             parameters: params,
                             encoding: JSONEncoding.default).responseJSON()
         let responseJson = try VaultApi.handlerJsonResponse(response)
         return try self.handleAuthResponse(responseJson)
     }
-    
+
     private func handleAuthResponse(_ response: JSON) throws -> AuthToken {
         let accessToken = response["access_token"].stringValue
         let jwtParserBuilder = try JwtParserBuilder().build()
         let claim = try jwtParserBuilder.parseClaimsJwt(accessToken).claims
         let expirationDate = claim.getExpiration()
-        let expiresTime: String = Date.convertToUTCStringFromDate(expirationDate!)
-        
+        let expiresTime = 9234999999
+//        let expiresTime: String = Date.convertToUTCStringFromDate(expirationDate!)
+        // TODO:
         return AuthToken(accessToken, expiresTime, "token")
     }
     
     private func challengeResponse() throws -> String {
-        let response = AF.request(self.vaultURL!.auth(),
+        let response = AF.request(self.connectionManager.hiveApi.auth(),
                                   method:.post,
                                   encoding:JSONEncoding.default).responseJSON()
         
@@ -158,3 +153,4 @@ public class RemoteResolver: TokenResolver {
         return token!.accessToken!
     }
 }
+

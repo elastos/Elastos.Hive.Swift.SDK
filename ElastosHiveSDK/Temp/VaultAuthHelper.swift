@@ -208,7 +208,7 @@ public class VaultAuthHelper: ConnectHelper {
             refreshToken = json[EXPIRES_AT_KEY].stringValue
         }
         if accessToken != "" && expiredTime != "" {
-            self.token = AuthToken(refreshToken, accessToken, expiredTime)
+            self.token = AuthToken(refreshToken, try Int(value: accessToken), expiredTime)
             setServiceDid(json[SERVICE_DID].stringValue)
         }
     }
@@ -239,7 +239,7 @@ public class VaultAuthHelper: ConnectHelper {
         }
         
         let expiresTime: String = Date.convertToUTCStringFromDate(exp!)
-        token = AuthToken("", json[ACCESS_TOKEN_KEY].stringValue, expiresTime)
+//        token = AuthToken("", json[ACCESS_TOKEN_KEY].stringValue, expiresTime)
         let json = [ACCESS_TOKEN_KEY: token!.accessToken,
 //                    EXPIRES_AT_KEY: token!.expiredTime,
                     TOKEN_TYPE_KEY: "token",

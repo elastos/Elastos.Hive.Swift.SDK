@@ -23,14 +23,71 @@
 import Foundation
 
 public class LocalResolver: TokenResolver {
-    private var providerAddress: String?
+    let TAG  = "LocalResolver"
+    let TOKEN_FOLDER = "/tokens"
+    var tokenPath: String
+    var nextResolver: TokenResolver?
+    var token: AuthToken?
+    private var providerAddress: String
     
-    init(_ providerAddress: String?) {
+    init(_ ownerDid: String, _ providerAddress: String, _ cacheDir: String) throws {
+        let rootDir = cacheDir + TOKEN_FOLDER
+        var isDirectory: ObjCBool = false
+        let fileManager = FileManager.default
+        
+        //============================================================
+        //            Check 1 - is file URL a directory?
+        //=======================================
+        if !fileManager.fileExists(atPath: rootDir) {
+            try fileManager.createDirectory(atPath: rootDir, withIntermediateDirectories: true, attributes: nil)
+        }
+        guard fileManager.fileExists(atPath: rootDir, isDirectory: &isDirectory) else {
+            throw HiveError.IllegalArgument(des: "Cannot create token root path.")
+        }
+        
         self.providerAddress = providerAddress
+        self.tokenPath = rootDir + (ownerDid + providerAddress).md5
     }
     
-    public func getToken() -> AuthToken? {return nil}
-    public func saveToken() {}
+    public func getToken() throws -> AuthToken? {
+        if token == nil {
+            token = try restoreToken()
+        }
+        if token == nil || token!.isExpired {
+            token = try nextResolver!.getToken()
+            saveToken(token!)
+        }
+        
+        return token
+    }
     
-    public func setNextResolver(_ resolver: TokenResolver?) {}
+    public func invlidateToken() {
+        if token != nil {
+            token = nil
+            clearToken()
+        }
+    }
+    
+    private func restoreToken() throws -> AuthToken? {
+        let fileManager = FileManager.default
+        if !fileManager.fileExists(atPath: tokenPath) {
+            return nil
+        }
+        // TODO:
+        return nil
+    }
+    
+    private func saveToken(_ token: AuthToken) {
+        //TODO:
+    }
+    
+    private func clearToken() {
+        // TODO:
+    }
+    
+    public func setNextResolver(_ resolver: TokenResolver?) {
+        self.nextResolver = resolver
+    }
+    
 }
+

@@ -45,11 +45,12 @@ public class DatabaseServiceRender: DatabaseProtocol {
                 }
             }
             let url = self.vault.connectionManager.hiveApi.createCollection()
+            let header = try self.vault.connectionManager.headers()
             let response = AF.request(url,
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
-                                headers: self.vault.connectionManager.hiveHeader.headers()).responseJSON()
+                                headers: header).responseJSON()
         }
     }
 /*

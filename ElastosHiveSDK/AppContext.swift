@@ -28,8 +28,8 @@ public class AppContext {
     private var _userDid: String?
     private var _providerAddress: String?
     
-    private var token: AuthToken?
-    private var tokenResolver: TokenResolver?
+//    private var token: AuthToken?
+//    private var tokenResolver: TokenResolver?
     private var _connectionManager: ConnectionManager?
 
     public convenience init(_ provider: AppContextProvider?, _ userDid: String?) {
@@ -40,9 +40,8 @@ public class AppContext {
         self.contextProvider = provider!
         self._userDid = userDid
         self._providerAddress = providerAddress
-        self.tokenResolver = LocalResolver(self.providerAddress)
-        self.tokenResolver?.setNextResolver(RemoteResolver(self, nil))
-        self._connectionManager = ConnectionManager(self, "", "", HiveHeader(nil))
+        // TODO
+        self._connectionManager = try! ConnectionManager(self, "https://hive-testnet1.trinity-tech.io", "/api/v1")
     }
     
     public static func setupResover(_ resolver: String, _ cacheDir: String) throws {
@@ -60,8 +59,8 @@ public class AppContext {
         return self.contextProvider!
     }
     
-    public var userDid: String {
-        return self._userDid!
+    public var userDid: String? {
+        return self._userDid
     }
     
     public var providerAddress: String? {
@@ -72,17 +71,17 @@ public class AppContext {
         return self._connectionManager!
     }
     
-    public static func build(_ provider: AppContextProvider) throws -> AppContext {
-        guard provider.getLocalDataDir() != nil else {
-            throw HiveError.IllegalArgument(des: "Missing method to acquire data location in AppContext provider")
-        }
-        
-        guard provider.getAppInstanceDocument() != nil else {
-            throw HiveError.IllegalArgument(des: "Missing method to acquire App instance DID document in AppContext provider")
-        }
-
-        return AppContext(provider, nil, nil)
-    }
+//    public static func build(_ provider: AppContextProvider) throws -> AppContext {
+//        guard provider.getLocalDataDir() != nil else {
+//            throw HiveError.IllegalArgument(des: "Missing method to acquire data location in AppContext provider")
+//        }
+//        
+//        guard provider.getAppInstanceDocument() != nil else {
+//            throw HiveError.IllegalArgument(des: "Missing method to acquire App instance DID document in AppContext provider")
+//        }
+//
+//        return AppContext(provider, nil, nil)
+//    }
     
     public static func build(_ provider: AppContextProvider, _ userDid: String, _ providerAddress: String) throws -> AppContext {
         guard provider.getLocalDataDir() != nil else {
