@@ -23,9 +23,10 @@
 import Foundation
 
 public protocol TokenResolver {
-    func getToken() -> AuthToken?
-    
-    func saveToken()
+
+    func getToken() throws -> AuthToken?
+
+    func invlidateToken()
 
     func setNextResolver(_ resolver: TokenResolver?)
 }

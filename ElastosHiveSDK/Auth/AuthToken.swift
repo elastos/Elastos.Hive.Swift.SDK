@@ -23,14 +23,30 @@
 import Foundation
 
 public class AuthToken: NSObject {
-    var accessToken: String
-    var expiresTime: String
-    var tokenType: String
-    
-    init(_ accessToken: String, _ expiresTime: String, _ tokenType: String) {
-        self.accessToken = accessToken
-        self.expiresTime = expiresTime
-        self.tokenType = tokenType
+    var _accessToken: String
+    public var accessToken: String {
+        return _accessToken
+    }
+    var _expiresTime: Int
+    public var expiresTime: Int {
+        return _expiresTime
+    }
+    var _tokenType: String
+    public var tokenType: String {
+        return _tokenType
     }
     
+    public var canonicalizedAccessToken: String {
+        return _tokenType + " " + accessToken
+    }
+    
+    init(_ accessToken: String, _ expiresTime: Int, _ tokenType: String) {
+        self._accessToken = accessToken
+        self._expiresTime = expiresTime
+        self._tokenType = tokenType
+    }
+    
+    public var isExpired: Bool {
+        return Int(Date().timeIntervalSince1970) >= expiresTime
+    }
 }

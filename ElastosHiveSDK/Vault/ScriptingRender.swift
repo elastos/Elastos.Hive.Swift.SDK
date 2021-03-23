@@ -55,7 +55,7 @@ public class ScriptingRender: ScriptingProtocol {
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
-                                headers: self.connectionManager.hiveHeader.headers()).responseJSON().handlerJsonResponse()
+                                headers: self.connectionManager.headers()).responseJSON().handlerJsonResponse()
             resolver.fulfill(true)
         }
     }

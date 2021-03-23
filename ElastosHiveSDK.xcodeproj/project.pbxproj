@@ -29,7 +29,6 @@
 		1103757023FF96A0004216D0 /* LogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103756F23FF96A0004216D0 /* LogLevel.swift */; };
 		1103757123FF96A0004216D0 /* LogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103756F23FF96A0004216D0 /* LogLevel.swift */; };
 		1103757323FF96AB004216D0 /* AuthToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103757223FF96AB004216D0 /* AuthToken.swift */; };
-		1103757423FF96AB004216D0 /* AuthToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103757223FF96AB004216D0 /* AuthToken.swift */; };
 		1103757623FF96B5004216D0 /* ConnectHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103757523FF96B5004216D0 /* ConnectHelper.swift */; };
 		1103757723FF96B5004216D0 /* ConnectHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103757523FF96B5004216D0 /* ConnectHelper.swift */; };
 		1103757923FF96BF004216D0 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103757823FF96BF004216D0 /* Log.swift */; };
@@ -229,6 +228,7 @@
 		3045A75926024C1E0037527A /* ScriptingRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A75826024C1E0037527A /* ScriptingRender.swift */; };
 		3045A75C2602519D0037527A /* Promise+async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A75B2602519D0037527A /* Promise+async.swift */; };
 		3045A75D2602519D0037527A /* Promise+async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A75B2602519D0037527A /* Promise+async.swift */; };
+		308F2C7D2608DAC800F2ADFD /* AuthToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103757223FF96AB004216D0 /* AuthToken.swift */; };
 		30A996FB25FCEB420002B014 /* RemoteResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A996FA25FCEB420002B014 /* RemoteResolver.swift */; };
 		30A996FF25FCF74B0002B014 /* ConnectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A996FE25FCF74B0002B014 /* ConnectionManager.swift */; };
 		30DA78A125F84ACD00400C19 /* BackupTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116B2F4925B8259900635D97 /* BackupTest.swift */; };
@@ -735,6 +735,7 @@
 		3033736F25FA2173004D0D93 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
+				1103757223FF96AB004216D0 /* AuthToken.swift */,
 				3033737025FA218D004D0D93 /* TokenResolver.swift */,
 				30A996FA25FCEB420002B014 /* RemoteResolver.swift */,
 				30099A6825FE68A800506AA8 /* LocalResolver.swift */,
@@ -769,7 +770,6 @@
 				3033736B25FA1FC5004D0D93 /* DataStorage.swift */,
 				11724C0D2589E0E200B27285 /* AuthenticationAdapter.swift */,
 				111D477824ED0C1200B7462B /* VaultAuthHelper.swift */,
-				1103757223FF96AB004216D0 /* AuthToken.swift */,
 				A3FD3C80228000EE0031413A /* HiveClient.swift */,
 				11C320FD25CA485C001A3AAE /* HiveURLInfo.swift */,
 				11C3210125CAA902001A3AAE /* UrlInfo.swift */,
@@ -1294,6 +1294,7 @@
 				1127462E24FE3343007D6356 /* Database.swift in Sources */,
 				11496C66251B1E37002DE4F0 /* Date.swift in Sources */,
 				116B2F6325B8302200635D97 /* BackupUsingPlan.swift in Sources */,
+				308F2C7D2608DAC800F2ADFD /* AuthToken.swift in Sources */,
 				111D47D524F7906F00B7462B /* DeleteOptions.swift in Sources */,
 				1127463424FE3386007D6356 /* Script.swift in Sources */,
 				111D47EA24F7940600B7462B /* UpdateResult.swift in Sources */,
@@ -1312,7 +1313,6 @@
 				111D47CC24F7904100B7462B /* Collation.swift in Sources */,
 				118F2D91250F29C400447A0A /* AndCondition.swift in Sources */,
 				118F2DA6250F33AB00447A0A /* RawCondition.swift in Sources */,
-				1103757423FF96AB004216D0 /* AuthToken.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
