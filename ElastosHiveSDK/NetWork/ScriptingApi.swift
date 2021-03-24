@@ -31,8 +31,12 @@ extension HiveAPI {
         return self.baseURL + self.apiPath + "/scripting/run_script"
     }
     
-    func callScriptUrl(_ targetDid: String, _ appDid: String, _ scriptName: String, _ params: String) -> String {
-        return self.baseURL + self.apiPath + "/api/v1/scripting/run_script_url/" + targetDid + "@" + appDid + "/" + scriptName + "?params=" + params.percentEncodingString()
+    func callScriptUrl(_ targetDid: String, _ appDid: String, _ scriptName: String, _ params: String?) -> String {
+        var paramsEncodingString = ""
+        if params != nil {
+            paramsEncodingString = "?params=" + params!.percentEncodingString()
+        }
+        return self.baseURL + self.apiPath + "/scripting/run_script_url/" + targetDid + "@" + appDid + "/" + scriptName + paramsEncodingString
     }
     
     func runScriptUpload(_ transactionId: String) -> String {

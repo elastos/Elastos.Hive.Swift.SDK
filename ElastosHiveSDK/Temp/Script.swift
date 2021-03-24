@@ -22,7 +22,7 @@
 
 import Foundation
 
-public class Script: ScriptingProtocol {
+public class Script {
 
     private static let TAG = "ScriptClient"
     private var authHelper: VaultAuthHelper
