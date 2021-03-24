@@ -1,7 +1,6 @@
 
 import Foundation
 
-// TODO:
 let HiveQueue = DispatchQueue(label: "org.elastos.hivesdk.queue", qos: .default, attributes: .concurrent, autoreleaseFrequency: .workItem)
 extension Promise {
     public class func async() -> Promise<Void> {

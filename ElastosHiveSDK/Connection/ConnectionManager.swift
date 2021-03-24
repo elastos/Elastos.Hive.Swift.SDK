@@ -42,8 +42,9 @@ public class ConnectionManager {
     }
     
     func headers() throws -> HTTPHeaders {
-        let accesstoken = try self.tokenResolver.getToken()!.accessToken
-        return ["Content-Type": "application/json;charset=UTF-8", "Authorization": "token \(accesstoken)"]
+        let token = try self.tokenResolver.getToken()!.accessToken
+        self.accessionToken = token
+        return ["Content-Type": "application/json;charset=UTF-8", "Authorization": "token \(token)"]
     }
     
     func NormalHeaders() -> HTTPHeaders {

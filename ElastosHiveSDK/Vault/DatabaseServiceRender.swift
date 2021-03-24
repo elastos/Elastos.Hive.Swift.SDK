@@ -80,7 +80,7 @@ public class DatabaseServiceRender: DatabaseProtocol {
                                           method: .post,
                                           parameters: param,
                                           encoding: JSONEncoding.default,
-                                          headers: header).responseJSON().handlerJsonResponse()
+                                          headers: header).responseJSON().validateResponse()
             let insertOneResult = InsertOneResult(json)
             resolver.fulfill(insertOneResult)
         }
@@ -104,7 +104,7 @@ public class DatabaseServiceRender: DatabaseProtocol {
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
-                                headers: header).responseJSON().handlerJsonResponse()
+                                headers: header).responseJSON().validateResponse()
             let insertManyResult = InsertManyResult(json)
             resolver.fulfill(insertManyResult)
         }
@@ -128,7 +128,7 @@ public class DatabaseServiceRender: DatabaseProtocol {
                                           method: .post,
                                           parameters: param,
                                           encoding: JSONEncoding.default,
-                                          headers: header).responseJSON().handlerJsonResponse()
+                                          headers: header).responseJSON().validateResponse()
             resolver.fulfill(json["count"].intValue)
         }
     }
@@ -151,7 +151,7 @@ public class DatabaseServiceRender: DatabaseProtocol {
                                       method: .post,
                                       parameters: param,
                                       encoding: JSONEncoding.default,
-                                      headers: header).responseJSON().handlerJsonResponse()
+                                      headers: header).responseJSON().validateResponse()
             resolver.fulfill(json["items"].dictionaryObject)
         }
     }
@@ -174,7 +174,7 @@ public class DatabaseServiceRender: DatabaseProtocol {
                                       method: .post,
                                       parameters: param,
                                       encoding: JSONEncoding.default,
-                                      headers: header).responseJSON().handlerJsonResponse()
+                                      headers: header).responseJSON().validateResponse()
             var items: [Dictionary<String, Any>] = []
             json["items"].arrayValue.forEach { json in
                 guard json.dictionaryObject == nil else {
@@ -208,7 +208,7 @@ public class DatabaseServiceRender: DatabaseProtocol {
                                           method: .post,
                                           parameters: param,
                                           encoding: JSONEncoding.default,
-                                          headers: header).responseJSON().handlerJsonResponse()
+                                          headers: header).responseJSON().validateResponse()
             let updateResult = UpdateResult(json)
             resolver.fulfill(updateResult)
         }
@@ -232,7 +232,7 @@ public class DatabaseServiceRender: DatabaseProtocol {
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
-                                headers: header).responseJSON().handlerJsonResponse()
+                                headers: header).responseJSON().validateResponse()
             let updateResult = UpdateResult(json)
             resolver.fulfill(updateResult)
         }
@@ -256,7 +256,7 @@ public class DatabaseServiceRender: DatabaseProtocol {
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
-                                headers: header).responseJSON().handlerJsonResponse()
+                                headers: header).responseJSON().validateResponse()
             let deleteResult = DeleteResult(json)
             resolver.fulfill(deleteResult)
         }
@@ -280,7 +280,7 @@ public class DatabaseServiceRender: DatabaseProtocol {
                                 method: .post,
                                 parameters: param,
                                 encoding: JSONEncoding.default,
-                                headers: header).responseJSON().handlerJsonResponse()
+                                headers: header).responseJSON().validateResponse()
             let deleteResult = DeleteResult(json)
             resolver.fulfill(deleteResult)
         }

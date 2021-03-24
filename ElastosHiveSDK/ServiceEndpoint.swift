@@ -32,7 +32,7 @@ public class ServiceEndpoint {
     
     /// This constructor will be embedded in the following global-grained extends:
     public convenience init(_ context: AppContext, _ providerAddress: String?, _ userDid: String) {
-        self.init(context, providerAddress, userDid, nil, nil)
+        self.init(context, providerAddress, userDid, userDid, nil)
     }
     
     /// This constructor will be embedded in the following service-grained extends:

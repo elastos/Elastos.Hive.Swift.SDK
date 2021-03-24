@@ -188,6 +188,7 @@ class ScriptTest: XCTestCase {
     func test12_uploadFile() {
         let lock = XCTestExpectation(description: "wait for test.")
         let params = ["group_id": ["$oid": "5f8d9dfe2f4c8b7a6f8ec0f1"], "path": "upload_test.txt"] as [String : Any]
+
         let scriptName = "upload_file"
         scripting?.callScript(scriptName, params, nil, JSON.self).then({ json -> Promise<FileWriter> in
             let transactionId = json[scriptName]["transaction_id"].stringValue

@@ -91,6 +91,6 @@ public class TestData {
     }
     
     public func getVault() -> Promise<Vault> {
-    return appContext!.getVault(nodeConfig!.ownerDid!, nodeConfig!.provider!)
+        return appContext!.getVault(nodeConfig!.ownerDid!, nodeConfig!.provider!)
     }
 }
