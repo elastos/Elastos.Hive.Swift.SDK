@@ -56,7 +56,7 @@ public protocol ScriptingProtocol {
     /// - Parameters:
     ///   - name: The call's script name
     ///   - resultType: String、 Data、 JSON、 Dictionry<String, Any>
-    func callScriptUrl<T>(_ name: String, _ params: String, _ appDid: String, _ resultType: T.Type) -> Promise<T>
+    func callScriptUrl<T>(_ name: String, _ params: String?, _ appDid: String, _ resultType: T.Type) -> Promise<T>
     
     /// Run a script to upload a file NOTE:
     /// The upload works a bit differently compared to other types of executable queries

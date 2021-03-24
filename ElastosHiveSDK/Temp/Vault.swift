@@ -28,13 +28,9 @@ public class Vault: ServiceEndpoint {
     private var _scripting: ScriptingProtocol?
     private var _pubsubService: PubSubProtocol?
     private var _backupService: BackupProtocol?
-    
-//    public init (_ context: AppContext, _ myDid: String) {
-//        self.ini
-//    }
 
-    public init (_ context: AppContext, _ myDid: String, _ providerAddress: String) {
-        super.init(context, providerAddress, myDid, nil, nil)
+    public init (_ context: AppContext,_ myDid: String, _ providerAddress: String) {
+        super.init(context, providerAddress, myDid, myDid, nil)
         self._filesService = ServiceBuilder(self).createFilesService()
         self._databaseService = ServiceBuilder(self).createDatabase()
         self._scripting = ServiceBuilder(self).createScriptingService()

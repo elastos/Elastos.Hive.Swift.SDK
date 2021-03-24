@@ -1,24 +1,24 @@
 /*
-* Copyright (c) 2020 Elastos Foundation
-*
-* Permission is hereby granted, free of charge, to any person obtaining a copy
-* of this software and associated documentation files (the "Software"), to deal
-* in the Software without restriction, including without limitation the rights
-* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-* copies of the Software, and to permit persons to whom the Software is
-* furnished to do so, subject to the following conditions:
-*
-* The above copyright notice and this permission notice shall be included in all
-* copies or substantial portions of the Software.
-*
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-* SOFTWARE.
-*/
+ * Copyright (c) 2020 Elastos Foundation
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 
 import Foundation
 
@@ -46,48 +46,6 @@ public class FilesServiceRender: FilesProtocol {
         }
     }
     
-    
-    public func download(_ path: String) -> Promise<FileReader> {
-        return Promise<FileReader> { resolver in
-            resolver.fulfill(false as! FileReader)
-        }
-    }
-    
-    public func delete(_ path: String) -> Promise<Bool> {
-        return Promise<Bool> { resolver in
-            resolver.fulfill(true)
-        }
-    }
-    
-    public func move(_ source: String, _ target: String) -> Promise<Bool> {
-        return Promise<Bool> { resolver in
-            resolver.fulfill(true)
-        }
-    }
-    
-    public func copy(_ source: String, _ target: String) -> Promise<Bool> {
-        return Promise<Bool> { resolver in
-            resolver.fulfill(true)
-        }
-    }
-    
-    public func hash(_ path: String) -> Promise<String> {
-        return Promise<Any>.async().then { [self] _ -> Promise<String> in
-            return hashImpl(path)
-        }
-    }
-    
-    public func hashImpl(_ path: String) -> Promise<String> {
-        return Promise<String> { resolver in
-            let url = self._connectionManager.hiveApi.hash(path)
-            let response: JSON = try AF.request(url,
-                                method: .get,
-                                encoding: JSONEncoding.default,
-                                headers: self._connectionManager.headers()).responseJSON().handlerJsonResponse()
-            resolver.fulfill(response["SHA256"].stringValue)
-        }
-    }
-    
     public func list(_ path: String) -> Promise<Array<FileInfo>> {
         return Promise<Any>.async().then { [self] _ -> Promise<Array<FileInfo>> in
             return listImpl(path)
@@ -97,10 +55,11 @@ public class FilesServiceRender: FilesProtocol {
     public func listImpl(_ path: String) -> Promise<Array<FileInfo>> {
         return Promise<Array<FileInfo>> { resolver in
             let url = self._connectionManager.hiveApi.list(path)
+            let header = try self._connectionManager.headers()
             let response: JSON = try AF.request(url,
-                                method: .get,
-                                encoding: JSONEncoding.default,
-                                headers: self._connectionManager.headers()).responseJSON().handlerJsonResponse()
+                                                method: .get,
+                                                encoding: JSONEncoding.default,
+                                                headers: header).responseJSON().validateResponse()
             let fileInfoList = response["file_info_list"].arrayValue
             var fileList = [FileInfo]()
             fileInfoList.forEach { fileInfo in
@@ -124,10 +83,11 @@ public class FilesServiceRender: FilesProtocol {
     public func statImpl(_ path: String) -> Promise<FileInfo> {
         return Promise<FileInfo> { resolver in
             let url = self._connectionManager.hiveApi.properties(path)
+            let header = try self._connectionManager.headers()
             let response = try AF.request(url,
-                                method: .get,
-                                encoding: JSONEncoding.default,
-                                headers: self._connectionManager.headers()).responseJSON().handlerJsonResponse()
+                                          method: .get,
+                                          encoding: JSONEncoding.default,
+                                          headers: header).responseJSON().validateResponse()
             let info = FileInfo()
             info.setName(response["name"].stringValue)
             info.setSize(response["size"].intValue)
@@ -136,11 +96,108 @@ public class FilesServiceRender: FilesProtocol {
             resolver.fulfill(info)
         }
     }
+    
+    public func download(_ path: String) -> Promise<FileReader> {
+        return Promise<Any>.async().then { [self] _ -> Promise<FileReader> in
+            return downloadImpl(path)
+        }
+    }
+    
+    public func downloadImpl(_ path: String) -> Promise<FileReader> {
+        return Promise<FileReader> { resolver in
+            let url = URL(string: self._connectionManager.hiveApi.download(path))
+            _ = try self._connectionManager.headers()
+            guard (url != nil) else {
+                resolver.reject(HiveError.IllegalArgument(des: "Invalid url format."))
+                return
+            }
+            let reader = FileReader(url!, self._connectionManager, resolver)
+            resolver.fulfill(reader)
+        }
+    }
+    
+    public func delete(_ path: String) -> Promise<Bool> {
+        return Promise<Any>.async().then { [self] _ -> Promise<Bool> in
+            return deleteImpl(path)
+        }
+    }
+    
+    private func deleteImpl(_ remoteFile: String) -> Promise<Bool> {
+        Promise<Bool> { resolver in
+            let param = ["path": remoteFile]
+            let url = URL(string: self._connectionManager.hiveApi.deleteFolder())
+            let header = try self._connectionManager.headers()
+            _ = try AF.request(url!,
+                               method: .post,
+                               parameters: param,
+                               encoding: JSONEncoding.default,
+                               headers: header).responseJSON().validateResponse()
+            resolver.fulfill(true)
+        }
+    }
+    
+    
+    public func move(_ source: String, _ target: String) -> Promise<Bool> {
+        return Promise<Any>.async().then { [self] _ -> Promise<Bool> in
+            return moveImpl(source, target)
+        }
+    }
+    
+    private func moveImpl(_ source: String, _ target: String) -> Promise<Bool> {
+        Promise<Bool> { resolver in
+            let url = self._connectionManager.hiveApi.move()
+            let header = try self._connectionManager.headers()
+            let params = ["src_path": source, "dst_path": target]
+            _ = try AF.request(URL(string: url)!,
+                               method: .post,
+                               parameters: params,
+                               encoding: JSONEncoding.default,
+                               headers: header).responseJSON().validateResponse()
+            resolver.fulfill(true)
+        }
+    }
+    
+    public func copy(_ source: String, _ target: String) -> Promise<Bool> {
+        return Promise<Any>.async().then { [self] _ -> Promise<Bool> in
+            return copyImpl(source, target)
+        }
+    }
+    
+    private func copyImpl(_ source: String, _ target: String) -> Promise<Bool> {
+        Promise<Bool> { resolver in
+            let url = self._connectionManager.hiveApi.copy()
+            let header = try self._connectionManager.headers()
+            let param = ["src_path": source, "dst_path": target]
+            let response = try AF.request(url,
+                                          method: .post,
+                                          parameters: param,
+                                          encoding: JSONEncoding.default,
+                                          headers: header).responseJSON().validateResponse()
+            resolver.fulfill(true)
+        }
+    }
+    
+    public func hash(_ path: String) -> Promise<String> {
+        return Promise<Any>.async().then { [self] _ -> Promise<String> in
+            return hashImpl(path)
+        }
+    }
+    
+    public func hashImpl(_ path: String) -> Promise<String> {
+        return Promise<String> { resolver in
+            let url = self._connectionManager.hiveApi.hash(path)
+            let response: JSON = try AF.request(url,
+                                                method: .get,
+                                                encoding: JSONEncoding.default,
+                                                headers: self._connectionManager.headers()).responseJSON().validateResponse()
+            resolver.fulfill(response["SHA256"].stringValue)
+        }
+    }
 }
 
 extension AFDataResponse {
         
-    func handlerJsonResponse() throws -> JSON {
+    func validateResponse() throws -> JSON {
         switch self.result {
         case .success(let re):
             let json = JSON(re)

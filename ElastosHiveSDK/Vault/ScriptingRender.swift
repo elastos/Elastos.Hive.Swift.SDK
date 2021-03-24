@@ -32,62 +32,55 @@ public class ScriptingRender: ScriptingProtocol {
     }
     
     public func registerScript(_ name: String, _ executable: Executable, _ allowAnonymousUser: Bool, _ allowAnonymousApp: Bool) -> Promise<Bool> {
-        return Promise<Bool> { resolver in
-            resolver.fulfill(true)
-        }
+        return self.registerScriptImp(name, nil, executable, allowAnonymousUser, allowAnonymousApp)
     }
     
-//    private boolean registerScriptImpl(String name, Condition condition, Executable executable, boolean allowAnonymousUser, boolean allowAnonymousApp) {
-
+    public func registerScript(_ name: String, _ condition: Condition, _ executable: Executable, _ allowAnonymousUser: Bool, _ allowAnonymousApp: Bool) -> Promise<Bool> {
+        return self.registerScriptImp(name, condition, executable, allowAnonymousUser, allowAnonymousApp)
+    }
     
-    private func registerScriptImp(_ name: String, _ condition: Condition?, _ executable: Executable,_ allowAnonymousUser: Bool, _ allowAnonymousApp: Bool) -> Promise<Bool> {
+    private func registerScriptImp(_ name: String, _ accessCondition: Condition?, _ executable: Executable,_ allowAnonymousUser: Bool, _ allowAnonymousApp: Bool) -> Promise<Bool> {
         Promise<Bool> { resolver in
-
+            
             var param = ["name": name] as [String : Any]
             param["allowAnonymousUser"] = allowAnonymousUser
             param["allowAnonymousApp"] = allowAnonymousApp
-            if let _ = condition {
-                param["accessCondition"] = try condition!.jsonSerialize()
+            if let _ = accessCondition {
+                param["accessCondition"] = try accessCondition!.jsonSerialize()
             }
             param["executable"] = try executable.jsonSerialize()
             let url = self.connectionManager.hiveApi.registerScript()
-            let response = try AF.request(url,
-                                method: .post,
-                                parameters: param,
-                                encoding: JSONEncoding.default,
-                                headers: self.connectionManager.headers()).responseJSON().handlerJsonResponse()
-            resolver.fulfill(true)
-        }
-    }
-    
-    
-    public func registerScript(_ name: String, _ condition: Condition, _ executable: Executable, _ allowAnonymousUser: Bool, _ allowAnonymousApp: Bool) -> Promise<Bool> {
-        return Promise<Bool> { resolver in
+            let header = try self.connectionManager.headers()
+            _ = try AF.request(url,
+                               method: .post,
+                               parameters: param,
+                               encoding: JSONEncoding.default,
+                               headers:header).responseJSON().validateResponse()
             resolver.fulfill(true)
         }
     }
     
     public func callScript<T>(_ name: String, _ params: [String : Any]?, _ appDid: String?, _ resultType: T.Type) -> Promise<T> {
-        return Promise<T> { resolver in
-            resolver.fulfill(true as! T)
+        return Promise<Any>.async().then{ [self] _ -> Promise<T> in
+            return scriptRunner.callScript(name, params, appDid, resultType)
         }
     }
     
-    public func callScriptUrl<T>(_ name: String, _ params: String, _ appDid: String, _ resultType: T.Type) -> Promise<T> {
-        return Promise<T> { resolver in
-            resolver.fulfill(true as! T)
+    public func callScriptUrl<T>(_ name: String, _ params: String?, _ appDid: String, _ resultType: T.Type) -> Promise<T> {
+        return Promise<Any>.async().then{ [self] _ -> Promise<T> in
+            return scriptRunner.callScriptUrl(name, params, appDid, resultType)
         }
     }
     
     public func uploadFile(_ transactionId: String) -> Promise<FileWriter> {
-        return Promise<FileWriter> { resolver in
-            resolver.fulfill(true as! FileWriter)
+        return Promise<Any>.async().then{ [self] _ -> Promise<FileWriter> in
+            return scriptRunner.uploadFile(transactionId)
         }
     }
     
     public func downloadFile(_ transactionId: String) -> Promise<FileReader> {
-        return Promise<FileReader> { resolver in
-            resolver.fulfill(true as! FileReader)
+        return Promise<Any>.async().then{ [self] _ -> Promise<FileReader> in
+            return scriptRunner.downloadFile(transactionId)
         }
     }
 }
