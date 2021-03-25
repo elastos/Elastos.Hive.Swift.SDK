@@ -71,17 +71,17 @@ public class AppContext {
         return self._connectionManager!
     }
     
-//    public static func build(_ provider: AppContextProvider) throws -> AppContext {
-//        guard provider.getLocalDataDir() != nil else {
-//            throw HiveError.IllegalArgument(des: "Missing method to acquire data location in AppContext provider")
-//        }
-//        
-//        guard provider.getAppInstanceDocument() != nil else {
-//            throw HiveError.IllegalArgument(des: "Missing method to acquire App instance DID document in AppContext provider")
-//        }
-//
-//        return AppContext(provider, nil, nil)
-//    }
+    public static func build(_ provider: AppContextProvider) throws -> AppContext {
+        guard provider.getLocalDataDir() != nil else {
+            throw HiveError.IllegalArgument(des: "Missing method to acquire data location in AppContext provider")
+        }
+        
+        guard provider.getAppInstanceDocument() != nil else {
+            throw HiveError.IllegalArgument(des: "Missing method to acquire App instance DID document in AppContext provider")
+        }
+
+        return AppContext(provider, nil, nil)
+    }
     
     public static func build(_ provider: AppContextProvider, _ userDid: String, _ providerAddress: String) throws -> AppContext {
         guard provider.getLocalDataDir() != nil else {

@@ -58,7 +58,7 @@ public class RemoteResolver: TokenResolver {
     }
     
     private func signIn() throws -> String {
-        let jsonstr = self.contextProvider.getAppInstanceDocument().description
+        let jsonstr = self.contextProvider.getAppInstanceDocument()!.description
         let data = jsonstr.data(using: .utf8)
         let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
         let params = ["document": json]
@@ -78,7 +78,7 @@ public class RemoteResolver: TokenResolver {
         _ = try verifyToken(jwtToken)
         let semaphore: DispatchSemaphore = DispatchSemaphore(value: 0)
         var authToken = ""
-        self.contextProvider.getAuthorization(jwtToken).done { token in
+        self.contextProvider.getAuthorization(jwtToken)!.done { token in
             authToken = token
             semaphore.signal()
         }.catch { error in
@@ -96,7 +96,7 @@ public class RemoteResolver: TokenResolver {
         let claims = try jwtParser.parseClaimsJwt(jwtToken).claims
         let exp = claims.getExpiration()
         let aud = claims.getAudience()
-        let did = self.contextProvider.getAppInstanceDocument().subject.description
+        let did = self.contextProvider.getAppInstanceDocument()!.subject.description
         if aud == nil || did != aud! {
             throw HiveError.jwtVerify(des: "authenticationDIDDocument's subject is not equal to audience")
         }

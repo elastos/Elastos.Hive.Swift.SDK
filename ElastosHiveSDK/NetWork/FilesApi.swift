@@ -24,15 +24,15 @@ import Foundation
 
 extension HiveAPI {
     func upload(_ path: String) -> String {
-        return self.baseURL + self.apiPath + "/files/upload/" + path.percentEncodingString()
+        return self.baseURL + self.apiPath + "/files/upload/" + path
     }
     
     func download(_ path: String) -> String {
-        return self.baseURL + self.apiPath + "/files/download?path=" + path.percentEncodingString()
+        return self.baseURL + self.apiPath + "/files/download?path=" + path
     }
     
     func deleteFolder() -> String {
-        return self.baseURL + self.apiPath + "/api/v1/files/delete"
+        return self.baseURL + self.apiPath + "/files/delete"
     }
     
     func move() -> String {

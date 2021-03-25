@@ -23,10 +23,9 @@
 import Foundation
 
 public protocol AppContextProvider {
-    
     func getLocalDataDir() -> String?
 
-    func getAppInstanceDocument() -> DIDDocument
+    func getAppInstanceDocument() -> DIDDocument?
 
-    func getAuthorization(_ jwtToken: String) -> Promise<String>
+    func getAuthorization(_ jwtToken: String) -> Promise<String>?
 }

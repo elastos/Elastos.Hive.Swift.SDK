@@ -44,6 +44,10 @@ public class BackupSubscription {
         return try render.subscribe(pricingPlan, BackupInfo.self)
     }
     
+    func unsubscribe() throws -> Promise<Void> {
+        return try render.unsubscribe()
+    }
+    
     func activate(_ activate: String) throws -> Promise<Void> {
         return try render.activate()
     }

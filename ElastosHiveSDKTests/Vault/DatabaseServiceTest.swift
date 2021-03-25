@@ -2,7 +2,7 @@ import XCTest
 @testable import ElastosHiveSDK
 import ElastosDIDSDK
 
-class DatabaseTest: XCTestCase {
+class DatabaseServiceTest: XCTestCase {
     private var client: HiveClientHandle?
     private var database: DatabaseServiceRender?
     private let collectionName = "works"
