@@ -21,17 +21,25 @@
  */
 
 import Foundation
+import ObjectMapper
 
-public class AuthToken: NSObject {
+public class AuthToken: NSObject, Mappable{
     var _accessToken: String
+    var _expiresTime: Int
+    var _tokenType: String
+    
+    init(_ accessToken: String, _ expiresTime: Int, _ tokenType: String) {
+        self._accessToken = accessToken
+        self._expiresTime = expiresTime
+        self._tokenType = tokenType
+    }
+
     public var accessToken: String {
         return _accessToken
     }
-    var _expiresTime: Int
     public var expiresTime: Int {
         return _expiresTime
     }
-    var _tokenType: String
     public var tokenType: String {
         return _tokenType
     }
@@ -40,13 +48,19 @@ public class AuthToken: NSObject {
         return _tokenType + " " + accessToken
     }
     
-    init(_ accessToken: String, _ expiresTime: Int, _ tokenType: String) {
-        self._accessToken = accessToken
-        self._expiresTime = expiresTime
-        self._tokenType = tokenType
-    }
-    
     public var isExpired: Bool {
         return Int(Date().timeIntervalSince1970) >= expiresTime
+    }
+    
+    public required init?(map: Map) {
+        try! self._accessToken = map.value("accessToken")
+        try! self._expiresTime = map.value("expiresTime")
+        try! self._tokenType = map.value("tokenType")
+    }
+    
+    public func mapping(map: Map) {
+        _accessToken <- map["accessToken"]
+        _expiresTime <- map["expiresTime"]
+        _tokenType <- map["tokenType"]
     }
 }

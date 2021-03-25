@@ -14,11 +14,11 @@ public class UserAppContextProvider: AppContextProvider {
         self.localDataDir
     }
     
-    public func getAppInstanceDocument() -> DIDDocument {
+    public func getAppInstanceDocument() -> DIDDocument? {
         return try! appInstanceDid.getDocument()
     }
     
-    public func getAuthorization(_ jwtToken: String) -> Promise<String> {
+    public func getAuthorization(_ jwtToken: String) -> Promise<String>? {
         return signAuthorization(jwtToken)
     }
     

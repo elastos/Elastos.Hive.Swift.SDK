@@ -21,23 +21,20 @@
 */
 
 import Foundation
+import ObjectMapper
 
 public class LocalResolver: TokenResolver {
-    let TAG  = "LocalResolver"
-    let TOKEN_FOLDER = "/tokens"
+    private static let tokenFolder: String = "/tokens"
     var tokenPath: String
     var nextResolver: TokenResolver?
     var token: AuthToken?
     private var providerAddress: String
     
     init(_ ownerDid: String, _ providerAddress: String, _ cacheDir: String) throws {
-        let rootDir = cacheDir + TOKEN_FOLDER
+        let rootDir = cacheDir + LocalResolver.tokenFolder
         var isDirectory: ObjCBool = false
         let fileManager = FileManager.default
-        
-        //============================================================
-        //            Check 1 - is file URL a directory?
-        //=======================================
+
         if !fileManager.fileExists(atPath: rootDir) {
             try fileManager.createDirectory(atPath: rootDir, withIntermediateDirectories: true, attributes: nil)
         }
@@ -48,17 +45,31 @@ public class LocalResolver: TokenResolver {
         self.providerAddress = providerAddress
         self.tokenPath = rootDir + (ownerDid + providerAddress).md5
     }
-    
+
     public func getToken() throws -> AuthToken? {
         if token == nil {
             token = try restoreToken()
         }
         if token == nil || token!.isExpired {
             token = try nextResolver!.getToken()
-            saveToken(token!)
+            try saveToken(token!)
         }
-        
         return token
+    }
+
+    private func restoreToken() throws -> AuthToken? {
+        let fileManager = FileManager.default
+        if !fileManager.fileExists(atPath: tokenPath) {
+            return nil
+        }
+        do {
+            let tokenData = try Data(contentsOf: URL(fileURLWithPath: self.tokenPath))
+            let json: [String : Any] = try JSONSerialization.jsonObject(with: tokenData) as! [String : Any]
+            return AuthToken(JSON: json)
+        } catch {
+            print("Failed to restore access token from local cache")
+            return nil
+        }
     }
     
     public func invlidateToken() {
@@ -67,27 +78,20 @@ public class LocalResolver: TokenResolver {
             clearToken()
         }
     }
-    
-    private func restoreToken() throws -> AuthToken? {
-        let fileManager = FileManager.default
-        if !fileManager.fileExists(atPath: tokenPath) {
-            return nil
-        }
-        // TODO:
-        return nil
-    }
-    
-    private func saveToken(_ token: AuthToken) {
-        //TODO:
+
+    private func saveToken(_ token: AuthToken) throws {
+        let jsonString = Mapper().toJSONString(token, prettyPrint: true)
+        try jsonString!.write(to: URL(fileURLWithPath: self.tokenPath),
+                              atomically: true,
+                              encoding: .utf8)
     }
     
     private func clearToken() {
-        // TODO:
+        try? FileManager.default.removeItem(atPath: self.tokenPath)
     }
     
     public func setNextResolver(_ resolver: TokenResolver?) {
         self.nextResolver = resolver
     }
-    
 }
 

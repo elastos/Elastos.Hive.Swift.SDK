@@ -48,6 +48,22 @@ class VaultSubscriptionTest: XCTestCase {
             print(error)
         }
     }
+    
+    func testPlaceOrder() throws {
+        
+    }
+    
+    func testGetOrder() throws {
+        
+    }
+    
+    func testPayOrder() throws {
+        
+    }
+    
+    func testGetReceipt() throws {
+
+    }
 
     override func setUpWithError() throws {
         let testData: TestData = TestData.shared
