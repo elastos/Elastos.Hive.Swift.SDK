@@ -24,16 +24,42 @@ import Foundation
 import ObjectMapper
 
 public class VaultInfo: Mappable {
-    var appInstanceDid: String?
-    var userDid: String?
-    var serviceDid: String?
+    var _myDid: String?
+    var _appInstanceDid: String?
+    var appId: String?
+    var provider: String?
+
+    var _serviceDid: String?
+    var pricingUsing: String?
+    var createTime: String?
+    var modifyTime: String?
+    var maxSpace: Int8?
+    var dbSpaceUsed: Int8?
+    var fileSpaceUsed: Int8?
+    var existing: Bool?
+    
+    public init(_ appInstanceDid: String, _ myDid: String, _ serviceDid: String) {
+        self._appInstanceDid = appInstanceDid
+        self._myDid = myDid
+        self._serviceDid = serviceDid
+    }
+
+    public var appInstanceDid: String? {
+        return _appInstanceDid;
+    }
+
+    public var myDid: String? {
+        return _myDid;
+    }
+
+    public var serviceDid: String? {
+        return _serviceDid;
+    }
     
     public required init?(map: Map) {}
 
     public func mapping(map: Map) {
-        appInstanceDid <- map["appInstanceDid"]
-        userDid <- map["userDid"]
-        serviceDid <- map["serviceDid"]
+
     }
 }
 
@@ -238,5 +264,23 @@ public class VaultSubscription {
         return try self.render.checkSubscription();
     }
     
+    public func getPricingPlanList(_ planName: String) -> Promise<Array<PricingPlan>> {
+        return render.getPricingPlanList()
+    }
+
+    public func getPricingPlan(_ planName: String) -> Promise<PricingPlan> {
+        return render.getPricingPlan(planName)
+    }
+
+    public func getOrder(_ orderId: String) -> Promise<Order> {
+        return render.getOrder(orderId)
+    }
+
+    public func payOrder(_ orderId: String, _ transId: String) -> Promise<Receipt> {
+        return render.payOrder(orderId, transId)
+    }
     
+    public func getReceipt(_ receiptId: String) throws -> Promise<Receipt> {
+        return render.getReceipt(receiptId)
+    }
 }
