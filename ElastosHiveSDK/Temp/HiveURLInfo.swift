@@ -22,48 +22,48 @@
 
 import Foundation
 
-@objc(HiveURLInfo)
-public class HiveURLInfo: NSObject {
-    var urlInfo: UrlInfo
-    var client: HiveClientHandle
-    var context: ApplicationContext
-    var authenticationAdapter: AuthenticationAdapter
-    
-    /// HiveURLInfo
-    /// - Parameters:
-    ///   - scriptUrl: scriptUrl
-    ///          hive://target_did@target_app_did/script_name?params={key=value}
-    ///   - client: clinet
-    ///   - context: contest
-    ///   - authenticationAdapter: AuthenticationAdapter
-    public init(_ scriptUrl: String, _ client: HiveClientHandle, _ context: ApplicationContext, _ authenticationAdapter: AuthenticationAdapter) {
-        self.urlInfo = UrlInfo(scriptUrl)
-        self.client = client
-        self.context = context
-        self.authenticationAdapter = authenticationAdapter
-        super.init()
-    }
-    
-//    public func callScript<T>(_ resultType: T.Type) -> Promise<T> {
-//        return getVault().then { [self] vault -> Promise<T> in
-//            vault.scripting.callScriptUrl(urlInfo.scriptName, urlInfo.params, urlInfo.appDid, resultType)
-//        }
+//@objc(HiveURLInfo)
+//public class HiveURLInfo: NSObject {
+//    var urlInfo: UrlInfo
+//    var client: HiveClientHandle
+//    var context: ApplicationContext
+//    var authenticationAdapter: AuthenticationAdapter
+//    
+//    /// HiveURLInfo
+//    /// - Parameters:
+//    ///   - scriptUrl: scriptUrl
+//    ///          hive://target_did@target_app_did/script_name?params={key=value}
+//    ///   - client: clinet
+//    ///   - context: contest
+//    ///   - authenticationAdapter: AuthenticationAdapter
+//    public init(_ scriptUrl: String, _ client: HiveClientHandle, _ context: ApplicationContext, _ authenticationAdapter: AuthenticationAdapter) {
+//        self.urlInfo = UrlInfo(scriptUrl)
+//        self.client = client
+//        self.context = context
+//        self.authenticationAdapter = authenticationAdapter
+//        super.init()
 //    }
-    
-//    public func getVault() -> Promise<Vault> {
-//        return Promise<Vault> { resolver in
-//            self.client.getVaultProvider(urlInfo.targetDid, "https://hive-testnet1.trinity-tech.io").done { [self] provider in
-//                let authHelper = VaultAuthHelper(context, urlInfo.targetDid, provider,authenticationAdapter as! AuthenticationAdapterImpl)
-//                let vault = Vault(authHelper, provider, urlInfo.targetDid)
-//                resolver.fulfill(vault)
-//            }
-//            .catch { error in
-//                resolver.reject(error)
-//            }
-//        }
+//    
+////    public func callScript<T>(_ resultType: T.Type) -> Promise<T> {
+////        return getVault().then { [self] vault -> Promise<T> in
+////            vault.scripting.callScriptUrl(urlInfo.scriptName, urlInfo.params, urlInfo.appDid, resultType)
+////        }
+////    }
+//    
+////    public func getVault() -> Promise<Vault> {
+////        return Promise<Vault> { resolver in
+////            self.client.getVaultProvider(urlInfo.targetDid, "https://hive-testnet1.trinity-tech.io").done { [self] provider in
+////                let authHelper = VaultAuthHelper(context, urlInfo.targetDid, provider,authenticationAdapter as! AuthenticationAdapterImpl)
+////                let vault = Vault(authHelper, provider, urlInfo.targetDid)
+////                resolver.fulfill(vault)
+////            }
+////            .catch { error in
+////                resolver.reject(error)
+////            }
+////        }
+////    }
+////
+//    public func deserialize(_ hiveUrl: String) -> UrlInfo {
+//        return UrlInfo(hiveUrl)
 //    }
-//
-    public func deserialize(_ hiveUrl: String) -> UrlInfo {
-        return UrlInfo(hiveUrl)
-    }
-}
+//}

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2020 Elastos Foundation
+* Copyright (c) 2019 Elastos Foundation
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -20,8 +20,18 @@
 * SOFTWARE.
 */
 
-
 import Foundation
-public class AuthHelper {
+import ObjectMapper
 
+public class CreateServiceResponse: Mappable {
+    public var existing: Bool?
+    public var status: String?
+    
+    public required init?(map: Map) {
+    }
+    
+    public func mapping(map: Map) {
+        status <- map["_status"]
+        existing <- map["existing"]
+    }
 }

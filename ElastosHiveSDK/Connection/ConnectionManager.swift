@@ -25,15 +25,15 @@ import Foundation
 public class ConnectionManager {
     private let defaultTimeout: Int = 30
     private var context: AppContext
-    public var hiveApi: HiveAPI
+    public var hiveApi: HiveAPi
     public var accessionToken: String?
-    var tokenResolver: TokenResolver
+    var tokenResolver: TokenResolver?
     
-    init(_ context: AppContext, _ baseURL: String, _ apiPath: String) throws {
+    init(_ context: AppContext) throws {
         self.context = context
-        self.hiveApi = HiveAPI(baseURL, apiPath)
-        self.tokenResolver = try LocalResolver(context.userDid!, context.providerAddress!, context.appContextProvider.getLocalDataDir()!)
-        self.tokenResolver.setNextResolver(RemoteResolver(context, self))
+        self.hiveApi = HiveAPi(self.context.providerAddress!)
+//        self.tokenResolver = try! LocalResolver(self.context.userDid!, self.context.providerAddress!, nil, self.context.getLocalDataDir())
+//        self.tokenResolver!.setNextResolver(RemoteResolver(self.context, nil, self.context.userDid!, self.context.providerAddress!))
     }
     
     func headersStream() -> HTTPHeaders {
@@ -42,7 +42,7 @@ public class ConnectionManager {
     }
     
     func headers() throws -> HTTPHeaders {
-        let token = try self.tokenResolver.getToken()!.accessToken
+        let token = try self.tokenResolver!.getToken()!.accessToken
         self.accessionToken = token
         return ["Content-Type": "application/json;charset=UTF-8", "Authorization": "token \(token)"]
     }

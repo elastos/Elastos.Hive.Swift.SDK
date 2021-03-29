@@ -22,7 +22,7 @@
 
 import Foundation
 
-extension HiveAPI {
+extension HiveAPi {
     func signIn() -> String {
         return self.baseURL + self.apiPath + "/did/sign_in"
     }

@@ -38,7 +38,7 @@ public class VaultInfo: Mappable {
     var fileSpaceUsed: Int8?
     var existing: Bool?
     
-    public init(_ appInstanceDid: String, _ myDid: String, _ serviceDid: String) {
+    public init(_ appInstanceDid: String?, _ myDid: String, _ serviceDid: String?) {
         self._appInstanceDid = appInstanceDid
         self._myDid = myDid
         self._serviceDid = serviceDid
@@ -88,11 +88,16 @@ public class SubscriptionRender: ServiceEndpoint, SubscriptionService, PaymentSe
         
     public func subscribe<T: Mappable>(_ pricingPlan: String?,_ type: T.Type) throws -> Promise<T> {
         return Promise<T> { resolver in
-            let response = AF.request(self.connectionManager.hiveApi.createVault(), method: .post, encoding: JSONEncoding.default, headers: HiveHeader(nil).headers()).responseJSON()
-            
+            let header = try self.connectionManager.headers()
+            let vaultInfo = VaultInfo(nil, self.context.userDid!, nil)
+            let response = AF.request(self.connectionManager.hiveApi.createVault(), method: .post, encoding: JSONEncoding.default, headers:header).responseJSON()
             switch response.result {
             case .success(let json):
-                resolver.fulfill(T(JSON: json as! [String : Any])!)
+                let response: CreateServiceResponse = CreateServiceResponse(JSON: json as! [String : Any])!
+                if response.existing == true {
+                    throw HiveError.vaultAlreadyExist
+                }
+                resolver.fulfill(vaultInfo as! T)
             case .failure(let error):
                 resolver.reject(error)
             }
@@ -101,10 +106,11 @@ public class SubscriptionRender: ServiceEndpoint, SubscriptionService, PaymentSe
     
     public func unsubscribe() throws -> Promise<Void> {
         return Promise<Void> { resolver in
-            let response = AF.request(self.connectionManager.hiveApi.removeVault(), method: .post, encoding: JSONEncoding.default, headers: HiveHeader(nil).headers()).responseJSON()
-            
+            let header = try self.connectionManager.headers()
+            let response = AF.request(self.connectionManager.hiveApi.removeVault(), method: .post, encoding: JSONEncoding.default, headers: header).responseJSON()
             switch response.result {
             case .success(let json):
+                print(json)
                 resolver.fulfill(Void())
             case .failure(let error):
                 resolver.reject(error)
@@ -114,10 +120,11 @@ public class SubscriptionRender: ServiceEndpoint, SubscriptionService, PaymentSe
     
     public func activate() throws -> Promise<Void> {
         return Promise<Void> { resolver in
-            let response = AF.request(self.connectionManager.hiveApi.unfreeze(), method: .post, encoding: JSONEncoding.default, headers: HiveHeader(nil).headers()).responseJSON()
-            
+            let header = try self.connectionManager.headers()
+            let response = AF.request(self.connectionManager.hiveApi.unfreeze(), method: .post, encoding: JSONEncoding.default, headers: header).responseJSON()
             switch response.result {
             case .success(let json):
+                print(json)
                 resolver.fulfill(Void())
             case .failure(let error):
                 resolver.reject(error)
@@ -127,8 +134,8 @@ public class SubscriptionRender: ServiceEndpoint, SubscriptionService, PaymentSe
     
     public func deactivate() throws -> Promise<Void> {
         return Promise<Void> { resolver in
-            let response = AF.request(self.connectionManager.hiveApi.freeze(), method: .post, encoding: JSONEncoding.default, headers: HiveHeader(nil).headers()).responseJSON()
-            
+            let header = try self.connectionManager.headers()
+            let response = AF.request(self.connectionManager.hiveApi.freeze(), method: .post, encoding: JSONEncoding.default, headers: header).responseJSON()
             switch response.result {
             case .success(let json):
                 resolver.fulfill(Void())
@@ -147,7 +154,6 @@ public class SubscriptionRender: ServiceEndpoint, SubscriptionService, PaymentSe
     
     public func getPricingPlanList() -> Promise<Array<PricingPlan>> {
         return Promise<Void>.async().then { [self] _ -> Promise<Array<PricingPlan>> in
-            // TODO
             return Promise<Array<PricingPlan>> { resolver in
                 do {
                     let url = self.connectionManager.hiveApi.getPackageInfo()
@@ -199,8 +205,7 @@ public class SubscriptionRender: ServiceEndpoint, SubscriptionService, PaymentSe
             return Promise<Order> { resolver in
                 do {
                     let url = self.connectionManager.hiveApi.orderInfo(orderId)
-                    let response = AF.request(url, method: .get, encoding: JSONEncoding.default, headers: try self.connectionManager.headers()).responseJSON()
-                    let json = try VaultApi.handlerJsonResponse(response)
+                    let json = try AF.request(url, method: .get, encoding: JSONEncoding.default, headers: try self.connectionManager.headers()).responseJSON().validateResponse()
                     resolver.fulfill(Order.deserialize(json["order_info"]))
                 } catch {
                     resolver.reject(error)
@@ -208,6 +213,7 @@ public class SubscriptionRender: ServiceEndpoint, SubscriptionService, PaymentSe
             }
         }
     }
+    
     
     public func payOrder(_ orderId: String, _ transId: String) -> Promise<Receipt> {
         return Promise<Void>.async().then { [self] _ -> Promise<Receipt> in
@@ -236,11 +242,11 @@ public class SubscriptionRender: ServiceEndpoint, SubscriptionService, PaymentSe
 public class VaultSubscription {
     public var render: SubscriptionRender
     public var context: AppContext
-    public var hiveApi: HiveAPI
-    
-    public init (_ context: AppContext,_ userDid: String, _ providerAddress: String, _ hiveApi: HiveAPI) {
+    private var connectionManager: ConnectionManager
+
+    public init (_ context: AppContext,_ userDid: String, _ providerAddress: String) {
         self.context = context
-        self.hiveApi = hiveApi
+        self.connectionManager = self.context.connectionManager
         self.render = SubscriptionRender(context, providerAddress, userDid)
     }
 
@@ -264,7 +270,7 @@ public class VaultSubscription {
         return try self.render.checkSubscription();
     }
     
-    public func getPricingPlanList(_ planName: String) -> Promise<Array<PricingPlan>> {
+    public func getPricingPlanList() -> Promise<Array<PricingPlan>> {
         return render.getPricingPlanList()
     }
 

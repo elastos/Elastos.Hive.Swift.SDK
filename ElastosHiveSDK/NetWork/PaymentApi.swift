@@ -22,7 +22,7 @@
 
 import Foundation
 
-extension HiveAPI {
+extension HiveAPi {
     func getPackageInfo() -> String {
         return self.baseURL + self.apiPath + "/payment/vault_package_info"
     }

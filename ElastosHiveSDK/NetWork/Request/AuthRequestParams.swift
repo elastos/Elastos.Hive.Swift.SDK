@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 Elastos Foundation
+* Copyright (c) 2019 Elastos Foundation
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -21,26 +21,16 @@
 */
 
 import Foundation
+import ObjectMapper
 
-public enum State: String {
-    case SUCCESS
-    case FAILED
-    case BACKUP
-    case RESTORE
+public class AuthRequestParams: Mappable {
+    public var jwt: String
+    
+    public required init?(map: Map) {
+        try! self.jwt = map.value("jwt")
+    }
+    
+    public func mapping(map: Map) {
+        jwt <- map["jwt"]
+    }
 }
-//public enum State: String {
-//    case STOP = "stop"
-//    case BACKUP = "backup"
-//    case RESTORE = "restore"
-//
-//    var description: String {
-//
-//        switch self {
-//        case .STOP: return "stop"
-//        case .BACKUP: return "backup"
-//        case .RESTORE: return "restore"
-//        }
-//    }
-//}
-
-

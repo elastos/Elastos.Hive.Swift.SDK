@@ -23,8 +23,6 @@
 import Foundation
 import ObjectMapper
 
-//let lock = NSLock()
-
 public class AccessToken: Mappable {
     var accessToken: String?
     
@@ -36,13 +34,18 @@ public class AccessToken: Mappable {
 }
 
 public class RemoteResolver: TokenResolver {
-
     private var contextProvider: AppContextProvider
     private var connectionManager: ConnectionManager
+    private var backupContext: BackupContext?
+    private var targetDid: String
+    private var targetHost: String
 
-    init(_ context: AppContext, _ connectionManager: ConnectionManager) {
+    init(_ context: AppContext, _ backupContext: BackupContext?, _ targetDid: String, _ targetHost: String) {
         self.contextProvider = context.appContextProvider
-        self.connectionManager = connectionManager
+        self.backupContext = backupContext
+        self.connectionManager = context.connectionManager
+        self.targetDid = targetDid
+        self.targetHost = targetHost
     }
 
     public func getToken() throws -> AuthToken? {
