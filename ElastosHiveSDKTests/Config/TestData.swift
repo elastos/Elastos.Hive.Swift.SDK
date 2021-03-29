@@ -9,8 +9,43 @@ public enum EnvironmentType: Int {
     case LOCAL
 }
 
-public class TestData {
+public class TestBackupRender: BackupContext {
+    public var nodeConfig: NodeConfig
+    public var userDid: DIDApp?
+    public var type: String {
+        get {
+            return ""
+        }
+        set {
+            self.type = newValue
+        }
+    }
+
+    public init(_ vault: Vault, _ nodeConfig: NodeConfig) {
+        self.nodeConfig = nodeConfig
+    }
     
+    public func getParameter(_ key: String) -> String {
+        if key == "targetDid" {
+            return self.nodeConfig.targetDid
+        } else if key == "targetHost" {
+            return self.nodeConfig.targetHost
+        }
+        return ""
+    }
+    
+    public func getAuthorization(_ srcDid: String, _ targetDid: String, _ targetHost: String) -> Promise<String> {
+        Promise<Any>.async().then { [self] _ -> Promise<String> in
+            return Promise<String> { resolver in
+                let auth = try userDid?.issueBackupDiplomaFor(srcDid, targetHost, targetDid)
+                resolver.fulfill(auth!.description)
+            }
+        }
+    }
+    
+}
+
+public class TestData {
     static let shared: TestData = try! TestData()
     public var userDid: DIDApp?
     public var appInstanceDid: DApp?
@@ -25,10 +60,6 @@ public class TestData {
         }
     }
     
-//    public static var testData: TestData {
-//        return try! TestData()
-//    }
-    
     public init () throws {
         var file: String? = nil
         let bundle = Bundle(for: type(of: self))
@@ -40,7 +71,6 @@ public class TestData {
         case .LOCAL:
             file = bundle.path(forResource: "Local", ofType: "conf")
         }
-        print(file)
         
         guard let _ = file else {
             throw DIDError.illegalArgument("Couldn't find a PEM file named \(file)")
@@ -54,14 +84,13 @@ public class TestData {
         try AppContext.setupResover(clientConfig!.resolverUrl, "data/didCache")
         let adapter = DummyAdapter()
         let applicationConfig = clientConfig!.application
-        appInstanceDid = try DApp(applicationConfig.name!, applicationConfig.mnemonic!,  adapter,applicationConfig.passPhrase!, applicationConfig.storepass!)
+        appInstanceDid = try DApp(applicationConfig.name, applicationConfig.mnemonic,  adapter,applicationConfig.passPhrase, applicationConfig.storepass)
         let userConfig = clientConfig!.user
-        self.userDid = DIDApp(userConfig.name!, userConfig.mnemonic!, adapter, userConfig.passPhrase!, userConfig.storepass!)
+        self.userDid = DIDApp(userConfig.name, userConfig.mnemonic, adapter, userConfig.passPhrase, userConfig.storepass)
         self.nodeConfig = clientConfig!.nodeConfig
-        let storePath = "\(NSHomeDirectory())/Library/Caches/data/store" + "/" + nodeConfig!.storePath!
+        let storePath = "\(NSHomeDirectory())/Library/Caches/data/store" + "/" + nodeConfig!.storePath
 
         self.appContext = try AppContext.build(UserAppContextProvider(storePath, userDid!, appInstanceDid!), (nodeConfig?.ownerDid)! as String, (nodeConfig?.provider)! as String)
-//        self.appContext = try AppContext.build(UserAppContextProvider(storePath, userDid!, appInstanceDid!), nodeConfig?.ownerDid, nodeConfig?.provider) as! AppContext
     }
 
     public var ownerDid: String? {
@@ -70,12 +99,8 @@ public class TestData {
         }
     }
     
-//    class func shared() -> TestData {
-//        return testData
-//    }
-    
     public func newVault() -> Vault {
-        return Vault(appContext!, nodeConfig!.ownerDid!, nodeConfig!.provider!)
+        return Vault(appContext!, nodeConfig!.ownerDid, nodeConfig!.provider)
     }
     
     public var getAppContext: AppContext? {
@@ -91,6 +116,12 @@ public class TestData {
     }
     
     public func getVault() -> Promise<Vault> {
-        return appContext!.getVault(nodeConfig!.ownerDid!, nodeConfig!.provider!)
+        return appContext!.getVault(nodeConfig!.ownerDid, nodeConfig!.provider)
+    }
+
+    public func getBackupService() throws -> BackupServiceRender {
+        let backService = self.newVault().backupService
+        try backService.setupContext(TestBackupRender(self.newVault(), self.nodeConfig!))
+        return backService as! BackupServiceRender
     }
 }

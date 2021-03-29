@@ -22,7 +22,7 @@
 
 import Foundation
 
-extension HiveAPI {
+extension HiveAPi {
     func upload(_ path: String) -> String {
         return self.baseURL + self.apiPath + "/files/upload/" + path
     }

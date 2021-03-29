@@ -23,19 +23,21 @@
 import Foundation
 
 public enum BackupResult {
-
+    case stop
+    case backup
+    case restore
 }
 
 public protocol BackupProtocol {
-    func setupContext(_ context: BackupContext) -> Promise<Void>
+    func setupContext(_ context: BackupContext) throws -> Promise<Void>
     
-    func startBackup() -> Promise<Void>
+    func startBackup() throws -> Promise<Void>
 
     func stopBackup() -> Promise<Void>
 
-    func restoreFrom() -> Promise<Void>
+    func restoreFrom() throws -> Promise<Void>
 
     func stopRestore() -> Promise<Void>
 
-    func checkResult() -> Promise<Void>
+    func checkResult() throws -> Promise<BackupResult>
 }

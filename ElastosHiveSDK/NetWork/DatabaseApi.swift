@@ -2,8 +2,7 @@
 
 import Foundation
 
-extension HiveAPI {
-    
+extension HiveAPi {
     func createCollection() -> String {
         return self.baseURL + self.apiPath + "/db/create_collection"
     }

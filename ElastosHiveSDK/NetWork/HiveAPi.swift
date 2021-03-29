@@ -22,29 +22,22 @@
 
 import Foundation
 
-extension HiveAPi {
-    func registerScript() -> String {
-        return self.baseURL + self.apiPath + "/scripting/set_script"
-    }
-    
-    func callScript() -> String {
-        return self.baseURL + self.apiPath + "/scripting/run_script"
-    }
-    
-    func callScriptUrl(_ targetDid: String, _ appDid: String, _ scriptName: String, _ params: String?) -> String {
-        var paramsEncodingString = ""
-        if params != nil {
-            paramsEncodingString = "?params=" + params!.percentEncodingString()
+public class HiveAPi {
+    public var baseURL: String
+    public var apiPath: String {
+        get {
+            return "/api/v1"
         }
-        return self.baseURL + self.apiPath + "/scripting/run_script_url/" + targetDid + "@" + appDid + "/" + scriptName + paramsEncodingString
     }
-    
-    func runScriptUpload(_ transactionId: String) -> String {
-        return self.baseURL + self.apiPath + "/scripting/run_script_upload/\(transactionId)"
+
+    public init(_ baseURL: String) {
+        self.baseURL = baseURL
     }
-    
-    func runScriptDownload(_ transactionId: String) -> String {
-        return self.baseURL + self.apiPath + "/scripting/run_script_download/\(transactionId)"
-    }
-    
 }
+
+extension String {
+    public func percentEncodingString() -> String {
+        return self.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+    }
+}
+
