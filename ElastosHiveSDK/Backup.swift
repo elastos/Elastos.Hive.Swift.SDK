@@ -21,7 +21,7 @@
 */
 
 import Foundation
-
+//
 public class Backup: ServiceEndpoint {
     private var _promotion: PromotionProtocol?
     
@@ -85,161 +85,161 @@ public class Backup: ServiceEndpoint {
         }
     }
     
-    public func state() -> Promise<State> {
-        return authHelper!.checkValid().then { _ -> Promise<State> in
-            return self.stateImp(0)
-        }
-    }
-    
-    private func stateImp(_ tryAgain: Int) -> Promise<State> {
-        return Promise<State> { resolver in
-            let url = vaultUrl!.state()
-            let response = AF.request(url, method: .get, encoding: JSONEncoding.default, headers: HiveHeader(authHelper).headers()).responseJSON()
-            let json = try VaultApi.handlerJsonResponse(response)
-            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
-            
+//    public func state() -> Promise<State> {
+//        return authHelper!.checkValid().then { _ -> Promise<State> in
+//            return self.stateImp(0)
+//        }
+//    }
+//    
+//    private func stateImp(_ tryAgain: Int) -> Promise<State> {
+//        return Promise<State> { resolver in
+//            let url = vaultUrl!.state()
+//            let response = AF.request(url, method: .get, encoding: JSONEncoding.default, headers: HiveHeader(authHelper).headers()).responseJSON()
+//            let json = try VaultApi.handlerJsonResponse(response)
+//            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+//            
+////            if isRelogin {
+////                try self.authHelper.signIn()
+////                stateImp(1).done { result in
+////                    resolver.fulfill(result)
+////                }.catch { error in
+////                    resolver.reject(error)
+////                }
+////            }
+//            let type = json["hive_backup_state"].stringValue
+//            let result = json["result"].stringValue
+//            switch (type) {
+//            case "stop":
+//                if result == "" || result == "failed" {
+//                    resolver.fulfill(State.FAILED)
+//                }
+//                resolver.fulfill(State.SUCCESS)
+//            case "backup":
+//                resolver.fulfill(State.BACKUP)
+//            case "restore":
+//                resolver.fulfill(State.RESTORE)
+//            default:
+//                resolver.fulfill(State.FAILED)
+//                break
+//            }
+//        }
+//    }
+//    
+//    public func save(_ handler: BackupAuthenticationHandler) -> Promise<Bool> {
+//        return authHelper!.checkValid().then { [self] _ -> Promise<String> in
+//            return try getCredential(handler, "store")
+//        }.then { credential -> Promise<Bool> in
+//            return self.saveImp(credential, 0)
+//        }
+//    }
+//    
+//    private func saveImp(_ credential: String, _ tryAgain: Int) -> Promise<Bool> {
+//        return Promise<Bool> { resolver in
+//            let url = vaultUrl!.save()
+//            let param = ["backup_credential": credential]
+//            let response = AF.request(url, method: .post, parameters: param, encoding: JSONEncoding.default, headers: HiveHeader(authHelper).headers()).responseJSON()
+//            let json = try VaultApi.handlerJsonResponse(response)
+//            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+//            
 //            if isRelogin {
-//                try self.authHelper.signIn()
-//                stateImp(1).done { result in
-//                    resolver.fulfill(result)
+//                try self.authHelper!.signIn()
+//            }
+//            resolver.fulfill(true)
+//        }
+//    }
+//    
+//    private func getCredential(_ handler: BackupAuthenticationHandler, _ type: String) -> Promise<String> {
+//        return Promise { resolver in
+//            getServiceDid().done { [self] targetDid in
+//                self.targetDid = targetDid
+//                self.type = type
+//                let cacheCredential = try restoreCredential()
+//                if try (cacheCredential != "" && !checkExpired(cacheCredential)) {
+//                    resolver.fulfill(cacheCredential)
+//                }
+//                let result = handler.authorization((authHelper?.serviceDid!)!, targetDid, targetHost!)
+//                guard result.value != nil else {
+//                    resolver.reject(result.error == nil ? HiveError.IllegalArgument(des: "TODO") : result.error!)
+//                    return
+//                }
+//                resolver.fulfill(result.value!)
+//            }
+//            .catch { error in
+//                resolver.reject(error)
+//            }
+//        }
+//    }
+//    
+//    private func checkExpired(_ cacheCredential: String) throws -> Bool {
+//        let vc = try VerifiableCredential.fromJson(cacheCredential)
+//        
+//        return vc.isExpired
+//    }
+//    
+//    private func restoreCredential() throws -> String {
+//        let persistent = BackupPersistentImpl(self.targetHost!, self.targetDid!, self.type!, self.authHelper!.storePath)
+//        let json = try JSON(persistent.parseFrom())
+//        let credential_key = json["credential_key"].stringValue
+//        
+//        return credential_key
+//    }
+//    
+//    private func storeCredential(_ credential: String) throws {
+//        let persistent = BackupPersistentImpl(self.targetHost!, self.targetDid!, self.type!, self.authHelper!.storePath)
+//        var json = try persistent.parseFrom()
+//        json["credential_key"] = credential
+//        try persistent.upateContent(json)
+//    }
+//
+//    public func restore(_ handler: BackupAuthenticationHandler) -> Promise<Bool> {
+//        return authHelper!.checkValid().then { [self] _ -> Promise<String> in
+//            return getCredential(handler, "restore")
+//        }.then { credential -> Promise<Bool> in
+//            return self.restoreImp(credential, 0)
+//        }
+//    }
+//    
+//    private func restoreImp(_ credential: String, _ tryAgain: Int) -> Promise<Bool> {
+//        return Promise<Bool> { resolver in
+//            let url = vaultUrl!.restore()
+//            let param = ["backup_credential": credential]
+//            let response = AF.request(url, method: .post, parameters: param, encoding: JSONEncoding.default, headers: HiveHeader(authHelper).headers()).responseJSON()
+//            let json = try VaultApi.handlerJsonResponse(response)
+//            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+//            
+//            if isRelogin {
+//                try self.authHelper!.signIn()
+//            }
+//            try storeCredential(credential)
+//            resolver.fulfill(true)
+//        }
+//    }
+//    
+//    public func active() -> Promise<Bool> {
+//        return authHelper!.checkValid().then { [self] _ -> Promise<Bool> in
+//            return activeImp(0)
+//        }
+//    }
+//    
+//    private func activeImp(_ tryAgain: Int) -> Promise<Bool> {
+//        return Promise<Bool> { resolver in
+////            vaultUrl.resetVaultApi(baseUrl: "https://hive-testnet2.trinity-tech.io")
+//            let url = vaultUrl!.activate()
+//            let param: [String: Any] = [: ]
+//            let response = AF.request(url, method: .post, parameters: param, encoding: JSONEncoding.default, headers: HiveHeader(authHelper).headers()).responseJSON()
+//            let json = try VaultApi.handlerJsonResponse(response)
+//            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
+//            
+//            if isRelogin {
+//                try self.authHelper!.signIn()
+//                activeImp(1).done { success in
+//                    resolver.fulfill(success)
 //                }.catch { error in
 //                    resolver.reject(error)
 //                }
 //            }
-            let type = json["hive_backup_state"].stringValue
-            let result = json["result"].stringValue
-            switch (type) {
-            case "stop":
-                if result == "" || result == "failed" {
-                    resolver.fulfill(State.FAILED)
-                }
-                resolver.fulfill(State.SUCCESS)
-            case "backup":
-                resolver.fulfill(State.BACKUP)
-            case "restore":
-                resolver.fulfill(State.RESTORE)
-            default:
-                resolver.fulfill(State.FAILED)
-                break
-            }
-        }
-    }
-    
-    public func save(_ handler: BackupAuthenticationHandler) -> Promise<Bool> {
-        return authHelper!.checkValid().then { [self] _ -> Promise<String> in
-            return try getCredential(handler, "store")
-        }.then { credential -> Promise<Bool> in
-            return self.saveImp(credential, 0)
-        }
-    }
-    
-    private func saveImp(_ credential: String, _ tryAgain: Int) -> Promise<Bool> {
-        return Promise<Bool> { resolver in
-            let url = vaultUrl!.save()
-            let param = ["backup_credential": credential]
-            let response = AF.request(url, method: .post, parameters: param, encoding: JSONEncoding.default, headers: HiveHeader(authHelper).headers()).responseJSON()
-            let json = try VaultApi.handlerJsonResponse(response)
-            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
-            
-            if isRelogin {
-                try self.authHelper!.signIn()
-            }
-            resolver.fulfill(true)
-        }
-    }
-    
-    private func getCredential(_ handler: BackupAuthenticationHandler, _ type: String) -> Promise<String> {
-        return Promise { resolver in
-            getServiceDid().done { [self] targetDid in
-                self.targetDid = targetDid
-                self.type = type
-                let cacheCredential = try restoreCredential()
-                if try (cacheCredential != "" && !checkExpired(cacheCredential)) {
-                    resolver.fulfill(cacheCredential)
-                }
-                let result = handler.authorization((authHelper?.serviceDid!)!, targetDid, targetHost!)
-                guard result.value != nil else {
-                    resolver.reject(result.error == nil ? HiveError.IllegalArgument(des: "TODO") : result.error!)
-                    return
-                }
-                resolver.fulfill(result.value!)
-            }
-            .catch { error in
-                resolver.reject(error)
-            }
-        }
-    }
-    
-    private func checkExpired(_ cacheCredential: String) throws -> Bool {
-        let vc = try VerifiableCredential.fromJson(cacheCredential)
-        
-        return vc.isExpired
-    }
-    
-    private func restoreCredential() throws -> String {
-        let persistent = BackupPersistentImpl(self.targetHost!, self.targetDid!, self.type!, self.authHelper!.storePath)
-        let json = try JSON(persistent.parseFrom())
-        let credential_key = json["credential_key"].stringValue
-        
-        return credential_key
-    }
-    
-    private func storeCredential(_ credential: String) throws {
-        let persistent = BackupPersistentImpl(self.targetHost!, self.targetDid!, self.type!, self.authHelper!.storePath)
-        var json = try persistent.parseFrom()
-        json["credential_key"] = credential
-        try persistent.upateContent(json)
-    }
-
-    public func restore(_ handler: BackupAuthenticationHandler) -> Promise<Bool> {
-        return authHelper!.checkValid().then { [self] _ -> Promise<String> in
-            return getCredential(handler, "restore")
-        }.then { credential -> Promise<Bool> in
-            return self.restoreImp(credential, 0)
-        }
-    }
-    
-    private func restoreImp(_ credential: String, _ tryAgain: Int) -> Promise<Bool> {
-        return Promise<Bool> { resolver in
-            let url = vaultUrl!.restore()
-            let param = ["backup_credential": credential]
-            let response = AF.request(url, method: .post, parameters: param, encoding: JSONEncoding.default, headers: HiveHeader(authHelper).headers()).responseJSON()
-            let json = try VaultApi.handlerJsonResponse(response)
-            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
-            
-            if isRelogin {
-                try self.authHelper!.signIn()
-            }
-            try storeCredential(credential)
-            resolver.fulfill(true)
-        }
-    }
-    
-    public func active() -> Promise<Bool> {
-        return authHelper!.checkValid().then { [self] _ -> Promise<Bool> in
-            return activeImp(0)
-        }
-    }
-    
-    private func activeImp(_ tryAgain: Int) -> Promise<Bool> {
-        return Promise<Bool> { resolver in
-//            vaultUrl.resetVaultApi(baseUrl: "https://hive-testnet2.trinity-tech.io")
-            let url = vaultUrl!.activate()
-            let param: [String: Any] = [: ]
-            let response = AF.request(url, method: .post, parameters: param, encoding: JSONEncoding.default, headers: HiveHeader(authHelper).headers()).responseJSON()
-            let json = try VaultApi.handlerJsonResponse(response)
-            let isRelogin = try VaultApi.handlerJsonResponseCanRelogin(json, tryAgain: tryAgain)
-            
-            if isRelogin {
-                try self.authHelper!.signIn()
-                activeImp(1).done { success in
-                    resolver.fulfill(success)
-                }.catch { error in
-                    resolver.reject(error)
-                }
-            }
-            resolver.fulfill(true)
-        }
-    }
+//            resolver.fulfill(true)
+//        }
+//    }
 }
 

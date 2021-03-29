@@ -23,28 +23,19 @@
 import Foundation
 
 extension HiveAPi {
-    func registerScript() -> String {
-        return self.baseURL + self.apiPath + "/scripting/set_script"
+    func getState() -> String {
+        return self.baseURL + self.apiPath + "/backup/state"
     }
     
-    func callScript() -> String {
-        return self.baseURL + self.apiPath + "/scripting/run_script"
+    func saveToNode() -> String {
+        return self.baseURL + self.apiPath + "/backup/save_to_node"
     }
     
-    func callScriptUrl(_ targetDid: String, _ appDid: String, _ scriptName: String, _ params: String?) -> String {
-        var paramsEncodingString = ""
-        if params != nil {
-            paramsEncodingString = "?params=" + params!.percentEncodingString()
-        }
-        return self.baseURL + self.apiPath + "/scripting/run_script_url/" + targetDid + "@" + appDid + "/" + scriptName + paramsEncodingString
+    func restoreFromNode() -> String {
+        return self.baseURL + self.apiPath + "/backup/restore_from_node"
     }
     
-    func runScriptUpload(_ transactionId: String) -> String {
-        return self.baseURL + self.apiPath + "/scripting/run_script_upload/\(transactionId)"
+    func activeToVault() -> String {
+        return self.baseURL + self.apiPath + "/backup/activate_to_vault"
     }
-    
-    func runScriptDownload(_ transactionId: String) -> String {
-        return self.baseURL + self.apiPath + "/scripting/run_script_download/\(transactionId)"
-    }
-    
 }

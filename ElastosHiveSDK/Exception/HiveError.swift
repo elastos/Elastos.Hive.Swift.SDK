@@ -23,6 +23,7 @@
 import Foundation
 
 public enum HiveError: Error {
+    case hiveDefaultError(des: String)
     case insufficientParameters(des: String?)
     case invalidatedBuilder(des: String?)
     case failure(des: String?)
@@ -36,22 +37,24 @@ public enum HiveError: Error {
     case fileNotFound(des: String?)
     case providerNotSet(des: String?)
     case authorizationIsNil(des: String?)
-    case vaultAlreadyExistException(des: String?)
+    case vaultAlreadyExist
     case challengeIsNil(des: String?)
     case jsonSerializationInvalidType(des: String?)
     case vaultNotFound(des: String?)
     case responseSerializationFailed(des: String?)
     case serviceDidIsNil(des: String?)
     case providerNotFound(des: String?)
-
-    
+    case backupAlreadyExist
+    case failedToGetBackupState
 }
 
 // jsonSerializationInvalidType
 extension HiveError {
-
-   public static func description(_ error: HiveError) -> String {
+    
+    public static func description(_ error: HiveError) -> String {
         switch error {
+        case .hiveDefaultError(let des):
+            return des
         case .failure(let des):
             return des ?? "Operation failed"
         case .insufficientParameters(let des):
@@ -78,8 +81,8 @@ extension HiveError {
             return des ?? ""
         case .authorizationIsNil(let des):
             return des ?? ""
-        case .vaultAlreadyExistException(let des):
-            return des ?? ""
+        case .vaultAlreadyExist:
+            return "The vault already exists"
         case .challengeIsNil(let des):
             return des ?? ""
         case .jsonSerializationInvalidType(let des):
@@ -92,15 +95,18 @@ extension HiveError {
             return des ?? ""
         case .providerNotFound(let des):
             return des ?? ""
+        case .backupAlreadyExist:
+            return "The backup service already exists"
+        case .failedToGetBackupState:
+            return "Failed to get back-up state."
         }
-
-}
-
+    }
+    
     static func praseError(_ json: JSON) -> String {
         let status = json["_status"].stringValue
         let code = json["_error"]["code"].intValue
         let message = json["_error"]["message"].stringValue
-
+        
         let dic = ["_status": status, "_error": ["code": code, "message": message]] as [String : Any]
         let data = try? JSONSerialization.data(withJSONObject: dic as Any, options: [])
         guard data != nil else {

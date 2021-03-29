@@ -28,8 +28,6 @@ public class AppContext {
     private var _userDid: String?
     private var _providerAddress: String?
     
-//    private var token: AuthToken?
-//    private var tokenResolver: TokenResolver?
     private var _connectionManager: ConnectionManager?
 
     public convenience init(_ provider: AppContextProvider?, _ userDid: String?) {
@@ -40,14 +38,14 @@ public class AppContext {
         self.contextProvider = provider!
         self._userDid = userDid
         self._providerAddress = providerAddress
-        // TODO
-        self._connectionManager = try! ConnectionManager(self, "https://hive-testnet1.trinity-tech.io", "/api/v1")
+        self._connectionManager = try! ConnectionManager(self)
+        self._connectionManager!.tokenResolver = try! LocalResolver(self.userDid!, self.providerAddress!, nil, self.contextProvider!.getLocalDataDir()!)
+        self._connectionManager!.tokenResolver!.setNextResolver(RemoteResolver(self, nil, self.userDid!, self.connectionManager.hiveApi.baseURL))
     }
     
     public static func setupResover(_ resolver: String, _ cacheDir: String) throws {
-
         guard resolverHasSetup == false else {
-            throw HiveError.vaultAlreadyExistException(des: "Resolver already setup before")
+            throw HiveError.vaultAlreadyExist
         }
         
         try DIDBackend.initializeInstance(resolver, cacheDir)
@@ -135,5 +133,9 @@ public class AppContext {
                 resolver.fulfill(Vault(self, ownerDid, providerAddress))
             }
         }
+    }
+    
+    public func getLocalDataDir() -> String {
+        return self.contextProvider!.getLocalDataDir()!
     }
 }

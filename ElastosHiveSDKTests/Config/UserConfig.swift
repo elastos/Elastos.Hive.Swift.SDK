@@ -2,22 +2,19 @@ import Foundation
 import ObjectMapper
 
 public class UserConfig: Mappable {
+    public var did: String
+    public var name: String
+    public var mnemonic: String
+    public var storepass: String
+    public var passPhrase: String
     
-    public var did: String?
-    public var name: String?
-    public var mnemonic: String?
-    public var passPhrase: String?
-    public var storepass: String?
-    
-//    init(_ did: String, _ name: String, _ mnemonic: String, _ passPhrase: String, _ storepass: String) {
-//        self.did = did
-//        self.name = name
-//        self.mnemonic = mnemonic
-//        self.passPhrase = passPhrase
-//        self.storepass = storepass
-//    }
-    
-    required public init?(map: Map) {}
+    required public init?(map: Map) {
+        try! self.did = map.value("did")
+        try! self.name = map.value("name")
+        try! self.mnemonic = map.value("mnemonic")
+        try! self.storepass = map.value("storepass")
+        try! self.passPhrase = map.value("passPhrase")
+    }
 
     public func mapping(map: Map) {
         did <- map["did"]
