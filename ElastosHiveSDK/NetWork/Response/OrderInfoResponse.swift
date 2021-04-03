@@ -20,15 +20,20 @@
 * SOFTWARE.
 */
 
+
 import Foundation
 import ObjectMapper
 
-public class CreateServiceResponse: HiveResponse, HiveCheckValidProtocol {
-    public var existing: Bool?
+public class OrderInfoResponse: HiveResponse, HiveCheckValidProtocol {
+    public var orderInfo: Order?
+
+    required public init?(map: Map) {
+        super.init(map: map)
+    }
     
     public override func mapping(map: Map) {
         status <- map["_status"]
-        existing <- map["existing"]
+        orderInfo <- map["order_info"]
     }
     
     public func checkResponseVaild() throws {

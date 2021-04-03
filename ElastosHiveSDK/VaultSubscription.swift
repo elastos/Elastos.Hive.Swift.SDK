@@ -63,7 +63,7 @@ public class VaultInfo: Mappable {
     }
 }
 
-public class SubscriptionRender: ServiceEndpoint, SubscriptionService, PaymentService {
+public class SubscriptionRender: ServiceEndpoint, SubscriptionService {
     
     public func subscribe<T>(_ pricingPlan: String, type: T.Type) -> Promise<T> {
         // TODO
@@ -152,15 +152,14 @@ public class SubscriptionRender: ServiceEndpoint, SubscriptionService, PaymentSe
     }
     
     
-    public func getPricingPlanList() -> Promise<Array<PricingPlan>> {
-        return Promise<Void>.async().then { [self] _ -> Promise<Array<PricingPlan>> in
-            return Promise<Array<PricingPlan>> { resolver in
+    public func getPricingPlanList() -> Promise<Array<PricingPlan>?> {
+        return Promise<Void>.async().then { [self] _ -> Promise<Array<PricingPlan>?> in
+            return Promise<Array<PricingPlan>?> { resolver in
                 do {
-                    let url = self.connectionManager.hiveApi.getPackageInfo()
-                    let response = AF.request(url, method: .get, encoding: JSONEncoding.default, headers: try self.connectionManager.headers()).responseJSON()
-                    let json = try VaultApi.handlerJsonResponse(response)
-                    let plan = PricingPlan.deserialize(json)
-                    resolver.fulfill([plan])
+                    let response = try HiveAPi.request(url: self.connectionManager.hiveApi.getPackageInfo(),
+                                                       method: .get,
+                                                       headers: self.connectionManager.headers()).get(PaymentPackageResponse.self)
+                    resolver.fulfill(response.pricingPlans)
                 } catch {
                     resolver.reject(error)
                 }
@@ -168,31 +167,36 @@ public class SubscriptionRender: ServiceEndpoint, SubscriptionService, PaymentSe
         }
     }
 
-    public func getPricingPlan(_ planName: String) -> Promise<PricingPlan> {
-        return Promise<Void>.async().then { [self] _ -> Promise<PricingPlan> in
-            return Promise<PricingPlan> { resolver in
-                do {
-                    let url = self.connectionManager.hiveApi.getPricingPlan(planName)
-                    let response = AF.request(url, method: .get, encoding: JSONEncoding.default, headers: try self.connectionManager.headers()).responseJSON()
-                    let json = try VaultApi.handlerJsonResponse(response)
-                    let plan = PricingPlan.deserialize(json)
-                    resolver.fulfill(plan)
-                } catch {
-                    resolver.reject(error)
-                }
-            }
-        }
-    }
+//    public func getPricingPlan(_ planName: String) -> Promise<PricingPlan?> {
+//        return Promise<Void>.async().then { [self] _ -> Promise<PricingPlan?> in
+//            return Promise<PricingPlan?> { resolver in
+//                do {
+//                    let response = try HiveAPi.request(url:self.connectionManager.hiveApi.getPricingPlan(planName),
+//                                                       method: .get,
+//                                                       headers: self.connectionManager.headers()).get(PricingPlan.self)
+//                    resolver.fulfill(response)
+//                } catch {
+//                    resolver.reject(error)
+//                }
+//            }
+//        }
+//    }
     
-    public func placeOrder(_ planName: String) -> Promise<Order> {
-        return Promise<Void>.async().then { [self] _ -> Promise<Order> in
-            return Promise<Order> { resolver in
+    public func placeOrder(_ planName: String) -> Promise<Order?> {
+        return Promise<Void>.async().then { [self] _ -> Promise<Order?> in
+            return Promise<Order?> { resolver in
                 do {
-                    let url = self.connectionManager.hiveApi.createOrder()
-                    let params = ["pricing_name": planName]
-                    let response = AF.request(url, method: .post, parameters: params, encoding: JSONEncoding.default, headers: try self.connectionManager.headers()).responseJSON()
-                    let json = try VaultApi.handlerJsonResponse(response)
-                    resolver.fulfill(Order.deserialize(json["order_info"]))
+                    let params = ["pricing_name": planName, "backing_name": ""]
+                    let response: HiveResponse = try HiveAPi.request(url: self.connectionManager.hiveApi.createOrder(),
+                                                                     method: .post,
+                                                                     parameters: params,
+                                                                     headers: try self.connectionManager.headers()).get()
+                    let orderId: String = response.json["order_id"] as! String
+                    print(orderId)
+                    let orderInfoResponse = try HiveAPi.request(url: self.connectionManager.hiveApi.orderInfo(orderId),
+                                                                method: .get,
+                                                                headers: try self.connectionManager.headers()).get(OrderInfoResponse.self)
+                    resolver.fulfill(orderInfoResponse.orderInfo)
                 } catch {
                     resolver.reject(error)
                 }
@@ -200,30 +204,31 @@ public class SubscriptionRender: ServiceEndpoint, SubscriptionService, PaymentSe
         }
     }
 
-    public func getOrder(_ orderId: String) -> Promise<Order> {
-        return Promise<Void>.async().then { [self] _ -> Promise<Order> in
-            return Promise<Order> { resolver in
-                do {
-                    let url = self.connectionManager.hiveApi.orderInfo(orderId)
-                    let json = try AF.request(url, method: .get, encoding: JSONEncoding.default, headers: try self.connectionManager.headers()).responseJSON().validateResponse()
-                    resolver.fulfill(Order.deserialize(json["order_info"]))
-                } catch {
-                    resolver.reject(error)
-                }
-            }
-        }
-    }
+//    public func getOrder(_ orderId: String) -> Promise<Order> {
+//        return Promise<Void>.async().then { [self] _ -> Promise<Order> in
+//            return Promise<Order> { resolver in
+//                do {
+//                    let url = self.connectionManager.hiveApi.orderInfo(orderId)
+//                    let json = try AF.request(url, method: .get, encoding: JSONEncoding.default, headers: try self.connectionManager.headers()).responseJSON().validateResponse()
+//                    resolver.fulfill(Order.deserialize(json["order_info"]))
+//                } catch {
+//                    resolver.reject(error)
+//                }
+//            }
+//        }
+//    }
     
-    
-    public func payOrder(_ orderId: String, _ transId: String) -> Promise<Receipt> {
-        return Promise<Void>.async().then { [self] _ -> Promise<Receipt> in
-            return Promise<Receipt> { resolver in
+    // TODO
+    public func payOrder(_ orderId: String, _ transIds: [String]) -> Promise<Receipt?> {
+        return Promise<Void>.async().then { [self] _ -> Promise<Receipt?> in
+            return Promise<Receipt?> { resolver in
                 do {
-                    let url = self.connectionManager.hiveApi.payOrder
-                    let params = ["order_id": orderId, "pay_txids": transId] as [String : Any]
-                    let response = AF.request(url, method: .post, parameters: params, encoding: JSONEncoding.default, headers: try self.connectionManager.headers()).responseJSON()
-                    let json = try VaultApi.handlerJsonResponse(response)
-                    resolver.fulfill(Receipt(json))
+                    let params = ["order_id": orderId, "pay_txids": transIds] as [String : Any]
+                    _ = try HiveAPi.request(url: self.connectionManager.hiveApi.payOrder,
+                    method: .post,
+                    parameters: params,
+                    headers: try self.connectionManager.headers()).get()
+                    resolver.fulfill(nil)
                 } catch {
                     resolver.reject(error)
                 }
@@ -270,23 +275,28 @@ public class VaultSubscription {
         return try self.render.checkSubscription();
     }
     
-    public func getPricingPlanList() -> Promise<Array<PricingPlan>> {
+    public func getPricingPlanList() -> Promise<Array<PricingPlan>?> {
         return render.getPricingPlanList()
     }
 
-    public func getPricingPlan(_ planName: String) -> Promise<PricingPlan> {
-        return render.getPricingPlan(planName)
-    }
+//    public func getPricingPlan(_ planName: String) -> Promise<PricingPlan?> {
+//        return render.getPricingPlan(planName)
+//    }
 
-    public func getOrder(_ orderId: String) -> Promise<Order> {
-        return render.getOrder(orderId)
-    }
+//    public func getOrder(_ orderId: String) -> Promise<Order> {
+//        return render.getOrder(orderId)
+//    }
 
-    public func payOrder(_ orderId: String, _ transId: String) -> Promise<Receipt> {
-        return render.payOrder(orderId, transId)
+    public func payOrder(_ orderId: String, _ transIds: [String]) -> Promise<Receipt?> {
+        return render.payOrder(orderId, transIds)
     }
     
     public func getReceipt(_ receiptId: String) throws -> Promise<Receipt> {
         return render.getReceipt(receiptId)
     }
+    
+    public func placeOrder(_ planName: String) throws -> Promise<Order?> {
+        return render.placeOrder(planName)
+    }
+
 }

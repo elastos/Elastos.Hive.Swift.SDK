@@ -24,36 +24,17 @@
 import Foundation
 
 public protocol PaymentProtocol {
-
-    /// Get vault's payment info
-    /// PricingPlan list
-    func getPaymentInfo() -> Promise<PricingInfo>
-
-    /// Get vault pricing plan information by plan name
-    /// - Parameter planName: planName plan name
-    /// Return: the instance of PricingPlan
-    func getPricingPlan(_ planName: String) -> Promise<PricingPlan>
     
-    /// Get payment version
-    func getPaymentVersion() -> Promise<String>
+    func getPricingPlanList() -> Promise<PricingPlan>
+    
+    func getPricingPlan(_ planName: String) -> Promise<PricingPlan>
 
-    /// Create a order of pricing plan
-    /// - Parameter priceName: priceName
-    func placeOrder(_ priceName: String) -> Promise<String>
+    func placeOrder(_ orderId: String) -> Promise<Order>
 
-    /// Pay for  pricing plan order
-    /// - Parameters:
-    ///   - orderId: orderId
-    ///   - txids: txids
-    func payOrder(_ orderId: String, _ txids: Array<String>) -> Promise<Bool>
-
-    /// Get order information of vault service purchase
-    /// - Parameter orderId: orderId
     func getOrder(_ orderId: String) -> Promise<Order>
 
-    /// Get user order information list of vault service purchase
-    func getAllOrders() -> Promise<Array<Order>>
+    func payOrder(_ orderId: String, _ transIds: [String]) -> Promise<Order>
+
+    func getReceipt(_ orderId: String) throws -> Promise<Receipt>
     
-    /// Get using price plan
-    func getUsingPricePlan() -> Promise<UsingPlan>
 }

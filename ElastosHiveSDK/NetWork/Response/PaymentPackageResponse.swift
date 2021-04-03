@@ -23,12 +23,26 @@
 import Foundation
 import ObjectMapper
 
-public class CreateServiceResponse: HiveResponse, HiveCheckValidProtocol {
-    public var existing: Bool?
+public class PaymentPackageResponse: Mappable, HiveCheckValidProtocol {
+    public var status: String?
+    public var json: [String: Any] = [: ]
+    public var backupPlans: [PricingPlan]?
+    public var pricingPlans: [PricingPlan]?
+    public var receivingELAAddress: String?
+    public var waitPaymentTimeout: Int64?
+    public var waitTxTimeout: Int64?
+
+    required public init?(map: Map) {
+
+    }
     
-    public override func mapping(map: Map) {
+    public func mapping(map: Map) {
         status <- map["_status"]
-        existing <- map["existing"]
+        backupPlans <- map["backupPlans"]
+        pricingPlans <- map["pricingPlans"]
+        waitTxTimeout <- map["paymentSettings.wait_tx_timeout"]
+        receivingELAAddress <- map["paymentSettings.receivingELAAddress"]
+        waitPaymentTimeout <- map["paymentSettings.wait_payment_timeout"]
     }
     
     public func checkResponseVaild() throws {

@@ -27,10 +27,14 @@ extension HiveAPi {
         return self.baseURL + self.apiPath + "/payment/vault_package_info"
     }
     
-    func getPricingPlan(_ name: String) -> String {
-        return self.baseURL + self.apiPath + "/payment/vault_pricing_plan?name=\(name)"
-    }    
+    func getPricingPlan(_ planName: String) -> String {
+        return self.baseURL + self.apiPath + "/payment/vault_pricing_plan?name=\(planName)"
+    }
     
+    func getBackupPlan(_ backupPlanName: String) -> String {
+        return self.baseURL + self.apiPath + "/payment/vault_backup_plan?name=\(backupPlanName)"
+    }
+  
     func createOrder() -> String {
         return self.baseURL + self.apiPath + "/payment/create_vault_package_order"
     }

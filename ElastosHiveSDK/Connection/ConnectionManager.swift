@@ -32,8 +32,6 @@ public class ConnectionManager {
     init(_ context: AppContext) throws {
         self.context = context
         self.hiveApi = HiveAPi(self.context.providerAddress!)
-//        self.tokenResolver = try! LocalResolver(self.context.userDid!, self.context.providerAddress!, nil, self.context.getLocalDataDir())
-//        self.tokenResolver!.setNextResolver(RemoteResolver(self.context, nil, self.context.userDid!, self.context.providerAddress!))
     }
     
     func headersStream() -> HTTPHeaders {

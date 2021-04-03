@@ -101,7 +101,7 @@ public class BackupServiceRender: BackupProtocol {
             case "restore":
                 resolver.fulfill(BackupResult.restore)
             default:
-                throw HiveError.hiveDefaultError(des: "Unknown state :" + result)
+                throw HiveError.unknownBackupState(result)
             }
         }
     }

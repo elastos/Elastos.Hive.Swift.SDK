@@ -28,6 +28,7 @@ public class Vault: ServiceEndpoint {
     private var _scripting: ScriptingProtocol?
     private var _pubsubService: PubSubProtocol?
     private var _backupService: BackupProtocol?
+    private var _nodeManageService: NodeManageService?
 
     public init (_ context: AppContext,_ myDid: String, _ providerAddress: String) {
         super.init(context, providerAddress, myDid, myDid, nil)
@@ -36,6 +37,7 @@ public class Vault: ServiceEndpoint {
         self._scripting = ServiceBuilder(self).createScriptingService()
         self._pubsubService = ServiceBuilder(self).createPubsubService()
         self._backupService = ServiceBuilder(self).createBackupService()
+        self._nodeManageService = NodeManageService(self)
     }
     
     public var filesService: FilesProtocol {
@@ -65,5 +67,41 @@ public class Vault: ServiceEndpoint {
     var appContext: AppContext {
         return self.context
     }
+    
+    public func getVersion() -> Promise<String> {
+        return self._nodeManageService!.getVersion()
+    }
+    
+    public func getCommitHash() -> Promise<String> {
+        return self._nodeManageService!.getCommitHash()
+    }
 }
 
+
+private class NodeManageService {
+    private var _connectionManager: ConnectionManager
+
+    public init (_ vault: Vault) {
+        self._connectionManager = vault.appContext.connectionManager
+    }
+
+    public func getVersion() -> Promise<String> {
+        return Promise<Any>.async().then { _ -> Promise<String> in
+            return Promise<String> { resolver in
+                let response = try HiveAPi.request(url: self._connectionManager.hiveApi.version(),
+                                                   headers:try self._connectionManager.headers()).get(NodeVersionResponse.self)
+                resolver.fulfill(response.version)
+            }
+        }
+    }
+
+    public func getCommitHash() -> Promise<String> {
+        return Promise<Any>.async().then { _ -> Promise<String> in
+            return Promise<String> { resolver in
+                let response = try HiveAPi.request(url: self._connectionManager.hiveApi.commitHash(),
+                                                   headers:try self._connectionManager.headers()).get(NodeCommitHashResponse.self)
+                resolver.fulfill(response.commitHash)
+            }
+        }
+    }
+}
