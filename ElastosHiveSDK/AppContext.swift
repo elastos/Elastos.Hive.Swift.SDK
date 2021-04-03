@@ -40,7 +40,7 @@ public class AppContext {
         self._providerAddress = providerAddress
         self._connectionManager = try! ConnectionManager(self)
         self._connectionManager!.tokenResolver = try! LocalResolver(self.userDid!, self.providerAddress!, nil, self.contextProvider!.getLocalDataDir()!)
-        self._connectionManager!.tokenResolver!.setNextResolver(RemoteResolver(self, nil, self.userDid!, self.connectionManager.hiveApi.baseURL))
+        try! self._connectionManager!.tokenResolver!.setNextResolver(RemoteResolver(self, self._connectionManager!))
     }
     
     public static func setupResover(_ resolver: String, _ cacheDir: String) throws {

@@ -22,10 +22,42 @@
 
 import Foundation
 
-public protocol AppContextProvider {    
-    func getLocalDataDir() -> String?
+public class HiveVaultRender {
+    private var _context: AppContext?
+    private var _vault: Vault?
+    private var _connectionManager: ConnectionManager?
+    
+    var context: AppContext {
+        get {
+            return _context!
+        }
+    }
+    
+    var vault: Vault {
+        get {
+            return _vault!
+        }
+    }
+    
+    var connectionManager: ConnectionManager {
+        get {
+            return _connectionManager!
+        }
+    }
+    
+    public init(_ vault: Vault) {
+        self._vault = vault
+        self._context = vault.appContext
+        self._connectionManager = vault.appContext.connectionManager
+    }
 
-    func getAppInstanceDocument() -> DIDDocument?
-
-    func getAuthorization(_ jwtToken: String) -> String?
+    public init(_ context: AppContext) {
+        self._context = context
+        self._connectionManager = context.connectionManager
+    }
+    
+    public init(_ context: AppContext, _ connectionManager: ConnectionManager) {
+        self._context = context
+        self._connectionManager = connectionManager
+    }
 }

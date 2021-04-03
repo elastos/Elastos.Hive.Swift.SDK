@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2020 Elastos Foundation
+* Copyright (c) 2019 Elastos Foundation
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -21,11 +21,39 @@
 */
 
 import Foundation
+import ObjectMapper
 
-public protocol AppContextProvider {    
-    func getLocalDataDir() -> String?
-
-    func getAppInstanceDocument() -> DIDDocument?
-
-    func getAuthorization(_ jwtToken: String) -> String?
+public class BackupStateResponse: HiveResponse, HiveCheckValidProtocol {
+    private var _hiveBackupState: String?
+    private var _result: String?
+        
+    required public init?(map: Map) {
+        super.init(map: map)
+    }
+    
+    public override func mapping(map: Map) {
+        _hiveBackupState <- map["hive_backup_state"]
+        _result <- map["result"]
+    }
+    
+    public func getStatusResult() throws -> BackupResult {
+        if _result != "success" {
+            throw HiveError.failedToGetBackupState
+        }
+        
+        switch (_hiveBackupState) {
+        case "stop":
+            return BackupResult.stop
+        case "backup":
+            return BackupResult.backup
+        case "restore":
+            return BackupResult.restore
+        default:
+            throw HiveError.unknownBackupState(_result ?? "result is null")
+        }
+    }
+    
+    public func checkResponseVaild() throws {
+        
+    }
 }

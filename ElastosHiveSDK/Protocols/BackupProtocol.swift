@@ -26,6 +26,7 @@ public enum BackupResult {
     case stop
     case backup
     case restore
+    case unknown
 }
 
 public protocol BackupProtocol {
@@ -33,7 +34,7 @@ public protocol BackupProtocol {
     
     func startBackup() throws -> Promise<Void>
 
-    func stopBackup() -> Promise<Void>
+    func stopBackup() throws -> Promise<Void>
 
     func restoreFrom() throws -> Promise<Void>
 
