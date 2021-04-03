@@ -24,11 +24,13 @@ import Foundation
 import ObjectMapper
 
 public class AuthToken: NSObject, Mappable{
+    public static let backupType: String = "backup"
+    
     var _accessToken: String
-    var _expiresTime: Int
+    var _expiresTime: Int64
     var _tokenType: String
     
-    init(_ accessToken: String, _ expiresTime: Int, _ tokenType: String) {
+    init(_ accessToken: String, _ expiresTime: Int64, _ tokenType: String) {
         self._accessToken = accessToken
         self._expiresTime = expiresTime
         self._tokenType = tokenType
@@ -37,7 +39,7 @@ public class AuthToken: NSObject, Mappable{
     public var accessToken: String {
         return _accessToken
     }
-    public var expiresTime: Int {
+    public var expiresTime: Int64 {
         return _expiresTime
     }
     public var tokenType: String {

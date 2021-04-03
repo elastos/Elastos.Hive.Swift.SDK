@@ -185,6 +185,12 @@
 		11F368FA25E3BC960035FA7E /* BackupPersistentImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F368F925E3BC960035FA7E /* BackupPersistentImpl.swift */; };
 		11F368FB25E3BC960035FA7E /* BackupPersistentImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F368F925E3BC960035FA7E /* BackupPersistentImpl.swift */; };
 		11FD496D2561AC9B00A108D2 /* DownloadExecutable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FD496C2561AC9B00A108D2 /* DownloadExecutable.swift */; };
+		30091C1526181EC6003EB5CE /* BackupStateResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C1426181EC6003EB5CE /* BackupStateResponse.swift */; };
+		30091C1926182250003EB5CE /* AuthenticationServiceRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C1826182250003EB5CE /* AuthenticationServiceRender.swift */; };
+		30091C1C26182326003EB5CE /* HiveVaultRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C1B26182326003EB5CE /* HiveVaultRender.swift */; };
+		30091C1F26182600003EB5CE /* SignInResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C1E26182600003EB5CE /* SignInResponse.swift */; };
+		30091C2226182D56003EB5CE /* AuthResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C2126182D56003EB5CE /* AuthResponse.swift */; };
+		30091C2526183207003EB5CE /* BackupRemoteResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C2426183206003EB5CE /* BackupRemoteResolver.swift */; };
 		30099A6925FE68A800506AA8 /* LocalResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30099A6825FE68A800506AA8 /* LocalResolver.swift */; };
 		3019D3CD261079D300A3C3C5 /* DataStorageProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3019D3CC261079D300A3C3C5 /* DataStorageProtocol.swift */; };
 		3019D3D126107B2C00A3C3C5 /* AuthRequestParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3019D3D026107B2C00A3C3C5 /* AuthRequestParams.swift */; };
@@ -425,6 +431,12 @@
 		11FD961725C1412B0027FC80 /* MigrationTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrationTest.swift; sourceTree = "<group>"; };
 		13C6D592C180032E4F31BEF6 /* Pods-ElastosHiveSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDK.debug.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDK/Pods-ElastosHiveSDK.debug.xcconfig"; sourceTree = "<group>"; };
 		2368C8CBAE94193EAF7DB87D /* Pods-ElastosHiveSDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDKTests.debug.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDKTests/Pods-ElastosHiveSDKTests.debug.xcconfig"; sourceTree = "<group>"; };
+		30091C1426181EC6003EB5CE /* BackupStateResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupStateResponse.swift; sourceTree = "<group>"; };
+		30091C1826182250003EB5CE /* AuthenticationServiceRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationServiceRender.swift; sourceTree = "<group>"; };
+		30091C1B26182326003EB5CE /* HiveVaultRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiveVaultRender.swift; sourceTree = "<group>"; };
+		30091C1E26182600003EB5CE /* SignInResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInResponse.swift; sourceTree = "<group>"; };
+		30091C2126182D56003EB5CE /* AuthResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthResponse.swift; sourceTree = "<group>"; };
+		30091C2426183206003EB5CE /* BackupRemoteResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupRemoteResolver.swift; sourceTree = "<group>"; };
 		30099A6825FE68A800506AA8 /* LocalResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalResolver.swift; sourceTree = "<group>"; };
 		3019D3CC261079D300A3C3C5 /* DataStorageProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStorageProtocol.swift; sourceTree = "<group>"; };
 		3019D3D026107B2C00A3C3C5 /* AuthRequestParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthRequestParams.swift; sourceTree = "<group>"; };
@@ -557,8 +569,8 @@
 		111D477B24EE4B0700B7462B /* Vault */ = {
 			isa = PBXGroup;
 			children = (
-				3045A739260237FC0037527A /* DatabaseServiceTest.swift */,
 				3019D3DD2610D8EF00A3C3C5 /* BackupServiceTest.swift */,
+				3045A739260237FC0037527A /* DatabaseServiceTest.swift */,
 				30E94820260AFF7500452FF5 /* BackupSubscriptionTest.swift */,
 				30E9482F260B0F5E00452FF5 /* FilesServiceTest.swift */,
 				30D393482609DC5B007A9E09 /* ScriptingServiceTest.swift */,
@@ -756,6 +768,9 @@
 				3065A5F926159DB100C20661 /* PaymentPlanResponse.swift */,
 				3065A5FC2615AE1500C20661 /* NodeVersionResponse.swift */,
 				3065A6022615B2CF00C20661 /* NodeCommitHashResponse.swift */,
+				30091C1426181EC6003EB5CE /* BackupStateResponse.swift */,
+				30091C1E26182600003EB5CE /* SignInResponse.swift */,
+				30091C2126182D56003EB5CE /* AuthResponse.swift */,
 			);
 			path = Response;
 			sourceTree = "<group>";
@@ -767,6 +782,7 @@
 				3033737025FA218D004D0D93 /* TokenResolver.swift */,
 				30A996FA25FCEB420002B014 /* RemoteResolver.swift */,
 				30099A6825FE68A800506AA8 /* LocalResolver.swift */,
+				30091C2426183206003EB5CE /* BackupRemoteResolver.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -835,6 +851,8 @@
 				3045A75126024BF40037527A /* PubSubServiceRender.swift */,
 				3045A75826024C1E0037527A /* ScriptingRender.swift */,
 				3065A5EC26156B3F00C20661 /* PaymentServiceRender.swift */,
+				30091C1826182250003EB5CE /* AuthenticationServiceRender.swift */,
+				30091C1B26182326003EB5CE /* HiveVaultRender.swift */,
 			);
 			path = Vault;
 			sourceTree = "<group>";
@@ -1398,6 +1416,7 @@
 				3033734F25F9F703004D0D93 /* AppContext.swift in Sources */,
 				30099A6925FE68A800506AA8 /* LocalResolver.swift in Sources */,
 				11E92CE12560D8B2007EFC95 /* FileExecutable.swift in Sources */,
+				30091C1C26182326003EB5CE /* HiveVaultRender.swift in Sources */,
 				1170FB142502019C0049E81D /* Vault.swift in Sources */,
 				11C9EAE5254A637500080995 /* InsertOneResult.swift in Sources */,
 				116B2F3025B6C0F200635D97 /* Backup.swift in Sources */,
@@ -1424,6 +1443,7 @@
 				30A996FB25FCEB420002B014 /* RemoteResolver.swift in Sources */,
 				118F2D8A250F264900447A0A /* AggregatedExecutable.swift in Sources */,
 				30DB962E260046F200ACF19F /* PaymentApi.swift in Sources */,
+				30091C2226182D56003EB5CE /* AuthResponse.swift in Sources */,
 				1170FB052501CB3F0049E81D /* WriteConcern.swift in Sources */,
 				1103757923FF96BF004216D0 /* Log.swift in Sources */,
 				111D47D124F7906100B7462B /* CreateCollectionOptions.swift in Sources */,
@@ -1476,6 +1496,7 @@
 				11E573FE22C4C33400F85419 /* Dictionary.swift in Sources */,
 				11496C65251B1E37002DE4F0 /* Date.swift in Sources */,
 				303372AD25F9CF8B004D0D93 /* Receipt.swift in Sources */,
+				30091C2526183207003EB5CE /* BackupRemoteResolver.swift in Sources */,
 				30DB96432600491D00ACF19F /* BackupProtocol.swift in Sources */,
 				111BD8B1256D011400746A51 /* Payment.swift in Sources */,
 				1127462D24FE3343007D6356 /* Database.swift in Sources */,
@@ -1488,6 +1509,7 @@
 				111D47D424F7906F00B7462B /* DeleteOptions.swift in Sources */,
 				111D47E924F7940600B7462B /* UpdateResult.swift in Sources */,
 				1170FB0E2501CEF70049E81D /* VaultIndex.swift in Sources */,
+				30091C1926182250003EB5CE /* AuthenticationServiceRender.swift in Sources */,
 				3065A6062615B6BB00C20661 /* Alamofire+Hive.swift in Sources */,
 				115E82E7251A4495004DCB1E /* MinKey.swift in Sources */,
 				3019D42C2612213900A3C3C5 /* HiveAPi.swift in Sources */,
@@ -1499,6 +1521,7 @@
 				3065A6002615B00700C20661 /* NodeManageApi.swift in Sources */,
 				11E92CED2560E228007EFC95 /* HashExecutable.swift in Sources */,
 				3045A75226024BF40037527A /* PubSubServiceRender.swift in Sources */,
+				30091C1526181EC6003EB5CE /* BackupStateResponse.swift in Sources */,
 				111D479324F4E2C300B7462B /* AuthPersistentImpl.swift in Sources */,
 				1170FB0B2501CD2F0049E81D /* ReadPreference.swift in Sources */,
 				1103757023FF96A0004216D0 /* LogLevel.swift in Sources */,
@@ -1510,6 +1533,7 @@
 				118F2DA5250F33AB00447A0A /* RawCondition.swift in Sources */,
 				111D47CB24F7904100B7462B /* Collation.swift in Sources */,
 				3019D3E12610DC7500A3C3C5 /* BackupAPi.swift in Sources */,
+				30091C1F26182600003EB5CE /* SignInResponse.swift in Sources */,
 				116B2F5125B8292E00635D97 /* ServiceManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

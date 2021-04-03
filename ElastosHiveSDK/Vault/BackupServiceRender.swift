@@ -22,42 +22,43 @@
 
 import Foundation
 
-public class BackupServiceRender: BackupProtocol {
-    var vault: Vault
-    var backupContext: BackupContext?
-    var connectionManager: ConnectionManager?
-    var tokenResolver: TokenResolver?
+public class BackupServiceRender: HiveVaultRender, BackupProtocol {
+    var _backupContext: BackupContext?
+    var _tokenResolver: TokenResolver?
 
-    public init(_ vault: Vault) {
-        self.vault = vault
-        self.connectionManager = self.vault.connectionManager
+    public override init(_ vault: Vault) {
+        super.init(vault)
     }
     
     public func setupContext(_ backupContext: BackupContext) throws -> Promise<Void> {
         return Promise<Void> { resolver in
-            self.backupContext = backupContext
-            self.tokenResolver = try LocalResolver(self.vault.context.userDid!, self.vault.context.providerAddress!, "backup_credential", self.vault.context.appContextProvider.getLocalDataDir()!)
-            let remoteResolver: RemoteResolver = RemoteResolver(self.vault.context,
-                                                                backupContext,
-                                                                backupContext.getParameter("targetDid"),
-                                                                backupContext.getParameter("targetHost"))
-            self.tokenResolver?.setNextResolver(remoteResolver)
+            self._backupContext = backupContext
+            self._tokenResolver = try LocalResolver(self.vault.context.userDid!,
+                                                    self.vault.context.providerAddress!,
+                                                    LocalResolver.credentialBackupType,
+                                                    self.vault.context.appContextProvider.getLocalDataDir()!)
+            let backupRemoteResolver: BackupRemoteResolver = BackupRemoteResolver(vault.appContext,
+                                                                                  backupContext,
+                                                                                  backupContext.getParameter("targetDid"),
+                                                                                  backupContext.getParameter("targetHost"))
+            try! self._tokenResolver?.setNextResolver(backupRemoteResolver)
             resolver.fulfill(Void())
         }
     }
     
     public func startBackup() throws -> Promise<Void> {
         return Promise<Void> { resolver in
-            let url = self.connectionManager!.hiveApi.saveToNode()
-            let header = try self.connectionManager?.headers()
-            let credential: String = try self.tokenResolver!.getToken()!._accessToken
+            let url = self.connectionManager.hiveApi.saveToNode()
+            let header = try self.connectionManager.headers()
+            let credential: String = try self._tokenResolver!.getToken()!.accessToken
             let param: Parameters = ["backup_credential": credential]
             let json = try! AF.request(url, method: .post, parameters: param, encoding: JSONEncoding.default, headers: header).responseJSON().validateResponse()
             resolver.fulfill(Void())
         }
     }
-    
-    public func stopBackup() -> Promise<Void> {
+
+    public func stopBackup() throws -> Promise<Void> {
+        throw HiveError.unsupportedOperation(des: nil)
         return Promise<Void> { resolver in
             resolver.fulfill(Void())
         }
@@ -66,9 +67,9 @@ public class BackupServiceRender: BackupProtocol {
     public func restoreFrom() throws -> Promise<Void> {
         return Promise<Any>.async().then {[self] _ -> Promise<Void> in
             return Promise<Void> { resolver in
-                let url = self.connectionManager!.hiveApi.restoreFromNode()
-                let header = try self.connectionManager?.headers()
-                let credential: String = try self.tokenResolver!.getToken()!._accessToken
+                let url = self.connectionManager.hiveApi.restoreFromNode()
+                let header = try self.connectionManager.headers()
+                let credential: String = try self._tokenResolver!.getToken()!.accessToken
                 let param: Parameters = ["backup_credential": credential]
                 _ = AF.request(url, method: .post, parameters: param, encoding: JSONEncoding.default, headers: header).responseJSON()
                 resolver.fulfill(Void())
@@ -84,25 +85,10 @@ public class BackupServiceRender: BackupProtocol {
     
     public func checkResult() throws -> Promise<BackupResult> {
         return Promise<BackupResult> { resolver in
-            let url = self.connectionManager!.hiveApi.getState()
-            let header = try self.connectionManager?.headers()
-            let json = try AF.request(url, method: .get, encoding: JSONEncoding.default, headers: header).responseJSON().validateResponse()
-            let result = json["result"].stringValue
-            if result != "success" {
-                throw HiveError.failedToGetBackupState
-            }
-            
-            let type = json["hive_backup_state"].stringValue
-            switch (type) {
-            case "stop":
-                resolver.fulfill(BackupResult.stop)
-            case "backup":
-                resolver.fulfill(BackupResult.backup)
-            case "restore":
-                resolver.fulfill(BackupResult.restore)
-            default:
-                throw HiveError.unknownBackupState(result)
-            }
+            let url = self.connectionManager.hiveApi.getState()
+            let header = try self.connectionManager.headers()
+            let response = try HiveAPi.request(url: url, method: .get, headers: header).get(BackupStateResponse.self)
+            resolver.fulfill(try response.getStatusResult())
         }
     }
 }

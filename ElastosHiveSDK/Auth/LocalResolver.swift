@@ -24,6 +24,7 @@ import Foundation
 import ObjectMapper
 
 public class LocalResolver: TokenResolver {
+    public static let credentialBackupType: String = "backup_credential"
     private static let tokenFolder: String = "/tokens"
     var tokenPath: String
     var nextResolver: TokenResolver?
@@ -72,7 +73,7 @@ public class LocalResolver: TokenResolver {
         }
     }
     
-    public func invlidateToken() {
+    public func invlidateToken() throws {
         if token != nil {
             token = nil
             clearToken()
