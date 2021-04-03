@@ -10,8 +10,9 @@ class BackupServiceTest: XCTestCase {
     func test01CheckResult() {
         let lock = XCTestExpectation(description: "wait for check result.")
         do {
-            try self.backupService?.checkResult().done({ _ in
-                
+            try self.backupService?.checkResult().done({ result in
+                XCTAssert(true)
+                lock.fulfill()
             }).catch({[self] error in
                 testCaseFailAndThrowError(error, lock)
             })

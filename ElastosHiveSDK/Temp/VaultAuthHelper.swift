@@ -208,7 +208,7 @@ public class VaultAuthHelper: ConnectHelper {
             refreshToken = json[EXPIRES_AT_KEY].stringValue
         }
         if accessToken != "" && expiredTime != "" {
-            self.token = AuthToken(refreshToken, try Int(value: accessToken), expiredTime)
+            self.token = AuthToken(refreshToken, Int64(try Int(value: accessToken)), expiredTime)
             setServiceDid(json[SERVICE_DID].stringValue)
         }
     }

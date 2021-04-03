@@ -18,14 +18,9 @@ public class UserAppContextProvider: AppContextProvider {
         return try! appInstanceDid.getDocument()
     }
     
-    public func getAuthorization(_ jwtToken: String) -> Promise<String>? {
+    public func getAuthorization(_ jwtToken: String) -> String? {
         return signAuthorization(jwtToken)
     }
-    
-    //    init(_ localDataDir: String, _ pjwt: PresentationInJWT) {
-    //        self.localDataDir = localDataDir
-    //        self.presentationInJWT = pjwt
-    //    }
     
     init(_ path: String, _ didapp:DIDApp, _ dapp: DApp) {
         self.localDataDir = path
@@ -33,24 +28,47 @@ public class UserAppContextProvider: AppContextProvider {
         self.appInstanceDid = dapp
     }
     
-    public func signAuthorization(_ jwtToken: String) -> Promise<String> {
-        return Promise{ resolver in
-            DispatchQueue.global().async { [self] in
-                do {
-                    let claims = try JwtParserBuilder().build().parseClaimsJwt(jwtToken).claims
-                    let iss = claims.getIssuer()
-                    let nonce = claims.get(key: "nonce") as? String
-                    
-                    let vc = try userDid.issueDiplomaFor(appInstanceDid)
-                    let vp: VerifiablePresentation = try appInstanceDid.createPresentation(vc, iss!, nonce!)
-                    let token = try appInstanceDid.createToken(vp, iss!)
-                    resolver.fulfill(token)
-                }
-                catch{
-                    resolver.reject(error)
-                }
+    public func signAuthorization(_ jwtToken: String) -> String? {
+        
+        var accessToken: String?
+        let semaphore: DispatchSemaphore = DispatchSemaphore(value: 0)
+        DispatchQueue.global().async { [self] in
+            do {
+                let claims = try JwtParserBuilder().build().parseClaimsJwt(jwtToken).claims
+                let iss = claims.getIssuer()
+                let nonce = claims.get(key: "nonce") as? String
+                
+                let vc = try userDid.issueDiplomaFor(appInstanceDid)
+                let vp: VerifiablePresentation = try appInstanceDid.createPresentation(vc, iss!, nonce!)
+                let token = try appInstanceDid.createToken(vp, iss!)
+                accessToken = token
+                semaphore.signal()
+            } catch{
+                print(error)
+                semaphore.signal()
             }
         }
+        semaphore.wait()
+        return accessToken!
+
+        
+//        return Promise{ resolver in
+//            DispatchQueue.global().async { [self] in
+//                do {
+//                    let claims = try JwtParserBuilder().build().parseClaimsJwt(jwtToken).claims
+//                    let iss = claims.getIssuer()
+//                    let nonce = claims.get(key: "nonce") as? String
+//
+//                    let vc = try userDid.issueDiplomaFor(appInstanceDid)
+//                    let vp: VerifiablePresentation = try appInstanceDid.createPresentation(vc, iss!, nonce!)
+//                    let token = try appInstanceDid.createToken(vp, iss!)
+//                    resolver.fulfill(token)
+//                }
+//                catch{
+//                    resolver.reject(error)
+//                }
+//            }
+//        }
     }
 }
 

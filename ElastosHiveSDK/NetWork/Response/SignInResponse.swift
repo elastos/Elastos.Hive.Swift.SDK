@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2020 Elastos Foundation
+* Copyright (c) 2019 Elastos Foundation
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -21,11 +21,31 @@
 */
 
 import Foundation
+import ObjectMapper
 
-public protocol AppContextProvider {    
-    func getLocalDataDir() -> String?
+public class SignInResponse: HiveResponse, HiveCheckValidProtocol {
+    private var _challenge: String?
+    
+    public var challenge: String {
+        get {
+            return _challenge!
+        }
+    }
+    
+    required public init?(map: Map) {
+        super.init(map: map)
+    }
+    
+    public override func mapping(map: Map) {
+        _challenge <- map["challenge"]
+    }
+ 
+    public func checkValid() throws -> Claims {
+        let jwtParser = try JwtParserBuilder().build()
+        return try jwtParser.parseClaimsJwt(self.challenge).claims
+    }
+    
+    public func checkResponseVaild() throws {
 
-    func getAppInstanceDocument() -> DIDDocument?
-
-    func getAuthorization(_ jwtToken: String) -> String?
+    }
 }
