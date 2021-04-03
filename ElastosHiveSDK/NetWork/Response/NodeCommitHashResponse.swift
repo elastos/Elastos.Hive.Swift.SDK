@@ -23,15 +23,26 @@
 import Foundation
 import ObjectMapper
 
-public class CreateServiceResponse: HiveResponse, HiveCheckValidProtocol {
-    public var existing: Bool?
+public class NodeCommitHashResponse: HiveResponse, HiveCheckValidProtocol {
+    private var _commitHash: String?
+
+    var commitHash: String {
+        get {
+            return _commitHash!
+        }
+    }
+    
+    required public init?(map: Map) {
+        super.init(map: map)
+    }
     
     public override func mapping(map: Map) {
-        status <- map["_status"]
-        existing <- map["existing"]
+        _commitHash <- map["commit_hash"]
     }
     
     public func checkResponseVaild() throws {
-        
+        if self._commitHash == nil {
+            throw HiveError.failure(des: "commitHash is null")
+        }
     }
 }

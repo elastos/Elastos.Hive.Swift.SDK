@@ -25,7 +25,7 @@ import Foundation
 public class PricingInfo: Result {
     private let PRICINGPLANS = "pricingPlans"
     private let PAYMENTSETTINGS = "paymentSettings"
-    private var _pricingPlans: Array<PricingPlan> = [ ]
+    private var _pricingPlans: Array<PricingPlan> = []
     private var _paymentSettings: PaymentSettings?
     
     public var pricingPlans: Array<PricingPlan> {
@@ -44,8 +44,8 @@ public class PricingInfo: Result {
         let json = JSON(paramars)
         let info = PricingInfo(json)
         for item in json["pricingPlans"].arrayValue {
-            let plan = PricingPlan(item)
-            info._pricingPlans.append(plan)
+//            let plan = PricingPlan(item)
+//            info._pricingPlans.append(plan)
         }
         return info
     }
@@ -53,8 +53,8 @@ public class PricingInfo: Result {
     class func deserialize(_ content: JSON) -> PricingInfo {
         let info = PricingInfo(content)
         for item in content["pricingPlans"].arrayValue {
-            let plan = PricingPlan.deserialize(item)
-            info._pricingPlans.append(plan)
+//            let plan = PricingPlan.deserialize(item)
+//            info._pricingPlans.append(plan)
         }
         info._paymentSettings = PaymentSettings.deserialize(content["paymentSettings"])
         return info

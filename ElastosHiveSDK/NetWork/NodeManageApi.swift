@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2019 Elastos Foundation
+* Copyright (c) 2020 Elastos Foundation
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -21,17 +21,13 @@
 */
 
 import Foundation
-import ObjectMapper
 
-public class CreateServiceResponse: HiveResponse, HiveCheckValidProtocol {
-    public var existing: Bool?
-    
-    public override func mapping(map: Map) {
-        status <- map["_status"]
-        existing <- map["existing"]
+extension HiveAPi {
+    func version() -> String {
+        return self.baseURL + self.apiPath + "/hive/version"
     }
     
-    public func checkResponseVaild() throws {
-        
+    func commitHash() -> String {
+        return self.baseURL + self.apiPath + "/hive/commithash"
     }
 }

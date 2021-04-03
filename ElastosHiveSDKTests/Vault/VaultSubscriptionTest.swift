@@ -63,28 +63,28 @@ class VaultSubscriptionTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
 
-    func testGetPricingPlan() {
-        let lock = XCTestExpectation(description: "wait for test deactivate.")
-        subscription?.getPricingPlan("free").done({ pricingPlan in
-            print(pricingPlan)
-            XCTAssertTrue(true)
-            lock.fulfill()
-        }).catch({[self] error in
-            testCaseFailAndThrowError(error, lock)
-        })
-        self.wait(for: [lock], timeout: 1000.0)
-    }
+//    func testGetPricingPlan() {
+//        let lock = XCTestExpectation(description: "wait for test deactivate.")
+//        subscription?.getPricingPlan("free").done({ pricingPlan in
+//            print(pricingPlan)
+//            XCTAssertTrue(true)
+//            lock.fulfill()
+//        }).catch({[self] error in
+//            testCaseFailAndThrowError(error, lock)
+//        })
+//        self.wait(for: [lock], timeout: 1000.0)
+//    }
     
-    func testGetOrder() throws {
-        let lock = XCTestExpectation(description: "test for get order.")
-        self.subscription!.getOrder(orderId).done({ order in
-            XCTAssertTrue(true)
-            lock.fulfill()
-        }).catch {[self] error in
-            testCaseFailAndThrowError(error, lock)
-        }
-        self.wait(for: [lock], timeout: 1000.0)
-    }
+//    func testGetOrder() throws {
+//        let lock = XCTestExpectation(description: "test for get order.")
+//        self.subscription!.getOrder(orderId).done({ order in
+//            XCTAssertTrue(true)
+//            lock.fulfill()
+//        }).catch {[self] error in
+//            testCaseFailAndThrowError(error, lock)
+//        }
+//        self.wait(for: [lock], timeout: 1000.0)
+//    }
         
     func testPayOrder() throws {
         

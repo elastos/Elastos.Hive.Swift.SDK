@@ -23,12 +23,21 @@
 import Foundation
 import ObjectMapper
 
-public class CreateServiceResponse: HiveResponse, HiveCheckValidProtocol {
-    public var existing: Bool?
+public class NodeVersionResponse: HiveResponse, HiveCheckValidProtocol {
+    private var _version: String?
+
+    var version: String {
+        get {
+            return _version!
+        }
+    }
+    
+    required public init?(map: Map) {
+        super.init(map: map)
+    }
     
     public override func mapping(map: Map) {
-        status <- map["_status"]
-        existing <- map["existing"]
+        _version <- map["version"]
     }
     
     public func checkResponseVaild() throws {

@@ -20,18 +20,31 @@
 * SOFTWARE.
 */
 
+
 import Foundation
 import ObjectMapper
 
-public class CreateServiceResponse: HiveResponse, HiveCheckValidProtocol {
-    public var existing: Bool?
+public class PaymentPlanResponse: HiveResponse, HiveCheckValidProtocol {
+    public var amount: Double?
+    public var currency: String?
+    public var maxStorage: Int64?
+    public var name: String?
+    public var serviceDays: Int64?
+    
+    required public init?(map: Map) {
+        super.init(map: map)
+    }
     
     public override func mapping(map: Map) {
-        status <- map["_status"]
-        existing <- map["existing"]
+        amount <- map["amount"]
+        currency <- map["currency"]
+        maxStorage <- map["maxStorage"]
+        name <- map["name"]
+        serviceDays <- map["serviceDays"]
     }
     
     public func checkResponseVaild() throws {
         
     }
 }
+
