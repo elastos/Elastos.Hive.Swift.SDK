@@ -63,18 +63,15 @@ public class RemoteResolver: TokenResolver {
     private func signIn() throws -> String {
         let jsonstr = self.contextProvider.getAppInstanceDocument()!.description
         let data = jsonstr.data(using: .utf8)
-        let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
-        let params = ["document": json]
+        let json: [String: Any]  = try JSONSerialization.jsonObject(with: data!, options: []) as! [String : Any]
+        let params: [String: Any] = ["document": json]
+        let responseJson: HiveResponse = try HiveAPi.request(url: self.connectionManager.hiveApi.signIn(),
+                                                             method: .post,
+                                                             parameters: params,
+                                                             headers: self.connectionManager.NormalHeaders()).get()
         
-        // TODO header design need improve
-        let response = AF.request(self.connectionManager.hiveApi.signIn(),
-                          method: .post,
-                          parameters: params as Parameters,
-                          encoding: JSONEncoding.default,
-                          headers: HiveHeader.init(nil).NormalHeaders()).responseJSON()
-        let responseJson = try VaultApi.handlerJsonResponse(response)
-        _ = try VaultApi.handlerJsonResponseCanRelogin(responseJson, tryAgain: 1)
-        let jwtToken = responseJson["challenge"].stringValue
+        let jwtToken: String = responseJson.json["challenge"] as! String
+        
         guard jwtToken != "" else {
             throw HiveError.challengeIsNil(des: "Sign-in request failed")
         }
@@ -112,12 +109,19 @@ public class RemoteResolver: TokenResolver {
     
     private func auth(_ token: String) throws -> AuthToken {
         let params = ["jwt": token]
-        let response = AF.request(self.connectionManager.hiveApi.auth(),
-                            method: .post,
-                            parameters: params,
-                            encoding: JSONEncoding.default).responseJSON()
-        let responseJson = try VaultApi.handlerJsonResponse(response)
-        return try self.handleAuthResponse(responseJson)
+        let url = self.connectionManager.hiveApi.auth()
+        let response = try HiveAPi.request(url: url,
+                                            method: .post,
+                                            parameters: params,
+                                            headers: self.connectionManager.NormalHeaders()).get()
+        // TODO:
+        let accessToken: String = response.json["access_token"] as! String
+        let jwtParserBuilder = try JwtParserBuilder().build()
+        let claim = try jwtParserBuilder.parseClaimsJwt(accessToken).claims
+        let expirationDate = claim.getExpiration()
+        let expiresTime = 9234999999
+//        let expiresTime: String = Date.convertToUTCStringFromDate(expirationDate!)
+        return AuthToken(accessToken, expiresTime, "token")
     }
 
     private func handleAuthResponse(_ response: JSON) throws -> AuthToken {
@@ -156,4 +160,3 @@ public class RemoteResolver: TokenResolver {
         return token!.accessToken!
     }
 }
-

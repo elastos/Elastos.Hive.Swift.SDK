@@ -23,12 +23,12 @@
 import Foundation
 
 public class DatabaseServiceRender: DatabaseProtocol {
-    var vault: Vault
+    let _connectionManager: ConnectionManager
     
     public init(_ vault: Vault) {
-        self.vault = vault
+        _connectionManager = vault.connectionManager
     }
-    
+
     public func createCollection(_ name: String, options: CreateCollectionOptions?) -> Promise<Bool> {
         return Promise<Any>.async().then{ [self] _ -> Promise<Bool> in
             return createColImp(name, options)
@@ -43,8 +43,8 @@ public class DatabaseServiceRender: DatabaseProtocol {
                     param["options"] = try options!.jsonSerialize()
                 }
             }
-            let url = self.vault.connectionManager.hiveApi.createCollection()
-            let header = try self.vault.connectionManager.headers()
+            let url = self._connectionManager.hiveApi.createCollection()
+            let header = try self._connectionManager.headers()
             _ = AF.request(url,
                            method: .post,
                            parameters: param,
@@ -74,8 +74,8 @@ public class DatabaseServiceRender: DatabaseProtocol {
                     param["options"] = try options!.jsonSerialize()
                 }
             }
-            let url = self.vault.connectionManager.hiveApi.insertOne()
-            let header = try self.vault.connectionManager.headers()
+            let url = self._connectionManager.hiveApi.insertOne()
+            let header = try self._connectionManager.headers()
             let json = try AF.request(url,
                                           method: .post,
                                           parameters: param,
@@ -98,8 +98,8 @@ public class DatabaseServiceRender: DatabaseProtocol {
             if try options.jsonSerialize().count != 0 {
                 param["options"] = try options.jsonSerialize()
             }
-            let url = self.vault.connectionManager.hiveApi.insertMany()
-            let header = try self.vault.connectionManager.headers()
+            let url = self._connectionManager.hiveApi.insertMany()
+            let header = try self._connectionManager.headers()
             let json = try AF.request(url,
                                 method: .post,
                                 parameters: param,
@@ -122,8 +122,8 @@ public class DatabaseServiceRender: DatabaseProtocol {
             if try options.jsonSerialize().count != 0 {
                 param["options"] = try options.jsonSerialize()
             }
-            let url = self.vault.connectionManager.hiveApi.insertMany()
-            let header = try self.vault.connectionManager.headers()
+            let url = self._connectionManager.hiveApi.insertMany()
+            let header = try self._connectionManager.headers()
             let json = try AF.request(url,
                                           method: .post,
                                           parameters: param,
@@ -145,8 +145,8 @@ public class DatabaseServiceRender: DatabaseProtocol {
             if try options.jsonSerialize().count != 0 {
                 param["options"] = try options.jsonSerialize()
             }
-            let url = self.vault.connectionManager.hiveApi.insertMany()
-            let header = try self.vault.connectionManager.headers()
+            let url = self._connectionManager.hiveApi.insertMany()
+            let header = try self._connectionManager.headers()
             let json = try AF.request(url,
                                       method: .post,
                                       parameters: param,
@@ -168,8 +168,8 @@ public class DatabaseServiceRender: DatabaseProtocol {
             if try options.jsonSerialize().count != 0 {
                 param["options"] = try options.jsonSerialize()
             }
-            let url = self.vault.connectionManager.hiveApi.findMany()
-            let header = try self.vault.connectionManager.headers()
+            let url = self._connectionManager.hiveApi.findMany()
+            let header = try self._connectionManager.headers()
             let json = try AF.request(url,
                                       method: .post,
                                       parameters: param,
@@ -202,8 +202,8 @@ public class DatabaseServiceRender: DatabaseProtocol {
             if try options.jsonSerialize().count != 0 {
                 param["options"] = try options.jsonSerialize()
             }
-            let url = self.vault.connectionManager.hiveApi.updateOne()
-            let header = try self.vault.connectionManager.headers()
+            let url = self._connectionManager.hiveApi.updateOne()
+            let header = try self._connectionManager.headers()
             let json = try AF.request(url,
                                           method: .post,
                                           parameters: param,
@@ -226,8 +226,8 @@ public class DatabaseServiceRender: DatabaseProtocol {
             if try options.jsonSerialize().count != 0 {
                 param["options"] = try options.jsonSerialize()
             }
-            let url = self.vault.connectionManager.hiveApi.updateMany()
-            let header = try self.vault.connectionManager.headers()
+            let url = self._connectionManager.hiveApi.updateMany()
+            let header = try self._connectionManager.headers()
             let json = try! AF.request(url,
                                 method: .post,
                                 parameters: param,
@@ -250,8 +250,8 @@ public class DatabaseServiceRender: DatabaseProtocol {
             if try options.jsonSerialize().count != 0 {
                 param["options"] = try options.jsonSerialize()
             }
-            let url = self.vault.connectionManager.hiveApi.deleteOne()
-            let header = try self.vault.connectionManager.headers()
+            let url = self._connectionManager.hiveApi.deleteOne()
+            let header = try self._connectionManager.headers()
             let json = try AF.request(url,
                                 method: .post,
                                 parameters: param,
@@ -274,8 +274,8 @@ public class DatabaseServiceRender: DatabaseProtocol {
             if try options.jsonSerialize().count != 0 {
                 param["options"] = try options.jsonSerialize()
             }
-            let url = self.vault.connectionManager.hiveApi.deleteMany()
-            let header = try self.vault.connectionManager.headers()
+            let url = self._connectionManager.hiveApi.deleteMany()
+            let header = try self._connectionManager.headers()
             let json = try AF.request(url,
                                 method: .post,
                                 parameters: param,

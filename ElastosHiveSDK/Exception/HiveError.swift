@@ -23,7 +23,6 @@
 import Foundation
 
 public enum HiveError: Error {
-    case hiveDefaultError(des: String)
     case insufficientParameters(des: String?)
     case invalidatedBuilder(des: String?)
     case failure(des: String?)
@@ -46,15 +45,67 @@ public enum HiveError: Error {
     case providerNotFound(des: String?)
     case backupAlreadyExist
     case failedToGetBackupState
+    case unknownBackupState(_ state: String)
 }
 
 // jsonSerializationInvalidType
 extension HiveError {
     
+    public var description: String {
+        switch self {
+        case .unknownBackupState(let state):
+            return "Unknown state : \(state)"
+        case .failure(let des):
+            return des ?? "Operation failed"
+        case .insufficientParameters(let des):
+            return des ?? ""
+        case .invalidatedBuilder(let des):
+            return des ?? ""
+        case .IllegalArgument(let des):
+            return des ?? ""
+        case .netWork(let des):
+            return des.debugDescription
+        case .unsupportedOperation(let des):
+            return des ?? ""
+        case .providerIsNil(des: let des):
+            return des ?? ""
+        case .accessAuthToken(let des):
+            return des ?? ""
+        case .jwtVerify(let des):
+            return des ?? ""
+        case .transactionIdIsNil(let des):
+            return des ?? ""
+        case .fileNotFound(let des):
+            return des ?? ""
+        case .providerNotSet(let des):
+            return des ?? ""
+        case .authorizationIsNil(let des):
+            return des ?? ""
+        case .vaultAlreadyExist:
+            return "The vault already exists"
+        case .challengeIsNil(let des):
+            return des ?? ""
+        case .jsonSerializationInvalidType(let des):
+            return des ?? ""
+        case .vaultNotFound(let des):
+            return des ?? ""
+        case .responseSerializationFailed(let des):
+            return des ?? ""
+        case .serviceDidIsNil(let des):
+            return des ?? ""
+        case .providerNotFound(let des):
+            return des ?? ""
+        case .backupAlreadyExist:
+            return "The backup service already exists"
+        case .failedToGetBackupState:
+            return "Failed to get back-up state."
+        }
+    }
+    
     public static func description(_ error: HiveError) -> String {
         switch error {
-        case .hiveDefaultError(let des):
-            return des
+        case .unknownBackupState(let state):
+            return "Unknown state : \(state)"
         case .failure(let des):
             return des ?? "Operation failed"
         case .insufficientParameters(let des):

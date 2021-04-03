@@ -26,6 +26,10 @@ import ObjectMapper
 public class AuthRequestParams: Mappable {
     public var jwt: String
     
+    public init (_ jwt: String) {
+        self.jwt = jwt
+    }
+    
     public required init?(map: Map) {
         try! self.jwt = map.value("jwt")
     }

@@ -23,15 +23,17 @@
 import Foundation
 import ObjectMapper
 
-public class CreateServiceResponse: HiveResponse, HiveCheckValidProtocol {
-    public var existing: Bool?
-    
-    public override func mapping(map: Map) {
-        status <- map["_status"]
-        existing <- map["existing"]
+
+
+public class HiveResponse: Mappable {
+    public var status: String
+    public var json: [String: Any] = [: ]
+
+    required public init?(map: Map) {
+        try! self.status = map.value("_status")
     }
     
-    public func checkResponseVaild() throws {
-        
+    public func mapping(map: Map) {
+        status <- map["_status"]
     }
 }
