@@ -25,7 +25,8 @@ import ObjectMapper
 
 
 
-public class HiveResponse: Mappable {
+public class HiveResponse: Mappable, HiveCheckValidProtocol{
+    public var httpStatusCode: Int?
     public var status: String
     public var json: [String: Any] = [: ]
 
@@ -35,5 +36,9 @@ public class HiveResponse: Mappable {
     
     public func mapping(map: Map) {
         status <- map["_status"]
+    }
+    
+    public func checkResponseVaild() throws {
+        
     }
 }

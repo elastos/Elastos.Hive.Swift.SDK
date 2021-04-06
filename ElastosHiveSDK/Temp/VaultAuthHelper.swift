@@ -109,7 +109,7 @@ public class VaultAuthHelper: ConnectHelper {
         self.vaultUrl = VaultURL(_endPoint)
     }
     
-    public override func checkValid() -> Promise<Void> {
+    public func checkValid() -> Promise<Void> {
         return DispatchQueue.global().async(.promise){ [self] in
 //            lock.lock()
             try doCheckExpired()

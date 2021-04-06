@@ -12,16 +12,18 @@ public enum EnvironmentType: Int {
 public class TestBackupRender: BackupContext {
     public var nodeConfig: NodeConfig
     public var userDid: DIDApp?
+    public var _type: String?
     public var type: String {
         get {
-            return ""
+            return _type!
         }
         set {
-            self.type = newValue
+            _type = newValue
         }
     }
 
-    public init(_ vault: Vault, _ nodeConfig: NodeConfig) {
+    public init(_ userDid: DIDApp, _ vault: Vault, _ nodeConfig: NodeConfig) {
+        self.userDid = userDid
         self.nodeConfig = nodeConfig
     }
     
@@ -37,8 +39,8 @@ public class TestBackupRender: BackupContext {
     public func getAuthorization(_ srcDid: String, _ targetDid: String, _ targetHost: String) -> Promise<String> {
         Promise<Any>.async().then { [self] _ -> Promise<String> in
             return Promise<String> { resolver in
-                let auth = try userDid?.issueBackupDiplomaFor(srcDid, targetHost, targetDid)
-                resolver.fulfill(auth!.description)
+                let auth = try userDid!.issueBackupDiplomaFor(srcDid, targetHost, targetDid)
+                resolver.fulfill(auth.description)
             }
         }
     }
@@ -119,9 +121,9 @@ public class TestData {
         return appContext!.getVault(nodeConfig!.ownerDid, nodeConfig!.provider)
     }
 
-    public func getBackupService() throws -> BackupServiceRender {
+    public func backupService() throws -> BackupServiceRender {
         let backService = self.newVault().backupService
-        try backService.setupContext(TestBackupRender(self.newVault(), self.nodeConfig!))
+        try backService.setupContext(TestBackupRender(userDid!, self.newVault(), self.nodeConfig!))
         return backService as! BackupServiceRender
     }
 }

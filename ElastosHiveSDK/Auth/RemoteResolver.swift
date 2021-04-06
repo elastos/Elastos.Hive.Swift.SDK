@@ -32,13 +32,6 @@ public class RemoteResolver: TokenResolver {
         self._authenticationServiceRender = AuthenticationServiceRender(context, context.appContextProvider, connectionManager)
     }
 
-//    init(_ context: AppContext, _ backupContext: BackupContext?, _ targetDid: String, _ targetHost: String) {
-//        self.contextProvider = context.appContextProvider
-//        self.backupContext = backupContext
-//        self.connectionManager = context.connectionManager
-//        self.targetDid = targetDid
-//        self.targetHost = targetHost
-//    }
 
     public func getToken() throws -> AuthToken? {
         return try self._authenticationServiceRender.auth(token: self._authenticationServiceRender.signInForToken())

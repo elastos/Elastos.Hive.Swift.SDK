@@ -23,14 +23,10 @@
 import Foundation
 import ObjectMapper
 
-public class BackupStateResponse: HiveResponse, HiveCheckValidProtocol {
+public class BackupStateResponse: HiveResponse {
     private var _hiveBackupState: String?
     private var _result: String?
-        
-    required public init?(map: Map) {
-        super.init(map: map)
-    }
-    
+            
     public override func mapping(map: Map) {
         _hiveBackupState <- map["hive_backup_state"]
         _result <- map["result"]
@@ -51,9 +47,5 @@ public class BackupStateResponse: HiveResponse, HiveCheckValidProtocol {
         default:
             throw HiveError.unknownBackupState(_result ?? "result is null")
         }
-    }
-    
-    public func checkResponseVaild() throws {
-        
     }
 }

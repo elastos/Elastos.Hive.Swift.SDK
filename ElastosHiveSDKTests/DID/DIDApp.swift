@@ -36,7 +36,7 @@ public class DIDApp: Entity {
         return vc
     }
 
-    public func issueBackupDiplomaFor(_ sourceDID: String, _ targetHost: String, _ targetDID: String)throws -> VerifiableCredential{
+    public func issueBackupDiplomaFor(_ sourceDID: String, _ targetHost: String, _ targetDID: String) throws -> VerifiableCredential{
         let subject = ["sourceDID": sourceDID, "targetHost": targetHost, "targetDID": targetDID]
         let userCalendar = Calendar.current
         var components = DateComponents()

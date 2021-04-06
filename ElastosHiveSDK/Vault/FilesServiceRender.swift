@@ -66,7 +66,7 @@ public class FilesServiceRender: FilesProtocol {
                 let info = FileInfo()
                 info.setName(fileInfo["name"].stringValue)
                 info.setSize(fileInfo["size"].intValue)
-                info.setLastModify(fileInfo["last_modify"].stringValue)
+//                info.setLastModify(Double(fileInfo["last_modify"]))
                 info.setType(fileInfo["type"].stringValue)
                 fileList.append(info)
             }
@@ -91,7 +91,7 @@ public class FilesServiceRender: FilesProtocol {
             let info = FileInfo()
             info.setName(response["name"].stringValue)
             info.setSize(response["size"].intValue)
-            info.setLastModify(response["last_modify"].stringValue)
+//            info.setLastModify(response["last_modify"].stringValue)
             info.setType(response["type"].stringValue)
             resolver.fulfill(info)
         }

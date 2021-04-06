@@ -23,7 +23,7 @@
 import Foundation
 import ObjectMapper
 
-public class NodeCommitHashResponse: HiveResponse, HiveCheckValidProtocol {
+public class NodeCommitHashResponse: HiveResponse {
     private var _commitHash: String?
 
     var commitHash: String {
@@ -31,16 +31,12 @@ public class NodeCommitHashResponse: HiveResponse, HiveCheckValidProtocol {
             return _commitHash!
         }
     }
-    
-    required public init?(map: Map) {
-        super.init(map: map)
-    }
-    
+
     public override func mapping(map: Map) {
         _commitHash <- map["commit_hash"]
     }
     
-    public func checkResponseVaild() throws {
+    public override func checkResponseVaild() throws {
         if self._commitHash == nil {
             throw HiveError.failure(des: "commitHash is null")
         }

@@ -23,7 +23,7 @@
 import Foundation
 import ObjectMapper
 
-public class AuthResponse: HiveResponse, HiveCheckValidProtocol {
+public class AuthResponse: HiveResponse {
     private var _accessToken: String?
     
     public var accessToken: String {
@@ -32,15 +32,7 @@ public class AuthResponse: HiveResponse, HiveCheckValidProtocol {
         }
     }
     
-    required public init?(map: Map) {
-        super.init(map: map)
-    }
-    
     public override func mapping(map: Map) {
         _accessToken <- map["access_token"]
-    }
- 
-    public func checkResponseVaild() throws {
-
     }
 }

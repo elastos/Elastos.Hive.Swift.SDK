@@ -50,25 +50,6 @@ public class UserAppContextProvider: AppContextProvider {
         }
         semaphore.wait()
         return accessToken!
-
-        
-//        return Promise{ resolver in
-//            DispatchQueue.global().async { [self] in
-//                do {
-//                    let claims = try JwtParserBuilder().build().parseClaimsJwt(jwtToken).claims
-//                    let iss = claims.getIssuer()
-//                    let nonce = claims.get(key: "nonce") as? String
-//
-//                    let vc = try userDid.issueDiplomaFor(appInstanceDid)
-//                    let vp: VerifiablePresentation = try appInstanceDid.createPresentation(vc, iss!, nonce!)
-//                    let token = try appInstanceDid.createToken(vp, iss!)
-//                    resolver.fulfill(token)
-//                }
-//                catch{
-//                    resolver.reject(error)
-//                }
-//            }
-//        }
     }
 }
 

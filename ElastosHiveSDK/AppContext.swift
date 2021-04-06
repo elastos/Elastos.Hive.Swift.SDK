@@ -39,7 +39,7 @@ public class AppContext {
         self._userDid = userDid
         self._providerAddress = providerAddress
         self._connectionManager = try! ConnectionManager(self)
-        self._connectionManager!.tokenResolver = try! LocalResolver(self.userDid!, self.providerAddress!, nil, self.contextProvider!.getLocalDataDir()!)
+        self._connectionManager!.tokenResolver = try! LocalResolver(self.userDid!, self.providerAddress!, "auth_token", self.contextProvider!.getLocalDataDir()!)
         try! self._connectionManager!.tokenResolver!.setNextResolver(RemoteResolver(self, self._connectionManager!))
     }
     
@@ -108,12 +108,12 @@ public class AppContext {
                     let did = try DID(targetDid)
                     let doc = try did.resolve()
                     guard doc != nil else {
-                        resolver.reject(HiveError.providerNotFound(des: "The DID \(targetDid) has not published onto sideChain"))
+                        resolver.reject(HiveError.providerNotFound(message: "The DID \(targetDid) has not published onto sideChain"))
                         return
                     }
                     let services = doc?.selectServices(byType: "HiveVault")
                     if services == nil || services!.count == 0 {
-                        resolver.reject(HiveError.providerNotSet(des: "No 'HiveVault' services declared on DID document \(targetDid)"))
+                        resolver.reject(HiveError.providerNotSet(message: "No 'HiveVault' services declared on DID document \(targetDid)"))
                         return
                     }
                     resolver.fulfill(services![0].endpoint)
