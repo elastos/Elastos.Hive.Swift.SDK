@@ -46,32 +46,32 @@ public class BackupServiceRender: HiveVaultRender, BackupProtocol {
         }
     }
     
-    public func startBackup() throws -> Promise<Void> {
+    public func startBackup() -> Promise<Void> {
         return Promise<Void> { resolver in
             let url = self.connectionManager.hiveApi.saveToNode()
             let header = try self.connectionManager.headers()
             let credential: String = try self._tokenResolver!.getToken()!.accessToken
             let param: Parameters = ["backup_credential": credential]
-            let json = try! AF.request(url, method: .post, parameters: param, encoding: JSONEncoding.default, headers: header).responseJSON().validateResponse()
+            _ = try HiveAPi.request(url: url, method: .post, parameters: param, headers: header).get(HiveResponse.self)
             resolver.fulfill(Void())
         }
     }
 
     public func stopBackup() throws -> Promise<Void> {
-        throw HiveError.unsupportedOperation(des: nil)
+//        throw HiveError.unsupportedOperation(des: nil)
         return Promise<Void> { resolver in
             resolver.fulfill(Void())
         }
     }
     
-    public func restoreFrom() throws -> Promise<Void> {
+    public func restoreFrom() -> Promise<Void> {
         return Promise<Any>.async().then {[self] _ -> Promise<Void> in
             return Promise<Void> { resolver in
                 let url = self.connectionManager.hiveApi.restoreFromNode()
                 let header = try self.connectionManager.headers()
                 let credential: String = try self._tokenResolver!.getToken()!.accessToken
                 let param: Parameters = ["backup_credential": credential]
-                _ = AF.request(url, method: .post, parameters: param, encoding: JSONEncoding.default, headers: header).responseJSON()
+                _ = try HiveAPi.request(url: url, method: .post, parameters: param, headers: header).get(HiveResponse.self)
                 resolver.fulfill(Void())
             }
         }
@@ -83,7 +83,7 @@ public class BackupServiceRender: HiveVaultRender, BackupProtocol {
         }
     }
     
-    public func checkResult() throws -> Promise<BackupResult> {
+    public func checkResult() -> Promise<BackupResult> {
         return Promise<BackupResult> { resolver in
             let url = self.connectionManager.hiveApi.getState()
             let header = try self.connectionManager.headers()

@@ -22,13 +22,18 @@
 
 import Foundation
 
-/// Provides author-related functionality
-@objc(AuthHelper)
-public class ConnectHelper: NSObject {
+public class ChannelMessage {
+    private var _message: String?
+    private var _time: Int?
     
-    ///  Check access token isExpired
-    /// - Returns: `Void` if expired
-//    public func checkValid() -> Promise<Void> {
-//        return Promise<Void>(error: HiveError.failure(des: "Dummy"))
-//    }
+    public var time: Int {
+        get {
+            return _time!
+        }
+    }
+    
+    public func setTime(_ time: Int) -> ChannelMessage {
+        self._time = time
+        return self
+    }
 }

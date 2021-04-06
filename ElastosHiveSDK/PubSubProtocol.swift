@@ -20,24 +20,22 @@
 * SOFTWARE.
 */
 
-
 import Foundation
-import ObjectMapper
 
-public class PaymentPlanResponse: HiveResponse {
-    public var amount: Double?
-    public var currency: String?
-    public var maxStorage: Int64?
-    public var name: String?
-    public var serviceDays: Int64?
+public protocol PubSubProtocol {
+    func publish(_ channelName: String) -> Promise<Bool>
 
-    public override func mapping(map: Map) {
-        status <- map["_status"]
-        amount <- map["amount"]
-        currency <- map["currency"]
-        maxStorage <- map["maxStorage"]
-        name <- map["name"]
-        serviceDays <- map["serviceDays"]
-    }
+    func remove(_ channelName: String) -> Promise<Bool>
+
+    func getPublishedChannels() -> Promise<Array<String>>
+
+    func getSubscribedChannels() -> Promise<Array<String>>
+
+    func subscribe(_ channelName: String, _ pubDid: String, _ pubAppId: String) -> Promise<Bool>
+
+    func unsubscribe(_ channelName: String, _ pubDid: String, _ pubAppId: String) -> Promise<Bool>
+
+    func push(_ channelName: String, _ message: String) -> Promise<Bool>
+    
+    func pop(_ channelName: String, _ pubDid: String, _ pubAppId: String, _ limit: Int) -> Promise<Array<ChannelMessage>>
 }
-

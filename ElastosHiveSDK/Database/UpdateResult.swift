@@ -21,34 +21,46 @@
  */
 
 import Foundation
+import ObjectMapper
 
-public class UpdateResult: Result {
-
-    public func matchedCount() -> Int {
-
-        return get("matched_count")?.intValue == nil ? 0 : get("matched_count")!.intValue
+public class UpdateResult: Mappable {
+    private var _matchedCount: Int?
+    private var _modifiedCount: Int?
+    private var _acknowledged: Bool?
+    private var _upsertedId: String?
+    
+    public var matchedCount: Int {
+        get {
+            return _matchedCount!
+        }
+    }
+    
+    public var modifiedCount: Int {
+        get {
+            return _modifiedCount!
+        }
+    }
+    
+    public var acknowledged: Bool {
+        get {
+            return _acknowledged!
+        }
+    }
+    
+    public var upsertedId: String {
+        get {
+            return _upsertedId!
+        }   
     }
 
-    public func modifiedCount() -> Int {
-
-        return get("modified_count")?.intValue == nil ? 0 : get("modified_count")!.intValue
+    required public init?(map: Map) {
+        
     }
-
-    public func upsertedCount() -> Int {
-
-        return get("upserted_count")?.intValue == nil ? 0 : get("upserted_count")!.intValue
-    }
-
-    public func upsertedId() -> String {
-
-        return get("upserted_id")?.stringValue == nil ? "" : get("upserted_id")!.stringValue
-    }
-
-    public class func deserialize(_ content: String) throws -> UpdateResult {
-        let data = content.data(using: String.Encoding.utf8)
-        let paramars = try JSONSerialization.jsonObject(with: data!,
-                                                        options: .mutableContainers) as? [String : Any] ?? [: ]
-        let opt = UpdateResult(JSON(paramars))
-        return opt
+    
+    public func mapping(map: Map) {
+        _matchedCount <- map["matched_count"]
+        _modifiedCount <- map["modified_count"]
+        _acknowledged <- map["acknowledged"]
+        _upsertedId <- map["upserted_id"]
     }
 }

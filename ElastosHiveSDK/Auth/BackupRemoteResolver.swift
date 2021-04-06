@@ -41,7 +41,7 @@ public class BackupRemoteResolver: TokenResolver {
     }
     
     public func getToken() throws -> AuthToken? {
-        return credential(try self._authenticationService.signInForToken())
+        return credential(try self._authenticationService.signInForIssuer())
     }
 
     private func credential(_ sourceDid: String) -> AuthToken {
@@ -49,6 +49,9 @@ public class BackupRemoteResolver: TokenResolver {
         let semaphore: DispatchSemaphore = DispatchSemaphore(value: 0)
         self._backupContext.getAuthorization(sourceDid, self._targetDid, self._targetHost).get { token  in
             accessToken = token
+            semaphore.signal()
+        }.catch { error in
+            print(error)
             semaphore.signal()
         }
         _ = semaphore.wait(timeout: DispatchTime.distantFuture)

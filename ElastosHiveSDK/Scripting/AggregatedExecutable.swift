@@ -41,7 +41,7 @@ public class AggregatedExecutable: Executable {
             executables.append(ae)
         }
         else if executable.isMember(of: RawExecutable.self) {
-            throw HiveError.unsupportedOperation(des: "Can not handle the RawExecutable")
+//            throw HiveError.unsupportedOperation(des: "Can not handle the RawExecutable")
         }
         else {
             executables.append(executable)

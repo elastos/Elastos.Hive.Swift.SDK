@@ -20,24 +20,19 @@
 * SOFTWARE.
 */
 
-
 import Foundation
 import ObjectMapper
 
-public class PaymentPlanResponse: HiveResponse {
-    public var amount: Double?
-    public var currency: String?
-    public var maxStorage: Int64?
-    public var name: String?
-    public var serviceDays: Int64?
-
+public class FindDocsResponse: HiveResponse {
+    private var _items: Array<Dictionary<String, Any>>?
+    
+    public var items: Array<Dictionary<String, Any>> {
+        get {
+            return _items!
+        }
+    }
+    
     public override func mapping(map: Map) {
-        status <- map["_status"]
-        amount <- map["amount"]
-        currency <- map["currency"]
-        maxStorage <- map["maxStorage"]
-        name <- map["name"]
-        serviceDays <- map["serviceDays"]
+        _items <- map["items"]
     }
 }
-
