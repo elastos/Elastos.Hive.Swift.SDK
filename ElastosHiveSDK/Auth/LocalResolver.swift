@@ -31,7 +31,7 @@ public class LocalResolver: TokenResolver {
     var token: AuthToken?
     private var providerAddress: String
     
-    init(_ ownerDid: String, _ providerAddress: String, _ type: String?, _ cacheDir: String) throws {
+    init(_ ownerDid: String, _ providerAddress: String, _ type: String, _ cacheDir: String) throws {
         let rootDir = cacheDir + LocalResolver.tokenFolder
         var isDirectory: ObjCBool = false
         let fileManager = FileManager.default
@@ -44,7 +44,7 @@ public class LocalResolver: TokenResolver {
         }
         
         self.providerAddress = providerAddress
-        self.tokenPath = rootDir + (ownerDid + providerAddress).md5
+        self.tokenPath = rootDir + "/" + (ownerDid + providerAddress + type).md5
     }
 
     public func getToken() throws -> AuthToken? {

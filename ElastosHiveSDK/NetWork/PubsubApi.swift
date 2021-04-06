@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2019 Elastos Foundation
+* Copyright (c) 2020 Elastos Foundation
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -20,24 +20,38 @@
 * SOFTWARE.
 */
 
-
 import Foundation
-import ObjectMapper
 
-public class PaymentPlanResponse: HiveResponse {
-    public var amount: Double?
-    public var currency: String?
-    public var maxStorage: Int64?
-    public var name: String?
-    public var serviceDays: Int64?
-
-    public override func mapping(map: Map) {
-        status <- map["_status"]
-        amount <- map["amount"]
-        currency <- map["currency"]
-        maxStorage <- map["maxStorage"]
-        name <- map["name"]
-        serviceDays <- map["serviceDays"]
+extension HiveAPi {
+    func publish() -> String {
+        return self.baseURL + self.apiPath + "/pubsub/publish"
+    }
+    
+    func remove() -> String {
+        return self.baseURL + self.apiPath + "/pubsub/remove"
+    }
+    
+    func getPublishedChannels() -> String {
+        return self.baseURL + self.apiPath + "/pubsub/pub/channels"
+    }
+    
+    func getSubscribedChannels() -> String {
+        return self.baseURL + self.apiPath + "/pubsub/sub/channels"
+    }
+    
+    func subscribe() -> String {
+        return self.baseURL + self.apiPath + "/pubsub/subscribe"
+    }
+    
+    func unsubscribe() -> String {
+        return self.baseURL + self.apiPath + "/pubsub/unsubscribe"
+    }
+    
+    func push() -> String {
+        return self.baseURL + self.apiPath + "/pubsub/push"
+    }
+    
+    func pop() -> String {
+        return self.baseURL + self.apiPath + "/pubsub/pop"
     }
 }
-

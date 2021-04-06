@@ -24,19 +24,11 @@
 import Foundation
 import ObjectMapper
 
-public class OrderInfoResponse: HiveResponse, HiveCheckValidProtocol {
+public class OrderInfoResponse: HiveResponse {
     public var orderInfo: Order?
-
-    required public init?(map: Map) {
-        super.init(map: map)
-    }
     
     public override func mapping(map: Map) {
         status <- map["_status"]
         orderInfo <- map["order_info"]
-    }
-    
-    public func checkResponseVaild() throws {
-        
     }
 }

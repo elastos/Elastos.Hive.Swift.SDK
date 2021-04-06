@@ -34,7 +34,7 @@ public protocol DatabaseProtocol {
     ///   - name: the collection name
     ///   - options: the collection options
     ///   - Return: fail(false) or success(true)
-    func createCollection(_ name: String, options: CreateCollectionOptions?) -> Promise<Bool>
+    func createCollection(_ name: String, _ options: CreateCollectionOptions?) -> Promise<Bool>
 
 
     /// Lets the vault owner delete a collection on database according to collection name.
@@ -50,7 +50,7 @@ public protocol DatabaseProtocol {
     ///   - options: bypass_document_validation: (optional) If True, allows
     ///              the write to opt-out of document level validation. Default is False.
     ///   - Return: InsertOneResult instance
-    func insertOne(_ collection: String, _ doc: [String: Any], options: InsertOptions?) -> Promise<InsertOneResult>
+    func insertOne(_ collection: String, _ doc: [String: Any], _ options: InsertOptions?) -> Promise<InsertDocResponse>
 
     /// Insert many new documents in a given collection
     /// - Parameters:
@@ -62,7 +62,7 @@ public protocol DatabaseProtocol {
     ///              and all document inserts will be attempted.
     ///              bypass_document_validation: (optional) If True, allows the write to opt-out of document level validation. Default is False.
     ///   - Return: InsertManyResult instance
-    func insertMany(_ collection: String, _ docs: Array<[String: Any]>, options: InsertOptions) -> Promise<InsertManyResult>
+    func insertMany(_ collection: String, _ docs: Array<[String: Any]>,_ options: InsertOptions) -> Promise<InsertDocsResponse>
 
     /// Count documents
     /// - Parameters:
@@ -73,7 +73,7 @@ public protocol DatabaseProtocol {
     ///              If not provided, no limit is imposed.
     ///              maxTimeMS (int): The maximum amount of time to allow this operation to run, in milliseconds.
     ///   - Return: document count
-    func countDocuments(_ collection: String, _ query: [String: Any], options: CountOptions) -> Promise<Int>
+    func countDocuments(_ collection: String, _ query: [String: Any], _ options: CountOptions) -> Promise<Int64>
 
     /// Find a specific document
     /// - Parameters:
@@ -81,7 +81,7 @@ public protocol DatabaseProtocol {
     ///   - query: query optional, a JSON object specifying elements which must be present for a document to be included in the result set
     ///   - options: FindOptions instance
     ///   - Return: a Dictionary object document result
-    func findOne(_ collection: String, _ query: [String: Any], options: FindOptions) -> Promise<[String: Any]?>
+    func findOne(_ collection: String, _ query: [String: Any], _ options: FindOptions) -> Promise<FindDocResponse>
 
     /// Find many documents
     /// - Parameters:
@@ -89,7 +89,7 @@ public protocol DatabaseProtocol {
     ///   - query: a JSON object specifying elements which must be present for a document to be included in the result set
     ///   - options: FindOptions instance
     ///   - Return: a Dictionary array result of document
-    func findMany(_ collection: String, _ query: [String: Any], options: FindOptions) -> Promise<Array<[String: Any]>?>
+    func findMany(_ collection: String, _ query: [String: Any], _ options: FindOptions) -> Promise<FindDocsResponse>
 
     /// Update an existing document in a given collection
     /// - Parameters:
@@ -98,7 +98,7 @@ public protocol DatabaseProtocol {
     ///   - update: The modifications to apply
     ///   - options: UpdateOptions instance
     ///   - Return: UpdateResult instance
-    func updateOne(_ collection: String, _ filter: [String: Any], _ update: [String: Any], options: UpdateOptions) -> Promise<UpdateResult>
+    func updateOne(_ collection: String, _ filter: [String: Any], _ update: [String: Any], _ options: UpdateOptions) -> Promise<UpdateResult>
 
     /// Update many existing documents in a given collection
     /// - Parameters:
@@ -107,7 +107,7 @@ public protocol DatabaseProtocol {
     ///   - update: The modifications to apply.
     ///   - options: UpdateOptions instance
     ///   - Return: UpdateResult instance
-    func updateMany(_ collection: String, _ filter: [String: Any], _ update: [String: Any], options: UpdateOptions) -> Promise<UpdateResult>
+    func updateMany(_ collection: String, _ filter: [String: Any], _ update: [String: Any], _ options: UpdateOptions) -> Promise<UpdateResult>
 
     /// Delete an existing document in a given collection
     /// - Parameters:

@@ -20,9 +20,15 @@
 * SOFTWARE.
 */
 
-
 import Foundation
+import ObjectMapper
 
-public protocol PubSubProtocol {
-
+public class PopMessageResponse: HiveResponse {
+    private var _messages: Array<ChannelMessage>?
+    
+    public var messages: Array<ChannelMessage> {
+        get {
+            return _messages!
+        }
+    }
 }

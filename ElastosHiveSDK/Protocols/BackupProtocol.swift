@@ -32,13 +32,13 @@ public enum BackupResult {
 public protocol BackupProtocol {
     func setupContext(_ context: BackupContext) throws -> Promise<Void>
     
-    func startBackup() throws -> Promise<Void>
+    func startBackup() -> Promise<Void>
 
     func stopBackup() throws -> Promise<Void>
 
-    func restoreFrom() throws -> Promise<Void>
+    func restoreFrom() -> Promise<Void>
 
     func stopRestore() -> Promise<Void>
 
-    func checkResult() throws -> Promise<BackupResult>
+    func checkResult() -> Promise<BackupResult>
 }

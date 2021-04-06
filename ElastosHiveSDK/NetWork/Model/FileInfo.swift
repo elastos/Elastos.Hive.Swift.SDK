@@ -32,7 +32,7 @@ public class FileInfo: NSObject {
     private var _type: String?
     private var _name: String?
     private var _size: Int?
-    private var _last_modify: String?
+    private var _last_modify: Double?
 
     public override init() {
 
@@ -72,11 +72,11 @@ public class FileInfo: NSObject {
         _size = size
     }
 
-    public var lastModify: String? {
+    public var lastModify: Double? {
         return _last_modify
     }
 
-    func setLastModify(_ time: String) {
+    func setLastModify(_ time: Double) {
         _last_modify = time
     }
 

@@ -23,7 +23,7 @@
 import Foundation
 import ObjectMapper
 
-public class NodeVersionResponse: HiveResponse, HiveCheckValidProtocol {
+public class NodeVersionResponse: HiveResponse {
     private var _version: String?
 
     var version: String {
@@ -31,16 +31,9 @@ public class NodeVersionResponse: HiveResponse, HiveCheckValidProtocol {
             return _version!
         }
     }
-    
-    required public init?(map: Map) {
-        super.init(map: map)
-    }
-    
+
     public override func mapping(map: Map) {
+        status <- map["_status"]
         _version <- map["version"]
-    }
-    
-    public func checkResponseVaild() throws {
-        
     }
 }

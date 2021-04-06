@@ -21,19 +21,30 @@
  */
 
 import Foundation
+import ObjectMapper
 
-public class DeleteResult: Result {
-
-    public var deletedCount: Int {
-        return get("deleted_count")?.intValue == nil ? 0 : get("deleted_count")!.intValue
+public class DeleteResult: Mappable {
+    private var _acknowledged: Bool?
+    private var _deletedCount: Int?
+    
+    public var acknowledged: Bool {
+        get {
+            return _acknowledged!
+        }
     }
     
-    public class func deserialize(_ content: String) throws -> DeleteResult {
-        let data = content.data(using: String.Encoding.utf8)
-        let paramars = try JSONSerialization.jsonObject(with: data!,
-                                                        options: .mutableContainers) as? [String : Any] ?? [: ]
-        let opt = DeleteResult(JSON(paramars))
-
-        return opt
+    public var deletedCount: Int {
+        get {
+            return _deletedCount!
+        }
+    }
+    
+    required public init?(map: Map) {
+        
+    }
+    
+    public func mapping(map: Map) {
+        _acknowledged <- map["acknowledged"]
+        _deletedCount <- map["deleted_count"]
     }
 }

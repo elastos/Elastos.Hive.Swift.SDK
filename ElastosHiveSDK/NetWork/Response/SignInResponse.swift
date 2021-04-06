@@ -23,7 +23,7 @@
 import Foundation
 import ObjectMapper
 
-public class SignInResponse: HiveResponse, HiveCheckValidProtocol {
+public class SignInResponse: HiveResponse {
     private var _challenge: String?
     
     public var challenge: String {
@@ -31,11 +31,7 @@ public class SignInResponse: HiveResponse, HiveCheckValidProtocol {
             return _challenge!
         }
     }
-    
-    required public init?(map: Map) {
-        super.init(map: map)
-    }
-    
+
     public override func mapping(map: Map) {
         _challenge <- map["challenge"]
     }
@@ -43,9 +39,5 @@ public class SignInResponse: HiveResponse, HiveCheckValidProtocol {
     public func checkValid() throws -> Claims {
         let jwtParser = try JwtParserBuilder().build()
         return try jwtParser.parseClaimsJwt(self.challenge).claims
-    }
-    
-    public func checkResponseVaild() throws {
-
     }
 }
