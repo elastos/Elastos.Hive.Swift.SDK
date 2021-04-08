@@ -3,10 +3,10 @@ import XCTest
 import ElastosDIDSDK
 
 extension XCTestCase {
-    func testCaseFailAndThrowError(_ error: Error, _ lock: XCTestExpectation?) {
-        print(error)
+    func testCaseFailAndThrowError(_ error: Error, _ lock: XCTestExpectation?) throws {
         lock?.fulfill()
         XCTFail()
+        throw error
     }
 }
 
@@ -25,29 +25,36 @@ class FilesServiceTest: XCTestCase {
     
     var filesService: FilesProtocol?
     
-    func test01_uploadText() throws {
-        let lock = XCTestExpectation(description: "upload txt.")
-        let data = try Data(contentsOf: URL(fileURLWithPath: self.textLocalPath!))
-        self.filesService?.upload(self.remoteTextPath!).done({ (fileWriter) in
-            try fileWriter.write(data: data, { err in
+    func testUploadText() {
+        let lock = XCTestExpectation(description: "wait for test upload text.")
+        do {
+            let data = try Data(contentsOf: URL(fileURLWithPath: self.textLocalPath!))
+            self.filesService!.upload(self.remoteTextPath!).done({ (fileWriter) in
+                try fileWriter.write(data: data, { err in
+                })
+                fileWriter.close { (success, error) in
+                    print(success)
+                    lock.fulfill()
+                }
+            }).catch({ error in
+                XCTFail("\(error)")
             })
-            fileWriter.close { (success, error) in
-                print(success)
-                lock.fulfill()
+            self.wait(for: [lock], timeout: 10000.0)
+            
+            let lockB = XCTestExpectation(description: "check verify remote file exists.")
+            self.verifyRemoteFileExists(self.remoteTextPath!).done { (result) in
+                lockB.fulfill()
+            }.catch { error in
+                XCTFail("\(error)")
             }
-        }).catch({[self] error in
-            testCaseFailAndThrowError(error, lock)
-        })
-        self.wait(for: [lock], timeout: 10000.0)
-        
-        let lockB = XCTestExpectation(description: "check verify remote file exists.")
-        self.verifyRemoteFileExists(self.remoteTextPath!).done { (result) in
-            lockB.fulfill()
-        }.catch {[self] error in
-            testCaseFailAndThrowError(error, lockB)
+            self.wait(for: [lockB], timeout: 10000.0)
+            
+        } catch {
+            XCTFail("\(error)")
         }
-        self.wait(for: [lockB], timeout: 10000.0)
+       
     }
+    
     
     func test02_uploadBin() throws {
         let lock = XCTestExpectation(description: "upload image.")
@@ -60,7 +67,7 @@ class FilesServiceTest: XCTestCase {
                 lock.fulfill()
             }
         }).catch {[self] error in
-            testCaseFailAndThrowError(error, lock)
+            try! testCaseFailAndThrowError(error, lock)
         }
         self.wait(for: [lock], timeout: 10000.0)
         
@@ -68,7 +75,7 @@ class FilesServiceTest: XCTestCase {
         self.verifyRemoteFileExists(self.remoteTextPath!).done { (result) in
             lockB.fulfill()
         }.catch {[self] error in
-            testCaseFailAndThrowError(error, lockB)
+            try! testCaseFailAndThrowError(error, lockB)
         }
         self.wait(for: [lockB], timeout: 10000.0)
     }
@@ -96,7 +103,7 @@ class FilesServiceTest: XCTestCase {
                 lock.fulfill()
             }
         }).catch {[self] error in
-            testCaseFailAndThrowError(error, lock)
+            try! testCaseFailAndThrowError(error, lock)
         }
         self.wait(for: [lock], timeout: 10000.0)
     }
@@ -124,7 +131,7 @@ class FilesServiceTest: XCTestCase {
                 lock.fulfill()
             }
         }).catch {[self] error in
-            testCaseFailAndThrowError(error, lock)
+            try! testCaseFailAndThrowError(error, lock)
         }
         self.wait(for: [lock], timeout: 10000.0)
     }
@@ -135,7 +142,7 @@ class FilesServiceTest: XCTestCase {
             XCTAssert(result.count > 0)
             lock.fulfill()
         }).catch({[self] error in
-            testCaseFailAndThrowError(error, lock)
+            try! testCaseFailAndThrowError(error, lock)
         })
         self.wait(for: [lock], timeout: 10000.0)
     }
@@ -146,7 +153,7 @@ class FilesServiceTest: XCTestCase {
             XCTAssert(hash.count > 0)
             lock.fulfill()
         }).catch({[self] (error) in
-            testCaseFailAndThrowError(error, lock)
+            try! testCaseFailAndThrowError(error, lock)
         })
         self.wait(for: [lock], timeout: 10000.0)
     }
@@ -177,10 +184,10 @@ class FilesServiceTest: XCTestCase {
                     lock.fulfill()
                 }
             }).catch({[self] (error) in
-                testCaseFailAndThrowError(error, lock)
+                try! testCaseFailAndThrowError(error, lock)
             })
         }.catch({[self] (error) in
-            testCaseFailAndThrowError(error, lock)
+            try! testCaseFailAndThrowError(error, lock)
         })
         self.wait(for: [lock], timeout: 10000.0)
     }
@@ -192,7 +199,7 @@ class FilesServiceTest: XCTestCase {
             XCTAssert(result)
             lock.fulfill()
         }).catch({[self] (error) in
-            testCaseFailAndThrowError(error, lock)
+            try! testCaseFailAndThrowError(error, lock)
         })
         self.wait(for: [lock], timeout: 10000.0)
     }
@@ -203,7 +210,7 @@ class FilesServiceTest: XCTestCase {
             XCTAssert(result)
             lock.fulfill()
         }).catch({[self] (error) in
-            testCaseFailAndThrowError(error, lock)
+            try! testCaseFailAndThrowError(error, lock)
         })
         self.wait(for: [lock], timeout: 10000.0)
     }

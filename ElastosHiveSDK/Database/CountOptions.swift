@@ -21,88 +21,49 @@
  */
 
 import Foundation
+import ObjectMapper
 
-public class CountOptions: Options<CountOptions> {
-    private var _collation: Collation?
-    let SKIP = "skip"
-    let LIMIT = "limit"
-    let MAXTIMEMS = "maxTimeMS"
-    let COLLATION = "collation"
-
-    public init(_ cSkip: Int, _ cLimit: Int) {
-        super.init()
-        _ = skip(cSkip)
-        _ = limit(cLimit)
+public class CountOptions: Mappable {
+    private var _skip: Int64?
+    private var _limit: Int64?
+    private var _maxTimeMS: Int64?
+    
+    public init() {
+        
     }
-
-    public override init() {
-
-    }
-
-    public func skip(_ value: Int) -> CountOptions {
-        return setNumberOption(SKIP, value)
-    }
-
-    public var skip: Int? {
-        return getNumberOption(SKIP)
-    }
-
-    public func limit(_ value: Int) -> CountOptions {
-        return setNumberOption(LIMIT, value)
-    }
-
-    public var limit: Int? {
-        return getNumberOption(LIMIT)
-    }
-
-    public func maxTimeMS(_ value: Int) -> CountOptions {
-        return setNumberOption(MAXTIMEMS, value)
-    }
-
-    public var maxTimeMS: Int? {
-        return getNumberOption(MAXTIMEMS)
-    }
-
-    public func collation(_ value: Collation) throws -> CountOptions {
-        self._collation = value
-        return setObjectOption(COLLATION, try value.jsonSerialize())
-    }
-
-    public var collation: Collation? {
-        return self._collation
-    }
-
-    public func hint(_ value: VaultIndex) throws -> CountOptions {
-        self._hint.append(value)
-        return self
-    }
-
-    public func hint(_ value: Array<VaultIndex>) -> CountOptions {
-        self._hint += value
-        return self
-    }
-
-    public class func deserialize(_ content: String) throws -> CountOptions {
-        let data = content.data(using: String.Encoding.utf8)
-        let paramars = try JSONSerialization.jsonObject(with: data!,
-                                                        options: .mutableContainers) as? [String : Any] ?? [: ]
-        let opt = CountOptions();
-        opt.param = paramars
-        let paramJson = JSON(paramars)
-        let hints = paramJson["hint"].arrayValue
-        if hints.count != 0 {
-            var hs: Array<VaultIndex> = [ ]
-            hints.forEach { json in
-                json.forEach { k, v in
-                    let index = VaultIndex(k, VaultIndex.Order(rawValue: v.intValue)!)
-                    hs.append(index)
-                }
-            }
-            opt._hint = hs
+    
+    public var skip: Int64 {
+        set {
+            _skip = newValue
         }
-        if let collation = paramJson["collation"].dictionaryObject {
-            opt._collation = Collation.deserialize(collation)
+        get {
+            return _skip!
         }
-        return opt
+    }
+    
+    public var limit: Int64 {
+        set {
+            _limit = newValue
+        }
+        get {
+            return _limit!
+        }
+    }
+    
+    public var maxTimeMS: Int64 {
+        set {
+            _maxTimeMS = newValue
+        }
+        get {
+            return _maxTimeMS!
+        }
+    }
+    
+    required public init?(map: Map) {
+        
+    }
+    
+    public func mapping(map: Map) {
+
     }
 }

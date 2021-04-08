@@ -21,15 +21,25 @@
 */
 
 import Foundation
+import ObjectMapper
 
-public class DownloadExecutable: FileExecutable {
-    private let TYPE = "fileDownload"
-
-    public init(name: String, path: String) {
-        super.init(TYPE, name, path)
+public class FindDocRequestParams: CreateCollectionRequestParams {
+    private var _filter: Dictionary<String, Any>?
+    private var _options: FindOptions?
+    
+    public init(_ name: String, _ filter: Dictionary<String, Any>, _ options: FindOptions) {
+        self._filter = filter
+        self._options = options
+        super.init(name, nil)
     }
-
-    public init(name: String, path: String, output: Bool) {
-        super.init(TYPE, name, path, output)
+    
+    required public init?(map: Map) {
+        super.init(map: map)
+    }
+    
+    public override func mapping(map: Map) {
+        super.mapping(map: map)
+        _filter <- map["filter"]
+        _options <- map["options"]
     }
 }

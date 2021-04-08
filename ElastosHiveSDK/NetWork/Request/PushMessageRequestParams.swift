@@ -21,29 +21,17 @@
 */
 
 import Foundation
+import ObjectMapper
 
-public class QueryHasResultsCondition: Condition {
-    private let TYPE = "queryHasResults"
-    private var query: Query
-
-    public init(_ name: String, _ collection: String, _ filter: [String: Any]) {
-        self.query = Query (collection, filter)
-        super.init(TYPE, name)
+public class PushMessageRequestParams: PubsubRequestParams {
+    private var _message: String?
+    
+    public init (_ channelName: String, _ message: String) {
+        super.init(channelName)
+        self._message = message
     }
-
-    override func serialize(_ gen: JsonGenerator) throws {
-        gen.writeStartObject()
-        gen.writeStringField("type", type)
-        gen.writeStringField("name", name!)
-        gen.writeFieldName("body")
-        try query.serialize(gen)
-        gen.writeEndObject()
-    }
-
-    public override func jsonSerialize() throws -> [String : Any] {
-        let jsonGenerator = JsonGenerator()
-        try serialize(jsonGenerator)
-        let data = jsonGenerator.toString().data(using: String.Encoding.utf8)
-        return try (JSONSerialization.jsonObject(with: data!,options: .mutableContainers) as? [String : Any])!
+    
+    required public init?(map: Map) {
+        super.init(map: map)
     }
 }

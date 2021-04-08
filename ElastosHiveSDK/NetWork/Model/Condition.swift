@@ -21,41 +21,27 @@
 */
 
 import Foundation
+import ObjectMapper
 
-public class Condition: NSObject {
-    var type: String
+public class Condition: NSObject, Mappable {
+    var type: String?
     var name: String?
+    var body: ScriptRootBody?
 
-    init(_ type: String, _ name: String) {
-        self.type = type
+    public init(_ name: String, _ type: String, _ body: ScriptRootBody) {
         self.name = name
-    }
-
-    init(_ type: String) {
         self.type = type
+        self.body = body
     }
-
-    func serialize(_ gen: JsonGenerator) throws {
+    
+    required public init?(map: Map) {
 
     }
-
-    func serialize() throws -> String {
-        let jsonGenerator = JsonGenerator()
-        jsonGenerator.writeStartObject()
-        jsonGenerator.writeStringField("type", type)
-        if let _ = name {
-            jsonGenerator.writeStringField("name", name!)
-        }
-        jsonGenerator.writeEndObject()
-        return jsonGenerator.toString()
-    }
-
-    public func jsonSerialize() throws -> [String: Any] {
-        var para: [String: Any] = ["type": type]
-        if let _ = name {
-            para["name"] = name
-        }
-        return para
+    
+    public func mapping(map: Map) {
+        type <- map["type"]
+        name <- map["name"]
+        body <- map["body"]
     }
 }
 

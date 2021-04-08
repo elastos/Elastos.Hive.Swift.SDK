@@ -21,73 +21,35 @@
  */
 
 import Foundation
+import ObjectMapper
 
-public class UpdateOptions: Options<UpdateOptions> {
-
-    private var _collation: Collation?
-
-    public func upsert(value: Bool) -> UpdateOptions {
-
-        return setBooleanOption("upsert", value)
-    }
-
-    public var upsert: Bool? {
-        return getBooleanOption("upsert")
-    }
-
-    public func bypassDocumentValidation(value: Bool) -> UpdateOptions {
-
-        return setBooleanOption("bypass_document_validation", value)
-    }
-
-    public var bypassDocumentValidation: Bool? {
-        return getBooleanOption("bypass_document_validation")
-    }
-
-    public func collation(value: Collation) throws -> UpdateOptions {
-
-        return setObjectOption("collation", try value.jsonSerialize())
-    }
-
-    public var collation: Collation? {
-        return _collation
-    }
-
-    public func hint(value: VaultIndex) -> UpdateOptions {
-        _hint.append(value)
-        return self
-    }
-
-    public func hint(value: Array<VaultIndex>) -> UpdateOptions {
-        _hint += value
-        return self
-    }
-
-    public var hint: [VaultIndex]? {
-        return _hint
-    }
-
-    public class func deserialize(_ content: String) throws -> UpdateOptions {
-        let data = content.data(using: String.Encoding.utf8)
-        let paramars = try JSONSerialization.jsonObject(with: data!,
-                                                        options: .mutableContainers) as? [String : Any] ?? [: ]
-        let opt = UpdateOptions()
-        opt.param = paramars
-        let paramJson = JSON(paramars)
-        let hints = paramJson["hint"].arrayValue
-        if hints.count != 0 {
-            var hs: Array<VaultIndex> = [ ]
-            hints.forEach { json in
-                json.forEach { k, v in
-                    let index = VaultIndex(k, VaultIndex.Order(rawValue: v.intValue)!)
-                    hs.append(index)
-                }
-            }
-            opt._hint = hs
+public class UpdateOptions: Mappable {
+    private var _upsert: Bool?
+    private var _bypassDocumentValidation: Bool?
+    
+    public var upsert: Bool {
+        set {
+            _upsert = newValue
         }
-        if let collation = paramJson["collation"].dictionaryObject {
-            opt._collation = Collation.deserialize(collation)
+        get {
+            return _upsert!
         }
-        return opt
+    }
+    
+    public var bypassDocumentValidation: Bool {
+        set {
+            _bypassDocumentValidation = newValue
+        }
+        get {
+            return _bypassDocumentValidation!
+        }
+    }
+    
+    public required init?(map: Map) {
+            
+    }
+    
+    public func mapping(map: Map) {
+        _bypassDocumentValidation <- map["bypass_document_validation"]
     }
 }

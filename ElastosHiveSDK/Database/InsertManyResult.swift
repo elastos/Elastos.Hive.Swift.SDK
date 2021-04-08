@@ -21,33 +21,34 @@
  */
 
 import Foundation
+import ObjectMapper
 
-public class InsertManyResult: Result {
+public class InsertManyResult: Mappable {
     private var _acknowledged: Bool?
-    private var _insertedIds: [String] = []
+    private var _insertedId: String?
 
-    public func insertedIds() -> Array<String> {
-        let ids = get("inserted_ids")
-        if let _ = ids {
-            ids?.arrayValue.forEach{ id in
-                _insertedIds.append(id.stringValue)
-            }
-            return _insertedIds
+    public var insertedId: String {
+        set {
+            _insertedId = newValue
         }
-
-        return _insertedIds
+        get {
+            return _insertedId!
+        }
     }
 
-    public var acknowledged: Bool? {
-        return get("acknowledged")?.boolValue
+    public var acknowledged: Bool {
+        get {
+            return _acknowledged!
+        }
     }
-
-    public class func deserialize(_ content: String) throws -> InsertManyResult {
-        let data = content.data(using: String.Encoding.utf8)
-        let paramars = try JSONSerialization.jsonObject(with: data!,
-                                                        options: .mutableContainers) as? [String : Any] ?? [: ]
-        let opt = InsertManyResult(JSON(paramars))
-
-        return opt
+    
+    public required init?(map: Map) {
+            
+    }
+    
+    public func mapping(map: Map) {
+        _acknowledged <- map["acknowledged"]
+        _insertedId <- map["insertedId"]
     }
 }
+
