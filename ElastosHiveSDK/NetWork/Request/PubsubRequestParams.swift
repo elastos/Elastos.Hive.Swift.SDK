@@ -21,31 +21,21 @@
 */
 
 import Foundation
+import ObjectMapper
 
-public class AndCondition: AggregatedCondition {
-    private let TYPE = "and"
+public class PubsubRequestParams: Mappable {
+    private var _channelName: String?
+    
+    public init(_ channelName: String) {
+        self._channelName = channelName
 
-    public init(_ name: String, _ conditions: [Condition]) {
-        super.init(TYPE, name, conditions)
     }
-
-    public init(_ name: String) {
-        super.init(TYPE, name)
+    
+    required public init?(map: Map) {
+        
     }
-
-    override func serialize(_ gen: JsonGenerator) throws {
-        gen.writeStartObject()
-        gen.writeStringField("type", type)
-        gen.writeStringField("name", name!)
-        if body().count > 0 {
-            gen.writeFieldName("body")
-            gen.writeStartArray()
-            let cs = body()
-            try cs.forEach { c in
-                try c.serialize(gen)
-            }
-            gen.writeEndArray()
-        }
-        gen.writeEndObject()
+    
+    public func mapping(map: Map) {
+        _channelName <- map["channel_name"]
     }
 }

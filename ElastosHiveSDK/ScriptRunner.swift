@@ -24,26 +24,22 @@ import Foundation
 
 public class ScriptRunner: ServiceEndpoint {
     public func callScript<T>(_ name: String, _ params: [String : Any]?, _ appDid: String?, _ resultType: T.Type) -> Promise<T> {
-        
         return Promise<T> { resolver in
-            var param = ["name": name] as [String : Any]
-            var context = [:] as [String : Any]
-            context["target_did"] = self._targetDid
-            if let _ = appDid {
-                context["target_app_did"] = appDid
+            let context = ScriptContext()
+            context.targetDid = self._targetDid
+            context.targetAppDid = appDid
+            
+            let requestParams = CallScriptRequestParams()
+            requestParams.name = name
+            requestParams.context = context
+            if params != nil {
+                requestParams.params = params!
             }
-            param["context"] = context
-            if let _ = params {
-                param["params"] = params
-            }
+
             let url = self.connectionManager.hiveApi.callScript()
             let header = try self.connectionManager.headers()
-            let json = try AF.request(url,
-                                      method: .post,
-                                      parameters: param,
-                                      encoding: JSONEncoding.default,
-                                      headers: header).responseJSON().validateResponse()
-            resolver.fulfill(try handleResult(json, resultType))
+            let response = try HiveAPi.request(url: url, method: .post, parameters: requestParams.toJSON(), headers: header).get()
+            resolver.fulfill(try handleResult(JSON(response.json), resultType))
         }
     }
     
@@ -70,7 +66,7 @@ public class ScriptRunner: ServiceEndpoint {
     
     public func uploadFile(_ transactionId: String) -> Promise<FileWriter> {
         return Promise<FileWriter> { resolver in
-            let url = self.connectionManager.hiveApi.runScriptDownload(transactionId)
+            let url = self.connectionManager.hiveApi.runScriptUpload(transactionId)
             _ = try self.connectionManager.headers()
             let writer = FileWriter(URL(string: url)!, self.connectionManager)
             resolver.fulfill(writer)

@@ -21,32 +21,24 @@
 */
 
 import Foundation
+import ObjectMapper
 
-public class OrCondition: AggregatedCondition {
-    private let TYPE = "or"
-
-    public init(_ name: String, _ conditions: [Condition]) {
-        super.init(TYPE, name, conditions)
+public class PaymentCreateRequestParams: Mappable {
+    private var _pricingName: String?
+    private var _backupName: String?
+    
+    public init(_ pricingPlanName: String, _ backupPlanName: String) {
+        self._pricingName = pricingPlanName
+        self._backupName = backupPlanName
     }
+    
+    required public init?(map: Map) {
 
-    public init(_ name: String) {
-        super.init(TYPE, name)
     }
-
-    override func serialize(_ gen: JsonGenerator) throws {
-        gen.writeStartObject()
-        gen.writeStringField("type", type)
-        gen.writeStringField("name", name!)
-        if body().count > 0 {
-            gen.writeFieldName("body")
-            gen.writeStartArray()
-            let cs = body()
-            try cs.forEach { c in
-                try c.serialize(gen)
-            }
-            gen.writeEndArray()
-        }
-        gen.writeEndObject()
+    
+    public func mapping(map: Map) {
+        _pricingName <- map["pricing_name"]
+        _backupName <- map["pricing_name"]
     }
 }
 

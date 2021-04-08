@@ -13,7 +13,7 @@ class VaultSubscriptionTest: XCTestCase {
         try subscription?.subscribe("free").done({ (vaultInfo) in
             
         }).catch({[self] error in
-            testCaseFailAndThrowError(error, lock)
+            try! testCaseFailAndThrowError(error, lock)
         })
         self.wait(for: [lock], timeout: 1000.0)
     }
@@ -24,7 +24,7 @@ class VaultSubscriptionTest: XCTestCase {
             XCTAssertTrue(true)
             lock.fulfill()
         }).catch({[self] error in
-            testCaseFailAndThrowError(error, lock)
+            try! testCaseFailAndThrowError(error, lock)
         })
         self.wait(for: [lock], timeout: 1000.0)
     }
@@ -35,7 +35,7 @@ class VaultSubscriptionTest: XCTestCase {
             XCTAssertTrue(true)
             lock.fulfill()
         }).catch({[self] error in
-            testCaseFailAndThrowError(error, lock)
+            try! testCaseFailAndThrowError(error, lock)
         })
         self.wait(for: [lock], timeout: 1000.0)
     }
@@ -46,7 +46,7 @@ class VaultSubscriptionTest: XCTestCase {
             XCTAssertTrue(true)
             lock.fulfill()
         }).catch({[self] error in
-            testCaseFailAndThrowError(error, lock)
+            try! testCaseFailAndThrowError(error, lock)
         })
         self.wait(for: [lock], timeout: 1000.0)
     }
@@ -58,7 +58,7 @@ class VaultSubscriptionTest: XCTestCase {
             XCTAssertTrue(true)
             lock.fulfill()
         }).catch({[self] error in
-            testCaseFailAndThrowError(error, lock)
+            try! testCaseFailAndThrowError(error, lock)
         })
         self.wait(for: [lock], timeout: 1000.0)
     }

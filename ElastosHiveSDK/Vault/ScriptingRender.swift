@@ -22,40 +22,28 @@
 
 import Foundation
 
-public class ScriptingRender: ScriptingProtocol {
-    let connectionManager: ConnectionManager
+public class ScriptingServiceRender: HiveVaultRender, ScriptingProtocol {
     let scriptRunner: ScriptRunner
     
-    public init(_ vault: Vault) {
-        self.connectionManager = vault.connectionManager
+    override init(_ vault: Vault) {
         self.scriptRunner = ScriptRunner(vault.appContext, vault.providerAddress, vault.userDid, vault.ownerDid, vault.appDid)
+        super.init(vault)
     }
     
-    public func registerScript(_ name: String, _ executable: Executable, _ allowAnonymousUser: Bool, _ allowAnonymousApp: Bool) -> Promise<Bool> {
-        return self.registerScriptImp(name, nil, executable, allowAnonymousUser, allowAnonymousApp)
-    }
-    
-    public func registerScript(_ name: String, _ condition: Condition, _ executable: Executable, _ allowAnonymousUser: Bool, _ allowAnonymousApp: Bool) -> Promise<Bool> {
-        return self.registerScriptImp(name, condition, executable, allowAnonymousUser, allowAnonymousApp)
-    }
-    
-    private func registerScriptImp(_ name: String, _ accessCondition: Condition?, _ executable: Executable,_ allowAnonymousUser: Bool, _ allowAnonymousApp: Bool) -> Promise<Bool> {
-        Promise<Bool> { resolver in
-            
-            var param = ["name": name] as [String : Any]
-            param["allowAnonymousUser"] = allowAnonymousUser
-            param["allowAnonymousApp"] = allowAnonymousApp
-            if let _ = accessCondition {
-                param["accessCondition"] = try accessCondition!.jsonSerialize()
+    public func registerScript(_ name: String, _ condition: Condition?, _ executable: Executable, _ allowAnonymousUser: Bool, _ allowAnonymousApp:  Bool) -> Promise<Bool> {
+        return Promise<Bool> { resolver in
+            let params = RegisterScriptRequestParams()
+            params.name = name
+            params.allowAnonymousUser = allowAnonymousUser
+            params.allowAnonymousApp = allowAnonymousApp
+            if condition != nil {
+                params.condition = condition!
             }
-            param["executable"] = try executable.jsonSerialize()
+            params.executable = executable
+            print(params.toJSON())
             let url = self.connectionManager.hiveApi.registerScript()
             let header = try self.connectionManager.headers()
-            _ = try AF.request(url,
-                               method: .post,
-                               parameters: param,
-                               encoding: JSONEncoding.default,
-                               headers:header).responseJSON().validateResponse()
+            _ = try HiveAPi.request(url: url, method: .post, parameters: params.toJSON(), headers: header).get(RegisterScriptResponse.self)
             resolver.fulfill(true)
         }
     }

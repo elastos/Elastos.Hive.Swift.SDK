@@ -23,32 +23,29 @@
 import Foundation
 import ObjectMapper
 
-public class InsertOneResult: Mappable {
-    private var _acknowledged: Bool?
-    private var _insertedId: String?
-
-    public var insertedId: String {
-        set {
-            _insertedId = newValue
-        }
-        get {
-            return _insertedId!
-        }
+public class ScriptInsertExecutableBody: ScriptRootBody {
+    private var _collection: String?
+    private var _document: Dictionary<String, Any>?
+    private var _options: Dictionary<String, Any>?
+    
+    public override init() {
+        super.init()
     }
 
-    public var acknowledged: Bool {
-        get {
-            return _acknowledged!
-        }
+    public init(_ collection: String, _ document: Dictionary<String, Any>, _ options:  Dictionary<String, Any>?) {
+        self._collection = collection
+        self._document = document
+        self._options = options
+        super.init()
     }
     
-    public required init?(map: Map) {
-            
+    required public init?(map: Map) {
+        super.init(map: map)
     }
     
-    public func mapping(map: Map) {
-        _acknowledged <- map["acknowledged"]
-        _insertedId <- map["insertedId"]
+    public override func mapping(map: Map) {
+        _collection <- map["collection"]
+        _document <- map["document"]
+        _options <- map["options"]
     }
 }
-

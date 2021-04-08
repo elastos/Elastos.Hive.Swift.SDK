@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2020 Elastos Foundation
+* Copyright (c) 2019 Elastos Foundation
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -21,32 +21,25 @@
 */
 
 import Foundation
+import ObjectMapper
 
-public class ServiceBuilder {
-    var vault: Vault
-    
-    init(_ vault: Vault) {
-        self.vault = vault
-    }
-    
-    func createFilesService() -> FilesServiceRender {
-        return FilesServiceRender(self.vault)
-    }
-    
-    func createDatabase() -> DatabaseServiceRender {
-        return DatabaseServiceRender(self.vault)
-    }
-    
-    func createScriptingService() -> ScriptingServiceRender {
-        return ScriptingServiceRender(self.vault)
-    }
+public class PubsubSubscribeRequestParams: PubsubRequestParams {
+    private var _pubDid: String?
+    private var _pubAppId: String?
 
-    func createPubsubService() -> PubSubServiceRender {
-        return PubSubServiceRender(self.vault)
+    public init (_ channelName: String, _ pubDid: String, _ pubAppId: String) {
+        super.init(channelName)
+        self._pubDid = pubDid
+        self._pubAppId = pubAppId
     }
-
-    func createBackupService() -> BackupServiceRender {
-        return BackupServiceRender(self.vault)
+    
+    required public init?(map: Map) {
+        super.init(map: map)
+    }
+    
+    public override func mapping(map: Map) {
+        super.mapping(map: map)
+        _pubDid <- map["pub_did"]
+        _pubAppId <- map["pub_app_id"]
     }
 }
-

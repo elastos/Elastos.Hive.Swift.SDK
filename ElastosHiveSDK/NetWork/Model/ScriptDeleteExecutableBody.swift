@@ -23,32 +23,38 @@
 import Foundation
 import ObjectMapper
 
-public class InsertOneResult: Mappable {
-    private var _acknowledged: Bool?
-    private var _insertedId: String?
+public class ScriptDeleteExecutableBody: ScriptRootBody {
+    private var _collection: String?
+    private var _filter: Dictionary<String, Any>?
+    
+    public override init() {
+        super.init()
+    }
 
-    public var insertedId: String {
+    public var collection: String? {
         set {
-            _insertedId = newValue
+            _collection = newValue
         }
         get {
-            return _insertedId!
-        }
-    }
-
-    public var acknowledged: Bool {
-        get {
-            return _acknowledged!
+            return _collection
         }
     }
     
-    public required init?(map: Map) {
-            
+    public var filter: Dictionary<String, Any>? {
+        set {
+            _filter = newValue
+        }
+        get {
+            return _filter
+        }
     }
     
-    public func mapping(map: Map) {
-        _acknowledged <- map["acknowledged"]
-        _insertedId <- map["insertedId"]
+    required public init?(map: Map) {
+        super.init(map: map)
+    }
+    
+    public override func mapping(map: Map) {
+        _collection <- map["collection"]
+        _filter <- map["filter"]
     }
 }
-
