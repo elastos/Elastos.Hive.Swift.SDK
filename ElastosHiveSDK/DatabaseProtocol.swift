@@ -24,11 +24,6 @@ import Foundation
 
 public protocol DatabaseProtocol {
     
-//    /// Lets the vault owner create a collection on database.
-//    /// - Parameter name: the collection name
-//    /// - Return: fail(false) or success(true)
-//    func createCollection(_ name: String) -> Promise<Bool>
-//
     /// Lets the vault owner create a collection on database.
     /// - Parameters:
     ///   - name: the collection name
@@ -50,7 +45,7 @@ public protocol DatabaseProtocol {
     ///   - options: bypass_document_validation: (optional) If True, allows
     ///              the write to opt-out of document level validation. Default is False.
     ///   - Return: InsertOneResult instance
-    func insertOne(_ collection: String, _ doc: [String: Any], _ options: InsertOptions?) -> Promise<InsertDocResponse>
+    func insertOne(_ collection: String, _ doc: [String: Any], _ options: InsertOneOptions?) -> Promise<InsertDocResponse>
 
     /// Insert many new documents in a given collection
     /// - Parameters:
@@ -62,7 +57,7 @@ public protocol DatabaseProtocol {
     ///              and all document inserts will be attempted.
     ///              bypass_document_validation: (optional) If True, allows the write to opt-out of document level validation. Default is False.
     ///   - Return: InsertManyResult instance
-    func insertMany(_ collection: String, _ docs: Array<[String: Any]>,_ options: InsertOptions) -> Promise<InsertDocsResponse>
+    func insertMany(_ collection: String, _ docs: Array<[String: Any]>,_ options: InsertManyOptions) -> Promise<InsertDocsResponse>
 
     /// Count documents
     /// - Parameters:

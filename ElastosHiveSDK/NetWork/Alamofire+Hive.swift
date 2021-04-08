@@ -50,8 +50,12 @@ extension DataRequest {
         case .success(let re):
             let json = re as! [String : Any]
             if json["_status"] as! String != "OK" {
-                throw HiveError.failure(des: "todo")
+                let errorObject = JSON(json)
+                let code = errorObject["_error"] ["code"];
+                let message = errorObject["_error"] ["message"];
+                throw HiveError.hiveSdk(message: "get error from server: error code = \(code), message = \(message)")
             }
+            
             let result = T(JSON: re as! [String : Any])!
             try result.checkResponseVaild()
             return result

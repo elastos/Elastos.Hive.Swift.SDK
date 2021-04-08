@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2020 Elastos Foundation
+* Copyright (c) 2019 Elastos Foundation
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -21,32 +21,23 @@
 */
 
 import Foundation
+import ObjectMapper
 
-public class ServiceBuilder {
-    var vault: Vault
-    
-    init(_ vault: Vault) {
-        self.vault = vault
-    }
-    
-    func createFilesService() -> FilesServiceRender {
-        return FilesServiceRender(self.vault)
-    }
-    
-    func createDatabase() -> DatabaseServiceRender {
-        return DatabaseServiceRender(self.vault)
-    }
-    
-    func createScriptingService() -> ScriptingServiceRender {
-        return ScriptingServiceRender(self.vault)
-    }
+public class CreateCollectionRequestParams: Mappable {
+    private var _collection: String?
+    private var _options: CreateCollectionOptions?
 
-    func createPubsubService() -> PubSubServiceRender {
-        return PubSubServiceRender(self.vault)
+    public init (_ collection: String, _ options: CreateCollectionOptions?) {
+        self._collection = collection
+        self._options = options
     }
-
-    func createBackupService() -> BackupServiceRender {
-        return BackupServiceRender(self.vault)
+    
+    required public init?(map: Map) {
+        
+    }
+    
+    public func mapping(map: Map) {
+        _collection <- map["collection"]
+        _options <- map["options"]
     }
 }
-

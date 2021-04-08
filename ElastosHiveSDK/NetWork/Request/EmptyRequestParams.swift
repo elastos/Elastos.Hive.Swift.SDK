@@ -21,15 +21,16 @@
 */
 
 import Foundation
+import ObjectMapper
 
-public class UploadExecutable: FileExecutable {
-    private let TYPE = "fileUpload"
+public class EmptyRequestParams: Mappable {
+    required public init?(map: Map) {
 
-    public init(name: String, path: String) {
-        super.init(TYPE, name, path)
     }
+    
+    public func mapping(map: Map) {
 
-    public init(name: String, path: String, output: Bool) {
-        super.init(TYPE, name, path, output)
     }
 }
+
+

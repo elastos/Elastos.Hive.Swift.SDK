@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2020 Elastos Foundation
+* Copyright (c) 2019 Elastos Foundation
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -20,21 +20,24 @@
 * SOFTWARE.
 */
 
-
 import Foundation
+import ObjectMapper
 
-public protocol PaymentService {
+public class FilesDeleteRequestParams: Mappable {
+    private var _path: String?
+    private var _dstPath: String?
     
-    func getPricingPlanList() -> Promise<Array<PricingPlan>>
+    public init(_ path: String) {
+        self._path = path
+    }
     
-    func getPricingPlan(_ planName: String) -> Promise<PricingPlan>
+    required public init?(map: Map) {
 
-    func placeOrder(_ planName: String) -> Promise<Order>
-
-    func getOrder(_ orderId: String) -> Promise<Order>
-
-    func payOrder(_ orderId: String, _ transId: String) -> Promise<Receipt>
-
-    func getReceipt(_ receiptId: String) -> Promise<Receipt>
+    }
     
+    public func mapping(map: Map) {
+        _path <- map["path"]
+    }
 }
+
+

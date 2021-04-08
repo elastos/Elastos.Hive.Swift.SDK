@@ -21,176 +21,96 @@
  */
 
 import Foundation
+import ObjectMapper
 
-public class FindOptions: Options<FindOptions> {
-    private var _collation: Collation?
 
-    public override init() { }
-
-    public func projection(_ value: [String: Any]) -> FindOptions {
-        return setObjectOption("projection", value)
+public class FindOptions: Mappable {
+    private var _projection: Dictionary<String, Any>?
+    private var _skip: Int64?
+    private var _sort: Array<Dictionary<String, Any>>?
+    private var _allowPartialResults: Bool?
+    private var _batchSize: Int?
+    private var _returnKey: Bool?
+    private var _showRecordId: Bool?
+    
+    public init () {
+        
     }
 
-    public var projection: [String: Any]? {
-        return getObjectOption("projection")
-    }
-
-    public func skip(_ value: Int) -> FindOptions {
-        return setNumberOption("skip", value)
-    }
-
-    public var skip: Int? {
-        return getNumberOption("skip")
-    }
-
-    public func limit(_ value: Int) -> FindOptions {
-        return setNumberOption("limit", value)
-    }
-
-    public var limit: Int? {
-        return getNumberOption("limit")
-    }
-
-    public func noCursorTimeout(_ value: Bool) -> FindOptions {
-        return setBooleanOption("no_cursor_timeout", value)
-    }
-
-    public var noCursorTimeout: Bool? {
-        return getBooleanOption("no_cursor_timeout")
-    }
-
-    public func sort(_ value: VaultIndex) -> FindOptions {
-        _sort.append(value)
-        return self
-    }
-
-    public func sort(_ value: Array<VaultIndex>) -> FindOptions {
-        _sort += value
-        return self
-    }
-
-    public var sort: Array<VaultIndex>? {
-        return _sort
-    }
-
-    public func allowPartialResults(_ value: Bool) -> FindOptions {
-        return setBooleanOption("allow_partial_results", value)
-    }
-
-    public var allowPartialResults: Bool? {
-        return getBooleanOption("allow_partial_results")
-    }
-
-    public func batchSize(_ value: Int) -> FindOptions {
-        return setNumberOption("batch_size", value)
-    }
-
-    public var batchSize: Int? {
-        return getNumberOption("batch_size")
-    }
-
-    public func collation(_ value: Collation) throws -> FindOptions {
-        return setObjectOption("collation", try value.jsonSerialize())
-    }
-
-    public var collation: Collation? {
-        return _collation
-    }
-
-    public func returnKey(_ value: Bool) -> FindOptions {
-        return setBooleanOption("return_key", value)
-    }
-
-    public var returnKey: Bool? {
-        return getBooleanOption("return_key")
-    }
-
-    public func hint(_ value: VaultIndex) -> FindOptions {
-        _hint.append(value)
-        return self
-    }
-
-    public func hint(_ value: Array<VaultIndex>) -> FindOptions {
-        _hint += value
-        return self
-    }
-
-    public var hint: Array<VaultIndex>? {
-        return _hint
-    }
-
-    public func maxTimeMS(_ value: Int) -> FindOptions {
-        return setNumberOption("max_time_ms", value)
-    }
-
-    public var maxTimeMS: Int? {
-        return getNumberOption("max_time_ms")
-    }
-
-    public func min(_ value: Int) -> FindOptions {
-        return setNumberOption("min", value)
-    }
-
-    public var min: Int? {
-        return getNumberOption("min")
-    }
-
-    public func max(_ value: Int) -> FindOptions {
-        return setNumberOption("max", value)
-    }
-
-    public var max: Int? {
-        return getNumberOption("max")
-    }
-
-    public func comment(_ value: String) -> FindOptions {
-        return setStringOption("comment", value)
-    }
-
-    public var comment: String? {
-        return getStringOption("comment")
-    }
-
-    public func allowDiskUse(_ value: Bool) -> FindOptions {
-        return setBooleanOption("allow_disk_use", value)
-    }
-
-    public var allowDiskUse: Bool? {
-        return getBooleanOption("allow_disk_use")
-    }
-
-    public class func deserialize(_ content: String) throws -> FindOptions {
-        let data = content.data(using: String.Encoding.utf8)
-        let paramars = try JSONSerialization.jsonObject(with: data!,
-                                                        options: .mutableContainers) as? [String : Any] ?? [: ]
-        let opt = FindOptions()
-        opt.param = paramars
-        let paramJson = JSON(paramars)
-        let hints = paramJson["hint"].arrayValue
-        if hints.count != 0 {
-            var hs: Array<VaultIndex> = [ ]
-            hints.forEach { json in
-                json.forEach { k, v in
-                    let index = VaultIndex(k, VaultIndex.Order(rawValue: v.intValue)!)
-                    hs.append(index)
-                }
-            }
-            opt._hint = hs
+    public var projection: Dictionary<String, Any> {
+        set {
+            _projection = newValue
         }
-        let sort = paramJson["sort"].arrayValue
-        if sort.count != 0 {
-            var ss: Array<VaultIndex> = [ ]
-            hints.forEach { json in
-                json.forEach { k, v in
-                    let index = VaultIndex(k, VaultIndex.Order(rawValue: v.intValue)!)
-                    ss.append(index)
-                }
-            }
-            opt._sort = ss
+        get {
+            return _projection!
         }
-        if let collation = paramJson["collation"].dictionaryObject {
-            opt._collation = Collation.deserialize(collation)
+    }
+    
+    public var skip: Int64 {
+        set {
+            _skip = newValue
         }
-        return opt
+        get {
+            return _skip!
+        }
+    }
+    
+    public var sort: Array<Dictionary<String, Any>> {
+        set {
+            _sort = newValue
+        }
+        get {
+            return _sort!
+        }
+    }
+    
+    public var allowPartialResults: Bool {
+        set {
+            _allowPartialResults = newValue
+        }
+        get {
+            return _allowPartialResults!
+        }
+    }
+
+    public var batchSize: Int {
+        set {
+            _batchSize = newValue
+        }
+        get {
+            return _batchSize!
+        }
+    }
+
+    public var returnKey: Bool {
+        set {
+            _returnKey = newValue
+        }
+        get {
+            return _returnKey!
+        }
+    }
+    
+    public var showRecordId: Bool {
+        set {
+            _showRecordId = newValue
+        }
+        get {
+            return _showRecordId!
+        }
+    }
+
+    public required init?(map: Map) {
+            
+    }
+    
+    public func mapping(map: Map) {
+        _projection <- map["projection"]
+        _skip <- map["skip"]
+        _sort <- map["sort"]
+        _allowPartialResults <- map["allow_partial_results"]
+        _batchSize <- map["batch_size"]
+        _returnKey <- map["return_key"]
+        _showRecordId <- map["show_record_id"]
     }
 }

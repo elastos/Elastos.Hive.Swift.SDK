@@ -21,15 +21,25 @@
 */
 
 import Foundation
+import ObjectMapper
 
-public class HashExecutable: FileExecutable {
-    private let TYPE = "fileHash"
-
-    public init(name: String, path: String) {
-        super.init(TYPE, name, path)
+public class CountDocRequestParams: CreateCollectionRequestParams {
+    private var _filter: Dictionary<String, Any>?
+    private var _options: CountOptions?
+    
+    public init(_ name: String, _ filter: Dictionary<String, Any>, _ options: CountOptions) {
+        self._filter = filter
+        self._options = options
+        super.init(name, nil)
     }
-
-    public init(name: String, path: String, output: Bool) {
-        super.init(TYPE, name, path, output)
+    
+    required public init?(map: Map) {
+        super.init(map: map)
+    }
+    
+    public override func mapping(map: Map) {
+        super.mapping(map: map)
+        _filter <- map["filter"]
+        _options <- map["options"]
     }
 }

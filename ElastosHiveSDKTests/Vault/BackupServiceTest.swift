@@ -10,10 +10,11 @@ class BackupServiceTest: XCTestCase {
     func testCheckResult() {
         let lock = XCTestExpectation(description: "wait for check result.")
         self.backupService!.checkResult().done({ result in
-            XCTAssert(true)
+            XCTAssertTrue(true, "check result test case passed")
             lock.fulfill()
-        }).catch({[self] error in
-            testCaseFailAndThrowError(error, lock)
+        }).catch({ error in
+            XCTFail("\(error)")
+            lock.fulfill()
         })
         self.wait(for: [lock], timeout: 1000.0)
     }
@@ -21,10 +22,11 @@ class BackupServiceTest: XCTestCase {
     func testStartBackup() {
         let lock = XCTestExpectation(description: "wait for start backup.")
         self.backupService!.startBackup().done({ _ in
-            XCTAssert(true)
+            XCTAssertTrue(true, "start backup test case passed")
             lock.fulfill()
-        }).catch({[self] error in
-            testCaseFailAndThrowError(error, lock)
+        }).catch({ error in
+            XCTFail("\(error)")
+            lock.fulfill()
         })
         self.wait(for: [lock], timeout: 1000.0)
     }
@@ -32,10 +34,11 @@ class BackupServiceTest: XCTestCase {
     func testRestoreFrom() {
         let lock = XCTestExpectation(description: "wait for restore form.")
         self.backupService!.restoreFrom().done({ _ in
-            XCTAssert(true)
+            XCTAssertTrue(true, "restore formp test case passed")
             lock.fulfill()
-        }).catch({[self] error in
-            testCaseFailAndThrowError(error, lock)
+        }).catch({ error in
+            XCTFail("\(error)")
+            lock.fulfill()
         })
         self.wait(for: [lock], timeout: 1000.0)
     }

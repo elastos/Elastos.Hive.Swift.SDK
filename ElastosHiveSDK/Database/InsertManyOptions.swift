@@ -23,32 +23,16 @@
 import Foundation
 import ObjectMapper
 
-public class InsertOneResult: Mappable {
-    private var _acknowledged: Bool?
-    private var _insertedId: String?
-
-    public var insertedId: String {
-        set {
-            _insertedId = newValue
-        }
-        get {
-            return _insertedId!
-        }
-    }
-
-    public var acknowledged: Bool {
-        get {
-            return _acknowledged!
-        }
+public class InsertManyOptions: InsertOneOptions {
+    private var _ordered: Bool?
+    
+    init(_ bypassDocumentValidation: Bool,_ ordered: Bool) {
+        self._ordered = ordered
+        super.init(bypassDocumentValidation)
     }
     
     public required init?(map: Map) {
-            
-    }
-    
-    public func mapping(map: Map) {
-        _acknowledged <- map["acknowledged"]
-        _insertedId <- map["insertedId"]
+        super.init(map: map)
     }
 }
 

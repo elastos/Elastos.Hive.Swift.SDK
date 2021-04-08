@@ -21,15 +21,24 @@
 */
 
 import Foundation
+import ObjectMapper
 
-public class PropertiesExecutable: FileExecutable {
-    private let TYPE = "fileProperties"
-
-    public init(name: String, path: String) {
-        super.init(TYPE, name, path)
+public class FilesMoveRequestParams: Mappable {
+    private var _srcPath: String?
+    private var _dstPath: String?
+    
+    public init(_ srcPath: String, _ dstPath: String) {
+        self._srcPath = srcPath
+        self._dstPath = dstPath
     }
+    
+    required public init?(map: Map) {
 
-    public init(name: String, path: String, output: Bool) {
-        super.init(TYPE, name, path, output)
+    }
+    
+    public func mapping(map: Map) {
+        _srcPath <- map["src_path"]
+        _dstPath <- map["dst_path"]
     }
 }
+
