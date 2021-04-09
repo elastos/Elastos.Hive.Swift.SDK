@@ -25,9 +25,9 @@ import ObjectMapper
 
 public class VaultInfoResponse: HiveResponse {
     private var _did: String?
-    private var _maxStorage: String?
-    private var _fileUseStorage: String?
-    private var _dbUseStorage: String?
+    private var _maxStorage: Int64?
+    private var _fileUseStorage: Int64?
+    private var _dbUseStorage: Int64?
     private var _modifyTime: String?
     private var _startTime: String?
     private var _endTime: String?
@@ -52,19 +52,19 @@ public class VaultInfoResponse: HiveResponse {
         }
     }
     
-    public var maxStorage: String {
+    public var maxStorage: Int64 {
         get {
             return _maxStorage!
         }
     }
     
-    public var fileUseStorage: String {
+    public var fileUseStorage: Int64 {
         get {
             return _fileUseStorage!
         }
     }
     
-    public var dbUseStorage: String {
+    public var dbUseStorage: Int64 {
         get {
             return _dbUseStorage!
         }
@@ -99,5 +99,10 @@ public class VaultInfoResponse: HiveResponse {
             return _state!
         }
     }
-    
+
+    public var isExisting: Bool {
+        get {
+            return self.state == "running"
+        }
+    }
 }

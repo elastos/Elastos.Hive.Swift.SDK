@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2019 Elastos Foundation
+* Copyright (c) 2020 Elastos Foundation
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -22,32 +22,20 @@
 
 import Foundation
 
-public class ConnectionManager {
-    
-    private var _serviceEndpoint: ServiceEndpoint
-    private let defaultTimeout: Int = 30
-    public var hiveApi: HiveAPi
-    public var accessionToken: String?
-    public var tokenResolver: TokenResolver?
-    
-    
-    init(_ serviceEndpoint: ServiceEndpoint) {
-        self._serviceEndpoint = serviceEndpoint
-        self.hiveApi = HiveAPi(self._serviceEndpoint.providerAddress)
+public class PromotionServiceRender: HiveVaultRender, PromotionProtocol {
+    public override init(_ serviceEndpoint: ServiceEndpoint) {
+        super.init(serviceEndpoint)
     }
     
-    func headersStream() -> HTTPHeaders {
-        let accesstoken: String = self.accessionToken ?? ""
-        return ["Content-Type": "application/octet-stream", "Authorization": "token \(accesstoken)", "Transfer-Encoding": "chunked", "Connection": "Keep-Alive"]
-    }
-    
-    func headers() throws -> HTTPHeaders {
-        let token = try self.tokenResolver!.getToken()!.accessToken
-        self.accessionToken = token
-        return ["Content-Type": "application/json;charset=UTF-8", "Authorization": "token \(token)"]
-    }
-    
-    func NormalHeaders() -> HTTPHeaders {
-        return ["Content-Type": "application/json;charset=UTF-8"]
+    public func promote() -> Promise<Void> {
+        return Promise<Any>.async().then{ [self] _ -> Promise<Void> in
+            return Promise<Void> { resolver in
+                let url = self.connectionManager.hiveApi.activeToVault()
+                let header = try self.connectionManager.headers()
+                let response = try HiveAPi.request(url: url, method: .post, parameters: nil, headers: header).get(HiveResponse.self)
+                resolver.fulfill(Void())
+            }
+            
+        }
     }
 }

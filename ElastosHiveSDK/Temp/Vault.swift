@@ -22,22 +22,25 @@
 
 import Foundation
 
+/**
+ * This class explicitly represents the vault service subscribed by "myDid".
+ */
 public class Vault: ServiceEndpoint {
     private var _filesService: FilesProtocol?
     private var _databaseService: DatabaseProtocol?
-    private var _scripting: ScriptingProtocol?
+    private var _scriptingService: ScriptingProtocol?
     private var _pubsubService: PubSubProtocol?
     private var _backupService: BackupProtocol?
-    private var _nodeManageService: NodeManageService?
+    private var _nodeManageService: NodeManageServiceRender?
 
-    public init (_ context: AppContext,_ myDid: String, _ providerAddress: String) {
-        super.init(context, providerAddress, myDid, myDid, nil)
+    public override init (_ context: AppContext, _ providerAddress: String, _ targetDid: String?, _ targetAppDid: String?) {
+        super.init(context, providerAddress, targetDid, targetAppDid)
         self._filesService = ServiceBuilder(self).createFilesService()
         self._databaseService = ServiceBuilder(self).createDatabase()
-        self._scripting = ServiceBuilder(self).createScriptingService()
+        self._scriptingService = ServiceBuilder(self).createScriptingService()
         self._pubsubService = ServiceBuilder(self).createPubsubService()
         self._backupService = ServiceBuilder(self).createBackupService()
-        self._nodeManageService = NodeManageService(self)
+        self._nodeManageService = NodeManageServiceRender(self)
     }
     
     public var filesService: FilesProtocol {
@@ -48,8 +51,8 @@ public class Vault: ServiceEndpoint {
         return self._databaseService!
     }
 
-    public var scripting: ScriptingProtocol {
-        return self._scripting!
+    public var scriptingService: ScriptingProtocol {
+        return self._scriptingService!
     }
     
     public var pubSubService: PubSubProtocol {
@@ -59,15 +62,7 @@ public class Vault: ServiceEndpoint {
     public var backupService: BackupProtocol {
         return self._backupService!
     }
-    
-    public override var connectionManager: ConnectionManager {
-        return self.context.connectionManager
-    }
-    
-    var appContext: AppContext {
-        return self.context
-    }
-    
+
     public func getVersion() -> Promise<String> {
         return self._nodeManageService!.getVersion()
     }
@@ -78,18 +73,17 @@ public class Vault: ServiceEndpoint {
 }
 
 
-private class NodeManageService {
-    private var _connectionManager: ConnectionManager
+private class NodeManageServiceRender: HiveVaultRender {
 
     public init (_ vault: Vault) {
-        self._connectionManager = vault.appContext.connectionManager
+        super.init(vault)
     }
 
     public func getVersion() -> Promise<String> {
         return Promise<Any>.async().then { _ -> Promise<String> in
             return Promise<String> { resolver in
-                let response = try HiveAPi.request(url: self._connectionManager.hiveApi.version(),
-                                                   headers:try self._connectionManager.headers()).get(NodeVersionResponse.self)
+                let response = try HiveAPi.request(url: self.connectionManager.hiveApi.version(),
+                                                   headers:try self.connectionManager.headers()).get(NodeVersionResponse.self)
                 resolver.fulfill(response.version)
             }
         }
@@ -98,8 +92,8 @@ private class NodeManageService {
     public func getCommitHash() -> Promise<String> {
         return Promise<Any>.async().then { _ -> Promise<String> in
             return Promise<String> { resolver in
-                let response = try HiveAPi.request(url: self._connectionManager.hiveApi.commitHash(),
-                                                   headers:try self._connectionManager.headers()).get(NodeCommitHashResponse.self)
+                let response = try HiveAPi.request(url: self.connectionManager.hiveApi.commitHash(),
+                                                   headers:try self.connectionManager.headers()).get(NodeCommitHashResponse.self)
                 resolver.fulfill(response.commitHash)
             }
         }

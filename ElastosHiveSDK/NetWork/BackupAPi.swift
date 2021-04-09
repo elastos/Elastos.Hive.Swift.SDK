@@ -23,18 +23,30 @@
 import Foundation
 
 extension HiveAPi {
+    /**
+     * Current backup process status on node side.
+     */
     func getState() -> String {
         return self.baseURL + self.apiPath + "/backup/state"
     }
     
+    /**
+     * Save the database and files data to backup node server from vault node server.
+     */
     func saveToNode() -> String {
         return self.baseURL + self.apiPath + "/backup/save_to_node"
     }
     
+    /**
+     * Restore backup data to vault and replace the exist one.
+     */
     func restoreFromNode() -> String {
         return self.baseURL + self.apiPath + "/backup/restore_from_node"
     }
     
+    /**
+     * Active backup data to vault on backup server side.
+     */
     func activeToVault() -> String {
         return self.baseURL + self.apiPath + "/backup/activate_to_vault"
     }

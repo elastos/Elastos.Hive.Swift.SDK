@@ -22,14 +22,33 @@
 
 import Foundation
 
+/**
+ * Subscription is for using the functions of the vault service.
+ * Before using it, subscribe request MUST be called.
+ *
+ * associatedtype <T> Vault information for specific vault server.
+ */
 public protocol SubscriptionProtocol {
-    func subscribe<T>(_ pricingPlan: String, type: T.Type) -> Promise<T>
+    associatedtype T
 
+    /// Subscript for using vault relating service.
+    ///
+    /// - Parameters:
+    ///   - pricingPlan: pricingPlan Pricing plan name for using the vault service.
+    /// - Returns: Vault service information.
+    func subscribe(_ pricingPlan: String) -> Promise<T>
+
+    /// Unsubscript vault service. After this, user can't use it.
     func unsubscribe() -> Promise<Void>
     
+    /// Activate vault service for using.
     func activate() -> Promise<Void>
-
+    
+    /// Deactive vault service for restrict access it later.
     func deactivate() -> Promise<Void>
 
-    func checkSubscription() -> Promise<Void>
+    /// Deactive vault service for restrict access it later.
+    ///
+    /// - Returns: Subscription information for vault relating service.
+    func checkSubscription() -> Promise<T>
 }

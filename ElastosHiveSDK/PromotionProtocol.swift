@@ -23,5 +23,5 @@
 import Foundation
 
 public protocol PromotionProtocol {
-    func promote();
+    func promote() -> Promise<Void>;
 }

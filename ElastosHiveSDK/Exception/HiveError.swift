@@ -57,6 +57,15 @@ public enum HiveError: Error {
     case vaultLocked(message: String)
     case failedToGetBackupState
     case unknownBackupState(_ state: String)
+    case DIDResoverAlreadySetupException
+    case BadContextProviderException(_ message: String)
+    case DIDResolverNotSetupException
+    case ProviderNotFoundException(_ message: String)
+    case ProviderNotSetException(_ message: String)
+    case VaultAlreadyExistException(_ message: String)
+    case UnsupportedOperationException
+
+    
 }
 
 extension HiveError {
@@ -133,6 +142,21 @@ extension HiveError {
             return message
         case .failedToGetBackupState:
             return "Failed to get back-up state."
+        case .DIDResoverAlreadySetupException:
+            return "Resolver already settup, replicated setup not allowed"
+        case .BadContextProviderException(let message):
+            return "BadContextProviderException: \(message)"
+        case .DIDResolverNotSetupException:
+            return "DID Resolver has not been setup before"
+        case .ProviderNotFoundException(let message):
+            return "ProviderNotFoundException: \(message)"
+        case .ProviderNotSetException(let message):
+            return "ProviderNotSetException: \(message)"
+        case .VaultAlreadyExistException(let message):
+            return "VaultAlreadyExistException: \(message)"
+        case .UnsupportedOperationException:
+            return "unsupported operation exception"
+
         }
     }
     
