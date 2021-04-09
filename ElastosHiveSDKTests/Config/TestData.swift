@@ -47,18 +47,23 @@ public class TestBackupRender: BackupContext {
     
 }
 
+/**
+ * This is used for representing 3rd-party application.
+ */
+
 public class TestData {
     static let shared: TestData = try! TestData()
+    
     public var userDid: DIDApp?
     public var appInstanceDid: DApp?
-    public var nodeConfig: NodeConfig?
-    public var appContext: AppContext?
-    public var providerAddress: String? {
+    public var nodeConfig: NodeConfig
+    public var context: AppContext
+    public var providerAddress: String {
         set {
-            self.nodeConfig?.provider = newValue!
+            self.nodeConfig.provider = newValue
         }
         get {
-            return self.nodeConfig?.provider
+            return self.nodeConfig.provider
         }
     }
     
@@ -75,7 +80,7 @@ public class TestData {
         }
         
         guard let _ = file else {
-            throw DIDError.illegalArgument("Couldn't find a PEM file named \(file)")
+            throw DIDError.illegalArgument("Couldn't find a PEM file named \(file!)")
         }
         let jsonData = try Data(contentsOf: URL(fileURLWithPath: file!))
         let json = try JSONSerialization.jsonObject(with: jsonData)
@@ -90,40 +95,36 @@ public class TestData {
         let userConfig = clientConfig!.user
         self.userDid = DIDApp(userConfig.name, userConfig.mnemonic, adapter, userConfig.passPhrase, userConfig.storepass)
         self.nodeConfig = clientConfig!.nodeConfig
-        let storePath = "\(NSHomeDirectory())/Library/Caches/data/store" + "/" + nodeConfig!.storePath
+        let storePath = "\(NSHomeDirectory())/Library/Caches/data/store" + "/" + self.nodeConfig.storePath
 
-        self.appContext = try AppContext.build(UserAppContextProvider(storePath, userDid!, appInstanceDid!), (nodeConfig?.ownerDid)! as String, (nodeConfig?.provider)! as String)
-    }
-
-    public var ownerDid: String? {
-        get {
-            return self.nodeConfig?.ownerDid
-        }
+        let appContextProvider = UserAppContextProvider(storePath, userDid!, appInstanceDid!)
+        self.context = try AppContext.build(appContextProvider, nodeConfig.ownerDid)
+        
     }
     
+    public var appContext: AppContext? {
+        return self.context
+    }
+    
+    public var ownerDid: String {
+        return self.nodeConfig.ownerDid
+    }
+        
     public func newVault() -> Vault {
-        return Vault(appContext!, nodeConfig!.ownerDid, nodeConfig!.provider)
+        return Vault(self.context, self.nodeConfig.provider, nil, nil)
     }
     
-    public var getAppContext: AppContext? {
-        return self.appContext
+    public func newVault4Scripting() -> Vault {
+        return Vault(self.context, self.nodeConfig.provider, self.nodeConfig.ownerDid, nil)
     }
     
-    public var getOwnerDid: String? {
-        return nodeConfig!.ownerDid
-    }
-    
-    public var getProviderAddress: String? {
-        return nodeConfig!.provider
-    }
-    
-    public func getVault() -> Promise<Vault> {
-        return appContext!.getVault(nodeConfig!.ownerDid, nodeConfig!.provider)
+    public func newBackup() -> Backup {
+        return Backup(self.context, self.nodeConfig.targetHost)
     }
 
     public func backupService() throws -> BackupServiceRender {
         let backService = self.newVault().backupService
-        try backService.setupContext(TestBackupRender(userDid!, self.newVault(), self.nodeConfig!))
+        _ = try backService.setupContext(TestBackupRender(userDid!, self.newVault(), self.nodeConfig))
         return backService as! BackupServiceRender
     }
 }

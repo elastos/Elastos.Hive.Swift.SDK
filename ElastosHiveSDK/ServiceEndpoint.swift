@@ -24,63 +24,60 @@ import Foundation
 
 public class ServiceEndpoint {
     private var _context: AppContext
-    var _providerAddress: String?
-    var _userDid: String?
-    var _targetDid: String?
-    
-    var _targetAppDid: String?
-    
-    /// This constructor will be embedded in the following global-grained extends:
-    public convenience init(_ context: AppContext, _ providerAddress: String?, _ userDid: String) {
-        self.init(context, providerAddress, userDid, userDid, nil)
+    private var _providerAddress: String
+    private var _targetDid: String?
+    private var _targetAppDid: String?
+    private var _connectionManager: ConnectionManager?
+
+    // This constructor will be embedded in the following global-grained extends:
+    // - VaultSubscription;
+    // - BackupSubscription;
+    // - Provider;
+    // - Vault;
+    // - Backup;
+    public convenience init(_ context: AppContext, _ providerAddress: String) throws {
+        try self.init(context, providerAddress, nil, nil)
     }
     
-    /// This constructor will be embedded in the following service-grained extends:
-    public init(_ context: AppContext, _ providerAddress: String?, _ userDid: String, _ targetDid: String?, _ targetAppDid: String?) {
+    public init(_ context: AppContext, _ providerAddress: String, _ targetDid: String?, _ targetAppDid: String?) {
         self._context = context
         self._providerAddress = providerAddress
-        self._userDid = userDid
         self._targetDid = targetDid
         self._targetAppDid = targetAppDid
+        self._connectionManager = ConnectionManager(self)
+        self._connectionManager!.tokenResolver = try! LocalResolver(self.appContext.userDid!,
+                                                                   self.providerAddress,
+                                                                   LocalResolver.TYPE_AUTH_TOKEN,
+                                                                   self.appContext.appContextProvider.getLocalDataDir()!)
+        let remoteResolver = RemoteResolver(self)
+        try! self._connectionManager!.tokenResolver?.setNextResolver(remoteResolver)
+    }
+    
+    public var appContext: AppContext {
+        return _context
+    }
+    
+    public var userDid: String? {
+        return self._context.userDid
     }
     
     public var providerAddress: String {
-        return _providerAddress!
-    }
-
-    public var endpointAddress: String {
-        return _providerAddress!
+        return self._providerAddress
     }
     
-    public var appDid: String? {
-        return _targetAppDid
+    public var targetDid: String? {
+        return self._targetDid
     }
     
-    public var ownerDid: String? {
-        return _targetDid
-    }
-    
-    public var userDid: String {
-        return _userDid!
-    }
-    
-    public var appInstanceDid: String? {
-        return nil
-    }
-    
-    public var serviceDid: String? {
-        return nil
-    }
-    
-    public var serviceInstanceDid: String? {
-        return nil
+    public var targetAppDid: String? {
+        return self._targetAppDid
     }
     
     public var connectionManager: ConnectionManager {
-        return self._context.connectionManager
+        return self._connectionManager!
     }
     
-    public var context: AppContext {
-        return _context
+    public var appDid: String? {
+        return nil
     }
 }

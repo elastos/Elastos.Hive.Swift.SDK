@@ -22,6 +22,18 @@
 
 import Foundation
 
+public class BackupServiceBuilder {
+    private var _backup: Backup
+    
+    public init(_ backup: Backup) {
+        self._backup = backup
+    }
+    
+    public func createPromotionService() -> PromotionServiceRender {
+        return PromotionServiceRender(self._backup)
+    }
+}
+
 public class ServiceBuilder {
     var vault: Vault
     
@@ -49,4 +61,3 @@ public class ServiceBuilder {
         return BackupServiceRender(self.vault)
     }
 }
-

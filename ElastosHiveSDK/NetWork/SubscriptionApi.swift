@@ -38,4 +38,17 @@ extension HiveAPi {
     func removeVault() -> String {
         return self.baseURL + self.apiPath + "/service/vault/remove"
     }
+    
+    func getVaultInfo() -> String {
+        return self.baseURL + self.apiPath + "/service/vault"
+    }
+    
+    func createBackupVault() -> String {
+        return self.baseURL + self.apiPath + "/service/vault_backup/create"
+    }
+    
+    func getBackupVaultInfo() -> String {
+        return self.baseURL + self.apiPath + "/service/vault_backup"
+    }
 }
+

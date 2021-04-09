@@ -23,7 +23,7 @@ class ScriptingServiceTest: XCTestCase {
     
     override func setUpWithError() throws {
         let lock = XCTestExpectation(description: "wait for setup.")
-        self.scriptingService = TestData.shared.newVault().scripting
+        self.scriptingService = TestData.shared.newVault().scriptingService
         self.filesService = TestData.shared.newVault().filesService
         self.databaseService = TestData.shared.newVault().databaseService
 

@@ -25,19 +25,15 @@ import Foundation
 public class BackupServiceRender: HiveVaultRender, BackupProtocol {
     var _backupContext: BackupContext?
     var _tokenResolver: TokenResolver?
-
-    public override init(_ vault: Vault) {
-        super.init(vault)
-    }
     
     public func setupContext(_ backupContext: BackupContext) throws -> Promise<Void> {
         return Promise<Void> { resolver in
             self._backupContext = backupContext
-            self._tokenResolver = try LocalResolver(self.vault.context.userDid!,
-                                                    self.vault.context.providerAddress!,
-                                                    LocalResolver.credentialBackupType,
-                                                    self.vault.context.appContextProvider.getLocalDataDir()!)
-            let backupRemoteResolver: BackupRemoteResolver = BackupRemoteResolver(vault.appContext,
+            self._tokenResolver = try LocalResolver(self.serviceEndpoint.userDid!,
+                                                    self.serviceEndpoint.providerAddress,
+                                                    LocalResolver.TYPE_BACKUP_CREDENTIAL,
+                                                    self.serviceEndpoint.appContext.appContextProvider.getLocalDataDir()!)
+            let backupRemoteResolver: BackupRemoteResolver = BackupRemoteResolver(self.serviceEndpoint,
                                                                                   backupContext,
                                                                                   backupContext.getParameter("targetDid"),
                                                                                   backupContext.getParameter("targetHost"))
@@ -57,10 +53,9 @@ public class BackupServiceRender: HiveVaultRender, BackupProtocol {
         }
     }
 
-    public func stopBackup() throws -> Promise<Void> {
-//        throw HiveError.unsupportedOperation(des: nil)
+    public func stopBackup() -> Promise<Void> {
         return Promise<Void> { resolver in
-            resolver.fulfill(Void())
+            throw HiveError.UnsupportedOperationException
         }
     }
     

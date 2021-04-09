@@ -27,9 +27,9 @@ public class RemoteResolver: TokenResolver {
     private var _contextProvider: AppContextProvider
     private var _authenticationServiceRender: AuthenticationServiceRender
     
-    public init (_ context: AppContext, _ connectionManager: ConnectionManager) {
-        self._contextProvider = context.appContextProvider
-        self._authenticationServiceRender = AuthenticationServiceRender(context, context.appContextProvider, connectionManager)
+    public init (_ serviceEndpoint: ServiceEndpoint) {
+        self._contextProvider = serviceEndpoint.appContext.appContextProvider
+        self._authenticationServiceRender = AuthenticationServiceRender(serviceEndpoint)
     }
 
 

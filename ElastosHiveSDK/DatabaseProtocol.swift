@@ -25,30 +25,32 @@ import Foundation
 public protocol DatabaseProtocol {
     
     /// Lets the vault owner create a collection on database.
-    /// - Parameters:
-    ///   - name: the collection name
-    ///   - options: the collection options
-    ///   - Return: fail(false) or success(true)
+    ///
+    /// - Parameter name the collection name
+    /// - Returns: fail(false) or success(true)
     func createCollection(_ name: String, _ options: CreateCollectionOptions?) -> Promise<Bool>
 
 
     /// Lets the vault owner delete a collection on database according to collection name.
+    ///
     /// - Parameter name: the collection name
-    ///   - Return: fail(false) or success(true)
+    ///
+    /// - Returns fail(false) or success(true)
     func deleteCollection(_ name: String) -> Promise<Bool>
 
     /// Insert a new document in a given collection
-    /// - Parameters:
+    /// - parameters:
     ///   - collection: the collection name
     ///   - doc: The document to insert. Must be a mutable mapping type. If
     ///          the document does not have an _id field one will be added automatically
     ///   - options: bypass_document_validation: (optional) If True, allows
     ///              the write to opt-out of document level validation. Default is False.
-    ///   - Return: InsertOneResult instance
+    /// - returns: Results returned by InsertOneResult wrapper
     func insertOne(_ collection: String, _ doc: [String: Any], _ options: InsertOneOptions?) -> Promise<InsertDocResponse>
 
     /// Insert many new documents in a given collection
-    /// - Parameters:
+    ///
+    /// - parameters:
     ///   - collection: the collection name
     ///   - docs: The document to insert. Must be a mutable mapping type. If the
     ///           document does not have an _id field one will be added automatically.
@@ -56,25 +58,27 @@ public protocol DatabaseProtocol {
     ///              in the order provided. If an error occurs all remaining inserts are aborted. If False, documents will be inserted on the server in arbitrary order, possibly in parallel,
     ///              and all document inserts will be attempted.
     ///              bypass_document_validation: (optional) If True, allows the write to opt-out of document level validation. Default is False.
-    ///   - Return: InsertManyResult instance
+    /// - returns: Results returned by `InsertManyResult` wrapper
     func insertMany(_ collection: String, _ docs: Array<[String: Any]>,_ options: InsertManyOptions) -> Promise<InsertDocsResponse>
 
     /// Count documents
-    /// - Parameters:
+    ///
+    /// - parameters:
     ///   - collection: the collection name
     ///   - query: The document of filter
-    ///   - options: skip (int): The number of matching documents to skip before returning results.
-    ///              limit (int): The maximum number of documents to count. Must be a positive integer.
-    ///              If not provided, no limit is imposed.
-    ///              maxTimeMS (int): The maximum amount of time to allow this operation to run, in milliseconds.
-    ///   - Return: document count
+    ///   - options:
+    ///     - skip (int): The number of matching documents to skip before returning results.
+    ///     - limit (int): The maximum number of documents to count. Must be a positive integer. If not provided, no limit is imposed.
+    ///     - maxTimeMS (int): The maximum amount of time to allow this operation to run, in milliseconds.
+    ///  - returns: count size
     func countDocuments(_ collection: String, _ query: [String: Any], _ options: CountOptions) -> Promise<Int64>
 
     /// Find a specific document
-    /// - Parameters:
-    ///   - collection: the collection name
+    ///
+    /// - parameters:
+    ///   - collection the collection name
     ///   - query: query optional, a JSON object specifying elements which must be present for a document to be included in the result set
-    ///   - options: FindOptions instance
+    ///   - options: options optional,refer to {@link FindOptions}
     ///   - Return: a Dictionary object document result
     func findOne(_ collection: String, _ query: [String: Any], _ options: FindOptions) -> Promise<FindDocResponse>
 
@@ -87,36 +91,44 @@ public protocol DatabaseProtocol {
     func findMany(_ collection: String, _ query: [String: Any], _ options: FindOptions) -> Promise<FindDocsResponse>
 
     /// Update an existing document in a given collection
-    /// - Parameters:
+    ///
+    /// - parameters:
     ///   - collection: the collection name
     ///   - filter: A query that matches the document to update.
     ///   - update: The modifications to apply
     ///   - options: UpdateOptions instance
-    ///   - Return: UpdateResult instance
+    ///
+    /// - returns Results returned by `UpdateResult` wrapper
     func updateOne(_ collection: String, _ filter: [String: Any], _ update: [String: Any], _ options: UpdateOptions) -> Promise<UpdateResult>
 
     /// Update many existing documents in a given collection
+    ///
     /// - Parameters:
     ///   - collection: the collection name
     ///   - filter: A query that matches the document to update.
     ///   - update: The modifications to apply.
-    ///   - options: UpdateOptions instance
-    ///   - Return: UpdateResult instance
+    ///   - options: optional, refer to UpdateOptions
+    ///
+    /// - Returns 
     func updateMany(_ collection: String, _ filter: [String: Any], _ update: [String: Any], _ options: UpdateOptions) -> Promise<UpdateResult>
 
     /// Delete an existing document in a given collection
+    /// 
     /// - Parameters:
     ///   - collection: the collection name
     ///   - filter: A query that matches the document to delete.
-    ///   - options: DeleteOptions instance
-    ///   - Return: DeleteResult instance
+    ///   - options:
+    ///
+    /// - Returns
     func deleteOne(_ collection: String, _ filter: [String: Any], options: DeleteOptions) -> Promise<DeleteResult>
 
     /// Delete many existing documents in a given collection
+    ///
     /// - Parameters:
     ///   - collection: the collection name
     ///   - filter: A query that matches the document to delete.
-    ///   - options: DeleteOptions instance
-    ///   - Return: DeleteResult instance
+    ///   - options:
+    ///
+    /// - Returns
     func deleteMany(_ collection: String, _ filter: [String: Any], options: DeleteOptions) -> Promise<DeleteResult>
 }

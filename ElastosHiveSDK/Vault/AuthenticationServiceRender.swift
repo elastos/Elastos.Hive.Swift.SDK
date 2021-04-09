@@ -27,11 +27,11 @@ public class AuthenticationServiceRender: HiveVaultRender {
     
     public typealias HiveToken = String
     
-    public init(_ context: AppContext, _ contextProvider: AppContextProvider, _ connectionManager: ConnectionManager) {
-        self._contextProvider = contextProvider
-        super.init(context, connectionManager)
+    public override init(_ serviceEndpoint: ServiceEndpoint) {
+        super.init(serviceEndpoint)
+        self._contextProvider = serviceEndpoint.appContext.appContextProvider
     }
-    
+
     public func signInForToken() throws -> HiveToken {
         let jsonstr = self._contextProvider!.getAppInstanceDocument()!.description
         let data = jsonstr.data(using: .utf8)

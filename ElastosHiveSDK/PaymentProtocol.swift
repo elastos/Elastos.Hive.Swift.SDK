@@ -25,16 +25,40 @@ import Foundation
 
 public protocol PaymentProtocol {
     
-    func getPricingPlanList() -> Promise<PricingPlan>
+    ///  Get pricing plan list from vault & backup service, such as more storage usage, backup service support, etc.
+    ///
+    /// - Returns: the list of pricing plans
+    func getPricingPlanList() -> Promise<Array<PricingPlan>?>
     
-    func getPricingPlan(_ planName: String) -> Promise<PricingPlan>
+    /// Get a pricing plan by name. Every pricing plan has a name with which we can do the corresponding payment operation.
+    ///
+    /// - Parameter planName the name of the pricing plan
+    /// - Returns: pricing plan
+    func getPricingPlan(_ planName: String) -> Promise<PricingPlan?>
 
-    func placeOrder(_ orderId: String) -> Promise<Order>
-
-    func getOrder(_ orderId: String) -> Promise<Order>
-
-    func payOrder(_ orderId: String, _ transIds: [String]) -> Promise<Order>
-
-    func getReceipt(_ orderId: String) throws -> Promise<Receipt>
+    /// Make an order for the pricing plan named with planName.
+    ///
+    /// - Parameter planName the name of the pricing plan
+    /// - Returns: the corresponding order details.
+    func placeOrder(_ orderId: String) -> Promise<Order?>
     
+    
+    /// Get order information by order id.
+    ///
+    /// - Parameter orderId order id
+    /// - Returns: the corresponding order details.
+    func getOrder(_ orderId: String) -> Promise<Order?>
+
+    /// Pay for the order made before.
+    ///
+    /// - Parameter orderId order id
+    /// - Parameter transIds payment transaction ids.
+    /// - Returns: receipt details.
+    func payOrder(_ orderId: String, _ transIds: [String]) -> Promise<Receipt?>
+
+    /// Get receipt details by receipt id.
+    ///
+    /// - Parameter receiptId: receipt id.
+    /// - Returns: receipt details.
+    func getReceipt(_ receiptId: String) -> Promise<Receipt?>
 }

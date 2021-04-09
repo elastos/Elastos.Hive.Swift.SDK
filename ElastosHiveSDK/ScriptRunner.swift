@@ -26,7 +26,7 @@ public class ScriptRunner: ServiceEndpoint {
     public func callScript<T>(_ name: String, _ params: [String : Any]?, _ appDid: String?, _ resultType: T.Type) -> Promise<T> {
         return Promise<T> { resolver in
             let context = ScriptContext()
-            context.targetDid = self._targetDid
+            context.targetDid = self.targetDid
             context.targetAppDid = appDid
             
             let requestParams = CallScriptRequestParams()
@@ -45,7 +45,7 @@ public class ScriptRunner: ServiceEndpoint {
     
     public func callScriptUrl<T>(_ name: String, _ params: String?, _ appDid: String, _ resultType: T.Type) -> Promise<T> {
         return Promise<T> { resolver in
-            let url = self.connectionManager.hiveApi.callScriptUrl(self._targetDid!, appDid, name, params)
+            let url = self.connectionManager.hiveApi.callScriptUrl(self.targetDid!, appDid, name, params)
             let header = try self.connectionManager.headers()
             let json = try AF.request(url,
                                       method: .get,
