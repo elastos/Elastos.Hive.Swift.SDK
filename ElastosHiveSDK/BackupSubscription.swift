@@ -24,37 +24,142 @@ import Foundation
 import ObjectMapper
 
 public class BackupInfo: Mappable {
+    public var did: String?
+    public var maxStorage: Int64?
+    public var fileUseStorage: Int64?
+    public var dbUseStorage: Int64?
+    public var modifyTime: String?
+    public var startTime: String?
+    public var endTime: String?
+    public var pricingUsing: String?
+    public var isExisting: Bool?
+
+    public init() {
+    
+    }
+    
     public required init?(map: Map) {}
     
     public func mapping(map: Map) {}
 }
 
-public class BackupSubscription {
-    private var render: SubscriptionRender
+public class BackupSubscription: ServiceEndpoint, SubscriptionProtocol, PaymentProtocol {
+    private var _paymentService: PaymentServiceRender?
+    private var _subscriptionService: SubscriptionServiceRender?
     
-    init(_ context: AppContext, _ userDid: String, _ providerAddress: String) {
-        render = SubscriptionRender(context, providerAddress, userDid)
-    }
-    
-    func subscribe() throws -> Promise<BackupInfo> {
-        return try render.subscribe(nil, BackupInfo.self)
-    }
-    
-    func subscribe(_ pricingPlan: String) throws -> Promise<BackupInfo> {
-        return try render.subscribe(pricingPlan, BackupInfo.self)
-    }
-    
-    func unsubscribe() throws -> Promise<Void> {
-        return try render.unsubscribe()
-    }
-    
-    func activate(_ activate: String) throws -> Promise<Void> {
-        return try render.activate()
+    public init(_ context: AppContext, _ providerAddress: String) {
+        super.init(context, providerAddress, nil, nil)
+        self._paymentService = PaymentServiceRender(self)
+        self._subscriptionService = SubscriptionServiceRender(self)
     }
 
-    func deactivate(_ activate: String) throws -> Promise<Void> {
-        return try render.deactivate()
+    // TODO
+    public func subscribe(_ pricingPlan: String) -> Promise<BackupInfo> {
+        return Promise<Any>.async().then { _ -> Promise<BackupInfo> in
+            return Promise<BackupInfo> { resolver in
+                self._subscriptionService!.subscribeBackup().then { _ -> Promise<VaultInfoResponse> in
+                    return self._subscriptionService!.getBackupVaultInfo()
+                }.done { response in
+                    let backupInfo = BackupInfo()
+                    backupInfo.did = response.did
+                    backupInfo.maxStorage = response.maxStorage
+                    backupInfo.fileUseStorage = response.fileUseStorage
+                    backupInfo.dbUseStorage = response.dbUseStorage
+                    backupInfo.modifyTime = response.modifyTime
+                    backupInfo.startTime = response.startTime
+                    backupInfo.endTime = response.endTime
+                    backupInfo.pricingUsing = response.pricingUsing
+                    backupInfo.isExisting = response.isExisting
+                    resolver.fulfill(backupInfo)
+                }.catch { error in
+                    resolver.reject(error)
+                }
+            }
+        }
     }
     
+    public func unsubscribe() -> Promise<Void> {
+        return Promise<Void> { resolver in
+            resolver.reject(HiveError.UnsupportedOperationException)
+        }
+    }
+
+    public func activate() -> Promise<Void> {
+        return Promise<Void> { resolver in
+            resolver.reject(HiveError.UnsupportedOperationException)
+        }
+    }
+    
+    public func deactivate() -> Promise<Void> {
+        return Promise<Void> { resolver in
+            resolver.reject(HiveError.UnsupportedOperationException)
+        }
+    }
+    
+    public func checkSubscription() -> Promise<BackupInfo> {
+        return Promise<Any>.async().then { _ -> Promise<BackupInfo> in
+            return Promise<BackupInfo> { resolver in
+                self._subscriptionService!.getBackupVaultInfo().done({ response in
+                   let backupInfo = BackupInfo()
+                   backupInfo.did = response.did
+                   backupInfo.maxStorage = response.maxStorage
+                   backupInfo.fileUseStorage = response.fileUseStorage
+                   backupInfo.dbUseStorage = response.dbUseStorage
+                   backupInfo.modifyTime = response.modifyTime
+                   backupInfo.startTime = response.startTime
+                   backupInfo.endTime = response.endTime
+                   backupInfo.pricingUsing = response.pricingUsing
+                   backupInfo.isExisting = response.isExisting
+                   resolver.fulfill(backupInfo)
+                }).catch { error in
+                    resolver.reject(error)
+                }
+            }
+        }
+    }
+    
+    public func getPricingPlanList() -> Promise<Array<PricingPlan>?> {
+        return Promise<Void>.async().then { [self] _ -> Promise<Array<PricingPlan>?> in
+            return self._paymentService!.getPricingPlanList()
+        }
+    }
+
+    public func getPricingPlan(_ planName: String) -> Promise<PricingPlan?> {
+        return Promise<Void>.async().then { [self] _ -> Promise<PricingPlan?> in
+            return self._paymentService!.getPricingPlan(planName)
+        }
+    }
+    
+    public func placeOrder(_ planName: String) -> Promise<Order?> {
+        return Promise<Void>.async().then { [self] _ -> Promise<Order?> in
+            return Promise<Order?> { resolver in
+                self._paymentService!.createPricingOrder(planName).then({ orderId -> Promise<Order?> in
+                    return self._paymentService!.getOrderInfo(orderId!)
+                }).done { order in
+                    resolver.fulfill(order)
+                }.catch { error in
+                    resolver.reject(error)
+                }
+            }
+        }
+    }
+    
+    public func getOrder(_ orderId: String) -> Promise<Order?> {
+        return Promise<Void>.async().then { [self] _ -> Promise<Order?> in
+            return self._paymentService!.getOrderInfo(orderId)
+        }
+    }
+    
+    public func payOrder(_ orderId: String, _ transIds: [String]) -> Promise<Receipt?> {
+        return Promise<Void>.async().then { [self] _ -> Promise<Receipt?> in
+            return self._paymentService!.payOrder(orderId, transIds)
+        }
+    }
+    
+    public func getReceipt(_ receiptId: String) -> Promise<Receipt?> {
+        return Promise<Receipt?> { resolver in
+            resolver.reject(HiveError.UnsupportedOperationException)
+        }
+    }
 }
 

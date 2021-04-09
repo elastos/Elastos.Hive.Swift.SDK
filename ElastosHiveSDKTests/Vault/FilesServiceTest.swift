@@ -236,13 +236,7 @@ class FilesServiceTest: XCTestCase {
     }
     
     override func setUpWithError() throws {
-        let lockA = XCTestExpectation(description: "wait for test.")
-        _ = TestData.shared.getVault().done { (vault) in
-            self.filesService = vault.filesService
-            _ = try vault.connectionManager.headers()
-            lockA.fulfill()
-        }
-        self.wait(for: [lockA], timeout: 1000.0)
+        self.filesService = TestData.shared.newVault().filesService
         
         self.bundlePath = Bundle(for: type(of: self))
         self.textLocalPath = self.bundlePath?.path(forResource: "test_ios", ofType: "txt")

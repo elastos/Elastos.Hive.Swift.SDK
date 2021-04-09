@@ -24,7 +24,9 @@ import Foundation
 import ObjectMapper
 
 public class LocalResolver: TokenResolver {
-    public static let credentialBackupType: String = "backup_credential"
+    public static let TYPE_BACKUP_CREDENTIAL: String = "backup_credential"
+    public static let TYPE_AUTH_TOKEN: String = "auth_token"
+
     private static let tokenFolder: String = "/tokens"
     var tokenPath: String
     var nextResolver: TokenResolver?

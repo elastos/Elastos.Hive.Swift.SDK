@@ -30,7 +30,7 @@ class VaultPaymentTest: XCTestCase {
     override func setUpWithError() throws {
         Log.setLevel(.Debug)
         let testData = TestData.shared
-        self.paymentService = VaultSubscription(testData.appContext!, testData.ownerDid!, testData.providerAddress!)
+        self.paymentService = VaultSubscription(testData.appContext!, testData.providerAddress)
     }
     
     func testGetPricingPlanList() {

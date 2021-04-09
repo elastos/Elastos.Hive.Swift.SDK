@@ -30,13 +30,13 @@ public class BackupRemoteResolver: TokenResolver {
     private var _targetHost: String
     private var _authenticationService: AuthenticationServiceRender
     
-    public init (_ context: AppContext, _ backupContext: BackupContext, _ targetDid: String, _ targetHost: String) {
-        self._contextProvider = context.appContextProvider
+    public init (_ serviceEndpoint: ServiceEndpoint, _ backupContext: BackupContext, _ targetDid: String, _ targetHost: String) {
+        self._contextProvider = serviceEndpoint.appContext.appContextProvider
         self._backupContext = backupContext
-        self._connectionManager = context.connectionManager
+        self._connectionManager = serviceEndpoint.connectionManager
         self._targetDid = targetDid
         self._targetHost = targetHost
-        self._authenticationService = AuthenticationServiceRender(context, self._contextProvider, self._connectionManager)
+        self._authenticationService = AuthenticationServiceRender(serviceEndpoint)
         
     }
     

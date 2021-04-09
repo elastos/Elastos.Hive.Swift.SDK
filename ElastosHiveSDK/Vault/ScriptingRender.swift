@@ -23,11 +23,14 @@
 import Foundation
 
 public class ScriptingServiceRender: HiveVaultRender, ScriptingProtocol {
-    let scriptRunner: ScriptRunner
+    private let _scriptRunner: ScriptRunner
     
-    override init(_ vault: Vault) {
-        self.scriptRunner = ScriptRunner(vault.appContext, vault.providerAddress, vault.userDid, vault.ownerDid, vault.appDid)
-        super.init(vault)
+    public override init(_ serviceEndpoint: ServiceEndpoint) {
+        self._scriptRunner = try ScriptRunner(serviceEndpoint.appContext,
+                                              serviceEndpoint.providerAddress,
+                                              serviceEndpoint.targetDid,
+                                              serviceEndpoint.appDid)
+        super.init(serviceEndpoint)
     }
     
     public func registerScript(_ name: String, _ condition: Condition?, _ executable: Executable, _ allowAnonymousUser: Bool, _ allowAnonymousApp:  Bool) -> Promise<Bool> {
@@ -50,25 +53,25 @@ public class ScriptingServiceRender: HiveVaultRender, ScriptingProtocol {
     
     public func callScript<T>(_ name: String, _ params: [String : Any]?, _ appDid: String?, _ resultType: T.Type) -> Promise<T> {
         return Promise<Any>.async().then{ [self] _ -> Promise<T> in
-            return scriptRunner.callScript(name, params, appDid, resultType)
+            return _scriptRunner.callScript(name, params, appDid, resultType)
         }
     }
     
     public func callScriptUrl<T>(_ name: String, _ params: String?, _ appDid: String, _ resultType: T.Type) -> Promise<T> {
         return Promise<Any>.async().then{ [self] _ -> Promise<T> in
-            return scriptRunner.callScriptUrl(name, params, appDid, resultType)
+            return _scriptRunner.callScriptUrl(name, params, appDid, resultType)
         }
     }
     
     public func uploadFile(_ transactionId: String) -> Promise<FileWriter> {
         return Promise<Any>.async().then{ [self] _ -> Promise<FileWriter> in
-            return scriptRunner.uploadFile(transactionId)
+            return _scriptRunner.uploadFile(transactionId)
         }
     }
     
     public func downloadFile(_ transactionId: String) -> Promise<FileReader> {
         return Promise<Any>.async().then{ [self] _ -> Promise<FileReader> in
-            return scriptRunner.downloadFile(transactionId)
+            return _scriptRunner.downloadFile(transactionId)
         }
     }
 }

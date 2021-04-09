@@ -8,7 +8,6 @@ public class UserAppContextProvider: AppContextProvider {
     public var userDid: DIDApp
     public var appInstanceDid: DApp
     private var localDataDir: String
-    //    private var presentationInJWT: PresentationInJWT
 
     public func getLocalDataDir() -> String? {
         self.localDataDir

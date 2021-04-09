@@ -22,77 +22,80 @@
 
 import Foundation
 
+/**
+ * The application context would contain the resources list below:
+ *  - the reference of application context provider;
+ */
 public class AppContext {
-    private static var resolverHasSetup: Bool = false
-    private var contextProvider: AppContextProvider?
-    private var _userDid: String?
-    private var _providerAddress: String?
     
+    private static var resolverHasSetup: Bool = false
+    private var _contextProvider: AppContextProvider
+    private var _userDid: String?
     private var _connectionManager: ConnectionManager?
-
-    public convenience init(_ provider: AppContextProvider?, _ userDid: String?) {
-        self.init(provider!, userDid, nil)
+    
+    public convenience init(_ provider: AppContextProvider) {
+        self.init(provider, nil)
     }
     
-    public init(_ provider: AppContextProvider?, _ userDid: String?, _ providerAddress: String?) {
-        self.contextProvider = provider!
+    public init(_ provider: AppContextProvider, _ userDid: String?) {
         self._userDid = userDid
-        self._providerAddress = providerAddress
-        self._connectionManager = try! ConnectionManager(self)
-        self._connectionManager!.tokenResolver = try! LocalResolver(self.userDid!, self.providerAddress!, "auth_token", self.contextProvider!.getLocalDataDir()!)
-        try! self._connectionManager!.tokenResolver!.setNextResolver(RemoteResolver(self, self._connectionManager!))
+        self._contextProvider = provider
     }
     
     public static func setupResover(_ resolver: String, _ cacheDir: String) throws {
         guard resolverHasSetup == false else {
-            throw HiveError.vaultAlreadyExist
+            throw HiveError.DIDResoverAlreadySetupException
         }
         
-        try DIDBackend.initializeInstance(resolver, cacheDir)
-        try ResolverCache.reset()
-        resolverHasSetup = true
+        do {
+            try DIDBackend.initializeInstance(resolver, cacheDir)
+            try ResolverCache.reset()
+            resolverHasSetup = true
+        } catch {
+            throw error
+        }
     }
     
     public var appContextProvider: AppContextProvider {
-        return self.contextProvider!
+        return self._contextProvider
     }
     
     public var userDid: String? {
         return self._userDid
     }
     
-    public var providerAddress: String? {
-        return self._providerAddress
-    }
-
-    public var connectionManager: ConnectionManager {
-        return self._connectionManager!
-    }
-    
     public static func build(_ provider: AppContextProvider) throws -> AppContext {
         guard provider.getLocalDataDir() != nil else {
-            throw HiveError.IllegalArgument(des: "Missing method to acquire data location in AppContext provider")
+            throw HiveError.BadContextProviderException("Missing method to acquire data location")
         }
         
         guard provider.getAppInstanceDocument() != nil else {
-            throw HiveError.IllegalArgument(des: "Missing method to acquire App instance DID document in AppContext provider")
+            throw HiveError.BadContextProviderException("Missing method to acquire App instance DID document")
+        }
+        
+        if self.resolverHasSetup == false {
+            throw HiveError.DIDResolverNotSetupException
         }
 
-        return AppContext(provider, nil, nil)
+        return AppContext(provider)
     }
     
-    public static func build(_ provider: AppContextProvider, _ userDid: String, _ providerAddress: String) throws -> AppContext {
+    public static func build(_ provider: AppContextProvider, _ userDid: String) throws -> AppContext {
         guard provider.getLocalDataDir() != nil else {
-            throw HiveError.IllegalArgument(des: "Missing method to acquire data location in AppContext provider")
+            throw HiveError.BadContextProviderException("Missing method to acquire data location")
         }
         
         guard provider.getAppInstanceDocument() != nil else {
-            throw HiveError.IllegalArgument(des: "Missing method to acquire App instance DID document in AppContext provider")
+            throw HiveError.BadContextProviderException("Missing method to acquire App instance DID document")
+        }
+        
+        if self.resolverHasSetup == false {
+            throw HiveError.DIDResolverNotSetupException
         }
 
-        return AppContext(provider, userDid, providerAddress)
+        return AppContext(provider, userDid)
     }
-
+    
     public func getProviderAddress(_ targetDid: String) -> Promise<String> {
         return getProviderAddress(targetDid, nil)
     }
@@ -108,12 +111,12 @@ public class AppContext {
                     let did = try DID(targetDid)
                     let doc = try did.resolve()
                     guard doc != nil else {
-                        resolver.reject(HiveError.providerNotFound(message: "The DID \(targetDid) has not published onto sideChain"))
+                        resolver.reject(HiveError.ProviderNotFoundException("The DID \(targetDid) has not published onto sideChain"))
                         return
                     }
                     let services = doc?.selectServices(byType: "HiveVault")
                     if services == nil || services!.count == 0 {
-                        resolver.reject(HiveError.providerNotSet(message: "No 'HiveVault' services declared on DID document \(targetDid)"))
+                        resolver.reject(HiveError.ProviderNotSetException("No 'HiveVault' services declared on DID document \(targetDid)"))
                         return
                     }
                     resolver.fulfill(services![0].endpoint)
@@ -122,20 +125,5 @@ public class AppContext {
                 }
             }
         }
-    }
-    
-    public func getVault(_ ownerDid: String, _ preferredProviderAddress: String) -> Promise<Vault> {
-        return Promise<Any>.async().then { [self] _ -> Promise<String> in
-            return getProviderAddress(ownerDid, preferredProviderAddress)
-        }.then { (providerAddress) -> Promise<Vault> in
-            self._providerAddress = providerAddress
-            return Promise<Vault> { resolver in
-                resolver.fulfill(Vault(self, ownerDid, providerAddress))
-            }
-        }
-    }
-    
-    public func getLocalDataDir() -> String {
-        return self.contextProvider!.getLocalDataDir()!
     }
 }

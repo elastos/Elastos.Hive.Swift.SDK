@@ -22,20 +22,22 @@
 
 import Foundation
 
-public class PaymentServiceRender {
-    private let _connectionManager: ConnectionManager
+/**
+ * Helper class for vault/backup subscription.
+ */
+public class PaymentServiceRender: HiveVaultRender {
     
-    public init(_ context: AppContext) {
-        self._connectionManager = context.connectionManager
+    public override init(_ serviceEndpoint: ServiceEndpoint) {
+        super.init(serviceEndpoint)
     }
     
     public func getPricingPlanList() -> Promise<Array<PricingPlan>?> {
         return Promise<Void>.async().then { [self] _ -> Promise<Array<PricingPlan>?> in
             return Promise<Array<PricingPlan>?> { resolver in
                 do {
-                    let response = try HiveAPi.request(url: self._connectionManager.hiveApi.getPackageInfo(),
+                    let response = try HiveAPi.request(url: self.connectionManager.hiveApi.getPackageInfo(),
                                                        method: .get,
-                                                       headers: self._connectionManager.headers()).get(PaymentPackageResponse.self)
+                                                       headers: self.connectionManager.headers()).get(PaymentPackageResponse.self)
                     resolver.fulfill(response.pricingPlans)
                 } catch {
                     resolver.reject(error)
@@ -48,9 +50,9 @@ public class PaymentServiceRender {
         return Promise<Void>.async().then { [self] _ -> Promise<Array<PricingPlan>?> in
             return Promise<Array<PricingPlan>?> { resolver in
                 do {
-                    let response = try HiveAPi.request(url: self._connectionManager.hiveApi.getPackageInfo(),
+                    let response = try HiveAPi.request(url: self.connectionManager.hiveApi.getPackageInfo(),
                                                        method: .get,
-                                                       headers: self._connectionManager.headers()).get(PaymentPackageResponse.self)
+                                                       headers: self.connectionManager.headers()).get(PaymentPackageResponse.self)
                     resolver.fulfill(response.backupPlans)
                 } catch {
                     resolver.reject(error)
@@ -62,9 +64,9 @@ public class PaymentServiceRender {
     public func getPricingPlan(_ planName: String) -> Promise<PricingPlan?> {
         return Promise<Void>.async().then { [self] _ -> Promise<PricingPlan?> in
             return Promise<PricingPlan?> { resolver in
-                let response = try HiveAPi.request(url: self._connectionManager.hiveApi.getPricingPlan(planName),
+                let response = try HiveAPi.request(url: self.connectionManager.hiveApi.getPricingPlan(planName),
                                                    method: .get,
-                                                   headers: self._connectionManager.headers()).get(PaymentPlanResponse.self)
+                                                   headers: self.connectionManager.headers()).get(PaymentPlanResponse.self)
                 let pricingPlan: PricingPlan  = PricingPlan()
                 pricingPlan.amount = response.amount
                 pricingPlan.currency = response.currency
@@ -80,9 +82,9 @@ public class PaymentServiceRender {
     public func getBackupPlan(_ backplanName: String) -> Promise<PricingPlan?> {
         return Promise<Void>.async().then { [self] _ -> Promise<PricingPlan?> in
             return Promise<PricingPlan?> { resolver in
-                let response = try HiveAPi.request(url: self._connectionManager.hiveApi.getBackupPlan(backplanName),
+                let response = try HiveAPi.request(url: self.connectionManager.hiveApi.getBackupPlan(backplanName),
                                                    method: .get,
-                                                   headers: self._connectionManager.headers()).get(PaymentPlanResponse.self)
+                                                   headers: self.connectionManager.headers()).get(PaymentPlanResponse.self)
                 let pricingPlan: PricingPlan  = PricingPlan()
                 pricingPlan.amount = response.amount
                 pricingPlan.currency = response.currency
@@ -108,10 +110,10 @@ public class PaymentServiceRender {
             return Promise<String?> { resolver in
                 do {
                     let params = ["pricing_name": planName, "backing_name": ""]
-                    let response: HiveResponse = try HiveAPi.request(url: self._connectionManager.hiveApi.createOrder(),
+                    let response: HiveResponse = try HiveAPi.request(url: self.connectionManager.hiveApi.createOrder(),
                                                                      method: .post,
                                                                      parameters: params as Parameters,
-                                                                     headers: try self._connectionManager.headers()).get()
+                                                                     headers: try self.connectionManager.headers()).get()
                     resolver.fulfill((response.json["order_id"] as! String))
                 } catch {
                     resolver.reject(error)
@@ -120,29 +122,31 @@ public class PaymentServiceRender {
         }
     }
     
-    // TODO:
     public func payOrder(_ orderId: String, _ transIds: [String]) -> Promise<Receipt?> {
         return Promise<Void>.async().then { [self] _ -> Promise<Receipt?> in
             return Promise<Receipt?> { resolver in
                 let params = ["order_id": orderId, "pay_txids": transIds] as [String : Any]
-                _ = try HiveAPi.request(url: self._connectionManager.hiveApi.payOrder,
+                _ = try HiveAPi.request(url: self.connectionManager.hiveApi.payOrder,
                 method: .post,
                 parameters: params,
-                headers: try self._connectionManager.headers()).get()
+                headers: try self.connectionManager.headers()).get()
                 resolver.fulfill(nil)
             }
         }
     }
     
-    public func getOrderInfo(_ orderId: String) throws -> Promise<Order?> {
+    public func getOrderInfo(_ orderId: String) -> Promise<Order?> {
         return Promise<Void>.async().then { _ -> Promise<Order?> in
             return Promise<Order?> { resolver in
-                let orderInfoResponse = try HiveAPi.request(url: self._connectionManager.hiveApi.orderInfo(orderId),
-                                                            method: .get,
-                                                            headers: try self._connectionManager.headers()).get(OrderInfoResponse.self)
-                resolver.fulfill(orderInfoResponse.orderInfo)
+                do {
+                    let orderInfoResponse = try HiveAPi.request(url: self.connectionManager.hiveApi.orderInfo(orderId),
+                                                                method: .get,
+                                                                headers: try self.connectionManager.headers()).get(OrderInfoResponse.self)
+                    resolver.fulfill(orderInfoResponse.orderInfo)
+                } catch {
+                    resolver.reject(error)
+                }
             }
         }
     }
-    
 }
