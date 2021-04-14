@@ -36,9 +36,10 @@ public class ConnectionManager {
         self.hiveApi = HiveAPi(self._serviceEndpoint.providerAddress)
     }
     
-    func headersStream() -> HTTPHeaders {
-        let accesstoken: String = self.accessionToken ?? ""
-        return ["Content-Type": "application/octet-stream", "Authorization": "token \(accesstoken)", "Transfer-Encoding": "chunked", "Connection": "Keep-Alive"]
+    func headersStream() throws -> HTTPHeaders {
+        let token = try self.tokenResolver!.getToken()!.accessToken
+        self.accessionToken = token
+        return ["Content-Type": "application/octet-stream", "Authorization": "token \(token)", "Transfer-Encoding": "chunked", "Connection": "Keep-Alive"]
     }
     
     func headers() throws -> HTTPHeaders {

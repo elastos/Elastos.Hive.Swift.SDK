@@ -29,16 +29,16 @@ public class FilesServiceRender: FilesProtocol {
         _connectionManager = vault.connectionManager
     }
     
-    public func upload(_ path: String) -> Promise<FileWriter> {
-        return Promise<Any>.async().then { [self] _ -> Promise<FileWriter> in
-            return uploadImpl(path)
+    public var connectionManager: ConnectionManager {
+        get {
+            return _connectionManager
         }
     }
     
-    public func uploadImpl(_ path: String) -> Promise<FileWriter> {
+    public func upload(_ path: String) -> Promise<FileWriter> {
         return Promise<FileWriter> { resolver in
             if let url = URL(string: self._connectionManager.hiveApi.upload(path)) {
-                let writer: FileWriter = FileWriter(url, self._connectionManager)
+                let writer: FileWriter = FileWriter(url, self.connectionManager)
                 resolver.fulfill(writer)
             } else {
                 resolver.reject(HiveError.IllegalArgument(des: "Invalid url format."))
@@ -48,155 +48,115 @@ public class FilesServiceRender: FilesProtocol {
     
     public func list(_ path: String) -> Promise<Array<FileInfo>> {
         return Promise<Any>.async().then { [self] _ -> Promise<Array<FileInfo>> in
-            return listImpl(path)
-        }
-    }
-    
-    public func listImpl(_ path: String) -> Promise<Array<FileInfo>> {
-        return Promise<Array<FileInfo>> { resolver in
-            let url = self._connectionManager.hiveApi.list(path)
-            let header = try self._connectionManager.headers()
-            let response: JSON = try AF.request(url,
-                                                method: .get,
-                                                encoding: JSONEncoding.default,
-                                                headers: header).responseJSON().validateResponse()
-            let fileInfoList = response["file_info_list"].arrayValue
-            var fileList = [FileInfo]()
-            fileInfoList.forEach { fileInfo in
-                let info = FileInfo()
-                info.setName(fileInfo["name"].stringValue)
-                info.setSize(fileInfo["size"].intValue)
-//                info.setLastModify(Double(fileInfo["last_modify"]))
-                info.setType(fileInfo["type"].stringValue)
-                fileList.append(info)
+            return Promise<Array<FileInfo>> { resolver in
+                do {
+                    let url = self._connectionManager.hiveApi.list(path)
+                    let header = try self._connectionManager.headers()
+                    let response = try HiveAPi.request(url: url, method: .get, headers: header).get(FilesListResponse.self)
+                    resolver.fulfill(response.fileInfoList)
+                } catch {
+                    resolver.reject(error)
+                }
             }
-            resolver.fulfill(fileList)
         }
     }
     
     public func stat(_ path: String) -> Promise<FileInfo> {
         return Promise<Any>.async().then { [self] _ -> Promise<FileInfo> in
-            return statImpl(path)
-        }
-    }
-    
-    public func statImpl(_ path: String) -> Promise<FileInfo> {
-        return Promise<FileInfo> { resolver in
-            let url = self._connectionManager.hiveApi.properties(path)
-            let header = try self._connectionManager.headers()
-            let response = try AF.request(url,
-                                          method: .get,
-                                          encoding: JSONEncoding.default,
-                                          headers: header).responseJSON().validateResponse()
-            let info = FileInfo()
-            info.setName(response["name"].stringValue)
-            info.setSize(response["size"].intValue)
-//            info.setLastModify(response["last_modify"].stringValue)
-            info.setType(response["type"].stringValue)
-            resolver.fulfill(info)
+            return Promise<FileInfo> { resolver in
+                do {
+                    let response = try HiveAPi.request(url: self.connectionManager.hiveApi.properties(path),
+                                                       headers:try self.connectionManager.headers()).get(FilesPropertiesResponse.self)
+                    resolver.fulfill(response.fileInfo)
+                } catch {
+                    resolver.reject(error)
+                }
+            }
         }
     }
     
     public func download(_ path: String) -> Promise<FileReader> {
         return Promise<Any>.async().then { [self] _ -> Promise<FileReader> in
-            return downloadImpl(path)
-        }
-    }
-    
-    public func downloadImpl(_ path: String) -> Promise<FileReader> {
-        return Promise<FileReader> { resolver in
-            let url = URL(string: self._connectionManager.hiveApi.download(path))
-            _ = try self._connectionManager.headers()
-            guard (url != nil) else {
-                resolver.reject(HiveError.IllegalArgument(des: "Invalid url format."))
-                return
+            return Promise<FileReader> { resolver in
+                let url = URL(string: self._connectionManager.hiveApi.download(path))
+                guard (url != nil) else {
+                    resolver.reject(HiveError.IllegalArgument(des: "Invalid url format."))
+                    return
+                }
+                let reader = FileReader(url!, self._connectionManager, resolver)
+                resolver.fulfill(reader)
             }
-            let reader = FileReader(url!, self._connectionManager, resolver)
-            resolver.fulfill(reader)
         }
     }
     
     public func delete(_ path: String) -> Promise<Bool> {
         return Promise<Any>.async().then { [self] _ -> Promise<Bool> in
-            return deleteImpl(path)
+            return Promise<Bool> { resolver in
+                do {
+                    let params = ["path": path]
+                    let url = URL(string: self._connectionManager.hiveApi.deleteFolder())!
+                    let header = try self._connectionManager.headers()
+                    let response = try HiveAPi.request(url: url, method: .post, parameters: params, headers: header).get(HiveResponse.self)
+                    resolver.fulfill(response.status == "OK")
+                } catch {
+                    resolver.reject(error)
+                }
+            }
         }
     }
-    
-    private func deleteImpl(_ remoteFile: String) -> Promise<Bool> {
-        Promise<Bool> { resolver in
-            let param = ["path": remoteFile]
-            let url = URL(string: self._connectionManager.hiveApi.deleteFolder())
-            let header = try self._connectionManager.headers()
-            _ = try AF.request(url!,
-                               method: .post,
-                               parameters: param,
-                               encoding: JSONEncoding.default,
-                               headers: header).responseJSON().validateResponse()
-            resolver.fulfill(true)
-        }
-    }
-    
     
     public func move(_ source: String, _ target: String) -> Promise<Bool> {
         return Promise<Any>.async().then { [self] _ -> Promise<Bool> in
-            return moveImpl(source, target)
-        }
-    }
-    
-    private func moveImpl(_ source: String, _ target: String) -> Promise<Bool> {
-        Promise<Bool> { resolver in
-            let url = self._connectionManager.hiveApi.move()
-            let header = try self._connectionManager.headers()
-            let params = ["src_path": source, "dst_path": target]
-            _ = try AF.request(URL(string: url)!,
-                               method: .post,
-                               parameters: params,
-                               encoding: JSONEncoding.default,
-                               headers: header).responseJSON().validateResponse()
-            resolver.fulfill(true)
+            return Promise<Bool> { resolver in
+                do {
+                    let url = self._connectionManager.hiveApi.move()
+                    let header = try self._connectionManager.headers()
+                    let params = ["src_path": source, "dst_path": target]
+                    let response = try HiveAPi.request(url: url, method: .post, parameters: params, headers: header).get(HiveResponse.self)
+                    resolver.fulfill(response.status == "OK")
+                } catch {
+                    resolver.reject(error)
+                }
+            }
         }
     }
     
     public func copy(_ source: String, _ target: String) -> Promise<Bool> {
         return Promise<Any>.async().then { [self] _ -> Promise<Bool> in
-            return copyImpl(source, target)
-        }
-    }
-    
-    private func copyImpl(_ source: String, _ target: String) -> Promise<Bool> {
-        Promise<Bool> { resolver in
-            let url = self._connectionManager.hiveApi.copy()
-            let header = try self._connectionManager.headers()
-            let param = ["src_path": source, "dst_path": target]
-            let response = try AF.request(url,
-                                          method: .post,
-                                          parameters: param,
-                                          encoding: JSONEncoding.default,
-                                          headers: header).responseJSON().validateResponse()
-            resolver.fulfill(true)
+            return Promise<Bool> { resolver in
+                do {
+                    let url = self._connectionManager.hiveApi.copy()
+                    let header = try self._connectionManager.headers()
+                    let param = ["src_path": source, "dst_path": target]
+                    let response = try HiveAPi.request(url: url, method: .post, parameters: param, headers: header).get(HiveResponse.self)
+                    resolver.fulfill(response.status == "OK")
+                } catch {
+                    resolver.reject(error)
+                }
+            }
         }
     }
     
     public func hash(_ path: String) -> Promise<String> {
         return Promise<Any>.async().then { [self] _ -> Promise<String> in
-            return hashImpl(path)
+            return Promise<String> { resolver in
+                do {
+                    let url = self._connectionManager.hiveApi.hash(path)
+                    let header = try self._connectionManager.headers()
+                    let response = try HiveAPi.request(url: url, method: .get, headers: header).get(FilesHashResponse.self)
+                    resolver.fulfill(response.sha256)
+                } catch {
+                    resolver.reject(error)
+                }
+            }
         }
     }
     
-    public func hashImpl(_ path: String) -> Promise<String> {
-        return Promise<String> { resolver in
-            let url = self._connectionManager.hiveApi.hash(path)
-            let response: JSON = try AF.request(url,
-                                                method: .get,
-                                                encoding: JSONEncoding.default,
-                                                headers: self._connectionManager.headers()).responseJSON().validateResponse()
-            resolver.fulfill(response["SHA256"].stringValue)
-        }
-    }
 }
 
+// TODO delete
 extension AFDataResponse {
-        
+    
     func validateResponse() throws -> JSON {
         switch self.result {
         case .success(let re):
