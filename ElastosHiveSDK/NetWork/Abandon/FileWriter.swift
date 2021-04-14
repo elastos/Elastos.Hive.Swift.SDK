@@ -64,37 +64,37 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         self.task?.resume()
     }
     
-    init(url: URL, authHelper: VaultAuthHelper) {
-        var input: InputStream? = nil
-        var output: OutputStream? = nil
-        self._connectionManager = nil
-
-        Stream.getBoundStreams(withBufferSize: BUFFER_SIZE,
-                               inputStream: &input,
-                               outputStream: &output)
-        
-        uploadBoundStreams = BoundStreams(input: input!, output: output!)
-
-        super.init()
-        
-        // Get out output stream ready for writing data we willreceive from clients
-        uploadBoundStreams.output.delegate = self
-        uploadBoundStreams.output.schedule(in: .current, forMode: .default)
-        uploadBoundStreams.output.open()
-        
-        // Start the upload task. This task will wait for input stream data
-        let config = URLSessionConfiguration.default
-        config.requestCachePolicy = .reloadIgnoringLocalCacheData
-        let operationQueue = OperationQueue() // Run in a background queue to not block the main operations (main thread)
-        let session = URLSession(configuration: config, delegate: self, delegateQueue: operationQueue)
-        var request = try! URLRequest(url: url, method: .post, headers: HiveHeader(authHelper).headersStream())
-        request.addValue("chunked", forHTTPHeaderField: "Transfer-Encoding")
-        task = session.uploadTask(withStreamedRequest: request)
-        Log.d("Hive Debug ==> request url ->", request.url as Any)
-        Log.d("Hive Debug ==> request headers ->", request.allHTTPHeaderFields as Any)
-        
-        self.task?.resume()
-    }
+//    init(url: URL, authHelper: VaultAuthHelper) {
+//        var input: InputStream? = nil
+//        var output: OutputStream? = nil
+//        self._connectionManager = nil
+//
+//        Stream.getBoundStreams(withBufferSize: BUFFER_SIZE,
+//                               inputStream: &input,
+//                               outputStream: &output)
+//        
+//        uploadBoundStreams = BoundStreams(input: input!, output: output!)
+//
+//        super.init()
+//        
+//        // Get out output stream ready for writing data we willreceive from clients
+//        uploadBoundStreams.output.delegate = self
+//        uploadBoundStreams.output.schedule(in: .current, forMode: .default)
+//        uploadBoundStreams.output.open()
+//        
+//        // Start the upload task. This task will wait for input stream data
+//        let config = URLSessionConfiguration.default
+//        config.requestCachePolicy = .reloadIgnoringLocalCacheData
+//        let operationQueue = OperationQueue() // Run in a background queue to not block the main operations (main thread)
+//        let session = URLSession(configuration: config, delegate: self, delegateQueue: operationQueue)
+//        var request = try! URLRequest(url: url, method: .post, headers: HiveHeader(authHelper).headersStream())
+//        request.addValue("chunked", forHTTPHeaderField: "Transfer-Encoding")
+//        task = session.uploadTask(withStreamedRequest: request)
+//        Log.d("Hive Debug ==> request url ->", request.url as Any)
+//        Log.d("Hive Debug ==> request headers ->", request.allHTTPHeaderFields as Any)
+//        
+//        self.task?.resume()
+//    }
     
     public func write(data: Data, _ error: @escaping (_ error: HiveError) -> Void) throws {
         self.writerBlock = error

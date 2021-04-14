@@ -8,23 +8,25 @@ class VaultSubscriptionTest: XCTestCase {
     private var hiveAPI: HiveAPi?
     private var orderId = "5fbdf4ee46c829dc73a9a3d2"
 
-    func testSubscribe() throws {
+    func testSubscribe() {
         let lock = XCTestExpectation(description: "wait for test.")
         try subscription?.subscribe("free").done({ (vaultInfo) in
             
         }).catch({[self] error in
-            try! testCaseFailAndThrowError(error, lock)
+            XCTFail("\(error)")
+            lock.fulfill()
         })
         self.wait(for: [lock], timeout: 1000.0)
     }
     
-    func testUnsubscribe() throws {
+    func testUnsubscribe() {
         let lock = XCTestExpectation(description: "wait for test unsubscribe.")
         try subscription?.unsubscribe().done({ _ in
             XCTAssertTrue(true)
             lock.fulfill()
         }).catch({[self] error in
-            try! testCaseFailAndThrowError(error, lock)
+            XCTFail("\(error)")
+            lock.fulfill()
         })
         self.wait(for: [lock], timeout: 1000.0)
     }
@@ -34,8 +36,9 @@ class VaultSubscriptionTest: XCTestCase {
         try subscription?.activate().done({ _ in
             XCTAssertTrue(true)
             lock.fulfill()
-        }).catch({[self] error in
-            try! testCaseFailAndThrowError(error, lock)
+        }).catch({ error in
+            XCTFail("\(error)")
+            lock.fulfill()
         })
         self.wait(for: [lock], timeout: 1000.0)
     }
@@ -45,8 +48,9 @@ class VaultSubscriptionTest: XCTestCase {
         try subscription?.deactivate().done({ _ in
             XCTAssertTrue(true)
             lock.fulfill()
-        }).catch({[self] error in
-            try! testCaseFailAndThrowError(error, lock)
+        }).catch({ error in
+            XCTFail("\(error)")
+            lock.fulfill()
         })
         self.wait(for: [lock], timeout: 1000.0)
     }
@@ -57,8 +61,9 @@ class VaultSubscriptionTest: XCTestCase {
             print(pricingPlanList)
             XCTAssertTrue(true)
             lock.fulfill()
-        }).catch({[self] error in
-            try! testCaseFailAndThrowError(error, lock)
+        }).catch({ error in
+            XCTFail("\(error)")
+            lock.fulfill()
         })
         self.wait(for: [lock], timeout: 1000.0)
     }

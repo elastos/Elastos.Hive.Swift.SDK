@@ -31,6 +31,10 @@ class BackupServiceTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
     
+    func testStopBackup() {
+        // TODO
+    }
+    
     func testRestoreFrom() {
         let lock = XCTestExpectation(description: "wait for restore form.")
         self.backupService!.restoreFrom().done({ _ in
@@ -43,6 +47,10 @@ class BackupServiceTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
 
+    func testStopRestore() {
+        // TODO
+    }
+    
     override func setUpWithError() throws {
         self.backupService = try TestData.shared.backupService()
     }
