@@ -22,13 +22,36 @@
 
 import Foundation
 
-/// Provides author-related functionality
-@objc(AuthHelper)
-public class ConnectHelper: NSObject {
+public class FileStorage: DataStorageProtocol {
+    public func loadBackupCredential(_ serviceDid: String) -> String {
+        return ""
+    }
     
-    ///  Check access token isExpired
-    /// - Returns: `Void` if expired
-//    public func checkValid() -> Promise<Void> {
-//        return Promise<Void>(error: HiveError.failure(des: "Dummy"))
-//    }
+    public func loadSignInCredential() -> String {
+        return ""
+    }
+    
+    public func loadAccessToken(_ serviceDid: String) -> String {
+        return ""
+    }
+
+    public func loadAccessTokenByAddress(_ providerAddress: String) -> String {
+        return ""
+    }
+
+    public func storeBackupCredential(_ serviceDid: String, _ credential: String) {
+        
+    }
+    
+    public func storeSignInCredential(_ credential: String) {
+        
+    }
+
+    public func storeAccessToken(_ serviceDid: String, _ accessToken: String) {
+        
+    }
+
+    public func storeAccessTokenByAddress(_ serviceDid: String, _ providerAddress: String) {
+        
+    }
 }

@@ -47,11 +47,8 @@ public class ScriptRunner: ServiceEndpoint {
         return Promise<T> { resolver in
             let url = self.connectionManager.hiveApi.callScriptUrl(self.targetDid!, appDid, name, params)
             let header = try self.connectionManager.headers()
-            let json = try AF.request(url,
-                                      method: .get,
-                                      encoding: JSONEncoding.default,
-                                      headers: header).responseJSON().validateResponse()
-            resolver.fulfill(try handleResult(json, resultType))
+            let response = try HiveAPi.request(url: url, method: .get, headers: header).get()
+            resolver.fulfill(try handleResult(JSON(response.json), resultType))
         }
     }
     
@@ -59,7 +56,7 @@ public class ScriptRunner: ServiceEndpoint {
         return Promise<FileReader> { resolver in
             let url = self.connectionManager.hiveApi.runScriptDownload(transactionId)
             _ = try self.connectionManager.headers()
-            let reader = FileReader(URL(string: url)!, self.connectionManager, resolver)
+            let reader = FileReader(URL(string: url)!, self.connectionManager, resolver, HTTPMethod.post)
             resolver.fulfill(reader)
         }
     }

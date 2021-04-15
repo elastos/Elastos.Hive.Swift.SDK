@@ -31,10 +31,10 @@ public class FilesPropertiesResponse: HiveResponse {
     
     public var fileInfo: FileInfo {
         let fileInfo: FileInfo = FileInfo()
-        fileInfo.setType(self._type!)
-        fileInfo.setName(self._name!)
-        fileInfo.setSize(self._size!)
-        fileInfo.setLastModify(self._lastModify!)
+        fileInfo.type = self._type!
+        fileInfo.name = self._name!
+        fileInfo.size = self._size!
+        fileInfo.lastModify = self._lastModify!
         return fileInfo
     }
     
