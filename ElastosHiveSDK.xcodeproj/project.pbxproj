@@ -101,7 +101,6 @@
 		30099A6925FE68A800506AA8 /* LocalResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30099A6825FE68A800506AA8 /* LocalResolver.swift */; };
 		3019D3CD261079D300A3C3C5 /* DataStorageProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3019D3CC261079D300A3C3C5 /* DataStorageProtocol.swift */; };
 		3019D3D126107B2C00A3C3C5 /* AuthRequestParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3019D3D026107B2C00A3C3C5 /* AuthRequestParams.swift */; };
-		3019D3DA2610AB5C00A3C3C5 /* CreateServiceResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3019D3D92610AB5C00A3C3C5 /* CreateServiceResponse.swift */; };
 		3019D3DE2610D8F000A3C3C5 /* BackupServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3019D3DD2610D8EF00A3C3C5 /* BackupServiceTest.swift */; };
 		3019D3E12610DC7500A3C3C5 /* BackupAPi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3019D3E02610DC7500A3C3C5 /* BackupAPi.swift */; };
 		3019D42C2612213900A3C3C5 /* HiveAPi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3019D42B2612213900A3C3C5 /* HiveAPi.swift */; };
@@ -323,7 +322,6 @@
 		30099A6825FE68A800506AA8 /* LocalResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalResolver.swift; sourceTree = "<group>"; };
 		3019D3CC261079D300A3C3C5 /* DataStorageProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStorageProtocol.swift; sourceTree = "<group>"; };
 		3019D3D026107B2C00A3C3C5 /* AuthRequestParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthRequestParams.swift; sourceTree = "<group>"; };
-		3019D3D92610AB5C00A3C3C5 /* CreateServiceResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateServiceResponse.swift; sourceTree = "<group>"; };
 		3019D3DD2610D8EF00A3C3C5 /* BackupServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupServiceTest.swift; sourceTree = "<group>"; };
 		3019D3E02610DC7500A3C3C5 /* BackupAPi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupAPi.swift; sourceTree = "<group>"; };
 		3019D42B2612213900A3C3C5 /* HiveAPi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HiveAPi.swift; sourceTree = "<group>"; };
@@ -680,7 +678,6 @@
 				30091C5A2619FA49003EB5CE /* UpdateDocResponse.swift */,
 				30091C5E2619FAC8003EB5CE /* VaultCreateResponse.swift */,
 				30091C612619FB01003EB5CE /* VaultInfoResponse.swift */,
-				3019D3D92610AB5C00A3C3C5 /* CreateServiceResponse.swift */,
 			);
 			path = Response;
 			sourceTree = "<group>";
@@ -1195,7 +1192,6 @@
 				30091C2B2619E9A3003EB5CE /* DeleteDocResponse.swift in Sources */,
 				111D47EC24F794A500B7462B /* DeleteResult.swift in Sources */,
 				1147720923F678BD00C7C36F /* SwiftyJSON.swift in Sources */,
-				3019D3DA2610AB5C00A3C3C5 /* CreateServiceResponse.swift in Sources */,
 				30091C412619F663003EB5CE /* InsertDocsResponse.swift in Sources */,
 				111D47DA24F7908D00B7462B /* FindOptions.swift in Sources */,
 				30091C692619FDBD003EB5CE /* PubSubProtocol.swift in Sources */,
