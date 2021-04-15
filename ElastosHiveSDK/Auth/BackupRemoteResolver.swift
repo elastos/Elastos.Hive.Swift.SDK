@@ -60,10 +60,10 @@ public class BackupRemoteResolver: TokenResolver {
     }
     
     public func invlidateToken() throws {
-        throw HiveError.unsupportedOperation(des: nil)
+        throw HiveError.UnsupportedOperationException
     }
     
     public func setNextResolver(_ resolver: TokenResolver?) throws {
-        throw HiveError.unsupportedOperation(des: nil)
+        throw HiveError.UnsupportedOperationException
     }
 }

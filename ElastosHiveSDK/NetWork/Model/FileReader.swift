@@ -45,7 +45,7 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     private var connectionManager: ConnectionManager?
     
     
-    public init(_ url: URL,_ connectionManager: ConnectionManager,_ resolver: Resolver<FileReader>) {
+    public init(_ url: URL,_ connectionManager: ConnectionManager,_ resolver: Resolver<FileReader>,_ method: HTTPMethod) {
         var input: InputStream? = nil
         var output: OutputStream? = nil
         self.connectionManager = connectionManager;
@@ -68,37 +68,7 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         let config = URLSessionConfiguration.default
         let operationQueue = OperationQueue()
         let session = URLSession(configuration: config, delegate: self, delegateQueue: operationQueue)
-        let request = try! URLRequest(url: url, method: .get, headers: self.connectionManager?.headersStream())
-        task = session.dataTask(with: request)
-        Log.d("Hive Debug ==> request url ->", request.url as Any)
-        Log.d("Hive Debug ==> request headers ->", request.allHTTPHeaderFields as Any)
-        
-        self.task?.resume()
-    }
-
-    init(url: URL, authHelper: VaultAuthHelper, method: HTTPMethod, resolver: Resolver<FileReader>) {
-        var input: InputStream? = nil
-        var output: OutputStream? = nil
-        self.resolver = resolver
-        Stream.getBoundStreams(withBufferSize: BUFFER_SIZE,
-                               inputStream: &input,
-                               outputStream: &output)
-        
-        downloadBoundStreams = BoundStreams(input: input!, output: output!)
-        super.init()
-        
-        downloadBoundStreams.output.delegate = self
-        downloadBoundStreams.output.schedule(in: .current, forMode: .default)
-        downloadBoundStreams.output.open()
-        
-        downloadBoundStreams.input.delegate = self
-        downloadBoundStreams.input.schedule(in: .current, forMode: .default)
-        downloadBoundStreams.input.open()
-
-        let config = URLSessionConfiguration.default
-        let operationQueue = OperationQueue()
-        let session = URLSession(configuration: config, delegate: self, delegateQueue: operationQueue)
-        let request = try! URLRequest(url: url, method: method, headers: HiveHeader(authHelper).headersStream())
+        let request = try! URLRequest(url: url, method: method, headers: self.connectionManager?.headersStream())
         task = session.dataTask(with: request)
         Log.d("Hive Debug ==> request url ->", request.url as Any)
         Log.d("Hive Debug ==> request headers ->", request.allHTTPHeaderFields as Any)

@@ -26,8 +26,10 @@ public protocol DatabaseProtocol {
     
     /// Lets the vault owner create a collection on database.
     ///
-    /// - Parameter name the collection name
-    /// - Returns: fail(false) or success(true)
+    /// - parameters:
+    ///    - name: the collection name
+    ///    - options:
+    /// - returns: fail(false) or success(true)
     func createCollection(_ name: String, _ options: CreateCollectionOptions?) -> Promise<Bool>
 
 
@@ -79,7 +81,7 @@ public protocol DatabaseProtocol {
     ///   - collection the collection name
     ///   - query: query optional, a JSON object specifying elements which must be present for a document to be included in the result set
     ///   - options: options optional,refer to {@link FindOptions}
-    ///   - Return: a Dictionary object document result
+    ///  - returns: a Dictionary object document result
     func findOne(_ collection: String, _ query: [String: Any], _ options: FindOptions) -> Promise<FindDocResponse>
 
     /// Find many documents
@@ -87,7 +89,7 @@ public protocol DatabaseProtocol {
     ///   - collection: the collection name
     ///   - query: a JSON object specifying elements which must be present for a document to be included in the result set
     ///   - options: FindOptions instance
-    ///   - Return: a Dictionary array result of document
+    ///  - returns: a Dictionary array result of document
     func findMany(_ collection: String, _ query: [String: Any], _ options: FindOptions) -> Promise<FindDocsResponse>
 
     /// Update an existing document in a given collection
@@ -98,37 +100,37 @@ public protocol DatabaseProtocol {
     ///   - update: The modifications to apply
     ///   - options: UpdateOptions instance
     ///
-    /// - returns Results returned by `UpdateResult` wrapper
+    /// - returns: Results returned by `UpdateResult` wrapper
     func updateOne(_ collection: String, _ filter: [String: Any], _ update: [String: Any], _ options: UpdateOptions) -> Promise<UpdateResult>
 
     /// Update many existing documents in a given collection
     ///
-    /// - Parameters:
+    /// - parameters:
     ///   - collection: the collection name
     ///   - filter: A query that matches the document to update.
     ///   - update: The modifications to apply.
     ///   - options: optional, refer to UpdateOptions
     ///
-    /// - Returns 
+    /// - returns: Results returned by `UpdateResult` wrapper
     func updateMany(_ collection: String, _ filter: [String: Any], _ update: [String: Any], _ options: UpdateOptions) -> Promise<UpdateResult>
 
     /// Delete an existing document in a given collection
     /// 
-    /// - Parameters:
+    /// - parameters:
     ///   - collection: the collection name
     ///   - filter: A query that matches the document to delete.
     ///   - options:
     ///
-    /// - Returns
+    /// - returns:
     func deleteOne(_ collection: String, _ filter: [String: Any], options: DeleteOptions) -> Promise<DeleteResult>
 
     /// Delete many existing documents in a given collection
     ///
-    /// - Parameters:
+    /// - parameters:
     ///   - collection: the collection name
     ///   - filter: A query that matches the document to delete.
     ///   - options:
     ///
-    /// - Returns
+    /// - returns:
     func deleteMany(_ collection: String, _ filter: [String: Any], options: DeleteOptions) -> Promise<DeleteResult>
 }

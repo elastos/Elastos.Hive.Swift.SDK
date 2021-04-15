@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2020 Elastos Foundation
+* Copyright (c) 2019 Elastos Foundation
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,38 @@
 */
 
 import Foundation
-public protocol AuthenticationAdapter {
+
+public class CloudBackupContext: BackupContext {
+    public var type: String = ""
     
-    func authenticate(_ context: ApplicationContext, _ jwtToken: String) -> Promise<String>
+    public func getParameter(_ key: String) -> String {
+        switch key {
+        case "clientId":
+            return getClientId()
+        case "redirectUrl":
+            return getRedirectUrl()
+        case "scope":
+            return getAppScope()
+        default:
+            return ""
+        }
+    }
+    
+    public func getAuthorization(_ srcDid: String, _ targetDid: String, _ targetHost: String) -> Promise<String> {
+        return Promise<String> { resolver in
+            resolver.reject(HiveError.UnsupportedOperationException)
+        }
+    }
+    
+    public func getClientId() -> String {
+        return ""
+    }
+    
+    public func getRedirectUrl() -> String {
+        return ""
+    }
+    
+    public func getAppScope() -> String {
+        return ""
+    }
 }

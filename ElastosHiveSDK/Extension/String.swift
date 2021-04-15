@@ -14,20 +14,3 @@ extension String {
         return hash.map { String(format: "%02x", $0) }.joined()
     }
 }
-
-extension String {
-    
-    func toDictionary() throws -> [String : Any] {
-        
-        let result = [String : Any]()
-        guard !self.isEmpty else { return result }
-        
-        guard let dataSelf = self.data(using: .utf8) else {
-            return result
-        }
-        
-        let dic = try JSONSerialization.jsonObject(with: dataSelf,
-                           options: .mutableContainers) as? [String : Any] ?? [: ]
-        return dic
-    }
-}

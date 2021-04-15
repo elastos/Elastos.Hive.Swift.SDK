@@ -23,5 +23,8 @@
 import Foundation
 
 public protocol PromotionProtocol {
+    /// Promote the backup node to vault node by backup data.
+    ///
+    /// - returns: Void.
     func promote() -> Promise<Void>;
 }

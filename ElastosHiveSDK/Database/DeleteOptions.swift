@@ -24,6 +24,10 @@ import Foundation
 import ObjectMapper
 
 public class DeleteOptions: Mappable {
+    
+    public init() {
+        
+    }
     required public init?(map: Map) {
         
     }

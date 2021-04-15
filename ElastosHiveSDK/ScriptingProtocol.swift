@@ -22,15 +22,6 @@
 
 import Foundation
 
-/**
- old enum  ready to be deleted
- */
-public enum ScriptingType {
-    case UPLOAD
-    case DOWNLOAD
-    case PROPERTIES
-}
-
 public protocol ScriptingProtocol {
     
     
@@ -47,22 +38,22 @@ public protocol ScriptingProtocol {
     func registerScript(_ name: String, _ condition: Condition?, _ executable: Executable, _ allowAnonymousUser: Bool, _ allowAnonymousApp: Bool) -> Promise<Bool>
 
     /// Executes a previously registered server side script using Scripting.setScript(). Vault owner or external users are
-    /// - Parameters:
+    /// - parameters:
     ///   - name: the call's script name
-    ///   - resultType: String、 Data、 JSON、 Dictionry<String, Any>
+    /// - returns: resultType String、 Data、 JSON、 Dictionry<String, Any>
     func callScript<T>(_ name: String, _ params: [String: Any]?, _ appDid: String?, _ resultType: T.Type) -> Promise<T>
     
     /// Executes a previously registered server side script with a direct URL where the values can be passed as part of the query. Vault owner or external users are allowed to call scripts on someone's vault.
-    /// - Parameters:
+    /// - parameter:
     ///   - name: The call's script name
-    ///   - resultType: String、 Data、 JSON、 Dictionry<String, Any>
+    /// - returns: resultType: String、 Data、 JSON、 Dictionry<String, Any>
     func callScriptUrl<T>(_ name: String, _ params: String?, _ appDid: String, _ resultType: T.Type) -> Promise<T>
     
     /// Run a script to upload a file NOTE:
     /// The upload works a bit differently compared to other types of executable queries
     /// because there are two steps to this executable.
     ///  First, register a script on the vault, then you call this api to actually upload the file
-    /// - Parameters:
+    /// - parameter:
     ///   - transactionId: transactionId
     func uploadFile(_ transactionId: String) -> Promise<FileWriter>
     
@@ -70,6 +61,6 @@ public protocol ScriptingProtocol {
     /// The download works a bit differently compared to other types of executable queries
     /// because there are two steps to this executable.
     /// First, register a script on the vault, then you call this api to actually upload the file
-    /// - Parameter transactionId: transactionId
+    /// - parameter transactionId: transactionId
     func downloadFile(_ transactionId: String) -> Promise<FileReader>
 }
