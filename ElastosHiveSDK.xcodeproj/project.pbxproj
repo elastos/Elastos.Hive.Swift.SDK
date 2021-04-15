@@ -166,6 +166,8 @@
 		304EA3A8261D422F007ADD47 /* ScriptContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304EA3A7261D422F007ADD47 /* ScriptContext.swift */; };
 		304EA3AB261D4370007ADD47 /* BackupSaveRequestParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304EA3AA261D4370007ADD47 /* BackupSaveRequestParams.swift */; };
 		304EA3AE261D43CB007ADD47 /* BackupRestoreRequestParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304EA3AD261D43CB007ADD47 /* BackupRestoreRequestParams.swift */; };
+		304F24392628066700DDB5C0 /* VaultManagementTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304F24382628066700DDB5C0 /* VaultManagementTest.swift */; };
+		304F243D262808EA00DDB5C0 /* PromotionServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304F243C262808EA00DDB5C0 /* PromotionServiceTest.swift */; };
 		3065A5E4261551D800C20661 /* HIveResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3065A5E3261551D800C20661 /* HIveResponse.swift */; };
 		3065A5E926156A0D00C20661 /* VaultPaymentTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3065A5E826156A0D00C20661 /* VaultPaymentTest.swift */; };
 		3065A5ED26156B3F00C20661 /* PaymentServiceRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3065A5EC26156B3F00C20661 /* PaymentServiceRender.swift */; };
@@ -201,7 +203,6 @@
 		30DD2078260257A200808B5B /* DatabaseApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DD2077260257A200808B5B /* DatabaseApi.swift */; };
 		30DD2079260257A200808B5B /* DatabaseApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DD2077260257A200808B5B /* DatabaseApi.swift */; };
 		30E94821260AFF7500452FF5 /* BackupSubscriptionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E94820260AFF7500452FF5 /* BackupSubscriptionTest.swift */; };
-		30E94827260B07CF00452FF5 /* VaultTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E94826260B07CF00452FF5 /* VaultTest.swift */; };
 		30E9482D260B0F4600452FF5 /* big_ios.png in Resources */ = {isa = PBXBuildFile; fileRef = 30E9482C260B0F4600452FF5 /* big_ios.png */; };
 		30E94830260B0F5E00452FF5 /* FilesServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E9482F260B0F5E00452FF5 /* FilesServiceTest.swift */; };
 		30EC87352626D1E100F15FB2 /* ScriptingServiceCallerPermissionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30EC87342626D1E000F15FB2 /* ScriptingServiceCallerPermissionTest.swift */; };
@@ -386,6 +387,8 @@
 		304EA3A7261D422F007ADD47 /* ScriptContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptContext.swift; sourceTree = "<group>"; };
 		304EA3AA261D4370007ADD47 /* BackupSaveRequestParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupSaveRequestParams.swift; sourceTree = "<group>"; };
 		304EA3AD261D43CB007ADD47 /* BackupRestoreRequestParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupRestoreRequestParams.swift; sourceTree = "<group>"; };
+		304F24382628066700DDB5C0 /* VaultManagementTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultManagementTest.swift; sourceTree = "<group>"; };
+		304F243C262808EA00DDB5C0 /* PromotionServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromotionServiceTest.swift; sourceTree = "<group>"; };
 		3065A5E3261551D800C20661 /* HIveResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HIveResponse.swift; sourceTree = "<group>"; };
 		3065A5E826156A0D00C20661 /* VaultPaymentTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultPaymentTest.swift; sourceTree = "<group>"; };
 		3065A5EC26156B3F00C20661 /* PaymentServiceRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentServiceRender.swift; sourceTree = "<group>"; };
@@ -419,7 +422,6 @@
 		30DB96692601AA7300ACF19F /* NodeConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeConfig.swift; sourceTree = "<group>"; };
 		30DD2077260257A200808B5B /* DatabaseApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseApi.swift; sourceTree = "<group>"; };
 		30E94820260AFF7500452FF5 /* BackupSubscriptionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupSubscriptionTest.swift; sourceTree = "<group>"; };
-		30E94826260B07CF00452FF5 /* VaultTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultTest.swift; sourceTree = "<group>"; };
 		30E9482C260B0F4600452FF5 /* big_ios.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = big_ios.png; sourceTree = "<group>"; };
 		30E9482F260B0F5E00452FF5 /* FilesServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesServiceTest.swift; sourceTree = "<group>"; };
 		30EC87342626D1E000F15FB2 /* ScriptingServiceCallerPermissionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptingServiceCallerPermissionTest.swift; sourceTree = "<group>"; };
@@ -480,13 +482,14 @@
 			isa = PBXGroup;
 			children = (
 				3019D3DD2610D8EF00A3C3C5 /* BackupServiceTest.swift */,
-				3045A739260237FC0037527A /* DatabaseServiceTest.swift */,
 				30E94820260AFF7500452FF5 /* BackupSubscriptionTest.swift */,
+				3045A739260237FC0037527A /* DatabaseServiceTest.swift */,
 				30E9482F260B0F5E00452FF5 /* FilesServiceTest.swift */,
+				304F243C262808EA00DDB5C0 /* PromotionServiceTest.swift */,
 				30D393482609DC5B007A9E09 /* ScriptingServiceTest.swift */,
 				30DB96532600E49300ACF19F /* VaultSubscriptionTest.swift */,
-				30E94826260B07CF00452FF5 /* VaultTest.swift */,
 				3065A5E826156A0D00C20661 /* VaultPaymentTest.swift */,
+				304F24382628066700DDB5C0 /* VaultManagementTest.swift */,
 				30EC87342626D1E000F15FB2 /* ScriptingServiceCallerPermissionTest.swift */,
 			);
 			path = Vault;
@@ -1114,7 +1117,9 @@
 			files = (
 				30D393492609DC5B007A9E09 /* ScriptingServiceTest.swift in Sources */,
 				30EC87352626D1E100F15FB2 /* ScriptingServiceCallerPermissionTest.swift in Sources */,
+				304F243D262808EA00DDB5C0 /* PromotionServiceTest.swift in Sources */,
 				3065A5E926156A0D00C20661 /* VaultPaymentTest.swift in Sources */,
+				304F24392628066700DDB5C0 /* VaultManagementTest.swift in Sources */,
 				3019D3DE2610D8F000A3C3C5 /* BackupServiceTest.swift in Sources */,
 				303CD58926078E9000865472 /* DApp.swift in Sources */,
 				30DB96662601A94900ACF19F /* TestData.swift in Sources */,
@@ -1129,7 +1134,6 @@
 				303CD5A626079E3F00865472 /* CrossConfig.swift in Sources */,
 				303CD58A26078E9100865472 /* Entity.swift in Sources */,
 				30E94821260AFF7500452FF5 /* BackupSubscriptionTest.swift in Sources */,
-				30E94827260B07CF00452FF5 /* VaultTest.swift in Sources */,
 				303CD59D26079C2300865472 /* ApplicationConfig.swift in Sources */,
 				303CD58E26078EE800865472 /* DIDEntity.swift in Sources */,
 				303CD5A026079CE200865472 /* ClientConfig.swift in Sources */,

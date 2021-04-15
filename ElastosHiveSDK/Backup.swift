@@ -30,5 +30,11 @@ public class Backup: ServiceEndpoint {
         self._promotionService = BackupServiceBuilder(self).createPromotionService()
     }
     
+    public var promotionService: PromotionProtocol {
+        get {
+            return _promotionService!
+        }
+    }
+    
 }
 
