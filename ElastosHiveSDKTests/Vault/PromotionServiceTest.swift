@@ -24,21 +24,20 @@ import XCTest
 @testable import ElastosHiveSDK
 import ElastosDIDSDK
 
-class BackupSubscriptionTest: XCTestCase {
-    private var subscription: BackupSubscription?
+class PromotionServiceTest: XCTestCase {
+    
+    private var promotionService: PromotionProtocol?
 
-//    func testSubscribe() {
-//        self.subscription?.subscribe().done({ (backupInfo) in
-//            
-//        })
-//    }
-    
-    func testUnsubscribe() {
-        
-    }
-    
-    
     override func setUpWithError() throws {
-        let testData: TestData = TestData.shared;
+        self.promotionService = TestData.shared.newBackup().promotionService
     }
+    
+    func testPromote() throws {
+        self.promotionService?.promote().done({ () in
+            XCTAssert(true)
+        }).catch({ error in
+            XCTFail("\(error)")
+        })
+    }
+
 }
