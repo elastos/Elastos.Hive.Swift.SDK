@@ -35,7 +35,7 @@ public protocol SubscriptionProtocol {
     ///
     /// - Parameters:
     ///   - pricingPlan: pricingPlan Pricing plan name for using the vault service.
-    /// - Returns: Vault service information.
+    /// - returns: Vault service information.
     func subscribe(_ pricingPlan: String) -> Promise<T>
 
     /// Unsubscript vault service. After this, user can't use it.

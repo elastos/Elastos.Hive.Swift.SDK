@@ -55,9 +55,13 @@ public class TestData {
     static let shared: TestData = try! TestData()
     
     public var userDid: DIDApp?
+    public var userDidCaller: DIDApp?;
+    public var callerDid: String?
     public var appInstanceDid: DApp?
     public var nodeConfig: NodeConfig
-    public var context: AppContext
+    public var context: AppContext?
+    public var contextCaller: AppContext?
+
     public var providerAddress: String {
         set {
             self.nodeConfig.provider = newValue
@@ -111,20 +115,24 @@ public class TestData {
     }
         
     public func newVault() -> Vault {
-        return Vault(self.context, self.nodeConfig.provider, nil, nil)
+        return Vault(self.context!, self.nodeConfig.provider, nil, nil)
     }
     
     public func newVault4Scripting() -> Vault {
-        return Vault(self.context, self.nodeConfig.provider, self.nodeConfig.ownerDid, nil)
+        return Vault(self.context!, self.nodeConfig.provider, self.nodeConfig.ownerDid, nil)
     }
     
     public func newBackup() -> Backup {
-        return Backup(self.context, self.nodeConfig.targetHost)
+        return Backup(self.context!, self.nodeConfig.targetHost)
     }
 
     public func backupService() throws -> BackupServiceRender {
         let backService = self.newVault().backupService
         _ = try backService.setupContext(TestBackupRender(userDid!, self.newVault(), self.nodeConfig))
         return backService as! BackupServiceRender
+    }
+    
+    public var appId: String {
+        return self.appInstanceDid!.appId
     }
 }

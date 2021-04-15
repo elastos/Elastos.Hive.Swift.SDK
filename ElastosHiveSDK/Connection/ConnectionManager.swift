@@ -36,6 +36,7 @@ public class ConnectionManager {
         self.hiveApi = HiveAPi(self._serviceEndpoint.providerAddress)
     }
     
+    // TODO need lock login logic
     func headersStream() throws -> HTTPHeaders {
         let token = try self.tokenResolver!.getToken()!.accessToken
         self.accessionToken = token

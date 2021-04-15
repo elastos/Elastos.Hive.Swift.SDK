@@ -24,9 +24,13 @@ import Foundation
 import ObjectMapper
 
 public class Condition: NSObject, Mappable {
-    var type: String?
-    var name: String?
-    var body: ScriptRootBody?
+    public static let TYPE_AND = "and"
+    public static let TYPE_OR = "or"
+    public static let TYPE_QUERY_HAS_RESULTS = "queryHasResults"
+    
+    public var type: String?
+    public var name: String?
+    public var body: ScriptRootBody?
 
     public init(_ name: String, _ type: String, _ body: ScriptRootBody) {
         self.name = name
