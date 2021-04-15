@@ -29,6 +29,7 @@ public class ConnectionManager {
     public var hiveApi: HiveAPi
     public var accessionToken: String?
     public var tokenResolver: TokenResolver?
+    public let lock: NSLock = NSLock()
     
     
     init(_ serviceEndpoint: ServiceEndpoint) {
@@ -36,15 +37,18 @@ public class ConnectionManager {
         self.hiveApi = HiveAPi(self._serviceEndpoint.providerAddress)
     }
     
-    // TODO need lock login logic
     func headersStream() throws -> HTTPHeaders {
+        self.lock.lock()
         let token = try self.tokenResolver!.getToken()!.accessToken
+        self.lock.unlock()
         self.accessionToken = token
         return ["Content-Type": "application/octet-stream", "Authorization": "token \(token)", "Transfer-Encoding": "chunked", "Connection": "Keep-Alive"]
     }
     
     func headers() throws -> HTTPHeaders {
+        self.lock.lock()
         let token = try self.tokenResolver!.getToken()!.accessToken
+        self.lock.unlock()
         self.accessionToken = token
         return ["Content-Type": "application/json;charset=UTF-8", "Authorization": "token \(token)"]
     }
