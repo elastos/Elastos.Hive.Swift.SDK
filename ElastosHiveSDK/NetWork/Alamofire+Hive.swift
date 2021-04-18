@@ -76,7 +76,6 @@ extension DataRequest {
     }
 }
 
-
 extension DownloadRequest {
     public func get(options: JSONSerialization.ReadingOptions = .allowFragments) -> AFDownloadResponse<Any> {
         return response(responseSerializer: JSONResponseSerializer(options: options))

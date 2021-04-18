@@ -37,10 +37,12 @@ public class TestBackupRender: BackupContext {
     }
     
     public func getAuthorization(_ srcDid: String, _ targetDid: String, _ targetHost: String) -> Promise<String> {
-        Promise<Any>.async().then { [self] _ -> Promise<String> in
-            return Promise<String> { resolver in
+        return Promise<String> { resolver in
+            do {
                 let auth = try userDid!.issueBackupDiplomaFor(srcDid, targetHost, targetDid)
                 resolver.fulfill(auth.description)
+            } catch {
+                resolver.reject(error)
             }
         }
     }
@@ -50,13 +52,12 @@ public class TestBackupRender: BackupContext {
 /**
  * This is used for representing 3rd-party application.
  */
-
 public class TestData {
     static let shared: TestData = try! TestData()
     
     public var userDid: DIDApp?
     public var userDidCaller: DIDApp?;
-    public var callerDid: String?
+    public var _callerDid: String?
     public var appInstanceDid: DApp?
     public var nodeConfig: NodeConfig
     public var context: AppContext?
@@ -71,7 +72,7 @@ public class TestData {
         }
     }
     
-    public init () throws {
+    public init() throws {
         var file: String? = nil
         let bundle = Bundle(for: type(of: self))
         switch EnvironmentType.DEVELOPING {
@@ -99,40 +100,53 @@ public class TestData {
         let userConfig = clientConfig!.user
         self.userDid = DIDApp(userConfig.name, userConfig.mnemonic, adapter, userConfig.passPhrase, userConfig.storepass)
         self.nodeConfig = clientConfig!.nodeConfig
-        let storePath = "\(NSHomeDirectory())/Library/Caches/data/store" + "/" + self.nodeConfig.storePath
-
-        let appContextProvider = UserAppContextProvider(storePath, userDid!, appInstanceDid!)
-        self.context = try AppContext.build(appContextProvider, nodeConfig.ownerDid)
         
+        let userConfigCaller: UserConfig = clientConfig!.crossConfig.userConfig
+        self.userDidCaller = DIDApp(userConfigCaller.name, userConfigCaller.mnemonic, adapter, userConfigCaller.passPhrase, userConfigCaller.storepass)
+
+        
+        let storePath = "\(NSHomeDirectory())/Library/Caches/data/store" + "/" + self.nodeConfig.storePath
+        self.context = try AppContext.build(TestAppContextProvider(storePath, userDid!, appInstanceDid!),
+                                            nodeConfig.ownerDid)
+        self.contextCaller = try AppContext.build(TestAppContextProvider(storePath, userDid!, appInstanceDid!),
+                                            nodeConfig.ownerDid)
     }
     
-    public var appContext: AppContext? {
-        return self.context
+    public var appContext: AppContext {
+        return self.context!
     }
     
     public var ownerDid: String {
         return self.nodeConfig.ownerDid
     }
         
-    public func newVault() -> Vault {
-        return Vault(self.context!, self.nodeConfig.provider, nil, nil)
+    public func newVault() throws -> Vault {
+        return try Vault(self.context!, self.nodeConfig.provider)
     }
     
-    public func newVault4Scripting() -> Vault {
-        return Vault(self.context!, self.nodeConfig.provider, self.nodeConfig.ownerDid, nil)
+    public func newScriptRunner() throws -> ScriptRunner {
+        return try ScriptRunner(context!, nodeConfig.provider)
     }
     
-    public func newBackup() -> Backup {
-        return Backup(self.context!, self.nodeConfig.targetHost)
+    public func newCallerScriptRunner() throws -> ScriptRunner {
+        return try ScriptRunner(self.contextCaller!, nodeConfig.provider)
     }
-
+    
+    public func newBackup() throws -> Backup {
+        return try Backup(self.context!, self.nodeConfig.targetHost)
+    }
+    
     public func backupService() throws -> BackupServiceRender {
-        let backService = self.newVault().backupService
+        let backService = try self.newVault().backupService
         _ = try backService.setupContext(TestBackupRender(userDid!, self.newVault(), self.nodeConfig))
         return backService as! BackupServiceRender
     }
     
     public var appId: String {
         return self.appInstanceDid!.appId
+    }
+    
+    public var callerDid: String {
+        return self._callerDid!
     }
 }

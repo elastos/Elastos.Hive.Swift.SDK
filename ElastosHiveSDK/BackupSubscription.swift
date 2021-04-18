@@ -28,9 +28,9 @@ public class BackupInfo: Mappable {
     public var maxStorage: Int64?
     public var fileUseStorage: Int64?
     public var dbUseStorage: Int64?
-    public var modifyTime: String?
-    public var startTime: String?
-    public var endTime: String?
+    public var modifyTime: Date?
+    public var startTime: Date?
+    public var endTime: Date?
     public var pricingUsing: String?
     public var isExisting: Bool?
 
@@ -47,8 +47,8 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionProtocol, PaymentP
     private var _paymentService: PaymentServiceRender?
     private var _subscriptionService: SubscriptionServiceRender?
     
-    public init(_ context: AppContext, _ providerAddress: String) {
-        super.init(context, providerAddress, nil, nil)
+    public override init(_ context: AppContext, _ providerAddress: String) throws {
+        try super.init(context, providerAddress)
         self._paymentService = PaymentServiceRender(self)
         self._subscriptionService = SubscriptionServiceRender(self)
     }
@@ -65,9 +65,9 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionProtocol, PaymentP
                     backupInfo.maxStorage = response.maxStorage
                     backupInfo.fileUseStorage = response.fileUseStorage
                     backupInfo.dbUseStorage = response.dbUseStorage
-                    backupInfo.modifyTime = response.modifyTime
-                    backupInfo.startTime = response.startTime
-                    backupInfo.endTime = response.endTime
+                    backupInfo.modifyTime = Date(timeIntervalSince1970: TimeInterval(integerLiteral: response.modifyTime))
+                    backupInfo.startTime = Date(timeIntervalSince1970: TimeInterval(integerLiteral: response.startTime))
+                    backupInfo.endTime = Date(timeIntervalSince1970: TimeInterval(integerLiteral: response.endTime))
                     backupInfo.pricingUsing = response.pricingUsing
                     backupInfo.isExisting = response.isExisting
                     resolver.fulfill(backupInfo)
@@ -105,9 +105,9 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionProtocol, PaymentP
                    backupInfo.maxStorage = response.maxStorage
                    backupInfo.fileUseStorage = response.fileUseStorage
                    backupInfo.dbUseStorage = response.dbUseStorage
-                   backupInfo.modifyTime = response.modifyTime
-                   backupInfo.startTime = response.startTime
-                   backupInfo.endTime = response.endTime
+                   backupInfo.modifyTime = Date(timeIntervalSince1970: TimeInterval(integerLiteral: response.modifyTime))
+                   backupInfo.startTime = Date(timeIntervalSince1970: TimeInterval(integerLiteral: response.startTime))
+                   backupInfo.endTime = Date(timeIntervalSince1970: TimeInterval(integerLiteral: response.endTime))
                    backupInfo.pricingUsing = response.pricingUsing
                    backupInfo.isExisting = response.isExisting
                    resolver.fulfill(backupInfo)

@@ -45,7 +45,9 @@ class FilesServiceTest: XCTestCase {
     private var subscription: VaultSubscription?
     
     override func setUpWithError() throws {
-        self.filesService = TestData.shared.newVault().filesService
+        let testData: TestData = TestData.shared;
+
+        self.filesService = try testData.newVault().filesService
         
         self.bundlePath = Bundle(for: type(of: self))
         self.localTxtFilePath = self.bundlePath?.path(forResource: "test_ios", ofType: "txt")
@@ -57,9 +59,8 @@ class FilesServiceTest: XCTestCase {
         self.remoteNotExistsFilePath = self.remoteRootDir! + "/" + FILE_NAME_NOT_EXISTS
         self.remoteBackupTxtFilePath = "backup" + "/" + FILE_NAME_NOT_EXISTS
         
-        let testData: TestData = TestData.shared;
-        self.subscription = VaultSubscription(testData.appContext!, testData.providerAddress)
-        self.filesService = testData.newVault().filesService
+        self.subscription = try VaultSubscription(testData.appContext, testData.providerAddress)
+        self.filesService = try testData.newVault().filesService
     }
 
     func test01UploadText() {

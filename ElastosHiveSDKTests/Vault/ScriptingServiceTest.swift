@@ -41,20 +41,26 @@ class ScriptingServiceTest: XCTestCase {
     private var scriptingService: ScriptingProtocol?
     private var filesService: FilesProtocol?
     private var databaseService: DatabaseProtocol?
+    private var scriptRunner: ScriptRunner?
     private var fileName: String = "test_ios_1.txt"
     private var localDstFilePath: String = "test_ios_download.txt"
     
     private var COLLECTION_NAME: String = "script_database"
     private var appId: String?
+    private var ownerDid: String?
 
 
     
     override func setUpWithError() throws {
         let lock = XCTestExpectation(description: "wait for setup.")
-        self.scriptingService = TestData.shared.newVault4Scripting().scriptingService
-        self.filesService = TestData.shared.newVault().filesService
-        self.databaseService = TestData.shared.newVault().databaseService
-        self.appId = TestData.shared.appId
+        let testData: TestData = TestData.shared
+        self.scriptingService = try TestData.shared.newVault().scriptingService
+        self.scriptRunner = try testData.newScriptRunner()
+        self.filesService = try testData.newVault().filesService
+        self.databaseService = try testData.newVault().databaseService
+
+        self.appId = testData.appId
+        self.ownerDid = testData.ownerDid
 
         self.createTestDatabase().done { isSuccess in
             lock.fulfill()
@@ -98,7 +104,7 @@ class ScriptingServiceTest: XCTestCase {
     func callScriptInsert(_ scriptName: String) -> Promise<JSON> {
         return Promise<JSON> { resolver in
             let params = ["author" : "John", "content" : "message"]
-            self.scriptingService!.callScript(scriptName, params, "appId", JSON.self).done { json in
+            self.scriptRunner!.callScript(scriptName, params, self.ownerDid, self.appId, JSON.self).done { json in
                 resolver.fulfill(json)
             }.catch { error in
                 resolver.reject(error)
@@ -137,7 +143,7 @@ class ScriptingServiceTest: XCTestCase {
     
     func callScriptFindWithoutCondition(_ scriptName: String) -> Promise<String> {
         return Promise<String> { resolver in
-            self.scriptingService!.callScript(scriptName, nil, self.appId, String.self).done { result in
+            self.scriptRunner!.callScript(scriptName, nil, self.ownerDid, self.appId, String.self).done { result in
                 resolver.fulfill(result)
             }.catch { error in
                 resolver.reject(error)
@@ -169,13 +175,13 @@ class ScriptingServiceTest: XCTestCase {
     }
     
     func callScriptFind(_ scriptName: String) -> Promise<String> {
-        return self.scriptingService!.callScript(scriptName, nil, self.appId, String.self)
+        return self.scriptRunner!.callScript(scriptName, nil, self.ownerDid, self.appId, String.self)
     }
 
     
     func testCallScriptFindWithoutCondition(_ scriptName: String) -> Promise<String> {
         return Promise<String> { resolver in
-            self.scriptingService!.callScript(FIND_NO_CONDITION_NAME, nil, "appId", String.self).get({ result in
+            self.scriptRunner!.callScript(FIND_NO_CONDITION_NAME, nil, self.ownerDid, self.appId, String.self).get({ result in
                 resolver.fulfill(result)
             }).catch { error in
                 resolver.reject(error)
@@ -211,7 +217,7 @@ class ScriptingServiceTest: XCTestCase {
 
     func callScriptUpdate(_ scriptName: String) -> Promise<JSON> {
         let params = ["author": "John", "content": "message"]
-        return self.scriptingService!.callScript(scriptName, params, "appId", JSON.self)
+        return self.scriptRunner!.callScript(scriptName, params, self.ownerDid, self.appId, JSON.self)
     }
     
     // MARK: -
@@ -238,7 +244,7 @@ class ScriptingServiceTest: XCTestCase {
     }
     
     func callScriptDelete(_ scriptName: String) -> Promise<JSON> {
-        return self.scriptingService!.callScript(scriptName, ["author" : "John"], "appId", JSON.self)
+        return self.scriptRunner!.callScript(scriptName, ["author" : "John"], self.ownerDid, self.appId, JSON.self)
     }
     
     // MARK: -
@@ -264,7 +270,7 @@ class ScriptingServiceTest: XCTestCase {
 
     func uploadFileByTransActionId(_ transactionId: String) -> Promise<Void> {
         return Promise<Void> { resolver in
-            self.scriptingService!.uploadFile(transactionId).done { writer in
+            self.scriptRunner!.uploadFile(transactionId).done { writer in
                 let bundle = Bundle(for: type(of: self))
                 let filePath: String = bundle.path(forResource: "test_ios", ofType: "txt")!
                 let data = try! Data(contentsOf: URL(fileURLWithPath: filePath))
@@ -329,7 +335,7 @@ class ScriptingServiceTest: XCTestCase {
     func callScriptFileDownload(_ scriptName: String, _ fileName: String) -> Promise<String> {
         return Promise<String> { resolver in
             let params = Executable.createFileDownloadParams("5f8d9dfe2f4c8b7a6f8ec0f1", fileName)
-            self.scriptingService!.callScript(scriptName, params, "appId", JSON.self).done { json in
+            self.scriptRunner!.callScript(scriptName, params, self.ownerDid, self.appId, JSON.self).done { json in
                 let transactionId = json[scriptName]["transaction_id"].stringValue
                 resolver.fulfill(transactionId)
             }.catch { error in
@@ -341,7 +347,7 @@ class ScriptingServiceTest: XCTestCase {
     func downloadFileByTransActionId(_ transactionId: String) -> Promise<Bool> {
         return Promise<Bool> { resolver in
             let downloadPath = createDownloadFile(self.localDstFilePath)
-            self.scriptingService!.downloadFile(transactionId).done({ (reader) in
+            self.scriptRunner!.downloadFile(transactionId).done({ (reader) in
                 while !reader.didLoadFinish {
                     if let data = reader.read({ error in
                         resolver.reject(error)
@@ -395,7 +401,7 @@ class ScriptingServiceTest: XCTestCase {
     func callScriptFileProperties(_ scriptName: String, _ fileName: String) -> Promise<JSON> {
         return Promise<JSON> { resolver in
             let params = Executable.createFilePropertiesParams("5f8d9dfe2f4c8b7a6f8ec0f1", fileName)
-            self.scriptingService!.callScript(scriptName, params, "appId", JSON.self).done { json in
+            self.scriptRunner!.callScript(scriptName, params, self.ownerDid, self.appId, JSON.self).done { json in
                 resolver.fulfill(json)
             }.catch { error in
                 resolver.reject(error)
@@ -434,7 +440,7 @@ class ScriptingServiceTest: XCTestCase {
     func callScriptFileHash(_ scriptName: String, _ fileName: String) -> Promise<JSON> {
         return Promise<JSON> { resolver in
             let params = Executable.createFileHashParams("5f8d9dfe2f4c8b7a6f8ec0f1", fileName)
-            self.scriptingService!.callScript(scriptName, params, "appId", JSON.self).done { json in
+            self.scriptRunner!.callScript(scriptName, params, self.ownerDid, self.appId, JSON.self).done { json in
                 resolver.fulfill(json)
             }.catch { error in
                 resolver.reject(error)
@@ -470,7 +476,7 @@ class ScriptingServiceTest: XCTestCase {
         return Promise<String> { resolver in
             let params: [String : Any] = ["group_id": ["$oid": "5f8d9dfe2f4c8b7a6f8ec0f1"], "path": self.fileName]
             let scriptName = "upload_file"
-            self.scriptingService!.callScript(scriptName, params, "appId", JSON.self).done { json in
+            self.scriptRunner!.callScript(scriptName, params, self.ownerDid, self.appId, JSON.self).done { json in
                 resolver.fulfill(json[UPLOAD_FILE_NAME]["transaction_id"].stringValue)
             }.catch { error in
                 resolver.reject(error)

@@ -32,7 +32,7 @@ public class PromotionServiceRender: HiveVaultRender, PromotionProtocol {
             return Promise<Void> { resolver in
                 let url = self.connectionManager.hiveApi.activeToVault()
                 let header = try self.connectionManager.headers()
-                let response = try HiveAPi.request(url: url, method: .post, parameters: nil, headers: header).get(HiveResponse.self)
+                _ = try HiveAPi.request(url: url, method: .post, parameters: nil, headers: header).get(HiveResponse.self)
                 resolver.fulfill(Void())
             }
             

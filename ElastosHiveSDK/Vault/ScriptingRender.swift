@@ -23,16 +23,15 @@
 import Foundation
 
 public class ScriptingServiceRender: HiveVaultRender, ScriptingProtocol {
-    private let _scriptRunner: ScriptRunner
     
     public override init(_ serviceEndpoint: ServiceEndpoint) {
-        self._scriptRunner = try ScriptRunner(serviceEndpoint.appContext,
-                                              serviceEndpoint.providerAddress,
-                                              serviceEndpoint.targetDid,
-                                              serviceEndpoint.appDid)
         super.init(serviceEndpoint)
     }
     
+    public func registerScript(_ name: String, _ executable: Executable, _ allowAnonymousUser: Bool, _ allowAnonymousApp: Bool) -> Promise<Bool> {
+        return self.registerScript(name, nil, executable, allowAnonymousUser, allowAnonymousApp)
+    }
+
     public func registerScript(_ name: String, _ condition: Condition?, _ executable: Executable, _ allowAnonymousUser: Bool, _ allowAnonymousApp:  Bool) -> Promise<Bool> {
         return Promise<Bool> { resolver in
             let params = RegisterScriptRequestParams()
@@ -51,27 +50,87 @@ public class ScriptingServiceRender: HiveVaultRender, ScriptingProtocol {
         }
     }
     
-    public func callScript<T>(_ name: String, _ params: [String : Any]?, _ appDid: String?, _ resultType: T.Type) -> Promise<T> {
-        return Promise<Any>.async().then{ [self] _ -> Promise<T> in
-            return _scriptRunner.callScript(name, params, appDid, resultType)
+    public func callScript<T>(_ name: String, _ params: [String : Any]?, _ targetDid: String?, _ targetAppDid: String?, _ resultType: T.Type) -> Promise<T> {
+        return Promise<T> { resolver in
+            let context = ScriptContext()
+            context.targetDid = targetDid
+            context.targetAppDid = targetAppDid
+            
+            let requestParams = CallScriptRequestParams()
+            requestParams.name = name
+            requestParams.context = context
+            if params != nil {
+                requestParams.params = params!
+            }
+
+            let url = self.connectionManager.hiveApi.callScript()
+            let header = try self.connectionManager.headers()
+            let response = try HiveAPi.request(url: url, method: .post, parameters: requestParams.toJSON(), headers: header).get()
+            resolver.fulfill(try handleResult(JSON(response.json), resultType))
         }
     }
     
-    public func callScriptUrl<T>(_ name: String, _ params: String?, _ appDid: String, _ resultType: T.Type) -> Promise<T> {
-        return Promise<Any>.async().then{ [self] _ -> Promise<T> in
-            return _scriptRunner.callScriptUrl(name, params, appDid, resultType)
-        }
-    }
-    
-    public func uploadFile(_ transactionId: String) -> Promise<FileWriter> {
-        return Promise<Any>.async().then{ [self] _ -> Promise<FileWriter> in
-            return _scriptRunner.uploadFile(transactionId)
+    public func callScriptUrl<T>(_ name: String, _ params: String?, _ targetDid: String?, _ targetAppDid: String?, _ resultType: T.Type) -> Promise<T> {
+        return Promise<T> { resolver in
+            let url = self.connectionManager.hiveApi.callScriptUrl(targetDid!, targetAppDid!, name, params)
+            let header = try self.connectionManager.headers()
+            let response = try AF.request(url,
+                                      method: .get,
+                                      encoding: JSONEncoding.default,
+                                      headers: header).get(HiveResponse.self)
+            resolver.fulfill(try handleResult(JSON(response.json), resultType))
         }
     }
     
     public func downloadFile(_ transactionId: String) -> Promise<FileReader> {
-        return Promise<Any>.async().then{ [self] _ -> Promise<FileReader> in
-            return _scriptRunner.downloadFile(transactionId)
+        return Promise<FileReader> { resolver in
+            let url = self.connectionManager.hiveApi.runScriptDownload(transactionId)
+            _ = try self.connectionManager.headers()
+//            let reader = FileReader(URL(string: url)!, self.connectionManager, resolver)
+            let reader = FileReader(URL(string: url)!, self.connectionManager, resolver, .post)
+            resolver.fulfill(reader)
+        }
+    }
+    
+    public func uploadFile(_ transactionId: String) -> Promise<FileWriter> {
+        return Promise<FileWriter> { resolver in
+            let url = self.connectionManager.hiveApi.runScriptUpload(transactionId)
+            _ = try self.connectionManager.headers()
+            let writer = FileWriter(URL(string: url)!, self.connectionManager)
+            resolver.fulfill(writer)
+        }
+    }
+    
+    private func handleResult<T>(_ json: JSON, _ resultType: T.Type) throws -> T {
+        // The String type
+        if resultType.self == String.self {
+            let dic = json.dictionaryObject as Any
+            let checker = JSONSerialization.isValidJSONObject(dic)
+            guard checker else {
+                throw HiveError.jsonSerializationInvalidType(des: "HiveSDK serializate: JSONSerialization Invalid type in JSON.")
+            }
+            let data = try JSONSerialization.data(withJSONObject: dic, options: [])
+            let str = String(data: data, encoding: String.Encoding.utf8)
+            return str as! T
+        }
+        // The Dictionary type
+        else if resultType.self == Dictionary<String, Any>.self {
+            let dic = json.dictionaryObject
+            return dic as! T
+        }
+        // The JSON type
+        else if resultType.self == JSON.self {
+            return json as! T
+        }
+        // the Data type
+        else {
+            let result = json.dictionaryObject as Any
+            let checker = JSONSerialization.isValidJSONObject(result)
+            guard checker else {
+                throw HiveError.jsonSerializationInvalidType(des: "HiveSDK serializate: JSONSerialization Invalid type in JSON.")
+            }
+            let data = try JSONSerialization.data(withJSONObject: result, options: [])
+            return data as! T
         }
     }
 }
