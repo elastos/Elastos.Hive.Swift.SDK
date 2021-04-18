@@ -22,10 +22,8 @@
 
 import Foundation
 
-public class ConnectionManager {
-    
+public class ConnectionManager {    
     private var _serviceEndpoint: ServiceEndpoint
-    private let defaultTimeout: Int = 30
     public var hiveApi: HiveAPi
     public var accessionToken: String?
     public var tokenResolver: TokenResolver?
@@ -53,7 +51,7 @@ public class ConnectionManager {
         return ["Content-Type": "application/json;charset=UTF-8", "Authorization": "token \(token)"]
     }
     
-    func NormalHeaders() -> HTTPHeaders {
+    func defaultHeaders() -> HTTPHeaders {
         return ["Content-Type": "application/json;charset=UTF-8"]
     }
 }

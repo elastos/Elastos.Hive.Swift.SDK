@@ -30,24 +30,24 @@ private let COLLECTION_GROUP_MESSAGE: String = "st_group_message"
 private let SCRIPT_NAME: String = "st_group_message"
 
 class ScriptingServiceCallerPermissionTest: XCTestCase {
-    
-
-    
     private var scriptingService: ScriptingProtocol?
-    private var scriptingServiceCaller: ScriptingProtocol?
+    private var scriptRunner: ScriptRunner?
     private var databaseService: DatabaseProtocol?
     
     private var callDid: String?
     private var appId: String?
+    private var ownerDid: String?
 
     override func setUpWithError() throws {
+        try XCTSkipIf(true)
         let testData = TestData.shared
         
-        self.scriptingService = testData.newVault().scriptingService
-        self.scriptingServiceCaller = testData.newVault4Scripting().scriptingService
-        self.databaseService = testData.newVault().databaseService
+        self.scriptingService = try testData.newVault().scriptingService
+        self.scriptRunner = try testData.newCallerScriptRunner()
+        self.databaseService = try testData.newVault().databaseService
         self.appId = testData.appId
-
+        self.ownerDid = testData.ownerDid
+        self.callDid = testData.callerDid
     }
 
     override func tearDownWithError() throws {
@@ -83,7 +83,7 @@ class ScriptingServiceCallerPermissionTest: XCTestCase {
     }
         
     func runScriptWithGroupPermission() -> Promise<JSON> {
-        return self.scriptingServiceCaller!.callScript(SCRIPT_NAME, ["author" : "John", "content" : "message"], self.appId, JSON.self)
+        return self.scriptRunner!.callScript(SCRIPT_NAME, ["author" : "John", "content" : "message"], self.ownerDid, self.appId, JSON.self)
     }
     
     func removePermissionForCaller() -> Promise<DeleteResult> {
@@ -95,19 +95,7 @@ class ScriptingServiceCallerPermissionTest: XCTestCase {
     }
     
     func runScriptWithoutGroupPermission() -> Promise<JSON> {
-        return self.scriptingServiceCaller!.callScript(SCRIPT_NAME, ["author" : "John", "content" : "message"], self.appId, JSON.self)
-    }
-        
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+        return self.scriptRunner!.callScript(SCRIPT_NAME, ["author" : "John", "content" : "message"], self.ownerDid, self.appId, JSON.self)
     }
 
 }

@@ -29,7 +29,7 @@ class PromotionServiceTest: XCTestCase {
     private var promotionService: PromotionProtocol?
 
     override func setUpWithError() throws {
-        self.promotionService = TestData.shared.newBackup().promotionService
+        self.promotionService = try TestData.shared.newBackup().promotionService
     }
     
     func testPromote() throws {

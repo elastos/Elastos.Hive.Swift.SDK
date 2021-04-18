@@ -24,43 +24,12 @@ import Foundation
 
 public protocol ScriptingProtocol {
     
-    
     /**
-     old method  ready to be deleted
+     * Lets the vault owner register a script on his vault for a given app. The script is built on the client side, then
+     * serialized and stored on the hive back-end. Later on, anyone, including the vault owner or external users, can
+     * use Scripting.call() to execute one of those scripts and get results/data.
      */
-    
-    /// Lets the vault owner register a script on his vault for a given app.
-    /// The script is built on the client side, then serialized and stored on the hive back-end.
-    /// Later on, anyone, including the vault owner or external users,
-    ///  can use Scripting.call() to execute one of those scripts and get results/data.
-//    func registerScript(_ name: String, _ executable: Executable, _ allowAnonymousUser: Bool, _ allowAnonymousApp: Bool) -> Promise<Bool>
-    
-    func registerScript(_ name: String, _ condition: Condition?, _ executable: Executable, _ allowAnonymousUser: Bool, _ allowAnonymousApp: Bool) -> Promise<Bool>
+    func registerScript(_ name: String, _ executable: Executable, _ allowAnonymousUser: Bool, _ allowAnonymousApp: Bool) -> Promise<Bool>
 
-    /// Executes a previously registered server side script using Scripting.setScript(). Vault owner or external users are
-    /// - parameters:
-    ///   - name: the call's script name
-    /// - returns: resultType String、 Data、 JSON、 Dictionry<String, Any>
-    func callScript<T>(_ name: String, _ params: [String: Any]?, _ appDid: String?, _ resultType: T.Type) -> Promise<T>
-    
-    /// Executes a previously registered server side script with a direct URL where the values can be passed as part of the query. Vault owner or external users are allowed to call scripts on someone's vault.
-    /// - parameter:
-    ///   - name: The call's script name
-    /// - returns: resultType: String、 Data、 JSON、 Dictionry<String, Any>
-    func callScriptUrl<T>(_ name: String, _ params: String?, _ appDid: String, _ resultType: T.Type) -> Promise<T>
-    
-    /// Run a script to upload a file NOTE:
-    /// The upload works a bit differently compared to other types of executable queries
-    /// because there are two steps to this executable.
-    ///  First, register a script on the vault, then you call this api to actually upload the file
-    /// - parameter:
-    ///   - transactionId: transactionId
-    func uploadFile(_ transactionId: String) -> Promise<FileWriter>
-    
-    /// Run a script to download a file NOTE:
-    /// The download works a bit differently compared to other types of executable queries
-    /// because there are two steps to this executable.
-    /// First, register a script on the vault, then you call this api to actually upload the file
-    /// - parameter transactionId: transactionId
-    func downloadFile(_ transactionId: String) -> Promise<FileReader>
+    func registerScript(_ name: String, _ condition: Condition?, _ executable: Executable, _ allowAnonymousUser: Bool, _ allowAnonymousApp: Bool) -> Promise<Bool>
 }

@@ -67,12 +67,14 @@ public class DatabaseServiceRender: DatabaseProtocol {
     }
 
     public func insertMany(_ collection: String, _ docs: Array<[String : Any]>, _ options: InsertManyOptions) -> Promise<InsertDocsResponse> {
-        return Promise<InsertDocsResponse> { resolver in
-            let params = InsertDocsRequestParams(collection, docs, options)
-            let url = self._connectionManager.hiveApi.insertMany()
-            let header = try self._connectionManager.headers()
-            let response = try HiveAPi.request(url: url, method: .post, parameters: params.toJSON(), headers: header).get(InsertDocsResponse.self)
-            resolver.fulfill(response)
+        return Promise<Any>.async().then { _ -> Promise<InsertDocsResponse> in
+            return Promise<InsertDocsResponse> { resolver in
+                let params = InsertDocsRequestParams(collection, docs, options)
+                let url = self._connectionManager.hiveApi.insertMany()
+                let header = try self._connectionManager.headers()
+                let response = try HiveAPi.request(url: url, method: .post, parameters: params.toJSON(), headers: header).get(InsertDocsResponse.self)
+                resolver.fulfill(response)
+            }   
         }
     }
     

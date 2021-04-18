@@ -38,7 +38,7 @@ public class AuthenticationServiceRender: HiveVaultRender {
         let json: [String: Any]  = try JSONSerialization.jsonObject(with: data!, options: []) as! [String : Any]
         let params: [String: Any] = ["document": json]
         
-        let response = try HiveAPi.request(url: self.connectionManager.hiveApi.signIn(), method: .post, parameters: params, headers: self.connectionManager.NormalHeaders()).get(SignInResponse.self)
+        let response = try HiveAPi.request(url: self.connectionManager.hiveApi.signIn(), method: .post, parameters: params, headers: self.connectionManager.defaultHeaders()).get(SignInResponse.self)
         _ = try response.checkValid()
         return self._contextProvider!.getAuthorization(response.challenge)!
     }
@@ -49,7 +49,7 @@ public class AuthenticationServiceRender: HiveVaultRender {
         let json: [String: Any]  = try JSONSerialization.jsonObject(with: data!, options: []) as! [String : Any]
         let params: [String: Any] = ["document": json]
         
-        let response = try HiveAPi.request(url: self.connectionManager.hiveApi.signIn(), method: .post, parameters: params, headers: self.connectionManager.NormalHeaders()).get(SignInResponse.self)
+        let response = try HiveAPi.request(url: self.connectionManager.hiveApi.signIn(), method: .post, parameters: params, headers: self.connectionManager.defaultHeaders()).get(SignInResponse.self)
          return try response.checkValid().getIssuer()!
     }
     
@@ -59,14 +59,13 @@ public class AuthenticationServiceRender: HiveVaultRender {
         let response = try HiveAPi.request(url: url,
                                             method: .post,
                                             parameters: params,
-                                            headers: self.connectionManager.NormalHeaders()).get(AuthResponse.self)
+                                            headers: self.connectionManager.defaultHeaders()).get(AuthResponse.self)
 
         let jwtParserBuilder = try JwtParserBuilder().build()
         let claim = try jwtParserBuilder.parseClaimsJwt(response.accessToken).claims
         let expirationDate = claim.getExpiration()
-        let expiresTime = 9234999999
-//        let expiresTime: String = Date.convertToUTCStringFromDate(expirationDate!)
-        return AuthToken(response.accessToken, Int64(expiresTime), "token")
+        let expiresTime: Int64 = Int64(Date().timeIntervalSince1970 / 1000 + expirationDate!.timeIntervalSince1970 / 1000)
+        return AuthToken(response.accessToken, expiresTime, "token")
         
     }
     

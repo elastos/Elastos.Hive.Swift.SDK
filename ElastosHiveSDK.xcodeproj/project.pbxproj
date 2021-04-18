@@ -121,7 +121,7 @@
 		303CD55D26075D2A00865472 /* ScriptRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303CD55C26075D2A00865472 /* ScriptRunner.swift */; };
 		303CD5602607606B00865472 /* ScriptingApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303CD55F2607606B00865472 /* ScriptingApi.swift */; };
 		303CD58326078E9000865472 /* DIDApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303CD57B26078E9000865472 /* DIDApp.swift */; };
-		303CD58426078E9000865472 /* UserAppContextProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303CD57C26078E9000865472 /* UserAppContextProvider.swift */; };
+		303CD58426078E9000865472 /* TestAppContextProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303CD57C26078E9000865472 /* TestAppContextProvider.swift */; };
 		303CD58626078E9000865472 /* DummyAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303CD57E26078E9000865472 /* DummyAdapter.swift */; };
 		303CD58826078E9000865472 /* PresentationInJWT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303CD58026078E9000865472 /* PresentationInJWT.swift */; };
 		303CD58926078E9000865472 /* DApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303CD58126078E9000865472 /* DApp.swift */; };
@@ -179,6 +179,7 @@
 		3065A6062615B6BB00C20661 /* Alamofire+Hive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3065A6052615B6BB00C20661 /* Alamofire+Hive.swift */; };
 		3065A6092615C81600C20661 /* HiveCheckValidProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3065A6082615C81600C20661 /* HiveCheckValidProtocol.swift */; };
 		308F2C7D2608DAC800F2ADFD /* AuthToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103757223FF96AB004216D0 /* AuthToken.swift */; };
+		30942F2C262BDCB300082F47 /* CallerAppContextProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30942F2B262BDCB300082F47 /* CallerAppContextProvider.swift */; };
 		30A996FB25FCEB420002B014 /* RemoteResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A996FA25FCEB420002B014 /* RemoteResolver.swift */; };
 		30A996FF25FCF74B0002B014 /* ConnectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A996FE25FCF74B0002B014 /* ConnectionManager.swift */; };
 		30ACCB00261DF2BF00178300 /* ScriptFileUploadBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30ACCAFF261DF2BF00178300 /* ScriptFileUploadBody.swift */; };
@@ -342,7 +343,7 @@
 		303CD55C26075D2A00865472 /* ScriptRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptRunner.swift; sourceTree = "<group>"; };
 		303CD55F2607606B00865472 /* ScriptingApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptingApi.swift; sourceTree = "<group>"; };
 		303CD57B26078E9000865472 /* DIDApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DIDApp.swift; sourceTree = "<group>"; };
-		303CD57C26078E9000865472 /* UserAppContextProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserAppContextProvider.swift; sourceTree = "<group>"; };
+		303CD57C26078E9000865472 /* TestAppContextProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestAppContextProvider.swift; sourceTree = "<group>"; };
 		303CD57E26078E9000865472 /* DummyAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DummyAdapter.swift; sourceTree = "<group>"; };
 		303CD58026078E9000865472 /* PresentationInJWT.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresentationInJWT.swift; sourceTree = "<group>"; };
 		303CD58126078E9000865472 /* DApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DApp.swift; sourceTree = "<group>"; };
@@ -398,6 +399,7 @@
 		3065A6022615B2CF00C20661 /* NodeCommitHashResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeCommitHashResponse.swift; sourceTree = "<group>"; };
 		3065A6052615B6BB00C20661 /* Alamofire+Hive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Alamofire+Hive.swift"; sourceTree = "<group>"; };
 		3065A6082615C81600C20661 /* HiveCheckValidProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiveCheckValidProtocol.swift; sourceTree = "<group>"; };
+		30942F2B262BDCB300082F47 /* CallerAppContextProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallerAppContextProvider.swift; sourceTree = "<group>"; };
 		30A996FA25FCEB420002B014 /* RemoteResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteResolver.swift; sourceTree = "<group>"; };
 		30A996FE25FCF74B0002B014 /* ConnectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionManager.swift; sourceTree = "<group>"; };
 		30ACCAFF261DF2BF00178300 /* ScriptFileUploadBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptFileUploadBody.swift; sourceTree = "<group>"; };
@@ -723,7 +725,8 @@
 				303CD58D26078EE800865472 /* DIDEntity.swift */,
 				303CD58026078E9000865472 /* PresentationInJWT.swift */,
 				303CD57E26078E9000865472 /* DummyAdapter.swift */,
-				303CD57C26078E9000865472 /* UserAppContextProvider.swift */,
+				303CD57C26078E9000865472 /* TestAppContextProvider.swift */,
+				30942F2B262BDCB300082F47 /* CallerAppContextProvider.swift */,
 			);
 			path = DID;
 			sourceTree = "<group>";
@@ -1120,11 +1123,12 @@
 				3019D3DE2610D8F000A3C3C5 /* BackupServiceTest.swift in Sources */,
 				303CD58926078E9000865472 /* DApp.swift in Sources */,
 				30DB96662601A94900ACF19F /* TestData.swift in Sources */,
-				303CD58426078E9000865472 /* UserAppContextProvider.swift in Sources */,
+				303CD58426078E9000865472 /* TestAppContextProvider.swift in Sources */,
 				30DB966A2601AA7300ACF19F /* NodeConfig.swift in Sources */,
 				30DB96542600E49300ACF19F /* VaultSubscriptionTest.swift in Sources */,
 				303CD58826078E9000865472 /* PresentationInJWT.swift in Sources */,
 				303CD58326078E9000865472 /* DIDApp.swift in Sources */,
+				30942F2C262BDCB300082F47 /* CallerAppContextProvider.swift in Sources */,
 				30E94830260B0F5E00452FF5 /* FilesServiceTest.swift in Sources */,
 				303CD5A326079D2400865472 /* UserConfig.swift in Sources */,
 				303CD58626078E9000865472 /* DummyAdapter.swift in Sources */,
