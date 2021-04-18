@@ -24,11 +24,11 @@ import Foundation
 import ObjectMapper
 
 public class VaultCreateResponse: HiveResponse {
-    private var _existing: Bool?
+    private var _existing: Bool = false
     
     public var existing: Bool {
         get {
-            return _existing!
+            return _existing
         }
     }
     

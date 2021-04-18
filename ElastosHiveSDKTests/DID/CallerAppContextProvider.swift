@@ -4,7 +4,7 @@ import ElastosDIDSDK
 import PromiseKit
 import ElastosHiveSDK
 
-public class UserAppContextProvider: AppContextProvider {
+public class CallerAppContextProvider: AppContextProvider {
     public var userDid: DIDApp
     public var appInstanceDid: DApp
     private var localDataDir: String

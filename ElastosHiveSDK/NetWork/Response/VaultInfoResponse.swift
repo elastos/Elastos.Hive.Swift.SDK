@@ -28,22 +28,22 @@ public class VaultInfoResponse: HiveResponse {
     private var _maxStorage: Int64?
     private var _fileUseStorage: Int64?
     private var _dbUseStorage: Int64?
-    private var _modifyTime: String?
-    private var _startTime: String?
-    private var _endTime: String?
+    private var _modifyTime: Int64?
+    private var _startTime: Int64?
+    private var _endTime: Int64?
     private var _pricingUsing: String?
     private var _state: String?
 
     public override func mapping(map: Map) {
-        _did <- map["did"]
-        _maxStorage <- map["max_storage"]
-        _fileUseStorage <- map["file_use_storage"]
-        _dbUseStorage <- map["db_use_storage"]
-        _modifyTime <- map["modify_time"]
-        _startTime <- map["start_time"]
-        _endTime <- map["end_time"]
-        _pricingUsing <- map["pricing_using"]
-        _state <- map["state"]
+        _did <- map["vault_service_info.did"]
+        _maxStorage <- map["vault_service_info.max_storage"]
+        _fileUseStorage <- map["vault_service_info.file_use_storage"]
+        _dbUseStorage <- map["vault_service_info.db_use_storage"]
+        _modifyTime <- map["vault_service_info.modify_time"]
+        _startTime <- map["vault_service_info.start_time"]
+        _endTime <- map["vault_service_info.end_time"]
+        _pricingUsing <- map["vault_service_info.pricing_using"]
+        _state <- map["vault_service_info.state"]
     }
     
     public var did: String {
@@ -70,19 +70,19 @@ public class VaultInfoResponse: HiveResponse {
         }
     }
     
-    public var modifyTime: String {
+    public var modifyTime: Int64 {
         get {
             return _modifyTime!
         }
     }
 
-    public var startTime: String {
+    public var startTime: Int64 {
         get {
             return _startTime!
         }
     }
     
-    public var endTime: String {
+    public var endTime: Int64 {
         get {
             return _endTime!
         }

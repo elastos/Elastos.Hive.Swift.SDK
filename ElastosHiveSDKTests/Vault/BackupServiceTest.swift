@@ -29,7 +29,7 @@ import XCTest
 class BackupServiceTest: XCTestCase {
     private var backupService: BackupProtocol?
     
-    func testCheckResult() {
+    func test01CheckResult() {
         let lock = XCTestExpectation(description: "wait for check result.")
         self.backupService!.checkResult().done({ result in
             XCTAssertTrue(true, "check result test case passed")
@@ -41,7 +41,7 @@ class BackupServiceTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
     
-    func testStartBackup() {
+    func test02StartBackup() {
         let lock = XCTestExpectation(description: "wait for start backup.")
         self.backupService!.startBackup().done({ _ in
             XCTAssertTrue(true, "start backup test case passed")
@@ -53,11 +53,11 @@ class BackupServiceTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
     
-    func testStopBackup() {
+    func test03StopBackup() {
         // TODO
     }
     
-    func testRestoreFrom() {
+    func test04RestoreFrom() {
         let lock = XCTestExpectation(description: "wait for restore form.")
         self.backupService!.restoreFrom().done({ _ in
             XCTAssertTrue(true, "restore formp test case passed")
@@ -69,7 +69,7 @@ class BackupServiceTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
 
-    func testStopRestore() {
+    func test05StopRestore() {
         // TODO
     }
     

@@ -30,12 +30,12 @@ public class VaultInfo: Mappable {
     public var provider: String?
     public var serviceDid: String?
     public var pricingUsing: String?
-    public var createTime: String?
-    public var modifyTime: String?
+    public var createTime: Date?
+    public var modifyTime: Date?
     public var maxSpace: Int64?
     public var dbSpaceUsed: Int64?
     public var fileSpaceUsed: Int64?
-    public var existing: Bool?
+    public var existing: Bool = false
     
     public init(_ appInstanceDid: String?, _ userDid: String?, _ serviceDid: String) {
         self.appInstanceDid = appInstanceDid
@@ -55,8 +55,8 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionProtocol, PaymentPr
     private var _subscriptionService: SubscriptionServiceRender?
     private var _paymentService: PaymentServiceRender?
     
-    public init(_ context: AppContext, _ providerAddress: String) {
-        super.init(context, providerAddress, nil, nil)
+    public override init(_ context: AppContext, _ providerAddress: String) throws {
+        try super.init(context, providerAddress)
         self._context = context
         self._paymentService = PaymentServiceRender(self)
         self._subscriptionService = SubscriptionServiceRender(self)
@@ -64,8 +64,22 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionProtocol, PaymentPr
     
     // TODO
     public func subscribe(_ pricingPlan: String) -> Promise<VaultInfo> {
-        return Promise<T> { resolver in
-            resolver.reject(HiveError.UnsupportedOperationException)
+        return Promise<VaultInfo> { resolver in
+            self._subscriptionService!.subscribe().then { _ -> Promise<VaultInfoResponse> in
+                return self._subscriptionService!.getVaultInfo()
+            }.done { response in
+                let vaultInfo = VaultInfo(nil, self.userDid, response.did)
+                vaultInfo.provider = self.providerAddress
+                vaultInfo.createTime = Date(timeIntervalSince1970: TimeInterval(integerLiteral: response.startTime))
+                vaultInfo.modifyTime =  Date(timeIntervalSince1970: TimeInterval(integerLiteral: response.modifyTime))
+                vaultInfo.maxSpace = response.maxStorage
+                vaultInfo.dbSpaceUsed = response.dbUseStorage
+                vaultInfo.fileSpaceUsed = response.fileUseStorage
+                vaultInfo.existing = response.isExisting
+                resolver.fulfill(vaultInfo)
+            }.catch { error in
+                resolver.reject(error)
+            }
         }
     }
     
@@ -93,8 +107,8 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionProtocol, PaymentPr
                 self._subscriptionService!.getVaultInfo().done { response in
                     let vaultInfo = VaultInfo(nil, self.userDid, response.did)
                     vaultInfo.provider = self.providerAddress
-                    vaultInfo.createTime = response.startTime
-                    vaultInfo.modifyTime = response.modifyTime
+                    vaultInfo.createTime = Date(timeIntervalSince1970: TimeInterval(integerLiteral: response.startTime))
+                    vaultInfo.modifyTime =  Date(timeIntervalSince1970: TimeInterval(integerLiteral: response.modifyTime))
                     vaultInfo.maxSpace = response.maxStorage
                     vaultInfo.dbSpaceUsed = response.dbUseStorage
                     vaultInfo.fileSpaceUsed = response.fileUseStorage

@@ -28,101 +28,112 @@ public class SubscriptionServiceRender: HiveVaultRender {
     }
     
     func subscribe() -> Promise<Void> {
-        return Promise<Void> { resolver in
-            do {
-                let url = self.connectionManager.hiveApi.createVault()
-                let header = try self.connectionManager.headers()
-                let response = try HiveAPi.request(url: url, method: .post, parameters: nil, headers: header).get(VaultCreateResponse.self)
-                if response.existing == true {
-                    resolver.reject(HiveError.VaultAlreadyExistException("The vault already exists"))
+        return Promise<Any>.async().then{ _ -> Promise<Void> in
+            return Promise<Void> { resolver in
+                do {
+                    let url = self.connectionManager.hiveApi.createVault()
+                    let header = try self.connectionManager.headers()
+                    let response = try HiveAPi.request(url: url, method: .post, parameters: nil, headers: header).get(VaultCreateResponse.self)
+                    if response.existing == true {
+                        resolver.reject(HiveError.VaultAlreadyExistException("The vault already exists"))
+                    }
+                    resolver.fulfill(Void())
+                } catch {
+                    resolver.reject(error)
                 }
-                resolver.fulfill(Void())
-            } catch {
-                resolver.reject(error)
             }
-
         }
     }
     
     func subscribeBackup() -> Promise<Void> {
-        return Promise<Void> { resolver in
-            do {
-                let url = self.connectionManager.hiveApi.createBackupVault()
-                let header = try self.connectionManager.headers()
-                let response = try HiveAPi.request(url: url, method: .post, parameters: nil, headers: header).get(VaultCreateResponse.self)
-                if response.existing == true {
-                    resolver.reject(HiveError.VaultAlreadyExistException("The vault already exists"))
+        return Promise<Any>.async().then{ _ -> Promise<Void> in
+            return Promise<Void> { resolver in
+                do {
+                    let url = self.connectionManager.hiveApi.createBackupVault()
+                    let header = try self.connectionManager.headers()
+                    let response = try HiveAPi.request(url: url, method: .post, parameters: nil, headers: header).get(VaultCreateResponse.self)
+                    if response.existing == true {
+                        resolver.reject(HiveError.VaultAlreadyExistException("The vault already exists"))
+                    }
+                    resolver.fulfill(Void())
+                } catch {
+                    resolver.reject(error)
                 }
-                resolver.fulfill(Void())
-            } catch {
-                resolver.reject(error)
             }
         }
-        
-       
     }
     
     func unsubscribe() -> Promise<Void> {
-        return Promise<Void> { resolver in
-            do {
-                let url = self.connectionManager.hiveApi.removeVault()
-                let header = try self.connectionManager.headers()
-                _ = try HiveAPi.request(url: url, method: .post, parameters: nil, headers: header).get(HiveResponse.self)
-                resolver.fulfill(Void())
-            } catch {
-                resolver.reject(error)
+        return Promise<Any>.async().then{ _ -> Promise<Void> in
+            return Promise<Void> { resolver in
+                do {
+                    let url = self.connectionManager.hiveApi.removeVault()
+                    let header = try self.connectionManager.headers()
+                    _ = try HiveAPi.request(url: url, method: .post, parameters: nil, headers: header).get(HiveResponse.self)
+                    resolver.fulfill(Void())
+                } catch {
+                    resolver.reject(error)
+                }
             }
         }
     }
     
     func activate() -> Promise<Void> {
-        return Promise<Void> { resolver in
-            do {
-                let url = self.connectionManager.hiveApi.unfreeze()
-                let header = try self.connectionManager.headers()
-                _ = try HiveAPi.request(url: url, method: .post, parameters: nil, headers: header).get(HiveResponse.self)
-                resolver.fulfill(Void())
-            } catch {
-                resolver.reject(error)
+        return Promise<Any>.async().then{ _ -> Promise<Void> in
+            return Promise<Void> { resolver in
+                do {
+                    let url = self.connectionManager.hiveApi.unfreeze()
+                    let header = try self.connectionManager.headers()
+                    _ = try HiveAPi.request(url: url, method: .post, parameters: nil, headers: header).get(HiveResponse.self)
+                    resolver.fulfill(Void())
+                } catch {
+                    resolver.reject(error)
+                }
             }
         }
     }
     
     func deactivate() -> Promise<Void> {
-        return Promise<Void> { resolver in
-            do {
-                let url = self.connectionManager.hiveApi.freeze()
-                let header = try self.connectionManager.headers()
-                _ = try HiveAPi.request(url: url, method: .post, parameters: nil, headers: header).get(HiveResponse.self)
-                resolver.fulfill(Void())
-            } catch {
-                resolver.reject(error)
+        return Promise<Any>.async().then{ _ -> Promise<Void> in
+            return Promise<Void> { resolver in
+                do {
+                    let url = self.connectionManager.hiveApi.freeze()
+                    let header = try self.connectionManager.headers()
+                    _ = try HiveAPi.request(url: url, method: .post, parameters: nil, headers: header).get(HiveResponse.self)
+                    resolver.fulfill(Void())
+                } catch {
+                    resolver.reject(error)
+                }
             }
         }
     }
     
     func getVaultInfo() -> Promise<VaultInfoResponse> {
-        return Promise<VaultInfoResponse> { resolver in
-            do {
-                let url = self.connectionManager.hiveApi.getVaultInfo()
-                let header = try self.connectionManager.headers()
-                let response = try HiveAPi.request(url: url, method: .post, parameters: nil, headers: header).get(VaultInfoResponse.self)
-                resolver.fulfill(response)
-            } catch {
-                resolver.reject(error)
+        return Promise<Any>.async().then{ _ -> Promise<VaultInfoResponse> in
+            return Promise<VaultInfoResponse> { resolver in
+                do {
+                    let url = self.connectionManager.hiveApi.getVaultInfo()
+                    let header = try self.connectionManager.headers()
+                    let response = try HiveAPi.request(url: url, method: .get, parameters: nil, headers: header).get(VaultInfoResponse.self)
+                    resolver.fulfill(response)
+                } catch {
+                    resolver.reject(error)
+                }
             }
         }
     }
     
     func getBackupVaultInfo() -> Promise<VaultInfoResponse> {
-        return Promise<VaultInfoResponse> { resolver in
-            do {
-                let url = self.connectionManager.hiveApi.getBackupVaultInfo()
-                let header = try self.connectionManager.headers()
-                let response = try HiveAPi.request(url: url, method: .post, parameters: nil, headers: header).get(VaultInfoResponse.self)
-                resolver.fulfill(response)
-            } catch {
-                resolver.reject(error)
+        return Promise<Any>.async().then{ _ -> Promise<VaultInfoResponse> in
+            return Promise<VaultInfoResponse> { resolver in
+                do {
+                    let url = self.connectionManager.hiveApi.getBackupVaultInfo()
+                    let header = try self.connectionManager.headers()
+                    let response = try HiveAPi.request(url: url, method: .post, parameters: nil, headers: header).get(VaultInfoResponse.self)
+                    resolver.fulfill(response)
+                } catch {
+                    resolver.reject(error)
+                }
             }
         }
     }

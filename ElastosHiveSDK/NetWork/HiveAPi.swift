@@ -24,6 +24,7 @@ import Foundation
 
 public class HiveAPi {
     public var baseURL: String
+    public static let defaultTimeout: TimeInterval = 30.0
     public var apiPath: String {
         get {
             return "/api/v1"
@@ -33,8 +34,6 @@ public class HiveAPi {
     public init(_ baseURL: String) {
         self.baseURL = baseURL
     }
-    
-
     
     public static func request(url: URLConvertible,
                                method: HTTPMethod = .get,
@@ -49,11 +48,9 @@ public class HiveAPi {
                                           method: method,
                                           parameters: parameters,
                                           encoding: JSONEncoding.default,
-                                          headers: headers)
-        print(req)
+                                          headers: headers) { $0.timeoutInterval = HiveAPi.defaultTimeout }
         return req
     }
-    
 }
 
 extension String {

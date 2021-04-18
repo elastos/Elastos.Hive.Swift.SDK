@@ -33,10 +33,6 @@ public class BackupStateResponse: HiveResponse {
     }
     
     public func getStatusResult() throws -> BackupResult {
-        if _result != "success" {
-            throw HiveError.failedToGetBackupState
-        }
-        
         switch (_hiveBackupState) {
         case "stop":
             return BackupResult.stop

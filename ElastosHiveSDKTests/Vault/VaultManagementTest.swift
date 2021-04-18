@@ -30,7 +30,7 @@ class VaultManagementTest: XCTestCase {
 
 
     override func setUpWithError() throws {
-        self.vault = TestData.shared.newVault()
+        self.vault = try TestData.shared.newVault()
     }
 
     override func tearDownWithError() throws {

@@ -30,12 +30,11 @@ class VaultSubscriptionTest: XCTestCase {
     private var orderId = "5fbdf4ee46c829dc73a9a3d2"
 
     override func setUpWithError() throws {
-        
         let testData = TestData.shared;
-        self.subscription = VaultSubscription(testData.appContext!, testData.providerAddress);
+        self.subscription = try VaultSubscription(testData.appContext, testData.providerAddress);
     }
     
-    func test01Subscribe() {
+    func test01Subscribe() throws {
         let lock = XCTestExpectation(description: "wait for test subscribe.")
         self.subscription!.subscribe("free").done({ (vaultInfo) in
             
@@ -46,7 +45,7 @@ class VaultSubscriptionTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
     
-    func test02Activate() {
+    func test02Activate() throws {
         let lock = XCTestExpectation(description: "wait for test activate.")
         self.subscription!.activate().done({ _ in
             XCTAssertTrue(true)
@@ -59,7 +58,7 @@ class VaultSubscriptionTest: XCTestCase {
     }
     
     
-    func test03CheckSubscription() {
+    func test03CheckSubscription() throws {
         let lock = XCTestExpectation(description: "wait for test check subscription.")
         self.subscription!.checkSubscription().done ({ vaultInfo in
             XCTAssertTrue(true)
@@ -85,7 +84,7 @@ class VaultSubscriptionTest: XCTestCase {
     
     
     
-    func test05Unsubscribe() {
+    func test05Unsubscribe() throws {
         let lock = XCTestExpectation(description: "wait for test unsubscribe.")
         self.subscription!.unsubscribe().done({ _ in
             XCTAssertTrue(true)

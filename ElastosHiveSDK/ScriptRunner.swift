@@ -23,83 +23,44 @@
 import Foundation
 
 public class ScriptRunner: ServiceEndpoint {
-    public func callScript<T>(_ name: String, _ params: [String : Any]?, _ appDid: String?, _ resultType: T.Type) -> Promise<T> {
-        return Promise<T> { resolver in
-            let context = ScriptContext()
-            context.targetDid = self.targetDid
-            context.targetAppDid = appDid
-            
-            let requestParams = CallScriptRequestParams()
-            requestParams.name = name
-            requestParams.context = context
-            if params != nil {
-                requestParams.params = params!
-            }
-
-            let url = self.connectionManager.hiveApi.callScript()
-            let header = try self.connectionManager.headers()
-            let response = try HiveAPi.request(url: url, method: .post, parameters: requestParams.toJSON(), headers: header).get()
-            resolver.fulfill(try handleResult(JSON(response.json), resultType))
-        }
+    private var scriptingServiceRender: ScriptingServiceRender?
+    
+    public override init(_ context: AppContext, _ providerAddress: String) throws {
+        try super.init(context, providerAddress)
+        self.scriptingServiceRender = ScriptingServiceRender(self)
     }
     
-    public func callScriptUrl<T>(_ name: String, _ params: String?, _ appDid: String, _ resultType: T.Type) -> Promise<T> {
-        return Promise<T> { resolver in
-            let url = self.connectionManager.hiveApi.callScriptUrl(self.targetDid!, appDid, name, params)
-            let header = try self.connectionManager.headers()
-            let response = try HiveAPi.request(url: url, method: .get, headers: header).get()
-            resolver.fulfill(try handleResult(JSON(response.json), resultType))
-        }
+    /// Set-up a context for get more detailed information for backup sExecutes a previously registered server side script using Scripting.setScript(). Vault owner or external users are allowed to call scripts on someone's vault.
+    /// - parameters:
+    ///    - name: The call's script name
+    ///    - resultType: String, JSON
+    /// - returns:  Result for specific script type
+    public func callScript<T>(_ name: String, _ params: [String : Any]?, _ targetDid: String?, _ targetAppDid: String?, _ resultType: T.Type) -> Promise<T> {
+        return self.scriptingServiceRender!.callScript(name, params, targetDid, targetAppDid, resultType)
     }
     
+    /// Executes a previously registered server side script with a direct URL where the values can be passed as part of the query.Vault owner or external users are allowed to call scripts on someone's vault.
+    /// - parameters:
+    ///    - name: The call's script name
+    ///    - resultType: String, JSON
+    /// - returns:  Result for specific script type
+    public func callScriptUrl<T>(_ name: String, _ params: String?, _ targetDid: String?, _ targetAppDid: String?, _ resultType: T.Type) -> Promise<T> {
+        return self.scriptingServiceRender!.callScriptUrl(name, params, targetDid, targetAppDid, resultType)
+    }
+    
+    /// Run a script to upload a file NOTE: The upload works a bit differently compared to other types of executable queries because there are two steps to this executable. First, register a script on the vault, then you call this api to actually upload the file
+    /// - parameters:
+    ///    - transactionId: Transaction id
+    /// - returns: FileReader
     public func downloadFile(_ transactionId: String) -> Promise<FileReader> {
-        return Promise<FileReader> { resolver in
-            let url = self.connectionManager.hiveApi.runScriptDownload(transactionId)
-            _ = try self.connectionManager.headers()
-            let reader = FileReader(URL(string: url)!, self.connectionManager, resolver, HTTPMethod.post)
-            resolver.fulfill(reader)
-        }
+        return self.scriptingServiceRender!.downloadFile(transactionId)
     }
     
+    /// Run a script to download a file NOTE: The download works a bit differently compared to other types of executable queries because there are two steps to this executable. First, register a script on the vault, then you call this api to actually upload the file
+    /// - parameters:
+    ///    - transactionId: Transaction id
+    /// - returns: Result for specific script type
     public func uploadFile(_ transactionId: String) -> Promise<FileWriter> {
-        return Promise<FileWriter> { resolver in
-            let url = self.connectionManager.hiveApi.runScriptUpload(transactionId)
-            _ = try self.connectionManager.headers()
-            let writer = FileWriter(URL(string: url)!, self.connectionManager)
-            resolver.fulfill(writer)
-        }
-    }
-    
-    private func handleResult<T>(_ json: JSON, _ resultType: T.Type) throws -> T {
-        // The String type
-        if resultType.self == String.self {
-            let dic = json.dictionaryObject as Any
-            let checker = JSONSerialization.isValidJSONObject(dic)
-            guard checker else {
-                throw HiveError.jsonSerializationInvalidType(des: "HiveSDK serializate: JSONSerialization Invalid type in JSON.")
-            }
-            let data = try JSONSerialization.data(withJSONObject: dic, options: [])
-            let str = String(data: data, encoding: String.Encoding.utf8)
-            return str as! T
-        }
-        // The Dictionary type
-        else if resultType.self == Dictionary<String, Any>.self {
-            let dic = json.dictionaryObject
-            return dic as! T
-        }
-        // The JSON type
-        else if resultType.self == JSON.self {
-            return json as! T
-        }
-        // the Data type
-        else {
-            let result = json.dictionaryObject as Any
-            let checker = JSONSerialization.isValidJSONObject(result)
-            guard checker else {
-                throw HiveError.jsonSerializationInvalidType(des: "HiveSDK serializate: JSONSerialization Invalid type in JSON.")
-            }
-            let data = try JSONSerialization.data(withJSONObject: result, options: [])
-            return data as! T
-        }
+        return self.scriptingServiceRender!.uploadFile(transactionId)
     }
 }

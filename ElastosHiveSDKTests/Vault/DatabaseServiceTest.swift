@@ -25,10 +25,10 @@ import XCTest
 import ElastosDIDSDK
 
 class DatabaseServiceTest: XCTestCase {
-    private var database: DatabaseServiceRender?
+    private var database: DatabaseProtocol?
     private static let COLLECTION_NAME: String = "works"
     
-    func testCreateCollection() {
+    func test01CreateCollection() {
         let lock = XCTestExpectation(description: "wait for create collection.")
         self.database!.createCollection(DatabaseServiceTest.COLLECTION_NAME, nil).done { isSuccess in
             XCTAssert(isSuccess)
@@ -40,7 +40,7 @@ class DatabaseServiceTest: XCTestCase {
         self.wait(for: [lock], timeout: 100.0)
     }
     
-    func testInsertOne() {
+    func test02InsertOne() {
         let lock = XCTestExpectation(description: "wait for insert one.")
         let docNode = ["author": "john doe1", "title": "Eve for Dummies1"]
         let insertOptions = InsertOneOptions(false)
@@ -54,7 +54,7 @@ class DatabaseServiceTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
     
-    func testInsertMany() {
+    func test03InsertMany() {
         let lock = XCTestExpectation(description: "wait for test insert many.")
         let docNode1 = ["author": "john doe2", "title": "Eve for Dummies2"]
         let docNode2 = ["author": "john doe3", "title": "Eve for Dummies3"]
@@ -69,7 +69,7 @@ class DatabaseServiceTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
 
-    func testFindOne() {
+    func test04FindOne() {
         let lock = XCTestExpectation(description: "wait for find one.")
         let queryInfo = ["author": "john doe1"]
         let findOptions = FindOptions()
@@ -90,7 +90,7 @@ class DatabaseServiceTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
     
-    func testFindMany() {
+    func test05FindMany() {
         let lock = XCTestExpectation(description: "wait for find many.")
         let queryInfo = ["author": "john doe1"]
         let findOptions = FindOptions()
@@ -111,7 +111,7 @@ class DatabaseServiceTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
     
-    func testCountDoc() {
+    func test06CountDoc() {
         let lock = XCTestExpectation(description: "wait for test count doc.")
         let filter = ["author": "john doe2"]
         let countOptions = CountOptions()
@@ -129,77 +129,10 @@ class DatabaseServiceTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
     
-//    func testUpdateOne() {
-//        let lock = XCTestExpectation(description: "wait for update one.")
-//        let filterInfo = ["author": "john doe1"]
-//        let update = ["$set": ["author": "john doe2_1", "title": "Eve for Dummies2"]]
-//        let updateOptions = UpdateOptions()
-//        _ = updateOptions.upsert(value: true).bypassDocumentValidation(value: false)
-//        self.database!.updateOne(collectionName, filterInfo, update, updateOptions).done{ result in
-//            XCTAssertTrue(true)
-//            lock.fulfill()
-//        }.catch { [self] error in
-//            testCaseFailAndThrowError(error, lock)
-//        }
-//        self.wait(for: [lock], timeout: 1000.0)
-//    }
-//    
-//    func testUpdateMany() {
-//        let lock = XCTestExpectation(description: "wait for update many.")
-//        let filterInfo = ["author": "john doe1"]
-//        let update = ["$set":["author": "john doe1", "title": "Eve for Dummies2"]]
-//        let updateOptions = UpdateOptions()
-//        _ = updateOptions.upsert(value: true).bypassDocumentValidation(value: false)
-//        self.database!.updateMany(collectionName, filterInfo, update, updateOptions).done{ result in
-//            XCTAssertTrue(true)
-//            lock.fulfill()
-//        }.catch { [self] error in
-//            testCaseFailAndThrowError(error, lock)
-//        }
-//        self.wait(for: [lock], timeout: 1000.0)
-//    }
-//
-//    func testDeleteOne() {
-//        let lock = XCTestExpectation(description: "wait for delete one.")
-//        let filterInfo = ["author": "john doe2"]
-//        let deleteOptions = DeleteOptions()
-//        self.database!.deleteOne(collectionName, filterInfo, options: deleteOptions).done{ result in
-//            XCTAssertTrue(true)
-//            lock.fulfill()
-//        }.catch { [self] error in
-//            testCaseFailAndThrowError(error, lock)
-//        }
-//        self.wait(for: [lock], timeout: 1000.0)
-//    }
-//    
-//    func testDeleteMany() {
-//        let lock = XCTestExpectation(description: "wait for test delete many.")
-//        let filterInfo = ["author": "john doe2"]
-//        let deleteOptions = DeleteOptions()
-//        self.database!.deleteMany(collectionName, filterInfo, options: deleteOptions).done{ result in
-//            XCTAssertTrue(true)
-//            lock.fulfill()
-//        }.catch { [self] error in
-//            testCaseFailAndThrowError(error, lock)
-//        }
-//        self.wait(for: [lock], timeout: 1000.0)
-//    }
-//    
-//    func testDeleteCollection() {
-//        let lock = XCTestExpectation(description: "wait for test delete collection.")
-//        self.database!.deleteCollection(collectionName).done{ result in
-//            XCTAssertTrue(true)
-//            lock.fulfill()
-//        }.catch { [self] error in
-//            testCaseFailAndThrowError(error, lock)
-//        }
-//        self.wait(for: [lock], timeout: 1000.0)
-//    }
-    
     override func setUpWithError() throws {
         let lock = XCTestExpectation(description: "wait for test.")
         Log.setLevel(.Debug)
-        self.database = (TestData.shared.newVault().databaseService as! DatabaseServiceRender)
+        self.database = try TestData.shared.newVault().databaseService
         lock.fulfill()
         self.wait(for: [lock], timeout: 100.0)
     }

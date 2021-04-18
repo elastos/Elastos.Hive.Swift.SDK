@@ -106,7 +106,7 @@ extension HiveError {
         case .UnauthorizedStateException(let message):
             return "UnauthorizedStateException \(message)"
         case .VaultLockedException(let message):
-            return "VaultLockedException \(message)"
+            return "VaultLockedException \(message)"    
         }
     }
     

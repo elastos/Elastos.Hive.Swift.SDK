@@ -33,8 +33,8 @@ public class Vault: ServiceEndpoint {
     private var _backupService: BackupProtocol?
     private var _nodeManageService: NodeManageServiceRender?
 
-    public override init (_ context: AppContext, _ providerAddress: String, _ targetDid: String?, _ targetAppDid: String?) {
-        super.init(context, providerAddress, targetDid, targetAppDid)
+    public override init (_ context: AppContext, _ providerAddress: String) throws {
+        try super.init(context, providerAddress)
         self._filesService = ServiceBuilder(self).createFilesService()
         self._databaseService = ServiceBuilder(self).createDatabase()
         self._scriptingService = ServiceBuilder(self).createScriptingService()

@@ -36,12 +36,14 @@ public class FilesServiceRender: FilesProtocol {
     }
     
     public func upload(_ path: String) -> Promise<FileWriter> {
-        return Promise<FileWriter> { resolver in
-            if let url = URL(string: self._connectionManager.hiveApi.upload(path)) {
-                let writer: FileWriter = FileWriter(url, self.connectionManager)
-                resolver.fulfill(writer)
-            } else {
-                resolver.reject(HiveError.IllegalArgument(des: "Invalid url format."))
+        return Promise<Any>.async().then { [self] _ ->Promise<FileWriter> in
+            return Promise<FileWriter> { resolver in
+                if let url = URL(string: self._connectionManager.hiveApi.upload(path)) {
+                    let writer: FileWriter = FileWriter(url, self.connectionManager)
+                    resolver.fulfill(writer)
+                } else {
+                    resolver.reject(HiveError.IllegalArgument(des: "Invalid url format."))
+                }
             }
         }
     }
@@ -152,18 +154,4 @@ public class FilesServiceRender: FilesProtocol {
         }
     }
     
-}
-
-// TODO delete
-extension AFDataResponse {
-    
-    func validateResponse() throws -> JSON {
-        switch self.result {
-        case .success(let re):
-            let json = JSON(re)
-            return json
-        case .failure(let error):
-            throw error
-        }
-    }
 }
