@@ -33,6 +33,7 @@ public class AuthResponse: HiveResponse {
     }
     
     public override func mapping(map: Map) {
+        super.mapping(map: map)
         _accessToken <- map["access_token"]
     }
 }

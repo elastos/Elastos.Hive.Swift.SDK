@@ -33,6 +33,7 @@ public class SignInResponse: HiveResponse {
     }
 
     public override func mapping(map: Map) {
+        super.mapping(map: map)
         _challenge <- map["challenge"]
     }
  

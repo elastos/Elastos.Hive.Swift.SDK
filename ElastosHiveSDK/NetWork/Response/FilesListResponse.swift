@@ -27,10 +27,11 @@ public class FilesListResponse: HiveResponse {
     private var _fileInfoList: Array<FileInfo>?
     
     public var fileInfoList: Array<FileInfo> {
-        return _fileInfoList!
+        return _fileInfoList ?? []
     }
     
     public override func mapping(map: Map) {
+        super.mapping(map: map)
         _fileInfoList <- map["file_info_list"]
     }
 }

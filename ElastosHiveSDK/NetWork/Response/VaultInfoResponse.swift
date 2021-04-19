@@ -35,6 +35,7 @@ public class VaultInfoResponse: HiveResponse {
     private var _state: String?
 
     public override func mapping(map: Map) {
+        super.mapping(map: map)
         _did <- map["vault_service_info.did"]
         _maxStorage <- map["vault_service_info.max_storage"]
         _fileUseStorage <- map["vault_service_info.file_use_storage"]

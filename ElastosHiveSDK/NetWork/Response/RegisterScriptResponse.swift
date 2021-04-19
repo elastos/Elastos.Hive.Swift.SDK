@@ -30,10 +30,10 @@ public class RegisterScriptResponse: HiveResponse {
     private var _upsertedId: String?
 
     public override func mapping(map: Map) {
+        super.mapping(map: map)
         _acknowledged <- map["acknowledged"]
         _matchedCount <- map["matched_count"]
         _modifiedCount <- map["modified_count"]
         _upsertedId <- map["upserted_id"]
-
     }
 }
