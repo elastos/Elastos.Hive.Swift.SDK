@@ -28,7 +28,7 @@ public class OrderInfoResponse: HiveResponse {
     public var orderInfo: Order?
     
     public override func mapping(map: Map) {
-        status <- map["_status"]
+        super.mapping(map: map)
         orderInfo <- map["order_info"]
     }
 }

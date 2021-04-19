@@ -24,13 +24,14 @@ import Foundation
 import ObjectMapper
 
 public class CountDocResponse: HiveResponse {
-    private var _count: Int64?
+    private var _count: Int64 = 0
     
     public var count: Int64 {
-        return _count!
+        return _count
     }
     
     public override func mapping(map: Map) {
+        super.mapping(map: map)
         _count <- map["count"]
     }
 }

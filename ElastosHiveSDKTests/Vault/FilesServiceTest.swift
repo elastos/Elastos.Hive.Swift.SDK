@@ -83,7 +83,7 @@ class FilesServiceTest: XCTestCase {
 
             let lockB = XCTestExpectation(description: "check verify remote file exists.")
             self.verifyRemoteFileExists(self.remoteTxtFilePath!).done { fileInfo in
-                XCTAssert(fileInfo.size! > 0)
+                XCTAssert(fileInfo.size > 0)
                 lockB.fulfill()
             }.catch { error in
                 XCTFail("\(error)")
@@ -117,7 +117,7 @@ class FilesServiceTest: XCTestCase {
             
             let lockB = XCTestExpectation(description: "check verify remote file exists.")
             self.verifyRemoteFileExists(self.remoteImgFilePath!).done { fileInfo in
-                XCTAssert(fileInfo.size! > 0)
+                XCTAssert(fileInfo.size > 0)
                 lockB.fulfill()
             }.catch { error in
                 XCTFail("\(error)")
@@ -232,10 +232,13 @@ class FilesServiceTest: XCTestCase {
     
     func test06Copy() {
         let lock = XCTestExpectation(description: "wait test copy.")
-        self.filesService!.copy(self.remoteTxtFilePath!, self.remoteBackupTxtFilePath!).then({ isSuccess -> Promise<FileInfo> in
+        
+        self.filesService!.delete(self.remoteBackupTxtFilePath!).then { isSuccess -> Promise<Bool> in
+            return self.filesService!.copy(self.remoteTxtFilePath!, self.remoteBackupTxtFilePath!)
+        }.then({ isSuccess -> Promise<FileInfo> in
             return self.verifyRemoteFileExists(self.remoteBackupTxtFilePath!)
         }).done({ fileInfo in
-            XCTAssert(fileInfo.size! > 0)
+            XCTAssert(fileInfo.size > 0)
             lock.fulfill()
         }).catch { error in
             XCTFail("\(error)")
@@ -244,12 +247,76 @@ class FilesServiceTest: XCTestCase {
         self.wait(for: [lock], timeout: 10000.0)
     }
     
-    func test07DeleteFile() {
+    func test07List() {
+        let lock = XCTestExpectation(description: "wait get list info.")
+        self.filesService!.list(self.remoteRootDir!).done({ (result) in
+            XCTAssert(result.count > 0)
+            lock.fulfill()
+        }).catch({ error in
+            XCTFail("\(error)")
+            lock.fulfill()
+        })
+        self.wait(for: [lock], timeout: 10000.0)
+    }
+    
+    func test08Move() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        self.filesService!.delete(self.remoteBackupTxtFilePath!).then({ (result) -> Promise<Bool> in
+            return self.filesService!.move(self.remoteTxtFilePath!, self.remoteBackupTxtFilePath!)
+        }).done { isSuccess in
+            self.filesService!.download(self.remoteBackupTxtFilePath!).done({ reader in
+                do {
+                    let fileurl = self.createFilePathForDownload("swift_download_1.txt")
+                    while !reader.didLoadFinish {
+                        if let data = reader.read({ error in
+                            XCTFail("\(error)")
+                            lock.fulfill()
+                        }){
+                            let fileHandle = try FileHandle(forWritingTo: fileurl)
+                            fileHandle.seekToEndOfFile()
+                            fileHandle.write(data)
+                            fileHandle.closeFile()
+                        }
+                    }
+                    reader.close { (success, error) in
+                        XCTAssertFalse(error != nil)
+                    }
+                    
+                    let dir = FileManager.default.urls(for: FileManager.SearchPathDirectory.cachesDirectory,
+                                                       in: FileManager.SearchPathDomainMask.userDomainMask).last!
+                    let backupTxtURL = dir.appendingPathComponent("swift_download_1.txt")
+                    let backupTxtData = try Data(contentsOf: backupTxtURL)
+                    let backupTxtString = String(data: backupTxtData, encoding: .utf8)
+  
+                    let bundle = Bundle(for: type(of: self))
+                    let srcTxtURL: String = bundle.path(forResource: "test_ios", ofType: "txt")!
+                    let srcTxtData = try! Data(contentsOf: URL(fileURLWithPath: srcTxtURL))
+                    let srcTxtString = String(data: srcTxtData, encoding: .utf8)
+                    
+                    XCTAssert(backupTxtString == srcTxtString)
+                    lock.fulfill()
+                } catch {
+                    XCTFail("\(error)")
+                    lock.fulfill()
+                }
+            }).catch({ (error) in
+                XCTFail("\(error)")
+                lock.fulfill()
+            })
+        }.catch({ error in
+            XCTFail("\(error)")
+            lock.fulfill()
+        })
+        self.wait(for: [lock], timeout: 10000.0)
+    }
+    
+    
+    func test09DeleteFile() {
         let lock = XCTestExpectation(description: "wait test delete file.")
         self.filesService!.delete(self.remoteTxtFilePath!).then { isSuccess -> Promise<Bool> in
             return self.filesService!.delete(self.remoteBackupTxtFilePath!)
         }.then { isSuccess -> Promise<FileInfo> in
-            return self.verifyRemoteFileExists(self.remoteTxtFilePath!)
+            return self.filesService!.stat(self.remoteTxtFilePath!)
         }.done { fileInfo in
             lock.fulfill()
         }.catch { error in
@@ -259,6 +326,7 @@ class FilesServiceTest: XCTestCase {
         self.wait(for: [lock], timeout: 10000.0)
     }
     
+        
     func createFilePathForDownload(_ downloadPath: String) -> URL {
         let dir = FileManager.default.urls(for: FileManager.SearchPathDirectory.cachesDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).last
         let fileurl = dir?.appendingPathComponent(downloadPath)
@@ -280,199 +348,4 @@ class FilesServiceTest: XCTestCase {
             })
         }
     }
-    
-    
-//
-//    func testDeleteFile() {
-//        self.filesService!.delete(self.remoteTxtFilePath!).then({ isSuccess -> Promise<Bool> in
-//            return self.filesService!.delete(self.remoteBackupTxtFilePath!)
-//        }).done { isSuccess in
-//
-//        }.catch { error in
-//            XCTFail("\(error)")
-//        }
-//    }
-//
-//    func testRemoteFileNotExistsException() {
-//        self.filesService!.hash(self.remoteNotExistsFilePath!).done { hashCode in
-//
-//        }.catch { error in
-//            XCTFail("\(error)")
-//        }
-//    }
-//
-//    func testVaultLockException() {
-//
-//    }
-//
-//    private func uploadTextReally() {
-//        self.filesService!.upload(self.remoteTxtFilePath!).done({ fileWriter in
-//            let data = try Data(contentsOf: URL(fileURLWithPath: self.localTxtFilePath!))
-//            try fileWriter.write(data: data, { err in
-//            })
-//            fileWriter.close { (success, error) in
-//
-//            }
-//        }).catch { error in
-//            XCTFail("\(error)")
-//        }
-//    }
-    
-//    private void uploadTextReally() throws IOException, ExecutionException, InterruptedException {
-//        try (Writer writer = filesService.upload(remoteTxtFilePath, Writer.class).get();
-//             FileReader fileReader = new FileReader(localTxtFilePath)) {
-//            Assertions.assertNotNull(writer);
-//            char[] buffer = new char[1];
-//            while (fileReader.read(buffer) != -1) {
-//                writer.write(buffer);
-//            }
-//        }
-//    }
-    
-//    func test04_downloadBin()  {
-//        let lock = XCTestExpectation(description: "wait download image.")
-//        self.filesService?.download(self.remoteImgPath!).done({ [self] (reader) in
-//            let fileurl = createFilePathForDownload("swift_download.png")
-//            while !reader.didLoadFinish {
-//                if let data = reader.read({ error in
-//                    print(error)
-//                }) {
-//                    if let fileHandle = try? FileHandle(forWritingTo: fileurl) {
-//                        fileHandle.seekToEndOfFile()
-//                        fileHandle.write(data)
-//                        fileHandle.closeFile()
-//                    } else {
-//                        XCTFail()
-//                        lock.fulfill()
-//                    }
-//                }
-//            }
-//            reader.close { (success, error) in
-//                success ? XCTAssert(success) : XCTFail()
-//                lock.fulfill()
-//            }
-//        }).catch {[self] error in
-//            try! testCaseFailAndThrowError(error, lock)
-//        }
-//        self.wait(for: [lock], timeout: 10000.0)
-//    }
-//
-//    func test03_downloadText() throws {
-//        let lock = XCTestExpectation(description: "wait download txt file from remote.")
-//        self.filesService?.download(self.remoteTextPath!).done({ [self] (reader) in
-//            let fileurl = createFilePathForDownload("test_ios_download.txt")
-//            while !reader.didLoadFinish {
-//                if let data = reader.read({ error in
-//                    print(error)
-//                }) {
-//                    if let fileHandle = try? FileHandle(forWritingTo: fileurl) {
-//                        fileHandle.seekToEndOfFile()
-//                        fileHandle.write(data)
-//                        fileHandle.closeFile()
-//                    } else {
-//                        XCTFail()
-//                        lock.fulfill()
-//                    }
-//                }
-//            }
-//            reader.close { (success, error) in
-//                success ? XCTAssert(success) : XCTFail()
-//                lock.fulfill()
-//            }
-//        }).catch {[self] error in
-//            try! testCaseFailAndThrowError(error, lock)
-//        }
-//        self.wait(for: [lock], timeout: 10000.0)
-//    }
-//
-//    func test05_list() throws {
-//        let lock = XCTestExpectation(description: "wait get list info.")
-//        self.filesService?.list(self.remoteRootPath!).done({ (result) in
-//            XCTAssert(result.count > 0)
-//            lock.fulfill()
-//        }).catch({[self] error in
-//            try! testCaseFailAndThrowError(error, lock)
-//        })
-//        self.wait(for: [lock], timeout: 10000.0)
-//    }
-//
-//    func test06_hash() throws {
-//        let lock = XCTestExpectation(description: "check txt file hash code.")
-//        self.filesService?.hash(self.remoteTextPath!).done({ (hash) in
-//            XCTAssert(hash.count > 0)
-//            lock.fulfill()
-//        }).catch({[self] (error) in
-//            try! testCaseFailAndThrowError(error, lock)
-//        })
-//        self.wait(for: [lock], timeout: 10000.0)
-//    }
-//
-//    func test07_move() throws {
-//        let lock = XCTestExpectation(description: "wait for test.")
-//        self.filesService!.delete(self.remoteTextBackupPath!).then({ (result) -> Promise<Bool> in
-//            return self.filesService!.move(self.remoteTextPath!, self.remoteTextBackupPath!)
-//        }).done { (result) in
-//            self.filesService!.download(self.remoteTextBackupPath!).done({ [self] (reader) in
-//                let fileurl = createFilePathForDownload("swift_download_1.txt")
-//                while !reader.didLoadFinish {
-//                    if let data = reader.read({ error in
-//                        print(error)
-//                    }){
-//                        if let fileHandle = try? FileHandle(forWritingTo: fileurl) {
-//                            fileHandle.seekToEndOfFile()
-//                            fileHandle.write(data)
-//                            fileHandle.closeFile()
-//                        } else {
-//                            XCTFail()
-//                            lock.fulfill()
-//                        }
-//                    }
-//                }
-//                reader.close { (success, error) in
-//                    success ? XCTAssert(success) : XCTFail()
-//                    lock.fulfill()
-//                }
-//            }).catch({[self] (error) in
-//                try! testCaseFailAndThrowError(error, lock)
-//            })
-//        }.catch({[self] (error) in
-//            try! testCaseFailAndThrowError(error, lock)
-//        })
-//        self.wait(for: [lock], timeout: 10000.0)
-//    }
-//
-//
-//    func test08_copy() throws {
-//        let lock = XCTestExpectation(description: "wait copy file.")
-//        self.filesService?.copy(self.remoteTextBackupPath!, self.remoteTextPath!).done({ (result) in
-//            XCTAssert(result)
-//            lock.fulfill()
-//        }).catch({[self] (error) in
-//            try! testCaseFailAndThrowError(error, lock)
-//        })
-//        self.wait(for: [lock], timeout: 10000.0)
-//    }
-//
-//    func test09_deleteFile() throws {
-//        let lock = XCTestExpectation(description: "wait delete file.")
-//        self.filesService?.delete(self.remoteTextPath!).done({ (result) in
-//            XCTAssert(result)
-//            lock.fulfill()
-//        }).catch({[self] (error) in
-//            try! testCaseFailAndThrowError(error, lock)
-//        })
-//        self.wait(for: [lock], timeout: 10000.0)
-//    }
-//
-//    func verifyRemoteFileExists(_ path: String) -> Promise<Bool> {
-//        return self.filesService!.stat(path).then({ (fileInfo) -> Promise<Bool> in
-//            return Promise<Bool> { resolver in
-//                resolver.fulfill(fileInfo.size! > 0)
-//            }
-//        })
-//    }
-//
-
-    
-
 }

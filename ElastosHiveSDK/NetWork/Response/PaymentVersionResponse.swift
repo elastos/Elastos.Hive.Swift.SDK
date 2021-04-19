@@ -33,7 +33,7 @@ public class PaymentVersionResponse: HiveResponse {
     }
     
     public override func mapping(map: Map) {
-        status <- map["_status"]
+        super.mapping(map: map)
         _version <- map["version"]
     }
 }
