@@ -32,7 +32,7 @@ public class PaymentPlanResponse: HiveResponse {
     public var serviceDays: Int64?
 
     public override func mapping(map: Map) {
-        status <- map["_status"]
+        super.mapping(map: map)
         amount <- map["amount"]
         currency <- map["currency"]
         maxStorage <- map["maxStorage"]

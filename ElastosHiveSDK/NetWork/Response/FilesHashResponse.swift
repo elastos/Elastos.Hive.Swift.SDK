@@ -33,6 +33,7 @@ public class FilesHashResponse: HiveResponse {
     }
 
     public override func mapping(map: Map) {
+        super.mapping(map: map)
         _sha256 <- map["SHA256"]
     }
 }

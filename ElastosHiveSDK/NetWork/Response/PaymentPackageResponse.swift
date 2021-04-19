@@ -31,7 +31,7 @@ public class PaymentPackageResponse: HiveResponse {
     public var waitTxTimeout: Int64?
     
     public override func mapping(map: Map) {
-        status <- map["_status"]
+        super.mapping(map: map)
         backupPlans <- map["backupPlans"]
         pricingPlans <- map["pricingPlans"]
         waitTxTimeout <- map["paymentSettings.wait_tx_timeout"]

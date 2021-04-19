@@ -33,6 +33,7 @@ public class NodeCommitHashResponse: HiveResponse {
     }
 
     public override func mapping(map: Map) {
+        super.mapping(map: map)
         _commitHash <- map["commit_hash"]
     }
     

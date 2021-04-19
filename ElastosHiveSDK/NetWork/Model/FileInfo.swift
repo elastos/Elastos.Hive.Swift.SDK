@@ -21,15 +21,16 @@
  */
 
 import Foundation
+import ObjectMapper
 
-public class FileInfo: NSObject {
+public class FileInfo: Mappable {
     private var _type: String?
     private var _name: String?
-    private var _size: Int?
-    private var _lastModify: Double?
-
-    public override init() {
-
+    private var _size: Int = 0
+    private var _lastModify: Double = 0.0
+    
+    public init() {
+        
     }
 
     public var name: String? {
@@ -50,7 +51,7 @@ public class FileInfo: NSObject {
         }
     }
 
-    public var size: Int? {
+    public var size: Int {
         set {
             _size = newValue
         }
@@ -63,12 +64,23 @@ public class FileInfo: NSObject {
         _size = size
     }
 
-    public var lastModify: Double? {
+    public var lastModify: Double {
         set {
             _lastModify = newValue
         }
         get {
             return _lastModify
         }
+    }
+    
+    required public init?(map: Map) {
+
+    }
+    
+    public func mapping(map: Map) {
+        _lastModify <- map["last_modify"]
+        _type <- map["type"]
+        _size <- map["size"]
+        _name <- map["name"]
     }
 }

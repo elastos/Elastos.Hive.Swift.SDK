@@ -24,12 +24,12 @@ import Foundation
 import ObjectMapper
 
 public class InsertDocsResponse: HiveResponse {
-    private var _acknowledged: Bool?
+    private var _acknowledged: Bool = false
     private var _insertedIds: Array<String>?
 
     public var acknowledged: Bool {
         get {
-            return _acknowledged!
+            return _acknowledged
         }
     }
     
@@ -40,6 +40,7 @@ public class InsertDocsResponse: HiveResponse {
     }
     
     public override func mapping(map: Map) {
+        super.mapping(map: map)
         _acknowledged <- map["acknowledged"]
         _insertedIds <- map["inserted_ids"]
     }

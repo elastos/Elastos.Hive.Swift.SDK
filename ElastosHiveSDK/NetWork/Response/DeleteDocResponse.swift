@@ -24,22 +24,23 @@ import Foundation
 import ObjectMapper
 
 public class DeleteDocResponse: HiveResponse {
-    private var _acknowledged: Bool?
-    private var _deletedCount: Int?
+    private var _acknowledged: Bool = false
+    private var _deletedCount: Int = 0
     
     public var acknowledged: Bool {
         get {
-            return _acknowledged!
+            return _acknowledged
         }
     }
     
     public var deletedCount: Int {
         get {
-            return _deletedCount!
+            return _deletedCount
         }
     }
     
     public override func mapping(map: Map) {
+        super.mapping(map: map)
         status <- map["_status"]
         _acknowledged <- map["acknowledged"]
         _deletedCount <- map["deleted_count"]

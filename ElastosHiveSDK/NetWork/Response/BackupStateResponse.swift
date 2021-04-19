@@ -28,6 +28,7 @@ public class BackupStateResponse: HiveResponse {
     private var _result: String?
             
     public override func mapping(map: Map) {
+        super.mapping(map: map)
         _hiveBackupState <- map["hive_backup_state"]
         _result <- map["result"]
     }

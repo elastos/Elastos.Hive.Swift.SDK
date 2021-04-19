@@ -33,6 +33,7 @@ public class FindDocsResponse: HiveResponse {
     }
     
     public override func mapping(map: Map) {
+        super.mapping(map: map)
         _items <- map["items"]
     }
 }
