@@ -130,7 +130,7 @@ public class PaymentServiceRender: HiveVaultRender {
                 method: .post,
                 parameters: params,
                 headers: try self.connectionManager.headers()).get()
-                resolver.fulfill(nil)
+                resolver.fulfill(Receipt())
             }
         }
     }

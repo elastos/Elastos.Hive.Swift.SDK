@@ -34,6 +34,10 @@ public class Receipt: Mappable  {
     private var _currency: Double?
     private var _createdTime: Int64?
     
+    public init() {
+        
+    }
+    
     public var receiptId: String {
         get {
             return _receiptId!

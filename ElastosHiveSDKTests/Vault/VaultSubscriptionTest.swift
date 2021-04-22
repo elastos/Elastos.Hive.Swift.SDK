@@ -25,99 +25,99 @@ import XCTest
 import ElastosDIDSDK
 
 class VaultSubscriptionTest: XCTestCase {
-    private var subscription: VaultSubscription?
-    private var hiveAPI: HiveAPi?
-    private var orderId = "5fbdf4ee46c829dc73a9a3d2"
-
-    override func setUpWithError() throws {
-        let testData = TestData.shared;
-        self.subscription = try VaultSubscription(testData.appContext, testData.providerAddress);
-    }
-    
-    func test01Subscribe() throws {
-        let lock = XCTestExpectation(description: "wait for test subscribe.")
-        self.subscription!.subscribe("free").done({ (vaultInfo) in
-            
-        }).catch({ error in
-            XCTFail("\(error)")
-            lock.fulfill()
-        })
-        self.wait(for: [lock], timeout: 1000.0)
-    }
-    
-    func test02Activate() throws {
-        let lock = XCTestExpectation(description: "wait for test activate.")
-        self.subscription!.activate().done({ _ in
-            XCTAssertTrue(true)
-            lock.fulfill()
-        }).catch({ error in
-            XCTFail("\(error)")
-            lock.fulfill()
-        })
-        self.wait(for: [lock], timeout: 1000.0)
-    }
-    
-    
-    func test03CheckSubscription() throws {
-        let lock = XCTestExpectation(description: "wait for test check subscription.")
-        self.subscription!.checkSubscription().done ({ vaultInfo in
-            XCTAssertTrue(true)
-            lock.fulfill()
-        }).catch({ error in
-            XCTFail("\(error)")
-            lock.fulfill()
-        })
-        self.wait(for: [lock], timeout: 1000.0)
-    }
-
-    func test04Deactivate() throws {
-        let lock = XCTestExpectation(description: "wait for test deactivate.")
-        self.subscription!.deactivate().done({ _ in
-            XCTAssertTrue(true)
-            lock.fulfill()
-        }).catch({ error in
-            XCTFail("\(error)")
-            lock.fulfill()
-        })
-        self.wait(for: [lock], timeout: 1000.0)
-    }
-    
-    
-    
-    func test05Unsubscribe() throws {
-        let lock = XCTestExpectation(description: "wait for test unsubscribe.")
-        self.subscription!.unsubscribe().done({ _ in
-            XCTAssertTrue(true)
-            lock.fulfill()
-        }).catch({ error in
-            XCTFail("\(error)")
-            lock.fulfill()
-        })
-        self.wait(for: [lock], timeout: 1000.0)
-    }
-
-    
-    func test06GetFileHashProcess() throws {
-        let lock = XCTestExpectation(description: "wait for test deactivate.")
-        self.subscription!.subscribe("free").then({ vaultInfo -> Promise<Void> in
-            return self.subscription!.activate()
-        }).then { _ -> Promise<Void> in
-            return Promise<Void> { resolver in
-                FilesServiceTest().test05Hash()
-                resolver.fulfill(Void())
-            }
-        }.then { _ -> Promise<Void> in
-            return self.subscription!.deactivate()
-        }.then { _ -> Promise<Void> in
-            return self.subscription!.unsubscribe()
-        }.done { _ in
-            XCTAssert(true)
-            lock.fulfill()
-        }.catch { error in
-            XCTFail("\(error)")
-            lock.fulfill()
-        }
-        self.wait(for: [lock], timeout: 1000.0)
-    }
+//    private var subscription: VaultSubscription?
+//    private var hiveAPI: HiveAPi?
+//    private var orderId = "5fbdf4ee46c829dc73a9a3d2"
+//
+//    override func setUpWithError() throws {
+//        let testData = TestData.shared;
+//        self.subscription = try VaultSubscription(testData.appContext, testData.providerAddress);
+//    }
+//    
+//    func test01Subscribe() throws {
+//        let lock = XCTestExpectation(description: "wait for test subscribe.")
+//        self.subscription!.subscribe("free").done({ (vaultInfo) in
+//            
+//        }).catch({ error in
+//            XCTFail("\(error)")
+//            lock.fulfill()
+//        })
+//        self.wait(for: [lock], timeout: 1000.0)
+//    }
+//    
+//    func test02Activate() throws {
+//        let lock = XCTestExpectation(description: "wait for test activate.")
+//        self.subscription!.activate().done({ _ in
+//            XCTAssertTrue(true)
+//            lock.fulfill()
+//        }).catch({ error in
+//            XCTFail("\(error)")
+//            lock.fulfill()
+//        })
+//        self.wait(for: [lock], timeout: 1000.0)
+//    }
+//    
+//    
+//    func test03CheckSubscription() throws {
+//        let lock = XCTestExpectation(description: "wait for test check subscription.")
+//        self.subscription!.checkSubscription().done ({ vaultInfo in
+//            XCTAssertTrue(true)
+//            lock.fulfill()
+//        }).catch({ error in
+//            XCTFail("\(error)")
+//            lock.fulfill()
+//        })
+//        self.wait(for: [lock], timeout: 1000.0)
+//    }
+//
+//    func test04Deactivate() throws {
+//        let lock = XCTestExpectation(description: "wait for test deactivate.")
+//        self.subscription!.deactivate().done({ _ in
+//            XCTAssertTrue(true)
+//            lock.fulfill()
+//        }).catch({ error in
+//            XCTFail("\(error)")
+//            lock.fulfill()
+//        })
+//        self.wait(for: [lock], timeout: 1000.0)
+//    }
+//    
+//    
+//    
+//    func test05Unsubscribe() throws {
+//        let lock = XCTestExpectation(description: "wait for test unsubscribe.")
+//        self.subscription!.unsubscribe().done({ _ in
+//            XCTAssertTrue(true)
+//            lock.fulfill()
+//        }).catch({ error in
+//            XCTFail("\(error)")
+//            lock.fulfill()
+//        })
+//        self.wait(for: [lock], timeout: 1000.0)
+//    }
+//
+//    
+//    func test06GetFileHashProcess() throws {
+//        let lock = XCTestExpectation(description: "wait for test deactivate.")
+//        self.subscription!.subscribe("free").then({ vaultInfo -> Promise<Void> in
+//            return self.subscription!.activate()
+//        }).then { _ -> Promise<Void> in
+//            return Promise<Void> { resolver in
+//                FilesServiceTest().test05Hash()
+//                resolver.fulfill(Void())
+//            }
+//        }.then { _ -> Promise<Void> in
+//            return self.subscription!.deactivate()
+//        }.then { _ -> Promise<Void> in
+//            return self.subscription!.unsubscribe()
+//        }.done { _ in
+//            XCTAssert(true)
+//            lock.fulfill()
+//        }.catch { error in
+//            XCTFail("\(error)")
+//            lock.fulfill()
+//        }
+//        self.wait(for: [lock], timeout: 1000.0)
+//    }
 
 }
