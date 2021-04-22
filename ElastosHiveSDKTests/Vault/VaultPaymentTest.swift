@@ -34,10 +34,22 @@ class VaultPaymentTest: XCTestCase {
         self.paymentService = try VaultSubscription(testData.appContext, testData.providerAddress)
     }
     
-    func testGetPricingPlanList() {
+    func test01GetPricingPlanList() {
         let lock = XCTestExpectation(description: "wait for get pricing plan list.")
         self.paymentService!.getPricingPlanList().done({ pricingPlan in
             XCTAssert(pricingPlan!.count > 0)
+            lock.fulfill()
+        }).catch { error in
+            XCTFail("\(error)")
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+    
+    func test02GetPricingPlan() {
+        let lock = XCTestExpectation(description: "wait for get pricing plan.")
+        self.paymentService!.getPricingPlan(self.planName).done({ pricingPlan in
+            XCTAssert(pricingPlan != nil)
             lock.fulfill()
         }).catch { error in
             XCTFail()
@@ -45,33 +57,23 @@ class VaultPaymentTest: XCTestCase {
         }
         self.wait(for: [lock], timeout: 1000.0)
     }
-    
-//    func testGetPricingPlan() {
-//        let lock = XCTestExpectation(description: "wait for get pricing plan.")
-//        self.paymentService!.getPricingPlan(self.planName).done({ pricingPlan in
-//            XCTAssert(pricingPlan != nil)
-//            lock.fulfill()
-//        }).catch { error in
-//            XCTFail()
-//            lock.fulfill()
-//        }
-//        self.wait(for: [lock], timeout: 1000.0)
-//    }
 
-    // TODO
-//    func testOrderProcess() {
-//        let lock = XCTestExpectation(description: "wait for get pricing plan.")
-//        try! self.paymentService!.placeOrder(self.planName).then({ order -> Promise<Receipt> in
-//            
-//            return self.paymentService!.payOrder(order!.orderId!, [])
-//        }).done({ receipt in
-//            print(receipt)
-//        }).catch { error in
-//            XCTFail()
-//            lock.fulfill()
-//        }
-//        
-//        self.wait(for: [lock], timeout: 1000.0)
-//    }
+    func test03OrderProcess() {
+        let lock = XCTestExpectation(description: "wait for get pricing plan.")
+        try! self.paymentService!.placeOrder(self.planName).then({ order -> Promise<Order?> in
+            XCTAssert(order != nil)
+            return self.paymentService!.getOrder(order!.orderId!)
+        }).then({ order -> Promise<Receipt?> in
+            XCTAssert(order != nil)
+            return self.paymentService!.payOrder(order!.orderId!, [])
+        }).done({ receipt in
+            XCTAssert(receipt != nil)
+            lock.fulfill()
+        }).catch { error in
+            XCTFail("\(error)")
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
     
 }

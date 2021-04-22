@@ -176,8 +176,8 @@ class FilesServiceTest: XCTestCase {
     
     func test04DownloadBin() {
         let lock = XCTestExpectation(description: "wait download bin file from remote.")
-        self.filesService!.download(self.remoteTxtFilePath!).done({ [self] (reader) in
-            let fileurl = createFilePathForDownload("test_ios_download.txt")
+        self.filesService!.download(self.remoteImgFilePath!).done({ [self] (reader) in
+            let fileurl = createFilePathForDownload("swift_download.png")
             while !reader.didLoadFinish {
                 if let data = reader.read({ error in
                     XCTFail("\(error)")

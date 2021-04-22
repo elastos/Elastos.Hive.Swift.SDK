@@ -27,55 +27,55 @@ import ElastosDIDSDK
 class BackupSubscriptionTest: XCTestCase {
     private var subscription: BackupSubscription?
 
-    override func setUpWithError() throws {
-        let testData: TestData = TestData.shared;
-        self.subscription = try BackupSubscription(testData.appContext, testData.providerAddress)
-    }
-    
-    func test01Subscribe() throws {
-        let lock = XCTestExpectation(description: "wait for subscribe.")
-        self.subscription!.subscribe("fake_pricing_plan_name").done({ backupInfo in
-            lock.fulfill()
-        }).catch({ error in
-            XCTFail("\(error)")
-            lock.fulfill()
-        })
-        self.wait(for: [lock], timeout: 1000.0)
-    }
-    
-    func test02Activate() throws {
-        let lock = XCTestExpectation(description: "wait for activate.")
-        self.subscription!.activate().done ({ _ in
-            lock.fulfill()
-        }).catch({ error in
-            XCTFail("\(error)")
-            lock.fulfill()
-        })
-        self.wait(for: [lock], timeout: 1000.0)
-    }
-    
-    func test03Deactivate() throws {
-        let lock = XCTestExpectation(description: "wait for deactivate.")
-        self.subscription!.deactivate().done ({ _ in
-            lock.fulfill()
-        }).catch({ error in
-            XCTFail("\(error)")
-            lock.fulfill()
-        })
-        self.wait(for: [lock], timeout: 1000.0)
-    }
-
-    func testUnsubscribe() throws {
-        let lock = XCTestExpectation(description: "wait for unsubscribe.")
-        self.subscription!.activate().done ({ _ in
-            lock.fulfill()
-        }).catch({ error in
-            XCTFail("\(error)")
-            lock.fulfill()
-        })
-        self.wait(for: [lock], timeout: 1000.0)
-    }
-    
-    
+//    override func setUpWithError() throws {
+//        let testData: TestData = TestData.shared;
+//        self.subscription = try BackupSubscription(testData.appContext, testData.providerAddress)
+//    }
+//    
+//    func test01Subscribe() throws {
+//        let lock = XCTestExpectation(description: "wait for subscribe.")
+//        self.subscription!.subscribe("fake_pricing_plan_name").done({ backupInfo in
+//            lock.fulfill()
+//        }).catch({ error in
+//            XCTFail("\(error)")
+//            lock.fulfill()
+//        })
+//        self.wait(for: [lock], timeout: 1000.0)
+//    }
+//    
+//    func test02Activate() throws {
+//        let lock = XCTestExpectation(description: "wait for activate.")
+//        self.subscription!.activate().done ({ _ in
+//            lock.fulfill()
+//        }).catch({ error in
+//            XCTFail("\(error)")
+//            lock.fulfill()
+//        })
+//        self.wait(for: [lock], timeout: 1000.0)
+//    }
+//    
+//    func test03Deactivate() throws {
+//        let lock = XCTestExpectation(description: "wait for deactivate.")
+//        self.subscription!.deactivate().done ({ _ in
+//            lock.fulfill()
+//        }).catch({ error in
+//            XCTFail("\(error)")
+//            lock.fulfill()
+//        })
+//        self.wait(for: [lock], timeout: 1000.0)
+//    }
+//
+//    func testUnsubscribe() throws {
+//        let lock = XCTestExpectation(description: "wait for unsubscribe.")
+//        self.subscription!.activate().done ({ _ in
+//            lock.fulfill()
+//        }).catch({ error in
+//            XCTFail("\(error)")
+//            lock.fulfill()
+//        })
+//        self.wait(for: [lock], timeout: 1000.0)
+//    }
+//    
+//    
 
 }
