@@ -24,9 +24,9 @@ import XCTest
 @testable import ElastosHiveSDK
 import ElastosDIDSDK
 
-class BackupSubscriptionTest: XCTestCase {
-    private var subscription: BackupSubscription?
-
+//class BackupSubscriptionTest: XCTestCase {
+//    private var subscription: BackupSubscription?
+//
 //    override func setUpWithError() throws {
 //        let testData: TestData = TestData.shared;
 //        self.subscription = try BackupSubscription(testData.appContext, testData.providerAddress)
@@ -34,7 +34,7 @@ class BackupSubscriptionTest: XCTestCase {
 //    
 //    func test01Subscribe() throws {
 //        let lock = XCTestExpectation(description: "wait for subscribe.")
-//        self.subscription!.subscribe("fake_pricing_plan_name").done({ backupInfo in
+//        self.subscription!.subscribe().done({ backupInfo in
 //            lock.fulfill()
 //        }).catch({ error in
 //            XCTFail("\(error)")
@@ -75,7 +75,5 @@ class BackupSubscriptionTest: XCTestCase {
 //        })
 //        self.wait(for: [lock], timeout: 1000.0)
 //    }
-//    
-//    
-
-}
+//
+//}

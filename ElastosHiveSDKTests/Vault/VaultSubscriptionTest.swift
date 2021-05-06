@@ -33,18 +33,18 @@ class VaultSubscriptionTest: XCTestCase {
 //        let testData = TestData.shared;
 //        self.subscription = try VaultSubscription(testData.appContext, testData.providerAddress);
 //    }
-//    
+//
 //    func test01Subscribe() throws {
 //        let lock = XCTestExpectation(description: "wait for test subscribe.")
-//        self.subscription!.subscribe("free").done({ (vaultInfo) in
-//            
+//        self.subscription!.subscribe().done({ (vaultInfo) in
+//
 //        }).catch({ error in
 //            XCTFail("\(error)")
 //            lock.fulfill()
 //        })
 //        self.wait(for: [lock], timeout: 1000.0)
 //    }
-//    
+//
 //    func test02Activate() throws {
 //        let lock = XCTestExpectation(description: "wait for test activate.")
 //        self.subscription!.activate().done({ _ in
@@ -56,8 +56,8 @@ class VaultSubscriptionTest: XCTestCase {
 //        })
 //        self.wait(for: [lock], timeout: 1000.0)
 //    }
-//    
-//    
+//
+//
 //    func test03CheckSubscription() throws {
 //        let lock = XCTestExpectation(description: "wait for test check subscription.")
 //        self.subscription!.checkSubscription().done ({ vaultInfo in
@@ -81,9 +81,9 @@ class VaultSubscriptionTest: XCTestCase {
 //        })
 //        self.wait(for: [lock], timeout: 1000.0)
 //    }
-//    
-//    
-//    
+//
+//
+//
 //    func test05Unsubscribe() throws {
 //        let lock = XCTestExpectation(description: "wait for test unsubscribe.")
 //        self.subscription!.unsubscribe().done({ _ in
@@ -96,7 +96,7 @@ class VaultSubscriptionTest: XCTestCase {
 //        self.wait(for: [lock], timeout: 1000.0)
 //    }
 //
-//    
+//
 //    func test06GetFileHashProcess() throws {
 //        let lock = XCTestExpectation(description: "wait for test deactivate.")
 //        self.subscription!.subscribe("free").then({ vaultInfo -> Promise<Void> in

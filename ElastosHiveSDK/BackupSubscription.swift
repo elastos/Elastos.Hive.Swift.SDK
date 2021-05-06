@@ -53,7 +53,7 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionProtocol, PaymentP
         self._subscriptionService = SubscriptionServiceRender(self)
     }
 
-    public func subscribe(_ pricingPlan: String) -> Promise<BackupInfo> {
+    public func subscribe() -> Promise<BackupInfo> {
         return Promise<Any>.async().then { _ -> Promise<BackupInfo> in
             return Promise<BackupInfo> { resolver in
                 self._subscriptionService!.subscribeBackup().then { _ -> Promise<VaultInfoResponse> in
