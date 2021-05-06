@@ -53,23 +53,13 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionProtocol, PaymentP
         self._subscriptionService = SubscriptionServiceRender(self)
     }
 
-    // TODO
     public func subscribe(_ pricingPlan: String) -> Promise<BackupInfo> {
         return Promise<Any>.async().then { _ -> Promise<BackupInfo> in
             return Promise<BackupInfo> { resolver in
                 self._subscriptionService!.subscribeBackup().then { _ -> Promise<VaultInfoResponse> in
                     return self._subscriptionService!.getBackupVaultInfo()
                 }.done { response in
-                    let backupInfo = BackupInfo()
-                    backupInfo.did = response.did
-                    backupInfo.maxStorage = response.maxStorage
-                    backupInfo.fileUseStorage = response.fileUseStorage
-                    backupInfo.dbUseStorage = response.dbUseStorage
-                    backupInfo.modifyTime = Date(timeIntervalSince1970: TimeInterval(integerLiteral: response.modifyTime))
-                    backupInfo.startTime = Date(timeIntervalSince1970: TimeInterval(integerLiteral: response.startTime))
-                    backupInfo.endTime = Date(timeIntervalSince1970: TimeInterval(integerLiteral: response.endTime))
-                    backupInfo.pricingUsing = response.pricingUsing
-                    backupInfo.isExisting = response.isExisting
+                    let backupInfo = self.getBackupInfoByResponseBody(response)
                     resolver.fulfill(backupInfo)
                 }.catch { error in
                     resolver.reject(error)
@@ -80,19 +70,19 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionProtocol, PaymentP
     
     public func unsubscribe() -> Promise<Void> {
         return Promise<Void> { resolver in
-            resolver.reject(HiveError.UnsupportedOperationException)
+            resolver.reject(HiveError.UnsupportedMethodException)
         }
     }
 
     public func activate() -> Promise<Void> {
         return Promise<Void> { resolver in
-            resolver.reject(HiveError.UnsupportedOperationException)
+            resolver.reject(HiveError.UnsupportedMethodException)
         }
     }
     
     public func deactivate() -> Promise<Void> {
         return Promise<Void> { resolver in
-            resolver.reject(HiveError.UnsupportedOperationException)
+            resolver.reject(HiveError.UnsupportedMethodException)
         }
     }
     
@@ -100,17 +90,8 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionProtocol, PaymentP
         return Promise<Any>.async().then { _ -> Promise<BackupInfo> in
             return Promise<BackupInfo> { resolver in
                 self._subscriptionService!.getBackupVaultInfo().done({ response in
-                   let backupInfo = BackupInfo()
-                   backupInfo.did = response.did
-                   backupInfo.maxStorage = response.maxStorage
-                   backupInfo.fileUseStorage = response.fileUseStorage
-                   backupInfo.dbUseStorage = response.dbUseStorage
-                   backupInfo.modifyTime = Date(timeIntervalSince1970: TimeInterval(integerLiteral: response.modifyTime))
-                   backupInfo.startTime = Date(timeIntervalSince1970: TimeInterval(integerLiteral: response.startTime))
-                   backupInfo.endTime = Date(timeIntervalSince1970: TimeInterval(integerLiteral: response.endTime))
-                   backupInfo.pricingUsing = response.pricingUsing
-                   backupInfo.isExisting = response.isExisting
-                   resolver.fulfill(backupInfo)
+                    let backupInfo = self.getBackupInfoByResponseBody(response)
+                    resolver.fulfill(backupInfo)
                 }).catch { error in
                     resolver.reject(error)
                 }
@@ -158,8 +139,22 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionProtocol, PaymentP
     
     public func getReceipt(_ receiptId: String) -> Promise<Receipt?> {
         return Promise<Receipt?> { resolver in
-            resolver.reject(HiveError.UnsupportedOperationException)
+            resolver.reject(HiveError.UnsupportedMethodException)
         }
+    }
+    
+    private func getBackupInfoByResponseBody(_ response: VaultInfoResponse) -> BackupInfo {
+        let backupInfo = BackupInfo()
+        backupInfo.did = response.did
+        backupInfo.maxStorage = response.maxStorage
+        backupInfo.fileUseStorage = response.fileUseStorage
+        backupInfo.dbUseStorage = response.dbUseStorage
+        backupInfo.modifyTime = Date(timeIntervalSince1970: TimeInterval(integerLiteral: response.modifyTime))
+        backupInfo.startTime = Date(timeIntervalSince1970: TimeInterval(integerLiteral: response.startTime))
+        backupInfo.endTime = Date(timeIntervalSince1970: TimeInterval(integerLiteral: response.endTime))
+        backupInfo.pricingUsing = response.pricingUsing
+        backupInfo.isExisting = response.isExisting
+        return backupInfo
     }
 }
 
