@@ -49,6 +49,7 @@ public enum HiveError: Error {
     case UnauthorizedStateException(_ message: String)
     case UnsupportedFileTypeException(_ message: String)
     case VaultLockedException(_ message: String)
+    case UnsupportedMethodException
 }
 
 extension HiveError {
@@ -106,7 +107,9 @@ extension HiveError {
         case .UnauthorizedStateException(let message):
             return "UnauthorizedStateException \(message)"
         case .VaultLockedException(let message):
-            return "VaultLockedException \(message)"    
+            return "VaultLockedException \(message)"
+        case .UnsupportedMethodException:
+            return "This method will be supported in the later versions"
         }
     }
     
