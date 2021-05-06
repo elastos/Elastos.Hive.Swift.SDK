@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		042C40F106835EB637117CA3 /* Pods_HiveExamples.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FAEB7C8E746A46B60303AA3 /* Pods_HiveExamples.framework */; };
 		303C53D226369BD400224B30 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303C53D126369BD400224B30 /* MainTabBarController.swift */; };
+		3048ACBC2643C02D00B417B6 /* ScriptConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3048ACBB2643C02D00B417B6 /* ScriptConst.swift */; };
+		3048ACBF2643E75500B417B6 /* ScriptCaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3048ACBE2643E75500B417B6 /* ScriptCaller.swift */; };
 		3077F59B2634F8A900A701ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3077F59A2634F8A900A701ED /* AppDelegate.swift */; };
 		3077F5A42634F8AA00A701ED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3077F5A32634F8AA00A701ED /* Assets.xcassets */; };
 		3077F5A72634F8AA00A701ED /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3077F5A52634F8AA00A701ED /* LaunchScreen.storyboard */; };
@@ -38,6 +40,8 @@
 /* Begin PBXFileReference section */
 		1FAEB7C8E746A46B60303AA3 /* Pods_HiveExamples.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HiveExamples.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		303C53D126369BD400224B30 /* MainTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
+		3048ACBB2643C02D00B417B6 /* ScriptConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptConst.swift; sourceTree = "<group>"; };
+		3048ACBE2643E75500B417B6 /* ScriptCaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptCaller.swift; sourceTree = "<group>"; };
 		3077F5972634F8A900A701ED /* HiveExamples.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HiveExamples.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3077F59A2634F8A900A701ED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3077F5A32634F8AA00A701ED /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -131,6 +135,8 @@
 			isa = PBXGroup;
 			children = (
 				30F890DD2642EBC200D8D4D2 /* ScriptOwner.swift */,
+				3048ACBB2643C02D00B417B6 /* ScriptConst.swift */,
+				3048ACBE2643E75500B417B6 /* ScriptCaller.swift */,
 			);
 			path = Scripting;
 			sourceTree = "<group>";
@@ -350,7 +356,9 @@
 				30F890CC2642E9DE00D8D4D2 /* DIDApp.swift in Sources */,
 				30F890C42642E99100D8D4D2 /* ApplicationConfig.swift in Sources */,
 				30F890CD2642E9DE00D8D4D2 /* Entity.swift in Sources */,
+				3048ACBC2643C02D00B417B6 /* ScriptConst.swift in Sources */,
 				30F890D02642EA1200D8D4D2 /* SdkContext.swift in Sources */,
+				3048ACBF2643E75500B417B6 /* ScriptCaller.swift in Sources */,
 				3077F59B2634F8A900A701ED /* AppDelegate.swift in Sources */,
 				30F890C32642E99100D8D4D2 /* TestData.swift in Sources */,
 				30F890DE2642EBC200D8D4D2 /* ScriptOwner.swift in Sources */,

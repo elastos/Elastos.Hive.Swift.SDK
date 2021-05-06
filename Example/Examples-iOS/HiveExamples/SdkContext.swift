@@ -64,7 +64,10 @@ public class HiveExampleBackupContext {
 }
 
 final class SdkContext {
-    static let instance = SdkContext()
+    
+    static let instance = {
+        try! SdkContext()
+    }()
     
     private var _userDid: DIDApp?
     private var _userDidCaller: DIDApp?
@@ -74,8 +77,66 @@ final class SdkContext {
     private var _context: AppContext?
     private var _contextCaller: AppContext?
     
-    public init() {
-       
+    private init() throws {
+        
+        //TODO set environment config
+        var fileName: String? = nil
+        let bundle = Bundle.main
+        switch EnvironmentType.DEVELOPING {
+        case .DEVELOPING:
+            fileName = bundle.path(forResource: "Developing", ofType: "conf")
+        case .PRODUCTION:
+            fileName = bundle.path(forResource: "Production", ofType: "conf")
+        case .LOCAL:
+            fileName = bundle.path(forResource: "Local", ofType: "conf")
+        }
+                
+        let jsonData = try Data(contentsOf: URL(fileURLWithPath: fileName!))
+        let json = try JSONSerialization.jsonObject(with: jsonData)
+
+        let clientConfig = ClientConfig(JSON: json as! [String : Any])
+        self._nodeConfig = clientConfig?.nodeConfig
+        
+        let paths = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.allDomainsMask, true)
+        let path = paths.first! + "data/didCache"
+        
+        try AppContext.setupResover(clientConfig!.resolverUrl, path)
+        
+        let adapter = DummyAdapter()
+        let applicationConfig = clientConfig!.applicationConfig
+
+        self._appInstanceDid = try DApp(applicationConfig.name,
+                                        applicationConfig.mnemonic,
+                                        adapter,applicationConfig.passPhrase,
+                                        applicationConfig.storepass)
+
+        let userConfig: UserConfig = clientConfig!.userConfig
+        self._userDid = DIDApp(userConfig.name,
+                               userConfig.mnemonic,
+                               adapter,
+                               userConfig.passPhrase,
+                               userConfig.storepass)
+
+        
+        let userConfigCaller: UserConfig = clientConfig!.crossConfig.userConfig
+        self._userDidCaller = DIDApp(userConfigCaller.name,
+                                     userConfigCaller.mnemonic,
+                                     adapter,
+                                     userConfigCaller.passPhrase,
+                                     userConfigCaller.storepass)
+        //初始化Application Context
+        let storePath = "\(NSHomeDirectory())/Library/Caches/data/store" + "/" + self._nodeConfig!.storePath
+        self._context = try AppContext.build(TestAppContextProvider(storePath,
+                                                                    self._userDid!,
+                                                                    self._appInstanceDid!),
+                                             self._nodeConfig!.ownerDid)
+        self._contextCaller = try AppContext.build(TestAppContextProvider(storePath,
+                                                                          self._userDid!,
+                                                                          self._appInstanceDid!),
+                                                   self._nodeConfig!.ownerDid)
+        
+        self._callerDid = userConfigCaller.did;
+
     }
     
     
