@@ -20,12 +20,31 @@
 * SOFTWARE.
 */
 
+/**
+ * The application context provider.
+ */
 import Foundation
 
-public protocol AppContextProvider {    
+public protocol AppContextProvider {
+    /**
+     * The method for upper Application to implement to set up the directory
+     * to store local data, especially for access tokens.
+     * @return The full path to the directory;
+     */
     func getLocalDataDir() -> String?
 
+    /**
+     * The method for upper Application to implement to provide current application
+     * instance did document as the running context.
+     * @return The application instance did document.
+     */
     func getAppInstanceDocument() -> DIDDocument?
 
+    /**
+     * The method for upper Application to implement to acquire the authorization
+     * code from user's approval.
+     * @param jwtToken  The input challenge code from back-end node service.
+     * @return The credential issued by user.
+     */
     func getAuthorization(_ jwtToken: String) -> String?
 }
