@@ -1,0 +1,6 @@
+framework module ReadWriteLock {
+  umbrella header "ReadWriteLock-umbrella.h"
+
+  export *
+  module * { export * }
+}

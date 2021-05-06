@@ -1,0 +1,93 @@
+PODS:
+  - Alamofire (5.4.2)
+  - BlueCryptor (1.0.32)
+  - BlueRSA (1.0.34)
+  - CYLTabBarController (1.29.0):
+    - CYLTabBarController/Core (= 1.29.0)
+  - CYLTabBarController/Core (1.29.0)
+  - ElastosDIDSDK (1.9):
+    - BlueCryptor (~> 1.0)
+    - BlueRSA (~> 1.0)
+    - KituraContracts (~> 1.1)
+    - LoggerAPI (~> 1.7)
+    - PromiseKit (~> 6.9)
+    - ReadWriteLock (~> 1.0)
+  - ElastosHiveSDK (2.2.2):
+    - Alamofire (~> 5.0)
+    - ElastosDIDSDK (~> 1.5)
+    - ObjectMapper
+    - PromiseKit (~> 6.9)
+  - KituraContracts (1.2.1):
+    - LoggerAPI (~> 1.7)
+  - LoggerAPI (1.9.200):
+    - Logging (~> 1.1)
+  - Logging (1.4.0)
+  - ObjectMapper (4.2.0)
+  - PromiseKit (6.13.1):
+    - PromiseKit/CorePromise (= 6.13.1)
+    - PromiseKit/Foundation (= 6.13.1)
+    - PromiseKit/UIKit (= 6.13.1)
+  - PromiseKit/CorePromise (6.13.1)
+  - PromiseKit/Foundation (6.13.1):
+    - PromiseKit/CorePromise
+  - PromiseKit/UIKit (6.13.1):
+    - PromiseKit/CorePromise
+  - ReadWriteLock (1.0.2)
+  - RxCocoa (6.1.0):
+    - RxRelay (= 6.1.0)
+    - RxSwift (= 6.1.0)
+  - RxRelay (6.1.0):
+    - RxSwift (= 6.1.0)
+  - RxSwift (6.1.0)
+  - SnapKit (5.0.1)
+
+DEPENDENCIES:
+  - CYLTabBarController
+  - ElastosHiveSDK (from `../../ElastosHiveSDK.podspec`)
+  - RxCocoa
+  - RxSwift
+  - SnapKit
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - BlueCryptor
+    - BlueRSA
+    - CYLTabBarController
+    - ElastosDIDSDK
+    - KituraContracts
+    - LoggerAPI
+    - Logging
+    - ObjectMapper
+    - PromiseKit
+    - ReadWriteLock
+    - RxCocoa
+    - RxRelay
+    - RxSwift
+    - SnapKit
+
+EXTERNAL SOURCES:
+  ElastosHiveSDK:
+    :path: "../../ElastosHiveSDK.podspec"
+
+SPEC CHECKSUMS:
+  Alamofire: bfbc4c2fe5909b1d94fb4ef2277c6b3727ef5dae
+  BlueCryptor: b0aee3d9b8f367b49b30de11cda90e1735571c24
+  BlueRSA: 6f9776d62d9773502415a7db3bcbb2bbb3f71fc3
+  CYLTabBarController: f5460b8446f82d016945d4d53895a1ef185b79e3
+  ElastosDIDSDK: 582a93456b56cb44fe2ce8ca7dba1bc4d80f0c44
+  ElastosHiveSDK: e0e7181120d8f476419e0c0dcea911ef1cd3ac98
+  KituraContracts: e845e60dc8627ad0a76fa55ef20a45451d8f830b
+  LoggerAPI: ad9c4a6f1e32f518fdb43a1347ac14d765ab5e3d
+  Logging: beeb016c9c80cf77042d62e83495816847ef108b
+  ObjectMapper: 1eb41f610210777375fa806bf161dc39fb832b81
+  PromiseKit: 28fda91c973cc377875d8c0ea4f973013c05b6db
+  ReadWriteLock: 530a9204257f782636562f337cefb5469ce9900d
+  RxCocoa: 5c51f02d562cbd94629f6c26cf0c80fe4ab8d343
+  RxRelay: 483e1a19fad961b41f0b0c0bee506f46c1ae14fe
+  RxSwift: a834e5c538e89eca0cae86f403f4fbf0336786ce
+  SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
+
+PODFILE CHECKSUM: c5137c6b2e815b52e608cbf34bee6c38e801ab1c
+
+COCOAPODS: 1.9.3
