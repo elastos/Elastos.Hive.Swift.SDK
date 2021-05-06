@@ -83,21 +83,17 @@ public class TestData {
         case .LOCAL:
             file = bundle.path(forResource: "Local", ofType: "conf")
         }
-        
-        guard let _ = file else {
-            throw DIDError.illegalArgument("Couldn't find a PEM file named \(file!)")
-        }
+
         let jsonData = try Data(contentsOf: URL(fileURLWithPath: file!))
         let json = try JSONSerialization.jsonObject(with: jsonData)
-        print(json)
 
         let clientConfig = ClientConfig(JSON: json as! [String : Any])
         
         try AppContext.setupResover(clientConfig!.resolverUrl, "data/didCache")
         let adapter = DummyAdapter()
-        let applicationConfig = clientConfig!.application
+        let applicationConfig = clientConfig!.applicationConfig
         appInstanceDid = try DApp(applicationConfig.name, applicationConfig.mnemonic,  adapter,applicationConfig.passPhrase, applicationConfig.storepass)
-        let userConfig = clientConfig!.user
+        let userConfig = clientConfig!.userConfig
         self.userDid = DIDApp(userConfig.name, userConfig.mnemonic, adapter, userConfig.passPhrase, userConfig.storepass)
         self.nodeConfig = clientConfig!.nodeConfig
         

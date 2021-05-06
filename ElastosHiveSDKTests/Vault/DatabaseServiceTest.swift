@@ -34,8 +34,8 @@ class DatabaseServiceTest: XCTestCase {
             XCTAssert(isSuccess)
             lock.fulfill()
         }.catch { error in
-                XCTFail("\(error)")
-                lock.fulfill()
+            XCTFail("\(error)")
+            lock.fulfill()
         }
         self.wait(for: [lock], timeout: 100.0)
     }
