@@ -43,10 +43,16 @@ public class ServiceEndpoint {
         return _context
     }
     
+    /**
+     * Get the user DID string of this serviceEndpoint.
+     */
     public var userDid: String? {
         return self._context.userDid
     }
     
+    /**
+     * Get the end-point address of this service End-point.
+     */
     public var providerAddress: String {
         return self._providerAddress
     }
@@ -55,19 +61,43 @@ public class ServiceEndpoint {
         return self._connectionManager!
     }
     
+    /**
+     * Get the application DID in the current calling context.
+     */
     public var appDid: String? {
+        try!{
+            throw HiveError.UnauthorizedStateException()
+        }()
         return nil
     }
     
+    /**
+     * Get the application instance DID in the current calling context;
+     */
     public var appInstanceDid: String? {
+        try!{
+            throw HiveError.UnauthorizedStateException()
+        }()
         return nil
     }
     
+    /**
+     * Get the remote node service application DID.
+     */
     public var serviceDid: String? {
+        try!{
+            throw HiveError.UnsupportedMethodException
+        }()
         return nil
     }
     
+    /**
+     * Get the remote node service instance DID where is serving the storage service.
+     */
     public var serviceInstanceDid: String? {
+        try!{
+            throw HiveError.UnauthorizedStateException()
+        }()
         return nil
     }
 }

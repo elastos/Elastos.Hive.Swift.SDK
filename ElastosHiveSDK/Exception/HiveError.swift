@@ -46,7 +46,7 @@ public enum HiveError: Error {
     case IllegalDidFormatException(_ message: String)
     case InvalidParameterException(_ message: String)
     case NoEnoughSpaceException(_ message: String)
-    case UnauthorizedStateException(_ message: String)
+    case UnauthorizedStateException(_ message: String? = "")
     case UnsupportedFileTypeException(_ message: String)
     case VaultLockedException(_ message: String)
     case UnsupportedMethodException
