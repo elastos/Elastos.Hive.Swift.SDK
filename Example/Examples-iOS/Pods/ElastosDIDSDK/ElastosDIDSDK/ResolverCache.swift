@@ -36,6 +36,7 @@ public class ResolverCache: NSObject {
     @objc
     public class func setCacheDir(_ rootPath: String) throws {
         ResolverCache.rootDir = rootPath
+        print("rootPath == \(rootPath)")
         if try !exists_dir(rootPath) {
             let fileManager = FileManager.default
             try fileManager.createDirectory(atPath: rootDir, withIntermediateDirectories: true, attributes: nil)

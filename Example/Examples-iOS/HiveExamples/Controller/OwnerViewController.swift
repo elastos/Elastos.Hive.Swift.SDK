@@ -27,13 +27,23 @@ import SnapKit
 class OwnerViewController: UIViewController {
     
     let registerScriptButton = UIButton()
-    let sdkContext: SdkContext = SdkContext()
-    let scriptOwner: ScriptOwner = ScriptOwner()
+    var sdkContext: SdkContext?
+    var scriptOwner: ScriptOwner?
+    let textView: UITextView = UITextView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.white
         self.navigationController?.navigationBar.isTranslucent = false
+        self.tabBarController?.tabBar.isTranslucent = false
+        
+        do {
+            self.sdkContext = SdkContext.instance
+            self.scriptOwner = try ScriptOwner(self.sdkContext!)
+        } catch  {
+            print(error)
+        }
+
         
         self.title = "Owner"
         
@@ -43,9 +53,19 @@ class OwnerViewController: UIViewController {
         self.view.addSubview(self.registerScriptButton)
         self.registerScriptButton.snp.makeConstraints { make in
             make.centerX.equalTo(self.view)
-            make.top.equalTo(self.view).offset(100)
+            make.top.equalTo(self.view).offset(20)
             make.width.equalTo(self.view).multipliedBy(0.8)
             make.height.equalTo(44)
+        }
+        
+        self.view.addSubview(self.textView)
+        self.textView.layer.cornerRadius = 4
+        self.textView.layer.borderColor = UIColor.purple.cgColor
+        self.textView.layer.borderWidth = 1
+        self.textView.snp.makeConstraints { make in
+            make.top.equalTo(self.registerScriptButton.snp.bottom).offset(20)
+            make.left.equalTo(self.view).offset(20)
+            make.right.bottom.equalTo(self.view).offset(-20)
         }
 
     }
