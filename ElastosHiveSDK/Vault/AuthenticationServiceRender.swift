@@ -64,7 +64,7 @@ public class AuthenticationServiceRender: HiveVaultRender {
         let jwtParserBuilder = try JwtParserBuilder().build()
         let claim = try jwtParserBuilder.parseClaimsJwt(response.accessToken).claims
         let expirationDate = claim.getExpiration()
-        let expiresTime: Int64 = Int64(Date().timeIntervalSince1970 / 1000 + expirationDate!.timeIntervalSince1970 / 1000)
+        let expiresTime: Int64 = Int64(expirationDate!.timeIntervalSince1970)
         return AuthToken(response.accessToken, expiresTime, "token")
         
     }

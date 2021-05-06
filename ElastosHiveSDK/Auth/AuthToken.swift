@@ -51,7 +51,7 @@ public class AuthToken: NSObject, Mappable{
     }
     
     public var isExpired: Bool {
-        return Int(Date().timeIntervalSince1970) >= expiresTime
+        return Int64(Date().timeIntervalSince1970) >= expiresTime
     }
     
     public required init?(map: Map) {
