@@ -145,6 +145,7 @@
 		3045A75926024C1E0037527A /* ScriptingRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A75826024C1E0037527A /* ScriptingRender.swift */; };
 		3045A75C2602519D0037527A /* Promise+async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A75B2602519D0037527A /* Promise+async.swift */; };
 		3045A75D2602519D0037527A /* Promise+async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A75B2602519D0037527A /* Promise+async.swift */; };
+		3048ACAC26437C1C00B417B6 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3048ACAB26437C1C00B417B6 /* Provider.swift */; };
 		304E4A29261F0564005D196E /* PromotionServiceRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304E4A28261F0564005D196E /* PromotionServiceRender.swift */; };
 		304E4A2C261F0878005D196E /* SubscriptionServiceRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304E4A2B261F0878005D196E /* SubscriptionServiceRender.swift */; };
 		304EA376261D3978007ADD47 /* PopMessageRequestParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304EA375261D3978007ADD47 /* PopMessageRequestParams.swift */; };
@@ -366,6 +367,7 @@
 		3045A75126024BF40037527A /* PubSubServiceRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PubSubServiceRender.swift; sourceTree = "<group>"; };
 		3045A75826024C1E0037527A /* ScriptingRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptingRender.swift; sourceTree = "<group>"; };
 		3045A75B2602519D0037527A /* Promise+async.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Promise+async.swift"; sourceTree = "<group>"; };
+		3048ACAB26437C1C00B417B6 /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
 		304E4A28261F0564005D196E /* PromotionServiceRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromotionServiceRender.swift; sourceTree = "<group>"; };
 		304E4A2B261F0878005D196E /* SubscriptionServiceRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionServiceRender.swift; sourceTree = "<group>"; };
 		304EA375261D3978007ADD47 /* PopMessageRequestParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopMessageRequestParams.swift; sourceTree = "<group>"; };
@@ -867,6 +869,7 @@
 				303CD55C26075D2A00865472 /* ScriptRunner.swift */,
 				116B2F2F25B6C0F200635D97 /* Backup.swift */,
 				3045A740260241FC0037527A /* BackupSubscription.swift */,
+				3048ACAB26437C1C00B417B6 /* Provider.swift */,
 				A39C4973225399860027BDF9 /* Info.plist */,
 			);
 			path = ElastosHiveSDK;
@@ -1237,6 +1240,7 @@
 				30091C2226182D56003EB5CE /* AuthResponse.swift in Sources */,
 				1103757923FF96BF004216D0 /* Log.swift in Sources */,
 				304E4A2C261F0878005D196E /* SubscriptionServiceRender.swift in Sources */,
+				3048ACAC26437C1C00B417B6 /* Provider.swift in Sources */,
 				30091C282619E935003EB5CE /* CountDocResponse.swift in Sources */,
 				111D47D124F7906100B7462B /* CreateCollectionOptions.swift in Sources */,
 				30091C4B2619F7C2003EB5CE /* PaymentVersionResponse.swift in Sources */,
