@@ -1,0 +1,6 @@
+framework module ElastosHiveSDK {
+  umbrella header "ElastosHiveSDK-umbrella.h"
+
+  export *
+  module * { export * }
+}
