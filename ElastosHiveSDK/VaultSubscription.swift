@@ -62,8 +62,7 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionProtocol, PaymentPr
         self._subscriptionService = SubscriptionServiceRender(self)
     }
     
-    // TODO
-    public func subscribe(_ pricingPlan: String) -> Promise<VaultInfo> {
+    public func subscribe() -> Promise<VaultInfo> {
         return Promise<VaultInfo> { resolver in
             self._subscriptionService!.subscribe().then { _ -> Promise<VaultInfoResponse> in
                 return self._subscriptionService!.getVaultInfo()
