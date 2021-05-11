@@ -22,7 +22,9 @@
 
 import Foundation
 
-public class ScriptRunner: ServiceEndpoint {
+public class ScriptRunner: ServiceEndpoint, ScriptingInvocationProtocol {
+
+
     private var scriptingServiceRender: ScriptingServiceRender?
     
     public override init(_ context: AppContext, _ providerAddress: String) throws {
@@ -52,15 +54,14 @@ public class ScriptRunner: ServiceEndpoint {
     /// - parameters:
     ///    - transactionId: Transaction id
     /// - returns: FileReader
-    public func downloadFile(_ transactionId: String) -> Promise<FileReader> {
-        return self.scriptingServiceRender!.downloadFile(transactionId)
+    public func uploadFile<T>(_ transactionId: String, _ resultType: T.Type) -> Promise<T> {
+        return self.scriptingServiceRender!.uploadFile(transactionId, resultType)
+
     }
     
-    /// Run a script to download a file NOTE: The download works a bit differently compared to other types of executable queries because there are two steps to this executable. First, register a script on the vault, then you call this api to actually upload the file
-    /// - parameters:
-    ///    - transactionId: Transaction id
-    /// - returns: Result for specific script type
-    public func uploadFile(_ transactionId: String) -> Promise<FileWriter> {
-        return self.scriptingServiceRender!.uploadFile(transactionId)
+    public func downloadFile<T>(_ transactionId: String, _ resultType: T.Type) -> Promise<T> {
+        return self.scriptingServiceRender!.downloadFile(transactionId, resultType)
+
     }
+
 }
