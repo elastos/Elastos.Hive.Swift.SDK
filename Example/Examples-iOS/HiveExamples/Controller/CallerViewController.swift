@@ -42,8 +42,9 @@ class CallerViewController: UIViewController {
         self.title = "Caller"
         
         self.runScriptButton.setTitle("RUN SCRIPT", for: UIControl.State.normal)
-        self.runScriptButton.backgroundColor = UIColor.purple
+        self.runScriptButton.backgroundColor = UIColor(rgb: 0x333333)
         self.runScriptButton.layer.cornerRadius = 4
+        self.runScriptButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
         self.view.addSubview(self.runScriptButton)
         self.runScriptButton.snp.makeConstraints { make in
             make.centerX.equalTo(self.view)
@@ -54,8 +55,9 @@ class CallerViewController: UIViewController {
         
         self.view.addSubview(self.textView)
         self.textView.layer.cornerRadius = 4
-        self.textView.layer.borderColor = UIColor.purple.cgColor
+        self.textView.layer.borderColor = UIColor(rgb: 0x333333).cgColor
         self.textView.layer.borderWidth = 1
+        self.textView.font = UIFont.systemFont(ofSize: 20)
         self.textView.snp.makeConstraints { make in
             make.top.equalTo(self.runScriptButton.snp.bottom).offset(20)
             make.left.equalTo(self.view).offset(20)
@@ -72,11 +74,14 @@ class CallerViewController: UIViewController {
         self.runScriptButton.rx.tap.subscribe { event in
             
             self.scriptCaller!.runScript().done({ json in
-                
+                DispatchQueue.main.async {
+                    self.textView.text = "success"
+                }
             }).catch { error in
-                print("\(error)")
+                DispatchQueue.main.async {
+                    self.textView.text = "\(error)"
+                }
             }
-           
         }.disposed(by: self.disposeBag)
     }
     

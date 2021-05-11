@@ -1,35 +1,43 @@
 /*
-* Copyright (c) 2020 Elastos Foundation
-*
-* Permission is hereby granted, free of charge, to any person obtaining a copy
-* of this software and associated documentation files (the "Software"), to deal
-* in the Software without restriction, including without limitation the rights
-* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-* copies of the Software, and to permit persons to whom the Software is
-* furnished to do so, subject to the following conditions:
-*
-* The above copyright notice and this permission notice shall be included in all
-* copies or substantial portions of the Software.
-*
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-* SOFTWARE.
-*/
+ * Copyright (c) 2020 Elastos Foundation
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 
 import ObjectMapper
 
-extension DataRequest {
-    public func get(options: JSONSerialization.ReadingOptions = .allowFragments) throws -> HiveResponse {
+internal extension DataRequest {
+    func get(options: JSONSerialization.ReadingOptions = .allowFragments) throws -> HiveResponse {
         let rep = response(responseSerializer: JSONResponseSerializer(options: options))
         switch rep.result {
         case .success(let re):
-                let response: HiveResponse = HiveResponse(JSON: re as! [String : Any])!
-                response.json = JSON(re).dictionaryObject!
-                return response
+            let json = re as! [String : Any]
+            if json["_status"] as! String != "OK" {
+                let errorObject = JSON(json)
+                let code = errorObject["_error"] ["code"];
+                let message = errorObject["_error"] ["message"];
+                throw HiveError.hiveSdk(message: "get error from server: error code = \(code), message = \(message)")
+            }
+            
+            let response: HiveResponse = HiveResponse(JSON: re as! [String : Any])!
+            response.json = JSON(re).dictionaryObject!
+            return response
         case .failure(let error):
             switch error {
             case .responseSerializationFailed(_):
@@ -43,8 +51,8 @@ extension DataRequest {
             throw error
         }
     }
-
-    public func get<T: Mappable & HiveCheckValidProtocol>(options: JSONSerialization.ReadingOptions = .allowFragments, _ resultType: T.Type) throws -> T {
+    
+    func get<T: Mappable & HiveCheckValidProtocol>(options: JSONSerialization.ReadingOptions = .allowFragments, _ resultType: T.Type) throws -> T {
         let response1 = response(responseSerializer: JSONResponseSerializer(options: options))
         switch response1.result {
         case .success(let re):

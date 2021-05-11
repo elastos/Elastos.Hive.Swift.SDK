@@ -45,28 +45,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func viewControllers() -> [UINavigationController]{
         let ownerViewController = UINavigationController(rootViewController: OwnerViewController())
-        let contactsItem = UITabBarItem.SystemItem.bookmarks
-        let contactsBarItem = UITabBarItem(tabBarSystemItem: contactsItem, tag: 0)
-        ownerViewController.tabBarItem = contactsBarItem
-        
+        ownerViewController.tabBarItem.image = UIImage(systemName: "search")
         let callerViewController = UINavigationController(rootViewController: CallerViewController())
-        
-        let favoritesItem = UITabBarItem.SystemItem.contacts
-        let favoritesBarItem = UITabBarItem(tabBarSystemItem: favoritesItem, tag: 0)
-        callerViewController.tabBarItem = favoritesBarItem
-        
         return [ownerViewController, callerViewController]
     }
     
     func tabBarItemsAttributesForController() ->  [[String : String]] {
         
         let tabBarItemA = [CYLTabBarItemTitle:"Owner",
-                           CYLTabBarItemImage:"home_normal",
-                           CYLTabBarItemSelectedImage:"home_highlight"]
+                           CYLTabBarItemImage:"icon1",
+                           CYLTabBarItemSelectedImage:"icon1"]
         
         let tabBarItemB = [CYLTabBarItemTitle:"Caller",
-                           CYLTabBarItemImage:"home_normal",
-                           CYLTabBarItemSelectedImage:"home_highlight"]
+                           CYLTabBarItemImage:"icon2",
+                           CYLTabBarItemSelectedImage:"icon2"]
+        
         
         return [tabBarItemA, tabBarItemB]
     }
