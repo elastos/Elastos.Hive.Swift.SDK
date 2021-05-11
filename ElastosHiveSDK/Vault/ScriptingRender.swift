@@ -22,7 +22,7 @@
 
 import Foundation
 
-public class ScriptingServiceRender: HiveVaultRender, ScriptingProtocol {
+public class ScriptingServiceRender: BaseServiceRender, ScriptingProtocol {
     
     public override init(_ serviceEndpoint: ServiceEndpoint) {
         super.init(serviceEndpoint)

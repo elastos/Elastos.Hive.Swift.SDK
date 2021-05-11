@@ -22,7 +22,7 @@
 
 import Foundation
 
-public class SubscriptionServiceRender: HiveVaultRender {
+public class SubscriptionServiceRender: BaseServiceRender {
     public override init(_ serviceEndpoint: ServiceEndpoint) {
         super.init(serviceEndpoint)
     }

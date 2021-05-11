@@ -22,7 +22,7 @@
 
 import Foundation
 
-public class HiveVaultRender {
+public class BaseServiceRender {
     private var _context: AppContext
     private var _serviceEndpoint: ServiceEndpoint
     

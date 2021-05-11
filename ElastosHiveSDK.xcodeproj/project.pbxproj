@@ -166,8 +166,9 @@
 		304EA3A8261D422F007ADD47 /* ScriptContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304EA3A7261D422F007ADD47 /* ScriptContext.swift */; };
 		304EA3AB261D4370007ADD47 /* BackupSaveRequestParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304EA3AA261D4370007ADD47 /* BackupSaveRequestParams.swift */; };
 		304EA3AE261D43CB007ADD47 /* BackupRestoreRequestParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304EA3AD261D43CB007ADD47 /* BackupRestoreRequestParams.swift */; };
-		304F1ED0264A270A00362062 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304F1ECF264A270A00362062 /* Version.swift */; };
 		304F1ECC264A20FD00362062 /* ScriptingInvocationProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304F1ECB264A20FD00362062 /* ScriptingInvocationProtocol.swift */; };
+		304F1ED0264A270A00362062 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304F1ECF264A270A00362062 /* Version.swift */; };
+		304F1ED4264A5E1A00362062 /* NodeManageServiceRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304F1ED3264A5E1A00362062 /* NodeManageServiceRender.swift */; };
 		304F24392628066700DDB5C0 /* VaultManagementTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304F24382628066700DDB5C0 /* VaultManagementTest.swift */; };
 		304F243D262808EA00DDB5C0 /* PromotionServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304F243C262808EA00DDB5C0 /* PromotionServiceTest.swift */; };
 		3065A5E4261551D800C20661 /* HIveResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3065A5E3261551D800C20661 /* HIveResponse.swift */; };
@@ -390,8 +391,9 @@
 		304EA3A7261D422F007ADD47 /* ScriptContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptContext.swift; sourceTree = "<group>"; };
 		304EA3AA261D4370007ADD47 /* BackupSaveRequestParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupSaveRequestParams.swift; sourceTree = "<group>"; };
 		304EA3AD261D43CB007ADD47 /* BackupRestoreRequestParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupRestoreRequestParams.swift; sourceTree = "<group>"; };
-		304F1ECF264A270A00362062 /* Version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
 		304F1ECB264A20FD00362062 /* ScriptingInvocationProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptingInvocationProtocol.swift; sourceTree = "<group>"; };
+		304F1ECF264A270A00362062 /* Version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
+		304F1ED3264A5E1A00362062 /* NodeManageServiceRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeManageServiceRender.swift; sourceTree = "<group>"; };
 		304F24382628066700DDB5C0 /* VaultManagementTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultManagementTest.swift; sourceTree = "<group>"; };
 		304F243C262808EA00DDB5C0 /* PromotionServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromotionServiceTest.swift; sourceTree = "<group>"; };
 		3065A5E3261551D800C20661 /* HIveResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HIveResponse.swift; sourceTree = "<group>"; };
@@ -749,6 +751,7 @@
 				30091C1826182250003EB5CE /* AuthenticationServiceRender.swift */,
 				30091C1B26182326003EB5CE /* HiveVaultRender.swift */,
 				304E4A2B261F0878005D196E /* SubscriptionServiceRender.swift */,
+				304F1ED3264A5E1A00362062 /* NodeManageServiceRender.swift */,
 			);
 			path = Vault;
 			sourceTree = "<group>";
@@ -1265,6 +1268,7 @@
 				3065A5ED26156B3F00C20661 /* PaymentServiceRender.swift in Sources */,
 				3045A75C2602519D0037527A /* Promise+async.swift in Sources */,
 				11E573FF22C4C33400F85419 /* String.swift in Sources */,
+				304F1ED4264A5E1A00362062 /* NodeManageServiceRender.swift in Sources */,
 				30DB962B260046F200ACF19F /* SubscriptionApi.swift in Sources */,
 				3065A6092615C81600C20661 /* HiveCheckValidProtocol.swift in Sources */,
 				111D47FA24F7A79800B7462B /* Condition.swift in Sources */,
