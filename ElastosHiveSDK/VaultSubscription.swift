@@ -51,6 +51,7 @@ public class VaultInfo: Mappable {
 }
 
 public class VaultSubscription: ServiceEndpoint, SubscriptionProtocol, PaymentProtocol {
+
     private var _context: AppContext?
     private var _subscriptionService: SubscriptionServiceRender?
     private var _paymentService: PaymentServiceRender?
@@ -81,6 +82,20 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionProtocol, PaymentPr
             }
         }
     }
+    
+    public func subscribe(_ credential: String) -> Promise<VaultInfo?> {
+        return Promise<Any>.async().then { _ -> Promise<VaultInfo?> in
+            return Promise<VaultInfo?> { reslover in
+                //TODO:
+                self._subscriptionService?.subscribe().done({ valutInfo in
+                    reslover.fulfill(nil)
+                }).catch({ error in
+                    reslover.reject(error)
+                })
+            }
+        }
+    }
+    
     
     public func unsubscribe() -> Promise<Void> {
         return Promise<Any>.async().then { _ -> Promise<Void> in
@@ -160,8 +175,23 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionProtocol, PaymentPr
     }
     
     public func getReceipt(_ receiptId: String) -> Promise<Receipt?> {
+        // TODO
         return Promise<Receipt?> { resolver in
-            resolver.reject(HiveError.UnsupportedOperationException)
+            resolver.reject(HiveError.UnsupportedMethodException)
+        }
+    }
+    
+    public func getOrderList() -> Promise<Array<Order>?> {
+        // TODO
+        return Promise<Array<Order>?> { resolver in
+            resolver.reject(HiveError.UnsupportedMethodException)
+        }
+    }
+    
+    public func getReceiptList() -> Promise<Array<Receipt>?> {
+        // TODO
+        return Promise<Array<Receipt>?> { resolver in
+            resolver.reject(HiveError.UnsupportedMethodException)
         }
     }
 }
