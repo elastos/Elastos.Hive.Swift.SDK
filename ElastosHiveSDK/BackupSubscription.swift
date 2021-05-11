@@ -68,6 +68,21 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionProtocol, PaymentP
         }
     }
     
+    public func subscribe(_ credential: String) -> Promise<BackupInfo?> {
+        return Promise<Any>.async().then { _ -> Promise<BackupInfo?> in
+            return Promise<BackupInfo?> { resolver in
+                self._subscriptionService!.subscribeBackup().then { _ -> Promise<VaultInfoResponse> in
+                    return self._subscriptionService!.getBackupVaultInfo()
+                }.done { response in
+                    let backupInfo = self.getBackupInfoByResponseBody(response)
+                    resolver.fulfill(backupInfo)
+                }.catch { error in
+                    resolver.reject(error)
+                }
+            }
+        }
+    }
+    
     public func unsubscribe() -> Promise<Void> {
         return Promise<Void> { resolver in
             resolver.reject(HiveError.UnsupportedMethodException)
@@ -137,12 +152,6 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionProtocol, PaymentP
         }
     }
     
-    public func getReceipt(_ receiptId: String) -> Promise<Receipt?> {
-        return Promise<Receipt?> { resolver in
-            resolver.reject(HiveError.UnsupportedMethodException)
-        }
-    }
-    
     private func getBackupInfoByResponseBody(_ response: VaultInfoResponse) -> BackupInfo {
         let backupInfo = BackupInfo()
         backupInfo.did = response.did
@@ -155,6 +164,27 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionProtocol, PaymentP
         backupInfo.pricingUsing = response.pricingUsing
         backupInfo.isExisting = response.isExisting
         return backupInfo
+    }
+    
+    public func getReceipt(_ receiptId: String) -> Promise<Receipt?> {
+        // TODO
+        return Promise<Receipt?> { resolver in
+            resolver.reject(HiveError.UnsupportedMethodException)
+        }
+    }
+    
+    public func getOrderList() -> Promise<Array<Order>?> {
+        // TODO
+        return Promise<Array<Order>?> { resolver in
+            resolver.reject(HiveError.UnsupportedMethodException)
+        }
+    }
+    
+    public func getReceiptList() -> Promise<Array<Receipt>?> {
+        // TODO
+        return Promise<Array<Receipt>?> { resolver in
+            resolver.reject(HiveError.UnsupportedMethodException)
+        }
     }
 }
 
