@@ -20,28 +20,36 @@
 * SOFTWARE.
 */
 
-/**
- * This class is used to fetch some possible information from remote hive node.
- * eg. version;
- *     latest commit Id;
- *     How many DID involved;
- *     How many vault service running there;
- *     How many backup service running there;
- *     How much disk storage filled there;
- *     etc.
- */
+import Foundation
 
-public class Provider: ServiceEndpoint {
+public class Version {
+    private var _major: Int?
+    private var _minor: Int?
+    private var _hotfix: Int?
     
-    init(_ context: AppContext) throws {
-        try super.init(context, "")
+    public var major: Int? {
+        get {
+            return _major
+        }
     }
     
-    public static func getVersion() throws -> Promise<Version> {
-        throw HiveError.UnsupportedMethodException
+    public var minor: Int? {
+        get {
+            return _minor
+        }
     }
-
-    public static func getLatestCommitId() throws -> Promise<Version> {
-        throw HiveError.UnsupportedMethodException
+    
+    public var hotfix: Int? {
+        get {
+            return _hotfix
+        }
+    }
+    
+    public func getFullVersion() -> String {
+        return "\(_major ?? 0).\(_minor ?? 0).\(_hotfix ?? 0)"
+    }
+    
+    public var description: String {
+        return getFullVersion()
     }
 }
