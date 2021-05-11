@@ -166,6 +166,7 @@
 		304EA3A8261D422F007ADD47 /* ScriptContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304EA3A7261D422F007ADD47 /* ScriptContext.swift */; };
 		304EA3AB261D4370007ADD47 /* BackupSaveRequestParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304EA3AA261D4370007ADD47 /* BackupSaveRequestParams.swift */; };
 		304EA3AE261D43CB007ADD47 /* BackupRestoreRequestParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304EA3AD261D43CB007ADD47 /* BackupRestoreRequestParams.swift */; };
+		304F1ED0264A270A00362062 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304F1ECF264A270A00362062 /* Version.swift */; };
 		304F24392628066700DDB5C0 /* VaultManagementTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304F24382628066700DDB5C0 /* VaultManagementTest.swift */; };
 		304F243D262808EA00DDB5C0 /* PromotionServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304F243C262808EA00DDB5C0 /* PromotionServiceTest.swift */; };
 		3065A5E4261551D800C20661 /* HIveResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3065A5E3261551D800C20661 /* HIveResponse.swift */; };
@@ -388,6 +389,7 @@
 		304EA3A7261D422F007ADD47 /* ScriptContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptContext.swift; sourceTree = "<group>"; };
 		304EA3AA261D4370007ADD47 /* BackupSaveRequestParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupSaveRequestParams.swift; sourceTree = "<group>"; };
 		304EA3AD261D43CB007ADD47 /* BackupRestoreRequestParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupRestoreRequestParams.swift; sourceTree = "<group>"; };
+		304F1ECF264A270A00362062 /* Version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
 		304F24382628066700DDB5C0 /* VaultManagementTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultManagementTest.swift; sourceTree = "<group>"; };
 		304F243C262808EA00DDB5C0 /* PromotionServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromotionServiceTest.swift; sourceTree = "<group>"; };
 		3065A5E3261551D800C20661 /* HIveResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HIveResponse.swift; sourceTree = "<group>"; };
@@ -870,6 +872,7 @@
 				116B2F2F25B6C0F200635D97 /* Backup.swift */,
 				3045A740260241FC0037527A /* BackupSubscription.swift */,
 				3048ACAB26437C1C00B417B6 /* Provider.swift */,
+				304F1ECF264A270A00362062 /* Version.swift */,
 				A39C4973225399860027BDF9 /* Info.plist */,
 			);
 			path = ElastosHiveSDK;
@@ -1293,6 +1296,7 @@
 				1129C19424052CC500CD77F2 /* Alamofire+Synchronous.swift in Sources */,
 				3065A5FA26159DB100C20661 /* PaymentPlanResponse.swift in Sources */,
 				111D47D424F7906F00B7462B /* DeleteOptions.swift in Sources */,
+				304F1ED0264A270A00362062 /* Version.swift in Sources */,
 				111D47E924F7940600B7462B /* UpdateResult.swift in Sources */,
 				30091C1926182250003EB5CE /* AuthenticationServiceRender.swift in Sources */,
 				3065A6062615B6BB00C20661 /* Alamofire+Hive.swift in Sources */,
