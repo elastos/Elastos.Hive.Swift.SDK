@@ -30,6 +30,7 @@ class OwnerViewController: UIViewController {
     var sdkContext: SdkContext?
     var scriptOwner: ScriptOwner?
     let textView: UITextView = UITextView()
+    let disposeBag = DisposeBag()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,13 +44,15 @@ class OwnerViewController: UIViewController {
         } catch  {
             print(error)
         }
-
         
         self.title = "Owner"
         
         self.registerScriptButton.setTitle("REGISTER SCRIPT", for: UIControl.State.normal)
-        self.registerScriptButton.backgroundColor = UIColor.purple
+        self.registerScriptButton.backgroundColor = UIColor(rgb: 0x333333)
         self.registerScriptButton.layer.cornerRadius = 4
+        self.registerScriptButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+
+
         self.view.addSubview(self.registerScriptButton)
         self.registerScriptButton.snp.makeConstraints { make in
             make.centerX.equalTo(self.view)
@@ -60,14 +63,27 @@ class OwnerViewController: UIViewController {
         
         self.view.addSubview(self.textView)
         self.textView.layer.cornerRadius = 4
-        self.textView.layer.borderColor = UIColor.purple.cgColor
+        self.textView.layer.borderColor = UIColor(rgb: 0x333333).cgColor
         self.textView.layer.borderWidth = 1
+        self.textView.font = UIFont.systemFont(ofSize: 20)
         self.textView.snp.makeConstraints { make in
             make.top.equalTo(self.registerScriptButton.snp.bottom).offset(20)
             make.left.equalTo(self.view).offset(20)
             make.right.bottom.equalTo(self.view).offset(-20)
         }
-
+        
+        self.registerScriptButton.rx.tap.subscribe { event in
+                self.scriptOwner?.setScript().done({ result in
+                DispatchQueue.main.async {
+                    self.textView.text = "success"
+                }
+            }).catch({ error in
+                DispatchQueue.main.async {
+                    self.textView.text = "\(error)"
+                }
+            })
+           
+        }.disposed(by: self.disposeBag)
     }
     
 }
