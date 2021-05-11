@@ -45,11 +45,14 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     private var connectionManager: ConnectionManager?
     
     
-    public init(_ url: URL,_ connectionManager: ConnectionManager,_ resolver: Resolver<FileReader>,_ method: HTTPMethod) {
+    public init<T>(_ url: URL,_ connectionManager: ConnectionManager,_ resolver: Resolver<T>,_ method: HTTPMethod) throws {
         var input: InputStream? = nil
         var output: OutputStream? = nil
         self.connectionManager = connectionManager;
-        self.resolver = resolver
+        if !(resolver is Resolver<FileReader>) {
+             throw HiveError.InvalidParameterException("only support FileReader as resolver")
+        }
+        self.resolver = resolver as! Resolver<FileReader>
         Stream.getBoundStreams(withBufferSize: BUFFER_SIZE,
                                inputStream: &input,
                                outputStream: &output)

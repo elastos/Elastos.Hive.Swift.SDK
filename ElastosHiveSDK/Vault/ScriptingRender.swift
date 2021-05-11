@@ -82,22 +82,34 @@ public class ScriptingServiceRender: HiveVaultRender, ScriptingProtocol {
         }
     }
     
-    public func downloadFile(_ transactionId: String) -> Promise<FileReader> {
-        return Promise<FileReader> { resolver in
+    public func downloadFile<T>(_ transactionId: String, _ resultType: T.Type) -> Promise<T>  {
+        return Promise<T> { resolver in
             let url = self.connectionManager.hiveApi.runScriptDownload(transactionId)
             _ = try self.connectionManager.headers()
-//            let reader = FileReader(URL(string: url)!, self.connectionManager, resolver)
-            let reader = FileReader(URL(string: url)!, self.connectionManager, resolver, .post)
-            resolver.fulfill(reader)
+            if resultType.self == FileReader.self {
+                do {
+                    let reader = try FileReader(URL(string: url)!, self.connectionManager, resolver, .post)
+                    resolver.fulfill(reader as! T)
+                } catch {
+                    resolver.reject(error)
+                }
+                
+            } else {
+                resolver.reject(HiveError.InvalidParameterException("only support FileReader as resultType"))
+            }
         }
     }
-    
-    public func uploadFile(_ transactionId: String) -> Promise<FileWriter> {
-        return Promise<FileWriter> { resolver in
+        
+    public func uploadFile<T>(_ transactionId: String, _ resultType: T.Type) -> Promise<T> {
+        return Promise<T> { resolver in
             let url = self.connectionManager.hiveApi.runScriptUpload(transactionId)
             _ = try self.connectionManager.headers()
-            let writer = FileWriter(URL(string: url)!, self.connectionManager)
-            resolver.fulfill(writer)
+            if resultType.self == FileWriter.self {
+                let writer = FileWriter(URL(string: url)!, self.connectionManager)
+                resolver.fulfill(writer as! T)
+            } else {
+                resolver.reject(HiveError.InvalidParameterException("only support FileWriter as resultType"))
+            }
         }
     }
     

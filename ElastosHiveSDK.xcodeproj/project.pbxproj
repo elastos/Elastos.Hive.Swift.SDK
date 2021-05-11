@@ -167,6 +167,7 @@
 		304EA3AB261D4370007ADD47 /* BackupSaveRequestParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304EA3AA261D4370007ADD47 /* BackupSaveRequestParams.swift */; };
 		304EA3AE261D43CB007ADD47 /* BackupRestoreRequestParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304EA3AD261D43CB007ADD47 /* BackupRestoreRequestParams.swift */; };
 		304F1ED0264A270A00362062 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304F1ECF264A270A00362062 /* Version.swift */; };
+		304F1ECC264A20FD00362062 /* ScriptingInvocationProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304F1ECB264A20FD00362062 /* ScriptingInvocationProtocol.swift */; };
 		304F24392628066700DDB5C0 /* VaultManagementTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304F24382628066700DDB5C0 /* VaultManagementTest.swift */; };
 		304F243D262808EA00DDB5C0 /* PromotionServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304F243C262808EA00DDB5C0 /* PromotionServiceTest.swift */; };
 		3065A5E4261551D800C20661 /* HIveResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3065A5E3261551D800C20661 /* HIveResponse.swift */; };
@@ -390,6 +391,7 @@
 		304EA3AA261D4370007ADD47 /* BackupSaveRequestParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupSaveRequestParams.swift; sourceTree = "<group>"; };
 		304EA3AD261D43CB007ADD47 /* BackupRestoreRequestParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupRestoreRequestParams.swift; sourceTree = "<group>"; };
 		304F1ECF264A270A00362062 /* Version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
+		304F1ECB264A20FD00362062 /* ScriptingInvocationProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptingInvocationProtocol.swift; sourceTree = "<group>"; };
 		304F24382628066700DDB5C0 /* VaultManagementTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultManagementTest.swift; sourceTree = "<group>"; };
 		304F243C262808EA00DDB5C0 /* PromotionServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromotionServiceTest.swift; sourceTree = "<group>"; };
 		3065A5E3261551D800C20661 /* HIveResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HIveResponse.swift; sourceTree = "<group>"; };
@@ -818,6 +820,7 @@
 				11E3C24C25709282000175F1 /* ScriptingProtocol.swift */,
 				3065A6082615C81600C20661 /* HiveCheckValidProtocol.swift */,
 				30091C682619FDBD003EB5CE /* PubSubProtocol.swift */,
+				304F1ECB264A20FD00362062 /* ScriptingInvocationProtocol.swift */,
 			);
 			name = Protocols;
 			sourceTree = "<group>";
@@ -1211,6 +1214,7 @@
 				3033734F25F9F703004D0D93 /* AppContext.swift in Sources */,
 				30099A6925FE68A800506AA8 /* LocalResolver.swift in Sources */,
 				304EA3A2261D4134007ADD47 /* CountDocRequestParams.swift in Sources */,
+				304F1ECC264A20FD00362062 /* ScriptingInvocationProtocol.swift in Sources */,
 				30091C1C26182326003EB5CE /* HiveVaultRender.swift in Sources */,
 				1170FB142502019C0049E81D /* Vault.swift in Sources */,
 				11C9EAE5254A637500080995 /* InsertOneResult.swift in Sources */,

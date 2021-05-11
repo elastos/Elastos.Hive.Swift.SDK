@@ -270,7 +270,7 @@ class ScriptingServiceTest: XCTestCase {
 
     func uploadFileByTransActionId(_ transactionId: String) -> Promise<Void> {
         return Promise<Void> { resolver in
-            self.scriptRunner!.uploadFile(transactionId).done { writer in
+            self.scriptRunner!.uploadFile(transactionId, FileWriter.self).done { writer in
                 let bundle = Bundle(for: type(of: self))
                 let filePath: String = bundle.path(forResource: "test_ios", ofType: "txt")!
                 let data = try! Data(contentsOf: URL(fileURLWithPath: filePath))
@@ -347,7 +347,7 @@ class ScriptingServiceTest: XCTestCase {
     func downloadFileByTransActionId(_ transactionId: String) -> Promise<Bool> {
         return Promise<Bool> { resolver in
             let downloadPath = createDownloadFile(self.localDstFilePath)
-            self.scriptRunner!.downloadFile(transactionId).done({ (reader) in
+            self.scriptRunner!.downloadFile(transactionId, FileReader.self).done({ reader in
                 while !reader.didLoadFinish {
                     if let data = reader.read({ error in
                         resolver.reject(error)

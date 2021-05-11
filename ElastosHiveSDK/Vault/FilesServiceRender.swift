@@ -85,8 +85,13 @@ public class FilesServiceRender: FilesProtocol {
                     resolver.reject(HiveError.IllegalArgument(des: "Invalid url format."))
                     return
                 }
-                let reader = FileReader(url!, self._connectionManager, resolver, HTTPMethod.get)
-                resolver.fulfill(reader)
+                do {
+                    let reader = try FileReader(url!, self._connectionManager, resolver, HTTPMethod.get)
+                    resolver.fulfill(reader)
+                } catch {
+                    resolver.reject(error)
+                }
+                
             }
         }
     }

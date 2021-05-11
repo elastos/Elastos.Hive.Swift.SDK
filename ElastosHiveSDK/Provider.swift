@@ -37,11 +37,5 @@ public class Provider: ServiceEndpoint {
         try super.init(context, "")
     }
     
-    public static func getVersion() throws -> Promise<Version> {
-        throw HiveError.UnsupportedMethodException
-    }
-
-    public static func getLatestCommitId() throws -> Promise<Version> {
-        throw HiveError.UnsupportedMethodException
-    }
 }
+
