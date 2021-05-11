@@ -22,7 +22,7 @@
 
 import Foundation
 
-public class PromotionServiceRender: HiveVaultRender, PromotionProtocol {
+public class PromotionServiceRender: BaseServiceRender, PromotionProtocol {
     public override init(_ serviceEndpoint: ServiceEndpoint) {
         super.init(serviceEndpoint)
     }

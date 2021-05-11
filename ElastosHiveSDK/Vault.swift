@@ -73,7 +73,7 @@ public class Vault: ServiceEndpoint {
 }
 
 
-private class NodeManageServiceRender: HiveVaultRender {
+private class NodeManageServiceRender: BaseServiceRender {
 
     public init (_ vault: Vault) {
         super.init(vault)

@@ -22,7 +22,7 @@
 
 import Foundation
 
-public class AuthenticationServiceRender: HiveVaultRender {
+public class AuthenticationServiceRender: BaseServiceRender {
     private var _contextProvider: AppContextProvider?
     
     public typealias HiveToken = String

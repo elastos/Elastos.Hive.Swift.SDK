@@ -22,7 +22,7 @@
 
 import Foundation
 
-public class BackupServiceRender: HiveVaultRender, BackupProtocol {
+public class BackupServiceRender: BaseServiceRender, BackupProtocol {
     var _backupContext: BackupContext?
     var _tokenResolver: TokenResolver?
     

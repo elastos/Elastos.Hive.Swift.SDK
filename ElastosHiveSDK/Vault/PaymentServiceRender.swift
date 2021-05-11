@@ -25,7 +25,7 @@ import Foundation
 /**
  * Helper class for vault/backup subscription.
  */
-public class PaymentServiceRender: HiveVaultRender {
+public class PaymentServiceRender: BaseServiceRender {
     
     public override init(_ serviceEndpoint: ServiceEndpoint) {
         super.init(serviceEndpoint)
