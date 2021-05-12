@@ -25,18 +25,18 @@ import Foundation
 public class ServiceEndpoint {
     private var _context: AppContext
     private var _providerAddress: String
-    private var _connectionManager: ConnectionManager?
+    private var _connectionManager: ConnectionManager
 
     public init(_ context: AppContext, _ providerAddress: String) throws {
         self._context = context
         self._providerAddress = providerAddress
         self._connectionManager = ConnectionManager(self)
-        self._connectionManager!.tokenResolver = try LocalResolver(self.appContext.userDid!,
-                                                                   self.providerAddress,
-                                                                   LocalResolver.TYPE_AUTH_TOKEN,
-                                                                   self.appContext.appContextProvider.getLocalDataDir()!)
+        self._connectionManager.tokenResolver = try LocalResolver(self.appContext.userDid,
+                                                                  self.providerAddress,
+                                                                  LocalResolver.TYPE_AUTH_TOKEN,
+                                                                  self.appContext.appContextProvider.getLocalDataDir())
         let remoteResolver = RemoteResolver(self)
-        try self._connectionManager!.tokenResolver?.setNextResolver(remoteResolver)
+        try self._connectionManager.tokenResolver?.setNextResolver(remoteResolver)
     }
     
     public var appContext: AppContext {
@@ -46,7 +46,7 @@ public class ServiceEndpoint {
     /**
      * Get the user DID string of this serviceEndpoint.
      */
-    public var userDid: String? {
+    public var userDid: String {
         return self._context.userDid
     }
     
@@ -58,7 +58,7 @@ public class ServiceEndpoint {
     }
         
     public var connectionManager: ConnectionManager {
-        return self._connectionManager!
+        return self._connectionManager
     }
     
     /**
@@ -100,4 +100,14 @@ public class ServiceEndpoint {
         }()
         return nil
     }
+
+    /* TODO
+    public func getVersion() -> Promise<Version> {
+        //TODO:
+    }
+
+    public func getLastCommitId() -> Promise<String> {
+        //TODO:
+    }
+    */
 }
