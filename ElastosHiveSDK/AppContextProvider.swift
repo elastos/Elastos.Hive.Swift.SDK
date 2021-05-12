@@ -31,14 +31,14 @@ public protocol AppContextProvider {
      * to store local data, especially for access tokens.
      * @return The full path to the directory;
      */
-    func getLocalDataDir() -> String?
+    func getLocalDataDir() -> String
 
     /**
      * The method for upper Application to implement to provide current application
      * instance did document as the running context.
      * @return The application instance did document.
      */
-    func getAppInstanceDocument() -> DIDDocument?
+    func getAppInstanceDocument() -> DIDDocument
 
     /**
      * The method for upper Application to implement to acquire the authorization
