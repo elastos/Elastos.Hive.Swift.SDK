@@ -46,5 +46,5 @@ public protocol AppContextProvider {
      * @param jwtToken  The input challenge code from back-end node service.
      * @return The credential issued by user.
      */
-    func getAuthorization(_ jwtToken: String) -> String?
+    func getAuthorization(_ authenticationChallengeJWTcode: String) -> String?
 }
