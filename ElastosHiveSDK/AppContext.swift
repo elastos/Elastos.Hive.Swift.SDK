@@ -30,14 +30,9 @@ public class AppContext {
     
     private static var resolverHasSetup: Bool = false
     private var _contextProvider: AppContextProvider
-    private var _userDid: String?
-    private var _connectionManager: ConnectionManager?
+    private var _userDid: String
     
-    public convenience init(_ provider: AppContextProvider) {
-        self.init(provider, nil)
-    }
-    
-    public init(_ provider: AppContextProvider, _ userDid: String?) {
+    public init(_ provider: AppContextProvider, _ userDid: String) {
         self._userDid = userDid
         self._contextProvider = provider
     }
@@ -52,7 +47,7 @@ public class AppContext {
             try ResolverCache.reset()
             resolverHasSetup = true
         } catch {
-            throw error
+            throw error //TODO: need to throw specific error.
         }
     }
     
@@ -60,24 +55,8 @@ public class AppContext {
         return self._contextProvider
     }
     
-    public var userDid: String? {
+    public var userDid: String {
         return self._userDid
-    }
-    
-    public static func build(_ provider: AppContextProvider) throws -> AppContext {
-        guard provider.getLocalDataDir() != nil else {
-            throw HiveError.BadContextProviderException("Missing method to acquire data location")
-        }
-        
-        guard provider.getAppInstanceDocument() != nil else {
-            throw HiveError.BadContextProviderException("Missing method to acquire App instance DID document")
-        }
-        
-        if self.resolverHasSetup == false {
-            throw HiveError.DIDResolverNotSetupException
-        }
-
-        return AppContext(provider)
     }
     
     public static func build(_ provider: AppContextProvider, _ userDid: String) throws -> AppContext {
@@ -89,7 +68,7 @@ public class AppContext {
             throw HiveError.BadContextProviderException("Missing method to acquire App instance DID document")
         }
         
-        if self.resolverHasSetup == false {
+        guard self.resolverHasSetup else{
             throw HiveError.DIDResolverNotSetupException
         }
 
@@ -100,7 +79,11 @@ public class AppContext {
         return getProviderAddress(targetDid, nil)
     }
     
-    public func getProviderAddress(_ targetDid: String, _ preferredProviderAddress: String?) -> Promise<String> {
+    public func getProviderAddress(_ targetDid: String, _ preferredProviderAddress: String) -> Promise<String> {
+        return getProviderAddress(targetDid, preferredProviderAddress);
+    }
+
+    private func getProviderAddress(_ targetDid: String, _ preferredProviderAddress: String?) -> Promise<String> {
         return Promise<Any>.async().then { _ -> Promise<String> in
             return Promise<String> { resolver in
                 if preferredProviderAddress != nil {
