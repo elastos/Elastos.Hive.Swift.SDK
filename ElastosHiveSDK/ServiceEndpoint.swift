@@ -25,18 +25,18 @@ import Foundation
 public class ServiceEndpoint {
     private var _context: AppContext
     private var _providerAddress: String
-    private var _connectionManager: ConnectionManager
+    private var _connectionManager: ConnectionManager?
 
     public init(_ context: AppContext, _ providerAddress: String) throws {
         self._context = context
         self._providerAddress = providerAddress
         self._connectionManager = ConnectionManager(self)
-        self._connectionManager.tokenResolver = try LocalResolver(self.appContext.userDid,
+        self._connectionManager!.tokenResolver = try LocalResolver(self.appContext.userDid,
                                                                   self.providerAddress,
                                                                   LocalResolver.TYPE_AUTH_TOKEN,
                                                                   self.appContext.appContextProvider.getLocalDataDir())
         let remoteResolver = RemoteResolver(self)
-        try self._connectionManager.tokenResolver?.setNextResolver(remoteResolver)
+        try self._connectionManager!.tokenResolver?.setNextResolver(remoteResolver)
     }
     
     public var appContext: AppContext {
@@ -58,7 +58,7 @@ public class ServiceEndpoint {
     }
         
     public var connectionManager: ConnectionManager {
-        return self._connectionManager
+        return self._connectionManager!
     }
     
     /**
@@ -101,13 +101,23 @@ public class ServiceEndpoint {
         return nil
     }
 
-    /* TODO
     public func getVersion() -> Promise<Version> {
-        //TODO:
+        return Promise<Version> { resolver in
+            // TODO: Required version number is *.*.*, such as 1.0.12
+            resolver.fulfill(Version())
+
+        }
     }
 
     public func getLastCommitId() -> Promise<String> {
-        //TODO:
+
+        return Promise<Any>.async().then{ [self] _ -> Promise<String> in
+            return Promise<String> { resolver in
+                let url = self.connectionManager.hiveApi.commitHash()
+                let header = try self.connectionManager.headers()
+                let response: NodeCommitHashResponse = try HiveAPi.request(url: url, method: .post, parameters: nil, headers: header).get(NodeCommitHashResponse.self)
+                resolver.fulfill(response.commitHash)
+            }
+        }  
     }
-    */
 }

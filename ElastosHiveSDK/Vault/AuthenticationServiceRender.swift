@@ -33,7 +33,7 @@ public class AuthenticationServiceRender: BaseServiceRender {
     }
 
     public func signInForToken() throws -> HiveToken {
-        let jsonstr = self._contextProvider!.getAppInstanceDocument()!.description
+        let jsonstr = self._contextProvider!.getAppInstanceDocument().description
         let data = jsonstr.data(using: .utf8)
         let json: [String: Any]  = try JSONSerialization.jsonObject(with: data!, options: []) as! [String : Any]
         let params: [String: Any] = ["document": json]
@@ -44,7 +44,7 @@ public class AuthenticationServiceRender: BaseServiceRender {
     }
 
     public func signInForIssuer() throws -> String {
-        let jsonstr = self._contextProvider!.getAppInstanceDocument()!.description
+        let jsonstr = self._contextProvider!.getAppInstanceDocument().description
         let data = jsonstr.data(using: .utf8)
         let json: [String: Any]  = try JSONSerialization.jsonObject(with: data!, options: []) as! [String : Any]
         let params: [String: Any] = ["document": json]

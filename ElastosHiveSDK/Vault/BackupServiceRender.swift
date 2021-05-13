@@ -30,10 +30,10 @@ public class BackupServiceRender: BaseServiceRender, BackupProtocol {
         return Promise<Any>.async().then{ [self] _ -> Promise<Void> in
             return Promise<Void> { resolver in
                 self._backupContext = backupContext
-                self._tokenResolver = try LocalResolver(self.serviceEndpoint.userDid!,
+                self._tokenResolver = try LocalResolver(self.serviceEndpoint.userDid,
                                                         self.serviceEndpoint.providerAddress,
                                                         LocalResolver.TYPE_BACKUP_CREDENTIAL,
-                                                        self.serviceEndpoint.appContext.appContextProvider.getLocalDataDir()!)
+                                                        self.serviceEndpoint.appContext.appContextProvider.getLocalDataDir())
                 let backupRemoteResolver: BackupRemoteResolver = BackupRemoteResolver(self.serviceEndpoint,
                                                                                       backupContext,
                                                                                       backupContext.getParameter("targetDid"),
