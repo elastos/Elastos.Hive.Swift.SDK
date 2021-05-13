@@ -9,11 +9,11 @@ public class CallerAppContextProvider: AppContextProvider {
     public var appInstanceDid: DApp
     private var localDataDir: String
 
-    public func getLocalDataDir() -> String? {
+    public func getLocalDataDir() -> String {
         self.localDataDir
     }
     
-    public func getAppInstanceDocument() -> DIDDocument? {
+    public func getAppInstanceDocument() -> DIDDocument {
         return try! appInstanceDid.getDocument()
     }
     

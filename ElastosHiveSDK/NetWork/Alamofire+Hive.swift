@@ -23,34 +23,6 @@
 import ObjectMapper
 
 internal extension DataRequest {
-    func get(options: JSONSerialization.ReadingOptions = .allowFragments) throws -> HiveResponse {
-        let rep = response(responseSerializer: JSONResponseSerializer(options: options))
-        switch rep.result {
-        case .success(let re):
-            let json = re as! [String : Any]
-            if json["_status"] as! String != "OK" {
-                let errorObject = JSON(json)
-                let code = errorObject["_error"] ["code"];
-                let message = errorObject["_error"] ["message"];
-                throw HiveError.hiveSdk(message: "get error from server: error code = \(code), message = \(message)")
-            }
-            
-            let response: HiveResponse = HiveResponse(JSON: re as! [String : Any])!
-            response.json = JSON(re).dictionaryObject!
-            return response
-        case .failure(let error):
-            switch error {
-            case .responseSerializationFailed(_):
-                var des = ""
-                if rep.data != nil {
-                    des = String(data: rep.data!, encoding: .utf8) ?? ""
-                }
-                throw  HiveError.responseSerializationFailed(des: des)
-            default: break
-            }
-            throw error
-        }
-    }
     
     func get<T: Mappable & HiveCheckValidProtocol>(options: JSONSerialization.ReadingOptions = .allowFragments, _ resultType: T.Type) throws -> T {
         let response1 = response(responseSerializer: JSONResponseSerializer(options: options))
@@ -64,9 +36,16 @@ internal extension DataRequest {
                 throw HiveError.hiveSdk(message: "get error from server: error code = \(code), message = \(message)")
             }
             
-            let result = T(JSON: re as! [String : Any])!
-            try result.checkResponseVaild()
-            return result
+            if resultType == HiveResponse.self {
+                let response: HiveResponse = HiveResponse(JSON: re as! [String : Any])!
+                response.json = JSON(re).dictionaryObject!
+                return response as! T
+            } else {
+                let result = T(JSON: re as! [String : Any])!
+                try result.checkResponseVaild()
+                return result
+            }
+            
         case .failure(let error):
             let e = error
             switch e {

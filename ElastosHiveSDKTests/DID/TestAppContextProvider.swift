@@ -5,15 +5,16 @@ import PromiseKit
 import ElastosHiveSDK
 
 public class TestAppContextProvider: AppContextProvider {
+    
     public var userDid: DIDApp
     public var appInstanceDid: DApp
     private var localDataDir: String
 
-    public func getLocalDataDir() -> String? {
+    public func getLocalDataDir() -> String {
         self.localDataDir
     }
     
-    public func getAppInstanceDocument() -> DIDDocument? {
+    public func getAppInstanceDocument() -> DIDDocument {
         return try! appInstanceDid.getDocument()
     }
     

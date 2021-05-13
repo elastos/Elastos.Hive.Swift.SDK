@@ -113,7 +113,7 @@ public class PaymentServiceRender: BaseServiceRender {
                     let response: HiveResponse = try HiveAPi.request(url: self.connectionManager.hiveApi.createOrder(),
                                                                      method: .post,
                                                                      parameters: params as Parameters,
-                                                                     headers: try self.connectionManager.headers()).get()
+                                                                     headers: try self.connectionManager.headers()).get(HiveResponse.self)
                     resolver.fulfill((response.json["order_id"] as! String))
                 } catch {
                     resolver.reject(error)
@@ -129,7 +129,7 @@ public class PaymentServiceRender: BaseServiceRender {
                 _ = try HiveAPi.request(url: self.connectionManager.hiveApi.payOrder,
                 method: .post,
                 parameters: params,
-                headers: try self.connectionManager.headers()).get()
+                headers: try self.connectionManager.headers()).get(HiveResponse.self)
                 resolver.fulfill(Receipt())
             }
         }

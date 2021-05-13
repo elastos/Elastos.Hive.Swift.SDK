@@ -65,7 +65,7 @@ public class ScriptingServiceRender: BaseServiceRender, ScriptingProtocol {
 
             let url = self.connectionManager.hiveApi.callScript()
             let header = try self.connectionManager.headers()
-            let response = try HiveAPi.request(url: url, method: .post, parameters: requestParams.toJSON(), headers: header).get()
+            let response = try HiveAPi.request(url: url, method: .post, parameters: requestParams.toJSON(), headers: header).get(HiveResponse.self)
             resolver.fulfill(try handleResult(JSON(response.json), resultType))
         }
     }
