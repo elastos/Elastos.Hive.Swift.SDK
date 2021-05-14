@@ -63,9 +63,11 @@ public class AuthenticationServiceRender: BaseServiceRender {
 
         let jwtParserBuilder = try JwtParserBuilder().build()
         let claim = try jwtParserBuilder.parseClaimsJwt(response.accessToken).claims
+        // Update the service did to service end-point for future usage.
+        self.serviceEndpoint.serviceDid = claim.getIssuer()
         let expirationDate = claim.getExpiration()
         let expiresTime: Int64 = Int64(expirationDate!.timeIntervalSince1970)
-        return AuthToken(response.accessToken, expiresTime, "token")
+        return AuthTokenToVault(response.accessToken, expiresTime)
         
     }
     

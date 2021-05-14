@@ -56,7 +56,7 @@ public class BackupRemoteResolver: TokenResolver {
         }
         _ = semaphore.wait(timeout: DispatchTime.distantFuture)
 
-        return AuthToken(accessToken!, 0, AuthToken.backupType)
+        return AuthToken(accessToken!, 0)
     }
     
     public func invlidateToken() throws {

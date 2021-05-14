@@ -23,19 +23,38 @@
 import Foundation
 
 public protocol DataStorageProtocol {
-    func loadBackupCredential(_ serviceDid: String) -> String
+    func loadBackupCredential(_ serviceDid: String) -> String?
     
-    func loadSignInCredential() -> String
+    func loadSignInCredential() -> String?
     
-    func loadAccessToken(_ serviceDid: String) -> String
+    /// Load access token by serviceDid which can be used for authorization.
+    /// - parameter path: serviceDid service did
+    /// - returns: access token
+    func loadAccessToken(_ serviceDid: String) -> String?
 
-    func loadAccessTokenByAddress(_ providerAddress: String) -> String
+    /// Load access token by provider address which can be used for authorization.
+    /// - parameter path: providerAddress provider address to access
+    /// - returns: access token
+    func loadAccessTokenByAddress(_ providerAddress: String) -> String?
 
     func storeBackupCredential(_ serviceDid: String, _ credential: String)
     
     func storeSignInCredential(_ credential: String)
 
+    /// Load access token by provider address which can be used for authorization.
+    /// - parameters:
+    ///   - serviceDid: service did
+    ///   - accessToken: access token to be stored
     func storeAccessToken(_ serviceDid: String, _ accessToken: String)
 
-    func storeAccessTokenByAddress(_ serviceDid: String, _ providerAddress: String)
+    /// Store access token to data storage by provider address.
+    /// - parameters:
+    ///   - serviceDid: providerAddress provider address
+    ///   - accessToken: access token
+    func storeAccessTokenByAddress(_ serviceDid: String, _ accessToken: String)
+    
+    func clearBackupCredential(_ serviceDid: String)
+    func clearSignInCredential()
+    func clearAccessToken(_ serviceDid: String)
+    func clearAccessTokenByAddress(_ providerAddress: String)
 }

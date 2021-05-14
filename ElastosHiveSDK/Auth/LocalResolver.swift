@@ -24,31 +24,17 @@ import Foundation
 import ObjectMapper
 
 public class LocalResolver: TokenResolver {
-    public static let TYPE_BACKUP_CREDENTIAL: String = "backup_credential"
-    public static let TYPE_AUTH_TOKEN: String = "auth_token"
-    private static let tokenFolder: String = "/tokens"
-    
-    var tokenPath: String
+
     var nextResolver: TokenResolver?
+    var dataStorage: DataStorageProtocol
+    var serviceEndpoint: ServiceEndpoint
     var token: AuthToken?
-    private var providerAddress: String
     
-    init(_ ownerDid: String, _ providerAddress: String, _ type: String, _ cacheDir: String) throws {
-        let rootDir = cacheDir + LocalResolver.tokenFolder
-        var isDirectory: ObjCBool = false
-        let fileManager = FileManager.default
-
-        if !fileManager.fileExists(atPath: rootDir) {
-            try fileManager.createDirectory(atPath: rootDir, withIntermediateDirectories: true, attributes: nil)
-        }
-        guard fileManager.fileExists(atPath: rootDir, isDirectory: &isDirectory) else {
-            throw HiveError.IllegalArgument(des: "Cannot create token root path.")
-        }
-        
-        self.providerAddress = providerAddress
-        self.tokenPath = rootDir + "/" + (ownerDid + providerAddress + type).md5
+    init(_ serviceEndpoint: ServiceEndpoint) {
+        self.dataStorage = serviceEndpoint.appContext.dataStorage
+        self.serviceEndpoint = serviceEndpoint
     }
-
+    
     public func getToken() throws -> AuthToken? {
         if token == nil {
             token = try restoreToken()
@@ -60,41 +46,52 @@ public class LocalResolver: TokenResolver {
         return token
     }
 
-    private func restoreToken() throws -> AuthToken? {
-        let fileManager = FileManager.default
-        if !fileManager.fileExists(atPath: tokenPath) {
-            return nil
-        }
-        do {
-            let tokenData = try Data(contentsOf: URL(fileURLWithPath: self.tokenPath))
-            let json: [String : Any] = try JSONSerialization.jsonObject(with: tokenData) as! [String : Any]
-            return AuthToken(JSON: json)
-        } catch {
-            print("Failed to restore access token from local cache")
-            return nil
-        }
-    }
-    
     public func invlidateToken() throws {
         if token != nil {
             token = nil
             clearToken()
         }
     }
-
-    private func saveToken(_ token: AuthToken) throws {
-        let jsonString = Mapper().toJSONString(token, prettyPrint: true)
-        try jsonString!.write(to: URL(fileURLWithPath: self.tokenPath),
-                              atomically: true,
-                              encoding: .utf8)
-    }
-    
-    private func clearToken() {
-        try? FileManager.default.removeItem(atPath: self.tokenPath)
-    }
     
     public func setNextResolver(_ resolver: TokenResolver?) {
         self.nextResolver = resolver
+    }
+    
+    public func restoreToken() throws -> AuthToken? {
+        var tokenStr: String? = nil
+        if self.serviceEndpoint.serviceDid != nil {
+            tokenStr = self.dataStorage.loadAccessToken(serviceEndpoint.serviceDid!)
+            if tokenStr == nil {
+                tokenStr = self.dataStorage.loadAccessTokenByAddress(self.serviceEndpoint.providerAddress)
+            }
+        }
+        
+        if tokenStr == nil {
+            return nil
+        }
+        
+        do {
+            let json: [String : Any] = try JSONSerialization.jsonObject(with: tokenStr!.data(using: .utf8)!) as! [String : Any]
+            return AuthTokenToVault(JSON: json)
+        } catch {
+            print(error.localizedDescription)
+        }
+        return nil
+    }
+    
+    public func saveToken(_ token: AuthToken) throws {
+        let tokenStr = Mapper().toJSONString(token, prettyPrint: true)
+        if self.serviceEndpoint.serviceDid != nil {
+            self.dataStorage.storeAccessToken(self.serviceEndpoint.serviceDid!, tokenStr!)
+        }
+        self.dataStorage.storeAccessTokenByAddress(self.serviceEndpoint.providerAddress, tokenStr!)
+    }
+    
+    public func clearToken() {
+        if self.serviceEndpoint.serviceDid != nil {
+            self.dataStorage.clearAccessToken(self.serviceEndpoint.serviceDid!)
+        }
+        self.dataStorage.clearAccessTokenByAddress(self.serviceEndpoint.providerAddress)
     }
 }
 

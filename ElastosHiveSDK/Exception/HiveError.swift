@@ -50,6 +50,7 @@ public enum HiveError: Error {
     case UnsupportedFileTypeException(_ message: String)
     case VaultLockedException(_ message: String)
     case UnsupportedMethodException
+    case DIDResolverSetupException(_ message: String)
 }
 
 extension HiveError {
@@ -110,6 +111,8 @@ extension HiveError {
             return "VaultLockedException \(message)"
         case .UnsupportedMethodException:
             return "This method will be supported in the later versions"
+        case .DIDResolverSetupException(let message):
+            return "DIDResolverSetupException \(message)"
         }
     }
     

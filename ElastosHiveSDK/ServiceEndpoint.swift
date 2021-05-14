@@ -26,15 +26,13 @@ public class ServiceEndpoint {
     private var _context: AppContext
     private var _providerAddress: String
     private var _connectionManager: ConnectionManager?
+    private var _serviceDid: String?
 
     public init(_ context: AppContext, _ providerAddress: String) throws {
         self._context = context
         self._providerAddress = providerAddress
         self._connectionManager = ConnectionManager(self)
-        self._connectionManager!.tokenResolver = try LocalResolver(self.appContext.userDid,
-                                                                  self.providerAddress,
-                                                                  LocalResolver.TYPE_AUTH_TOKEN,
-                                                                  self.appContext.appContextProvider.getLocalDataDir())
+        self._connectionManager!.tokenResolver = LocalResolver(self)
         let remoteResolver = RemoteResolver(self)
         try self._connectionManager!.tokenResolver?.setNextResolver(remoteResolver)
     }
@@ -58,7 +56,12 @@ public class ServiceEndpoint {
     }
         
     public var connectionManager: ConnectionManager {
-        return self._connectionManager!
+        set {
+            self._connectionManager = newValue
+        }
+        get {
+            return self._connectionManager!
+        }
     }
     
     /**
@@ -85,10 +88,12 @@ public class ServiceEndpoint {
      * Get the remote node service application DID.
      */
     public var serviceDid: String? {
-        try!{
-            throw HiveError.UnsupportedMethodException
-        }()
-        return nil
+        set {
+            _serviceDid = newValue
+        }
+        get {
+            return _serviceDid
+        }
     }
     
     /**

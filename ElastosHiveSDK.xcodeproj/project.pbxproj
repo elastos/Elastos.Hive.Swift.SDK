@@ -212,6 +212,9 @@
 		30EC875D2627CA5E00F15FB2 /* FileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30EC875C2627CA5E00F15FB2 /* FileStorage.swift */; };
 		30EC87682627CF7500F15FB2 /* CloudBackupContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30EC87672627CF7500F15FB2 /* CloudBackupContext.swift */; };
 		30F2BA0B264CF4950032BF99 /* AboutApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F2BA0A264CF4950032BF99 /* AboutApi.swift */; };
+		30F2BA14264D02CB0032BF99 /* BackupLocalResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F2BA13264D02CB0032BF99 /* BackupLocalResolver.swift */; };
+		30F2BA28264D3EF60032BF99 /* AuthTokenToBackup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F2BA27264D3EF60032BF99 /* AuthTokenToBackup.swift */; };
+		30F2BA2B264D3F0A0032BF99 /* AuthTokenToVault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F2BA2A264D3F0A0032BF99 /* AuthTokenToVault.swift */; };
 		6DDA50FA35E7A18E5EF0C90E /* Pods_ElastosHiveSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D17AD36AC88E073FD2B2D930 /* Pods_ElastosHiveSDK.framework */; };
 		A39C4980225399860027BDF9 /* ElastosHiveSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = A39C4972225399860027BDF9 /* ElastosHiveSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A3D9D41323C9671C003B602E /* FilesProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D9D41023C9671C003B602E /* FilesProtocol.swift */; };
@@ -434,6 +437,9 @@
 		30EC875C2627CA5E00F15FB2 /* FileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileStorage.swift; sourceTree = "<group>"; };
 		30EC87672627CF7500F15FB2 /* CloudBackupContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudBackupContext.swift; sourceTree = "<group>"; };
 		30F2BA0A264CF4950032BF99 /* AboutApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutApi.swift; sourceTree = "<group>"; };
+		30F2BA13264D02CB0032BF99 /* BackupLocalResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupLocalResolver.swift; sourceTree = "<group>"; };
+		30F2BA27264D3EF60032BF99 /* AuthTokenToBackup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthTokenToBackup.swift; sourceTree = "<group>"; };
+		30F2BA2A264D3F0A0032BF99 /* AuthTokenToVault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthTokenToVault.swift; sourceTree = "<group>"; };
 		556E8D39E54EDBDFA4DEAD42 /* Pods-TestHost.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestHost.release.xcconfig"; path = "Target Support Files/Pods-TestHost/Pods-TestHost.release.xcconfig"; sourceTree = "<group>"; };
 		5F09DA7DC9D47111E630261C /* Pods_TestHost.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TestHost.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6081910F0FC211291C05B08B /* Pods-ElastosHiveSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDK.release.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDK/Pods-ElastosHiveSDK.release.xcconfig"; sourceTree = "<group>"; };
@@ -694,9 +700,12 @@
 			isa = PBXGroup;
 			children = (
 				1103757223FF96AB004216D0 /* AuthToken.swift */,
+				30F2BA2A264D3F0A0032BF99 /* AuthTokenToVault.swift */,
+				30F2BA27264D3EF60032BF99 /* AuthTokenToBackup.swift */,
 				3033737025FA218D004D0D93 /* TokenResolver.swift */,
 				30A996FA25FCEB420002B014 /* RemoteResolver.swift */,
 				30099A6825FE68A800506AA8 /* LocalResolver.swift */,
+				30F2BA13264D02CB0032BF99 /* BackupLocalResolver.swift */,
 				30091C2426183206003EB5CE /* BackupRemoteResolver.swift */,
 			);
 			path = Auth;
@@ -1230,6 +1239,7 @@
 				30DB965A2600E61600ACF19F /* ServiceEndpoint.swift in Sources */,
 				30A996FF25FCF74B0002B014 /* ConnectionManager.swift in Sources */,
 				30091C3B2619F558003EB5CE /* FindDocsResponse.swift in Sources */,
+				30F2BA28264D3EF60032BF99 /* AuthTokenToBackup.swift in Sources */,
 				3033735325F9F7BD004D0D93 /* AppContextProvider.swift in Sources */,
 				3045A75926024C1E0037527A /* ScriptingRender.swift in Sources */,
 				303CD55D26075D2A00865472 /* ScriptRunner.swift in Sources */,
@@ -1256,6 +1266,7 @@
 				30091C4F2619F84B003EB5CE /* ChannelMessage.swift in Sources */,
 				304EA392261D3F8B007ADD47 /* FilesCopyRequestParams.swift in Sources */,
 				30DB96442600491D00ACF19F /* SubscriptionProtocol.swift in Sources */,
+				30F2BA2B264D3F0A0032BF99 /* AuthTokenToVault.swift in Sources */,
 				30221071261C962D00578934 /* ScriptFindBody.swift in Sources */,
 				304EA38F261D3F0E007ADD47 /* FilesDeleteRequestParams.swift in Sources */,
 				3065A5F3261592E600C20661 /* OrderInfoResponse.swift in Sources */,
@@ -1263,6 +1274,7 @@
 				30091C622619FB01003EB5CE /* VaultInfoResponse.swift in Sources */,
 				110357E7256FA420003F639F /* FileWriter.swift in Sources */,
 				30091C482619F73A003EB5CE /* PaymentCreateResponse.swift in Sources */,
+				30F2BA14264D02CB0032BF99 /* BackupLocalResolver.swift in Sources */,
 				3065A5ED26156B3F00C20661 /* PaymentServiceRender.swift in Sources */,
 				3045A75C2602519D0037527A /* Promise+async.swift in Sources */,
 				11E573FF22C4C33400F85419 /* String.swift in Sources */,

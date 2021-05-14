@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Elastos Foundation
+ * Copyright (c) 2021 Elastos Foundation
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,39 +23,20 @@
 import Foundation
 import ObjectMapper
 
-public class AuthToken: NSObject, Mappable{
-    public static let backupType: String = "backup"
+class AuthTokenToBackup: AuthToken {
     
-    var _accessToken: String?
-    var _expiresTime: Int64
-    
-    init(_ accessToken: String?, _ expiresTime: Int64) {
-        self._accessToken = accessToken
-        self._expiresTime = expiresTime
-    }
+    public static let TOKEN_TYPE: String = "backup"
 
-    public var accessToken: String? {
-        return _accessToken
-    }
-    public var expiresTime: Int64 {
-        return _expiresTime
+    override var canonicalizedAccessToken: String {
+        return AuthTokenToBackup.TOKEN_TYPE + " " + self.accessToken!
     }
     
-    public var canonicalizedAccessToken: String {
-        return ""
-    }
-    
-    public var isExpired: Bool {
-        return Int64(Date().timeIntervalSince1970) >= expiresTime
-    }
-    
-    public required init?(map: Map) {
-        try! self._accessToken = map.value("accessToken")
-        try! self._expiresTime = map.value("expiresTime")
-    }
-    
-    public func mapping(map: Map) {
-        _accessToken <- map["accessToken"]
-        _expiresTime <- map["expiresTime"]
+    override var isExpired: Bool {
+        do {
+            return try VerifiableCredential.fromJson(self.accessToken!).isExpired;
+        } catch {
+            print("Failed to check backup credential with message: \(error)")
+            return true;
+        }
     }
 }

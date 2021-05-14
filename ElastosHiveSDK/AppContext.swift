@@ -31,10 +31,12 @@ public class AppContext {
     private static var resolverHasSetup: Bool = false
     private var _contextProvider: AppContextProvider
     private var _userDid: String
+    private var _dataStorage: DataStorageProtocol?
     
     public init(_ provider: AppContextProvider, _ userDid: String) {
         self._userDid = userDid
         self._contextProvider = provider
+        self._dataStorage = FileStorage(provider.getLocalDataDir() + "/", userDid)
     }
     
     public static func setupResover(_ resolver: String, _ cacheDir: String) throws {
@@ -47,7 +49,7 @@ public class AppContext {
             try ResolverCache.reset()
             resolverHasSetup = true
         } catch {
-            throw error //TODO: need to throw specific error.
+            throw HiveError.DIDResolverSetupException("\(error)")
         }
     }
     
@@ -57,6 +59,10 @@ public class AppContext {
     
     public var userDid: String {
         return self._userDid
+    }
+    
+    public var dataStorage: DataStorageProtocol {
+        return self._dataStorage!
     }
     
     public static func build(_ provider: AppContextProvider, _ userDid: String) throws -> AppContext {

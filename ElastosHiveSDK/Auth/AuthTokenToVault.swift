@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Elastos Foundation
+ * Copyright (c) 2021 Elastos Foundation
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,39 +23,15 @@
 import Foundation
 import ObjectMapper
 
-public class AuthToken: NSObject, Mappable{
-    public static let backupType: String = "backup"
+class AuthTokenToVault: AuthToken {
+
+    public static let TOKEN_TYPE: String = "token"
     
-    var _accessToken: String?
-    var _expiresTime: Int64
-    
-    init(_ accessToken: String?, _ expiresTime: Int64) {
-        self._accessToken = accessToken
-        self._expiresTime = expiresTime
+    public override  var canonicalizedAccessToken: String {
+        return AuthTokenToVault.TOKEN_TYPE + " " + self.accessToken!
     }
 
-    public var accessToken: String? {
-        return _accessToken
-    }
-    public var expiresTime: Int64 {
-        return _expiresTime
-    }
-    
-    public var canonicalizedAccessToken: String {
-        return ""
-    }
-    
-    public var isExpired: Bool {
+    public override var isExpired: Bool {
         return Int64(Date().timeIntervalSince1970) >= expiresTime
-    }
-    
-    public required init?(map: Map) {
-        try! self._accessToken = map.value("accessToken")
-        try! self._expiresTime = map.value("expiresTime")
-    }
-    
-    public func mapping(map: Map) {
-        _accessToken <- map["accessToken"]
-        _expiresTime <- map["expiresTime"]
     }
 }
