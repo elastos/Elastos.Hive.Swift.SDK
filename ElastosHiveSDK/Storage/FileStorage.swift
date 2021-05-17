@@ -86,7 +86,7 @@ public class FileStorage: DataStorageProtocol {
         } catch {
             print("Failed to get content from file \(path)");
         }
-        return content ?? "“"
+        return content
     }
     
     private func saveFileContent(_ path: String, _ content: String) {

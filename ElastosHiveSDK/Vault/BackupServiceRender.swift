@@ -32,7 +32,7 @@ public class BackupServiceRender: BaseServiceRender, BackupProtocol {
                 let backupRemoteResolver: BackupRemoteResolver = BackupRemoteResolver(self.serviceEndpoint,
                                                                                       backupContext,
                                                                                       backupContext.getParameter("targetServiceDid"),
-                                                                                      backupContext.getParameter("targetServiceDid"))
+                                                                                      backupContext.getParameter("targetAddress"))
                 try! self._tokenResolver?.setNextResolver(backupRemoteResolver)
                 resolver.fulfill(Void())
             }

@@ -74,6 +74,7 @@ class BackupServiceTest: XCTestCase {
     }
     
     override func setUpWithError() throws {
+        Log.setLevel(.Debug)
         self.backupService = try TestData.shared.backupService()
     }
 }

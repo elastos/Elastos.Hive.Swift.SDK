@@ -28,10 +28,10 @@ public class TestBackupRender: BackupContext {
     }
     
     public func getParameter(_ key: String) -> String {
-        if key == "targetDid" {
-            return self.nodeConfig.targetDid
-        } else if key == "targetHost" {
+        if key == "targetAddress" {
             return self.nodeConfig.targetHost
+        } else if key == "targetServiceDid" {
+            return self.nodeConfig.targetDid
         }
         return ""
     }
@@ -106,6 +106,8 @@ public class TestData {
                                             nodeConfig.ownerDid)
         self.contextCaller = try AppContext.build(TestAppContextProvider(storePath, userDid!, appInstanceDid!),
                                             nodeConfig.ownerDid)
+        
+        _callerDid = userConfigCaller.did
     }
     
     public var appContext: AppContext {

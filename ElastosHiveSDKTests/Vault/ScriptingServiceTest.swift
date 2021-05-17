@@ -48,10 +48,9 @@ class ScriptingServiceTest: XCTestCase {
     private var COLLECTION_NAME: String = "script_database"
     private var appId: String?
     private var ownerDid: String?
-
-
     
     override func setUpWithError() throws {
+        Log.setLevel(.Debug)
         let lock = XCTestExpectation(description: "wait for setup.")
         let testData: TestData = TestData.shared
         self.scriptingService = try TestData.shared.newVault().scriptingService
@@ -448,15 +447,6 @@ class ScriptingServiceTest: XCTestCase {
         }
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-
     // MARK: -
     func testRegisterScriptFindWithoutCondition(_ scriptName: String) {
         let lock = XCTestExpectation(description: "wait for test register script find without conditon.")

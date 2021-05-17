@@ -27,6 +27,10 @@ public class UpdateOptions: Mappable {
     private var _upsert: Bool?
     private var _bypassDocumentValidation: Bool?
     
+    public init () {
+        
+    }
+    
     public var upsert: Bool {
         set {
             _upsert = newValue

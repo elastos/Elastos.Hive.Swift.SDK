@@ -35,12 +35,6 @@ internal extension DataRequest {
                 let message = errorObject["_error"] ["message"];
                 throw HiveError.hiveSdk(message: "get error from server: error code = \(code), message = \(message)")
             }
-            
-            Log.d("Hive Debug ==> request url ->", response1.request?.url as Any)
-            Log.d("Hive Debug ==> request headers ->", response1.request?.allHTTPHeaderFields)
-            Log.d("Hive Debug ==> response Code ->", response1.response?.statusCode)
-            Log.d("Hive Debug ==> response body ->", re)
-            
             if resultType == HiveResponse.self {
                 let response: HiveResponse = HiveResponse(JSON: re as! [String : Any])!
                 response.json = JSON(re).dictionaryObject!

@@ -129,6 +129,78 @@ class DatabaseServiceTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
     
+    func test07UpdateOne() {
+        let lock = XCTestExpectation(description: "wait for test count doc.")
+        let filter = ["author": "john doe1"]
+        let doc = ["author": "john doe1", "title": "Eve for Dummies2"]
+        let update = ["$set": doc]
+
+        let option = UpdateOptions()
+        option.bypassDocumentValidation = false
+        option.upsert = true
+        
+        self.database!.updateOne(DatabaseServiceTest.COLLECTION_NAME, filter, update, option).done{ result in
+            XCTAssertNotNil(result)
+            lock.fulfill()
+        }.catch { error in
+            XCTFail("\(error)")
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+    
+    func test08UpdateMany() {
+        let lock = XCTestExpectation(description: "wait for test count doc.")
+        let filter = ["author": "john doe1"]
+        let doc = ["author": "john doe1", "title": "Eve for Dummies2"]
+        let update = ["$set": doc]
+
+        let option = UpdateOptions()
+        option.bypassDocumentValidation = false
+        option.upsert = true
+        
+        self.database!.updateMany(DatabaseServiceTest.COLLECTION_NAME, filter, update, option).done{ result in
+            XCTAssertNotNil(result)
+            lock.fulfill()
+        }.catch { error in
+            XCTFail("\(error)")
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+    
+    func test09DeleteOne() {
+        let lock = XCTestExpectation(description: "wait for test count doc.")
+        let filter = ["author": "john doe2"]
+
+        let option = DeleteOptions()
+
+        self.database!.deleteOne(DatabaseServiceTest.COLLECTION_NAME, filter, options: option).done{ result in
+            XCTAssertNotNil(result)
+            lock.fulfill()
+        }.catch { error in
+            XCTFail("\(error)")
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+    
+    func test10DeleteMany() {
+        let lock = XCTestExpectation(description: "wait for test count doc.")
+        let filter = ["author": "john doe2"]
+
+        let option = DeleteOptions()
+
+        self.database!.deleteMany(DatabaseServiceTest.COLLECTION_NAME, filter, options: option).done{ result in
+            XCTAssertNotNil(result)
+            lock.fulfill()
+        }.catch { error in
+            XCTFail("\(error)")
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 1000.0)
+    }
+
     override func setUpWithError() throws {
         let lock = XCTestExpectation(description: "wait for test.")
         Log.setLevel(.Debug)

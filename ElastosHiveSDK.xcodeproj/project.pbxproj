@@ -118,6 +118,7 @@
 		3033734F25F9F703004D0D93 /* AppContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3033734E25F9F703004D0D93 /* AppContext.swift */; };
 		3033735325F9F7BD004D0D93 /* AppContextProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3033735225F9F7BD004D0D93 /* AppContextProvider.swift */; };
 		3033737125FA218D004D0D93 /* TokenResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3033737025FA218D004D0D93 /* TokenResolver.swift */; };
+		3036DDD4265122C200253510 /* DatabaseServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3036DDD3265122C200253510 /* DatabaseServiceTest.swift */; };
 		303CD55D26075D2A00865472 /* ScriptRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303CD55C26075D2A00865472 /* ScriptRunner.swift */; };
 		303CD5602607606B00865472 /* ScriptingApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303CD55F2607606B00865472 /* ScriptingApi.swift */; };
 		303CD58326078E9000865472 /* DIDApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303CD57B26078E9000865472 /* DIDApp.swift */; };
@@ -135,7 +136,6 @@
 		303CD5A326079D2400865472 /* UserConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303CD5A226079D2400865472 /* UserConfig.swift */; };
 		303CD5A626079E3F00865472 /* CrossConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303CD5A526079E3F00865472 /* CrossConfig.swift */; };
 		303D685E261E92F500981858 /* ScriptInsertExecutableBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303D685D261E92F500981858 /* ScriptInsertExecutableBody.swift */; };
-		3045A73A260237FD0037527A /* DatabaseServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A739260237FC0037527A /* DatabaseServiceTest.swift */; };
 		3045A741260241FC0037527A /* BackupSubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A740260241FC0037527A /* BackupSubscription.swift */; };
 		3045A745260245330037527A /* ServiceBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A744260245330037527A /* ServiceBuilder.swift */; };
 		3045A749260245960037527A /* FilesServiceRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A748260245960037527A /* FilesServiceRender.swift */; };
@@ -346,6 +346,7 @@
 		3033734E25F9F703004D0D93 /* AppContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContext.swift; sourceTree = "<group>"; };
 		3033735225F9F7BD004D0D93 /* AppContextProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContextProvider.swift; sourceTree = "<group>"; };
 		3033737025FA218D004D0D93 /* TokenResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenResolver.swift; sourceTree = "<group>"; };
+		3036DDD3265122C200253510 /* DatabaseServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseServiceTest.swift; sourceTree = "<group>"; };
 		303CD55C26075D2A00865472 /* ScriptRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptRunner.swift; sourceTree = "<group>"; };
 		303CD55F2607606B00865472 /* ScriptingApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptingApi.swift; sourceTree = "<group>"; };
 		303CD57B26078E9000865472 /* DIDApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DIDApp.swift; sourceTree = "<group>"; };
@@ -363,7 +364,6 @@
 		303CD5A226079D2400865472 /* UserConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConfig.swift; sourceTree = "<group>"; };
 		303CD5A526079E3F00865472 /* CrossConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrossConfig.swift; sourceTree = "<group>"; };
 		303D685D261E92F500981858 /* ScriptInsertExecutableBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptInsertExecutableBody.swift; sourceTree = "<group>"; };
-		3045A739260237FC0037527A /* DatabaseServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseServiceTest.swift; sourceTree = "<group>"; };
 		3045A740260241FC0037527A /* BackupSubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupSubscription.swift; sourceTree = "<group>"; };
 		3045A744260245330037527A /* ServiceBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceBuilder.swift; sourceTree = "<group>"; };
 		3045A748260245960037527A /* FilesServiceRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesServiceRender.swift; sourceTree = "<group>"; };
@@ -495,7 +495,6 @@
 			children = (
 				3019D3DD2610D8EF00A3C3C5 /* BackupServiceTest.swift */,
 				30E94820260AFF7500452FF5 /* BackupSubscriptionTest.swift */,
-				3045A739260237FC0037527A /* DatabaseServiceTest.swift */,
 				30E9482F260B0F5E00452FF5 /* FilesServiceTest.swift */,
 				304F243C262808EA00DDB5C0 /* PromotionServiceTest.swift */,
 				30D393482609DC5B007A9E09 /* ScriptingServiceTest.swift */,
@@ -503,6 +502,7 @@
 				3065A5E826156A0D00C20661 /* VaultPaymentTest.swift */,
 				304F24382628066700DDB5C0 /* VaultManagementTest.swift */,
 				30EC87342626D1E000F15FB2 /* ScriptingServiceCallerPermissionTest.swift */,
+				3036DDD3265122C200253510 /* DatabaseServiceTest.swift */,
 			);
 			path = Vault;
 			sourceTree = "<group>";
@@ -1151,12 +1151,12 @@
 				303CD5A326079D2400865472 /* UserConfig.swift in Sources */,
 				303CD58626078E9000865472 /* DummyAdapter.swift in Sources */,
 				303CD5A626079E3F00865472 /* CrossConfig.swift in Sources */,
+				3036DDD4265122C200253510 /* DatabaseServiceTest.swift in Sources */,
 				303CD58A26078E9100865472 /* Entity.swift in Sources */,
 				30E94821260AFF7500452FF5 /* BackupSubscriptionTest.swift in Sources */,
 				303CD59D26079C2300865472 /* ApplicationConfig.swift in Sources */,
 				303CD58E26078EE800865472 /* DIDEntity.swift in Sources */,
 				303CD5A026079CE200865472 /* ClientConfig.swift in Sources */,
-				3045A73A260237FD0037527A /* DatabaseServiceTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

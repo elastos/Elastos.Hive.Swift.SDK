@@ -39,11 +39,6 @@ public class HiveAPi {
                                method: HTTPMethod = .get,
                                parameters: Parameters? = nil,
                                headers: HTTPHeaders? = nil) -> DataRequest {
-
-        Log.d("Hive Debug ==> request url ->", url as Any)
-        Log.d("Hive Debug ==> request parameters ->", parameters as Any)
-        Log.d("Hive Debug ==> request headers ->", headers as Any)
-
         let req: DataRequest = AF.request(url,
                                           method: method,
                                           parameters: parameters,

@@ -39,7 +39,8 @@ class ScriptingServiceCallerPermissionTest: XCTestCase {
     private var ownerDid: String?
 
     override func setUpWithError() throws {
-        try XCTSkipIf(true)
+//        try XCTSkipIf(true)
+        Log.setLevel(.Debug)
         let testData = TestData.shared
         
         self.scriptingService = try testData.newVault().scriptingService
@@ -49,29 +50,55 @@ class ScriptingServiceCallerPermissionTest: XCTestCase {
         self.ownerDid = testData.ownerDid
         self.callDid = testData.callerDid
     }
+    
+    func testCallerGroupPermission() {
+        initForCaller()
+        setPermissionForCaller()
+        registerScriptForCaller()
+        runScriptWithGroupPermission()
+        removePermissionForCaller()
+        runScriptWithoutGroupPermission()
+        uninitForCaller()
+    }
 
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
-    func initForCaller() -> Promise<Bool> {
-        return self.databaseService!.createCollection(COLLECTION_GROUP, nil).then({ isSuccess -> Promise<Bool> in
+    func initForCaller() {
+        let lock = XCTestExpectation(description: "wait for create collection.")
+        self.databaseService!.createCollection(COLLECTION_GROUP, nil).then({ isSuccess -> Promise<Bool> in
             return self.databaseService!.createCollection(COLLECTION_GROUP_MESSAGE, nil)
-        })
+        }).done { success in
+            XCTAssertTrue(success)
+            lock.fulfill()
+        }.catch { _ in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 100.0)
     }
     
-    func setPermissionForCaller() -> Promise<InsertDocResponse> {
+    func setPermissionForCaller() {
         //add group named COLLECTION_GROUP_MESSAGE and add caller did into it,
         //  then caller will get the permission
         //  to access collection COLLECTION_GROUP_MESSAGE
+        let lock = XCTestExpectation(description: "wait for create collection.")
         let docNode: Dictionary<String, String> = ["collection" : COLLECTION_GROUP_MESSAGE,
                        "did" : self.callDid!]
-        return self.databaseService!.insertOne(COLLECTION_GROUP, docNode, InsertOneOptions(false))
+        self.databaseService!.insertOne(COLLECTION_GROUP, docNode, InsertOneOptions(false)).done { (insert) in
+            XCTAssertNotNil(insert)
+            lock.fulfill()
+        }.catch { _ in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 100.0)
     }
 
     
-    func registerScriptForCaller() -> Promise<Bool> {
-        
+    func registerScriptForCaller() {
+        let lock = XCTestExpectation(description: "wait for create collection.")
         let filter: Dictionary<String, String> = ["collection": COLLECTION_GROUP_MESSAGE,
                                                   "did": "$callScripter_did"]
         let condition = Condition("verify_user_permission", "queryHasResults", ScriptFindBody(COLLECTION_GROUP, filter))
@@ -79,23 +106,67 @@ class ScriptingServiceCallerPermissionTest: XCTestCase {
                                               ["author" : "$params.author", "content" : "$params.content"],
                                               ["bypass_document_validation" : false, "ordered" : true])
         let executable = Executable.createInsertExecutable(SCRIPT_NAME, body)
-        return self.scriptingService!.registerScript(SCRIPT_NAME, condition, executable, false, false)
+        self.scriptingService!.registerScript(SCRIPT_NAME, condition, executable, false, false).done { success in
+            XCTAssertTrue(success)
+            lock.fulfill()
+        }.catch { _ in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 100.0)
     }
         
-    func runScriptWithGroupPermission() -> Promise<JSON> {
-        return self.scriptRunner!.callScript(SCRIPT_NAME, ["author" : "John", "content" : "message"], self.ownerDid, self.appId, JSON.self)
+    func runScriptWithGroupPermission() {
+        let lock = XCTestExpectation(description: "wait for create collection.")
+        self.scriptRunner!.callScript(SCRIPT_NAME, ["author" : "John", "content" : "message"], self.ownerDid, self.appId, JSON.self).done { json in
+            XCTAssertNotNil(json)
+            lock.fulfill()
+        }.catch { error in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 100.0)
     }
     
-    func removePermissionForCaller() -> Promise<DeleteResult> {
+    func removePermissionForCaller() {
+        let lock = XCTestExpectation(description: "wait for create collection.")
         let filter: Dictionary<String, String> = [
             "collection" : COLLECTION_GROUP_MESSAGE,
             "did" : self.callDid!
         ]
-        return self.databaseService!.deleteOne(COLLECTION_GROUP, filter, options: DeleteOptions())
+        self.databaseService!.deleteOne(COLLECTION_GROUP, filter, options: DeleteOptions()).done { delete in
+           XCTAssertNotNil(delete)
+            lock.fulfill()
+        }.catch { _ in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 100.0)
     }
     
-    func runScriptWithoutGroupPermission() -> Promise<JSON> {
-        return self.scriptRunner!.callScript(SCRIPT_NAME, ["author" : "John", "content" : "message"], self.ownerDid, self.appId, JSON.self)
+    func runScriptWithoutGroupPermission() {
+        let lock = XCTestExpectation(description: "wait for create collection.")
+        self.scriptRunner!.callScript(SCRIPT_NAME, ["author" : "John", "content" : "message"], self.ownerDid, self.appId, JSON.self).done { json in
+            XCTAssertNotNil(json)
+            lock.fulfill()
+        }.catch { _ in
+            XCTFail()
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 100.0)
     }
-
+    
+    func uninitForCaller() {
+        let lock = XCTestExpectation(description: "wait for create collection.")
+        _ = databaseService?.deleteCollection(COLLECTION_GROUP_MESSAGE).then({ [self] success -> Promise<Bool> in
+            return (databaseService?.deleteCollection(COLLECTION_GROUP))!
+        }).done({ success in
+            XCTAssertTrue(success)
+            lock.fulfill()
+        }).catch({ _ in
+            XCTFail()
+            lock.fulfill()
+        })
+        self.wait(for: [lock], timeout: 100.0)
+    }
 }
