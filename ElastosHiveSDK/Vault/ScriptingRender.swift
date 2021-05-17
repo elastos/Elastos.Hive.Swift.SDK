@@ -22,10 +22,11 @@
 
 import Foundation
 
-public class ScriptingServiceRender: BaseServiceRender, ScriptingProtocol {
+public class ScriptingServiceRender: ScriptingProtocol {
+    private var _serviceEndpoint: ServiceEndpoint
     
-    public override init(_ serviceEndpoint: ServiceEndpoint) {
-        super.init(serviceEndpoint)
+    public init(_ serviceEndpoint: ServiceEndpoint) {
+        self._serviceEndpoint = serviceEndpoint
     }
     
     public func registerScript(_ name: String, _ executable: Executable, _ allowAnonymousUser: Bool, _ allowAnonymousApp: Bool) -> Promise<Bool> {
@@ -43,8 +44,8 @@ public class ScriptingServiceRender: BaseServiceRender, ScriptingProtocol {
             }
             params.executable = executable
             print(params.toJSON())
-            let url = self.connectionManager.hiveApi.registerScript()
-            let header = try self.connectionManager.headers()
+            let url = self._serviceEndpoint.connectionManager.hiveApi.registerScript()
+            let header = try self._serviceEndpoint.connectionManager.headers()
             _ = try HiveAPi.request(url: url, method: .post, parameters: params.toJSON(), headers: header).get(RegisterScriptResponse.self)
             resolver.fulfill(true)
         }
@@ -63,8 +64,8 @@ public class ScriptingServiceRender: BaseServiceRender, ScriptingProtocol {
                 requestParams.params = params!
             }
 
-            let url = self.connectionManager.hiveApi.callScript()
-            let header = try self.connectionManager.headers()
+            let url = self._serviceEndpoint.connectionManager.hiveApi.callScript()
+            let header = try self._serviceEndpoint.connectionManager.headers()
             let response = try HiveAPi.request(url: url, method: .post, parameters: requestParams.toJSON(), headers: header).get(HiveResponse.self)
             resolver.fulfill(try handleResult(JSON(response.json), resultType))
         }
@@ -72,8 +73,8 @@ public class ScriptingServiceRender: BaseServiceRender, ScriptingProtocol {
     
     public func callScriptUrl<T>(_ name: String, _ params: String?, _ targetDid: String?, _ targetAppDid: String?, _ resultType: T.Type) -> Promise<T> {
         return Promise<T> { resolver in
-            let url = self.connectionManager.hiveApi.callScriptUrl(targetDid!, targetAppDid!, name, params)
-            let header = try self.connectionManager.headers()
+            let url = self._serviceEndpoint.connectionManager.hiveApi.callScriptUrl(targetDid!, targetAppDid!, name, params)
+            let header = try self._serviceEndpoint.connectionManager.headers()
             let response = try AF.request(url,
                                       method: .get,
                                       encoding: JSONEncoding.default,
@@ -84,11 +85,11 @@ public class ScriptingServiceRender: BaseServiceRender, ScriptingProtocol {
     
     public func downloadFile<T>(_ transactionId: String, _ resultType: T.Type) -> Promise<T>  {
         return Promise<T> { resolver in
-            let url = self.connectionManager.hiveApi.runScriptDownload(transactionId)
-            _ = try self.connectionManager.headers()
+            let url = self._serviceEndpoint.connectionManager.hiveApi.runScriptDownload(transactionId)
+            _ = try self._serviceEndpoint.connectionManager.headers()
             if resultType.self == FileReader.self {
                 do {
-                    let reader = try FileReader(URL(string: url)!, self.connectionManager, resolver, .post)
+                    let reader = try FileReader(URL(string: url)!, self._serviceEndpoint.connectionManager, resolver, .post)
                     resolver.fulfill(reader as! T)
                 } catch {
                     resolver.reject(error)
@@ -102,10 +103,10 @@ public class ScriptingServiceRender: BaseServiceRender, ScriptingProtocol {
         
     public func uploadFile<T>(_ transactionId: String, _ resultType: T.Type) -> Promise<T> {
         return Promise<T> { resolver in
-            let url = self.connectionManager.hiveApi.runScriptUpload(transactionId)
-            _ = try self.connectionManager.headers()
+            let url = self._serviceEndpoint.connectionManager.hiveApi.runScriptUpload(transactionId)
+            _ = try self._serviceEndpoint.connectionManager.headers()
             if resultType.self == FileWriter.self {
-                let writer = FileWriter(URL(string: url)!, self.connectionManager)
+                let writer = FileWriter(URL(string: url)!, self._serviceEndpoint.connectionManager)
                 resolver.fulfill(writer as! T)
             } else {
                 resolver.reject(HiveError.InvalidParameterException("only support FileWriter as resultType"))

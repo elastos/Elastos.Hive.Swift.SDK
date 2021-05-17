@@ -73,7 +73,6 @@
 		11ED682A22FF1078004C17D0 /* ElastosHiveSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED682922FF1077004C17D0 /* ElastosHiveSDK.swift */; };
 		30091C1526181EC6003EB5CE /* BackupStateResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C1426181EC6003EB5CE /* BackupStateResponse.swift */; };
 		30091C1926182250003EB5CE /* AuthenticationServiceRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C1826182250003EB5CE /* AuthenticationServiceRender.swift */; };
-		30091C1C26182326003EB5CE /* HiveVaultRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C1B26182326003EB5CE /* HiveVaultRender.swift */; };
 		30091C1F26182600003EB5CE /* SignInResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C1E26182600003EB5CE /* SignInResponse.swift */; };
 		30091C2226182D56003EB5CE /* AuthResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C2126182D56003EB5CE /* AuthResponse.swift */; };
 		30091C2526183207003EB5CE /* BackupRemoteResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C2426183206003EB5CE /* BackupRemoteResolver.swift */; };
@@ -215,6 +214,8 @@
 		30F2BA14264D02CB0032BF99 /* BackupLocalResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F2BA13264D02CB0032BF99 /* BackupLocalResolver.swift */; };
 		30F2BA28264D3EF60032BF99 /* AuthTokenToBackup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F2BA27264D3EF60032BF99 /* AuthTokenToBackup.swift */; };
 		30F2BA2B264D3F0A0032BF99 /* AuthTokenToVault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F2BA2A264D3F0A0032BF99 /* AuthTokenToVault.swift */; };
+		30F6CB2F2652C602008F9D40 /* HiveVaultRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F6CB2E2652C602008F9D40 /* HiveVaultRender.swift */; };
+		30F6CB322652C6AE008F9D40 /* NodeManageServiceRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F6CB312652C6AE008F9D40 /* NodeManageServiceRender.swift */; };
 		6DDA50FA35E7A18E5EF0C90E /* Pods_ElastosHiveSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D17AD36AC88E073FD2B2D930 /* Pods_ElastosHiveSDK.framework */; };
 		A39C4980225399860027BDF9 /* ElastosHiveSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = A39C4972225399860027BDF9 /* ElastosHiveSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A3D9D41323C9671C003B602E /* FilesProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D9D41023C9671C003B602E /* FilesProtocol.swift */; };
@@ -301,7 +302,6 @@
 		2368C8CBAE94193EAF7DB87D /* Pods-ElastosHiveSDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDKTests.debug.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDKTests/Pods-ElastosHiveSDKTests.debug.xcconfig"; sourceTree = "<group>"; };
 		30091C1426181EC6003EB5CE /* BackupStateResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupStateResponse.swift; sourceTree = "<group>"; };
 		30091C1826182250003EB5CE /* AuthenticationServiceRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationServiceRender.swift; sourceTree = "<group>"; };
-		30091C1B26182326003EB5CE /* HiveVaultRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiveVaultRender.swift; sourceTree = "<group>"; };
 		30091C1E26182600003EB5CE /* SignInResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInResponse.swift; sourceTree = "<group>"; };
 		30091C2126182D56003EB5CE /* AuthResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthResponse.swift; sourceTree = "<group>"; };
 		30091C2426183206003EB5CE /* BackupRemoteResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupRemoteResolver.swift; sourceTree = "<group>"; };
@@ -440,6 +440,8 @@
 		30F2BA13264D02CB0032BF99 /* BackupLocalResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupLocalResolver.swift; sourceTree = "<group>"; };
 		30F2BA27264D3EF60032BF99 /* AuthTokenToBackup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthTokenToBackup.swift; sourceTree = "<group>"; };
 		30F2BA2A264D3F0A0032BF99 /* AuthTokenToVault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthTokenToVault.swift; sourceTree = "<group>"; };
+		30F6CB2E2652C602008F9D40 /* HiveVaultRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiveVaultRender.swift; sourceTree = "<group>"; };
+		30F6CB312652C6AE008F9D40 /* NodeManageServiceRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeManageServiceRender.swift; sourceTree = "<group>"; };
 		556E8D39E54EDBDFA4DEAD42 /* Pods-TestHost.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestHost.release.xcconfig"; path = "Target Support Files/Pods-TestHost/Pods-TestHost.release.xcconfig"; sourceTree = "<group>"; };
 		5F09DA7DC9D47111E630261C /* Pods_TestHost.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TestHost.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6081910F0FC211291C05B08B /* Pods-ElastosHiveSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDK.release.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDK/Pods-ElastosHiveSDK.release.xcconfig"; sourceTree = "<group>"; };
@@ -756,8 +758,9 @@
 				3045A75826024C1E0037527A /* ScriptingRender.swift */,
 				3065A5EC26156B3F00C20661 /* PaymentServiceRender.swift */,
 				30091C1826182250003EB5CE /* AuthenticationServiceRender.swift */,
-				30091C1B26182326003EB5CE /* HiveVaultRender.swift */,
 				304E4A2B261F0878005D196E /* SubscriptionServiceRender.swift */,
+				30F6CB2E2652C602008F9D40 /* HiveVaultRender.swift */,
+				30F6CB312652C6AE008F9D40 /* NodeManageServiceRender.swift */,
 			);
 			path = Vault;
 			sourceTree = "<group>";
@@ -1199,6 +1202,7 @@
 				111D47F024F7A18900B7462B /* FileInfo.swift in Sources */,
 				30091C442619F6DA003EB5CE /* OrderListResponse.swift in Sources */,
 				3045A749260245960037527A /* FilesServiceRender.swift in Sources */,
+				30F6CB322652C6AE008F9D40 /* NodeManageServiceRender.swift in Sources */,
 				3022107F261CB3DE00578934 /* InsertOneOptions.swift in Sources */,
 				30EC87522627C6DA00F15FB2 /* Receipt.swift in Sources */,
 				304EA39B261D40B5007ADD47 /* DeleteCollectionRequestParams.swift in Sources */,
@@ -1224,7 +1228,6 @@
 				30099A6925FE68A800506AA8 /* LocalResolver.swift in Sources */,
 				304EA3A2261D4134007ADD47 /* CountDocRequestParams.swift in Sources */,
 				304F1ECC264A20FD00362062 /* ScriptingInvocationProtocol.swift in Sources */,
-				30091C1C26182326003EB5CE /* HiveVaultRender.swift in Sources */,
 				1170FB142502019C0049E81D /* Vault.swift in Sources */,
 				11C9EAE5254A637500080995 /* InsertOneResult.swift in Sources */,
 				304EA3AE261D43CB007ADD47 /* BackupRestoreRequestParams.swift in Sources */,
@@ -1232,6 +1235,7 @@
 				30221082261CB4E200578934 /* InsertManyOptions.swift in Sources */,
 				3045A741260241FC0037527A /* BackupSubscription.swift in Sources */,
 				111D47F424F7A30300B7462B /* Executable.swift in Sources */,
+				30F6CB2F2652C602008F9D40 /* HiveVaultRender.swift in Sources */,
 				3045A74C26024B9B0037527A /* DatabaseServiceRender.swift in Sources */,
 				303CD5602607606B00865472 /* ScriptingApi.swift in Sources */,
 				30221098261CBECF00578934 /* PubsubSubscribeRequestParams.swift in Sources */,
