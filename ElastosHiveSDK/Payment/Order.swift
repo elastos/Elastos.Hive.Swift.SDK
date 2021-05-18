@@ -25,104 +25,63 @@ import ObjectMapper
 
 public class Order: Mappable  {
     
-    public var orderId: String?
-    public var did: String?
-    public var appId: String?
-    public var pricingInfo: PricingPlan?
-    public var payTxids: [String]?
-    public var state: String?
-    public var type: String?
-    public var createTime: Double?
-    public var finishTime: Double?
+    private var _orderId: String?
+    private var _did: String?
+    private var _appId: String?
+    private var _pricingInfo: PricingPlan?
+    private var _payTxids: [String]?
+    private var _state: String?
+    private var _type: String?
+    private var _createTime: Double?
+    private var _finishTime: Double?
     
-    required public init?(map: Map) {
-        
+    public var orderId: String? {
+        return _orderId
     }
+    
+    public var did: String? {
+        return _did
+    }
+    
+    public var appId: String? {
+        return _appId
+    }
+    
+    public var pricingInfo: PricingPlan? {
+        return _pricingInfo
+    }
+    
+    public var payTxids: [String]? {
+        return _payTxids
+    }
+    
+    public var state: String? {
+        return _state
+    }
+    
+    public var type: String? {
+        return _type
+    }
+    
+    public var createTime: Double? {
+        return _createTime
+    }
+    
+    public var finishTime: Double? {
+        return _finishTime
+    }
+    
+    required public init?(map: Map) {}
     
     public func mapping(map: Map) {
-        orderId <- map["order_id"]
-        did <- map["did"]
-        appId <- map["app_id"]
-        pricingInfo <- map["pricing_info"]
-        payTxids <- map["pay_txids"]
-        state <- map["state"]
-        type <- map["type"]
-        createTime <- map["creat_time"]
-        finishTime <- map["finish_time"]
-        
+        _orderId <- map["order_id"]
+        _did <- map["did"]
+        _appId <- map["app_id"]
+        _pricingInfo <- map["pricing_info"]
+        _payTxids <- map["pay_txids"]
+        _state <- map["state"]
+        _type <- map["type"]
+        _createTime <- map["creat_time"]
+        _finishTime <- map["finish_time"]
     }
 }
-
-/*
- 
- 
- //    private let ORDER_ID = "order_id"
- //    private let DID = "did"
- //    private let APP_ID = "app_id"
- //    private static let PRICING_INFO = "pricing_info"
- //    private let PAY_TXIDS = "pay_txids"
- //    private let STATE = "state"
- //    private let CREAT_TIME = "creat_time"
- //    private let FINISH_TIME = "finish_time"
- //    private var _packageInfo: PricingPlan?
- //
- //    public var finish_time: Int {
- //        return paramars[FINISH_TIME].intValue
- //    }
- //
- //    public var orderId: String {
- //        return paramars[ORDER_ID].stringValue
- //    }
- //
- //    public var did: String {
- //        return paramars[DID].stringValue
- //    }
- //
- //    public var appId: String {
- //        return paramars[APP_ID].stringValue
- //    }
- //
- //    public var packageInfo: PricingPlan? {
- //        return _packageInfo
- //    }
- //
- //    public var payTxids: Array<String> {
- //        var list: Array<String> = []
- //        paramars[PAY_TXIDS].arrayValue.forEach { vaule in
- //            list.append(vaule.stringValue)
- //        }
- //        return list
- //    }
- //
- //    public var state: String {
- //        return paramars[STATE].stringValue
- //    }
- //
- //    public var creatTime: Int {
- //        return paramars[CREAT_TIME].intValue
- //    }
- //
- //    public var finishTime: Int {
- //        return paramars[FINISH_TIME].intValue
- //    }
- //
- //    public class func deserialize(_ content: String) throws -> Order {
- //        let data = content.data(using: String.Encoding.utf8)
- //        let paramars = try JSONSerialization
- //            .jsonObject(with: data!,
- //                        options: .mutableContainers) as? [String : Any] ?? [: ]
- //        let json = JSON(paramars)
- //        let order = Order(json)
- ////        order._packageInfo = PricingPlan(json[PRICING_INFO])
- //
- //        return order
- //    }
- //
- //    class func deserialize(_ content: JSON) -> Order {
- //        let order = Order(content)
- ////        order._packageInfo = PricingPlan.deserialize(content[PRICING_INFO])
- //
- //        return order
- //    }
- }
-*/

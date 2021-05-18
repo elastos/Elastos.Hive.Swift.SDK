@@ -31,51 +31,9 @@ public class PricingPlan: Mappable {
     public var name: String?
     public var serviceDays: Int64?
     
-    public init() {
-        
-    }
-
-//    private let NAME = "name"
-//    private let MAXSTORAGE = "maxStorage"
-//    private let SERVICE_DAYS = "serviceDays"
-//    private let AMOUNT = "amount"
-//    private let CURENCY = "currency"
-//
-//    public var name: String {
-//        return paramars[NAME].stringValue
-//    }
-//
-//    public var maxStorage: Int {
-//        return paramars[MAXSTORAGE].intValue
-//    }
-//
-//    public var serviceDays: Int {
-//        return paramars[SERVICE_DAYS].intValue
-//    }
-//
-//    public var amount: Float {
-//        return paramars[AMOUNT].floatValue
-//    }
-//
-//    public var currency: String {
-//        return paramars[CURENCY].stringValue
-//    }
-//
-//    public class func deserialize(_ content: String) throws -> PricingPlan {
-//        let data = content.data(using: String.Encoding.utf8)
-//        let paramars = try JSONSerialization
-//            .jsonObject(with: data!,
-//                        options: .mutableContainers) as? [String : Any] ?? [: ]
-//        return PricingPlan(map: Map()!
-//    }
-////
-//    class func deserialize(_ content: JSON) -> PricingPlan {
-//        return PricingPlan(map: content.dictionaryObject)
-//    }
+    public init() {}
     
-    required public init?(map: Map) {
-
-    }
+    required public init?(map: Map) {}
     
     public func mapping(map: Map) {
         amount <- map["amount"]
