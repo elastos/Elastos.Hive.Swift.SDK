@@ -52,7 +52,7 @@ public class TestAppContextProvider: AppContextProvider {
         return accessToken!
     }
     
-    func getAppDid() -> String {
+    public func getAppDid() -> String {
         return self.appInstanceDid.appId
     }
 }

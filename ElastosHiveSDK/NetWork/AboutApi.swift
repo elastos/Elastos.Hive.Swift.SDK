@@ -23,6 +23,7 @@
 import Foundation
 
 extension HiveAPi {
+    
     func version() -> String {
         return self.baseURL + self.apiPath + "/hive/version"
     }
