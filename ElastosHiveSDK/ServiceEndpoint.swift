@@ -27,6 +27,8 @@ public class ServiceEndpoint {
     private var _providerAddress: String
     private var _connectionManager: ConnectionManager?
     private var _serviceDid: String?
+    private var _appInstanceDid: String?
+    private var _serviceInstanceDid: String?
 
     public init(_ context: AppContext, _ providerAddress: String) throws {
         self._context = context
@@ -41,16 +43,16 @@ public class ServiceEndpoint {
         return _context
     }
     
-    /**
-     * Get the user DID string of this serviceEndpoint.
-     */
+    /// Get the user DID string of this serviceEndpoint.
+    ///
+    /// - returns: user did
     public var userDid: String {
         return self._context.userDid
     }
     
-    /**
-     * Get the end-point address of this service End-point.
-     */
+    /// Get the end-point address of this service End-point.
+    ///
+    /// - returns: provider address
     public var providerAddress: String {
         return self._providerAddress
     }
@@ -64,44 +66,43 @@ public class ServiceEndpoint {
         }
     }
     
-    /**
-     * Get the application DID in the current calling context.
-     */
+    /// Get the application DID in the current calling context.
+    ///
+    /// - returns: application did
     public var appDid: String? {
-        try!{
-            throw HiveError.UnauthorizedStateException()
-        }()
-        return nil
+        return self.appContext.appContextProvider.getAppDid()
     }
     
-    /**
-     * Get the application instance DID in the current calling context;
-     */
+    /// The application instance DID in the current calling context.
+    ///
+    /// - returns: application instance did
     public var appInstanceDid: String? {
-        try!{
-            throw HiveError.UnauthorizedStateException()
-        }()
-        return nil
-    }
-    
-    /**
-     * Get the remote node service application DID.
-     */
-    public var serviceDid: String? {
         set {
-            _serviceDid = newValue
+            _appInstanceDid = newValue
         }
         get {
-            return _serviceDid
+            return _appInstanceDid
         }
     }
     
-    /**
-     * Get the remote node service instance DID where is serving the storage service.
-     */
+    /// The remote node service instance DID where is serving the storage service.
+    ///
+    /// - returns: node service instance did
     public var serviceInstanceDid: String? {
-        try!{
-            throw HiveError.UnauthorizedStateException()
+        set {
+            self._serviceInstanceDid = newValue
+        }
+        get {
+            return self._serviceInstanceDid
+        }
+    }
+    
+    /// Get the remote node service application DID.
+    ///
+    /// - returns: node service did
+    public var serviceDid: String? {
+        try! {
+            throw HiveError.UnauthorizedStateException("")
         }()
         return nil
     }
@@ -110,7 +111,6 @@ public class ServiceEndpoint {
         return Promise<Version> { resolver in
             // TODO: Required version number is *.*.*, such as 1.0.12
             resolver.fulfill(Version())
-
         }
     }
 

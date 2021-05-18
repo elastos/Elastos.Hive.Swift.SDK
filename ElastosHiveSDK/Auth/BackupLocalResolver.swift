@@ -26,11 +26,11 @@ import ObjectMapper
 public class BackupLocalResolver: LocalResolver {
     
     public override func restoreToken() throws -> AuthToken? {
-        if self.serviceEndpoint.serviceDid == nil {
+        if self.serviceEndpoint.serviceInstanceDid == nil {
             return nil
         }
         
-        let tokenStr = self.dataStorage.loadBackupCredential(self.serviceEndpoint.serviceDid!)
+        let tokenStr = self.dataStorage.loadBackupCredential(self.serviceEndpoint.serviceInstanceDid!)
         if tokenStr == nil {
             return nil
         }
@@ -48,14 +48,14 @@ public class BackupLocalResolver: LocalResolver {
     
     
     public override func saveToken(_ token: AuthToken) throws {
-        if self.serviceEndpoint.serviceDid != nil {
-            self.dataStorage.storeBackupCredential(self.serviceEndpoint.serviceDid!, Mapper().toJSONString(token, prettyPrint: true)!)
+        if self.serviceEndpoint.serviceInstanceDid != nil {
+            self.dataStorage.storeBackupCredential(self.serviceEndpoint.serviceInstanceDid!, Mapper().toJSONString(token, prettyPrint: true)!)
         }
     }
     
     public override func clearToken() {
-        if self.serviceEndpoint.serviceDid != nil {
-            self.dataStorage.clearBackupCredential(self.serviceEndpoint.serviceDid!)
+        if self.serviceEndpoint.serviceInstanceDid != nil {
+            self.dataStorage.clearBackupCredential(self.serviceEndpoint.serviceInstanceDid!)
         }
     }
 

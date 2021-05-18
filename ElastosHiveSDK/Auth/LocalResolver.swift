@@ -59,8 +59,8 @@ public class LocalResolver: TokenResolver {
     
     public func restoreToken() throws -> AuthToken? {
         var tokenStr: String? = nil
-        if self.serviceEndpoint.serviceDid != nil {
-            tokenStr = self.dataStorage.loadAccessToken(serviceEndpoint.serviceDid!)
+        if self.serviceEndpoint.serviceInstanceDid != nil {
+            tokenStr = self.dataStorage.loadAccessToken(serviceEndpoint.serviceInstanceDid!)
             if tokenStr == nil {
                 tokenStr = self.dataStorage.loadAccessTokenByAddress(self.serviceEndpoint.providerAddress)
             }
@@ -81,15 +81,15 @@ public class LocalResolver: TokenResolver {
     
     public func saveToken(_ token: AuthToken) throws {
         let tokenStr = Mapper().toJSONString(token, prettyPrint: true)
-        if self.serviceEndpoint.serviceDid != nil {
-            self.dataStorage.storeAccessToken(self.serviceEndpoint.serviceDid!, tokenStr!)
+        if self.serviceEndpoint.serviceInstanceDid != nil {
+            self.dataStorage.storeAccessToken(self.serviceEndpoint.serviceInstanceDid!, tokenStr!)
         }
         self.dataStorage.storeAccessTokenByAddress(self.serviceEndpoint.providerAddress, tokenStr!)
     }
     
     public func clearToken() {
-        if self.serviceEndpoint.serviceDid != nil {
-            self.dataStorage.clearAccessToken(self.serviceEndpoint.serviceDid!)
+        if self.serviceEndpoint.serviceInstanceDid != nil {
+            self.dataStorage.clearAccessToken(self.serviceEndpoint.serviceInstanceDid!)
         }
         self.dataStorage.clearAccessTokenByAddress(self.serviceEndpoint.providerAddress)
     }

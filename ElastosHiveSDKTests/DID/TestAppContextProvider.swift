@@ -51,6 +51,10 @@ public class TestAppContextProvider: AppContextProvider {
         semaphore.wait()
         return accessToken!
     }
+    
+    func getAppDid() -> String {
+        return self.appInstanceDid.appId
+    }
 }
 
 /*

@@ -47,4 +47,9 @@ public protocol AppContextProvider {
      * @return The credential issued by user.
      */
     func getAuthorization(_ authenticationChallengeJWTcode: String) -> String?
+    
+    /**
+     * The application did identifies the application with others.
+     */
+    func getAppDid() -> String
 }
