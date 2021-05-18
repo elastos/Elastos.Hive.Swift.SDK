@@ -180,19 +180,5 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionProtocol, PaymentPr
             resolver.reject(HiveError.UnsupportedMethodException)
         }
     }
-    
-    public func getOrderList() -> Promise<Array<Order>?> {
-        // TODO
-        return Promise<Array<Order>?> { resolver in
-            resolver.reject(HiveError.UnsupportedMethodException)
-        }
-    }
-    
-    public func getReceiptList() -> Promise<Array<Receipt>?> {
-        // TODO
-        return Promise<Array<Receipt>?> { resolver in
-            resolver.reject(HiveError.UnsupportedMethodException)
-        }
-    }
 }
 

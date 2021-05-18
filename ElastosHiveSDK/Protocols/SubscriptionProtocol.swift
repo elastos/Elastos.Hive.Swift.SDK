@@ -29,18 +29,7 @@ import Foundation
 public protocol SubscriptionProtocol {
     associatedtype T
 
-    ///  Let users to get the all the pricing plan list in order to subscribe to a new vault or backup
-    ///   service on the user's requirement.
-    ///
-    /// - returns: Return a list of all pricing plan with specific type on success. Otherwise, the specific exception would be returned.
-    func getPricingPlanList() -> Promise<Array<PricingPlan>?>
-    
-    /// Let users to get the specific pricing plan information.
-    ///
-    /// - parameter planName: the name of the pricing plan
-    /// - returns: Return the specific pricing plan information on success. Otherwise, the specific exception would be returned.
-    func getPricingPlan(_ planName: String) -> Promise<PricingPlan?>
-    
+   
     /// Let a new user subscribe to the entity service on the specified back-end
     /// node, where the entity service would be vault or backup service.
     /// Currently this method would only support for subscription to a entity service

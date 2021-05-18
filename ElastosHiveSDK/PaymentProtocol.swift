@@ -31,39 +31,42 @@ import Foundation
  */
 public protocol PaymentProtocol {
     
-    /// Place an order for new subscription or extending the existing subscription service.
+    ///  Let users to get the all the pricing plan list in order to subscribe to a new vault or backup
+    ///   service on the user's requirement.
+    ///
+    /// - returns: Return a list of all pricing plan with specific type on success. Otherwise, the specific exception would be returned.
+    func getPricingPlanList() -> Promise<Array<PricingPlan>?>
+    
+    /// Let users to get the specific pricing plan information.
     ///
     /// - parameter planName: the name of the pricing plan
-    /// - returns: the new order detail when the request successfully was received by back-end node, otherwise return the specific exception.
+    /// - returns: Return the specific pricing plan information on success. Otherwise, the specific exception would be returned.
+    func getPricingPlan(_ planName: String) -> Promise<PricingPlan?>
+    
+    
+    /// Make an order for the pricing plan named with planName.
+    ///
+    /// - parameter planName: the corresponding order details.
+    /// - returns: the corresponding order details.
     func placeOrder(_ planName: String) -> Promise<Order?>
     
-    /// Obtain the order detail according to the given order id.
+    /// Get order information by order id.
     ///
     /// - parameter orderId order id
-    /// - returns: the order detail in case there is a order with order id existing. otherwise, return the specific exception.
+    /// - returns: the corresponding order details.
     func getOrder(_ orderId: String) -> Promise<Order?>
-    
-    /// Obtain all the list of order detail.
-    ///
-    /// - returns: return the list of order detail on success, otherwise, return the specific exception.
-    func getOrderList() -> Promise<Array<Order>?>
 
-    /// Pay for the order with a given id.
+    /// Pay for the order made before.
     ///
     /// - parameters:
     ///   - orderId: order id
-    ///   - transactionId: the transaction id on the block-chain.
-    /// - returns: return the receipt detail in case the payment was accepted by hive node, otherwise return the specific exception.
-    func payOrder(_ orderId: String, _ transactionId: [String]) -> Promise<Receipt?>
+    ///   - transIds: payment transaction ids.
+    /// - returns: receipt details.
+    func payOrder(_ orderId: String, _ transIds: [String]) -> Promise<Receipt?>
 
-    /// Obtain the receipt detail according to the receipt id.
+    /// Get receipt details by receipt id.
     ///
     /// - parameter receiptId: receipt id.
-    /// - returns: return the receipt detail in case there is a receipt existing, otherwise, return the specific exception.
+    /// - returns: receipt details.
     func getReceipt(_ receiptId: String) -> Promise<Receipt?>
-    
-    /// Obtain all the list of receipt detail.
-    ///
-    /// - returns: return the list of receipt detail on success, otherwise, return the specific exception.
-    func getReceiptList() -> Promise<Array<Receipt>?>
 }
