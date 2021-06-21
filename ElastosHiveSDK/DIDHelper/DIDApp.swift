@@ -1,5 +1,4 @@
 import Foundation
-import ElastosDIDSDK
 
 public class DIDApp: Entity {
     var issuer: VerifiableCredentialIssuer?

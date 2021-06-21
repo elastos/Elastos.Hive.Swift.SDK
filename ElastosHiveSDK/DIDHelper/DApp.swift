@@ -1,5 +1,4 @@
 import Foundation
-import ElastosDIDSDK
 
 public class DApp: Entity {
     public var appId = "appId"

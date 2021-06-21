@@ -67,9 +67,8 @@ public class HiveClientHandle: NSObject {
         }
         _reslover = resolver
         _cacheDir = cacheDir
-        try DIDBackend.initializeInstance(_reslover, _cacheDir)
+        try DIDBackend.initialize(DummyAdapter(endpoint))
         resolverDidSetup = true
-        try ResolverCache.reset() // 删除了整个路径 ！！！！
     }
 
     /// Create a Client instance
@@ -157,7 +156,7 @@ public class HiveClientHandle: NSObject {
                         resolver.reject(HiveError.providerNotSet(des: "The DID document \(ownerDid) has not published."))
                         return
                     }
-                    let services = doc?.selectServices(byType: "HiveVault")
+                    let services = try doc?.selectServices(byType: "HiveVault")
                     if services == nil || services!.count == 0 {
                         resolver.reject(HiveError.providerNotSet(des: "No 'HiveVault' services declared on DID document \(ownerDid)"))
                         return
