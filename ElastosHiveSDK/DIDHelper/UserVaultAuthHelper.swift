@@ -1,7 +1,6 @@
 
 
 import Foundation
-import ElastosDIDSDK
 import PromiseKit
 //import ElastosHiveSDK
 

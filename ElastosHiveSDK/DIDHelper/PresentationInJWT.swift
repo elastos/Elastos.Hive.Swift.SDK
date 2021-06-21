@@ -1,16 +1,15 @@
 import Foundation
-import ElastosDIDSDK
 import PromiseKit
 
 public class PresentationInJWT: NSObject {
     var userDidApp: DIDApp?
     var appInstanceDidApp: DApp?
     var doc: DIDDocument?
-    static var adapter: DummyAdapter = DummyAdapter()
+    static var adapter: DummyAdapter = DummyAdapter(endpoint)
 
     public func initDIDBackend() throws {
         let cacheDir = "\(NSHomeDirectory())/Library/Caches/store" + "/" + "didCache"
-        try DIDBackend.initializeInstance(PresentationInJWT.adapter, cacheDir)
+        try DIDBackend.initialize(PresentationInJWT.adapter)
     }
 
     public init(_ userDidOpt: PresentationInJWTOptions, _ appInstanceDidOpt: PresentationInJWTOptions) throws {
