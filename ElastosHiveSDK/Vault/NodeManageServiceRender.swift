@@ -22,33 +22,29 @@
 
 import Foundation
 
-public class HiveVaultRender {
-    private var _context: AppContext
-    private var _serviceEndpoint: ServiceEndpoint
+public class NodeManageServiceRender: HiveVaultRender {
     
-    public init(_ serviceEndpoint: ServiceEndpoint) {
-        self._serviceEndpoint = serviceEndpoint
-        self._context = self._serviceEndpoint.appContext
+    public init (_ vault: Vault) {
+        super.init(vault)
     }
-    
-    var context: AppContext {
-        get {
-            return _context
+
+    public func getVersion() -> Promise<String> {
+        return Promise<Any>.async().then { _ -> Promise<String> in
+            return Promise<String> { resolver in
+                let response = try HiveAPi.request(url: self.connectionManager.hiveApi.version(),
+                                                   headers:try self.connectionManager.headers()).get(NodeVersionResponse.self)
+                resolver.fulfill(response.version)
+            }
         }
     }
-    
-    var serviceEndpoint: ServiceEndpoint {
-        get {
-            return _serviceEndpoint
-        }
-    }
-    
-    var connectionManager: ConnectionManager {
-        get {
-            return self._serviceEndpoint.connectionManager
+
+    public func getCommitHash() -> Promise<String> {
+        return Promise<Any>.async().then { _ -> Promise<String> in
+            return Promise<String> { resolver in
+                let response = try HiveAPi.request(url: self.connectionManager.hiveApi.commitHash(),
+                                                   headers:try self.connectionManager.headers()).get(NodeCommitHashResponse.self)
+                resolver.fulfill(response.commitHash)
+            }
         }
     }
 }
-
-
-

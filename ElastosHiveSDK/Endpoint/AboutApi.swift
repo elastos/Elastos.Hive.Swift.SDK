@@ -22,33 +22,13 @@
 
 import Foundation
 
-public class HiveVaultRender {
-    private var _context: AppContext
-    private var _serviceEndpoint: ServiceEndpoint
+extension HiveAPi {
     
-    public init(_ serviceEndpoint: ServiceEndpoint) {
-        self._serviceEndpoint = serviceEndpoint
-        self._context = self._serviceEndpoint.appContext
+    func version() -> String {
+        return self.baseURL + self.apiPath + "/hive/version"
     }
     
-    var context: AppContext {
-        get {
-            return _context
-        }
-    }
-    
-    var serviceEndpoint: ServiceEndpoint {
-        get {
-            return _serviceEndpoint
-        }
-    }
-    
-    var connectionManager: ConnectionManager {
-        get {
-            return self._serviceEndpoint.connectionManager
-        }
+    func commitHash() -> String {
+        return self.baseURL + self.apiPath + "/hive/commithash"
     }
 }
-
-
-

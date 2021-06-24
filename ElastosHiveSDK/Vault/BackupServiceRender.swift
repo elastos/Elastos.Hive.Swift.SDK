@@ -22,22 +22,23 @@
 
 import Foundation
 
-public class BackupServiceRender: BaseServiceRender, BackupProtocol {
-    var _backupContext: BackupContext?
-    var _tokenResolver: TokenResolver?
+public class BackupServiceRender: BackupProtocol {
+    private var _tokenResolver: TokenResolver?
+    private var _serviceEndpoint: ServiceEndpoint
+    
+    public init(_ serviceEndpoint: ServiceEndpoint) {
+        self._serviceEndpoint = serviceEndpoint
+    }
+
     
     public func setupContext(_ backupContext: BackupContext) throws -> Promise<Void> {
         return Promise<Any>.async().then{ [self] _ -> Promise<Void> in
             return Promise<Void> { resolver in
-                self._backupContext = backupContext
-                self._tokenResolver = try LocalResolver(self.serviceEndpoint.userDid!,
-                                                        self.serviceEndpoint.providerAddress,
-                                                        LocalResolver.TYPE_BACKUP_CREDENTIAL,
-                                                        self.serviceEndpoint.appContext.appContextProvider.getLocalDataDir()!)
-                let backupRemoteResolver: BackupRemoteResolver = BackupRemoteResolver(self.serviceEndpoint,
+                self._tokenResolver = BackupLocalResolver(self._serviceEndpoint)
+                let backupRemoteResolver: BackupRemoteResolver = BackupRemoteResolver(self._serviceEndpoint,
                                                                                       backupContext,
-                                                                                      backupContext.getParameter("targetDid"),
-                                                                                      backupContext.getParameter("targetHost"))
+                                                                                      backupContext.getParameter("targetServiceDid"),
+                                                                                      backupContext.getParameter("targetAddress"))
                 try! self._tokenResolver?.setNextResolver(backupRemoteResolver)
                 resolver.fulfill(Void())
             }
@@ -48,9 +49,9 @@ public class BackupServiceRender: BaseServiceRender, BackupProtocol {
         return Promise<Any>.async().then{ [self] _ -> Promise<Void> in
             return Promise<Void> { resolver in
                 do {
-                    let url = self.connectionManager.hiveApi.saveToNode()
-                    let header = try self.connectionManager.headers()
-                    let credential: String = try self._tokenResolver!.getToken()!.accessToken
+                    let url = self._serviceEndpoint.connectionManager.hiveApi.saveToNode()
+                    let header = try self._serviceEndpoint.connectionManager.headers()
+                    let credential: String = try self._tokenResolver!.getToken()!.accessToken!
                     let param: Parameters = ["backup_credential": credential]
                     _ = try HiveAPi.request(url: url, method: .post, parameters: param, headers: header).get(HiveResponse.self)
                     resolver.fulfill(Void())
@@ -70,9 +71,9 @@ public class BackupServiceRender: BaseServiceRender, BackupProtocol {
     public func restoreFrom() -> Promise<Void> {
         return Promise<Any>.async().then {[self] _ -> Promise<Void> in
             return Promise<Void> { resolver in
-                let url = self.connectionManager.hiveApi.restoreFromNode()
-                let header = try self.connectionManager.headers()
-                let credential: String = try self._tokenResolver!.getToken()!.accessToken
+                let url = self._serviceEndpoint.connectionManager.hiveApi.restoreFromNode()
+                let header = try self._serviceEndpoint.connectionManager.headers()
+                let credential: String = try self._tokenResolver!.getToken()!.accessToken!
                 let param: Parameters = ["backup_credential": credential]
                 _ = try HiveAPi.request(url: url, method: .post, parameters: param, headers: header).get(HiveResponse.self)
                 resolver.fulfill(Void())
@@ -91,8 +92,8 @@ public class BackupServiceRender: BaseServiceRender, BackupProtocol {
     public func checkResult() -> Promise<BackupResult> {
         return Promise<Any>.async().then {[self] _ -> Promise<BackupResult> in
             return Promise<BackupResult> { resolver in
-                let url = self.connectionManager.hiveApi.getState()
-                let header = try self.connectionManager.headers()
+                let url = self._serviceEndpoint.connectionManager.hiveApi.getState()
+                let header = try self._serviceEndpoint.connectionManager.headers()
                 let response = try HiveAPi.request(url: url, method: .get, headers: header).get(BackupStateResponse.self)
                 resolver.fulfill(try response.getStatusResult())
             }

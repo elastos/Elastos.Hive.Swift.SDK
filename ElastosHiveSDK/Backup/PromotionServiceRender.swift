@@ -22,16 +22,19 @@
 
 import Foundation
 
-public class PromotionServiceRender: BaseServiceRender, PromotionProtocol {
-    public override init(_ serviceEndpoint: ServiceEndpoint) {
-        super.init(serviceEndpoint)
+public class PromotionServiceRender: PromotionProtocol {
+    
+    private var _serviceEndpoint: ServiceEndpoint
+    
+    public init(_ serviceEndpoint: ServiceEndpoint) {
+        self._serviceEndpoint = serviceEndpoint
     }
     
     public func promote() -> Promise<Void> {
         return Promise<Any>.async().then{ [self] _ -> Promise<Void> in
             return Promise<Void> { resolver in
-                let url = self.connectionManager.hiveApi.activeToVault()
-                let header = try self.connectionManager.headers()
+                let url = self._serviceEndpoint.connectionManager.hiveApi.activeToVault()
+                let header = try self._serviceEndpoint.connectionManager.headers()
                 _ = try HiveAPi.request(url: url, method: .post, parameters: nil, headers: header).get(HiveResponse.self)
                 resolver.fulfill(Void())
             }

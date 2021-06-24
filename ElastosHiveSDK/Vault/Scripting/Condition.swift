@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2020 Elastos Foundation
+* Copyright (c) 2019 Elastos Foundation
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -21,34 +21,41 @@
 */
 
 import Foundation
+import ObjectMapper
 
-public class HiveVaultRender {
-    private var _context: AppContext
-    private var _serviceEndpoint: ServiceEndpoint
+public class Condition: NSObject, Mappable {
+    private var _type: String?
+    private var _name: String?
+    private var _body: Any?
     
-    public init(_ serviceEndpoint: ServiceEndpoint) {
-        self._serviceEndpoint = serviceEndpoint
-        self._context = self._serviceEndpoint.appContext
+    public init(_ name: String, _ type: String, _ body: ScriptRootBody) {
+        self._name = name
+        self._type = type
+        self._body = body
     }
     
-    var context: AppContext {
+    public var body: Any? {
+        set {
+            _body = newValue
+        }
         get {
-            return _context
+            return _body
         }
     }
     
-    var serviceEndpoint: ServiceEndpoint {
-        get {
-            return _serviceEndpoint
-        }
+    required public init?(map: Map) {
+
     }
     
-    var connectionManager: ConnectionManager {
-        get {
-            return self._serviceEndpoint.connectionManager
-        }
+    public func mapping(map: Map) {
+        _type <- map["type"]
+        _name <- map["name"]
+        _body <- map["body"]
     }
+    
+//    public static let TYPE_AND = "and"
+//    public static let TYPE_OR = "or"
+//    public static let TYPE_QUERY_HAS_RESULTS = "queryHasResults"
 }
-
 
 
