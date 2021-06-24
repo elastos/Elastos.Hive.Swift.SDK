@@ -5,16 +5,16 @@ Elastos Hive Swift Framework
 
 ## Summary
 
-Elastos Hive is a basic service infrastructure that provides decentralised data storage capabilities to applications. And Elastos Hive Swift SDK provides a set of Swift APIs for applications to access/store vault data on Hive backend servers.
+Elastos Hive is an essential service infrastructure that provides decentralized data storage capabilities to applications. And Elastos Hive Swift SDK provides Swift APIs for applications to access/store vault data on Hive backend servers.
 
-Elastos Hive currently is under heavy development, and plans to support with the following data objects in the near future:
+Elastos Hive currently is under heavy development and plans to support with the following data objects soon:
 
 - File storage
 - Database
 - Key-Values
 - Scripting
 
-Anyway, Elastos Hive will keep practising the promise of users remain in full control of their own data.
+Anyway, Elastos Hive will keep practicing the promise that users remain in total control of their own data.
 
 
 ## Build from source
@@ -28,7 +28,7 @@ $ pod install
 $ open -a Xcode ElastosHiveSDK.xcworkspace
 ```
 
-**Note:** Different versions of cocoapods will lead to compilation errors. Please keep the latest version. Use the following commands to update cocoapods
+**Note:** Different versions of CocoaPods will lead to compilation errors. Please keep the latest version. Use the following commands to update CocoaPods.
 
 ```
 sudo gem install cocoapods
@@ -50,12 +50,12 @@ There are three ways to run the tests:
 
 You can alse run an individual test method by clicking its diamond, either in the Test navigator or in the gutter.
 
-When all the tests succeed, the diamonds will turn green and show check marks.
+When all the tests succeed, the diamonds will turn green and show checkmarks.
 
 ## CocoaPods
 
 ###  Pod install
-The distribution would be published to CocoaPods platform. So, the simple way to use **ElastosHiveSDK.framework** is just to add the following line to your **Podfile**:
+The distribution would be published to the CocoaPods platform. So, the simple way to use **ElastosHiveSDK.framework** is to add the following line to your **Podfile**:
 
 ```
 $ pod 'ElastosHiveSDK'
@@ -88,12 +88,13 @@ TODO.
 
 ## Thanks
 
-Sincerely thanks to all teams and projects that we relies on directly or indirectly.
+Sincerely thanks to all teams and projects that we rely on directly or indirectly.
 
 ## Contributing
 
-We welcome contributions to the Elastos Hive Swfit Project in many forms.
+We welcome contributions to the Elastos Hive Swift Project in many forms.
 
 ## License
 
 MIT
+
