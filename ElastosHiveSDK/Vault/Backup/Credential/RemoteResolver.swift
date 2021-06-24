@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2020 Elastos Foundation
+* Copyright (c) 2019 Elastos Foundation
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -21,34 +21,27 @@
 */
 
 import Foundation
+import ObjectMapper
 
-public class HiveVaultRender {
-    private var _context: AppContext
-    private var _serviceEndpoint: ServiceEndpoint
+public class RemoteResolver: TokenResolver {
+    private var _contextProvider: AppContextProvider
+    private var _authenticationServiceRender: AuthenticationServiceRender
     
-    public init(_ serviceEndpoint: ServiceEndpoint) {
-        self._serviceEndpoint = serviceEndpoint
-        self._context = self._serviceEndpoint.appContext
+    public init (_ serviceEndpoint: ServiceEndpoint) {
+        self._contextProvider = serviceEndpoint.appContext.appContextProvider
+        self._authenticationServiceRender = AuthenticationServiceRender(serviceEndpoint)
     }
-    
-    var context: AppContext {
-        get {
-            return _context
-        }
+
+
+    public func getToken() throws -> AuthToken? {
+        return try self._authenticationServiceRender.auth(token: self._authenticationServiceRender.signInForToken())
     }
-    
-    var serviceEndpoint: ServiceEndpoint {
-        get {
-            return _serviceEndpoint
-        }
+
+    public func invlidateToken() throws {
+        throw HiveError.UnsupportedOperationException
     }
-    
-    var connectionManager: ConnectionManager {
-        get {
-            return self._serviceEndpoint.connectionManager
-        }
+
+    public func setNextResolver(_ resolver: TokenResolver?) throws {
+        throw HiveError.UnsupportedOperationException
     }
 }
-
-
-

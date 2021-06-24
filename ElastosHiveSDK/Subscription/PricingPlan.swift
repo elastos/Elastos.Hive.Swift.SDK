@@ -21,34 +21,26 @@
 */
 
 import Foundation
+import ObjectMapper
 
-public class HiveVaultRender {
-    private var _context: AppContext
-    private var _serviceEndpoint: ServiceEndpoint
+public class PricingPlan: Mappable {
     
-    public init(_ serviceEndpoint: ServiceEndpoint) {
-        self._serviceEndpoint = serviceEndpoint
-        self._context = self._serviceEndpoint.appContext
+    public var amount: Double?
+    public var currency: String?
+    public var maxStorage: Int64?
+    public var name: String?
+    public var serviceDays: Int64?
+    
+    public init() {}
+    
+    required public init?(map: Map) {}
+    
+    public func mapping(map: Map) {
+        amount <- map["amount"]
+        currency <- map["currency"]
+        maxStorage <- map["maxStorage"]
+        name <- map["name"]
+        serviceDays <- map["serviceDays"]
     }
     
-    var context: AppContext {
-        get {
-            return _context
-        }
-    }
-    
-    var serviceEndpoint: ServiceEndpoint {
-        get {
-            return _serviceEndpoint
-        }
-    }
-    
-    var connectionManager: ConnectionManager {
-        get {
-            return self._serviceEndpoint.connectionManager
-        }
-    }
 }
-
-
-

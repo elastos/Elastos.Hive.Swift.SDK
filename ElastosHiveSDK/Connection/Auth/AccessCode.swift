@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2020 Elastos Foundation
+* Copyright (c) 2019 Elastos Foundation
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -20,35 +20,5 @@
 * SOFTWARE.
 */
 
+
 import Foundation
-
-public class HiveVaultRender {
-    private var _context: AppContext
-    private var _serviceEndpoint: ServiceEndpoint
-    
-    public init(_ serviceEndpoint: ServiceEndpoint) {
-        self._serviceEndpoint = serviceEndpoint
-        self._context = self._serviceEndpoint.appContext
-    }
-    
-    var context: AppContext {
-        get {
-            return _context
-        }
-    }
-    
-    var serviceEndpoint: ServiceEndpoint {
-        get {
-            return _serviceEndpoint
-        }
-    }
-    
-    var connectionManager: ConnectionManager {
-        get {
-            return self._serviceEndpoint.connectionManager
-        }
-    }
-}
-
-
-

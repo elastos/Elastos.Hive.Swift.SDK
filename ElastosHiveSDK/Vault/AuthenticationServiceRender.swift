@@ -22,50 +22,55 @@
 
 import Foundation
 
-public class AuthenticationServiceRender: BaseServiceRender {
+public class AuthenticationServiceRender {
     private var _contextProvider: AppContextProvider?
-    
+    private var _serviceEndpoint: ServiceEndpoint
+
     public typealias HiveToken = String
     
-    public override init(_ serviceEndpoint: ServiceEndpoint) {
-        super.init(serviceEndpoint)
+    public init(_ serviceEndpoint: ServiceEndpoint) {
+        self._serviceEndpoint = serviceEndpoint
         self._contextProvider = serviceEndpoint.appContext.appContextProvider
     }
 
     public func signInForToken() throws -> HiveToken {
-        let jsonstr = self._contextProvider!.getAppInstanceDocument()!.description
+//        let jsonstr = self._contextProvider!.getAppInstanceDocument().description
+        let jsonstr = ""
         let data = jsonstr.data(using: .utf8)
         let json: [String: Any]  = try JSONSerialization.jsonObject(with: data!, options: []) as! [String : Any]
         let params: [String: Any] = ["document": json]
         
-        let response = try HiveAPi.request(url: self.connectionManager.hiveApi.signIn(), method: .post, parameters: params, headers: self.connectionManager.defaultHeaders()).get(SignInResponse.self)
+        let response = try HiveAPi.request(url: self._serviceEndpoint.connectionManager.hiveApi.signIn(), method: .post, parameters: params, headers: self._serviceEndpoint.connectionManager.defaultHeaders()).get(SignInResponse.self)
         _ = try response.checkValid()
         return self._contextProvider!.getAuthorization(response.challenge)!
     }
 
     public func signInForIssuer() throws -> String {
-        let jsonstr = self._contextProvider!.getAppInstanceDocument()!.description
+//        let jsonstr = self._contextProvider!.getAppInstanceDocument().description
+        let jsonstr = ""
         let data = jsonstr.data(using: .utf8)
         let json: [String: Any]  = try JSONSerialization.jsonObject(with: data!, options: []) as! [String : Any]
         let params: [String: Any] = ["document": json]
         
-        let response = try HiveAPi.request(url: self.connectionManager.hiveApi.signIn(), method: .post, parameters: params, headers: self.connectionManager.defaultHeaders()).get(SignInResponse.self)
+        let response = try HiveAPi.request(url: self._serviceEndpoint.connectionManager.hiveApi.signIn(), method: .post, parameters: params, headers: self._serviceEndpoint.connectionManager.defaultHeaders()).get(SignInResponse.self)
          return try response.checkValid().getIssuer()!
     }
     
     public func auth(token: HiveToken) throws -> AuthToken {
         let params = ["jwt": token]
-        let url = self.connectionManager.hiveApi.auth()
+        let url = self._serviceEndpoint.connectionManager.hiveApi.auth()
         let response = try HiveAPi.request(url: url,
                                             method: .post,
                                             parameters: params,
-                                            headers: self.connectionManager.defaultHeaders()).get(AuthResponse.self)
+                                            headers: self._serviceEndpoint.connectionManager.defaultHeaders()).get(AuthResponse.self)
 
         let jwtParserBuilder = try JwtParserBuilder().build()
         let claim = try jwtParserBuilder.parseClaimsJwt(response.accessToken).claims
+        // Update the service did to service end-point for future usage.
+        self._serviceEndpoint.serviceInstanceDid = claim.getIssuer()
         let expirationDate = claim.getExpiration()
         let expiresTime: Int64 = Int64(expirationDate!.timeIntervalSince1970)
-        return AuthToken(response.accessToken, expiresTime, "token")
+        return AuthTokenToVault(response.accessToken, expiresTime)
         
     }
     

@@ -22,33 +22,9 @@
 
 import Foundation
 
-public class HiveVaultRender {
-    private var _context: AppContext
-    private var _serviceEndpoint: ServiceEndpoint
-    
-    public init(_ serviceEndpoint: ServiceEndpoint) {
-        self._serviceEndpoint = serviceEndpoint
-        self._context = self._serviceEndpoint.appContext
+extension HiveAPi {
+    func promoteToVault() -> String {
+        return self.baseURL + self.apiPath + "/backup/promotion"
     }
-    
-    var context: AppContext {
-        get {
-            return _context
-        }
-    }
-    
-    var serviceEndpoint: ServiceEndpoint {
-        get {
-            return _serviceEndpoint
-        }
-    }
-    
-    var connectionManager: ConnectionManager {
-        get {
-            return self._serviceEndpoint.connectionManager
-        }
-    }
+   
 }
-
-
-
