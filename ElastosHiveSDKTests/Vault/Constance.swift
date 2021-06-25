@@ -1,12 +1,11 @@
 
 import Foundation
-
-let TEST_RESOLVER_URL = "http://api.elastos.io:21606" //Test Net
-let MAIN_RESOLVER_URL = "http://api.elastos.io:20606" //Main Net
+let TEST_RESOLVER_URL = "https://api-testnet.elastos.io/newid"
+let MAIN_RESOLVER_URL = "https://api-testnet.elastos.io/newid"
 
 let LOCAL_PROVIDER = "http://192.168.199.180:5000"
-let RELEASE_PROVIDER = "https://hive1.trinity-tech.io" // release
-let DEVELOP_PROVIDER = "https://hive.yoopig.com" // develop
+let RELEASE_PROVIDER = "https://hive-testnet2.trinity-tech.io" // release
+let DEVELOP_PROVIDER = "https://hive-testnet2.trinity-tech.io" // release
 
 //user1
 //https://hive1.trinity-tech.io
@@ -85,6 +84,8 @@ let appInstance4_storepass = "password"
 //user3
 //did:elastos:ijsuXewbiRytAhoWcGhhYJ87LNzALoiX9K
 ////http://api.elastos.io:20606
+///https://api-testnet.elastos.io/newid
+///published
 let userDid3 = "did:elastos:ijsuXewbiRytAhoWcGhhYJ87LNzALoiX9K"
 let userDid3_name = "didapp1"
 let userDid3_mn = "horror task escape shock suffer burger celery behave exist predict board famous"
