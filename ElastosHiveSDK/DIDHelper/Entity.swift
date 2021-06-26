@@ -36,6 +36,7 @@ public class Entity: NSObject {
 
         // Initialize the root identity.
         rootIdent = try RootIdentity.create(mnemonic, phrasepass, store!, storepass)
+        try rootIdent?.synchronize()
     }
 
     public func initDid() throws {

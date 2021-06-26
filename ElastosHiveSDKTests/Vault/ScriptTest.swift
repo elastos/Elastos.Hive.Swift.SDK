@@ -111,7 +111,7 @@ class ScriptTest: XCTestCase {
 
     func test05_callStringType() {
         let lock = XCTestExpectation(description: "wait for test.")
-        scripting?.callScript(noConditionName, nil, nil, String.self).done{ re in
+        scripting?.callScript(noConditionName, nil, "appId", String.self).done{ re in
             lock.fulfill()
         }.catch{ err in
             XCTFail()
@@ -122,7 +122,7 @@ class ScriptTest: XCTestCase {
 
     func test06_callDataType() {
         let lock = XCTestExpectation(description: "wait for test.")
-        scripting?.callScript(noConditionName, nil, nil, Data.self).done{ data in
+        scripting?.callScript(noConditionName, nil, "appId", Data.self).done{ data in
             let rejson = try JSONSerialization.jsonObject(with: data , options: .mutableContainers) as AnyObject
             print(rejson)
             XCTAssertTrue(true)
@@ -136,7 +136,7 @@ class ScriptTest: XCTestCase {
 
     func test07_callOtherScript() {
         let lock = XCTestExpectation(description: "wait for test.")
-        scripting?.callScript(noConditionName, nil, nil, String.self).done{ str in
+        scripting?.callScript(noConditionName, nil, "appId", String.self).done{ str in
             print(str)
             XCTAssertTrue(true)
             lock.fulfill()
@@ -163,7 +163,7 @@ class ScriptTest: XCTestCase {
 
     func test09_callDictionaryType() {
         let lock = XCTestExpectation(description: "wait for test.")
-        scripting?.callScript(noConditionName, nil,nil, Dictionary<String, Any>.self).done{ re in
+        scripting?.callScript(noConditionName, nil,"appId", Dictionary<String, Any>.self).done{ re in
             lock.fulfill()
         }.catch{ err in
             XCTFail()
@@ -189,7 +189,7 @@ class ScriptTest: XCTestCase {
         let lock = XCTestExpectation(description: "wait for test.")
         let params = ["group_id": ["$oid": "5f8d9dfe2f4c8b7a6f8ec0f1"], "path": "upload_test.txt"] as [String : Any]
         let scriptName = "upload_file"
-        scripting?.callScript(scriptName, params, nil, JSON.self).then({ json -> Promise<FileWriter> in
+        scripting?.callScript(scriptName, params, "appId", JSON.self).then({ json -> Promise<FileWriter> in
             let transactionId = json[scriptName]["transaction_id"].stringValue
             return (self.scripting?.uploadFile(transactionId))!
         }).done{ writer in
@@ -255,7 +255,7 @@ class ScriptTest: XCTestCase {
         let params = ["group_id": ["$oid": "5f497bb83bd36ab235d82e6a"], "path": "upload_test.txt"] as [String : Any]
         let scriptName = "download_file"
         let lock = XCTestExpectation(description: "wait for test.")
-        scripting?.callScript(scriptName, params, nil, JSON.self).then({ [self] json -> Promise<FileReader> in
+        scripting?.callScript(scriptName, params, "appId", JSON.self).then({ [self] json -> Promise<FileReader> in
             return (scripting?.downloadFile(json[scriptName]["transaction_id"].stringValue))!
         }).done{ [self] reader in
             let fileurl = creaFile()
@@ -301,14 +301,21 @@ class ScriptTest: XCTestCase {
 
     func test16_getFileInfo() {
         let params = ["group_id": ["$oid": "5f497bb83bd36ab235d82e6a"], "path": "test.txt"] as [String : Any]
+        let hashExecutable = HashExecutable(name: "file_hash", path: "$params.path")
+        let propertiesExecutable = PropertiesExecutable(name: "file_properties", path: "$params.path")
+        let executable = AggregatedExecutable("file_properties_and_hash", [hashExecutable, propertiesExecutable])
+        
         let lock = XCTestExpectation(description: "wait for test.")
-        scripting!.callScript("get_file_info", params, nil, String.self).done { success in
-            print(success)
-            lock.fulfill()
-        }.catch { error in
-            XCTFail()
-            lock.fulfill()
-        }
+        scripting!.registerScript("get_file_info", executable, false, false).then{ [self] result -> Promise<String> in
+            print("result == \(result)")
+            return scripting!.callScript("get_file_info", params, "appId", String.self)}
+            .done { success in
+                print(success)
+                lock.fulfill()
+            }.catch { error in
+                XCTFail()
+                lock.fulfill()
+            }
         self.wait(for: [lock], timeout: 10000.0)
     }
 
