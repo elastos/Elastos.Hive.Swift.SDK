@@ -8,9 +8,9 @@ class PaymentTest: XCTestCase {
     
     private let planName = "Free"
     private let priceName = "Rookie"
-    private var orderId = "5fbdf4ee46c829dc73a9a3d2"
-    private var txid = "d7f35a35764a7c4f58a0698429425a73fa2e364daa30c0e7393857dd5b966b65"
-
+    private var orderId = "60d6d8b2bd3b68acb5c45e5b"
+//    private var txid = "d7f35a35764a7c4f58a0698429425a73fa2e364daa30c0e7393857dd5b966b65"
+    private var txid = "bccf93e3ba2b700adbd78458b710e33488e635c4cf5de6a45f435c3d667bed39"
     func test0_GetPaymentInfo() {
         let lock = XCTestExpectation(description: "wait for test.")
         _ = payment?.getPaymentInfo().done{ info in

@@ -47,19 +47,15 @@ class InstanceTest: XCTestCase {
     }
     
     func test_getVault() {
-        let params = ["group_id": ["$oid": "5f497bb83bd36ab235d82e6a"], "path": "test.txt"] as [String : Any]
         let lock = XCTestExpectation(description: "wait for test.")
-        var array: [Promise<Vault>] = []
-        
-        for _ in 0...100 {
-            let p2 = user?.client.getVault(user!.userFactoryOpt.ownerDid, nil)
-            array.append(p2!)
-        }
-        
-        when(resolved: array).done { re in
-            XCTAssertTrue(true)
+        user?.client.getVault(user!.userFactoryOpt.ownerDid, user?.userFactoryOpt.provider).done{ vault in
+            XCTAssertNotNil(vault)
+            lock.fulfill()
+        }.catch{ e in
+            XCTFail()
             lock.fulfill()
         }
+
         self.wait(for: [lock], timeout: 10000.0)
     }
 
