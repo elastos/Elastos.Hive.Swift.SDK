@@ -1,3 +1,11 @@
+06/26/2021 Li Aihong liaihong@trinity-tech.io
+
+**version 2.1.3-pre**, main changes to previous version:
+
+```markdown
+- Adapter ElastosDIDSDK 2.0 sdk.  
+```
+
 01/11/2021 Li Aihong liaihong@trinity-tech.io
 
 **version 2.1.2**, main changes to previous version:
