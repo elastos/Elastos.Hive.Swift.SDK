@@ -21,3 +21,25 @@
 */
 
 import Foundation
+import ElastosDIDSDK
+
+public class AuthController {
+    
+    private var _expectationAudience: String?
+    
+//    public init(_ appInstanceDidDoc: DIDDocument) {
+//        self._expectationAudience = appInstanceDidDoc.subject
+//    }
+    
+    public func signIn(_ appInstanceDidDoc: DIDDocument) throws -> String? {
+        return nil
+    }
+    
+    public func auth(_ challengeResponse: String) throws -> String? {
+        return nil
+    }
+
+    private func checkValid(_ jwtCode: String, _ expectationDid: String) -> Bool {
+        return false
+    }
+}

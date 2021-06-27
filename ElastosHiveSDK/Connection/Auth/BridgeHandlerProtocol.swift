@@ -21,3 +21,9 @@
 */
 
 import Foundation
+
+public protocol BridgeHandlerProtocol {
+    func flush(_ value: String?)
+    func target() -> Any
+    func invalidate()
+}

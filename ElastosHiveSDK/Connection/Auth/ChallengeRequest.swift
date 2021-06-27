@@ -22,3 +22,12 @@
 
 
 import Foundation
+
+public class ChallengeRequest {
+    private var _challenge: String?
+    
+    public var challenge: String? {
+        return _challenge
+    }
+}
+
