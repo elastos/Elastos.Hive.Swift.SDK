@@ -22,23 +22,24 @@
 
 import Foundation
 
+/**
+ * TODO: refine APIs like *One, *Many, find*.
+ */
 public protocol DatabaseProtocol {
     
     /// Lets the vault owner create a collection on database.
     ///
     /// - parameters:
     ///    - name: the collection name
-    ///    - options:
     /// - returns: fail(false) or success(true)
-    func createCollection(_ name: String, _ options: CreateCollectionOptions?) -> Promise<Bool>
-
+    func createCollection(_ name: String) -> Promise<Void>
 
     /// Lets the vault owner delete a collection on database according to collection name.
     ///
-    /// - Parameter name: the collection name
-    ///
+    /// - parameters:
+    ///    - name: the collection name
     /// - Returns fail(false) or success(true)
-    func deleteCollection(_ name: String) -> Promise<Bool>
+    func deleteCollection(_ name: String) -> Promise<Void>
 
     /// Insert a new document in a given collection
     /// - parameters:
@@ -48,8 +49,8 @@ public protocol DatabaseProtocol {
     ///   - options: bypass_document_validation: (optional) If True, allows
     ///              the write to opt-out of document level validation. Default is False.
     /// - returns: Results returned by InsertOneResult wrapper
-    func insertOne(_ collection: String, _ doc: [String: Any], _ options: InsertOneOptions?) -> Promise<InsertDocResponse>
-
+    func insertOne(_ collection: String, _ doc: [String: Any], _ options: InsertOptions?) -> Promise<InsertResult>
+  
     /// Insert many new documents in a given collection
     ///
     /// - parameters:
@@ -61,8 +62,8 @@ public protocol DatabaseProtocol {
     ///              and all document inserts will be attempted.
     ///              bypass_document_validation: (optional) If True, allows the write to opt-out of document level validation. Default is False.
     /// - returns: Results returned by `InsertManyResult` wrapper
-    func insertMany(_ collection: String, _ docs: Array<[String: Any]>,_ options: InsertManyOptions) -> Promise<InsertDocsResponse>
-
+    func insertMany(_ collection: String, _ docs: Array<[String: Any]>,_ options: InsertOptions) -> Promise<InsertResult>
+    
     /// Count documents
     ///
     /// - parameters:
@@ -74,7 +75,7 @@ public protocol DatabaseProtocol {
     ///     - maxTimeMS (int): The maximum amount of time to allow this operation to run, in milliseconds.
     ///  - returns: count size
     func countDocuments(_ collection: String, _ query: [String: Any], _ options: CountOptions) -> Promise<Int64>
-
+    
     /// Find a specific document
     ///
     /// - parameters:
@@ -82,7 +83,7 @@ public protocol DatabaseProtocol {
     ///   - query: query optional, a JSON object specifying elements which must be present for a document to be included in the result set
     ///   - options: options optional,refer to {@link FindOptions}
     ///  - returns: a Dictionary object document result
-    func findOne(_ collection: String, _ query: [String: Any], _ options: FindOptions) -> Promise<FindDocResponse>
+    func findOne(_ collection: String, _ query: [String: Any], _ options: FindOptions) -> Promise<Dictionary<String, Any>>
 
     /// Find many documents
     /// - Parameters:
@@ -90,7 +91,10 @@ public protocol DatabaseProtocol {
     ///   - query: a JSON object specifying elements which must be present for a document to be included in the result set
     ///   - options: FindOptions instance
     ///  - returns: a Dictionary array result of document
-    func findMany(_ collection: String, _ query: [String: Any], _ options: FindOptions) -> Promise<FindDocsResponse>
+    func findMany(_ collection: String, _ query: [String: Any], _ options: FindOptions) -> Array<Dictionary<String, Any>>
+    
+    
+    
 
     /// Update an existing document in a given collection
     ///
