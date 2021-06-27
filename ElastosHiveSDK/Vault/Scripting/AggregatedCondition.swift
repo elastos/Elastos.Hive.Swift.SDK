@@ -21,3 +21,39 @@
  */
 
 import Foundation
+import ObjectMapper
+
+public class AggregatedCondition: Condition {
+    
+    public init(_ name: String?, _ type: String?, _ conditions: [Condition]?) {
+        super.init(name, type, conditions)
+    }
+    
+    public init(_ name: String?, _ type: String?) {
+        super.init(name, type, nil)
+    }
+    
+    public func setConditions(_ conditions: [Condition]?) -> AggregatedCondition {
+        super.body = conditions == nil ? [] : conditions
+        return self
+    }
+    
+    public func appendCondition(_ condition: Condition?) -> AggregatedCondition {
+        if condition == nil {
+            return self
+        }
+        
+        if super.body == nil {
+            super.body = [condition]
+        } else {
+            let body = super.body as! [Condition]
+            body.append(condition)
+        }
+        return self
+    }
+    
+    required public init?(map: Map) {
+        fatalError("init(map:) has not been implemented")
+    }
+    
+}

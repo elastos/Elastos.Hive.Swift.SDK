@@ -21,3 +21,26 @@
  */
 
 import Foundation
+
+public class InsertResult {
+    private var _acknowledged: Bool = false
+    private var _insertedId: String?
+    
+    public var acknowledged: Bool {
+        get {
+            return _acknowledged
+        }
+    }
+    
+    public var insertedId: String {
+        get {
+            return _insertedId!
+        }
+    }
+    
+    public override func mapping(map: Map) {
+        super.mapping(map: map)
+        _acknowledged <- map["acknowledged"]
+        _insertedId <- map["inserted_id"]
+    }
+}
