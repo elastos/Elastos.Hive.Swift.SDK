@@ -22,3 +22,19 @@
 
 
 import Foundation
+import ObjectMapper
+
+public class ChallengeResponse: Mappable {
+    private var _challengeResponse: String?
+    
+    public init(_ challengeResponse: String) {
+        self._challengeResponse = challengeResponse
+    }
+    
+    required public init?(map: Map) {}
+    
+    public func mapping(map: Map) {
+        _challengeResponse <- map["challenge_response"]
+    }
+}
+

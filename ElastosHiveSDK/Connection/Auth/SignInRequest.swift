@@ -21,3 +21,11 @@
 */
 
 import Foundation
+
+public class SignInRequest {
+    private var _didDocument: Any?
+    
+    init(_ didDocument: Any?) {
+        self._didDocument = didDocument
+    }
+}

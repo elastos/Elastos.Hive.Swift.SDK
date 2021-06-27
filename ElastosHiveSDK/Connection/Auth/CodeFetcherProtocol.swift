@@ -21,3 +21,8 @@
 */
 
 import Foundation
+
+public protocol CodeFetcherProtocol {
+    func fetch() throws -> String?
+    func invalidate()
+}

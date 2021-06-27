@@ -33,7 +33,7 @@ public class LocalResolver: TokenResolver {
     var token: AuthToken?
     private var providerAddress: String
     
-    init(_ ownerDid: String, _ providerAddress: String, _ type: String, _ cacheDir: String) throws {
+    init(_ ownerDid: String, _ providerAddress: String?, _ type: String, _ cacheDir: String) throws {
         let rootDir = cacheDir + LocalResolver.tokenFolder
         var isDirectory: ObjCBool = false
         let fileManager = FileManager.default
