@@ -21,3 +21,21 @@
  */
 
 import Foundation
+import ObjectMapper
+
+public class DeleteParams: Mappable {
+    private var _filter: Dictionary<String, Any>?
+    private var _options: DeleteOptions?
+    
+    public init(_ filter: Dictionary<String, Any>?, _ options: DeleteOptions) {
+        self._filter = filter
+        self._options = options
+    }
+
+    public required init?(map: Map) {}
+    
+    public func mapping(map: Map) {
+        _filter <- map["filter"]
+        _options <- map["options"]
+    }
+}

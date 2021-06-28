@@ -109,7 +109,6 @@
 		303D685E261E92F500981858 /* ScriptInsertExecutableBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303D685D261E92F500981858 /* ScriptInsertExecutableBody.swift */; };
 		3045A73A260237FD0037527A /* DatabaseServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A739260237FC0037527A /* DatabaseServiceTest.swift */; };
 		3045A741260241FC0037527A /* BackupSubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A740260241FC0037527A /* BackupSubscription.swift */; };
-		3045A749260245960037527A /* FilesServiceRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A748260245960037527A /* FilesServiceRender.swift */; };
 		3045A74C26024B9B0037527A /* DatabaseServiceRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A74B26024B9B0037527A /* DatabaseServiceRender.swift */; };
 		3045A74F26024BD30037527A /* BackupServiceRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A74E26024BD30037527A /* BackupServiceRender.swift */; };
 		3045A75226024BF40037527A /* PubSubServiceRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A75126024BF40037527A /* PubSubServiceRender.swift */; };
@@ -176,7 +175,7 @@
 		3053BEBC2684CA5F005828B0 /* CountResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE722684CA5F005828B0 /* CountResult.swift */; };
 		3053BEBD2684CA5F005828B0 /* DeleteParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE732684CA5F005828B0 /* DeleteParams.swift */; };
 		3053BEBE2684CA5F005828B0 /* DeleteResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE742684CA5F005828B0 /* DeleteResult.swift */; };
-		3053BEBF2684CA5F005828B0 /* Index.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE752684CA5F005828B0 /* Index.swift */; };
+		3053BEBF2684CA5F005828B0 /* HiveIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE752684CA5F005828B0 /* HiveIndex.swift */; };
 		3053BEC02684CA5F005828B0 /* CountParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE762684CA5F005828B0 /* CountParams.swift */; };
 		3053BEC12684CA5F005828B0 /* DatabaseAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE772684CA5F005828B0 /* DatabaseAPI.swift */; };
 		3053BEC22684CA5F005828B0 /* CreateCollectionResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE782684CA5F005828B0 /* CreateCollectionResult.swift */; };
@@ -258,7 +257,6 @@
 		3065A5F3261592E600C20661 /* OrderInfoResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3065A5F2261592E600C20661 /* OrderInfoResponse.swift */; };
 		3065A5FA26159DB100C20661 /* PaymentPlanResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3065A5F926159DB100C20661 /* PaymentPlanResponse.swift */; };
 		3065A5FD2615AE1500C20661 /* NodeVersionResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3065A5FC2615AE1500C20661 /* NodeVersionResponse.swift */; };
-		3065A6002615B00700C20661 /* NodeManageApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3065A5FF2615B00700C20661 /* NodeManageApi.swift */; };
 		3065A6032615B2CF00C20661 /* NodeCommitHashResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3065A6022615B2CF00C20661 /* NodeCommitHashResponse.swift */; };
 		3065A6062615B6BB00C20661 /* Alamofire+Hive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3065A6052615B6BB00C20661 /* Alamofire+Hive.swift */; };
 		308E08992688D68F0089F479 /* CodeFetcherProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 308E08982688D68F0089F479 /* CodeFetcherProtocol.swift */; };
@@ -416,7 +414,6 @@
 		303D685D261E92F500981858 /* ScriptInsertExecutableBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptInsertExecutableBody.swift; sourceTree = "<group>"; };
 		3045A739260237FC0037527A /* DatabaseServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseServiceTest.swift; sourceTree = "<group>"; };
 		3045A740260241FC0037527A /* BackupSubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupSubscription.swift; sourceTree = "<group>"; };
-		3045A748260245960037527A /* FilesServiceRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesServiceRender.swift; sourceTree = "<group>"; };
 		3045A74B26024B9B0037527A /* DatabaseServiceRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseServiceRender.swift; sourceTree = "<group>"; };
 		3045A74E26024BD30037527A /* BackupServiceRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupServiceRender.swift; sourceTree = "<group>"; };
 		3045A75126024BF40037527A /* PubSubServiceRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PubSubServiceRender.swift; sourceTree = "<group>"; };
@@ -482,7 +479,7 @@
 		3053BE722684CA5F005828B0 /* CountResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountResult.swift; sourceTree = "<group>"; };
 		3053BE732684CA5F005828B0 /* DeleteParams.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteParams.swift; sourceTree = "<group>"; };
 		3053BE742684CA5F005828B0 /* DeleteResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteResult.swift; sourceTree = "<group>"; };
-		3053BE752684CA5F005828B0 /* Index.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Index.swift; sourceTree = "<group>"; };
+		3053BE752684CA5F005828B0 /* HiveIndex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HiveIndex.swift; sourceTree = "<group>"; };
 		3053BE762684CA5F005828B0 /* CountParams.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountParams.swift; sourceTree = "<group>"; };
 		3053BE772684CA5F005828B0 /* DatabaseAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseAPI.swift; sourceTree = "<group>"; };
 		3053BE782684CA5F005828B0 /* CreateCollectionResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateCollectionResult.swift; sourceTree = "<group>"; };
@@ -564,7 +561,6 @@
 		3065A5F2261592E600C20661 /* OrderInfoResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderInfoResponse.swift; sourceTree = "<group>"; };
 		3065A5F926159DB100C20661 /* PaymentPlanResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentPlanResponse.swift; sourceTree = "<group>"; };
 		3065A5FC2615AE1500C20661 /* NodeVersionResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeVersionResponse.swift; sourceTree = "<group>"; };
-		3065A5FF2615B00700C20661 /* NodeManageApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeManageApi.swift; sourceTree = "<group>"; };
 		3065A6022615B2CF00C20661 /* NodeCommitHashResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeCommitHashResponse.swift; sourceTree = "<group>"; };
 		3065A6052615B6BB00C20661 /* Alamofire+Hive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Alamofire+Hive.swift"; sourceTree = "<group>"; };
 		308E08982688D68F0089F479 /* CodeFetcherProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeFetcherProtocol.swift; sourceTree = "<group>"; };
@@ -676,7 +672,6 @@
 				3019D42B2612213900A3C3C5 /* HiveAPi.swift */,
 				30DB9628260046F200ACF19F /* FilesApi.swift */,
 				30DD2077260257A200808B5B /* DatabaseApi.swift */,
-				3065A5FF2615B00700C20661 /* NodeManageApi.swift */,
 				30DB9629260046F200ACF19F /* PaymentApi.swift */,
 				30091C642619FCAE003EB5CE /* PubsubApi.swift */,
 				303CD55F2607606B00865472 /* ScriptingApi.swift */,
@@ -858,7 +853,6 @@
 			isa = PBXGroup;
 			children = (
 				3045A74B26024B9B0037527A /* DatabaseServiceRender.swift */,
-				3045A748260245960037527A /* FilesServiceRender.swift */,
 				3045A74E26024BD30037527A /* BackupServiceRender.swift */,
 				3045A75126024BF40037527A /* PubSubServiceRender.swift */,
 				3045A75826024C1E0037527A /* ScriptingRender.swift */,
@@ -982,7 +976,7 @@
 				3053BE722684CA5F005828B0 /* CountResult.swift */,
 				3053BE732684CA5F005828B0 /* DeleteParams.swift */,
 				3053BE742684CA5F005828B0 /* DeleteResult.swift */,
-				3053BE752684CA5F005828B0 /* Index.swift */,
+				3053BE752684CA5F005828B0 /* HiveIndex.swift */,
 				3053BE762684CA5F005828B0 /* CountParams.swift */,
 				3053BE772684CA5F005828B0 /* DatabaseAPI.swift */,
 				3053BE782684CA5F005828B0 /* CreateCollectionResult.swift */,
@@ -1500,7 +1494,6 @@
 				30091C442619F6DA003EB5CE /* OrderListResponse.swift in Sources */,
 				3053BEED2684CA5F005828B0 /* HiveVaultRender.swift in Sources */,
 				3053BE652684CA38005828B0 /* PromotionProtocol.swift in Sources */,
-				3045A749260245960037527A /* FilesServiceRender.swift in Sources */,
 				3053BF152684CA96005828B0 /* OrderCollection.swift in Sources */,
 				304EA39B261D40B5007ADD47 /* DeleteCollectionRequestParams.swift in Sources */,
 				3053BE422684C974005828B0 /* NodeRPCException.swift in Sources */,
@@ -1687,7 +1680,6 @@
 				3053BEEB2684CA5F005828B0 /* BackupServiceRender.swift in Sources */,
 				3053BE6A2684CA38005828B0 /* CloudBackupContext.swift in Sources */,
 				3065A5E4261551D800C20661 /* HIveResponse.swift in Sources */,
-				3065A6002615B00700C20661 /* NodeManageApi.swift in Sources */,
 				304EA386261D3DE9007ADD47 /* FindDocRequestParams.swift in Sources */,
 				3045A75226024BF40037527A /* PubSubServiceRender.swift in Sources */,
 				30091C522619F929003EB5CE /* PopMessageResponse.swift in Sources */,
@@ -1705,7 +1697,7 @@
 				3019D3D126107B2C00A3C3C5 /* AuthRequestParams.swift in Sources */,
 				3053BF012684CA5F005828B0 /* PubSubServiceRender.swift in Sources */,
 				3053BEC82684CA5F005828B0 /* InsertResult.swift in Sources */,
-				3053BEBF2684CA5F005828B0 /* Index.swift in Sources */,
+				3053BEBF2684CA5F005828B0 /* HiveIndex.swift in Sources */,
 				3053BE432684C974005828B0 /* UploadOutputStreamWriter.swift in Sources */,
 				3053BE6C2684CA38005828B0 /* PaymentProtocol.swift in Sources */,
 				3053BE412684C974005828B0 /* UploadOutputStream.swift in Sources */,

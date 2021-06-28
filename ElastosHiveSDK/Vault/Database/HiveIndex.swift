@@ -21,3 +21,24 @@
  */
 
 import Foundation
+
+public class HiveIndex {
+    private var _key: String?
+    private var _order: Order?
+    
+//    public Index(String key, Order order) {
+
+    public init(_ key: String?, _ order: Order?) {
+        self._key = key
+        self._order = order
+    }
+    
+    public var key: String? {
+        return _key
+    }
+
+    public var order: String? {
+        return _order
+    }
+    
+}

@@ -53,8 +53,9 @@ public enum HiveError: Error {
     case DIDResolverSetupException(_ message: String)
     case BadContextProviderException(_ message: String)
     case DIDResolverNotSetupException
+    case NotImplementedException
 
-
+    
 }
 
 extension HiveError {
@@ -117,7 +118,10 @@ extension HiveError {
             return "This method will be supported in the later versions"
         case .DIDResolverSetupException(let message):
             return "DIDResolverSetupException \(message)"
+        case .NotImplementedException:
+            return "NotImplementedException"
         }
+        
     }
     
     static func praseError(_ json: JSON) -> String {

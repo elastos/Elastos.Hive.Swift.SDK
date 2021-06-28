@@ -21,3 +21,9 @@
  */
 
 import Foundation
+
+public class AscendingSortItem: SortItem {
+    public init(_ key: String?) {
+        super.init(key, Order.ASCENDING)
+    }
+}

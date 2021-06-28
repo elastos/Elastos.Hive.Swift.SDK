@@ -21,3 +21,30 @@
  */
 
 import Foundation
+
+public class FilesController {
+    
+    public func listChildren(_ path: String?) throws -> [FileInfo] {
+        // TODO
+    }
+
+    public func getProperty(_ path: String) throws -> FileInfo {
+        // TODO
+    }
+    
+    public func getHash(_ path: String) throws {
+        // TODO
+    }
+    
+    public func copyFile(_ srcPath: String, _ destPath: String) throws {
+        // TODO
+    }
+    
+    public func moveFile(_ srcPath: String, _ destPath: String) throws {
+        // TODO
+    }
+    
+    public func delete(_ path: String) throws {
+        // TODO
+    }
+}

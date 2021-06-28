@@ -22,66 +22,66 @@
 
 import Foundation
 import ObjectMapper
-
-public class Order: Mappable  {
-    
-    private var _orderId: String?
-    private var _did: String?
-    private var _appId: String?
-    private var _pricingInfo: PricingPlan?
-    private var _payTxids: [String]?
-    private var _state: String?
-    private var _type: String?
-    private var _createTime: Double?
-    private var _finishTime: Double?
-    
-    public var orderId: String? {
-        return _orderId
-    }
-    
-    public var did: String? {
-        return _did
-    }
-    
-    public var appId: String? {
-        return _appId
-    }
-    
-    public var pricingInfo: PricingPlan? {
-        return _pricingInfo
-    }
-    
-    public var payTxids: [String]? {
-        return _payTxids
-    }
-    
-    public var state: String? {
-        return _state
-    }
-    
-    public var type: String? {
-        return _type
-    }
-    
-    public var createTime: Double? {
-        return _createTime
-    }
-    
-    public var finishTime: Double? {
-        return _finishTime
-    }
-    
-    required public init?(map: Map) {}
-    
-    public func mapping(map: Map) {
-        _orderId <- map["order_id"]
-        _did <- map["did"]
-        _appId <- map["app_id"]
-        _pricingInfo <- map["pricing_info"]
-        _payTxids <- map["pay_txids"]
-        _state <- map["state"]
-        _type <- map["type"]
-        _createTime <- map["creat_time"]
-        _finishTime <- map["finish_time"]
-    }
-}
+//
+//public class Order: Mappable  {
+//    
+//    private var _orderId: String?
+//    private var _did: String?
+//    private var _appId: String?
+//    private var _pricingInfo: PricingPlan?
+//    private var _payTxids: [String]?
+//    private var _state: String?
+//    private var _type: String?
+//    private var _createTime: Double?
+//    private var _finishTime: Double?
+//    
+//    public var orderId: String? {
+//        return _orderId
+//    }
+//    
+//    public var did: String? {
+//        return _did
+//    }
+//    
+//    public var appId: String? {
+//        return _appId
+//    }
+//    
+//    public var pricingInfo: PricingPlan? {
+//        return _pricingInfo
+//    }
+//    
+//    public var payTxids: [String]? {
+//        return _payTxids
+//    }
+//    
+//    public var state: String? {
+//        return _state
+//    }
+//    
+//    public var type: String? {
+//        return _type
+//    }
+//    
+//    public var createTime: Double? {
+//        return _createTime
+//    }
+//    
+//    public var finishTime: Double? {
+//        return _finishTime
+//    }
+//    
+//    required public init?(map: Map) {}
+//    
+//    public func mapping(map: Map) {
+//        _orderId <- map["order_id"]
+//        _did <- map["did"]
+//        _appId <- map["app_id"]
+//        _pricingInfo <- map["pricing_info"]
+//        _payTxids <- map["pay_txids"]
+//        _state <- map["state"]
+//        _type <- map["type"]
+//        _createTime <- map["creat_time"]
+//        _finishTime <- map["finish_time"]
+//    }
+//}
