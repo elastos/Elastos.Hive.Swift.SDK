@@ -21,3 +21,18 @@
  */
 
 import Foundation
+import ObjectMapper
+
+public class CountResult: Mappable {
+    private var _count: Int64?
+    
+    public var count: Int64? {
+        return _count
+    }
+
+    public required init?(map: Map) {}
+    
+    public func mapping(map: Map) {
+        _count <- map["count"]
+    }
+}

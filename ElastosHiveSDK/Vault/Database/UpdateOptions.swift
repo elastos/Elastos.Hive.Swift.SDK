@@ -21,3 +21,26 @@
  */
 
 import Foundation
+import ObjectMapper
+
+public class UpdateOptions: Mappable {
+    private var _upsert: Bool?
+    private var _bypassDocumentValidation: Bool?
+    
+    public func setUpsert(_ upsert: Bool) -> UpdateOptions? {
+        self._upsert = upsert
+        return self
+    }
+    
+    public func setBypassDocumentValidation(_ bypassDocumentValidation: Bool) -> UpdateOptions? {
+        self._bypassDocumentValidation = bypassDocumentValidation
+        return self
+    }
+
+    public required init?(map: Map) {}
+    
+    public func mapping(map: Map) {
+        _upsert <- map["upsert"]
+        _bypassDocumentValidation <- map["bypass_document_validation"]
+    }
+}

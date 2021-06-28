@@ -21,3 +21,17 @@
  */
 
 import Foundation
+
+public enum Order: Int {
+    case ASCENDING = 1
+    case DESCENDING = -1
+}
+
+public class SortItem {
+    private var _storage: [Any] = []
+    
+    public init (_ key: String?, _ order: Order?) {
+        _storage.append(key)
+        _storage.append(order)
+    }
+}

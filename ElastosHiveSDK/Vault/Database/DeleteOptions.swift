@@ -24,15 +24,55 @@ import Foundation
 import ObjectMapper
 
 public class DeleteOptions: Mappable {
+    private var _collation: Collation?
+    private var _hint: [HiveIndex]?
     
-    public init() {
+    public init(_ collation: Collation, _ hint: HiveIndex?) {
         
     }
-    required public init?(map: Map) {
-        
+
+    public var collation: Collation? {
+        return _collation
     }
+    
+    public func collation(_ value: Collation?) -> DeleteOptions {
+        _collation = value
+        return self
+    }
+    
+    public func hint(_ value: HiveIndex?) -> DeleteOptions {
+        if value == nil {
+            _hint = nil
+        } else {
+            if _hint == nil {
+                _hint = []
+            }
+            _hint?.append(value!)
+        }
+        return self
+    }
+    
+    public func hint(_ value: [HiveIndex]?) -> DeleteOptions {
+        if value == nil {
+            _hint = nil
+        } else {
+            if _hint == nil {
+                _hint = []
+            }
+            _hint?.append(contentsOf: value!)
+        }
+        return self
+    }
+    
+    public var hint: Array[HiveIndex]? {
+        return _hint
+    }
+        
+    required public init?(map: Map) {}
     
     public func mapping(map: Map) {
 
     }
+    
+    
 }

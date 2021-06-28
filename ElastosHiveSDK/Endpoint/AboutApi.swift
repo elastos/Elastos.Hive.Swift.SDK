@@ -25,10 +25,10 @@ import Foundation
 extension HiveAPi {
     
     func version() -> String {
-        return self.baseURL + self.apiPath + "/hive/version"
+        return self.baseURL + self.apiPath + "/about/version"
     }
     
-    func commitHash() -> String {
-        return self.baseURL + self.apiPath + "/hive/commithash"
+    func commitId() -> String {
+        return self.baseURL + self.apiPath + "/about/commit_id"
     }
 }

@@ -21,3 +21,19 @@
  */
 
 import Foundation
+import ObjectMapper
+
+public class FindResult: Mappable {
+    // TODO: change 'items' to 'docs' ?
+    private var _documents: [Dictionary<String, Any>]?
+    
+    public var documents: [Dictionary<String, Any>]? {
+        return _documents
+    }
+    
+    required public init?(map: Map) {}
+    
+    public func mapping(map: Map) {
+        _documents <- map["items"]
+    }
+}

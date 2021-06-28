@@ -22,42 +22,49 @@
 
 import Foundation
 
-public class BackupServiceBuilder {
-    private var _backup: Backup
-    
-    public init(_ backup: Backup) {
-        self._backup = backup
-    }
-    
-    public func createPromotionService() -> PromotionServiceRender {
-        return PromotionServiceRender(self._backup)
-    }
-}
+//public class BackupServiceBuilder {
+//    private var _backup: Backup
+//
+//    public init(_ backup: Backup) {
+//        self._backup = backup
+//    }
+//
+//    public func createPromotionService() -> PromotionServiceRender {
+//        return PromotionServiceRender(self._backup)
+//    }
+//}
 
 public class ServiceBuilder {
-    var vault: Vault
+    private var _serviceEndpoint: ServiceEndpoint?
     
-    init(_ vault: Vault) {
-        self.vault = vault
-    }
-    
-    func createFilesService() -> FilesServiceRender {
-        return FilesServiceRender(self.vault)
+    public init(_ serviceEndpoint: ServiceEndpoint) {
+        self._serviceEndpoint = serviceEndpoint
     }
     
-    func createDatabase() -> DatabaseServiceRender {
-        return DatabaseServiceRender(self.vault)
-    }
     
-    func createScriptingService() -> ScriptingServiceRender {
-        return ScriptingServiceRender(self.vault)
-    }
-
-    func createPubsubService() -> PubSubServiceRender {
-        return PubSubServiceRender(self.vault)
-    }
-
-    func createBackupService() -> BackupServiceRender {
-        return BackupServiceRender(self.vault)
-    }
+//    var vault: Vault
+//
+//    init(_ vault: Vault) {
+//        self.vault = vault
+//    }
+//
+//    func createFilesService() -> FilesServiceRender {
+//        return FilesServiceRender(self.vault)
+//    }
+//
+//    func createDatabase() -> DatabaseServiceRender {
+//        return DatabaseServiceRender(self.vault)
+//    }
+//
+//    func createScriptingService() -> ScriptingServiceRender {
+//        return ScriptingServiceRender(self.vault)
+//    }
+//
+//    func createPubsubService() -> PubSubServiceRender {
+//        return PubSubServiceRender(self.vault)
+//    }
+//
+//    func createBackupService() -> BackupServiceRender {
+//        return BackupServiceRender(self.vault)
+//    }
 }

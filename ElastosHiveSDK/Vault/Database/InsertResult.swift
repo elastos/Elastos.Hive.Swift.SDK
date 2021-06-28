@@ -21,8 +21,9 @@
  */
 
 import Foundation
+import ObjectMapper
 
-public class InsertResult {
+public class InsertResult: Mappable {
     private var _acknowledged: Bool = false
     private var _insertedId: String?
     
@@ -38,8 +39,9 @@ public class InsertResult {
         }
     }
     
+    public required init?(map: Map) {}
+    
     public override func mapping(map: Map) {
-        super.mapping(map: map)
         _acknowledged <- map["acknowledged"]
         _insertedId <- map["inserted_id"]
     }
