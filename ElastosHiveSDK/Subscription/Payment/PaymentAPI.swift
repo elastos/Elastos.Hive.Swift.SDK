@@ -23,7 +23,7 @@
 import Foundation
 
 extension HiveAPi {
-    static func createOrder() -> String {
+    func createOrder() -> String {
         return self.baseURL + self.apiPath + "/payment/order"
     }
     

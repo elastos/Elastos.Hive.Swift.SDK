@@ -24,7 +24,6 @@ import Foundation
 import ObjectMapper
 
 public class CreateOrderParams: Mappable {
-    
     private var _subscription: String
     private var _pricingPlan: String
 

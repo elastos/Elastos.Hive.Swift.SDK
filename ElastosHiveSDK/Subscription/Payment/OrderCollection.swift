@@ -24,7 +24,6 @@ import Foundation
 import ObjectMapper
 
 public class OrderCollection: Mappable  {
-    
     private var _orders: [Order]?
 
     public var orderList: [Order]? {
