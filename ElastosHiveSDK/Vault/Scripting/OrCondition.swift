@@ -21,3 +21,18 @@
  */
 
 import Foundation
+
+/**
+ * Vault script condition that succeeds if at least one of the contained conditions are successful.
+ * Contained conditions are tested in the given order, and test stops as soon as one successful condition
+ * succeeds.
+ */
+public class OrCondition: AggregatedCondition {
+    public init(_ name: String?, _ conditions: [Condition]?) {
+        super.init(name, AggregatedConditionType.OR.rawValue, conditions)
+    }
+    
+    public init(_ name: String?) {
+        super.init(name, AggregatedConditionType.OR.rawValue, nil)
+    }
+}

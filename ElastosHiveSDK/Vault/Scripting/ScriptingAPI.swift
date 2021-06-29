@@ -21,3 +21,28 @@
  */
 
 import Foundation
+
+extension HiveAPi {
+    public static let API_SCRIPT_UPLOAD: String = "/api/v2/vault/scripting/stream"
+    
+    func registerScript(_ scriptName: String) -> String {
+        return self.baseURL + self.apiPath + "/vault/scripting/ \(scriptName)"
+    }
+    
+    func runScript(_ scriptName: String) -> String {
+        return self.baseURL + self.apiPath + "/vault/scripting/ \(scriptName)"
+    }
+    
+    func runScriptUrl(_ scriptName: String, _ targetDid: String, _ targetAppDid: String, _ params: String) -> String {
+        return self.baseURL + self.apiPath + "/vault/scripting/ \(scriptName)/\(targetDid)@\(targetAppDid)/\(params)"
+    }
+    
+    func downloadFile(_ transactionId: String) -> String {
+        return self.baseURL + self.apiPath + "/vault/scripting/stream/ \(transactionId)"
+    }
+    
+    func unregisterScript(_ scriptName: String) -> String {
+        return self.baseURL + self.apiPath + "/vault/scripting/ \(scriptName)"
+    }
+}
+

@@ -21,3 +21,51 @@
  */
 
 import Foundation
+import ObjectMapper
+
+public class QueryHasResultConditionBody {
+    private var _collection: String?
+    private var _filter: Dictionary<String, String>?
+    private var _options: QueryHasResultConditionOptions?
+    
+    public init(_ collectionName: String?, _ filter: Dictionary<String, String>?, _ options: QueryHasResultConditionOptions?) {
+        _collection = collectionName
+        _filter = filter
+        _options = options
+    }
+}
+
+public class QueryHasResultConditionOptions {
+    private var _skip: Int64?
+    private var _limit: Int64?
+    private var _maxTimeMS: Int64?
+    
+    public init(_ skip: Int64?, _ limit: Int64?, _ maxTimeMS: Int64?) {
+        _skip = skip
+        _limit = limit
+        _maxTimeMS = maxTimeMS
+    }
+}
+
+/**
+ * Vault script condition to check if a database query returns results or not.
+ * This is a way for example to check if a user is in a group, if a message contains comments, if a user
+ * is in a list, etc.
+ */
+public class QueryHasResultCondition: Condition {
+    private static let TYPE: String = "queryHasResults"
+    
+    public init(_ name: String?, _ collectionName: String?, _ filter: Dictionary<String, String>?, _ options: Any?) {
+        super.init(name, QueryHasResultCondition.TYPE, nil)
+        self.body = QueryHasResultConditionBody(collectionName, filter, (options as! QueryHasResultConditionOptions))
+    }
+    
+    public init(_ name: String?, _ collectionName: String?, _ filter: Dictionary<String, String>?) {
+        super.init(name, QueryHasResultCondition.TYPE, nil)
+        self.body = QueryHasResultConditionBody(collectionName, filter, nil)
+    }
+    
+    required public init?(map: Map) {
+        fatalError("init(map:) has not been implemented")
+    }
+}

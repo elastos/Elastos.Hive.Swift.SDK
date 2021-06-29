@@ -21,3 +21,41 @@
  */
 
 import Foundation
+import ObjectMapper
+
+public class RegScriptParams: Mappable {
+    private var _executable: Executable?
+    private var _allowAnonymousUser: Bool?
+    private var _allowAnonymousApp: Bool?
+    private var _condition: Condition?
+    
+    public func setExecutable(_ executable: Executable?) -> RegScriptParams {
+        self._executable = executable
+        return self
+    }
+
+    public func setAllowAnonymousUser(_ allowAnonymousUser: Bool?) -> RegScriptParams {
+        self._allowAnonymousUser = allowAnonymousUser
+        return self
+    }
+
+    public func setAllowAnonymousApp(_ allowAnonymousApp: Bool?) -> RegScriptParams {
+        self._allowAnonymousApp = allowAnonymousApp
+        return self
+    }
+    
+    public func setCondition(_ condition: Condition?) -> RegScriptParams {
+        self._condition = condition
+        return self
+    }
+    
+    public required init?(map: Map) {}
+
+    public func mapping(map: Map) {
+        _executable <- map["executable"]
+        _allowAnonymousUser <- map["allowAnonymousUser"]
+        _allowAnonymousApp <- map["allowAnonymousApp"]
+        _condition <- map["condition"]
+    }
+}
+

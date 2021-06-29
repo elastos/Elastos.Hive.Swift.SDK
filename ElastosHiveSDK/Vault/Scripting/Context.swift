@@ -21,3 +21,27 @@
  */
 
 import Foundation
+import ObjectMapper
+
+public class Context: Mappable {
+    private var _targetDid: String?
+    private var _targetAppDid: String?
+    
+    public func setTargetDid(_ targetDid: String?) -> Context {
+        self._targetDid = targetDid
+        return self
+    }
+    
+    public func setTargetAppDid(_ targetAppDid: String?) -> Context {
+        self._targetAppDid = targetAppDid
+        return self
+    }
+    
+    required init?(map: Map) {}
+    
+    func mapping(map: Map) {
+        _targetDid <- map["target_did"]
+        _targetAppDid <- map["target_app_did"]
+    }
+}
+

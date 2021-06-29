@@ -23,13 +23,16 @@
 import Foundation
 import ObjectMapper
 
-public class FilePropertiesExecutable: Executable {
-    public init(_ name: String?) {
-        super.init(name, ExecutableType.FILE_PROPERTIES, nil)
-        super.body = FileBody()
+public class DatabaseBody: Mappable {
+    private var _collection: String?
+    
+    public init(_ collection: String?) {
+        self._collection = collection
     }
     
-    required public init?(map: Map) {
-        fatalError("init(map:) has not been implemented")
+    required init?(map: Map) {}
+    
+    func mapping(map: Map) {
+        self._collection <- map["collection"]
     }
 }

@@ -21,5 +21,37 @@
  */
 
 import Foundation
+import ObjectMapper
 
+public class UpdateExecutableBody: DatabaseBody {
+    private var _filter: Dictionary<String, String>?
+    private var _update: Dictionary<String, String>?
+    private var _options: Dictionary<String, String>?
+    
+    public init(_ collection: String?, _ filter: Dictionary<String, String>?, _ update: Dictionary<String, String>?, _ options: Dictionary<String, String>?) {
+        super.init(collection)
+        _filter = filter
+        _update = update
+        _options = options
+    }
+    
+    required init?(map: Map) {
+        fatalError("init(map:) has not been implemented")
+    }
+}
 
+public class UpdateExecutable: Executable {
+    public init(_ name: String?, _ collectionName: String?, _ filter: Dictionary<String, String>?, _ update: Dictionary<String, String>?, _ options: Dictionary<String, String>?) {
+        super.init(name, ExecutableType.UPDATE, nil)
+        super.body = UpdateExecutableBody(collectionName, filter, update, options)
+    }
+    
+    public init(_ name: String, _ collectionName: String, _ filter: Dictionary<String, String>?, _ update: Dictionary<String, String>?) {
+        super.init(name, ExecutableType.UPDATE, nil)
+        super.body = UpdateExecutableBody(collectionName, filter, update, nil)
+    }
+    
+    required public init?(map: Map) {
+        fatalError("init(map:) has not been implemented")
+    }
+}

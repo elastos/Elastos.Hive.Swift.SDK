@@ -21,3 +21,11 @@
  */
 
 import Foundation
+
+public class RunFileParams {
+    private var _params: Dictionary<String, String> = [:]
+    
+    public init(_ path: String) {
+        _params["path"] = path
+    }
+}

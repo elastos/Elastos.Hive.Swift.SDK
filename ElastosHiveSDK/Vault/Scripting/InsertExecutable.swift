@@ -21,3 +21,35 @@
  */
 
 import Foundation
+import ObjectMapper
+
+public class InsertExecutableBody: DatabaseBody {
+    private var _document: Dictionary<String, String>?
+    private var _options: Dictionary<String, String>?
+    
+    public init(_ collection: String?, _ document: Dictionary<String, String>?, _ options: Dictionary<String, String>?) {
+        super.init(collection)
+        _document = document
+        _options = options
+    }
+    
+    required init?(map: Map) {
+        fatalError("init(map:) has not been implemented")
+    }
+}
+
+public class InsertExecutable: Executable {
+    public init(_ name: String?, _ collectionName: String?, _ document: Dictionary<String, String>?, _ options:  Dictionary<String, String>?) {
+        super.init(name, ExecutableType.INSERT, nil)
+        self.body = InsertExecutableBody(collectionName, document, options)
+    }
+    
+    public init(_ name: String?, _ collectionName: String?, _ document: Dictionary<String, String>?) {
+        super.init(name, ExecutableType.INSERT, nil)
+        self.body = InsertExecutableBody(collectionName, document, nil)
+    }
+    
+    required public init?(map: Map) {
+        fatalError("init(map:) has not been implemented")
+    }
+}

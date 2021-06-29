@@ -21,3 +21,15 @@
  */
 
 import Foundation
+import ObjectMapper
+
+public class FileDownloadExecutable: Executable {
+    public init(_ name: String?) {
+        super.init(name, ExecutableType.FILE_DOWNLOAD, nil)
+        super.body = FileBody()
+    }
+    
+    required public init?(map: Map) {
+        fatalError("init(map:) has not been implemented")
+    }
+}

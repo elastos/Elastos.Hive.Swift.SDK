@@ -23,8 +23,14 @@
 import Foundation
 import ObjectMapper
 
+public enum AggregatedConditionType: String {
+    case AND = "and"
+    case OR = "or"
+}
+
+
 public class AggregatedCondition: Condition {
-    
+
     public init(_ name: String?, _ type: String?, _ conditions: [Condition]?) {
         super.init(name, type, conditions)
     }
@@ -57,3 +63,4 @@ public class AggregatedCondition: Condition {
     }
     
 }
+
