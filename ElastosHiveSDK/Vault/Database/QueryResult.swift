@@ -21,3 +21,8 @@
  */
 
 import Foundation
+
+public class QueryResult: FindResult {
+    
+}
+

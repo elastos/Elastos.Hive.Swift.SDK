@@ -24,9 +24,9 @@ import Foundation
 
 public class PromotionServiceRender: PromotionProtocol {
     
-    private var _serviceEndpoint: ServiceEndpoint
+    private var _serviceEndpoint: ServiceEndpoint?
     
-    public init(_ serviceEndpoint: ServiceEndpoint) {
+    public init(_ serviceEndpoint: ServiceEndpoint?) {
         self._serviceEndpoint = serviceEndpoint
     }
     

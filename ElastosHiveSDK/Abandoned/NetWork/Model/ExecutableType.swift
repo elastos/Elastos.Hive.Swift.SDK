@@ -20,42 +20,17 @@
  * SOFTWARE.
  */
 
+
 import Foundation
-import ObjectMapper
 
-public class InsertOptions: Mappable {
-    private var _bypassDocumentValidation: Bool?
-    private var _ordered: Bool?
-
-    required public init?(map: Map) {}
-    
-    public func mapping(map: Map) {
-        _bypassDocumentValidation <- map["bypass_document_validation"]
-        _ordered <- map["ordered"]
-    }
-    
-    public init() {
-        _bypassDocumentValidation = false
-        _ordered = false
-    }
-    
-    public init(_ bypassDocumentValidation: Bool) {
-        _bypassDocumentValidation = bypassDocumentValidation
-        _ordered = false
-    }
-
-    public init(_ bypassDocumentValidation: Bool?, _ ordered: Bool?) {
-        _bypassDocumentValidation = bypassDocumentValidation
-        _ordered = ordered
-    }
-    
-    public func bypassDocumentValidation(_ bypassDocumentValidation: Bool?) -> InsertOptions {
-        self._bypassDocumentValidation = bypassDocumentValidation
-        return self
-    }
-    
-    public func ordered(_ value: Bool?) -> InsertOptions {
-        _ordered = value
-        return self
-    }
+public enum ExecutableType: String {
+    case AGGREGATED = "aggregated"
+    case FIND = "find"
+    case INSERT = "insert"
+    case UPDATE = "update"
+    case DELETE = "delete"
+    case FILE_UPLOAD = "fileUpload"
+    case FILE_DOWNLOAD = "fileDownload"
+    case FILE_PROPERTIES = "fileProperties"
+    case FILE_HASH = "fileHash"
 }

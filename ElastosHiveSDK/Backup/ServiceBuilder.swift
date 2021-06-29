@@ -22,25 +22,28 @@
 
 import Foundation
 
-//public class BackupServiceBuilder {
-//    private var _backup: Backup
+//public class ServiceBuilder {
+//    private ServiceEndpoint backup;
 //
-//    public init(_ backup: Backup) {
-//        self._backup = backup
+//    public ServiceBuilder(ServiceEndpoint backup) {
+//        this.backup = backup;
 //    }
 //
-//    public func createPromotionService() -> PromotionServiceRender {
-//        return PromotionServiceRender(self._backup)
+//    public PromotionService createPromotionService() {
+//        return new PromotionServiceRender(backup);
 //    }
 //}
 
 public class ServiceBuilder {
-    private var _serviceEndpoint: ServiceEndpoint?
+    private var _backup: ServiceEndpoint?
     
-    public init(_ serviceEndpoint: ServiceEndpoint) {
-        self._serviceEndpoint = serviceEndpoint
+    public init(_ backup: ServiceEndpoint?) {
+        self._backup = backup
     }
     
+    public func createPromotionService() -> PromotionProtocol {
+        return PromotionServiceRender(_backup)
+    }
     
 //    var vault: Vault
 //
