@@ -21,3 +21,21 @@
  */
 
 import Foundation
+import ObjectMapper
+
+public class InsertParams: Mappable {
+    private var _documents: Dictionary<String, String>?
+    private var _options: InsertOptions?
+    
+    public init(_ documents: Dictionary<String, String>?, _ options: InsertOptions) {
+        self._documents = documents
+        self._options = options
+    }
+    
+    public required init?(map: Map) {}
+
+    public func mapping(map: Map) {
+        _documents <- map["document"]
+        _options <- map["options"]
+    }
+}

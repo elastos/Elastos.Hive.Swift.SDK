@@ -24,28 +24,35 @@ import Foundation
 import ObjectMapper
 
 public class Condition: NSObject, Mappable {
-    public static let TYPE_AND = "and"
-    public static let TYPE_OR = "or"
-    public static let TYPE_QUERY_HAS_RESULTS = "queryHasResults"
+//    public static let TYPE_AND = "and"
+//    public static let TYPE_OR = "or"
+//    public static let TYPE_QUERY_HAS_RESULTS = "queryHasResults"
     
-    public var type: String?
-    public var name: String?
-    public var body: ScriptRootBody?
+    public var _type: String?
+    public var _name: String?
+    public var _body: Any?
 
-    public init(_ name: String, _ type: String, _ body: ScriptRootBody) {
-        self.name = name
-        self.type = type
-        self.body = body
+    public init(_ name: String?, _ type: String?, _ body: Any?) {
+        self._name = name
+        self._type = type
+        self._body = body
     }
     
-    required public init?(map: Map) {
-
-    }
+    required public init?(map: Map) {}
     
     public func mapping(map: Map) {
-        type <- map["type"]
-        name <- map["name"]
-        body <- map["body"]
+        _type <- map["type"]
+        _name <- map["name"]
+        _body <- map["body"]
+    }
+    
+    final var body: Any? {
+        set {
+            _body = newValue
+        }
+        get {
+            return _body
+        }
     }
 }
 

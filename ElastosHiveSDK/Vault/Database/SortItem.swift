@@ -22,7 +22,7 @@
 
 import Foundation
 
-public enum Order: Int {
+public enum SortItemOrder: Int {
     case ASCENDING = 1
     case DESCENDING = -1
 }
@@ -30,7 +30,7 @@ public enum Order: Int {
 public class SortItem {
     private var _storage: [Any] = []
     
-    public init (_ key: String?, _ order: Order?) {
+    public init (_ key: String?, _ order: SortItemOrder?) {
         _storage.append(key)
         _storage.append(order)
     }

@@ -23,33 +23,6 @@
 import Foundation
 import ObjectMapper
 
-public class VaultInfo: Mappable {
-    public var userDid: String?
-    public var appInstanceDid: String?
-    public var appId: String?
-    public var provider: String?
-    public var serviceDid: String?
-    public var pricingUsing: String?
-    public var createTime: Date?
-    public var modifyTime: Date?
-    public var maxSpace: Int64?
-    public var dbSpaceUsed: Int64?
-    public var fileSpaceUsed: Int64?
-    public var existing: Bool = false
-    
-    public init(_ appInstanceDid: String?, _ userDid: String?, _ serviceDid: String) {
-        self.appInstanceDid = appInstanceDid
-        self.userDid = userDid
-        self.serviceDid = serviceDid
-    }
-    
-    public required init?(map: Map) {}
-    
-    public func mapping(map: Map) {
-        
-    }
-}
-
 public class VaultSubscription: ServiceEndpoint, SubscriptionProtocol, PaymentProtocol {
 
     private var _context: AppContext?
