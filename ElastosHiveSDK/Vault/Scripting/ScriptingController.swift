@@ -21,3 +21,37 @@
  */
 
 import Foundation
+
+public class ScriptingController {
+    public func registerScript(_ name: String?, _ condition: Condition?, _ executable: Executable?, _ allowAnonymousUser: Bool?, _ allowAnonymousApp: Bool?) throws {
+        // TODO
+    }
+    
+    public func callScript(_ name: String?, _ params: Dictionary<String, String>?, _ targetDid: String?, _ targetAppDid: String?, _ resultType: AnyClass) throws {
+        //  TODO
+    }
+    
+    public func callScriptUrl(_ name: String?, _ params: Dictionary<String, String>?, _ targetDid: String?, _ targetAppDid: String?, _ resultType: AnyClass) throws {
+        //  TODO
+    }
+    
+    public func uploadFile(_ transactionId: String, _ resultType: AnyClass) throws {
+        // TODO
+    }
+    
+    public func downloadFile<T>(_ transactionId: String, _ resultType: T) throws -> T {
+        // TODO
+    }
+    
+    private func getRequestStream<T>(_ connection: Any?, _ resultType: T) throws -> T {
+        // TODO
+    }
+    
+    private func getResponseStream<T>(_ response: Any?, _ resultType: T) throws -> T {
+        // TODO
+    }
+    
+    public func unregisterScript(_ name: String) throws {
+        // TODO
+    }
+}

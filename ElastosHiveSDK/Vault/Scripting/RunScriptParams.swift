@@ -21,3 +21,28 @@
  */
 
 import Foundation
+import ObjectMapper
+
+public class RunScriptParams: Mappable {
+    private var _context: Context?
+    private var _params: Any?
+    
+    public func setContext(_ context: Context?) -> RunScriptParams {
+        _context = context
+        return self
+    }
+    
+    public func setParams(_ params: Any?) -> RunScriptParams {
+        _params = params
+        return self
+    }
+    
+    public required init?(map: Map) {}
+    
+    public func mapping(map: Map) {
+        _context <- map["context"]
+        _params <- map["params"]
+    }
+}
+
+
