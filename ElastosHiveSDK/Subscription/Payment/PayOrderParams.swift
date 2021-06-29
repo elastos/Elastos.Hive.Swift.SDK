@@ -23,34 +23,8 @@
 
 import Foundation
 
-public class PaymentController {
-    public init () {
+public class PayOrderParams {
+    public init() {
         
-    }
-    
-    public func createOrder(_ subscription: String?, _ pricingPlan: String?) throws -> Order? {
-        // TODO
-        return nil
-    }
-    
-    public func payOrder(_ orderId: String?, _ transIds: String?) throws -> Receipt? {
-        // TODO
-        return nil
-    }
-        
-    public func getOrderInfo(_ orderId: String?) throws -> Order? {
-        throw HiveError.NotImplementedException
-    }
-    
-    public func getOrders(_ subscription: String?) throws -> [Order]? {
-        throw HiveError.NotImplementedException
-    }
-
-    public func getReceipts(_ subscription: String?) throws -> [Receipt]? {
-        throw HiveError.NotImplementedException
-    }
-     
-    public func getVersion(_ subscription: String?) throws -> String? {
-        throw HiveError.NotImplementedException
     }
 }

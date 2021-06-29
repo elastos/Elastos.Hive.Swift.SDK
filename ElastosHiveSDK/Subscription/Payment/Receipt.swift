@@ -24,65 +24,66 @@ import Foundation
 import ObjectMapper
 
 public class Receipt: Mappable  {
-    
     private var _receiptId: String?
     private var _orderId: String?
     private var _customerDid: String?
+    
     private var _transId: String?
     private var _transTime: Int64?
     private var _transAmount: Double?
     private var _currency: Double?
+    
     private var _createdTime: Int64?
     
     public init() {
         
     }
     
-    public var receiptId: String {
+    public var receiptId: String? {
         get {
-            return _receiptId!
+            return _receiptId
         }
     }
     
-    public var orderId: String {
+    public var orderId: String? {
         get {
-            return _orderId!
+            return _orderId
         }
     }
     
-    public var customerDid: String {
+    public var customerDid: String? {
         get {
-            return _customerDid!
+            return _customerDid
         }
     }
     
-    public var transId: String {
+    public var transId: String? {
         get {
-            return _transId!
+            return _transId
         }
     }
     
-    public var transTime: Int64 {
+    public var transTime: Int64? {
         get {
-            return _transTime!
+            return _transTime
         }
     }
 
-    public var transAmount: Double {
+    public var transAmount: Double? {
         get {
-            return _transAmount!
+            return _transAmount
         }
     }
 
-    public var currency: Double {
+    public var currency: Double? {
         get {
-            return _currency!
+            return _currency
         }
     }
     
-    public var createdTime: Int64 {
+    public var createdTime: Int64? {
         get {
-            return _createdTime!
+            return _createdTime
         }
     }
     

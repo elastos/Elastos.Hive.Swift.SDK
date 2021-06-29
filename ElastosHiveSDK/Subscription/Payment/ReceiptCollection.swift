@@ -20,37 +20,19 @@
  * SOFTWARE.
  */
 
-
 import Foundation
+import ObjectMapper
 
-public class PaymentController {
-    public init () {
-        
-    }
-    
-    public func createOrder(_ subscription: String?, _ pricingPlan: String?) throws -> Order? {
-        // TODO
-        return nil
-    }
-    
-    public func payOrder(_ orderId: String?, _ transIds: String?) throws -> Receipt? {
-        // TODO
-        return nil
-    }
-        
-    public func getOrderInfo(_ orderId: String?) throws -> Order? {
-        throw HiveError.NotImplementedException
-    }
-    
-    public func getOrders(_ subscription: String?) throws -> [Order]? {
-        throw HiveError.NotImplementedException
-    }
+public class ReceiptCollection: Mappable  {
+    private var _receipts: [Order]?
 
-    public func getReceipts(_ subscription: String?) throws -> [Receipt]? {
-        throw HiveError.NotImplementedException
+    public var receipts: [Order]? {
+        return _receipts
     }
-     
-    public func getVersion(_ subscription: String?) throws -> String? {
-        throw HiveError.NotImplementedException
+    
+    required public init?(map: Map) {}
+    
+    public func mapping(map: Map) {
+        _receipts <- map["value"]
     }
 }
