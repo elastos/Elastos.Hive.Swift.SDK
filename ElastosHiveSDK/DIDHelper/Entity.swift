@@ -36,7 +36,8 @@ public class Entity: NSObject {
 
         // Initialize the root identity.
         rootIdent = try RootIdentity.create(mnemonic, phrasepass, store!, storepass)
-        try rootIdent?.synchronize()
+        let re = try rootIdent?.synchronize(0)
+        print(re)
     }
 
     public func initDid() throws {
@@ -49,17 +50,16 @@ public class Entity: NSObject {
             // This only for dummy backend.
             // normally don't need this on ID sidechain.
             let doc = try self.did?.resolve()
-//            try doc?.publish(using: storepass)
             return
         }
 
         let doc = try rootIdent?.newDid(storepass)
         self.did = doc?.subject
         print("My new DID created: ", name, did!.description)
-//        try doc?.publish(using: storepass)
     }
 
-    public func getDocument() throws -> DIDDocument? {        return try store!.loadDid(did!)
+    public func getDocument() throws -> DIDDocument? {
+        return try store!.loadDid(did!)
     }
 }
 

@@ -8,7 +8,7 @@ public class DIDApp: Entity {
         do {
             issuer = try VerifiableCredentialIssuer(getDocument()!)
         } catch {
-            print(error)
+            print("issuer error === \(error)")
         }
     }
 

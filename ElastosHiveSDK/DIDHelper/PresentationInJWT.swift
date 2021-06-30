@@ -5,7 +5,8 @@ public class PresentationInJWT: NSObject {
     var userDidApp: DIDApp?
     var appInstanceDidApp: DApp?
     var doc: DIDDocument?
-    static var adapter: DummyAdapter = DummyAdapter(endpoint)
+    static var adapter: DummyAdapter = DummyAdapter("https://api.elastos.io/eid")
+//    static var adapter: DummyAdapter = DummyAdapter("https://api-testnet.elastos.io/newid")
 
     public func initDIDBackend() throws {
         let cacheDir = "\(NSHomeDirectory())/Library/Caches/store" + "/" + "didCache"

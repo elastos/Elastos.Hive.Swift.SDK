@@ -8,9 +8,11 @@ class PaymentTest: XCTestCase {
     
     private let planName = "Free"
     private let priceName = "Rookie"
-    private var orderId = "60d6d8b2bd3b68acb5c45e5b"
+//    private var orderId = "60d6d8b2bd3b68acb5c45e5b" // /newdid测试网
 //    private var txid = "d7f35a35764a7c4f58a0698429425a73fa2e364daa30c0e7393857dd5b966b65"
-    private var txid = "bccf93e3ba2b700adbd78458b710e33488e635c4cf5de6a45f435c3d667bed39"
+//    private var txid = "bccf93e3ba2b700adbd78458b710e33488e635c4cf5de6a45f435c3d667bed39" // /newdid测试网
+    private var orderId = "60daf5f8743e945342b4f98e" // /主网：/eid
+    private var txid = "c4bd3f1f8a1321403f7b281c02109cf9ae05a32d76b93f6e354b3994e943037b" // 主网：eid
     func test0_GetPaymentInfo() {
         let lock = XCTestExpectation(description: "wait for test.")
         _ = payment?.getPaymentInfo().done{ info in
@@ -120,6 +122,7 @@ class PaymentTest: XCTestCase {
             Log.setLevel(.Debug)
             user = try AppInstanceFactory.createUser1()
             let lock = XCTestExpectation(description: "wait for test.")
+//            user?.client.createVault(user!.userFactoryOpt.ownerDid, user?.userFactoryOpt.provider).done{ vault in
             user?.client.getVault(user!.userFactoryOpt.ownerDid, user?.userFactoryOpt.provider).done{ vault in
 
                 self.payment = (vault.payment)
