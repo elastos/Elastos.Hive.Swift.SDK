@@ -36,7 +36,7 @@ public class AppInstanceFactory {
          _ userFactoryOpt: UserOptions) throws {
         self.userFactoryOpt = userFactoryOpt
 
-        presentationInJWT = try PresentationInJWT(userDidOpt, appInstanceDidOpt)
+        presentationInJWT = try PresentationInJWT(userDidOpt, appInstanceDidOpt, adapter)
         if !resolverDidSetup {
             try HiveClientHandle.setupResolver(userFactoryOpt.resolveUrl, AppInstanceFactory.didCachePath)
             resolverDidSetup = true

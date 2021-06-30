@@ -30,11 +30,11 @@ public class UserVaultAuthHelper: NSObject {
     let presentationInJWT: PresentationInJWT
     let localDataDir: String
     
-    public static func createInstance(_ userMnemonic: String, _ appMnemonic: String, _ localDataDir: String) throws -> UserVaultAuthHelper {
-        return try UserVaultAuthHelper(userMnemonic, appMnemonic, localDataDir)
+    public static func createInstance(_ userMnemonic: String, _ appMnemonic: String, _ localDataDir: String, _ adapter: DummyAdapter) throws -> UserVaultAuthHelper {
+        return try UserVaultAuthHelper(userMnemonic, appMnemonic, localDataDir, adapter)
     }
     
-    public init(_ userMnemonic: String, _ appMnemonic: String, _ localDataDir: String) throws {
+    public init(_ userMnemonic: String, _ appMnemonic: String, _ localDataDir: String, _ adapter: DummyAdapter) throws {
         let userDidOpt = PresentationInJWTOptions()
         userDidOpt.mnemonic = userMnemonic
         userDidOpt.storepass = "storepass"
@@ -43,7 +43,7 @@ public class UserVaultAuthHelper: NSObject {
         appInstanceDidOpt.mnemonic = userMnemonic
         appInstanceDidOpt.storepass = "storepass"
         
-        presentationInJWT = try PresentationInJWT(userDidOpt, appInstanceDidOpt)
+        presentationInJWT = try PresentationInJWT(userDidOpt, appInstanceDidOpt, adapter)
         self.localDataDir = localDataDir
     }
     
