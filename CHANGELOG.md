@@ -1,3 +1,11 @@
+06/30/2021 Li Aihong liaihong@trinity-tech.io
+
+**version 2.1.4-pre**, main changes to previous version:
+
+```markdown
+- Fix some configurations.
+```
+
 06/26/2021 Li Aihong liaihong@trinity-tech.io
 
 **version 2.1.3-pre**, main changes to previous version:
