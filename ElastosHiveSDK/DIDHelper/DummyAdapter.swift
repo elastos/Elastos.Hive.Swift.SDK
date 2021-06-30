@@ -4,7 +4,7 @@ import Foundation
 public class DummyAdapter: DefaultDIDAdapter {
     private var idtxEndpoint: String = ""
     
-    override init(_ endpoint: String) {
+    public override init(_ endpoint: String) {
         super.init(endpoint + "/resolve")
         idtxEndpoint = endpoint + "/idtx"
     }

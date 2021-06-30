@@ -5,19 +5,19 @@ public class PresentationInJWT: NSObject {
     var userDidApp: DIDApp?
     var appInstanceDidApp: DApp?
     var doc: DIDDocument?
-    static var adapter: DummyAdapter = DummyAdapter("https://api.elastos.io/eid")
-//    static var adapter: DummyAdapter = DummyAdapter("https://api-testnet.elastos.io/newid")
+    var adapter: DummyAdapter
 
-    public func initDIDBackend() throws {
-        let cacheDir = "\(NSHomeDirectory())/Library/Caches/store" + "/" + "didCache"
-        try DIDBackend.initialize(PresentationInJWT.adapter)
+    public func initDIDBackend(_ adapter: DummyAdapter) throws {
+        self.adapter = adapter
+        try DIDBackend.initialize(adapter)
     }
 
-    public init(_ userDidOpt: PresentationInJWTOptions, _ appInstanceDidOpt: PresentationInJWTOptions) throws {
+    public init(_ userDidOpt: PresentationInJWTOptions, _ appInstanceDidOpt: PresentationInJWTOptions, _ adapter: DummyAdapter) throws {
+        self.adapter = adapter
         super.init()
-        try initDIDBackend()
-        userDidApp = DIDApp(userDidOpt.name, userDidOpt.mnemonic, PresentationInJWT.adapter, userDidOpt.phrasepass, userDidOpt.storepass)
-        appInstanceDidApp = DApp(appInstanceDidOpt.name, appInstanceDidOpt.mnemonic, PresentationInJWT.adapter, appInstanceDidOpt.phrasepass, appInstanceDidOpt.storepass)
+        try initDIDBackend(adapter)
+        userDidApp = DIDApp(userDidOpt.name, userDidOpt.mnemonic, adapter, userDidOpt.phrasepass, userDidOpt.storepass)
+        appInstanceDidApp = DApp(appInstanceDidOpt.name, appInstanceDidOpt.mnemonic, adapter, appInstanceDidOpt.phrasepass, appInstanceDidOpt.storepass)
         doc = try appInstanceDidApp!.getDocument()!
     }
     

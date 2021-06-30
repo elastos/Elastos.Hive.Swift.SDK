@@ -1,7 +1,10 @@
 
 import Foundation
+import ElastosHiveSDK
+
 let TEST_RESOLVER_URL = "https://api.elastos.io/eid"
 let MAIN_RESOLVER_URL = "https://api.elastos.io/eid"
+let adapter = DummyAdapter("https://api.elastos.io/eid")
 //let TEST_RESOLVER_URL = "https://api-testnet.elastos.io/newid"
 //let MAIN_RESOLVER_URL = "https://api-testnet.elastos.io/newid"
 
