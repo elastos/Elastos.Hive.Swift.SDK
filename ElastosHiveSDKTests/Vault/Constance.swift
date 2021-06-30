@@ -2,17 +2,14 @@
 import Foundation
 import ElastosHiveSDK
 
-let TEST_RESOLVER_URL = "https://api.elastos.io/eid"
+let TEST_RESOLVER_URL = "https://api-testnet.elastos.io/newid"
 let MAIN_RESOLVER_URL = "https://api.elastos.io/eid"
 let adapter = DummyAdapter("https://api.elastos.io/eid")
-//let TEST_RESOLVER_URL = "https://api-testnet.elastos.io/newid"
-//let MAIN_RESOLVER_URL = "https://api-testnet.elastos.io/newid"
+//let adapter = DummyAdapter("https://api-testnet.elastos.io/newid")
 
 let LOCAL_PROVIDER = "http://192.168.199.180:5000"
-let RELEASE_PROVIDER = "https://hive-testnet3.trinity-tech.io" // release
+let RELEASE_PROVIDER = "https://hive2.trinity-tech.io" // release
 let DEVELOP_PROVIDER = "https://hive-testnet3.trinity-tech.io" // release
-//let RELEASE_PROVIDER = "https://hive-testnet2.trinity-tech.io" // release
-//let DEVELOP_PROVIDER = "https://hive-testnet2.trinity-tech.io" // release
 
 //user1
 //https://hive1.trinity-tech.io
