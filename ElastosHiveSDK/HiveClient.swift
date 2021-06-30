@@ -67,7 +67,7 @@ public class HiveClientHandle: NSObject {
         }
         _reslover = resolver
         _cacheDir = cacheDir
-        try DIDBackend.initialize(DummyAdapter(endpoint))
+        try DIDBackend.initialize(DummyAdapter(_reslover))
         resolverDidSetup = true
     }
 
