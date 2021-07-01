@@ -23,7 +23,6 @@
 import Foundation
 
 extension HiveAPi {
-    
     func createCollection(_ collection: String) -> String {
         return self.baseURL + self.apiPath + "/vault/db/collections/\(collection)"
     }

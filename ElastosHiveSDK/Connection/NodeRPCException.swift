@@ -21,3 +21,9 @@
 */
 
 import Foundation
+
+public enum NodeRPCException: Error {
+    case BAD_REQUEST
+    case UNAUTHORIZED
+    case NOT_FOUND
+}

@@ -22,36 +22,36 @@
 
 import Foundation
 
-extension HiveAPi {
-    func upload(_ path: String) -> String {
-        return self.baseURL + self.apiPath + "/files/upload/" + path
-    }
-    
-    func download(_ path: String) -> String {
-        return self.baseURL + self.apiPath + "/files/download?path=" + path
-    }
-    
-    func deleteFolder() -> String {
-        return self.baseURL + self.apiPath + "/files/delete"
-    }
-    
-    func move() -> String {
-        return self.baseURL + self.apiPath + "/files/move"
-    }
-    
-    func copy() -> String {
-        return self.baseURL + self.apiPath + "/files/copy"
-    }
-    
-    func hash(_ path: String) -> String {
-        return self.baseURL + self.apiPath + "/files/file/hash?path=" + path.percentEncodingString()
-    }
-    
-    func list(_ path: String) -> String {
-        return self.baseURL + self.apiPath + "/files/list/folder?path=" + path.percentEncodingString()
-    }
-    
-    func properties(_ path: String) -> String {
-        return self.baseURL + self.apiPath + "/files/properties?path=" + path.percentEncodingString()
-    }
-}
+//extension HiveAPi {
+//    func upload(_ path: String) -> String {
+//        return self.baseURL + self.apiPath + "/files/upload/" + path
+//    }
+//    
+//    func download(_ path: String) -> String {
+//        return self.baseURL + self.apiPath + "/files/download?path=" + path
+//    }
+//    
+//    func deleteFolder() -> String {
+//        return self.baseURL + self.apiPath + "/files/delete"
+//    }
+//    
+//    func move() -> String {
+//        return self.baseURL + self.apiPath + "/files/move"
+//    }
+//    
+//    func copy() -> String {
+//        return self.baseURL + self.apiPath + "/files/copy"
+//    }
+//    
+//    func hash(_ path: String) -> String {
+//        return self.baseURL + self.apiPath + "/files/file/hash?path=" + path.percentEncodingString()
+//    }
+//    
+//    func list(_ path: String) -> String {
+//        return self.baseURL + self.apiPath + "/files/list/folder?path=" + path.percentEncodingString()
+//    }
+//    
+//    func properties(_ path: String) -> String {
+//        return self.baseURL + self.apiPath + "/files/properties?path=" + path.percentEncodingString()
+//    }
+//}

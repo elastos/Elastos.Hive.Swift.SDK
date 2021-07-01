@@ -21,3 +21,30 @@
  */
 
 import Foundation
+import ObjectMapper
+
+public class NodeVersion: Mappable {
+    private var _major: Int64?
+    private var _minor: Int64?
+    private var _patch: Int64?
+    
+    public var major: Int64? {
+        return _major
+    }
+
+    public var minor: Int64? {
+        return _minor
+    }
+    
+    public var patch: Int64? {
+        return _patch
+    }
+    
+    required public init?(map: Map) {}
+    
+    public func mapping(map: Map) {
+        _major <- map["major"]
+        _minor <- map["minor"]
+        _patch <- map["patch"]
+    }
+}

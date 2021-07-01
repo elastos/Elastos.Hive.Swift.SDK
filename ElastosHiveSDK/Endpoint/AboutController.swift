@@ -21,3 +21,13 @@
  */
 
 import Foundation
+
+public class AboutController {
+    public func getNodeVersion() throws -> NodeVersion? {
+        return nil
+    }
+    
+    public func getCommitId() throws -> String? {
+        return nil
+    }
+}

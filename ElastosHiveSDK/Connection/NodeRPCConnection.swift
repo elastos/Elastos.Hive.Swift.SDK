@@ -21,3 +21,7 @@
 */
 
 import Foundation
+
+public class NodeRPCConnection {
+    
+}

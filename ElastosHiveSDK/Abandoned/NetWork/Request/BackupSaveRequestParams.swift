@@ -30,9 +30,7 @@ public class BackupSaveRequestParams: Mappable {
         self._backupCredential = backupCredential
     }
   
-    required public init?(map: Map) {
-        
-    }
+    required public init?(map: Map) {}
     
     public func mapping(map: Map) {
         _backupCredential <- map["backup_credential"]
