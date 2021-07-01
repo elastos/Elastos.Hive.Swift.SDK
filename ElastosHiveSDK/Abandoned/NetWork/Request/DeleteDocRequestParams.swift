@@ -23,22 +23,22 @@
 import Foundation
 import ObjectMapper
 
-public class DeleteDocRequestParams: CreateCollectionRequestParams {
-    private var _filter: Dictionary<String, Any>?
-    private var _options: DeleteOptions?
-    
-    public init(_ name: String, _ filter: Dictionary<String, Any>, _ options: DeleteOptions) {
-        self._filter = filter
-        self._options = options
-        super.init(name, nil)
-    }
-    
-    required public init?(map: Map) {
-        super.init(map: map)
-    }
-    
-    public override func mapping(map: Map) {
-        super.mapping(map: map)
-        _filter <- map["filter"]
-    }
-}
+//public class DeleteDocRequestParams: CreateCollectionRequestParams {
+//    private var _filter: Dictionary<String, Any>?
+//    private var _options: DeleteOptions?
+//    
+//    public init(_ name: String, _ filter: Dictionary<String, Any>, _ options: DeleteOptions) {
+//        self._filter = filter
+//        self._options = options
+//        super.init(name, nil)
+//    }
+//    
+//    required public init?(map: Map) {
+//        super.init(map: map)
+//    }
+//    
+//    public override func mapping(map: Map) {
+//        super.mapping(map: map)
+//        _filter <- map["filter"]
+//    }
+//}

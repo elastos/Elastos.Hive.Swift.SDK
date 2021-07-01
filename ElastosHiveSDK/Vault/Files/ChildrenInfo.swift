@@ -21,3 +21,18 @@
  */
 
 import Foundation
+import ObjectMapper
+
+public class ChildrenInfo: Mappable {
+    private var _value: [FileInfo]?
+    
+    public var value: [FileInfo]? {
+        return _value
+    }
+    
+    required public init?(map: Map) {}
+    
+    public func mapping(map: Map) {
+        _value <- map["value"]
+    }
+}

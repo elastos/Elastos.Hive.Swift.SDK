@@ -21,3 +21,18 @@
  */
 
 import Foundation
+import ObjectMapper
+
+public class CommitHash: Mappable {
+    private var _commitId: String?
+    
+    public var commitId: String? {
+        return _commitId
+    }
+    
+    required public init?(map: Map) {}
+    
+    public func mapping(map: Map) {
+        _commitId <- map["commit_hash"]
+    }
+}

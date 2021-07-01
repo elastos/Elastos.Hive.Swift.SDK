@@ -21,3 +21,25 @@
 */
 
 import Foundation
+
+public class UploadOutputStream {
+    public func write(_ b: Any?) throws {
+        // TODO
+    }
+
+    public func flush() throws {
+        // TODO
+    }
+    
+    public func close() throws {
+        // In order for uploads to complete successfully in chunk mode, we have to
+        // read the server response.
+        // This doesn't seem to behave identically on all devices. Some devices work
+        // without this. But some devices don't terminate the API call until the server
+        // response is read.
+        //
+        // This close() method on the output stream is the only location where we know
+        // user has finished writing his file.
+        // TODO
+    }
+}

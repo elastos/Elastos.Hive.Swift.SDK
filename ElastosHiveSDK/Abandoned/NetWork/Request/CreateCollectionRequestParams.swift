@@ -22,22 +22,22 @@
 
 import Foundation
 import ObjectMapper
-
-public class CreateCollectionRequestParams: Mappable {
-    private var _collection: String?
-    private var _options: CreateCollectionOptions?
-
-    public init (_ collection: String, _ options: CreateCollectionOptions?) {
-        self._collection = collection
-        self._options = options
-    }
-    
-    required public init?(map: Map) {
-        
-    }
-    
-    public func mapping(map: Map) {
-        _collection <- map["collection"]
-        _options <- map["options"]
-    }
-}
+//
+//public class CreateCollectionRequestParams: Mappable {
+//    private var _collection: String?
+//    private var _options: CreateCollectionOptions?
+//
+//    public init (_ collection: String, _ options: CreateCollectionOptions?) {
+//        self._collection = collection
+//        self._options = options
+//    }
+//    
+//    required public init?(map: Map) {
+//        
+//    }
+//    
+//    public func mapping(map: Map) {
+//        _collection <- map["collection"]
+//        _options <- map["options"]
+//    }
+//}
