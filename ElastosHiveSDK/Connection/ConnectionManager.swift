@@ -25,9 +25,10 @@ import ObjectMapper
 
 extension DataRequest {
     
-//    func execute() -> HiveResponse? {
-//        // TODO
-//    }
+    func execute() -> HiveResponse? {
+        // TODO
+        return nil
+    }
 
         
     func execute<T: Mappable>(options: JSONSerialization.ReadingOptions = .allowFragments, _ resultType: T.Type) throws -> T {

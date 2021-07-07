@@ -24,6 +24,9 @@ import Foundation
 
 public enum NetworkError: Error {
     case NetworkException(message: String?)
+    case UnauthorizedException(message: String?)
+    case ServerUnkownException(message: String?)
+
 }
 
 extension NetworkError {
@@ -32,6 +35,10 @@ extension NetworkError {
         switch self {
         case .NetworkException(let message):
             return "NetworkException : \(message ?? "")"
+        case .UnauthorizedException(let message):
+            return "UnauthorizedException : \(message ?? "")"
+        case .ServerUnkownException(let message):
+            return "ServerUnkownException : \(message ?? "")"
         }
     }
     
