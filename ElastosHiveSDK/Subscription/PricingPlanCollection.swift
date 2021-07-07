@@ -21,3 +21,30 @@
  */
 
 import Foundation
+import ObjectMapper
+
+public class PricingPlanCollection: Mappable {
+    private var _backupPlans: Array<PricingPlan>?
+    private var _pricingPlans: Array<PricingPlan>?
+    private var _version: String?
+    
+    required public init?(map: Map) {}
+    
+    public func mapping(map: Map) {
+        _backupPlans <- map["backupPlans"]
+        _pricingPlans <- map["pricingPlans"]
+        _version <- map["version"]
+    }
+    
+    public var backupPlans: Array<PricingPlan>? {
+        return _backupPlans
+    }
+    
+    public var pricingPlans: Array<PricingPlan>? {
+        return _pricingPlans
+    }
+    
+    public var version: String? {
+        return _version
+    }
+}
