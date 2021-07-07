@@ -26,56 +26,42 @@ import ObjectMapper
 /**
  * The class to represent the information of File or Folder.
  */
-//public class FileInfo: Mappable {
-//    private var _name: String?
-//    private var _isFile: Bool?
-//    private var _size: Int?
-//
-//    @SerializedName("name")
-//        private String name;
-//
-//        @SerializedName("is_file")
-//        private boolean isFile;
-//
-//        @SerializedName("size")
-//        private int size;
-//
-//        @SerializedName("created")
-//        private long created;
-//
-//        @SerializedName("updated")
-//        private long updated;
-//
-//        public String getName() {
-//            return name;
-//        }
-//
-//        public boolean isFile() {
-//            return isFile;
-//        }
-//
-//        public int getSize() {
-//            return size;
-//        }
-//
-//        public Date getCreated() {
-//            // TODO: check
-//            return new Date(created * 1000);
-//        }
-//
-//        public Date getUpdated() {
-//            // TODO: check
-//            return new Date(updated * 1000);
-//        }
-//    
-//    required public init?(map: Map) {
-//
+public class FileInfo: Mappable {
+    private var _name: String?
+    private var _isFile: Bool?
+    private var _size: Int?
+    private var _created : Int64?
+    private var _updated : Int64?
+
+    public var name: String? {
+        return _name
+    }
+
+    public var isFile: Bool? {
+        return _isFile
+    }
+
+    public var size: Int? {
+        return _size
+    }
+
+//    public var created: Date? {
+//        return Date(timeIntervalSinceReferenceDate: _created * 1000)
 //    }
 //    
-//    public func mapping(map: Map) {
-//        _lastModify <- map["last_modify"]
-//        _type <- map["type"]
-//        _size <- map["size"]
-//        _name <- map["name"]
+//    public var updated: Date? {
+//        return Date(timeIntervalSinceReferenceDate: _updated * 1000)
 //    }
-//}
+    
+    required public init?(map: Map) {
+
+    }
+    
+    public func mapping(map: Map) {
+        _name <- map["name"]
+        _isFile <- map["is_file"]
+        _size <- map["size"]
+        _created <- map["created"]
+        _updated <- map["updated"]
+    }
+}

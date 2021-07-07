@@ -23,7 +23,10 @@
 import Foundation
 
 public protocol BridgeHandlerProtocol {
-    func flush(_ value: String?)
-    func target() -> Any
+    associatedtype T
+
+    func flush(_ value: String)
+    func target() -> T
+    func setTarget(_ target: T)
     func invalidate()
 }

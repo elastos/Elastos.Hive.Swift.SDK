@@ -21,6 +21,7 @@
  */
 
 import Foundation
+import ObjectMapper
 
 /**
  * Convenient class to store and serialize a sequence of executables.
@@ -34,17 +35,17 @@ public class AggregatedExecutable: Executable {
         super.init(name, ExecutableType.AGGREGATED, executables)
     }
     
-    public func appendExecutable(_ executable: Executable?) -> Executable? {
-        if executable == nil || executable?.body == nil {
-            return self
-        }
-        
-        if super.body == nil {
-            
-        }
-        // TODO
-    }
-    
+//    public func appendExecutable(_ executable: Executable?) -> Executable? {
+//        if executable == nil || executable?.body == nil {
+//            return self
+//        }
+//        
+//        if super.body == nil {
+//            
+//        }
+//        // TODO
+//    }
+//    
     required public init?(map: Map) {
         fatalError("init(map:) has not been implemented")
     }

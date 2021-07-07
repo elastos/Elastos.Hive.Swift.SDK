@@ -22,36 +22,36 @@
 
 import Foundation
 
-extension HiveAPi {
-    func createCollection(_ collection: String) -> String {
-        return self.baseURL + self.apiPath + "/vault/db/collections/\(collection)"
-    }
-
-    func deleteCollection(_ collection: String) -> String {
-        return self.baseURL + self.apiPath + "/vault/db/\(collection)"
-    }
-    
-    func insert(_ collection: String) -> String {
-        return self.baseURL + self.apiPath + "/vault/db/collection/\(collection)"
-    }
-    
-    func update(_ collection: String) -> String {
-        return self.baseURL + self.apiPath + "/vault/db/collection/\(collection)"
-    }
-    
-    func delete(_ collection: String) -> String {
-        return self.baseURL + self.apiPath + "/vault/db/collection/\(collection)"
-    }
-    
-    func count(_ collection: String) -> String {
-        return self.baseURL + self.apiPath + "/vault/db/collection/\(collection)?op=count"
-    }
-    
-    func find(_ collection: String) -> String {
-        return self.baseURL + self.apiPath + "/vault/db/\(collection)"
-    }
-    
-    func query(_ collection: String) -> String {
-        return self.baseURL + self.apiPath + "/vault/db/query"
-    }
-}
+//extension HiveAPi {
+//    func createCollection(_ collection: String) -> String {
+//        return self.baseURL + self.apiPath + "/vault/db/collections/\(collection)"
+//    }
+//
+//    func deleteCollection(_ collection: String) -> String {
+//        return self.baseURL + self.apiPath + "/vault/db/\(collection)"
+//    }
+//    
+//    func insert(_ collection: String) -> String {
+//        return self.baseURL + self.apiPath + "/vault/db/collection/\(collection)"
+//    }
+//    
+//    func update(_ collection: String) -> String {
+//        return self.baseURL + self.apiPath + "/vault/db/collection/\(collection)"
+//    }
+//    
+//    func delete(_ collection: String) -> String {
+//        return self.baseURL + self.apiPath + "/vault/db/collection/\(collection)"
+//    }
+//    
+//    func count(_ collection: String) -> String {
+//        return self.baseURL + self.apiPath + "/vault/db/collection/\(collection)?op=count"
+//    }
+//    
+//    func find(_ collection: String) -> String {
+//        return self.baseURL + self.apiPath + "/vault/db/\(collection)"
+//    }
+//    
+//    func query(_ collection: String) -> String {
+//        return self.baseURL + self.apiPath + "/vault/db/query"
+//    }
+//}

@@ -23,11 +23,25 @@
 import Foundation
 
 public class AboutController {
-    public func getNodeVersion() throws -> NodeVersion? {
-        return nil
+    private var _connectionManager: ConnectionManager
+    
+    public init(_ serviceEndpoint: ServiceEndpoint) {
+        _connectionManager = serviceEndpoint.connectionManager!
+    }
+    
+    public func getNodeVersion() throws -> NodeVersion {
+        do {
+            return try _connectionManager.version().execute(NodeVersion.self)
+        } catch {
+            throw error
+        }
     }
     
     public func getCommitId() throws -> String? {
-        return nil
+        do {
+            return try _connectionManager.commitId().execute(CommitHash.self).commitId
+        } catch {
+            throw error
+        }
     }
 }

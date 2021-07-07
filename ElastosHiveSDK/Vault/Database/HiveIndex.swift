@@ -36,9 +36,9 @@ public class HiveIndex {
     public var key: String? {
         return _key
     }
-
-    public var order: String? {
-        return _order
-    }
+//
+//    public var order: String? {
+//        return _order
+//    }
     
 }

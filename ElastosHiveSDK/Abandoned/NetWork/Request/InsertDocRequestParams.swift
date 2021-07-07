@@ -23,23 +23,23 @@
 import Foundation
 import ObjectMapper
 
-public class InsertDocRequestParams: CreateCollectionRequestParams {
-    private var _document: Dictionary<String, Any>?
-    private var _options: InsertOneOptions?
-    
-    public init(_ name: String, _ document: Dictionary<String, Any>, _ options: InsertOneOptions?) {
-        self._document = document
-        self._options = options
-        super.init(name, nil)
-    }
-    
-    required public init?(map: Map) {
-        super.init(map: map)
-    }
-    
-    public override func mapping(map: Map) {
-        super.mapping(map: map)
-        _document <- map["document"]
-        _options <- map["options"]
-    }
-}
+//public class InsertDocRequestParams: CreateCollectionRequestParams {
+//    private var _document: Dictionary<String, Any>?
+//    private var _options: InsertOneOptions?
+//    
+//    public init(_ name: String, _ document: Dictionary<String, Any>, _ options: InsertOneOptions?) {
+//        self._document = document
+//        self._options = options
+//        super.init(name, nil)
+//    }
+//    
+//    required public init?(map: Map) {
+//        super.init(map: map)
+//    }
+//    
+//    public override func mapping(map: Map) {
+//        super.mapping(map: map)
+//        _document <- map["document"]
+//        _options <- map["options"]
+//    }
+//}

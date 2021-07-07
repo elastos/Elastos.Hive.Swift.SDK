@@ -23,26 +23,26 @@
 import Foundation
 import ObjectMapper
 
-public class UpdateDocRequestParams: CreateCollectionRequestParams {
-    private var _filter: Dictionary<String, Any>?
-    private var _update: Dictionary<String, Any>?
-    private var _options: UpdateOptions?
-    
-    public init(_ collection: String, _ filter: Dictionary<String, Any>, _ update: Dictionary<String, Any>,  _ options: UpdateOptions?) {
-        self._filter = filter
-        self._update = update
-        self._options = options
-        super.init(collection, nil)
-    }
-    
-    required public init?(map: Map) {
-        super.init(map: map)
-    }
-    
-    public override func mapping(map: Map) {
-        super.mapping(map: map)
-        _filter <- map["filter"]
-        _update <- map["update"]
-        _options <- map["options"]
-    }
-}
+//public class UpdateDocRequestParams: CreateCollectionRequestParams {
+//    private var _filter: Dictionary<String, Any>?
+//    private var _update: Dictionary<String, Any>?
+//    private var _options: UpdateOptions?
+//    
+//    public init(_ collection: String, _ filter: Dictionary<String, Any>, _ update: Dictionary<String, Any>,  _ options: UpdateOptions?) {
+//        self._filter = filter
+//        self._update = update
+//        self._options = options
+//        super.init(collection, nil)
+//    }
+//    
+//    required public init?(map: Map) {
+//        super.init(map: map)
+//    }
+//    
+//    public override func mapping(map: Map) {
+//        super.mapping(map: map)
+//        _filter <- map["filter"]
+//        _update <- map["update"]
+//        _options <- map["options"]
+//    }
+//}

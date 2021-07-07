@@ -23,26 +23,26 @@
 import Foundation
 import ObjectMapper
 
-public class FilesPropertiesResponse: HiveResponse {
-    private var _type: String?
-    private var _name: String?
-    private var _size: Int = 0
-    private var _lastModify: Double = 0.0
-    
-    public var fileInfo: FileInfo {
-        let fileInfo: FileInfo = FileInfo()
-        fileInfo.type = self._type!
-        fileInfo.name = self._name!
-        fileInfo.size = self._size
-        fileInfo.lastModify = self._lastModify
-        return fileInfo
-    }
-    
-    public override func mapping(map: Map) {
-        super.mapping(map: map)
-        _type <- map["type"]
-        _name <- map["name"]
-        _size <- map["size"]
-        _lastModify <- map["last_modify"]
-    }
-}
+//public class FilesPropertiesResponse: HiveResponse {
+//    private var _type: String?
+//    private var _name: String?
+//    private var _size: Int = 0
+//    private var _lastModify: Double = 0.0
+//    
+//    public var fileInfo: FileInfo {
+//        let fileInfo: FileInfo = FileInfo()
+//        fileInfo.type = self._type!
+//        fileInfo.name = self._name!
+//        fileInfo.size = self._size
+//        fileInfo.lastModify = self._lastModify
+//        return fileInfo
+//    }
+//    
+//    public override func mapping(map: Map) {
+//        super.mapping(map: map)
+//        _type <- map["type"]
+//        _name <- map["name"]
+//        _size <- map["size"]
+//        _lastModify <- map["last_modify"]
+//    }
+//}

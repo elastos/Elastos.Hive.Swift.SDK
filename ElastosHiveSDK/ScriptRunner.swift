@@ -22,46 +22,46 @@
 
 import Foundation
 
-public class ScriptRunner: ServiceEndpoint, ScriptingInvocationProtocol {
+//public class ScriptRunner: ServiceEndpoint, ScriptingInvocationProtocol {
 
 
-    private var scriptingServiceRender: ScriptingServiceRender?
-    
-    public override init(_ context: AppContext, _ providerAddress: String) throws {
-        try super.init(context, providerAddress)
-        self.scriptingServiceRender = ScriptingServiceRender(self)
-    }
-    
-    /// Set-up a context for get more detailed information for backup sExecutes a previously registered server side script using Scripting.setScript(). Vault owner or external users are allowed to call scripts on someone's vault.
-    /// - parameters:
-    ///    - name: The call's script name
-    ///    - resultType: String, JSON
-    /// - returns:  Result for specific script type
-    public func callScript<T>(_ name: String, _ params: [String : Any]?, _ targetDid: String?, _ targetAppDid: String?, _ resultType: T.Type) -> Promise<T> {
-        return self.scriptingServiceRender!.callScript(name, params, targetDid, targetAppDid, resultType)
-    }
-    
-    /// Executes a previously registered server side script with a direct URL where the values can be passed as part of the query.Vault owner or external users are allowed to call scripts on someone's vault.
-    /// - parameters:
-    ///    - name: The call's script name
-    ///    - resultType: String, JSON
-    /// - returns:  Result for specific script type
-    public func callScriptUrl<T>(_ name: String, _ params: String?, _ targetDid: String?, _ targetAppDid: String?, _ resultType: T.Type) -> Promise<T> {
-        return self.scriptingServiceRender!.callScriptUrl(name, params, targetDid, targetAppDid, resultType)
-    }
-    
-    /// Run a script to upload a file NOTE: The upload works a bit differently compared to other types of executable queries because there are two steps to this executable. First, register a script on the vault, then you call this api to actually upload the file
-    /// - parameters:
-    ///    - transactionId: Transaction id
-    /// - returns: FileReader
-    public func uploadFile<T>(_ transactionId: String, _ resultType: T.Type) -> Promise<T> {
-        return self.scriptingServiceRender!.uploadFile(transactionId, resultType)
+//    private var scriptingServiceRender: ScriptingServiceRender?
+//    
+//    public override init(_ context: AppContext, _ providerAddress: String) throws {
+//        try super.init(context, providerAddress)
+//        self.scriptingServiceRender = ScriptingServiceRender(self)
+//    }
+//    
+//    /// Set-up a context for get more detailed information for backup sExecutes a previously registered server side script using Scripting.setScript(). Vault owner or external users are allowed to call scripts on someone's vault.
+//    /// - parameters:
+//    ///    - name: The call's script name
+//    ///    - resultType: String, JSON
+//    /// - returns:  Result for specific script type
+//    public func callScript<T>(_ name: String, _ params: [String : Any]?, _ targetDid: String?, _ targetAppDid: String?, _ resultType: T.Type) -> Promise<T> {
+//        return self.scriptingServiceRender!.callScript(name, params, targetDid, targetAppDid, resultType)
+//    }
+//    
+//    /// Executes a previously registered server side script with a direct URL where the values can be passed as part of the query.Vault owner or external users are allowed to call scripts on someone's vault.
+//    /// - parameters:
+//    ///    - name: The call's script name
+//    ///    - resultType: String, JSON
+//    /// - returns:  Result for specific script type
+//    public func callScriptUrl<T>(_ name: String, _ params: String?, _ targetDid: String?, _ targetAppDid: String?, _ resultType: T.Type) -> Promise<T> {
+//        return self.scriptingServiceRender!.callScriptUrl(name, params, targetDid, targetAppDid, resultType)
+//    }
+//    
+//    /// Run a script to upload a file NOTE: The upload works a bit differently compared to other types of executable queries because there are two steps to this executable. First, register a script on the vault, then you call this api to actually upload the file
+//    /// - parameters:
+//    ///    - transactionId: Transaction id
+//    /// - returns: FileReader
+//    public func uploadFile<T>(_ transactionId: String, _ resultType: T.Type) -> Promise<T> {
+//        return self.scriptingServiceRender!.uploadFile(transactionId, resultType)
+//
+//    }
+//    
+//    public func downloadFile<T>(_ transactionId: String, _ resultType: T.Type) -> Promise<T> {
+//        return self.scriptingServiceRender!.downloadFile(transactionId, resultType)
+//
+//    }
 
-    }
-    
-    public func downloadFile<T>(_ transactionId: String, _ resultType: T.Type) -> Promise<T> {
-        return self.scriptingServiceRender!.downloadFile(transactionId, resultType)
-
-    }
-
-}
+//}

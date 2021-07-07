@@ -41,7 +41,7 @@ public class InsertResult: Mappable {
     
     public required init?(map: Map) {}
     
-    public override func mapping(map: Map) {
+    public func mapping(map: Map) {
         _acknowledged <- map["acknowledged"]
         _insertedId <- map["inserted_id"]
     }

@@ -22,27 +22,29 @@
 
 import Foundation
 
-extension HiveAPi {
-    public static let API_SCRIPT_UPLOAD: String = "/api/v2/vault/scripting/stream"
-    
-    func registerScript(_ scriptName: String) -> String {
-        return self.baseURL + self.apiPath + "/vault/scripting/ \(scriptName)"
-    }
-    
-    func runScript(_ scriptName: String) -> String {
-        return self.baseURL + self.apiPath + "/vault/scripting/ \(scriptName)"
-    }
-    
-    func runScriptUrl(_ scriptName: String, _ targetDid: String, _ targetAppDid: String, _ params: String) -> String {
-        return self.baseURL + self.apiPath + "/vault/scripting/ \(scriptName)/\(targetDid)@\(targetAppDid)/\(params)"
-    }
-    
-    func downloadFile(_ transactionId: String) -> String {
-        return self.baseURL + self.apiPath + "/vault/scripting/stream/ \(transactionId)"
-    }
-    
-    func unregisterScript(_ scriptName: String) -> String {
-        return self.baseURL + self.apiPath + "/vault/scripting/ \(scriptName)"
-    }
+public enum NetworkError: Error {
+    case NetworkException(message: String?)
 }
 
+extension NetworkError {
+    
+    public var description: String {
+        switch self {
+        case .NetworkException(let message):
+            return "NetworkException : \(message ?? "")"
+        }
+    }
+    
+    static func praseError(_ json: JSON) -> String {
+        let status = json["_status"].stringValue
+        let code = json["_error"]["code"].intValue
+        let message = json["_error"]["message"].stringValue
+        
+        let dic = ["_status": status, "_error": ["code": code, "message": message]] as [String : Any]
+        let data = try? JSONSerialization.data(withJSONObject: dic as Any, options: [])
+        guard data != nil else {
+            return ""
+        }
+        return String(data: data!, encoding: String.Encoding.utf8)!
+    }
+}

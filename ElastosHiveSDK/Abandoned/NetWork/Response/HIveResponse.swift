@@ -41,4 +41,12 @@ public class HiveResponse: Mappable, HiveCheckValidProtocol{
     public func checkResponseVaild() throws {
         
     }
+    
+    public func getCount() -> Int64 {
+        return 0
+    }
+    
+    public func getArray() -> Array<Any> {
+        return Array()
+    }
 }

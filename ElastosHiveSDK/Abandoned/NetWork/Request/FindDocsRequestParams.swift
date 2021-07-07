@@ -23,12 +23,12 @@
 import Foundation
 import ObjectMapper
 
-public class FindDocsRequestParams: FindDocRequestParams {
-    public override init(_ name: String, _ filter: Dictionary<String, Any>, _ options: FindOptions) {
-        super.init(name, filter, options)
-    }
-    
-    required public init?(map: Map) {
-        super.init(map: map)
-    }
-}
+//public class FindDocsRequestParams: FindDocRequestParams {
+//    public override init(_ name: String, _ filter: Dictionary<String, Any>, _ options: FindOptions) {
+//        super.init(name, filter, options)
+//    }
+//    
+//    required public init?(map: Map) {
+//        super.init(map: map)
+//    }
+//}

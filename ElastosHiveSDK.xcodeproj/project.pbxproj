@@ -86,6 +86,7 @@
 		30221092261CBE0200578934 /* PubsubRequestParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30221091261CBE0200578934 /* PubsubRequestParams.swift */; };
 		30221095261CBE6E00578934 /* PushMessageRequestParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30221094261CBE6E00578934 /* PushMessageRequestParams.swift */; };
 		30221098261CBECF00578934 /* PubsubSubscribeRequestParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30221097261CBECF00578934 /* PubsubSubscribeRequestParams.swift */; };
+		302E9F632695A250008200D3 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302E9F622695A250008200D3 /* NetworkError.swift */; };
 		3033734F25F9F703004D0D93 /* AppContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3033734E25F9F703004D0D93 /* AppContext.swift */; };
 		3033735325F9F7BD004D0D93 /* AppContextProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3033735225F9F7BD004D0D93 /* AppContextProvider.swift */; };
 		3033737125FA218D004D0D93 /* TokenResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3033737025FA218D004D0D93 /* TokenResolver.swift */; };
@@ -108,14 +109,12 @@
 		303D685E261E92F500981858 /* ScriptInsertExecutableBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303D685D261E92F500981858 /* ScriptInsertExecutableBody.swift */; };
 		3045A73A260237FD0037527A /* DatabaseServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A739260237FC0037527A /* DatabaseServiceTest.swift */; };
 		3045A741260241FC0037527A /* BackupSubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A740260241FC0037527A /* BackupSubscription.swift */; };
-		3045A74C26024B9B0037527A /* DatabaseServiceRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A74B26024B9B0037527A /* DatabaseServiceRender.swift */; };
 		3045A74F26024BD30037527A /* BackupServiceRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A74E26024BD30037527A /* BackupServiceRender.swift */; };
 		3045A75226024BF40037527A /* PubSubServiceRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A75126024BF40037527A /* PubSubServiceRender.swift */; };
 		3045A75926024C1E0037527A /* ScriptingRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A75826024C1E0037527A /* ScriptingRender.swift */; };
 		3045A75C2602519D0037527A /* Promise+async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A75B2602519D0037527A /* Promise+async.swift */; };
 		3045A75D2602519D0037527A /* Promise+async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A75B2602519D0037527A /* Promise+async.swift */; };
 		3048ACAC26437C1C00B417B6 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3048ACAB26437C1C00B417B6 /* Provider.swift */; };
-		304E4A2C261F0878005D196E /* SubscriptionServiceRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304E4A2B261F0878005D196E /* SubscriptionServiceRender.swift */; };
 		304EA376261D3978007ADD47 /* PopMessageRequestParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304EA375261D3978007ADD47 /* PopMessageRequestParams.swift */; };
 		304EA37A261D39CB007ADD47 /* PayOrderRequestParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304EA379261D39CB007ADD47 /* PayOrderRequestParams.swift */; };
 		304EA37D261D3A26007ADD47 /* PaymentCreateRequestParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304EA37C261D3A26007ADD47 /* PaymentCreateRequestParams.swift */; };
@@ -213,7 +212,6 @@
 		3053BEE52684CA5F005828B0 /* AggregatedExecutable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE9C2684CA5F005828B0 /* AggregatedExecutable.swift */; };
 		3053BEE62684CA5F005828B0 /* OrCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE9D2684CA5F005828B0 /* OrCondition.swift */; };
 		3053BEE72684CA5F005828B0 /* FileUploadExecutable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE9E2684CA5F005828B0 /* FileUploadExecutable.swift */; };
-		3053BEE82684CA5F005828B0 /* ScriptingAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE9F2684CA5F005828B0 /* ScriptingAPI.swift */; };
 		3053BEE92684CA5F005828B0 /* AndCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BEA02684CA5F005828B0 /* AndCondition.swift */; };
 		3053BEEA2684CA5F005828B0 /* AggregatedCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BEA12684CA5F005828B0 /* AggregatedCondition.swift */; };
 		3053BEEB2684CA5F005828B0 /* BackupServiceRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BEA22684CA5F005828B0 /* BackupServiceRender.swift */; };
@@ -395,6 +393,7 @@
 		30221091261CBE0200578934 /* PubsubRequestParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PubsubRequestParams.swift; sourceTree = "<group>"; };
 		30221094261CBE6E00578934 /* PushMessageRequestParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushMessageRequestParams.swift; sourceTree = "<group>"; };
 		30221097261CBECF00578934 /* PubsubSubscribeRequestParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PubsubSubscribeRequestParams.swift; sourceTree = "<group>"; };
+		302E9F622695A250008200D3 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		3033734E25F9F703004D0D93 /* AppContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContext.swift; sourceTree = "<group>"; };
 		3033735225F9F7BD004D0D93 /* AppContextProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContextProvider.swift; sourceTree = "<group>"; };
 		3033737025FA218D004D0D93 /* TokenResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenResolver.swift; sourceTree = "<group>"; };
@@ -417,13 +416,11 @@
 		303D685D261E92F500981858 /* ScriptInsertExecutableBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptInsertExecutableBody.swift; sourceTree = "<group>"; };
 		3045A739260237FC0037527A /* DatabaseServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseServiceTest.swift; sourceTree = "<group>"; };
 		3045A740260241FC0037527A /* BackupSubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupSubscription.swift; sourceTree = "<group>"; };
-		3045A74B26024B9B0037527A /* DatabaseServiceRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseServiceRender.swift; sourceTree = "<group>"; };
 		3045A74E26024BD30037527A /* BackupServiceRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupServiceRender.swift; sourceTree = "<group>"; };
 		3045A75126024BF40037527A /* PubSubServiceRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PubSubServiceRender.swift; sourceTree = "<group>"; };
 		3045A75826024C1E0037527A /* ScriptingRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptingRender.swift; sourceTree = "<group>"; };
 		3045A75B2602519D0037527A /* Promise+async.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Promise+async.swift"; sourceTree = "<group>"; };
 		3048ACAB26437C1C00B417B6 /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
-		304E4A2B261F0878005D196E /* SubscriptionServiceRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionServiceRender.swift; sourceTree = "<group>"; };
 		304EA375261D3978007ADD47 /* PopMessageRequestParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopMessageRequestParams.swift; sourceTree = "<group>"; };
 		304EA379261D39CB007ADD47 /* PayOrderRequestParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayOrderRequestParams.swift; sourceTree = "<group>"; };
 		304EA37C261D3A26007ADD47 /* PaymentCreateRequestParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentCreateRequestParams.swift; sourceTree = "<group>"; };
@@ -521,7 +518,6 @@
 		3053BE9C2684CA5F005828B0 /* AggregatedExecutable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AggregatedExecutable.swift; sourceTree = "<group>"; };
 		3053BE9D2684CA5F005828B0 /* OrCondition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrCondition.swift; sourceTree = "<group>"; };
 		3053BE9E2684CA5F005828B0 /* FileUploadExecutable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileUploadExecutable.swift; sourceTree = "<group>"; };
-		3053BE9F2684CA5F005828B0 /* ScriptingAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScriptingAPI.swift; sourceTree = "<group>"; };
 		3053BEA02684CA5F005828B0 /* AndCondition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AndCondition.swift; sourceTree = "<group>"; };
 		3053BEA12684CA5F005828B0 /* AggregatedCondition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AggregatedCondition.swift; sourceTree = "<group>"; };
 		3053BEA22684CA5F005828B0 /* BackupServiceRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackupServiceRender.swift; sourceTree = "<group>"; };
@@ -858,14 +854,12 @@
 		3045A7432602451F0037527A /* Vault */ = {
 			isa = PBXGroup;
 			children = (
-				3045A74B26024B9B0037527A /* DatabaseServiceRender.swift */,
 				3045A74E26024BD30037527A /* BackupServiceRender.swift */,
 				3045A75126024BF40037527A /* PubSubServiceRender.swift */,
 				3045A75826024C1E0037527A /* ScriptingRender.swift */,
 				3065A5EC26156B3F00C20661 /* PaymentServiceRender.swift */,
 				30091C1826182250003EB5CE /* AuthenticationServiceRender.swift */,
 				30091C1B26182326003EB5CE /* HiveVaultRender.swift */,
-				304E4A2B261F0878005D196E /* SubscriptionServiceRender.swift */,
 				304F1ED3264A5E1A00362062 /* NodeManageServiceRender.swift */,
 			);
 			path = Vault;
@@ -932,6 +926,7 @@
 			isa = PBXGroup;
 			children = (
 				3053BE532684CA10005828B0 /* HiveError.swift */,
+				302E9F622695A250008200D3 /* NetworkError.swift */,
 			);
 			path = Exception;
 			sourceTree = "<group>";
@@ -1029,7 +1024,6 @@
 				3053BE8F2684CA5F005828B0 /* RegScriptResult.swift */,
 				3053BE8E2684CA5F005828B0 /* RunFileParams.swift */,
 				3053BE952684CA5F005828B0 /* RunScriptParams.swift */,
-				3053BE9F2684CA5F005828B0 /* ScriptingAPI.swift */,
 				3053BE8D2684CA5F005828B0 /* ScriptingController.swift */,
 				3053BE972684CA5F005828B0 /* UpdateExecutable.swift */,
 				30967524268B6E6300FF8406 /* FileBody.swift */,
@@ -1174,31 +1168,31 @@
 		A39C4971225399860027BDF9 /* ElastosHiveSDK */ = {
 			isa = PBXGroup;
 			children = (
+				A39C4972225399860027BDF9 /* ElastosHiveSDK.h */,
+				A39C4973225399860027BDF9 /* Info.plist */,
+				3033734E25F9F703004D0D93 /* AppContext.swift */,
+				3033735225F9F7BD004D0D93 /* AppContextProvider.swift */,
+				116B2F2F25B6C0F200635D97 /* Backup.swift */,
+				3045A740260241FC0037527A /* BackupSubscription.swift */,
+				11ED682922FF1077004C17D0 /* ElastosHiveSDK.swift */,
+				3048ACAB26437C1C00B417B6 /* Provider.swift */,
+				303CD55C26075D2A00865472 /* ScriptRunner.swift */,
+				30DB96592600E61600ACF19F /* ServiceEndpoint.swift */,
+				1170FB132502019C0049E81D /* Vault.swift */,
+				30DB96562600E4C700ACF19F /* VaultSubscription.swift */,
 				3053BE512684C9DB005828B0 /* Abandoned */,
 				3053BDF62684C8DF005828B0 /* Backup */,
 				30A996FD25FCF7450002B014 /* Connection */,
 				3053BE472684C9AE005828B0 /* Endpoint */,
 				3053BE522684CA10005828B0 /* Exception */,
-				3053BE562684CA38005828B0 /* Service */,
 				3019D3C82610726C00A3C3C5 /* Exception */,
-				3053BF032684CA96005828B0 /* Subscription */,
-				3053BE702684CA5F005828B0 /* Vault */,
-				1151E9A0256CCC6000024303 /* Log */,
-				1147720723F678BD00C7C36F /* SwiftyJSON */,
 				11E573F922C4C33400F85419 /* Extension */,
+				1151E9A0256CCC6000024303 /* Log */,
+				3053BE562684CA38005828B0 /* Service */,
+				3053BF032684CA96005828B0 /* Subscription */,
+				1147720723F678BD00C7C36F /* SwiftyJSON */,
+				3053BE702684CA5F005828B0 /* Vault */,
 				3045A7432602451F0037527A /* Vault */,
-				3033734E25F9F703004D0D93 /* AppContext.swift */,
-				1170FB132502019C0049E81D /* Vault.swift */,
-				A39C4972225399860027BDF9 /* ElastosHiveSDK.h */,
-				11ED682922FF1077004C17D0 /* ElastosHiveSDK.swift */,
-				3033735225F9F7BD004D0D93 /* AppContextProvider.swift */,
-				30DB96562600E4C700ACF19F /* VaultSubscription.swift */,
-				30DB96592600E61600ACF19F /* ServiceEndpoint.swift */,
-				303CD55C26075D2A00865472 /* ScriptRunner.swift */,
-				116B2F2F25B6C0F200635D97 /* Backup.swift */,
-				3045A740260241FC0037527A /* BackupSubscription.swift */,
-				3048ACAB26437C1C00B417B6 /* Provider.swift */,
-				A39C4973225399860027BDF9 /* Info.plist */,
 			);
 			path = ElastosHiveSDK;
 			sourceTree = "<group>";
@@ -1555,7 +1549,6 @@
 				116B2F3025B6C0F200635D97 /* Backup.swift in Sources */,
 				3045A741260241FC0037527A /* BackupSubscription.swift in Sources */,
 				111D47F424F7A30300B7462B /* Executable.swift in Sources */,
-				3045A74C26024B9B0037527A /* DatabaseServiceRender.swift in Sources */,
 				303CD5602607606B00865472 /* ScriptingApi.swift in Sources */,
 				30221098261CBECF00578934 /* PubsubSubscribeRequestParams.swift in Sources */,
 				3053BEE72684CA5F005828B0 /* FileUploadExecutable.swift in Sources */,
@@ -1574,7 +1567,6 @@
 				3053BEC12684CA5F005828B0 /* DatabaseAPI.swift in Sources */,
 				304EA395261D3FF0007ADD47 /* EmptyRequestParams.swift in Sources */,
 				3053BE3A2684C974005828B0 /* ChallengeRequest.swift in Sources */,
-				3053BEE82684CA5F005828B0 /* ScriptingAPI.swift in Sources */,
 				3053BEC62684CA5F005828B0 /* QueryResult.swift in Sources */,
 				30091C652619FCAE003EB5CE /* PubsubApi.swift in Sources */,
 				3053BE352684C974005828B0 /* ConnectionClosure.swift in Sources */,
@@ -1598,8 +1590,8 @@
 				3053BEE22684CA5F005828B0 /* InsertExecutable.swift in Sources */,
 				3053BED22684CA5F005828B0 /* DeleteOptions.swift in Sources */,
 				3053BECF2684CA5F005828B0 /* AscendingSortItem.swift in Sources */,
+				302E9F632695A250008200D3 /* NetworkError.swift in Sources */,
 				3053BE642684CA38005828B0 /* DatabaseProtocol.swift in Sources */,
-				304E4A2C261F0878005D196E /* SubscriptionServiceRender.swift in Sources */,
 				3048ACAC26437C1C00B417B6 /* Provider.swift in Sources */,
 				30091C282619E935003EB5CE /* CountDocResponse.swift in Sources */,
 				3053BF132684CA96005828B0 /* SubscriptionAPI.swift in Sources */,

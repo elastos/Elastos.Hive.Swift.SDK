@@ -21,6 +21,7 @@
  */
 
 import Foundation
+import ObjectMapper
 
 /**
  * Vault script condition that succeeds if at least one of the contained conditions are successful.
@@ -34,5 +35,9 @@ public class OrCondition: AggregatedCondition {
     
     public init(_ name: String?) {
         super.init(name, AggregatedConditionType.OR.rawValue, nil)
+    }
+    
+    required public init?(map: Map) {
+        fatalError("init(map:) has not been implemented")
     }
 }
