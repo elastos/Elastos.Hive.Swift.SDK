@@ -26,34 +26,35 @@ public class AccessToken: CodeFetcherProtocol {
     private var _jwtCode: String?
     private var _remoteFetcher: CodeFetcherProtocol?
     private var _storage: DataStorageProtocol?
-    private var _bridge: BridgeHandlerProtocol?
+//    private var _bridge: BridgeHandlerProtocol?
     
-    public init(_ endpoint: ServiceEndpoint, _ storage: DataStorageProtocol?, _ bridge: BridgeHandlerProtocol?) {
-        _remoteFetcher = RemoteFetcher(endpoint)
-        
-    }
-    
-    public func getCanonicalizedAccessToken() -> String {
-        
-    }
+//    public init(_ endpoint: ServiceEndpoint, _ storage: DataStorageProtocol?, _ bridge: BridgeHandlerProtocol?) {
+//        _remoteFetcher = RemoteFetcher(endpoint)
+//        
+//    }
+//    
+//    public func getCanonicalizedAccessToken() -> String {
+//        
+//    }
     
     public func fetch() throws -> String? {
-        if _jwtCode != nil {
-            return _jwtCode
-        }
-        
-        _jwtCode = restoreToken()
-        if _jwtCode == nil {
-            _jwtCode = try _remoteFetcher?.fetch()
-            
-            if _jwtCode != nil {
-                _bridge?.flush(_jwtCode)
-                saveToken(_jwtCode)
-            }
-        } else {
-            _bridge?.flush(_jwtCode)
-        }
-        return _jwtCode
+//        if _jwtCode != nil {
+//            return _jwtCode
+//        }
+//
+//        _jwtCode = restoreToken()
+//        if _jwtCode == nil {
+//            _jwtCode = try _remoteFetcher?.fetch()
+//
+//            if _jwtCode != nil {
+//                _bridge?.flush(_jwtCode!)
+//                saveToken(_jwtCode)
+//            }
+//        } else {
+//            _bridge?.flush(_jwtCode!)
+//        }
+//        return _jwtCode
+        return nil
     }
     
     public func invalidate() {
@@ -61,15 +62,28 @@ public class AccessToken: CodeFetcherProtocol {
     }
     
     private func restoreToken() -> String? {
-        
-        let endpoint: ServiceEndpoint = _bridge?.target() as! ServiceEndpoint
-        if endpoint == nil {
-            return nil
-        }
-        
-        var jwtCode: String = nil
-        var serviceDid: String
-        var address: String
+     
+        return nil
+//        let endpoint: ServiceEndpoint? = _bridge?.target() as! ServiceEndpoint
+//        if endpoint == nil {
+//            return nil
+//        }
+//
+//        var jwtCode: String? = nil
+//        var serviceDid: String? = nil
+//        var address: String? = nil
+    }
+    
+//    private func restoreToken() -> String? {
+//
+//        let endpoint: ServiceEndpoint = _bridge?.target() as! ServiceEndpoint
+//        if endpoint == nil {
+//            return nil
+//        }
+//
+//        var jwtCode: String = nil
+//        var serviceDid: String
+//        var address: String
 //
 //                serviceDid = endpoint.getServiceInstanceDid();
 //                address    = endpoint.getProviderAddress();
@@ -92,7 +106,7 @@ public class AccessToken: CodeFetcherProtocol {
 //                }
 //
 //                return jwtCode;
-    }
+//    }
     
     private func isExpired(_ jwtCode: String?) -> Bool? {
         return false

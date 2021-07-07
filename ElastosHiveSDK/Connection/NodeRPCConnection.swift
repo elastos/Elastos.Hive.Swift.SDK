@@ -24,4 +24,7 @@ import Foundation
 
 public class NodeRPCConnection {
     
+//    public func createService(_ serviceClass: Any, _ requiredAuthorization: Bool?) -> Any? {
+//        
+//    }
 }

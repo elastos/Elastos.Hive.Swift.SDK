@@ -21,3 +21,27 @@
  */
 
 import Foundation
+
+import ObjectMapper
+
+public class UpdateParams: Mappable {
+    private var _filter: Dictionary<String, Any>?
+    private var _update: Dictionary<String, Any>?
+    private var _options: UpdateOptions?
+    
+    public init(_ filter: Dictionary<String, Any>?, _ update: Dictionary<String, Any>?, _ options: UpdateOptions) {
+        self._filter = filter
+        self._update = update
+        self._options = options
+    }
+
+    public required init?(map: Map) {}
+    
+    public func mapping(map: Map) {
+        _filter <- map["filter"]
+        _update <- map["update"]
+        _options <- map["options"]
+    }
+}
+
+

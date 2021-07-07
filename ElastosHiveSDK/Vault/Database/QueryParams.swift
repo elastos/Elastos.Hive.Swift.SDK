@@ -21,3 +21,24 @@
  */
 
 import Foundation
+import ObjectMapper
+
+public class QueryParams: Mappable {
+    private var _collection: String?
+    private var _filter: Dictionary<String, Any>?
+    private var _options: QueryOptions?
+    
+    public init(_ collectionName: String?, _ filter: Dictionary<String, Any>?, _ options: QueryOptions?) {
+        _collection = collectionName
+        _filter = filter
+        _options = options
+    }
+    
+    public required init?(map: Map) {}
+    
+    public func mapping(map: Map) {
+        _collection <- map["collection"]
+        _filter <- map["filter"]
+        _options <- map["options"]
+    }
+}

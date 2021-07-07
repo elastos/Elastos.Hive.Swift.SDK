@@ -28,7 +28,6 @@ public enum AggregatedConditionType: String {
     case OR = "or"
 }
 
-
 public class AggregatedCondition: Condition {
 
     public init(_ name: String?, _ type: String?, _ conditions: [Condition]?) {
@@ -52,8 +51,8 @@ public class AggregatedCondition: Condition {
         if super.body == nil {
             super.body = [condition]
         } else {
-            let body = super.body as! [Condition]
-            body.append(condition)
+            var body = super.body as! [Condition]
+//            body.append(condition)
         }
         return self
     }

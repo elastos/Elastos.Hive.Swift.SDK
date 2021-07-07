@@ -23,23 +23,23 @@
 import Foundation
 import ObjectMapper
 
-public class CountDocRequestParams: CreateCollectionRequestParams {
-    private var _filter: Dictionary<String, Any>?
-    private var _options: CountOptions?
-    
-    public init(_ name: String, _ filter: Dictionary<String, Any>, _ options: CountOptions) {
-        self._filter = filter
-        self._options = options
-        super.init(name, nil)
-    }
-    
-    required public init?(map: Map) {
-        super.init(map: map)
-    }
-    
-    public override func mapping(map: Map) {
-        super.mapping(map: map)
-        _filter <- map["filter"]
-        _options <- map["options"]
-    }
-}
+//public class CountDocRequestParams: CreateCollectionRequestParams {
+//    private var _filter: Dictionary<String, Any>?
+//    private var _options: CountOptions?
+//    
+//    public init(_ name: String, _ filter: Dictionary<String, Any>, _ options: CountOptions) {
+//        self._filter = filter
+//        self._options = options
+//        super.init(name, nil)
+//    }
+//    
+//    required public init?(map: Map) {
+//        super.init(map: map)
+//    }
+//    
+//    public override func mapping(map: Map) {
+//        super.mapping(map: map)
+//        _filter <- map["filter"]
+//        _options <- map["options"]
+//    }
+//}

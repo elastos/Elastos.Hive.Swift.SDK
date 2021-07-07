@@ -22,29 +22,29 @@
 
 import Foundation
 
-public class NodeManageServiceRender: HiveVaultRender {
-    
-    public init (_ vault: Vault) {
-        super.init(vault)
-    }
-
-    public func getVersion() -> Promise<String> {
-        return Promise<Any>.async().then { _ -> Promise<String> in
-            return Promise<String> { resolver in
-                let response = try HiveAPi.request(url: self.connectionManager.hiveApi.version(),
-                                                   headers:try self.connectionManager.headers()).get(NodeVersionResponse.self)
-                resolver.fulfill(response.version)
-            }
-        }
-    }
-
-    public func getCommitHash() -> Promise<String> {
-        return Promise<Any>.async().then { _ -> Promise<String> in
-            return Promise<String> { resolver in
-                let response = try HiveAPi.request(url: self.connectionManager.hiveApi.commitHash(),
-                                                   headers:try self.connectionManager.headers()).get(NodeCommitHashResponse.self)
-                resolver.fulfill(response.commitHash)
-            }
-        }
-    }
-}
+//public class NodeManageServiceRender: HiveVaultRender {
+//    
+//    public init (_ vault: Vault) {
+//        super.init(vault)
+//    }
+//
+//    public func getVersion() -> Promise<String> {
+//        return Promise<Any>.async().then { _ -> Promise<String> in
+//            return Promise<String> { resolver in
+//                let response = try HiveAPi.request(url: self.connectionManager.hiveApi.version(),
+//                                                   headers:try self.connectionManager.headers()).get(NodeVersionResponse.self)
+//                resolver.fulfill(response.version)
+//            }
+//        }
+//    }
+//
+//    public func getCommitHash() -> Promise<String> {
+//        return Promise<Any>.async().then { _ -> Promise<String> in
+//            return Promise<String> { resolver in
+//                let response = try HiveAPi.request(url: self.connectionManager.hiveApi.commitHash(),
+//                                                   headers:try self.connectionManager.headers()).get(NodeCommitHashResponse.self)
+//                resolver.fulfill(response.commitHash)
+//            }
+//        }
+//    }
+//}

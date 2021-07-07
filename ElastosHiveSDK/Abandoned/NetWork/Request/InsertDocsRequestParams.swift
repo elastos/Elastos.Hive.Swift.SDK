@@ -22,24 +22,24 @@
 
 import Foundation
 import ObjectMapper
-
-public class InsertDocsRequestParams: CreateCollectionRequestParams {
-    private var _documents: Array<[String : Any]>?
-    private var _options: InsertManyOptions?
-    
-    public init(_ name: String, _ documents: Array<[String : Any]>, _ options: InsertManyOptions) {
-        self._documents = documents
-        self._options = options
-        super.init(name, nil)
-    }
-    
-    required public init?(map: Map) {
-        super.init(map: map)
-    }
-    
-    public override func mapping(map: Map) {
-        super.mapping(map: map)
-        _documents <- map["document"]
-        _options <- map["options"]
-    }
-}
+//
+//public class InsertDocsRequestParams: CreateCollectionRequestParams {
+//    private var _documents: Array<[String : Any]>?
+//    private var _options: InsertManyOptions?
+//    
+//    public init(_ name: String, _ documents: Array<[String : Any]>, _ options: InsertManyOptions) {
+//        self._documents = documents
+//        self._options = options
+//        super.init(name, nil)
+//    }
+//    
+//    required public init?(map: Map) {
+//        super.init(map: map)
+//    }
+//    
+//    public override func mapping(map: Map) {
+//        super.mapping(map: map)
+//        _documents <- map["document"]
+//        _options <- map["options"]
+//    }
+//}

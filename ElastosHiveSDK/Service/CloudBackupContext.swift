@@ -22,37 +22,37 @@
 
 import Foundation
 
-public class CloudBackupContext: BackupContext {
-    public var type: String = ""
-    
-    public func getParameter(_ key: String) -> String {
-        switch key {
-        case "clientId":
-            return getClientId()
-        case "redirectUrl":
-            return getRedirectUrl()
-        case "scope":
-            return getAppScope()
-        default:
-            return ""
-        }
-    }
-    
-    public func getAuthorization(_ srcDid: String, _ targetDid: String, _ targetHost: String) -> Promise<String> {
-        return Promise<String> { resolver in
-            resolver.reject(HiveError.UnsupportedOperationException)
-        }
-    }
-    
-    public func getClientId() -> String {
-        return ""
-    }
-    
-    public func getRedirectUrl() -> String {
-        return ""
-    }
-    
-    public func getAppScope() -> String {
-        return ""
-    }
-}
+//public class CloudBackupContext: BackupContext {
+//    public var type: String = ""
+//    
+//    public func getParameter(_ key: String) -> String {
+//        switch key {
+//        case "clientId":
+//            return getClientId()
+//        case "redirectUrl":
+//            return getRedirectUrl()
+//        case "scope":
+//            return getAppScope()
+//        default:
+//            return ""
+//        }
+//    }
+//    
+//    public func getAuthorization(_ srcDid: String, _ targetDid: String, _ targetHost: String) -> Promise<String> {
+//        return Promise<String> { resolver in
+//            resolver.reject(HiveError.UnsupportedOperationException)
+//        }
+//    }
+//    
+//    public func getClientId() -> String {
+//        return ""
+//    }
+//    
+//    public func getRedirectUrl() -> String {
+//        return ""
+//    }
+//    
+//    public func getAppScope() -> String {
+//        return ""
+//    }
+//}

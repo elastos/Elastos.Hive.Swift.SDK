@@ -21,8 +21,15 @@
 */
 
 import Foundation
+import ObjectMapper
 
 public class HiveAPi {
+    private var _header: HTTPHeaders?
+    private var _url: String?
+    private var _parameters: Dictionary<String, Any>?
+    private var _httpMethod: HTTPMethod?
+    private var _req: DataRequest?
+    
     public var baseURL: String
     public static let defaultTimeout: TimeInterval = 30.0
     public var apiPath: String {
@@ -51,6 +58,41 @@ public class HiveAPi {
                                           headers: headers) { $0.timeoutInterval = HiveAPi.defaultTimeout }
         return req
     }
+    
+//    public func createOrder(_ params: CreateOrderParams?) -> HiveAPi {
+//        _parameters = params?.toJSON()
+//        _httpMethod = .put
+//        return self
+//    }
+
+    public func execute() -> HiveAPi {
+        _req = AF.request(_url!,
+                          method: _httpMethod!,
+                          parameters: _parameters,
+                          encoding: JSONEncoding.default,
+                          headers: _header) { $0.timeoutInterval = HiveAPi.defaultTimeout }
+        return self
+    }
+    
+    public func body<T: Mappable & HiveCheckValidProtocol>(_ bodyType: T.Type) throws -> T? {
+        return try _req!.get(bodyType)
+    }
+    
+//    public func deleteCollection(_ name: String) -> Promise<Bool> {
+//        return Promise<Any>.async().then{ [self] _ -> Promise<Bool> in
+//            return Promise<Bool> { resolver in
+//                let url = self._connectionManager.hiveApi.deleteCollection()
+//                let header = try self._connectionManager.headers()
+//                let params = DeleteCollectionRequestParams(name)
+//                _ = try HiveAPi.request(url: url, method: .post, parameters: params.toJSON(), headers: header).get(HiveResponse.self)
+//                resolver.fulfill(true)
+//            }
+//        }
+//    }
+    
+//    @PUT("/api/v2/vault/db/collections/{collection}")
+//        Call<CreateCollectionResult> createCollection(@Path("collection") String collection);
+    
 }
 
 extension String {

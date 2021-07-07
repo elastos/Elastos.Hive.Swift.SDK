@@ -33,10 +33,18 @@ public class AppContext {
     private var _userDid: String
     
     public init(_ provider: AppContextProvider, _ userDid: String) {
-        self._userDid = userDid
-        self._contextProvider = provider
+        _userDid = userDid
+        _contextProvider = provider
     }
     
+    public var appContextProvider: AppContextProvider {
+        return _contextProvider
+    }
+    
+    public var userDid: String {
+        return _userDid
+    }
+
     public static func setupResover(_ resolver: String, _ cacheDir: String) throws {
         guard resolverHasSetup == false else {
             throw HiveError.DIDResoverAlreadySetupException
@@ -49,14 +57,6 @@ public class AppContext {
         } catch {
             throw error //TODO: need to throw specific error.
         }
-    }
-    
-    public var appContextProvider: AppContextProvider {
-        return self._contextProvider
-    }
-    
-    public var userDid: String {
-        return self._userDid
     }
     
     public static func build(_ provider: AppContextProvider, _ userDid: String) throws -> AppContext {
@@ -75,21 +75,19 @@ public class AppContext {
         return AppContext(provider, userDid)
     }
     
-    public func getProviderAddress(_ targetDid: String) -> Promise<String> {
+    
+    public static func getProviderAddress(_ targetDid: String) -> Promise<String> {
         return getProviderAddress(targetDid, nil)
     }
-    
-    public func getProviderAddress(_ targetDid: String, _ preferredProviderAddress: String) -> Promise<String> {
-        return getProviderAddress(targetDid, preferredProviderAddress);
-    }
 
-    private func getProviderAddress(_ targetDid: String, _ preferredProviderAddress: String?) -> Promise<String> {
+    public static func getProviderAddress(_ targetDid: String, _ preferredProviderAddress: String?) -> Promise<String> {
         return Promise<Any>.async().then { _ -> Promise<String> in
             return Promise<String> { resolver in
                 if preferredProviderAddress != nil {
                     resolver.fulfill(preferredProviderAddress!)
                     return
                 }
+                
                 do {
                     let did = try DID(targetDid)
                     let doc = try did.resolve()
@@ -104,6 +102,16 @@ public class AppContext {
                     }
                     resolver.fulfill(services![0].endpoint)
                 } catch {
+                    if let error = error as? DIDError {
+                        switch error {
+                        case .malformedMeta:
+                            resolver.reject(HiveError.IllegalArgument(des: "Malformed did string: \(targetDid)"))
+                        case .didResolveError:
+                            resolver.reject(NetworkError.NetworkException(message: "Resolving DID failed: \(error.localizedDescription)"))
+                        default:
+                            resolver.reject(error)
+                        }   
+                    }
                     resolver.reject(error)
                 }
             }

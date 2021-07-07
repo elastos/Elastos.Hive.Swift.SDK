@@ -64,7 +64,7 @@ public class DeleteOptions: Mappable {
         return self
     }
     
-    public var hint: Array[HiveIndex]? {
+    public var hint: Array<HiveIndex>? {
         return _hint
     }
         

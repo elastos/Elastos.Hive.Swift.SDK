@@ -30,9 +30,9 @@ public class DatabaseBody: Mappable {
         self._collection = collection
     }
     
-    required init?(map: Map) {}
+    required public init?(map: Map) {}
     
-    func mapping(map: Map) {
-        self._collection <- map["collection"]
+    public func mapping(map: Map) {
+//        self._collection <- map["collection"]
     }
 }

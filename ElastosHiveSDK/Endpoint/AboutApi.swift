@@ -22,13 +22,14 @@
 
 import Foundation
 
-extension HiveAPi {
-    
-    func version() -> String {
-        return self.baseURL + self.apiPath + "/about/version"
+extension ConnectionManager {
+    public func version() throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/about/version"
+        return try self.createDataRequest(url, .get, nil)
     }
     
-    func commitId() -> String {
-        return self.baseURL + self.apiPath + "/about/commit_id"
+    public func commitId() throws -> DataRequest {
+        let url = self.baseURL + "api/v2/about/commit_id"
+        return try self.createDataRequest(url, .get, nil)
     }
 }

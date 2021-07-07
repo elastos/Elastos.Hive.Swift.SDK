@@ -37,9 +37,9 @@ public class Context: Mappable {
         return self
     }
     
-    required init?(map: Map) {}
+    required public init?(map: Map) {}
     
-    func mapping(map: Map) {
+    public func mapping(map: Map) {
         _targetDid <- map["target_did"]
         _targetAppDid <- map["target_app_did"]
     }

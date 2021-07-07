@@ -22,67 +22,138 @@
 
 import Foundation
 
-public class ServiceEndpoint {
-    private var _context: AppContext
-    private var _providerAddress: String
-    private var _connectionManager: ConnectionManager
+//this.accessToken = new AccessToken(this, dataStorage, new BridgeHandler() {
+//            private WeakReference<ServiceEndpoint> weakref;
+//
+//            @Override
+//            public void flush(String value) {
+//                try {
+//                    ServiceEndpoint endpoint = weakref.get();
+//                    Claims claims;
+//
+//                    claims = new JwtParserBuilder().build().parseClaimsJws(value).getBody();
+//                    endpoint.flushDids(claims.getAudience(), claims.getIssuer());
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    return;
+//                }
+//            }
+//
+//            BridgeHandler setTarget(ServiceEndpoint endpoint) {
+//                this.weakref = new WeakReference<>(endpoint);
+//                return this;
+//            }
+//
+//            @Override
+//            public Object target() {
+//                return weakref.get();
+//            }
+//
+//        }.setTarget(this));
 
+//public class BridgeHandler: BridgeHandlerProtocol {
+//    private var _serviceEndpoint: ServiceEndpoint?
+//
+//    public func setTarget(_ target: ServiceEndpoint) {
+//        _serviceEndpoint = target
+//    }
+//
+//    public func flush(_ value: String) {
+//        do {
+//            let claims = try JwtParserBuilder().build().parseClaimsJwt(value).claims
+//            _serviceEndpoint.
+//
+//        } catch  {
+//
+//        }
+        
+//
+//        ServiceEndpoint endpoint = weakref.get();
+//        //                    Claims claims;
+//        //
+//        //                    claims = new JwtParserBuilder().build().parseClaimsJws(value).getBody();
+//        //                    endpoint.flushDids(claims.getAudience(), claims.getIssuer());
+
+//    }
+//
+//    public func target() -> ServiceEndpoint {
+//        return _serviceEndpoint!
+//    }
+//
+//    public func invalidate() {
+//
+//    }
+//}
+
+public class ServiceEndpoint: NodeRPCConnection {
+    public var connectionManager: ConnectionManager?
+    
+    private var _context: AppContext?
+    private var _providerAddress: String?
+
+    private var _appDid: String?
+    private var _appInstanceDid: String?
+    private var _serviceInstanceDid: String?
+
+    private var _accessToken: AccessToken?
+    private var _dataStorage: DataStorageProtocol?
+    
     public init(_ context: AppContext, _ providerAddress: String) throws {
-        self._context = context
-        self._providerAddress = providerAddress
-        self._connectionManager = ConnectionManager(self)
-        self._connectionManager.tokenResolver = try LocalResolver(self.appContext.userDid,
-                                                                  self.providerAddress,
-                                                                  LocalResolver.TYPE_AUTH_TOKEN,
-                                                                  self.appContext.appContextProvider.getLocalDataDir())
-        let remoteResolver = RemoteResolver(self)
-        try self._connectionManager.tokenResolver?.setNextResolver(remoteResolver)
+        _context = context
+        _providerAddress = providerAddress
+        self.connectionManager = ConnectionManager(_providerAddress!)
+        
+        var dataDir = _context?.appContextProvider.getLocalDataDir()
+        if String((dataDir?.last)!) != "\\" {
+            dataDir = dataDir! + "\\"
+        }
     }
     
-    public var appContext: AppContext {
+    public var appContext: AppContext? {
         return _context
+    }
+
+    /**
+     * Get the end-point address of this service End-point.
+     *
+     * @return provider address
+     */
+    public var providerAddress: String? {
+        return _providerAddress
     }
     
     /**
      * Get the user DID string of this serviceEndpoint.
+     *
+     * @return user did
      */
-    public var userDid: String {
-        return self._context.userDid
-    }
-    
-    /**
-     * Get the end-point address of this service End-point.
-     */
-    public var providerAddress: String {
-        return self._providerAddress
-    }
-        
-    public var connectionManager: ConnectionManager {
-        return self._connectionManager
+    public var userDid: String? {
+        return _context?.userDid
     }
     
     /**
      * Get the application DID in the current calling context.
+     *
+     * @return application did
      */
     public var appDid: String? {
-        try!{
-            throw HiveError.UnauthorizedStateException()
-        }()
-        return nil
+        return _appDid
     }
     
     /**
      * Get the application instance DID in the current calling context;
+     *
+     * @return application instance did
      */
     public var appInstanceDid: String? {
-        try!{
-            throw HiveError.UnauthorizedStateException()
-        }()
-        return nil
+        return _appInstanceDid
     }
     
     /**
      * Get the remote node service application DID.
+     *
+     * @return node service did
      */
     public var serviceDid: String? {
         try!{
@@ -93,21 +164,54 @@ public class ServiceEndpoint {
     
     /**
      * Get the remote node service instance DID where is serving the storage service.
+     *
+     * @return node service instance did
      */
     public var serviceInstanceDid: String? {
-        try!{
-            throw HiveError.UnauthorizedStateException()
-        }()
-        return nil
+        return _serviceInstanceDid
     }
 
-    /* TODO
-    public func getVersion() -> Promise<Version> {
-        //TODO:
+    
+    private func flushDids(_ appInstanceDId: String, _ serviceInstanceDid: String) {
+        _appInstanceDid = appInstanceDId
+        _serviceInstanceDid = serviceInstanceDid
     }
-
-    public func getLastCommitId() -> Promise<String> {
-        //TODO:
+    
+    public func getStorage() -> DataStorageProtocol {
+        return _dataStorage!
     }
-    */
+    
+    public func refreshAccessToken() throws {
+        try _ = _accessToken?.fetch()
+    }
+    
+    public func getAccessToken() -> AccessToken {
+        return _accessToken!
+    }
+    
+    public func getNodeVersion() -> Promise<NodeVersion> {
+        return Promise<Any>.async().then { _ -> Promise<NodeVersion> in
+            return Promise<NodeVersion> { resolver in
+                do {
+                    let nodeVersion: NodeVersion = try AboutController(self).getNodeVersion()
+                    resolver.fulfill(nodeVersion)
+                } catch {
+                    resolver.reject(error)
+                }
+            }
+        }
+    }
+    
+    public func getLatestCommitId() -> Promise<String> {
+        return Promise<Any>.async().then { _ -> Promise<String> in
+            return Promise<String> { resolver in
+                do {
+                    let commitId: String = try AboutController(self).getCommitId()!
+                    resolver.fulfill(commitId)
+                } catch {
+                    resolver.reject(error)
+                }
+            }
+        }
+    }
 }

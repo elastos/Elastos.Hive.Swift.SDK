@@ -23,8 +23,9 @@
 import Foundation
 import ObjectMapper
 
+
+
 public class PricingPlan: Mappable {
-    
     public var amount: Double?
     public var currency: String?
     public var maxStorage: Int64?
@@ -42,5 +43,4 @@ public class PricingPlan: Mappable {
         name <- map["name"]
         serviceDays <- map["serviceDays"]
     }
-    
 }

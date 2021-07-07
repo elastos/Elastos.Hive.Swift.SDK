@@ -24,93 +24,33 @@ import Foundation
 import ObjectMapper
 
 
-public class FindOptions: Mappable {
-    private var _projection: Dictionary<String, Any>?
+public class FindOptions {
     private var _skip: Int64?
-    private var _sort: Array<Dictionary<String, Any>>?
-    private var _allowPartialResults: Bool?
-    private var _batchSize: Int?
-    private var _returnKey: Bool?
-    private var _showRecordId: Bool?
-    
-    public init () {
-        
-    }
+    private var _limit: Int64?
 
-    public var projection: Dictionary<String, Any> {
-        set {
-            _projection = newValue
-        }
-        get {
-            return _projection!
-        }
-    }
-    
-    public var skip: Int64 {
+    public var skip: Int64? {
         set {
             _skip = newValue
         }
         get {
-            return _skip!
+            return _skip
         }
     }
     
-    public var sort: Array<Dictionary<String, Any>> {
+    public var limit: Int64? {
         set {
-            _sort = newValue
+            _limit = newValue
         }
         get {
-            return _sort!
-        }
-    }
-    
-    public var allowPartialResults: Bool {
-        set {
-            _allowPartialResults = newValue
-        }
-        get {
-            return _allowPartialResults!
+            return _limit
         }
     }
 
-    public var batchSize: Int {
-        set {
-            _batchSize = newValue
-        }
-        get {
-            return _batchSize!
-        }
-    }
-
-    public var returnKey: Bool {
-        set {
-            _returnKey = newValue
-        }
-        get {
-            return _returnKey!
-        }
+    public func getSkipStr() -> String {
+        return _skip != nil ? "\(_skip!)" : ""
     }
     
-    public var showRecordId: Bool {
-        set {
-            _showRecordId = newValue
-        }
-        get {
-            return _showRecordId!
-        }
-    }
-
-    public required init?(map: Map) {
-            
-    }
-    
-    public func mapping(map: Map) {
-        _projection <- map["projection"]
-        _skip <- map["skip"]
-        _sort <- map["sort"]
-        _allowPartialResults <- map["allow_partial_results"]
-        _batchSize <- map["batch_size"]
-        _returnKey <- map["return_key"]
-        _showRecordId <- map["show_record_id"]
+    public func getLimitStr() -> String {
+        return _limit != nil ? "\(_limit!)" : ""
     }
 }

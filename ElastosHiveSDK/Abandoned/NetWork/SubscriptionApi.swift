@@ -20,35 +20,35 @@
 * SOFTWARE.
 */
 
-import Foundation
+//import Foundation
 
-extension HiveAPi {
-    func createVault() -> String {
-        return self.baseURL + self.apiPath + "/service/vault/create"
-    }
-    
-    func freeze() -> String {
-        return self.baseURL + self.apiPath + "/service/vault/freeze"
-    }
-    
-    func unfreeze() -> String {
-        return self.baseURL + self.apiPath + "/service/vault/unfreeze"
-    }
-    
-    func removeVault() -> String {
-        return self.baseURL + self.apiPath + "/service/vault/remove"
-    }
-    
-    func getVaultInfo() -> String {
-        return self.baseURL + self.apiPath + "/service/vault"
-    }
-    
-    func createBackupVault() -> String {
-        return self.baseURL + self.apiPath + "/service/vault_backup/create"
-    }
-    
-    func getBackupVaultInfo() -> String {
-        return self.baseURL + self.apiPath + "/service/vault_backup"
-    }
-}
+//extension HiveAPi {
+//    func createVault() -> String {
+//        return self.baseURL + self.apiPath + "/service/vault/create"
+//    }
+//
+//    func freeze() -> String {
+//        return self.baseURL + self.apiPath + "/service/vault/freeze"
+//    }
+//
+//    func unfreeze() -> String {
+//        return self.baseURL + self.apiPath + "/service/vault/unfreeze"
+//    }
+//
+//    func removeVault() -> String {
+//        return self.baseURL + self.apiPath + "/service/vault/remove"
+//    }
+//
+//    func getVaultInfo() -> String {
+//        return self.baseURL + self.apiPath + "/service/vault"
+//    }
+//
+//    func createBackupVault() -> String {
+//        return self.baseURL + self.apiPath + "/service/vault_backup/create"
+//    }
+//
+//    func getBackupVaultInfo() -> String {
+//        return self.baseURL + self.apiPath + "/service/vault_backup"
+//    }
+//}
 

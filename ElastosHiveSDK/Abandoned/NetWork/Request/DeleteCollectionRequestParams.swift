@@ -23,12 +23,12 @@
 import Foundation
 import ObjectMapper
 
-public class DeleteCollectionRequestParams: CreateCollectionRequestParams {
-    public init(_ collection: String) {
-        super.init(collection, nil)
-    }
-    
-    required public init?(map: Map) {
-        super.init(map: map)
-    }
-}
+//public class DeleteCollectionRequestParams: CreateCollectionRequestParams {
+//    public init(_ collection: String) {
+//        super.init(collection, nil)
+//    }
+//    
+//    required public init?(map: Map) {
+//        super.init(map: map)
+//    }
+//}

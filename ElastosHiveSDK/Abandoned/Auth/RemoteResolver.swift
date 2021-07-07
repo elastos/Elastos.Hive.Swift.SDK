@@ -23,25 +23,25 @@
 import Foundation
 import ObjectMapper
 
-public class RemoteResolver: TokenResolver {
-    private var _contextProvider: AppContextProvider
-    private var _authenticationServiceRender: AuthenticationServiceRender
-    
-    public init (_ serviceEndpoint: ServiceEndpoint) {
-        self._contextProvider = serviceEndpoint.appContext.appContextProvider
-        self._authenticationServiceRender = AuthenticationServiceRender(serviceEndpoint)
-    }
-
-
-    public func getToken() throws -> AuthToken? {
-        return try self._authenticationServiceRender.auth(token: self._authenticationServiceRender.signInForToken())
-    }
-
-    public func invlidateToken() throws {
-        throw HiveError.UnsupportedOperationException
-    }
-
-    public func setNextResolver(_ resolver: TokenResolver?) throws {
-        throw HiveError.UnsupportedOperationException
-    }
-}
+//public class RemoteResolver: TokenResolver {
+//    private var _contextProvider: AppContextProvider
+//    private var _authenticationServiceRender: AuthenticationServiceRender
+//    
+//    public init (_ serviceEndpoint: ServiceEndpoint) {
+//        self._contextProvider = serviceEndpoint.appContext.appContextProvider
+//        self._authenticationServiceRender = AuthenticationServiceRender(serviceEndpoint)
+//    }
+//
+//
+//    public func getToken() throws -> AuthToken? {
+//        return try self._authenticationServiceRender.auth(token: self._authenticationServiceRender.signInForToken())
+//    }
+//
+//    public func invlidateToken() throws {
+//        throw HiveError.UnsupportedOperationException
+//    }
+//
+//    public func setNextResolver(_ resolver: TokenResolver?) throws {
+//        throw HiveError.UnsupportedOperationException
+//    }
+//}

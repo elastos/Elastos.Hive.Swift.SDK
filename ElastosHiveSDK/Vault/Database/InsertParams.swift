@@ -23,11 +23,12 @@
 import Foundation
 import ObjectMapper
 
-public class InsertParams: Mappable {
-    private var _documents: Dictionary<String, String>?
+public class
+InsertParams: Mappable {
+    private var _documents: Array<Dictionary<String, Any>>?
     private var _options: InsertOptions?
     
-    public init(_ documents: Dictionary<String, String>?, _ options: InsertOptions) {
+    public init(_ documents: Array<Dictionary<String, Any>>?, _ options: InsertOptions?) {
         self._documents = documents
         self._options = options
     }
