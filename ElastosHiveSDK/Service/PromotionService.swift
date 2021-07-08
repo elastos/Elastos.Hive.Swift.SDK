@@ -22,7 +22,7 @@
 
 import Foundation
 
-public protocol PromotionProtocol {
+public protocol PromotionService {
     /// Promote the backup node to vault node by backup data.
     ///
     /// - returns: Void.

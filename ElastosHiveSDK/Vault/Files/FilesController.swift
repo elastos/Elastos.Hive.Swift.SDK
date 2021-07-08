@@ -23,6 +23,25 @@
 import Foundation
 
 public class FilesController {
+    private var _connectionManager: ConnectionManager
+    
+    public init(_ serviceEndpoint: ServiceEndpoint) {
+        _connectionManager = serviceEndpoint.connectionManager!
+    }
+    
+    public func getUploadStream(_ path: String) -> FileWriter {
+        let uploadPath = "\(self._connectionManager.baseURL)/api/v2/vault/files/\(path)"
+        return FileWriter(URL(string: uploadPath)!, _connectionManager)
+    }
+    
+    public func getDownloadReader(_ path: String) throws -> FileReader {
+        let downloadPath = "\(self._connectionManager.baseURL)/api/v2/vault/files/\(path)"
+        return try FileReader(URL(string: downloadPath)!, _connectionManager, HTTPMethod.get)
+    }
+    
+
+    
+
     
 //    public func listChildren(_ path: String?) throws -> [FileInfo] {
 //        // TODO
@@ -31,19 +50,19 @@ public class FilesController {
 //    public func getProperty(_ path: String) throws -> FileInfo {
 //        // TODO
 //    }
-//    
+//
 //    public func getHash(_ path: String) throws {
 //        // TODO
 //    }
-//    
+//
 //    public func copyFile(_ srcPath: String, _ destPath: String) throws {
 //        // TODO
 //    }
-//    
+//
 //    public func moveFile(_ srcPath: String, _ destPath: String) throws {
 //        // TODO
 //    }
-//    
+//
 //    public func delete(_ path: String) throws {
 //        // TODO
 //    }

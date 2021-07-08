@@ -122,13 +122,13 @@ public class ConnectionManager {
 ////        self.hiveApi = HiveAPi(self._serviceEndpoint.providerAddress)
 //    }
 //
-//    func headersStream() throws -> HTTPHeaders {
-//        self.lock.lock()
-//        let token = try self.tokenResolver!.getToken()!.canonicalizedAccessToken
-//        self.lock.unlock()
-//        self.accessionToken = token
-//        return ["Content-Type": "application/octet-stream", "Authorization": "\(token)", "Transfer-Encoding": "chunked", "Connection": "Keep-Alive"]
-//    }
+    func headersStream() throws -> HTTPHeaders {
+        self.lock.lock()
+        let token = try self.tokenResolver!.getToken()!.canonicalizedAccessToken
+        self.lock.unlock()
+        self.accessionToken = token
+        return ["Content-Type": "application/octet-stream", "Authorization": "\(token)", "Transfer-Encoding": "chunked", "Connection": "Keep-Alive"]
+    }
 //
     func headers() throws -> HTTPHeaders {
         self.lock.lock()
