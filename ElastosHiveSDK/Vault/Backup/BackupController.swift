@@ -21,3 +21,23 @@
  */
 
 import Foundation
+
+public class BackupController {
+    private var _connectionManager: ConnectionManager
+    
+    public init(_ serviceEndpoint: ServiceEndpoint) {
+        _connectionManager = serviceEndpoint.connectionManager!
+    }
+    
+    public func startBackup(_ credential: String) throws {
+        try _ = _connectionManager.saveToNode(RequestParams(credential)).execute()
+    }
+    
+    public func restoreFrom(_ credential: String) throws {
+        try _ = _connectionManager.restoreFromNode(RequestParams(credential)).execute()
+    }
+    
+    public func checkResult() throws -> BackupResult {
+        try _connectionManager.getState().execute()!.getBackupState()
+    }
+}
