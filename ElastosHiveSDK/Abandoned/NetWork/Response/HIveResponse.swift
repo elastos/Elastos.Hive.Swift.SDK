@@ -46,6 +46,10 @@ public class HiveResponse: Mappable, HiveCheckValidProtocol{
         return 0
     }
     
+    public func getString() -> String {
+        return ""
+    }
+    
     public func getArray<T>(_ elementType: T.Type) -> Array<T> {
         return Array()
     }

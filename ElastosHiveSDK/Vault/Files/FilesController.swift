@@ -29,7 +29,7 @@ public class FilesController {
         _connectionManager = serviceEndpoint.connectionManager!
     }
     
-    public func getUploadStream(_ path: String) -> FileWriter {
+    public func getUploadWriter(_ path: String) -> FileWriter {
         let uploadPath = "\(self._connectionManager.baseURL)/api/v2/vault/files/\(path)"
         return FileWriter(URL(string: uploadPath)!, _connectionManager)
     }
@@ -39,31 +39,27 @@ public class FilesController {
         return try FileReader(URL(string: downloadPath)!, _connectionManager, HTTPMethod.get)
     }
     
-
+    public func listChildren(_ path: String) throws -> [FileInfo] {
+        return try _connectionManager.listChildren(path).execute()!.getArray(FileInfo.self)
+    }
     
-
+    public func getProperty(_ path: String) throws -> FileInfo {
+        return try _connectionManager.getMetadata(path).execute(FileInfo.self)
+    }
     
-//    public func listChildren(_ path: String?) throws -> [FileInfo] {
-//        // TODO
-//    }
-//
-//    public func getProperty(_ path: String) throws -> FileInfo {
-//        // TODO
-//    }
-//
-//    public func getHash(_ path: String) throws {
-//        // TODO
-//    }
-//
-//    public func copyFile(_ srcPath: String, _ destPath: String) throws {
-//        // TODO
-//    }
-//
-//    public func moveFile(_ srcPath: String, _ destPath: String) throws {
-//        // TODO
-//    }
-//
-//    public func delete(_ path: String) throws {
-//        // TODO
-//    }
+    public func getHash(_ path: String) throws -> String {
+        return try _connectionManager.getHash(path).execute()!.getString()
+    }
+
+    public func copyFile(_ srcPath: String, _ destPath: String) throws {
+        return _ = try _connectionManager.copy(srcPath, destPath).execute()
+    }
+
+    public func moveFile(_ srcPath: String, _ destPath: String) throws {
+        return _ = try _connectionManager.move(srcPath, destPath).execute()
+    }
+
+    public func delete(_ path: String) throws {
+        return _ = try _connectionManager.delete(path).execute()
+    }
 }
