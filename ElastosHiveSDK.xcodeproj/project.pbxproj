@@ -75,7 +75,6 @@
 		3019D3CD261079D300A3C3C5 /* DataStorageProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3019D3CC261079D300A3C3C5 /* DataStorageProtocol.swift */; };
 		3019D3D126107B2C00A3C3C5 /* AuthRequestParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3019D3D026107B2C00A3C3C5 /* AuthRequestParams.swift */; };
 		3019D3DE2610D8F000A3C3C5 /* BackupServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3019D3DD2610D8EF00A3C3C5 /* BackupServiceTest.swift */; };
-		3019D3E12610DC7500A3C3C5 /* BackupAPi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3019D3E02610DC7500A3C3C5 /* BackupAPi.swift */; };
 		3019D42C2612213900A3C3C5 /* HiveAPi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3019D42B2612213900A3C3C5 /* HiveAPi.swift */; };
 		3022106E261C924100578934 /* RegisterScriptRequestParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3022106D261C924100578934 /* RegisterScriptRequestParams.swift */; };
 		30221071261C962D00578934 /* ScriptFindBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30221070261C962D00578934 /* ScriptFindBody.swift */; };
@@ -164,7 +163,7 @@
 		3053BE662684CA38005828B0 /* ScriptingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE5A2684CA38005828B0 /* ScriptingProtocol.swift */; };
 		3053BE672684CA38005828B0 /* FilesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE5B2684CA38005828B0 /* FilesService.swift */; };
 		3053BE682684CA38005828B0 /* SubscriptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE5C2684CA38005828B0 /* SubscriptionService.swift */; };
-		3053BE692684CA38005828B0 /* BackupProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE5D2684CA38005828B0 /* BackupProtocol.swift */; };
+		3053BE692684CA38005828B0 /* BackupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE5D2684CA38005828B0 /* BackupService.swift */; };
 		3053BE6A2684CA38005828B0 /* CloudBackupContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE5E2684CA38005828B0 /* CloudBackupContext.swift */; };
 		3053BE6B2684CA38005828B0 /* BackupContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE5F2684CA38005828B0 /* BackupContext.swift */; };
 		3053BE6C2684CA38005828B0 /* PaymentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE602684CA38005828B0 /* PaymentService.swift */; };
@@ -379,7 +378,6 @@
 		3019D3CC261079D300A3C3C5 /* DataStorageProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStorageProtocol.swift; sourceTree = "<group>"; };
 		3019D3D026107B2C00A3C3C5 /* AuthRequestParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthRequestParams.swift; sourceTree = "<group>"; };
 		3019D3DD2610D8EF00A3C3C5 /* BackupServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupServiceTest.swift; sourceTree = "<group>"; };
-		3019D3E02610DC7500A3C3C5 /* BackupAPi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupAPi.swift; sourceTree = "<group>"; };
 		3019D42B2612213900A3C3C5 /* HiveAPi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HiveAPi.swift; sourceTree = "<group>"; };
 		3022106D261C924100578934 /* RegisterScriptRequestParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterScriptRequestParams.swift; sourceTree = "<group>"; };
 		30221070261C962D00578934 /* ScriptFindBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptFindBody.swift; sourceTree = "<group>"; };
@@ -467,7 +465,7 @@
 		3053BE5A2684CA38005828B0 /* ScriptingProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScriptingProtocol.swift; sourceTree = "<group>"; };
 		3053BE5B2684CA38005828B0 /* FilesService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilesService.swift; sourceTree = "<group>"; };
 		3053BE5C2684CA38005828B0 /* SubscriptionService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubscriptionService.swift; sourceTree = "<group>"; };
-		3053BE5D2684CA38005828B0 /* BackupProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackupProtocol.swift; sourceTree = "<group>"; };
+		3053BE5D2684CA38005828B0 /* BackupService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackupService.swift; sourceTree = "<group>"; };
 		3053BE5E2684CA38005828B0 /* CloudBackupContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudBackupContext.swift; sourceTree = "<group>"; };
 		3053BE5F2684CA38005828B0 /* BackupContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackupContext.swift; sourceTree = "<group>"; };
 		3053BE602684CA38005828B0 /* PaymentService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentService.swift; sourceTree = "<group>"; };
@@ -665,7 +663,6 @@
 				3019D3D82610AB2500A3C3C5 /* Response */,
 				3019D3CF26107B0A00A3C3C5 /* Request */,
 				303CD56226077D5100865472 /* Model */,
-				3019D3E02610DC7500A3C3C5 /* BackupAPi.swift */,
 				3019D42B2612213900A3C3C5 /* HiveAPi.swift */,
 				30DD2077260257A200808B5B /* DatabaseApi.swift */,
 				30091C642619FCAE003EB5CE /* PubsubApi.swift */,
@@ -927,7 +924,7 @@
 			isa = PBXGroup;
 			children = (
 				3053BE5F2684CA38005828B0 /* BackupContext.swift */,
-				3053BE5D2684CA38005828B0 /* BackupProtocol.swift */,
+				3053BE5D2684CA38005828B0 /* BackupService.swift */,
 				3053BE5E2684CA38005828B0 /* CloudBackupContext.swift */,
 				3053BE582684CA38005828B0 /* DatabaseProtocol.swift */,
 				3053BE5B2684CA38005828B0 /* FilesService.swift */,
@@ -1665,7 +1662,7 @@
 				3053BEF62684CA5F005828B0 /* GeneralResult.swift in Sources */,
 				3065A6062615B6BB00C20661 /* Alamofire+Hive.swift in Sources */,
 				3019D42C2612213900A3C3C5 /* HiveAPi.swift in Sources */,
-				3053BE692684CA38005828B0 /* BackupProtocol.swift in Sources */,
+				3053BE692684CA38005828B0 /* BackupService.swift in Sources */,
 				30DD2078260257A200808B5B /* DatabaseApi.swift in Sources */,
 				30091C552619F998003EB5CE /* PubsubChannelsResponse.swift in Sources */,
 				3053BEEE2684CA5F005828B0 /* NodeManageServiceRender.swift in Sources */,
@@ -1695,7 +1692,6 @@
 				3053BE432684C974005828B0 /* UploadOutputStreamWriter.swift in Sources */,
 				3053BE6C2684CA38005828B0 /* PaymentService.swift in Sources */,
 				3053BE412684C974005828B0 /* UploadOutputStream.swift in Sources */,
-				3019D3E12610DC7500A3C3C5 /* BackupAPi.swift in Sources */,
 				308E08992688D68F0089F479 /* CodeFetcherProtocol.swift in Sources */,
 				30091C1F26182600003EB5CE /* SignInResponse.swift in Sources */,
 			);

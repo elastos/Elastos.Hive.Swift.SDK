@@ -22,12 +22,7 @@
 
 import Foundation
 
-/**
- * Backup service is for doing backup vault data from vault node server to backup server.
- * Backup server maybe another node server or third-party centered server like Google Driver.
- * As a restrict, only one vault can be used for one DID.
- * User also need just one backup copy for vault data.
- */
+
 public enum BackupResult {
     case stop
     case backup
@@ -35,7 +30,13 @@ public enum BackupResult {
     case unknown
 }
 
-public protocol BackupProtocol {
+/**
+ * Backup service is for doing backup vault data from vault node server to backup server.
+ * Backup server maybe another node server or third-party centered server like Google Driver.
+ * As a restrict, only one vault can be used for one DID.
+ * User also need just one backup copy for vault data.
+ */
+public protocol BackupService {
     
     /// Set-up a context for get more detailed information for backup server.
     ///
@@ -43,7 +44,7 @@ public protocol BackupProtocol {
     ///    - context: context for providing backup server details.
     /// - returns: void
     func setupContext(_ context: BackupContext) throws -> Promise<Void>
-    
+
     /// Backup process in node side is a continues process. Vault node server backup whole vault data to backup server and keep syncing with it. This is for user personal data security. This function is for starting a background scheduler to update data to backup server. It's an async process.
     ///
     /// - returns: void

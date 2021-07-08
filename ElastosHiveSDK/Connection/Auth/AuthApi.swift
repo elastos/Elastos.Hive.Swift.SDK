@@ -22,12 +22,24 @@
 
 import Foundation
 
-extension HiveAPi {
-    func signIn() -> String {
-        return self.baseURL + self.apiPath + "/did/sign_in"
+extension ConnectionManager {
+    public func signIn(_ request: SignInRequest) throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/did/signin"
+        return try self.createDataRequest(url, .post, nil)
     }
     
-    func auth() -> String {
-        return self.baseURL + self.apiPath + "/did/auth"
+    public func auth(_ request: ChallengeResponse) throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/did/signin"
+        return try self.createDataRequest(url, .post, nil)
     }
 }
+
+//extension HiveAPi {
+//    func signIn() -> String {
+//        return self.baseURL + self.apiPath + "/did/sign_in"
+//    }
+//    
+//    func auth() -> String {
+//        return self.baseURL + self.apiPath + "/did/auth"
+//    }
+//}

@@ -50,6 +50,10 @@ public class HiveResponse: Mappable, HiveCheckValidProtocol{
         return ""
     }
     
+    public func getBackupState() -> BackupResult {
+        return BackupResult.unknown
+    }
+    
     public func getArray<T>(_ elementType: T.Type) -> Array<T> {
         return Array()
     }

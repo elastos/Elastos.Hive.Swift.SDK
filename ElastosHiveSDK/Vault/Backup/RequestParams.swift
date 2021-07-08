@@ -21,3 +21,19 @@
  */
 
 import Foundation
+import ObjectMapper
+
+public class RequestParams: Mappable {
+    private var _credential: String?
+    
+    public init(_ credential: String?) {
+        _credential = credential
+    }
+
+    required public init?(map: Map) {}
+    
+    public func mapping(map: Map) {
+        _credential <- map["credential"]
+    }
+}
+
