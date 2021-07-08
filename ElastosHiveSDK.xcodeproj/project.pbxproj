@@ -270,7 +270,6 @@
 		30ACCB06261DFD3200178300 /* ScriptUpdateExecutableBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30ACCB05261DFD3200178300 /* ScriptUpdateExecutableBody.swift */; };
 		30D393492609DC5B007A9E09 /* ScriptingServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D393482609DC5B007A9E09 /* ScriptingServiceTest.swift */; };
 		30D3934F260A5527007A9E09 /* test_ios.txt in Resources */ = {isa = PBXBuildFile; fileRef = 30D3934E260A5527007A9E09 /* test_ios.txt */; };
-		30DB962D260046F200ACF19F /* FilesApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DB9628260046F200ACF19F /* FilesApi.swift */; };
 		30DB96542600E49300ACF19F /* VaultSubscriptionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DB96532600E49300ACF19F /* VaultSubscriptionTest.swift */; };
 		30DB96572600E4C700ACF19F /* VaultSubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DB96562600E4C700ACF19F /* VaultSubscription.swift */; };
 		30DB965A2600E61600ACF19F /* ServiceEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DB96592600E61600ACF19F /* ServiceEndpoint.swift */; };
@@ -573,7 +572,6 @@
 		30ACCB05261DFD3200178300 /* ScriptUpdateExecutableBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptUpdateExecutableBody.swift; sourceTree = "<group>"; };
 		30D393482609DC5B007A9E09 /* ScriptingServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptingServiceTest.swift; sourceTree = "<group>"; };
 		30D3934E260A5527007A9E09 /* test_ios.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test_ios.txt; sourceTree = "<group>"; };
-		30DB9628260046F200ACF19F /* FilesApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilesApi.swift; sourceTree = "<group>"; };
 		30DB96532600E49300ACF19F /* VaultSubscriptionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultSubscriptionTest.swift; sourceTree = "<group>"; };
 		30DB96562600E4C700ACF19F /* VaultSubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultSubscription.swift; sourceTree = "<group>"; };
 		30DB96592600E61600ACF19F /* ServiceEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceEndpoint.swift; sourceTree = "<group>"; };
@@ -669,7 +667,6 @@
 				303CD56226077D5100865472 /* Model */,
 				3019D3E02610DC7500A3C3C5 /* BackupAPi.swift */,
 				3019D42B2612213900A3C3C5 /* HiveAPi.swift */,
-				30DB9628260046F200ACF19F /* FilesApi.swift */,
 				30DD2077260257A200808B5B /* DatabaseApi.swift */,
 				30091C642619FCAE003EB5CE /* PubsubApi.swift */,
 				303CD55F2607606B00865472 /* ScriptingApi.swift */,
@@ -1634,7 +1631,6 @@
 				304EA376261D3978007ADD47 /* PopMessageRequestParams.swift in Sources */,
 				3022108C261CBBCB00578934 /* CreateCollectionRequestParams.swift in Sources */,
 				3053BF112684CA96005828B0 /* VaultInfo.swift in Sources */,
-				30DB962D260046F200ACF19F /* FilesApi.swift in Sources */,
 				304EA3A5261D41D2007ADD47 /* CallScriptRequestParams.swift in Sources */,
 				304EA37D261D3A26007ADD47 /* PaymentCreateRequestParams.swift in Sources */,
 				3053BEE92684CA5F005828B0 /* AndCondition.swift in Sources */,

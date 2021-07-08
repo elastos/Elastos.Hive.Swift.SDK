@@ -22,34 +22,35 @@
 
 import Foundation
 
-extension HiveAPi {
-    public static let API_UPLOAD: String = "/api/v2/vault/files/"
-    
-    func download(_ path: String) -> String {
-        return self.baseURL + self.apiPath + "/vault/files/\(path)"
+extension ConnectionManager {
+    public func listChildren(_ path: String) throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/vault/files/\(path)?comp=children"
+        return try self.createDataRequest(url, .get, nil)
     }
     
-    func listChildren(_ path: String) -> String {
-        return self.baseURL + self.apiPath + "/vault/files/\(path)?comp=children"
+    public func getMetadata(_ path: String) throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/vault/files/\(path)?comp=metadata"
+        return try self.createDataRequest(url, .get, nil)
     }
     
-    func getMetadata(_ path: String) -> String {
-        return self.baseURL + self.apiPath + "/vault/files/\(path)?comp=metadata"
+    public func getHash(_ path: String) throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/vault/files/\(path)?comp=hash"
+        return try self.createDataRequest(url, .get, nil)
     }
     
-    func getHash(_ path: String) -> String {
-        return self.baseURL + self.apiPath + "/vault/files/\(path)?comp=hash"
+    public func copy(_ path: String, _ dest: String) throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/vault/files/\(path)?dest=\(dest)"
+        return try self.createDataRequest(url, .get, nil)
     }
     
-    func copy(_ path: String) -> String {
-        return self.baseURL + self.apiPath + "/vault/files/\(path)"
+    public func move(_ path: String, _ to: String) throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/vault/files/\(path)?to=\(to)"
+        return try self.createDataRequest(url, .get, nil)
     }
     
-    func move(_ path: String) -> String {
-        return self.baseURL + self.apiPath + "/vault/files/\(path)"
-    }
-    
-    func delete(_ path: String) -> String {
-        return self.baseURL + self.apiPath + "/vault/files/\(path)"
+    public func delete(_ path: String) throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/vault/files/\(path)"
+        return try self.createDataRequest(url, .get, nil)
     }
 }
+
