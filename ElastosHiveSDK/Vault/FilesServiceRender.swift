@@ -22,8 +22,57 @@
 //
 //import Foundation
 ////
-////public class FilesServiceRender: FilesProtocol {
-////    private _controller: FilesController?
+////public class FilesServiceRender: FilesService {
+////    private var _controller: FilesController?
+//    
+////    public init(_ serviceEndpoint: ServiceEndpoint) {
+////        _controller = File
+////    }
+////
+////    public FilesServiceRender(ServiceEndpoint serviceEndpoint) {
+////        this.controller = new FilesController(serviceEndpoint);
+////    }
+////
+////
+////    public func getUploadWriter(_ path: String) -> Promise<FileWriter> {
+////        <#code#>
+////    }
+////
+////    public func getDownloadReader(_ path: String) -> Promise<FileReader> {
+////        <#code#>
+////    }
+////
+////    public func list(_ path: String) -> Promise<Array<FileInfo>> {
+////        <#code#>
+////    }
+////
+////    public func stat(_ path: String) -> Promise<FileInfo> {
+////        <#code#>
+////    }
+////
+////    public func hash(_ path: String) -> Promise<String> {
+////        <#code#>
+////    }
+////
+////    public func move(_ source: String, _ target: String) -> Promise<Void> {
+////        <#code#>
+////    }
+////
+////    public func copy(_ source: String, _ target: String) -> Promise<Void> {
+////        <#code#>
+////    }
+////
+////    public func delete(_ path: String) -> Promise<Void> {
+////        <#code#>
+////    }
+//    
+//    
+//    
+//    
+//    
+//    
+//    
+//    
 //    
 ////    let _connectionManager: ConnectionManager
 //    
