@@ -25,13 +25,15 @@ import Foundation
 import ObjectMapper
 
 public class AccessCode: Mappable {
-    private var _token: String?
+    private var _token: String
     
-    public var token: String? {
+    public var getToken: String {
         return _token
     }
     
-    required public init?(map: Map) {}
+    required public init?(map: Map) {
+        try! self._token = map.value("token")
+    }
     
     public func mapping(map: Map) {
         _token <- map["token"]

@@ -27,7 +27,8 @@
 //    private var _controller: AuthController?
 //    
 //    public init(_ serviceEndpoint: ServiceEndpoint) {
-//
+//        _contextProvider = serviceEndpoint.appContext?.appContextProvider
+//        _controller = AuthController()
 //    }
 //    
 //    public func fetch() throws -> String? {
@@ -37,6 +38,25 @@
 //    public func invalidate() {
 //        
 //    }
+//    
+//    public RemoteFetcher(ServiceEndpoint serviceEndpoint) {
+//            this.contextProvider = serviceEndpoint.getAppContext().getAppContextProvider();
+//            this.controller = new AuthController(serviceEndpoint, contextProvider.getAppInstanceDocument());
+//        }
+//
+//        @Override
+//        public String fetch() throws NodeRPCException {
+//            try {
+//                String challenge = controller.signIn(contextProvider.getAppInstanceDocument());
+//
+//                String challengeResponse = contextProvider.getAuthorization(challenge).get();
+//                return controller.auth(challengeResponse);
+//            } catch (Exception e) {
+//                // TODO: log here.
+//                e.printStackTrace();
+//                throw new NodeRPCException(401,-1, "Failed to get token by auth requests.");
+//            }
+//        }
 //}
 //
 ///*
