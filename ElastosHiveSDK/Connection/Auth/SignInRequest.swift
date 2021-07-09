@@ -21,11 +21,18 @@
 */
 
 import Foundation
+import ObjectMapper
 
-public class SignInRequest {
+public class SignInRequest: Mappable {
     private var _didDocument: Any?
     
     init(_ didDocument: Any?) {
         self._didDocument = didDocument
+    }
+    
+    public required init?(map: Map) {}
+    
+    public func mapping(map: Map) {
+        _didDocument <- map["didDocument"]
     }
 }

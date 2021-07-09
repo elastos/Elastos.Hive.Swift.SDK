@@ -24,22 +24,36 @@ import Foundation
 import ElastosDIDSDK
 
 public class AuthController {
+    private var _connectionManager: ConnectionManager
+    private var _expectationAudience: String
     
-    private var _expectationAudience: String?
-    
-//    public init(_ appInstanceDidDoc: DIDDocument) {
-//        self._expectationAudience = appInstanceDidDoc.subject
-//    }
+    public init(_ serviceEndpoint: ServiceEndpoint, _ appInstanceDidDoc: DIDDocument) {
+        _connectionManager = serviceEndpoint.connectionManager!
+        _expectationAudience = appInstanceDidDoc.subject.description
+    }
     
     public func signIn(_ appInstanceDidDoc: DIDDocument) throws -> String? {
-        return nil
+        let challenge: ChallengeRequest = try _connectionManager.signIn(SignInRequest(appInstanceDidDoc.description)).execute(ChallengeRequest.self)
+        if try !checkValid(challenge.getChallenge, _expectationAudience) {
+            throw HiveError.ServerUnkownException("Invalid challenge code, possibly being hacked.")
+        }
+        return challenge.getChallenge
     }
     
     public func auth(_ challengeResponse: String) throws -> String? {
-        return nil
+        let token: AccessCode = try _connectionManager.auth(ChallengeResponse(challengeResponse)).execute(AccessCode.self)
+        
+        if try !checkValid(token.getToken, _expectationAudience) {
+            throw HiveError.ServerUnkownException("Invalid challenge code, possibly being hacked.")
+        }
+       
+        return token.getToken
     }
 
-    private func checkValid(_ jwtCode: String, _ expectationDid: String) -> Bool {
-        return false
+    private func checkValid(_ jwtCode: String, _ expectationDid: String) throws -> Bool {      
+        let jwtParserBuilder = try JwtParserBuilder().build()
+        let claim = try jwtParserBuilder.parseClaimsJwt(jwtCode).claims
+
+        return claim.getExpiration()! > Date() && claim.getAudience() == expectationDid
     }
 }

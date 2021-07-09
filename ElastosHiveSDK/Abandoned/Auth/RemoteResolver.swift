@@ -22,14 +22,15 @@
 
 import Foundation
 import ObjectMapper
+import AwaitKit
 
 public class RemoteResolver: CodeFetcherProtocol {
     private var _serviceEndpoint: ServiceEndpoint?
-    private var _backupContext: BackupContext?
+    private var _backupContext: BackupContext
     private var _targetDid: String?
     private var _targetHost: String?
     
-    public init(_ serviceEndpoint: ServiceEndpoint?, _ backupContext: BackupContext?, _ targetServiceDid: String?, _ targetAddress: String?) {
+    public init(_ serviceEndpoint: ServiceEndpoint, _ backupContext: BackupContext, _ targetServiceDid: String, _ targetAddress: String) {
         _serviceEndpoint = serviceEndpoint
         _backupContext = backupContext
         _targetDid = targetServiceDid
@@ -41,7 +42,8 @@ public class RemoteResolver: CodeFetcherProtocol {
             try _serviceEndpoint?.refreshAccessToken()
         }
         
-        _backupContext?.getAuthorization(_serviceEndpoint?.serviceInstanceDid, _targetDid, _targetHost)
+        let promise: Promise<String>? = _backupContext.getAuthorization(_serviceEndpoint?.serviceInstanceDid, _targetDid, _targetHost)
+        return try await(promise!)
     }
     
     public func invalidate() {}

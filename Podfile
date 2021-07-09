@@ -11,6 +11,8 @@ def import_pods
   pod 'BlueCryptor', '~> 1.0'
   pod 'ReadWriteLock', '~> 1.0'
   pod 'ObjectMapper'
+  pod 'AwaitKit'
+
 
 end
 
