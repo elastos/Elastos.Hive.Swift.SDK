@@ -23,34 +23,34 @@
 
 import Foundation
 
-//public class PaymentController {
-//    public init () {
-//        
-//    }
-//    
-//    public func createOrder(_ subscription: String?, _ pricingPlan: String?) throws -> Order? {
-//        // TODO
-//        return nil
-//    }
-//    
-//    public func payOrder(_ orderId: String?, _ transIds: String?) throws -> Receipt? {
-//        // TODO
-//        return nil
-//    }
-//        
-//    public func getOrderInfo(_ orderId: String?) throws -> Order? {
-//        throw HiveError.NotImplementedException
-//    }
-//    
-//    public func getOrders(_ subscription: String?) throws -> [Order]? {
-//        throw HiveError.NotImplementedException
-//    }
-//
-//    public func getReceipts(_ subscription: String?) throws -> [Receipt]? {
-//        throw HiveError.NotImplementedException
-//    }
-//     
-//    public func getVersion(_ subscription: String?) throws -> String? {
-//        throw HiveError.NotImplementedException
-//    }
-//}
+public class PaymentController {
+    private var _connectionManager: ConnectionManager
+    
+    public init(_ serviceEndpoint: ServiceEndpoint) {
+        _connectionManager = serviceEndpoint.connectionManager!
+    }
+    
+    public func createOrder(_ subscription: String?, _ pricingPlan: String?) throws -> Order? {
+        return try _connectionManager.createOrder(CreateOrderParams("", "")).execute(Order.self)
+    }
+    
+    public func payOrder(_ orderId: String?, _ transIds: String?) throws -> Receipt? {
+        return try _connectionManager.payOrder(PayOrderParams()).execute(Receipt.self)
+    }
+    
+    public func getOrderInfo(_ orderId: String?) throws -> Order? {
+        throw HiveError.NotImplementedException(nil)
+    }
+    
+    public func getOrders(_ subscription: String?) throws -> [Order]? {
+        throw HiveError.NotImplementedException(nil)
+    }
+    
+    public func getReceipts(_ subscription: String?) throws -> [Receipt]? {
+        throw HiveError.NotImplementedException(nil)
+    }
+    
+    public func getVersion(_ subscription: String?) throws -> String? {
+        throw HiveError.NotImplementedException(nil)
+    }
+}

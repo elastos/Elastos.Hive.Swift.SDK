@@ -40,7 +40,7 @@ public class FilesController {
     }
     
     public func listChildren(_ path: String) throws -> [FileInfo] {
-        return try _connectionManager.listChildren(path).execute()!.getArray(FileInfo.self)
+        return try _connectionManager.listChildren(path).execute()?.getArray(FileInfo.self) as! [FileInfo]
     }
     
     public func getProperty(_ path: String) throws -> FileInfo {

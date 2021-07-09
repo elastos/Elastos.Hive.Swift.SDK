@@ -20,11 +20,15 @@
  * SOFTWARE.
  */
 
-
 import Foundation
+import ObjectMapper
 
-public class PayOrderParams {
-    public init() {
+public class PayOrderParams: Mappable {
+    public init () {}
+    
+    required public init?(map: Map) {}
+    
+    public func mapping(map: Map) {
         
     }
 }

@@ -50,7 +50,7 @@ public class AuthController {
         return token.getToken
     }
 
-    private func checkValid(_ jwtCode: String, _ expectationDid: String) throws -> Bool {      
+    private func checkValid(_ jwtCode: String, _ expectationDid: String) throws -> Bool {
         let jwtParserBuilder = try JwtParserBuilder().build()
         let claim = try jwtParserBuilder.parseClaimsJwt(jwtCode).claims
 

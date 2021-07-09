@@ -22,24 +22,29 @@
 
 import Foundation
 
-extension HiveAPi {
-    func createOrder() -> String {
-        return self.baseURL + self.apiPath + "/payment/order"
+extension ConnectionManager {
+    public func createOrder(_ params: CreateOrderParams) throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/payment/order"
+        return try self.createDataRequest(url, .put, params.toJSON())
     }
     
-    func payOrder() -> String {
-        return self.baseURL + self.apiPath + "/payment/order/{order_id}"
+    public func payOrder(_ params: PayOrderParams) throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/payment/order/{order_id}"
+        return try self.createDataRequest(url, .post, params.toJSON())
     }
     
-    func getOrders() -> String {
-        return self.baseURL + self.apiPath + "/payment/order"
+    public func getOrders(_ subscription: String) throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/payment/order?subscription=\(subscription)"
+        return try self.createDataRequest(url, .get, nil)
+    }
+
+    public func getReceipts(_ subscription: String) throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/payment/receipt?subscription=\(subscription)"
+        return try self.createDataRequest(url, .get, nil)
     }
     
-    func getReceipts() -> String {
-        return self.baseURL + self.apiPath + "/payment/receipt"
-    }
-    
-    func getVersion() -> String {
-        return self.baseURL + self.apiPath + "/payment/version"
+    public func getVersion() throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/payment/version"
+        return try self.createDataRequest(url, .get, nil)
     }
 }

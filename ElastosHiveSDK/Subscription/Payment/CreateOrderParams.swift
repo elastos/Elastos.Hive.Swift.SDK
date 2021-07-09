@@ -23,19 +23,22 @@
 import Foundation
 import ObjectMapper
 
-//public class CreateOrderParams: Mappable {
-//    private var _subscription: String
-//    private var _pricingPlan: String
-//
-//    required public init?(map: Map) {}
-//    
-//    public func mapping(map: Map) {
-//        _subscription <- map["subscription"]
-//        _pricingPlan <- map["pricing_plan"]
-//    }
-//    
-//    init(_ subscription: String, _ pricingPlan: String) {
-//        _subscription = subscription
-//        _pricingPlan = pricingPlan
-//    }
-//}
+public class CreateOrderParams: Mappable {
+    private var _subscription: String
+    private var _pricingPlan: String
+
+    required public init?(map: Map) {
+        try! self._subscription = map.value("subscription")
+        try! self._pricingPlan = map.value("pricing_plan")
+    }
+    
+    public func mapping(map: Map) {
+        _subscription <- map["subscription"]
+        _pricingPlan <- map["pricing_plan"]
+    }
+    
+    init(_ subscription: String, _ pricingPlan: String) {
+        _subscription = subscription
+        _pricingPlan = pricingPlan
+    }
+}
