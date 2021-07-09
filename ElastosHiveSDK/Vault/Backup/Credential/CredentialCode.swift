@@ -20,3 +20,58 @@
  * SOFTWARE.
  */
 import Foundation
+
+public class CredentialCode {
+    private var _targetServiceDid: String?
+    private var _jwtCode: String?
+    private var _remoteResolver: CodeFetcherProtocol?
+    private var _storage: DataStorageProtocol?
+    
+    public init(_ endpoint: ServiceEndpoint, _ context: BackupContext) {
+        _targetServiceDid = context.getParameter("targetServiceDid")
+        let remoteResolver: CodeFetcherProtocol = Remo
+    }
+}
+
+public class CredentialCode {
+    private String targetServiceDid;
+    private String jwtCode;
+    private CodeFetcher remoteResolver;
+    private DataStorage storage;
+
+    public CredentialCode(ServiceEndpoint endpoint, BackupContext context) {
+        targetServiceDid = context.getParameter("targetServiceDid");
+        CodeFetcher remoteResolver = new RemoteResolver(
+                endpoint, context, targetServiceDid,
+                context.getParameter("targetAddress"));
+        this.remoteResolver = new LocalResolver(endpoint, remoteResolver);
+        storage = endpoint.getStorage();
+    }
+
+    public String getToken() throws HiveException {
+        if (jwtCode != null)
+            return jwtCode;
+
+        jwtCode = restoreToken();
+        if (jwtCode == null) {
+            try {
+                jwtCode = remoteResolver.fetch();
+            } catch (NodeRPCException e) {
+                throw new HiveException(e.getMessage());
+            }
+
+            if (jwtCode != null) {
+                saveToken(jwtCode);
+            }
+        }
+        return jwtCode;
+    }
+
+    private String restoreToken() {
+        return storage.loadBackupCredential(targetServiceDid);
+    }
+
+    private void saveToken(String jwtCode) {
+        storage.storeBackupCredential(targetServiceDid, jwtCode);
+    }
+}

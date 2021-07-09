@@ -23,10 +23,37 @@
 import Foundation
 import ObjectMapper
 
-//public class RemoteResolver: TokenResolver {
+public class RemoteResolver: CodeFetcherProtocol {
+    private var _serviceEndpoint: ServiceEndpoint?
+    private var _backupContext: BackupContext?
+    private var _targetDid: String?
+    private var _targetHost: String?
+    
+    public init(_ serviceEndpoint: ServiceEndpoint?, _ backupContext: BackupContext?, _ targetServiceDid: String?, _ targetAddress: String?) {
+        _serviceEndpoint = serviceEndpoint
+        _backupContext = backupContext
+        _targetDid = targetServiceDid
+        _targetHost = targetAddress
+    }
+ 
+    public func fetch() throws -> String? {
+        if _serviceEndpoint?.serviceInstanceDid == nil {
+            try _serviceEndpoint?.refreshAccessToken()
+        }
+        
+        _backupContext?.getAuthorization(_serviceEndpoint?.serviceInstanceDid, _targetDid, _targetHost)
+    }
+    
+    public func invalidate() {}
+    
+//    private ServiceEndpoint serviceEndpoint;
+//    private BackupContext backupContext;
+//    private String targetDid;
+//    private String targetHost;
+//
 //    private var _contextProvider: AppContextProvider
 //    private var _authenticationServiceRender: AuthenticationServiceRender
-//    
+//
 //    public init (_ serviceEndpoint: ServiceEndpoint) {
 //        self._contextProvider = serviceEndpoint.appContext.appContextProvider
 //        self._authenticationServiceRender = AuthenticationServiceRender(serviceEndpoint)
@@ -44,4 +71,4 @@ import ObjectMapper
 //    public func setNextResolver(_ resolver: TokenResolver?) throws {
 //        throw HiveError.UnsupportedOperationException
 //    }
-//}
+}
