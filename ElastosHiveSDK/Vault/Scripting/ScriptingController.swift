@@ -25,8 +25,8 @@ import Foundation
 public class ScriptingController {
     private var _connectionManager: ConnectionManager?
     
-    public init(_ connectionManager: ConnectionManager) {
-        _connectionManager = connectionManager
+    public init(_ serviceEndpoint: ServiceEndpoint) {
+        _connectionManager = serviceEndpoint.connectionManager!
     }
     
     public func registerScript(_ name: String, _ condition: Condition?, _ executable: Executable?, _ allowAnonymousUser: Bool?, _ allowAnonymousApp: Bool?) throws {
@@ -37,7 +37,7 @@ public class ScriptingController {
         _ = try _connectionManager?.registerScript(name, params).execute()?.getString()
     }
     
-    public func callScript<T>(_ name: String, _ params: Dictionary<String, String>?, _ targetDid: String?, _ targetAppDid: String?, _ resultType: T.Type) throws -> T {
+    public func callScript<T>(_ name: String, _ params: Dictionary<String, Any>?, _ targetDid: String?, _ targetAppDid: String?, _ resultType: T.Type) throws -> T {
         let context = Context().setTargetDid(targetDid).setTargetAppDid(targetAppDid)
         let runScriptParams = RunScriptParams().setContext(context).setParams(params)
         let json = try _connectionManager?.runScript(name, runScriptParams).execute()?.getString()
