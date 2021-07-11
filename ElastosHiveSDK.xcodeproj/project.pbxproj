@@ -108,7 +108,6 @@
 		303D685E261E92F500981858 /* ScriptInsertExecutableBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303D685D261E92F500981858 /* ScriptInsertExecutableBody.swift */; };
 		3045A73A260237FD0037527A /* DatabaseServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A739260237FC0037527A /* DatabaseServiceTest.swift */; };
 		3045A741260241FC0037527A /* BackupSubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A740260241FC0037527A /* BackupSubscription.swift */; };
-		3045A74F26024BD30037527A /* BackupServiceRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A74E26024BD30037527A /* BackupServiceRender.swift */; };
 		3045A75226024BF40037527A /* PubSubServiceRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A75126024BF40037527A /* PubSubServiceRender.swift */; };
 		3045A75926024C1E0037527A /* ScriptingRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A75826024C1E0037527A /* ScriptingRender.swift */; };
 		3045A75C2602519D0037527A /* Promise+async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A75B2602519D0037527A /* Promise+async.swift */; };
@@ -167,7 +166,7 @@
 		3053BE6A2684CA38005828B0 /* CloudBackupContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE5E2684CA38005828B0 /* CloudBackupContext.swift */; };
 		3053BE6B2684CA38005828B0 /* BackupContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE5F2684CA38005828B0 /* BackupContext.swift */; };
 		3053BE6C2684CA38005828B0 /* PaymentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE602684CA38005828B0 /* PaymentService.swift */; };
-		3053BE6D2684CA38005828B0 /* ScriptingInvocationProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE612684CA38005828B0 /* ScriptingInvocationProtocol.swift */; };
+		3053BE6D2684CA38005828B0 /* ScriptingInvocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE612684CA38005828B0 /* ScriptingInvocationService.swift */; };
 		3053BE6E2684CA38005828B0 /* PubSubProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE622684CA38005828B0 /* PubSubProtocol.swift */; };
 		3053BEBC2684CA5F005828B0 /* CountResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE722684CA5F005828B0 /* CountResult.swift */; };
 		3053BEBD2684CA5F005828B0 /* DeleteParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE732684CA5F005828B0 /* DeleteParams.swift */; };
@@ -411,7 +410,6 @@
 		303D685D261E92F500981858 /* ScriptInsertExecutableBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptInsertExecutableBody.swift; sourceTree = "<group>"; };
 		3045A739260237FC0037527A /* DatabaseServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseServiceTest.swift; sourceTree = "<group>"; };
 		3045A740260241FC0037527A /* BackupSubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupSubscription.swift; sourceTree = "<group>"; };
-		3045A74E26024BD30037527A /* BackupServiceRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupServiceRender.swift; sourceTree = "<group>"; };
 		3045A75126024BF40037527A /* PubSubServiceRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PubSubServiceRender.swift; sourceTree = "<group>"; };
 		3045A75826024C1E0037527A /* ScriptingRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptingRender.swift; sourceTree = "<group>"; };
 		3045A75B2602519D0037527A /* Promise+async.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Promise+async.swift"; sourceTree = "<group>"; };
@@ -469,7 +467,7 @@
 		3053BE5E2684CA38005828B0 /* CloudBackupContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudBackupContext.swift; sourceTree = "<group>"; };
 		3053BE5F2684CA38005828B0 /* BackupContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackupContext.swift; sourceTree = "<group>"; };
 		3053BE602684CA38005828B0 /* PaymentService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentService.swift; sourceTree = "<group>"; };
-		3053BE612684CA38005828B0 /* ScriptingInvocationProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScriptingInvocationProtocol.swift; sourceTree = "<group>"; };
+		3053BE612684CA38005828B0 /* ScriptingInvocationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScriptingInvocationService.swift; sourceTree = "<group>"; };
 		3053BE622684CA38005828B0 /* PubSubProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PubSubProtocol.swift; sourceTree = "<group>"; };
 		3053BE722684CA5F005828B0 /* CountResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountResult.swift; sourceTree = "<group>"; };
 		3053BE732684CA5F005828B0 /* DeleteParams.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteParams.swift; sourceTree = "<group>"; };
@@ -843,7 +841,6 @@
 		3045A7432602451F0037527A /* Vault */ = {
 			isa = PBXGroup;
 			children = (
-				3045A74E26024BD30037527A /* BackupServiceRender.swift */,
 				3045A75126024BF40037527A /* PubSubServiceRender.swift */,
 				3045A75826024C1E0037527A /* ScriptingRender.swift */,
 				3065A5EC26156B3F00C20661 /* PaymentServiceRender.swift */,
@@ -932,7 +929,7 @@
 				3053BE602684CA38005828B0 /* PaymentService.swift */,
 				3053BE592684CA38005828B0 /* PromotionService.swift */,
 				3053BE622684CA38005828B0 /* PubSubProtocol.swift */,
-				3053BE612684CA38005828B0 /* ScriptingInvocationProtocol.swift */,
+				3053BE612684CA38005828B0 /* ScriptingInvocationService.swift */,
 				3053BE5A2684CA38005828B0 /* ScriptingProtocol.swift */,
 				3053BE5C2684CA38005828B0 /* SubscriptionService.swift */,
 			);
@@ -1600,7 +1597,6 @@
 				30221071261C962D00578934 /* ScriptFindBody.swift in Sources */,
 				304EA38F261D3F0E007ADD47 /* FilesDeleteRequestParams.swift in Sources */,
 				3065A5F3261592E600C20661 /* OrderInfoResponse.swift in Sources */,
-				3045A74F26024BD30037527A /* BackupServiceRender.swift in Sources */,
 				3053BE3C2684C974005828B0 /* RemoteFetcher.swift in Sources */,
 				30091C622619FB01003EB5CE /* VaultInfoResponse.swift in Sources */,
 				110357E7256FA420003F639F /* FileWriter.swift in Sources */,
@@ -1657,7 +1653,7 @@
 				3065A5FA26159DB100C20661 /* PaymentPlanResponse.swift in Sources */,
 				3053BEFB2684CA5F005828B0 /* BackupAPI.swift in Sources */,
 				3053BF002684CA5F005828B0 /* AuthenticationServiceRender.swift in Sources */,
-				3053BE6D2684CA38005828B0 /* ScriptingInvocationProtocol.swift in Sources */,
+				3053BE6D2684CA38005828B0 /* ScriptingInvocationService.swift in Sources */,
 				30091C1926182250003EB5CE /* AuthenticationServiceRender.swift in Sources */,
 				3053BEF62684CA5F005828B0 /* GeneralResult.swift in Sources */,
 				3065A6062615B6BB00C20661 /* Alamofire+Hive.swift in Sources */,

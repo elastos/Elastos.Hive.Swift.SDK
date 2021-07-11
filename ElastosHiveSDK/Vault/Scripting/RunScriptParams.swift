@@ -27,6 +27,10 @@ public class RunScriptParams: Mappable {
     private var _context: Context?
     private var _params: Any?
     
+    public init() {
+        
+    }
+    
     public func setContext(_ context: Context?) -> RunScriptParams {
         _context = context
         return self

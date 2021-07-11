@@ -35,7 +35,7 @@ public class ServiceEndpoint: NodeRPCConnection {
     private var _accessToken: AccessToken?
     private var _dataStorage: DataStorageProtocol?
     
-    public init(_ context: AppContext, _ providerAddress: String) throws {
+    public init(_ context: AppContext, _ providerAddress: String?) throws {
         _context = context
         _providerAddress = providerAddress
         self.connectionManager = ConnectionManager(_providerAddress!)

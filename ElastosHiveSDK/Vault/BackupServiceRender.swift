@@ -23,85 +23,113 @@
 //import Foundation
 //
 //public class BackupServiceRender: BackupService {
-//    private var _serviceEndpoint: ServiceEndpoint?
-//    private var _controller: BackupController?
-//    private var _credentialCode:
-//    
-//    private ServiceEndpoint serviceEndpoint;
-//    private BackupController controller;
-//    private CredentialCode credentialCode;
-//    
-//    public init(_ serviceEndpoint: ServiceEndpoint) {
-//        self._serviceEndpoint = serviceEndpoint
-//    }
 //
-//    
-//    public func setupContext(_ backupContext: BackupContext) throws -> Promise<Void> {
-//        return Promise<Any>.async().then{ [self] _ -> Promise<Void> in
-//            return Promise<Void> { resolver in
-//                self._tokenResolver = BackupLocalResolver(self._serviceEndpoint)
-//                let backupRemoteResolver: BackupRemoteResolver = BackupRemoteResolver(self._serviceEndpoint,
-//                                                                                      backupContext,
-//                                                                                      backupContext.getParameter("targetServiceDid"),
-//                                                                                      backupContext.getParameter("targetAddress"))
-//                try! self._tokenResolver?.setNextResolver(backupRemoteResolver)
-//                resolver.fulfill(Void())
-//            }
-//        }
-//    }
 //    
 //    public func startBackup() -> Promise<Void> {
-//        return Promise<Any>.async().then{ [self] _ -> Promise<Void> in
-//            return Promise<Void> { resolver in
-//                do {
-//                    let url = self._serviceEndpoint.connectionManager.hiveApi.saveToNode()
-//                    let header = try self._serviceEndpoint.connectionManager.headers()
-//                    let credential: String = try self._tokenResolver!.getToken()!.accessToken!
-//                    let param: Parameters = ["backup_credential": credential]
-//                    _ = try HiveAPi.request(url: url, method: .post, parameters: param, headers: header).get(HiveResponse.self)
-//                    resolver.fulfill(Void())
-//                } catch {
-//                    resolver.reject(error)
-//                }
-//            }
-//        }
+//        <#code#>
 //    }
-//
+//    
 //    public func stopBackup() -> Promise<Void> {
-//        return Promise<Void> { resolver in
-//            throw HiveError.UnsupportedOperationException
-//        }
+//        <#code#>
 //    }
 //    
 //    public func restoreFrom() -> Promise<Void> {
-//        return Promise<Any>.async().then {[self] _ -> Promise<Void> in
-//            return Promise<Void> { resolver in
-//                let url = self._serviceEndpoint.connectionManager.hiveApi.restoreFromNode()
-//                let header = try self._serviceEndpoint.connectionManager.headers()
-//                let credential: String = try self._tokenResolver!.getToken()!.accessToken!
-//                let param: Parameters = ["backup_credential": credential]
-//                _ = try HiveAPi.request(url: url, method: .post, parameters: param, headers: header).get(HiveResponse.self)
-//                resolver.fulfill(Void())
-//            }
-//        }
+//        <#code#>
 //    }
 //    
 //    public func stopRestore() -> Promise<Void> {
-//        return Promise<Any>.async().then { _ -> Promise<Void> in
-//            return Promise<Void> { resolver in
-//                resolver.fulfill(Void())
-//            }
-//        }
+//        <#code#>
 //    }
 //    
 //    public func checkResult() -> Promise<BackupResult> {
-//        return Promise<Any>.async().then {[self] _ -> Promise<BackupResult> in
-//            return Promise<BackupResult> { resolver in
-//                let url = self._serviceEndpoint.connectionManager.hiveApi.getState()
-//                let header = try self._serviceEndpoint.connectionManager.headers()
-//                let response = try HiveAPi.request(url: url, method: .get, headers: header).get(BackupStateResponse.self)
-//                resolver.fulfill(try response.getStatusResult())
+//        <#code#>
+//    }
+//    
+//    private var _serviceEndpoint: ServiceEndpoint?
+//    private var _controller: BackupController?
+//    private var _credentialCode: CredentialCode?
+//    
+//    public init(_ serviceEndpoint: ServiceEndpoint) {
+//        _serviceEndpoint = serviceEndpoint
+//        _controller = BackupController(serviceEndpoint)
+//    }
+//
+//    public func setupContext(_ backupContext: BackupContext) throws -> Promise<Void> {
+//        _credentialCode = CredentialCode(_serviceEndpoint, backupContext);
+//        return Promise<Any>.async().then { [self] _ -> Promise<Void> in
+//            return Promise<Array<PricingPlan>> { resolver in
+//                resolver.fulfill(Void())
 //            }
 //        }
+//        
 //    }
+////
+////    public func setupContext(_ backupContext: BackupContext) throws -> Promise<Void> {
+////        return Promise<Any>.async().then{ [self] _ -> Promise<Void> in
+////            return Promise<Void> { resolver in
+////                self._tokenResolver = BackupLocalResolver(self._serviceEndpoint)
+////                let backupRemoteResolver: BackupRemoteResolver = BackupRemoteResolver(self._serviceEndpoint,
+////                                                                                      backupContext,
+////                                                                                      backupContext.getParameter("targetServiceDid"),
+////                                                                                      backupContext.getParameter("targetAddress"))
+////                try! self._tokenResolver?.setNextResolver(backupRemoteResolver)
+////                resolver.fulfill(Void())
+////            }
+////        }
+////    }
+////
+////    public func startBackup() -> Promise<Void> {
+////        return Promise<Any>.async().then{ [self] _ -> Promise<Void> in
+////            return Promise<Void> { resolver in
+////                do {
+////                    let url = self._serviceEndpoint.connectionManager.hiveApi.saveToNode()
+////                    let header = try self._serviceEndpoint.connectionManager.headers()
+////                    let credential: String = try self._tokenResolver!.getToken()!.accessToken!
+////                    let param: Parameters = ["backup_credential": credential]
+////                    _ = try HiveAPi.request(url: url, method: .post, parameters: param, headers: header).get(HiveResponse.self)
+////                    resolver.fulfill(Void())
+////                } catch {
+////                    resolver.reject(error)
+////                }
+////            }
+////        }
+////    }
+////
+////    public func stopBackup() -> Promise<Void> {
+////        return Promise<Void> { resolver in
+////            throw HiveError.UnsupportedOperationException
+////        }
+////    }
+////
+////    public func restoreFrom() -> Promise<Void> {
+////        return Promise<Any>.async().then {[self] _ -> Promise<Void> in
+////            return Promise<Void> { resolver in
+////                let url = self._serviceEndpoint.connectionManager.hiveApi.restoreFromNode()
+////                let header = try self._serviceEndpoint.connectionManager.headers()
+////                let credential: String = try self._tokenResolver!.getToken()!.accessToken!
+////                let param: Parameters = ["backup_credential": credential]
+////                _ = try HiveAPi.request(url: url, method: .post, parameters: param, headers: header).get(HiveResponse.self)
+////                resolver.fulfill(Void())
+////            }
+////        }
+////    }
+////
+////    public func stopRestore() -> Promise<Void> {
+////        return Promise<Any>.async().then { _ -> Promise<Void> in
+////            return Promise<Void> { resolver in
+////                resolver.fulfill(Void())
+////            }
+////        }
+////    }
+////
+////    public func checkResult() -> Promise<BackupResult> {
+////        return Promise<Any>.async().then {[self] _ -> Promise<BackupResult> in
+////            return Promise<BackupResult> { resolver in
+////                let url = self._serviceEndpoint.connectionManager.hiveApi.getState()
+////                let header = try self._serviceEndpoint.connectionManager.headers()
+////                let response = try HiveAPi.request(url: url, method: .get, headers: header).get(BackupStateResponse.self)
+////                resolver.fulfill(try response.getStatusResult())
+////            }
+////        }
+////    }
 //}

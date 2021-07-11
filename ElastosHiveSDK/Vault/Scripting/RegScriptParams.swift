@@ -29,6 +29,8 @@ public class RegScriptParams: Mappable {
     private var _allowAnonymousApp: Bool?
     private var _condition: Condition?
     
+    public init () {}
+    
     public func setExecutable(_ executable: Executable?) -> RegScriptParams {
         self._executable = executable
         return self
