@@ -41,16 +41,12 @@ public protocol ScriptingInvocationService {
     /// Invoke the execution of the script to upload a file in the streaming mode. The upload works a bit differently from other executable queries because there are two steps to this executable. First, register a script on the vault, then you call this API actually to upload the file
     /// - parameters:
     ///    - transactionId: The streaming identifier to the upload process
-    ///    - resultType: String, Data, JSON, FileWriter
-    ///    - T: String, byte[], FileReader
-    /// - returns: String, Data, JSON, FileWriter
-    func uploadFile<T>(_ transactionId: String, _ resultType: T.Type) -> Promise<T>;
+    /// - returns:FileWriter
+    func uploadFile(_ transactionId: String) -> Promise<FileWriter>;
 
     /// Invoke the execution of the script to download a file in the streaming mode. The upload works a bit differently from other executable queries because there are two steps to this executable. First, register a script on the vault, then you call this API actually to download the file
     /// - parameters:
     ///    - transactionId: The streaming identifier to the upload process
-    ///    - resultType: FileReader
-    ///    - T: FileReader
     /// - returns: FileReader
-    func downloadFile<T>(_ transactionId: String, _ resultType: T.Type) -> Promise<T>;
+    func downloadFile(_ transactionId: String) -> Promise<FileReader>;
 }
