@@ -26,7 +26,7 @@ import ObjectMapper
 public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentService {
     private var _subscriptionController: SubscriptionController?
     
-    public override init(_ context: AppContext, _ providerAddress: String) throws {
+    public override init(_ context: AppContext, _ providerAddress: String?) throws {
         try super.init(context, providerAddress)
         _subscriptionController = SubscriptionController(self)
     }

@@ -27,6 +27,10 @@ public class Context: Mappable {
     private var _targetDid: String?
     private var _targetAppDid: String?
     
+    public init() {
+        
+    }
+    
     public func setTargetDid(_ targetDid: String?) -> Context {
         self._targetDid = targetDid
         return self
