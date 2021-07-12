@@ -25,7 +25,7 @@ import Foundation
 /**
  * TODO: refine APIs like *One, *Many, find*.
  */
-public protocol DatabaseProtocol {
+public protocol DatabaseService {
     
     /// Lets the vault owner create a collection on database.
     ///
@@ -49,7 +49,7 @@ public protocol DatabaseProtocol {
     ///   - options: bypass_document_validation: (optional) If True, allows
     ///              the write to opt-out of document level validation. Default is False.
     /// - returns: Results returned by InsertOneResult wrapper
-    func insertOne(_ collection: String, _ doc: [String: Any], _ options: InsertOptions?) -> Promise<InsertResult>
+    func insertOne(_ collection: String, _ doc: [String: Any], _ options: InsertOptions) -> Promise<InsertResult>
   
     /// Insert many new documents in a given collection
     ///
@@ -91,7 +91,7 @@ public protocol DatabaseProtocol {
     ///   - query: a JSON object specifying elements which must be present for a document to be included in the result set
     ///   - options: FindOptions instance
     ///  - returns: a Dictionary array result of document
-    func findMany(_ collection: String, _ query: [String: Any], _ options: FindOptions) -> Array<Dictionary<String, Any>>
+    func findMany(_ collection: String, _ query: [String: Any], _ options: FindOptions) -> Promise<Array<Dictionary<String, Any>>>
     
     
     
@@ -126,7 +126,7 @@ public protocol DatabaseProtocol {
     ///   - options:
     ///
     /// - returns:
-    func deleteOne(_ collection: String, _ filter: [String: Any], options: DeleteOptions) -> Promise<DeleteResult>
+    func deleteOne(_ collection: String, _ filter: [String: Any], options: DeleteOptions) -> Promise<Void>
 
     /// Delete many existing documents in a given collection
     ///
@@ -136,5 +136,5 @@ public protocol DatabaseProtocol {
     ///   - options:
     ///
     /// - returns:
-    func deleteMany(_ collection: String, _ filter: [String: Any], options: DeleteOptions) -> Promise<DeleteResult>
+    func deleteMany(_ collection: String, _ filter: [String: Any], options: DeleteOptions) -> Promise<Void>
 }
