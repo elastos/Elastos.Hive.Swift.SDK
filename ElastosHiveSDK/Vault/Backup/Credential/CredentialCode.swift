@@ -52,7 +52,7 @@ public class CredentialCode {
     }
     
     private func restoreToken() -> String {
-        return _storage.loadBackupCredential(_targetServiceDid)
+        return _storage.loadBackupCredential(_targetServiceDid)!
     }
 
     private func saveToken(_ jwtCode: String) {
