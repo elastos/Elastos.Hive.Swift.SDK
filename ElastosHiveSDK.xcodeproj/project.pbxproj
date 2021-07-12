@@ -157,7 +157,7 @@
 		3053BE4F2684C9AE005828B0 /* NodeVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE4B2684C9AE005828B0 /* NodeVersion.swift */; };
 		3053BE542684CA10005828B0 /* HiveError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE532684CA10005828B0 /* HiveError.swift */; };
 		3053BE632684CA38005828B0 /* HiveCheckValidProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE572684CA38005828B0 /* HiveCheckValidProtocol.swift */; };
-		3053BE642684CA38005828B0 /* DatabaseProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE582684CA38005828B0 /* DatabaseProtocol.swift */; };
+		3053BE642684CA38005828B0 /* DatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE582684CA38005828B0 /* DatabaseService.swift */; };
 		3053BE652684CA38005828B0 /* PromotionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE592684CA38005828B0 /* PromotionService.swift */; };
 		3053BE662684CA38005828B0 /* ScriptingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE5A2684CA38005828B0 /* ScriptingProtocol.swift */; };
 		3053BE672684CA38005828B0 /* FilesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE5B2684CA38005828B0 /* FilesService.swift */; };
@@ -458,7 +458,7 @@
 		3053BE4B2684C9AE005828B0 /* NodeVersion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeVersion.swift; sourceTree = "<group>"; };
 		3053BE532684CA10005828B0 /* HiveError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HiveError.swift; sourceTree = "<group>"; };
 		3053BE572684CA38005828B0 /* HiveCheckValidProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HiveCheckValidProtocol.swift; sourceTree = "<group>"; };
-		3053BE582684CA38005828B0 /* DatabaseProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseProtocol.swift; sourceTree = "<group>"; };
+		3053BE582684CA38005828B0 /* DatabaseService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseService.swift; sourceTree = "<group>"; };
 		3053BE592684CA38005828B0 /* PromotionService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromotionService.swift; sourceTree = "<group>"; };
 		3053BE5A2684CA38005828B0 /* ScriptingProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScriptingProtocol.swift; sourceTree = "<group>"; };
 		3053BE5B2684CA38005828B0 /* FilesService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilesService.swift; sourceTree = "<group>"; };
@@ -923,7 +923,7 @@
 				3053BE5F2684CA38005828B0 /* BackupContext.swift */,
 				3053BE5D2684CA38005828B0 /* BackupService.swift */,
 				3053BE5E2684CA38005828B0 /* CloudBackupContext.swift */,
-				3053BE582684CA38005828B0 /* DatabaseProtocol.swift */,
+				3053BE582684CA38005828B0 /* DatabaseService.swift */,
 				3053BE5B2684CA38005828B0 /* FilesService.swift */,
 				3053BE572684CA38005828B0 /* HiveCheckValidProtocol.swift */,
 				3053BE602684CA38005828B0 /* PaymentService.swift */,
@@ -1575,7 +1575,7 @@
 				3053BED22684CA5F005828B0 /* DeleteOptions.swift in Sources */,
 				3053BECF2684CA5F005828B0 /* AscendingSortItem.swift in Sources */,
 				302E9F632695A250008200D3 /* NetworkError.swift in Sources */,
-				3053BE642684CA38005828B0 /* DatabaseProtocol.swift in Sources */,
+				3053BE642684CA38005828B0 /* DatabaseService.swift in Sources */,
 				3048ACAC26437C1C00B417B6 /* Provider.swift in Sources */,
 				30091C282619E935003EB5CE /* CountDocResponse.swift in Sources */,
 				3053BF132684CA96005828B0 /* SubscriptionAPI.swift in Sources */,

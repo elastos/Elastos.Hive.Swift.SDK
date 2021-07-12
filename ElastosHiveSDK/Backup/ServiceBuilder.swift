@@ -23,18 +23,18 @@
 import Foundation
 
 public class ServiceBuilder {
-    private var _serviceEndpoint: ServiceEndpoint?
+    private var _serviceEndpoint: ServiceEndpoint
     
-    public init(_ serviceEndpoint: ServiceEndpoint?) {
+    public init(_ serviceEndpoint: ServiceEndpoint) {
         _serviceEndpoint = serviceEndpoint
     }
 
-//    public createFilesService() -> FilesService {
-//        return Filsser
-//    }
-//    public FilesService createFilesService() {
-//        return new FilesServiceRender(serviceEndpoint);
-//    }
+    public func createFilesService() -> FilesService {
+        return FilesServiceRender(_serviceEndpoint)
+    }
+    
+//    public func createDatabase() -> Databas
+     
 //
 //    public DatabaseService createDatabase() {
 //        return new DatabaseServiceRender(serviceEndpoint);
