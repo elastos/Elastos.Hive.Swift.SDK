@@ -37,11 +37,11 @@ public class ServiceBuilder {
         return DatabaseServiceRender(_serviceEndpoint);
     }
 
-//    public func createScriptingService() -> ScriptingService{
-//        return ScriptingServiceRender(_serviceEndpoint);
-//    }
-//
-//    public func createBackupService() -> BackupService {
-//        return BackupServiceRender(serviceEndpoint);
-//    }
+    public func createScriptingService() -> ScriptingService{
+        return ScriptingServiceRender(_serviceEndpoint);
+    }
+
+    public func createBackupService() -> BackupService {
+        return BackupServiceRender(serviceEndpoint);
+    }
 }

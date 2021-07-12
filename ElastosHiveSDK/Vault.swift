@@ -28,7 +28,7 @@ import Foundation
 public class Vault: ServiceEndpoint {
     private var _filesService: FilesService?
     private var _database: DatabaseService?
-    private var _scriptingService: ScriptingService?
+    private var _scripting: ScriptingService?
     private var _backupService: BackupService?
     
     public override init(_ context: AppContext?, _ providerAddress: String?) throws {
@@ -36,7 +36,9 @@ public class Vault: ServiceEndpoint {
         
         let builder = ServiceBuilder(self)
         _filesService = builder.createFilesService()
-//        _database = builder.cred
+        _database = builder.createDatabase()
+        _scripting = builder.createScriptingService()
+        _backupService = builder.createBackupService()
     }
 
 }

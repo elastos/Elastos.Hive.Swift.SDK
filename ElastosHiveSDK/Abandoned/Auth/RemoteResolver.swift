@@ -24,7 +24,7 @@ import Foundation
 import ObjectMapper
 import AwaitKit
 
-public class RemoteResolver: CodeFetcherProtocol {
+public class RemoteResolver: CodeFetcher {
     private var _serviceEndpoint: ServiceEndpoint?
     private var _backupContext: BackupContext
     private var _targetDid: String?

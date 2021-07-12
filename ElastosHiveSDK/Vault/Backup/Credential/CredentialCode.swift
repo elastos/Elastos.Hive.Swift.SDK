@@ -22,56 +22,41 @@
 import Foundation
 
 public class CredentialCode {
-    private var _targetServiceDid: String?
+    private var _targetServiceDid: String
     private var _jwtCode: String?
-    private var _remoteResolver: CodeFetcherProtocol?
-    private var _storage: DataStorageProtocol?
+    private var _remoteResolver: CodeFetcher
+    private var _storage: DataStorage
     
     public init(_ endpoint: ServiceEndpoint, _ context: BackupContext) {
         _targetServiceDid = context.getParameter("targetServiceDid")
-//        let remoteResolver: CodeFetcherProtocol = Remo
+        let remoteResolver: CodeFetcher = RemoteResolver(endpoint, context, _targetServiceDid, context.getParameter("targetAddress"))
+        _remoteResolver = LocalResolver(endpoint, remoteResolver)
+        _storage = endpoint.getStorage()
     }
-}
+    
+    public func getToken() throws -> String? {
+        if _jwtCode != nil {
+            return _jwtCode
+        }
+        
+        _jwtCode = restoreToken()
+        if _jwtCode == nil {
+            _jwtCode = try _remoteResolver.fetch()
+        }
+        
+        if _jwtCode != nil {
+            saveToken(_jwtCode!)
+        }
+        
+        return _jwtCode
+    }
+    
+    private func restoreToken() -> String {
+        return _storage.loadBackupCredential(_targetServiceDid)
+    }
 
-//public class CredentialCode {
-//    private String targetServiceDid;
-//    private String jwtCode;
-//    private CodeFetcher remoteResolver;
-//    private DataStorage storage;
-//
-//    public CredentialCode(ServiceEndpoint endpoint, BackupContext context) {
-//        targetServiceDid = context.getParameter("targetServiceDid");
-//        CodeFetcher remoteResolver = new RemoteResolver(
-//                endpoint, context, targetServiceDid,
-//                context.getParameter("targetAddress"));
-//        this.remoteResolver = new LocalResolver(endpoint, remoteResolver);
-//        storage = endpoint.getStorage();
-//    }
-//
-//    public String getToken() throws HiveException {
-//        if (jwtCode != null)
-//            return jwtCode;
-//
-//        jwtCode = restoreToken();
-//        if (jwtCode == null) {
-//            try {
-//                jwtCode = remoteResolver.fetch();
-//            } catch (NodeRPCException e) {
-//                throw new HiveException(e.getMessage());
-//            }
-//
-//            if (jwtCode != null) {
-//                saveToken(jwtCode);
-//            }
-//        }
-//        return jwtCode;
-//    }
-//
-//    private String restoreToken() {
-//        return storage.loadBackupCredential(targetServiceDid);
-//    }
-//
-//    private void saveToken(String jwtCode) {
-//        storage.storeBackupCredential(targetServiceDid, jwtCode);
-//    }
-//}
+    private func saveToken(_ jwtCode: String) {
+        _storage.storeBackupCredential(_targetServiceDid, _jwtCode!);
+    }
+
+}
