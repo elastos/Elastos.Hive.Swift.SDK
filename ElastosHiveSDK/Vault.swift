@@ -38,7 +38,7 @@ public class Vault: ServiceEndpoint {
         _filesService = builder.createFilesService()
         _database = builder.createDatabase()
         _scripting = builder.createScriptingService()
-//        _backupService = builder.createBackupService()
+        _backupService = builder.createBackupService()
     }
 
 }

@@ -22,36 +22,44 @@
 
 import Foundation
 
-//extension HiveAPi {
-//    func createCollection(_ collection: String) -> String {
-//        return self.baseURL + self.apiPath + "/vault/db/collections/\(collection)"
-//    }
-//
-//    func deleteCollection(_ collection: String) -> String {
-//        return self.baseURL + self.apiPath + "/vault/db/\(collection)"
-//    }
-//    
-//    func insert(_ collection: String) -> String {
-//        return self.baseURL + self.apiPath + "/vault/db/collection/\(collection)"
-//    }
-//    
-//    func update(_ collection: String) -> String {
-//        return self.baseURL + self.apiPath + "/vault/db/collection/\(collection)"
-//    }
-//    
-//    func delete(_ collection: String) -> String {
-//        return self.baseURL + self.apiPath + "/vault/db/collection/\(collection)"
-//    }
-//    
-//    func count(_ collection: String) -> String {
-//        return self.baseURL + self.apiPath + "/vault/db/collection/\(collection)?op=count"
-//    }
-//    
-//    func find(_ collection: String) -> String {
-//        return self.baseURL + self.apiPath + "/vault/db/\(collection)"
-//    }
-//    
-//    func query(_ collection: String) -> String {
-//        return self.baseURL + self.apiPath + "/vault/db/query"
-//    }
-//}
+extension ConnectionManager {
+    public func createCollection(_ collection: String) throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/vault/db/collections/\(collection)"
+        return try self.createDataRequest(url, .put, nil)
+    }
+    
+    public func deleteCollection(_ collection: String) throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/vault/db/\(collection)"
+        return try self.createDataRequest(url, .delete, nil)
+    }
+    
+    public func insert(_ collection: String, _ params: InsertParams) throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/vault/db/collection/\(collection)"
+        return try self.createDataRequest(url, .post, params.toJSON())
+    }
+    
+    public func update(_ collection: String, _ params: UpdateParams) throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/vault/db/collection/\(collection)"
+        return try self.createDataRequest(url, .patch, params.toJSON())
+    }
+
+    public func delete(_ collection: String, _ params: DeleteParams) throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/vault/db/collection/\(collection)"
+        return try self.createDataRequest(url, .delete, params.toJSON())
+    }
+    
+    public func count(_ collection: String, _ params: CountParams) throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/vault/db/collection/\(collection)?op=count"
+        return try self.createDataRequest(url, .post, params.toJSON())
+    }
+
+    public func find(_ collection: String, _ filter: String, _ skip: String, _ limit: String) throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/vault/db/\(collection)?filter=\(filter)&skip=\(skip)&limit=\(limit)"
+        return try self.createDataRequest(url, .get, nil)
+    }
+    
+    public func query(_ params: QueryParams) throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/vault/db/query"
+        return try self.createDataRequest(url, .post, params.toJSON())
+    }
+}
