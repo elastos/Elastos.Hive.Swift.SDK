@@ -33,7 +33,7 @@ public class ServiceEndpoint: NodeRPCConnection {
     private var _serviceInstanceDid: String?
 
     private var _accessToken: AccessToken?
-    private var _dataStorage: DataStorageProtocol?
+    private var _dataStorage: DataStorage?
     
     public init(_ context: AppContext, _ providerAddress: String?) throws {
         _context = context
@@ -113,7 +113,7 @@ public class ServiceEndpoint: NodeRPCConnection {
         _serviceInstanceDid = serviceInstanceDid
     }
     
-    public func getStorage() -> DataStorageProtocol {
+    public func getStorage() -> DataStorage {
         return _dataStorage!
     }
     

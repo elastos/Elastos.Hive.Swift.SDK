@@ -23,46 +23,70 @@
 //import Foundation
 //
 //public class BackupServiceRender: BackupService {
-//
-//    
-//    public func startBackup() -> Promise<Void> {
-//        <#code#>
-//    }
-//    
-//    public func stopBackup() -> Promise<Void> {
-//        <#code#>
-//    }
-//    
-//    public func restoreFrom() -> Promise<Void> {
-//        <#code#>
-//    }
-//    
-//    public func stopRestore() -> Promise<Void> {
-//        <#code#>
-//    }
-//    
-//    public func checkResult() -> Promise<BackupResult> {
-//        <#code#>
-//    }
-//    
-//    private var _serviceEndpoint: ServiceEndpoint?
-//    private var _controller: BackupController?
+//    private var _serviceEndpoint: ServiceEndpoint
+//    private var _controller: BackupController
 //    private var _credentialCode: CredentialCode?
 //    
 //    public init(_ serviceEndpoint: ServiceEndpoint) {
 //        _serviceEndpoint = serviceEndpoint
 //        _controller = BackupController(serviceEndpoint)
 //    }
-//
-//    public func setupContext(_ backupContext: BackupContext) throws -> Promise<Void> {
-//        _credentialCode = CredentialCode(_serviceEndpoint, backupContext);
-//        return Promise<Any>.async().then { [self] _ -> Promise<Void> in
-//            return Promise<Array<PricingPlan>> { resolver in
+//    
+//    public func setupContext(_ backupContext: BackupContext) -> Promise<Void> {
+//        _credentialCode = CredentialCode(_serviceEndpoint, backupContext)
+//        return Promise<Any>.async().then { _ -> Promise<Void> in
+//            return Promise<Void> { resolver in
 //                resolver.fulfill(Void())
 //            }
 //        }
-//        
 //    }
+//    
+//    public func startBackup() -> Promise<Void> {
+//        return Promise<Any>.async().then { [self] _ -> Promise<Void> in
+//            return Promise<Void> { resolver in
+//                do {
+////                    resolver.fulfill(try _controller.startBackup(_credentialCode.))
+//                } catch {
+//                    resolver.reject(error)
+//                }
+//            }
+//        }
+//    }
+//    
+////    public func stopBackup() -> Promise<Void> {
+////        <#code#>
+////    }
+////    
+////    public func restoreFrom() -> Promise<Void> {
+////        <#code#>
+////    }
+////    
+////    public func stopRestore() -> Promise<Void> {
+////        <#code#>
+////    }
+////    
+////    public func checkResult() -> Promise<BackupResult> {
+////        <#code#>
+////    }
+////    
+////    private var _serviceEndpoint: ServiceEndpoint?
+////    private var _controller: BackupController?
+////    private var _credentialCode: CredentialCode?
+////
+////    public init(_ serviceEndpoint: ServiceEndpoint) {
+////        _serviceEndpoint = serviceEndpoint
+////        _controller = BackupController(serviceEndpoint)
+////    }
+////
+////    public func setupContext(_ backupContext: BackupContext) throws -> Promise<Void> {
+////        _credentialCode = CredentialCode(_serviceEndpoint, backupContext);
+////        return Promise<Any>.async().then { [self] _ -> Promise<Void> in
+////            return Promise<Array<PricingPlan>> { resolver in
+////                resolver.fulfill(Void())
+////            }
+////        }
+////
+////    }
 ////
 ////    public func setupContext(_ backupContext: BackupContext) throws -> Promise<Void> {
 ////        return Promise<Any>.async().then{ [self] _ -> Promise<Void> in

@@ -22,10 +22,10 @@
 
 import Foundation
 
-public class AccessToken: CodeFetcherProtocol {
+public class AccessToken: CodeFetcher {
     private var _jwtCode: String?
-    private var _remoteFetcher: CodeFetcherProtocol?
-    private var _storage: DataStorageProtocol?
+    private var _remoteFetcher: CodeFetcher?
+    private var _storage: DataStorage?
 //    private var _bridge: BridgeHandlerProtocol?
     
 //    public init(_ endpoint: ServiceEndpoint, _ storage: DataStorageProtocol?, _ bridge: BridgeHandlerProtocol?) {

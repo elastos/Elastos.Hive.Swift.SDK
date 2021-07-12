@@ -22,7 +22,7 @@
 
 import Foundation
 
-public protocol CodeFetcherProtocol {
+public protocol CodeFetcher {
     func fetch() throws -> String?
     func invalidate()
 }
