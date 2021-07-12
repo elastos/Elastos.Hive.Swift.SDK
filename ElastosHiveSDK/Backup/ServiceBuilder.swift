@@ -41,7 +41,7 @@ public class ServiceBuilder {
         return ScriptingServiceRender(_serviceEndpoint);
     }
 
-//    public func createBackupService() -> BackupService {
-//        return BackupServiceRender(serviceEndpoint);
-//    }
+    public func createBackupService() -> BackupService {
+        return BackupServiceRender(_serviceEndpoint);
+    }
 }
