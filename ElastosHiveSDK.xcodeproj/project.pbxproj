@@ -109,7 +109,7 @@
 		3045A73A260237FD0037527A /* DatabaseServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A739260237FC0037527A /* DatabaseServiceTest.swift */; };
 		3045A741260241FC0037527A /* BackupSubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A740260241FC0037527A /* BackupSubscription.swift */; };
 		3045A75226024BF40037527A /* PubSubServiceRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A75126024BF40037527A /* PubSubServiceRender.swift */; };
-		3045A75926024C1E0037527A /* ScriptingRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A75826024C1E0037527A /* ScriptingRender.swift */; };
+		3045A75926024C1E0037527A /* ScriptingServiceRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A75826024C1E0037527A /* ScriptingServiceRender.swift */; };
 		3045A75C2602519D0037527A /* Promise+async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A75B2602519D0037527A /* Promise+async.swift */; };
 		3045A75D2602519D0037527A /* Promise+async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A75B2602519D0037527A /* Promise+async.swift */; };
 		3048ACAC26437C1C00B417B6 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3048ACAB26437C1C00B417B6 /* Provider.swift */; };
@@ -159,7 +159,7 @@
 		3053BE632684CA38005828B0 /* HiveCheckValidProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE572684CA38005828B0 /* HiveCheckValidProtocol.swift */; };
 		3053BE642684CA38005828B0 /* DatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE582684CA38005828B0 /* DatabaseService.swift */; };
 		3053BE652684CA38005828B0 /* PromotionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE592684CA38005828B0 /* PromotionService.swift */; };
-		3053BE662684CA38005828B0 /* ScriptingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE5A2684CA38005828B0 /* ScriptingProtocol.swift */; };
+		3053BE662684CA38005828B0 /* ScriptingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE5A2684CA38005828B0 /* ScriptingService.swift */; };
 		3053BE672684CA38005828B0 /* FilesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE5B2684CA38005828B0 /* FilesService.swift */; };
 		3053BE682684CA38005828B0 /* SubscriptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE5C2684CA38005828B0 /* SubscriptionService.swift */; };
 		3053BE692684CA38005828B0 /* BackupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE5D2684CA38005828B0 /* BackupService.swift */; };
@@ -213,7 +213,6 @@
 		3053BEE92684CA5F005828B0 /* AndCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BEA02684CA5F005828B0 /* AndCondition.swift */; };
 		3053BEEA2684CA5F005828B0 /* AggregatedCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BEA12684CA5F005828B0 /* AggregatedCondition.swift */; };
 		3053BEEB2684CA5F005828B0 /* BackupServiceRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BEA22684CA5F005828B0 /* BackupServiceRender.swift */; };
-		3053BEEC2684CA5F005828B0 /* ScriptingRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BEA32684CA5F005828B0 /* ScriptingRender.swift */; };
 		3053BEED2684CA5F005828B0 /* HiveVaultRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BEA42684CA5F005828B0 /* HiveVaultRender.swift */; };
 		3053BEEE2684CA5F005828B0 /* NodeManageServiceRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BEA52684CA5F005828B0 /* NodeManageServiceRender.swift */; };
 		3053BEEF2684CA5F005828B0 /* PaymentServiceRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BEA62684CA5F005828B0 /* PaymentServiceRender.swift */; };
@@ -411,7 +410,7 @@
 		3045A739260237FC0037527A /* DatabaseServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseServiceTest.swift; sourceTree = "<group>"; };
 		3045A740260241FC0037527A /* BackupSubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupSubscription.swift; sourceTree = "<group>"; };
 		3045A75126024BF40037527A /* PubSubServiceRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PubSubServiceRender.swift; sourceTree = "<group>"; };
-		3045A75826024C1E0037527A /* ScriptingRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptingRender.swift; sourceTree = "<group>"; };
+		3045A75826024C1E0037527A /* ScriptingServiceRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptingServiceRender.swift; sourceTree = "<group>"; };
 		3045A75B2602519D0037527A /* Promise+async.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Promise+async.swift"; sourceTree = "<group>"; };
 		3048ACAB26437C1C00B417B6 /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
 		304EA375261D3978007ADD47 /* PopMessageRequestParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopMessageRequestParams.swift; sourceTree = "<group>"; };
@@ -460,7 +459,7 @@
 		3053BE572684CA38005828B0 /* HiveCheckValidProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HiveCheckValidProtocol.swift; sourceTree = "<group>"; };
 		3053BE582684CA38005828B0 /* DatabaseService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseService.swift; sourceTree = "<group>"; };
 		3053BE592684CA38005828B0 /* PromotionService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromotionService.swift; sourceTree = "<group>"; };
-		3053BE5A2684CA38005828B0 /* ScriptingProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScriptingProtocol.swift; sourceTree = "<group>"; };
+		3053BE5A2684CA38005828B0 /* ScriptingService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScriptingService.swift; sourceTree = "<group>"; };
 		3053BE5B2684CA38005828B0 /* FilesService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilesService.swift; sourceTree = "<group>"; };
 		3053BE5C2684CA38005828B0 /* SubscriptionService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubscriptionService.swift; sourceTree = "<group>"; };
 		3053BE5D2684CA38005828B0 /* BackupService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackupService.swift; sourceTree = "<group>"; };
@@ -514,7 +513,6 @@
 		3053BEA02684CA5F005828B0 /* AndCondition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AndCondition.swift; sourceTree = "<group>"; };
 		3053BEA12684CA5F005828B0 /* AggregatedCondition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AggregatedCondition.swift; sourceTree = "<group>"; };
 		3053BEA22684CA5F005828B0 /* BackupServiceRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackupServiceRender.swift; sourceTree = "<group>"; };
-		3053BEA32684CA5F005828B0 /* ScriptingRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScriptingRender.swift; sourceTree = "<group>"; };
 		3053BEA42684CA5F005828B0 /* HiveVaultRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HiveVaultRender.swift; sourceTree = "<group>"; };
 		3053BEA52684CA5F005828B0 /* NodeManageServiceRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeManageServiceRender.swift; sourceTree = "<group>"; };
 		3053BEA62684CA5F005828B0 /* PaymentServiceRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentServiceRender.swift; sourceTree = "<group>"; };
@@ -842,7 +840,7 @@
 			isa = PBXGroup;
 			children = (
 				3045A75126024BF40037527A /* PubSubServiceRender.swift */,
-				3045A75826024C1E0037527A /* ScriptingRender.swift */,
+				3045A75826024C1E0037527A /* ScriptingServiceRender.swift */,
 				3065A5EC26156B3F00C20661 /* PaymentServiceRender.swift */,
 				30091C1826182250003EB5CE /* AuthenticationServiceRender.swift */,
 				30091C1B26182326003EB5CE /* HiveVaultRender.swift */,
@@ -930,7 +928,7 @@
 				3053BE592684CA38005828B0 /* PromotionService.swift */,
 				3053BE622684CA38005828B0 /* PubSubProtocol.swift */,
 				3053BE612684CA38005828B0 /* ScriptingInvocationService.swift */,
-				3053BE5A2684CA38005828B0 /* ScriptingProtocol.swift */,
+				3053BE5A2684CA38005828B0 /* ScriptingService.swift */,
 				3053BE5C2684CA38005828B0 /* SubscriptionService.swift */,
 			);
 			path = Service;
@@ -947,7 +945,6 @@
 				3053BEA52684CA5F005828B0 /* NodeManageServiceRender.swift */,
 				3053BEA62684CA5F005828B0 /* PaymentServiceRender.swift */,
 				3053BEBB2684CA5F005828B0 /* PubSubServiceRender.swift */,
-				3053BEA32684CA5F005828B0 /* ScriptingRender.swift */,
 				3053BEB02684CA5F005828B0 /* Backup */,
 				3053BE712684CA5F005828B0 /* Database */,
 				3053BEA82684CA5F005828B0 /* Files */,
@@ -1496,7 +1493,7 @@
 				3053BEE32684CA5F005828B0 /* Context.swift in Sources */,
 				3022106E261C924100578934 /* RegisterScriptRequestParams.swift in Sources */,
 				3053BED92684CA5F005828B0 /* QueryHasResultCondition.swift in Sources */,
-				3053BE662684CA38005828B0 /* ScriptingProtocol.swift in Sources */,
+				3053BE662684CA38005828B0 /* ScriptingService.swift in Sources */,
 				1103757323FF96AB004216D0 /* AuthToken.swift in Sources */,
 				3053BEDE2684CA5F005828B0 /* RunScriptParams.swift in Sources */,
 				3053BEBC2684CA5F005828B0 /* CountResult.swift in Sources */,
@@ -1547,7 +1544,7 @@
 				3053BF172684CA96005828B0 /* CreateOrderParams.swift in Sources */,
 				30091C3B2619F558003EB5CE /* FindDocsResponse.swift in Sources */,
 				3033735325F9F7BD004D0D93 /* AppContextProvider.swift in Sources */,
-				3045A75926024C1E0037527A /* ScriptingRender.swift in Sources */,
+				3045A75926024C1E0037527A /* ScriptingServiceRender.swift in Sources */,
 				303CD55D26075D2A00865472 /* ScriptRunner.swift in Sources */,
 				3053BEC12684CA5F005828B0 /* DatabaseAPI.swift in Sources */,
 				304EA395261D3FF0007ADD47 /* EmptyRequestParams.swift in Sources */,
@@ -1620,7 +1617,6 @@
 				3065A6032615B2CF00C20661 /* NodeCommitHashResponse.swift in Sources */,
 				3053BEEA2684CA5F005828B0 /* AggregatedCondition.swift in Sources */,
 				30091C312619EAD5003EB5CE /* FilesListResponse.swift in Sources */,
-				3053BEEC2684CA5F005828B0 /* ScriptingRender.swift in Sources */,
 				304EA376261D3978007ADD47 /* PopMessageRequestParams.swift in Sources */,
 				3022108C261CBBCB00578934 /* CreateCollectionRequestParams.swift in Sources */,
 				3053BF112684CA96005828B0 /* VaultInfo.swift in Sources */,

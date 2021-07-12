@@ -33,49 +33,15 @@ public class ServiceBuilder {
         return FilesServiceRender(_serviceEndpoint)
     }
     
-//    public func createDatabase() -> Databas
-     
-//
-//    public DatabaseService createDatabase() {
-//        return new DatabaseServiceRender(serviceEndpoint);
+    public func createDatabase() -> DatabaseService {
+        return DatabaseServiceRender(_serviceEndpoint);
+    }
+
+//    public func createScriptingService() -> ScriptingService{
+//        return ScriptingServiceRender(_serviceEndpoint);
 //    }
 //
-//    public ScriptingService createScriptingService() {
-//        return new ScriptingServiceRender(serviceEndpoint);
-//    }
-//
-//    public BackupService createBackupService() {
-//        return new BackupServiceRender(serviceEndpoint);
-//    }
-    
-    
-//    public func createPromotionService() -> PromotionProtocol {
-//        return PromotionServiceRender(_backup)
-//    }
-//
-//    var vault: Vault
-//
-//    init(_ vault: Vault) {
-//        self.vault = vault
-//    }
-//
-//    func createFilesService() -> FilesServiceRender {
-//        return FilesServiceRender(self.vault)
-//    }
-//
-//    func createDatabase() -> DatabaseServiceRender {
-//        return DatabaseServiceRender(self.vault)
-//    }
-//
-//    func createScriptingService() -> ScriptingServiceRender {
-//        return ScriptingServiceRender(self.vault)
-//    }
-//
-//    func createPubsubService() -> PubSubServiceRender {
-//        return PubSubServiceRender(self.vault)
-//    }
-//
-//    func createBackupService() -> BackupServiceRender {
-//        return BackupServiceRender(self.vault)
+//    public func createBackupService() -> BackupService {
+//        return BackupServiceRender(serviceEndpoint);
 //    }
 }
