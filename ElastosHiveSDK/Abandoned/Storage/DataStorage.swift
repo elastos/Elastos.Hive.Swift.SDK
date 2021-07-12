@@ -23,9 +23,9 @@
 import Foundation
 
 public protocol DataStorage {
-    func loadBackupCredential(_ serviceDid: String) -> String
-    func loadAccessToken(_ serviceDid: String) -> String
-    func loadAccessTokenByAddress(_ providerAddress: String) -> String
+    func loadBackupCredential(_ serviceDid: String) -> String?
+    func loadAccessToken(_ serviceDid: String) -> String?
+    func loadAccessTokenByAddress(_ providerAddress: String) -> String?
 
     func storeBackupCredential(_ serviceDid: String, _ credential: String)
     func storeAccessToken(_ serviceDid: String, _ accessToken: String)
