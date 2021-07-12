@@ -50,7 +50,7 @@ public protocol ScriptingService: ScriptingInvocationService {
     ///   - allowAnonymousUser: whether allows anonymous user.
     ///   - allowAnonymousApp: whether allows anonymous application.
     /// - returns: void
-    func registerScript(_ name: String, _ condition: Condition, _ executable: Executable, _ allowAnonymousUser: Bool, _ allowAnonymousApp: Bool) -> Promise<Void>
+    func registerScript(_ name: String, _ condition: Condition?, _ executable: Executable, _ allowAnonymousUser: Bool, _ allowAnonymousApp: Bool) -> Promise<Void>
     
     /// Let the vault owner unregister a script when the script become useless to applications.
     /// - parameters:
