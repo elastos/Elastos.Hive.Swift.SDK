@@ -32,26 +32,14 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentSe
     }
     
     public func getPricingPlanList() -> Promise<Array<PricingPlan>> {
-        return Promise<Any>.async().then { [self] _ -> Promise<Array<PricingPlan>> in
-            return Promise<Array<PricingPlan>> { resolver in
-                do {
-                    resolver.fulfill(try _subscriptionController!.getBackupPricingPlanList())
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _subscriptionController!.getBackupPricingPlanList()
         }
     }
     
     public func getPricingPlan(_ planName: String) -> Promise<PricingPlan> {
-        return Promise<Any>.async().then { [self] _ -> Promise<PricingPlan> in
-            return Promise<PricingPlan> { resolver in
-                do {
-                    resolver.fulfill(try _subscriptionController!.getBackupPricingPlan(planName))
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _subscriptionController!.getBackupPricingPlan(planName)
         }
     }
     
@@ -60,43 +48,23 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentSe
     }
     
     public func subscribe(_ credential: String?) -> Promise<BackupInfo> {
-        return Promise<Any>.async().then { [self] _ -> Promise<BackupInfo> in
-            return Promise<BackupInfo> { resolver in
-                if credential != nil {
-                    resolver.reject(HiveError.NotImplementedException("Paid pricing plan will be supported later"))
-                }
-                
-                do {
-                    resolver.fulfill(try _subscriptionController!.subscribeToBackup(nil))
-                } catch {
-                    resolver.reject(error)
-                }
+        return DispatchQueue.global().async(.promise){ [self] in
+            if credential != nil {
+                throw HiveError.NotImplementedException("Paid pricing plan will be supported later")
             }
+            return try _subscriptionController!.subscribeToBackup(nil)
         }
     }
     
     public func unsubscribe() -> Promise<Void> {
-        return Promise<Any>.async().then { [self] _ -> Promise<Void> in
-            return Promise<Void> { resolver in
-                do {
-                    try _subscriptionController!.unsubscribeBackup()
-                    resolver.fulfill(Void())
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _subscriptionController!.unsubscribeBackup()
         }
     }
     
     public func checkSubscription() -> Promise<BackupInfo> {
-        return Promise<Any>.async().then { [self] _ -> Promise<BackupInfo> in
-            return Promise<BackupInfo> { resolver in
-                do {
-                    resolver.fulfill(try _subscriptionController!.getBackupInfo())
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _subscriptionController!.getBackupInfo()
         }
     }
     
