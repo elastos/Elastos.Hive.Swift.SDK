@@ -77,10 +77,14 @@ public class AppContext {
     
     
     public static func getProviderAddress(_ targetDid: String) -> Promise<String> {
-        return getProviderAddress(targetDid, nil)
+        return getProviderAddress(targetDid: targetDid, preferredProviderAddress: nil)
     }
 
-    public static func getProviderAddress(_ targetDid: String, _ preferredProviderAddress: String?) -> Promise<String> {
+    public static func getProviderAddress(_ targetDid: String, _ preferredProviderAddress: String) -> Promise<String> {
+        return getProviderAddress(targetDid: targetDid, preferredProviderAddress: preferredProviderAddress)
+    }
+    
+    private static func getProviderAddress(targetDid: String, preferredProviderAddress: String?) -> Promise<String> {
         return Promise<Any>.async().then { _ -> Promise<String> in
             return Promise<String> { resolver in
                 if preferredProviderAddress != nil {

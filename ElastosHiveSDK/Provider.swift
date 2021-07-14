@@ -20,16 +20,14 @@
 * SOFTWARE.
 */
 
-/**
- * This class is used to fetch some possible information from remote hive node.
- * eg. version;
- *     latest commit Id;
- *     How many DID involved;
- *     How many vault service running there;
- *     How many backup service running there;
- *     How much disk storage filled there;
- *     etc.
- */
+/// This class is used to fetch some possible information from remote hive node.
+/// eg. version;
+///     latest commit Id;
+///     How many DID involved;
+///     How many vault service running there;
+///     How many backup service running there;
+///     How much disk storage filled there;
+///     etc.
 public class Provider: ServiceEndpoint {
     public init(_ context: AppContext) throws {
         try super.init(context, nil)
