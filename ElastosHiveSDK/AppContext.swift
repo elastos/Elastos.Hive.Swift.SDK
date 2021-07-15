@@ -21,11 +21,10 @@
 */
 
 import Foundation
+import ElastosDIDSDK
 
-/**
- * The application context would contain the resources list below:
- *  - the reference of application context provider;
- */
+/// The application context would contain the resources list below:
+/// - the reference of application context provider
 public class AppContext {
     
     private static var resolverHasSetup: Bool = false
@@ -51,8 +50,7 @@ public class AppContext {
         }
         
         do {
-            try DIDBackend.initializeInstance(resolver, cacheDir)
-            try ResolverCache.reset()
+            try DIDBackend.initialize(DefaultDIDAdapter(resolver))
             resolverHasSetup = true
         } catch {
             throw error //TODO: need to throw specific error.
@@ -92,32 +90,18 @@ public class AppContext {
                     return
                 }
                 
-                do {
-                    let did = try DID(targetDid)
-                    let doc = try did.resolve()
-                    guard doc != nil else {
-                        resolver.reject(HiveError.ProviderNotFoundException("The DID \(targetDid) has not published onto sideChain"))
-                        return
-                    }
-                    let services = doc?.selectServices(byType: "HiveVault")
-                    if services == nil || services!.count == 0 {
-                        resolver.reject(HiveError.ProviderNotSetException("No 'HiveVault' services declared on DID document \(targetDid)"))
-                        return
-                    }
-                    resolver.fulfill(services![0].endpoint)
-                } catch {
-                    if let error = error as? DIDError {
-                        switch error {
-                        case .malformedMeta:
-                            resolver.reject(HiveError.IllegalArgument(des: "Malformed did string: \(targetDid)"))
-                        case .didResolveError:
-                            resolver.reject(NetworkError.NetworkException(message: "Resolving DID failed: \(error.localizedDescription)"))
-                        default:
-                            resolver.reject(error)
-                        }   
-                    }
-                    resolver.reject(error)
+                let did = try DID(targetDid)
+                let doc = try did.resolve()
+                guard doc != nil else {
+                    resolver.reject(HiveError.ProviderNotFoundException("The DID \(targetDid) has not published onto sideChain"))
+                    return
                 }
+                let services = try doc!.selectServices(byType: "HiveVault")
+                if services.count == 0 {
+                    resolver.reject(HiveError.ProviderNotSetException("No 'HiveVault' services declared on DID document \(targetDid)"))
+                    return
+                }
+                resolver.fulfill(services[0].endpoint)
             }
         }
     }
