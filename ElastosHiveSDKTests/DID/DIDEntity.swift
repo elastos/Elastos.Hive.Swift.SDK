@@ -10,7 +10,7 @@ public class DIDEntity: NSObject {
     var store: DIDStore?
     var did: DID?
     
-    init(_ name: String, _ mnemonic: String, _ adapter: DummyAdapter, _ phrasepass: String, _ storepass: String) throws {
+    init(_ name: String, _ mnemonic: String, _ phrasepass: String, _ storepass: String) throws {
         self.phrasepass = phrasepass
         self.storepass = storepass
         self.name = name

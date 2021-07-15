@@ -4,8 +4,8 @@ import ElastosDIDSDK
 public class AppDID: DIDEntity {
     public var appId = "appId"
 
-    public override init(_ name: String, _ mnemonic: String, _ adapter: DummyAdapter, _ phrasepass: String, _ storepass: String) throws {
-        try super.init(name, mnemonic, adapter, phrasepass, storepass)
+    public override init(_ name: String, _ mnemonic: String, _ phrasepass: String, _ storepass: String) throws {
+        try super.init(name, mnemonic, phrasepass, storepass)
     }
 
     public func createPresentation(_ vc: VerifiableCredential, _ realm: String, _ nonce: String) throws -> VerifiablePresentation {
