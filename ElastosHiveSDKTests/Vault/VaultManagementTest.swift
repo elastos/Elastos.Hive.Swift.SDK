@@ -28,13 +28,12 @@ class VaultManagementTest: XCTestCase {
     
     private var vault: Vault?
 
-
-    override func setUpWithError() throws {
-        self.vault = try TestData.shared.newVault()
+    override func setUp() {
+        self.vault = TestData.shared().newVault()
     }
-
-    override func tearDownWithError() throws {
-
+    
+    override func tearDown() {
+        
     }
 
     func testGetFiles() throws {

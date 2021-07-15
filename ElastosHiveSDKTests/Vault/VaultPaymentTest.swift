@@ -23,7 +23,7 @@
 import XCTest
 @testable import ElastosHiveSDK
 import ElastosDIDSDK
-
+/*
 class VaultPaymentTest: XCTestCase {
     let planName: String = "Rookie"
     private var paymentService: VaultSubscription?
@@ -37,7 +37,7 @@ class VaultPaymentTest: XCTestCase {
     func test01GetPricingPlanList() {
         let lock = XCTestExpectation(description: "wait for get pricing plan list.")
         self.paymentService!.getPricingPlanList().done({ pricingPlan in
-            XCTAssert(pricingPlan!.count > 0)
+            XCTAssert(pricingPlan.count > 0)
             lock.fulfill()
         }).catch { error in
             XCTFail("\(error)")
@@ -77,3 +77,4 @@ class VaultPaymentTest: XCTestCase {
     }
     
 }
+*/

@@ -22,23 +22,35 @@
 
 import Foundation
 
-/**
- * This class explicitly represents the vault service subscribed by "userDid".
- */
+/// This class explicitly represents the vault service subscribed by "userDid".
 public class Vault: ServiceEndpoint {
-    private var _filesService: FilesService?
-    private var _database: DatabaseService?
-    private var _scripting: ScriptingService?
-    private var _backupService: BackupService?
+    private var _filesService: FilesService!
+    private var _database: DatabaseService!
+    private var _scripting: ScriptingService!
+    private var _backupService: BackupService!
     
-    public override init(_ context: AppContext?, _ providerAddress: String?) throws {
-         try super.init(context!, providerAddress!)
-        
+    public override init(_ context: AppContext, _ providerAddress: String) {
+        super.init(context, providerAddress)
         let builder = ServiceBuilder(self)
         _filesService = builder.createFilesService()
         _database = builder.createDatabase()
         _scripting = builder.createScriptingService()
         _backupService = builder.createBackupService()
     }
+    
+    public var filesService: FilesService {
+        return _filesService
+    }
 
+    public var databaseService: DatabaseService {
+        return _database
+    }
+    
+    public var scriptingService: ScriptingService {
+        return _scripting
+    }
+    
+    public var backupService: BackupService {
+        return _backupService
+    }
 }

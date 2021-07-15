@@ -25,7 +25,7 @@ import XCTest
 import ElastosDIDSDK
 
 import XCTest
-
+/*
 class BackupServiceTest: XCTestCase {
     private var backupService: BackupProtocol?
     
@@ -77,3 +77,4 @@ class BackupServiceTest: XCTestCase {
         self.backupService = try TestData.shared.backupService()
     }
 }
+*/

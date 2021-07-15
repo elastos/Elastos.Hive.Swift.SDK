@@ -25,8 +25,8 @@ import Foundation
 public class Backup: ServiceEndpoint {
     private var _promotionService: PromotionService?
     
-    public override init(_ context: AppContext, _ providerAddress: String?) throws {
-        try super.init(context, providerAddress)
+    public override init(_ context: AppContext, _ providerAddress: String) {
+        super.init(context, providerAddress)
         self._promotionService = ServiceBuilder(self).createPromotionService()
     }
     

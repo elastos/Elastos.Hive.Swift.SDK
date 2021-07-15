@@ -25,6 +25,39 @@ import XCTest
 import ElastosDIDSDK
 
 class DatabaseServiceTest: XCTestCase {
+    private let COLLECTION_NAME = "works"
+    private var databaseService: DatabaseService?
+    
+    override func setUp() {
+        XCTAssertNoThrow(databaseService = TestData.shared().newVault().databaseService)
+    }
+    
+    func test1CreateCollection() {
+        let lock = XCTestExpectation(description: "wait for create collection.")
+        databaseService?.createCollection(COLLECTION_NAME).done { _ in
+            XCTAssertTrue(true)
+            lock.fulfill()
+        }.catch { error in
+            lock.fulfill()
+            XCTFail()
+        }
+        self.wait(for: [lock], timeout: 100.0)
+    }
+    
+    func test2InsertOne() {
+        let lock = XCTestExpectation(description: "wait for test.")
+        let docNode = ["author": "john doe1", "title": "Eve for Dummies1"]
+        databaseService?.insertOne(COLLECTION_NAME, docNode,InsertOptions().bypassDocumentValidation(false)).done{ result in
+            print(result)
+            lock.fulfill()
+        }.catch{ error in
+            lock.fulfill()
+        }
+        self.wait(for: [lock], timeout: 100.0)
+    }
+}
+/*
+class DatabaseServiceTest: XCTestCase {
     private var database: DatabaseProtocol?
     private static let COLLECTION_NAME: String = "works"
     
@@ -137,3 +170,4 @@ class DatabaseServiceTest: XCTestCase {
         self.wait(for: [lock], timeout: 100.0)
     }
 }
+*/
