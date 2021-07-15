@@ -35,7 +35,7 @@ private let FILE_PROPERTIES_NAME: String = "file_properties"
 private let FILE_HASH_NAME: String = "file_hash"
 private let DATABASE_NAME: String = "script_database"
 
-
+/*
 class ScriptingServiceTest: XCTestCase {
         
     private var scriptingService: ScriptingProtocol?
@@ -527,3 +527,4 @@ class ScriptingServiceTest: XCTestCase {
         self.wait(for: [lock], timeout: 1000.0)
     }
 }
+*/

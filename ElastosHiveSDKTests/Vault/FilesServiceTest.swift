@@ -24,7 +24,7 @@ import XCTest
 @testable import ElastosHiveSDK
 import ElastosDIDSDK
 
-
+/*
 class FilesServiceTest: XCTestCase {
     
     private let FILE_NAME_TXT: String = "test_ios.txt"
@@ -349,3 +349,4 @@ class FilesServiceTest: XCTestCase {
         }
     }
 }
+*/

@@ -24,22 +24,22 @@ import Foundation
 import ObjectMapper
 
 public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentService {
-    private var _subscriptionController: SubscriptionController?
+    private var _subscriptionController: SubscriptionController!
     
-    public override init(_ context: AppContext, _ providerAddress: String?) throws {
-        try super.init(context, providerAddress)
+    public override init(_ context: AppContext, _ providerAddress: String) {
+        super.init(context, providerAddress)
         _subscriptionController = SubscriptionController(self)
     }
     
     public func getPricingPlanList() -> Promise<Array<PricingPlan>> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _subscriptionController!.getBackupPricingPlanList()
+            return try _subscriptionController.getBackupPricingPlanList()
         }
     }
     
     public func getPricingPlan(_ planName: String) -> Promise<PricingPlan> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _subscriptionController!.getBackupPricingPlan(planName)
+            return try _subscriptionController.getBackupPricingPlan(planName)
         }
     }
     
@@ -52,19 +52,19 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentSe
             if credential != nil {
                 throw HiveError.NotImplementedException("Paid pricing plan will be supported later")
             }
-            return try _subscriptionController!.subscribeToBackup(nil)
+            return try _subscriptionController.subscribeToBackup(nil)
         }
     }
     
     public func unsubscribe() -> Promise<Void> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _subscriptionController!.unsubscribeBackup()
+            return try _subscriptionController.unsubscribeBackup()
         }
     }
     
     public func checkSubscription() -> Promise<BackupInfo> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _subscriptionController!.getBackupInfo()
+            return try _subscriptionController.getBackupInfo()
         }
     }
     

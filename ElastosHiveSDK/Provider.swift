@@ -29,12 +29,12 @@
 ///     How much disk storage filled there;
 ///     etc.
 public class Provider: ServiceEndpoint {
-    public init(_ context: AppContext) throws {
-        try super.init(context, nil)
+    public init(_ context: AppContext) {
+        super.init(context, "") // TODO:
     }
     
-    public override init(_ context: AppContext, _ providerAddress: String?) throws {
-        try super.init(context, providerAddress)
+    public override init(_ context: AppContext, _ providerAddress: String) {
+        super.init(context, providerAddress)
     }
 }
 

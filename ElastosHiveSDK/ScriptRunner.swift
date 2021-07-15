@@ -23,10 +23,10 @@
 import Foundation
 
 public class ScriptRunner: ServiceEndpoint, ScriptingInvocationService {
-    private var _controller: ScriptingController?
+    private var _controller: ScriptingController!
 
-    public override init(_ context: AppContext, _ providerAddress: String?) throws {
-        try super.init(context, providerAddress)
+    public override init(_ context: AppContext, _ providerAddress: String) {
+        super.init(context, providerAddress)
         _controller = ScriptingController(self)
     }
 

@@ -45,6 +45,7 @@
 		11D26F4522CA3B4B00E4099A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FB22C4C33400F85419 /* String.swift */; };
 		11E573FF22C4C33400F85419 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FB22C4C33400F85419 /* String.swift */; };
 		11ED682A22FF1078004C17D0 /* ElastosHiveSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED682922FF1077004C17D0 /* ElastosHiveSDK.swift */; };
+		30037BB426A048730085AE4A /* TestAppContextProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30037BB226A048720085AE4A /* TestAppContextProvider.swift */; };
 		30091C1526181EC6003EB5CE /* BackupStateResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C1426181EC6003EB5CE /* BackupStateResponse.swift */; };
 		30091C1926182250003EB5CE /* AuthenticationServiceRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C1826182250003EB5CE /* AuthenticationServiceRender.swift */; };
 		30091C1C26182326003EB5CE /* HiveVaultRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C1B26182326003EB5CE /* HiveVaultRender.swift */; };
@@ -339,6 +340,7 @@
 		11ED682922FF1077004C17D0 /* ElastosHiveSDK.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElastosHiveSDK.swift; sourceTree = "<group>"; };
 		13C6D592C180032E4F31BEF6 /* Pods-ElastosHiveSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDK.debug.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDK/Pods-ElastosHiveSDK.debug.xcconfig"; sourceTree = "<group>"; };
 		2368C8CBAE94193EAF7DB87D /* Pods-ElastosHiveSDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDKTests.debug.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDKTests/Pods-ElastosHiveSDKTests.debug.xcconfig"; sourceTree = "<group>"; };
+		30037BB226A048720085AE4A /* TestAppContextProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestAppContextProvider.swift; sourceTree = "<group>"; };
 		30091C1426181EC6003EB5CE /* BackupStateResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupStateResponse.swift; sourceTree = "<group>"; };
 		30091C1826182250003EB5CE /* AuthenticationServiceRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationServiceRender.swift; sourceTree = "<group>"; };
 		30091C1B26182326003EB5CE /* HiveVaultRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiveVaultRender.swift; sourceTree = "<group>"; };
@@ -809,6 +811,7 @@
 		303CD57726078E5000865472 /* DID */ = {
 			isa = PBXGroup;
 			children = (
+				30037BB226A048720085AE4A /* TestAppContextProvider.swift */,
 				30D387CD269FDDFD0079E895 /* AppDID.swift */,
 				30D387CB269FDDFD0079E895 /* DIDEntity.swift */,
 				30D387CC269FDDFD0079E895 /* UserDID.swift */,
@@ -1409,6 +1412,7 @@
 				304F243D262808EA00DDB5C0 /* PromotionServiceTest.swift in Sources */,
 				3065A5E926156A0D00C20661 /* VaultPaymentTest.swift in Sources */,
 				304F24392628066700DDB5C0 /* VaultManagementTest.swift in Sources */,
+				30037BB426A048730085AE4A /* TestAppContextProvider.swift in Sources */,
 				3019D3DE2610D8F000A3C3C5 /* BackupServiceTest.swift in Sources */,
 				30DB96662601A94900ACF19F /* TestData.swift in Sources */,
 				30DB966A2601AA7300ACF19F /* NodeConfig.swift in Sources */,

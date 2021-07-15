@@ -25,8 +25,8 @@ import Foundation
 public class ServiceEndpoint: NodeRPCConnection {
     public var connectionManager: ConnectionManager?
     
-    private var _context: AppContext?
-    private var _providerAddress: String?
+    private var _context: AppContext
+    private var _providerAddress: String
 
     private var _appDid: String?
     private var _appInstanceDid: String?
@@ -35,18 +35,18 @@ public class ServiceEndpoint: NodeRPCConnection {
     private var _accessToken: AccessToken?
     private var _dataStorage: DataStorage?
     
-    public init(_ context: AppContext, _ providerAddress: String?) throws {
+    public init(_ context: AppContext, _ providerAddress: String) {
         _context = context
         _providerAddress = providerAddress
-        self.connectionManager = ConnectionManager(_providerAddress!)
+        self.connectionManager = ConnectionManager(_providerAddress)
         
-        var dataDir = _context?.appContextProvider.getLocalDataDir()
+        var dataDir = _context.appContextProvider.getLocalDataDir()
         if String((dataDir?.last)!) != "\\" {
             dataDir = dataDir! + "\\"
         }
     }
     
-    public var appContext: AppContext? {
+    public var appContext: AppContext {
         return _context
     }
 
@@ -55,7 +55,7 @@ public class ServiceEndpoint: NodeRPCConnection {
      *
      * @return provider address
      */
-    public var providerAddress: String? {
+    public var providerAddress: String {
         return _providerAddress
     }
     
@@ -65,7 +65,7 @@ public class ServiceEndpoint: NodeRPCConnection {
      * @return user did
      */
     public var userDid: String? {
-        return _context?.userDid
+        return _context.userDid
     }
     
     /**

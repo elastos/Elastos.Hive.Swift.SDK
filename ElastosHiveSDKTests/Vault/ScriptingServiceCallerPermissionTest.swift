@@ -28,7 +28,7 @@ import XCTest
 private let COLLECTION_GROUP: String = "st_group"
 private let COLLECTION_GROUP_MESSAGE: String = "st_group_message"
 private let SCRIPT_NAME: String = "st_group_message"
-
+/*
 class ScriptingServiceCallerPermissionTest: XCTestCase {
     private var scriptingService: ScriptingProtocol?
     private var scriptRunner: ScriptRunner?
@@ -99,3 +99,4 @@ class ScriptingServiceCallerPermissionTest: XCTestCase {
     }
 
 }
+*/
