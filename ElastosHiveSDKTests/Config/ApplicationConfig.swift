@@ -1,7 +1,7 @@
 import Foundation
 import ObjectMapper
 
-public class ApplicationConfig: Mappable {
+public class ApplicationConfig: Config {
     public var name: String
     public var mnemonic: String
     public var storepass: String
@@ -14,7 +14,8 @@ public class ApplicationConfig: Mappable {
         try! self.passPhrase = map.value("passPhrase")
     }
     
-    public func mapping(map: Map) {
+    public override func mapping(map: Map) {
+        super.mapping(map: map)
         name <- map["name"]
         mnemonic <- map["mnemonic"]
         storepass <- map["storepass"]
