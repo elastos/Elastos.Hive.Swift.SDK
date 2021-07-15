@@ -22,7 +22,7 @@ public class DIDEntity: NSObject {
     func initPrivateIdentity(_ mnemonic: String) throws {
         let storePath = "\(NSHomeDirectory())/Library/Caches/data/didCache"
         store = try DIDStore.open(atPath: storePath)
-
+//        identity = try store?.loadRootIdentity()
         if (try store!.containsRootIdentities()) {
             return // Already exists
         }
@@ -38,8 +38,9 @@ public class DIDEntity: NSObject {
             self.did = dids[0]
         }
 
-        let doc = try identity?.newDid(storepass)
-        self.did = doc?.subject
+        if let doc = try identity?.newDid(storepass) {
+            self.did = doc.subject
+        }
         print("My new DID created: ", name, did!.description)
     }
     

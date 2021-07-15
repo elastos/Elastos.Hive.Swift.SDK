@@ -13,54 +13,57 @@ public enum EnvironmentType: Int {
 public class TestData {
     private static var instance: TestData?
     private let RESOLVE_CACHE = "data/didCache"
-    private var _userDid: UserDID
-    private var _callerDid: UserDID
-    private var _appInstanceDid: AppDID
-    private var _nodeConfig: NodeConfig
-    private var _context: AppContext
-    private var _callerContext: AppContext
-    private var _storePath: String
+    private var _userDid: UserDID!
+    private var _callerDid: UserDID!
+    private var _appInstanceDid: AppDID!
+    private var _nodeConfig: NodeConfig!
+    private var _context: AppContext!
+    private var _callerContext: AppContext!
+    private var _storePath: String!
     
     public static func shared() -> TestData {
         if (instance == nil) {
-            instance = try! TestData()
+            instance = TestData()
         }
         return instance!
     }
     
-    public init() throws {
-        var file: String? = nil
-        let bundle = Bundle(for: type(of: self))
-        switch EnvironmentType.DEVELOPING {
-        case .DEVELOPING:
-            file = bundle.path(forResource: "Developing", ofType: "conf")
-        case .PRODUCTION:
-            file = bundle.path(forResource: "Production", ofType: "conf")
-        case .LOCAL:
-            file = bundle.path(forResource: "Local", ofType: "conf")
+    public init() {
+        do {
+            var file: String? = nil
+            let bundle = Bundle(for: type(of: self))
+            switch EnvironmentType.DEVELOPING {
+            case .DEVELOPING:
+                file = bundle.path(forResource: "Developing", ofType: "conf")
+            case .PRODUCTION:
+                file = bundle.path(forResource: "Production", ofType: "conf")
+            case .LOCAL:
+                file = bundle.path(forResource: "Local", ofType: "conf")
+            }
+            
+            let jsonData = try Data(contentsOf: URL(fileURLWithPath: file!))
+            let json = try JSONSerialization.jsonObject(with: jsonData)
+            
+            let clientConfig = ClientConfig(JSON: json as! [String : Any])
+            
+            try AppContext.setupResover(clientConfig!.resolverUrl, "data/didCache")
+            let applicationConfig = clientConfig!.applicationConfig
+            _appInstanceDid = try AppDID(applicationConfig.name, applicationConfig.mnemonic, applicationConfig.passPhrase, applicationConfig.storepass)
+            let userConfig = clientConfig!.userConfig
+            _userDid = try UserDID(userConfig.name, userConfig.mnemonic, userConfig.passPhrase, userConfig.storepass)
+            _nodeConfig = clientConfig!.nodeConfig
+            
+            let userConfigCaller: UserConfig = clientConfig!.crossConfig.userConfig
+            _callerDid = try UserDID(userConfigCaller.name, userConfigCaller.mnemonic, userConfigCaller.passPhrase, userConfigCaller.storepass)
+            
+            
+            _storePath = "\(NSHomeDirectory())/Library/Caches/data/store" + "/" + _nodeConfig.storePath
+            _context = try AppContext.build(TestAppContextProvider(_storePath, _userDid, _appInstanceDid), _userDid.description)
+            _callerContext = try AppContext.build(TestAppContextProvider(_storePath, _userDid, _appInstanceDid), _userDid.description)
         }
-
-        let jsonData = try Data(contentsOf: URL(fileURLWithPath: file!))
-        let json = try JSONSerialization.jsonObject(with: jsonData)
-
-        let clientConfig = ClientConfig(JSON: json as! [String : Any])
-        
-        try AppContext.setupResover(clientConfig!.resolverUrl, "data/didCache")
-        let applicationConfig = clientConfig!.applicationConfig
-        _appInstanceDid = try AppDID(applicationConfig.name, applicationConfig.mnemonic, applicationConfig.passPhrase, applicationConfig.storepass)
-        let userConfig = clientConfig!.userConfig
-        _userDid = try UserDID(userConfig.name, userConfig.mnemonic, userConfig.passPhrase, userConfig.storepass)
-        _nodeConfig = clientConfig!.nodeConfig
-        
-        let userConfigCaller: UserConfig = clientConfig!.crossConfig.userConfig
-        _callerDid = try UserDID(userConfigCaller.name, userConfigCaller.mnemonic, userConfigCaller.passPhrase, userConfigCaller.storepass)
-
-        
-        _storePath = "\(NSHomeDirectory())/Library/Caches/data/store" + "/" + _nodeConfig.storePath
-        _context = try AppContext.build(TestAppContextProvider(_storePath, _userDid, _appInstanceDid),
-                                            _nodeConfig.ownerDid)
-        _callerContext = try AppContext.build(TestAppContextProvider(_storePath, _userDid, _appInstanceDid),
-                                            _nodeConfig.ownerDid)
+        catch {
+            print(error)
+        }
     }
     
     public var storePath: String {
