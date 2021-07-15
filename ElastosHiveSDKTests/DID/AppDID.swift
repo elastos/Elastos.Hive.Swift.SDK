@@ -1,7 +1,7 @@
 import Foundation
 import ElastosDIDSDK
 
-public class DApp: DIDEntity {
+public class AppDID: DIDEntity {
     public var appId = "appId"
 
     public override init(_ name: String, _ mnemonic: String, _ adapter: DummyAdapter, _ phrasepass: String, _ storepass: String) throws {
@@ -15,10 +15,6 @@ public class DApp: DIDEntity {
 
         print("VerifiableCredential: ")
         print(vp.description)
-        
-        guard vp.isValid else {
-            throw DIDError.invalidState("Verifiable Presentation is invalid")
-        }
         
         return vp
     }

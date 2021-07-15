@@ -1,19 +1,19 @@
 import Foundation
 import ElastosDIDSDK
 
-public class DIDApp: Entity {
+public class UserDID: DIDEntity {
     var issuer: VerifiableCredentialIssuer?
 
-    public override init(_ name: String, _ mnemonic: String, _ adapter: DummyAdapter, _ phrasepass: String, _ storepass: String) {
-        super.init(name, mnemonic, adapter, phrasepass, storepass)
+    public override init(_ name: String, _ mnemonic: String, _ adapter: DummyAdapter, _ phrasepass: String, _ storepass: String) throws {
+        try super.init(name, mnemonic, adapter, phrasepass, storepass)
         do {
-            issuer = try VerifiableCredentialIssuer(getDocument()!)
+            issuer = try VerifiableCredentialIssuer(getDocument())
         } catch {
             print(error)
         }
     }
 
-    public func issueDiplomaFor(_ dapp: DApp) throws -> VerifiableCredential {
+    public func issueDiplomaFor(_ dapp: AppDID) throws -> VerifiableCredential {
         let subject = ["appDid": dapp.appId]
         let userCalendar = Calendar.current
         var components = DateComponents()
@@ -30,9 +30,6 @@ public class DIDApp: Entity {
         let vcStr = vc.toString(true)
         print(vcStr)
 
-        guard vc.isValid else {
-            throw DIDError.illegalArgument("Verifiable Credential is invalid")
-        }
         return vc
     }
 
@@ -52,10 +49,6 @@ public class DIDApp: Entity {
         print("BackupCredential:")
         let vcStr = vc.toString(true)
         print(vcStr)
-        
-        guard vc.isValid else {
-            throw DIDError.illegalArgument("Verifiable Credential is invalid")
-        }
         
         return vc
     }

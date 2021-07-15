@@ -1,23 +1,19 @@
 import Foundation
 import ElastosDIDSDK
 
-
 public class DIDEntity: NSObject {
     
+    var name: String
     var phrasepass: String
     var storepass: String
-
-    var name: String
+    var identity: RootIdentity?
     var store: DIDStore?
     var did: DID?
-
-    static var adapter: DummyAdapter?
     
     init(_ name: String, _ mnemonic: String, _ adapter: DummyAdapter, _ phrasepass: String, _ storepass: String) throws {
         self.phrasepass = phrasepass
         self.storepass = storepass
         self.name = name
-        DIDEntity.adapter = adapter
         super.init()
         try initPrivateIdentity(mnemonic)
         try initDid()
@@ -25,31 +21,26 @@ public class DIDEntity: NSObject {
     
     func initPrivateIdentity(_ mnemonic: String) throws {
         let storePath = "\(NSHomeDirectory())/Library/Caches/data/didCache"
-        store = try DIDStore.open(atPath: storePath, withType: "filesystem", adapter: DIDEntity.adapter!)
+        store = try DIDStore.open(atPath: storePath)
 
-        if (store!.containsPrivateIdentity()) {
+        if (try store!.containsRootIdentities()) {
             return // Already exists
         }
 
-        try store!.initializePrivateIdentity(using: Mnemonic.DID_ENGLISH, mnemonic: mnemonic, passPhrase: phrasepass, storePassword: storepass)
+        identity = try RootIdentity.create(mnemonic, phrasepass, store!, storepass)
+        let re = try identity?.synchronize(0)
+        print(re)
     }
     
     func initDid() throws {
-        let dids = try store!.listDids(using: DIDStore.DID_HAS_PRIVATEKEY)
+        let dids = try store!.listDids()
         if (dids.count > 0) {
-            for did in dids {
-                if did.getMetadata().aliasName == "me" {
-                    print("\(name) My DID: \(did)")
-                    self.did = did
-                    return
-                }
-            }
+            self.did = dids[0]
         }
 
-        let doc = try store!.newDid(withAlias: "me", using: storepass)
-        
-        self.did = doc.subject
-        print("\(name) My new DID created: \(did)")
+        let doc = try identity?.newDid(storepass)
+        self.did = doc?.subject
+        print("My new DID created: ", name, did!.description)
     }
     
     var getDIDStore: DIDStore {
