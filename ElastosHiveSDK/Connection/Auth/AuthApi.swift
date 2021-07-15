@@ -25,21 +25,11 @@ import Foundation
 extension ConnectionManager {
     public func signIn(_ request: SignInRequest) throws -> DataRequest {
         let url = self.baseURL + "/api/v2/did/signin"
-        return try self.createDataRequest(url, .post, nil)
+        return try self.createDataNoAuthRequest(url, .post, request.toJSON())
     }
     
     public func auth(_ request: ChallengeResponse) throws -> DataRequest {
-        let url = self.baseURL + "/api/v2/did/signin"
-        return try self.createDataRequest(url, .post, nil)
+        let url = self.baseURL + "/api/v2/did/auth"
+        return try self.createDataNoAuthRequest(url, .post, request.toJSON())
     }
 }
-
-//extension HiveAPi {
-//    func signIn() -> String {
-//        return self.baseURL + self.apiPath + "/did/sign_in"
-//    }
-//    
-//    func auth() -> String {
-//        return self.baseURL + self.apiPath + "/did/auth"
-//    }
-//}
