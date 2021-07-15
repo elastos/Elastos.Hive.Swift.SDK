@@ -31,7 +31,7 @@ public class HiveAPi {
     private var _req: DataRequest?
     
     public var baseURL: String
-    public static let defaultTimeout: TimeInterval = 30.0
+    public static let defaultTimeout: TimeInterval = 100.0
     public var apiPath: String {
         get {
             return "/api/v1"

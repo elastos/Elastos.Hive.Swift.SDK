@@ -26,35 +26,42 @@ public class AccessToken: CodeFetcher {
     private var _jwtCode: String?
     private var _remoteFetcher: CodeFetcher?
     private var _storage: DataStorage?
-//    private var _bridge: BridgeHandlerProtocol?
     
-//    public init(_ endpoint: ServiceEndpoint, _ storage: DataStorageProtocol?, _ bridge: BridgeHandlerProtocol?) {
-//        _remoteFetcher = RemoteFetcher(endpoint)
-//        
-//    }
+    public var flush: ((String) -> Void)?
+//    public var target: (() -> Any)?
+    
+    public init(_ endpoint: ServiceEndpoint, _ storage: DataStorage?) {
+        _remoteFetcher = RemoteFetcher(endpoint)
+        
+    }
 //    
 //    public func getCanonicalizedAccessToken() -> String {
 //        
 //    }
     
     public func fetch() throws -> String? {
-//        if _jwtCode != nil {
-//            return _jwtCode
-//        }
-//
-//        _jwtCode = restoreToken()
-//        if _jwtCode == nil {
-//            _jwtCode = try _remoteFetcher?.fetch()
-//
-//            if _jwtCode != nil {
+        if _jwtCode != nil {
+            return _jwtCode
+        }
+
+        _jwtCode = restoreToken()
+        if _jwtCode == nil {
+            _jwtCode = try _remoteFetcher?.fetch()
+
+            if _jwtCode != nil {
+                if self.flush != nil {
+                    self.flush!(_jwtCode!)
+                }
 //                _bridge?.flush(_jwtCode!)
-//                saveToken(_jwtCode)
-//            }
-//        } else {
+                saveToken(_jwtCode)
+            }
+        } else {
 //            _bridge?.flush(_jwtCode!)
-//        }
-//        return _jwtCode
-        return nil
+            if self.flush != nil {
+                self.flush!(_jwtCode!)
+            }
+        }
+        return _jwtCode
     }
     
     public func invalidate() {

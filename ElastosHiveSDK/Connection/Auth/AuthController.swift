@@ -32,8 +32,20 @@ public class AuthController {
         _expectationAudience = appInstanceDidDoc.subject.description
     }
     
+    private func convertStringToDictionary(text: String) -> [String:AnyObject]? {
+       if let data = text.data(using: .utf8) {
+           do {
+               let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String:AnyObject]
+               return json
+           } catch {
+               print("Something went wrong")
+           }
+       }
+       return nil
+   }
+    
     public func signIn(_ appInstanceDidDoc: DIDDocument) throws -> String? {
-        let challenge: ChallengeRequest = try _connectionManager.signIn(SignInRequest(appInstanceDidDoc.description)).execute(ChallengeRequest.self)
+        let challenge: ChallengeRequest = try _connectionManager.signIn(SignInRequest(self.convertStringToDictionary(text: appInstanceDidDoc.description))).execute(ChallengeRequest.self)
         if try !checkValid(challenge.getChallenge, _expectationAudience) {
             throw HiveError.ServerUnkownException("Invalid challenge code, possibly being hacked.")
         }

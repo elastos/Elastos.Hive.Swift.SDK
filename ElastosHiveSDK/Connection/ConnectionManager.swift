@@ -35,13 +35,13 @@ extension DataRequest {
         let response1 = response(responseSerializer: JSONResponseSerializer(options: options))
         switch response1.result {
         case .success(let re):
-            let json = re as! [String : Any]
-            if json["_status"] as! String != "OK" {
-                let errorObject = JSON(json)
-                let code = errorObject["_error"] ["code"];
-                let message = errorObject["_error"] ["message"];
-                throw HiveError.hiveSdk(message: "get error from server: error code = \(code), message = \(message)")
-            }
+//            let json = re as! [String : Any]
+//            if json["_status"] as! String != "OK" {
+//                let errorObject = JSON(json)
+//                let code = errorObject["_error"] ["code"];
+//                let message = errorObject["_error"] ["message"];
+//                throw HiveError.hiveSdk(message: "get error from server: error code = \(code), message = \(message)")
+//            }
             
             let result = T(JSON: re as! [String : Any])!
 //            try result.checkResponseVaild()
@@ -70,6 +70,8 @@ public class ConnectionManager {
     public var tokenResolver: TokenResolver?
     public let lock: NSLock = NSLock()
     public let baseURL: String
+    public var accessToken: AccessToken?
+
     
     public init(_ baseURL: String) {
         self.baseURL = baseURL
@@ -117,7 +119,20 @@ public class ConnectionManager {
 //        return req
 //    }
     
+    public func createDataNoAuthRequest(_ url: String,  _ method: HTTPMethod, _ parameters: Dictionary<String, Any>?) throws -> DataRequest {
+        return AF.request(url,
+                          method: method,
+                          parameters: parameters,
+                          encoding: JSONEncoding.default,
+                          headers:self.defaultHeaders()) { $0.timeoutInterval = HiveAPi.defaultTimeout }
+    }
+    
     public func createDataRequest(_ url: String,  _ method: HTTPMethod, _ parameters: Dictionary<String, Any>?) throws -> DataRequest {
+        
+        if self.accessionToken == nil {
+            self.accessionToken = try self.accessToken?.fetch()
+        }
+        
         return AF.request(url,
                           method: method,
                           parameters: parameters,

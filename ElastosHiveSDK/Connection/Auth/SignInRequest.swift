@@ -33,6 +33,6 @@ public class SignInRequest: Mappable {
     public required init?(map: Map) {}
     
     public func mapping(map: Map) {
-        _didDocument <- map["didDocument"]
+        _didDocument <- map["id"]
     }
 }

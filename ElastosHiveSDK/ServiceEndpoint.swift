@@ -21,6 +21,7 @@
 */
 
 import Foundation
+import ElastosDIDSDK
 
 public class ServiceEndpoint: NodeRPCConnection {
     public var connectionManager: ConnectionManager?
@@ -38,12 +39,26 @@ public class ServiceEndpoint: NodeRPCConnection {
     public init(_ context: AppContext, _ providerAddress: String) {
         _context = context
         _providerAddress = providerAddress
+        super.init()
         self.connectionManager = ConnectionManager(_providerAddress)
         
         var dataDir = _context.appContextProvider.getLocalDataDir()
         if String((dataDir?.last)!) != "\\" {
             dataDir = dataDir! + "\\"
         }
+        
+        _dataStorage = FileStorage(dataDir!, _context.userDid)
+        _accessToken = AccessToken(self, _dataStorage)
+        _accessToken!.flush = { (value) in
+            do {
+                let claims = try JwtParserBuilder().build().parseClaimsJwt(value).claims
+                self.flushDids(claims.getAudience()!, claims.getIssuer()!)
+            } catch {
+                print(error)
+            }
+            
+        }
+        self.connectionManager?.accessToken = _accessToken;
     }
     
     public var appContext: AppContext {
