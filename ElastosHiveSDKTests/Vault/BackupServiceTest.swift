@@ -23,34 +23,30 @@
 import XCTest
 @testable import ElastosHiveSDK
 import ElastosDIDSDK
+import AwaitKit
 
 import XCTest
-/*
+
 class BackupServiceTest: XCTestCase {
-    private var backupService: BackupProtocol?
+    private var _backupService: BackupService?
     
-    func test01CheckResult() {
-        let lock = XCTestExpectation(description: "wait for check result.")
-        self.backupService!.checkResult().done({ result in
-            XCTAssertTrue(true, "check result test case passed")
-            lock.fulfill()
-        }).catch({ error in
-            XCTFail("\(error)")
-            lock.fulfill()
+    override func setUpWithError() throws {
+        XCTAssertNoThrow({ [self] in
+            let testData = TestData.shared()
+            _backupService = try testData.backupService()
         })
-        self.wait(for: [lock], timeout: 1000.0)
     }
     
-    func test02StartBackup() {
-        let lock = XCTestExpectation(description: "wait for start backup.")
-        self.backupService!.startBackup().done({ _ in
-            XCTAssertTrue(true, "start backup test case passed")
-            lock.fulfill()
-        }).catch({ error in
-            XCTFail("\(error)")
-            lock.fulfill()
+    func test01StartBackup() {
+        XCTAssertNoThrow({ [self] in
+            try await(_backupService!.startBackup())
         })
-        self.wait(for: [lock], timeout: 1000.0)
+    }
+
+    func test02CheckResult() {
+        XCTAssertNoThrow({ [self] in
+            XCTAssertNotNil(try await(_backupService!.checkResult()))
+        })
     }
     
     func test03StopBackup() {
@@ -58,23 +54,13 @@ class BackupServiceTest: XCTestCase {
     }
     
     func test04RestoreFrom() {
-        let lock = XCTestExpectation(description: "wait for restore form.")
-        self.backupService!.restoreFrom().done({ _ in
-            XCTAssertTrue(true, "restore formp test case passed")
-            lock.fulfill()
-        }).catch({ error in
-            XCTFail("\(error)")
-            lock.fulfill()
+        XCTAssertNoThrow({ [self] in
+            try await(_backupService!.restoreFrom())
         })
-        self.wait(for: [lock], timeout: 1000.0)
-    }
-
-    func test05StopRestore() {
-        // TODO
     }
     
-    override func setUpWithError() throws {
-        self.backupService = try TestData.shared.backupService()
+    func testStopRestore() {
+        // TODO
     }
 }
-*/
+
