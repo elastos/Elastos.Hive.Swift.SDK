@@ -53,7 +53,7 @@ public protocol PaymentService {
     ///   - orderId: order id
     ///   - transactionId: the transaction id on the block-chain.
     /// - returns: return the receipt detail in case the payment was accepted by hive node, otherwise return the specific exception.
-    func payOrder(_ orderId: String, _ transactionId: [String]) -> Promise<Receipt>
+    func payOrder(_ orderId: String, _ transactionId: String) -> Promise<Receipt>
     
     /// Obtain the receipt detail according to the receipt id.
     ///
@@ -61,8 +61,8 @@ public protocol PaymentService {
     /// - returns: return the receipt detail in case there is a receipt existing, otherwise, return the specific exception.
     func getReceipt(_ receiptId: String) -> Promise<Receipt>
     
-    /// Obtain all the list of receipt detail.
+    /// Obtain the version of the payment module.
     ///
-    /// - returns: return the list of receipt detail on success, otherwise, return the specific exception.
-    func getReceiptList() -> Promise<Array<Receipt>>
+    /// - returns: return the version, otherwise, return the specific exception.
+    func getVersion() -> Promise<String?>
 }

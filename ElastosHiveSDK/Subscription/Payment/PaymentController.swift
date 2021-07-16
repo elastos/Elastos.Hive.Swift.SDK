@@ -46,11 +46,11 @@ public class PaymentController {
         throw HiveError.NotImplementedException(nil)
     }
     
-    public func getReceipts(_ subscription: String?) throws -> [Receipt]? {
-        throw HiveError.NotImplementedException(nil)
+    public func getReceipt(_ orderId: String) throws -> Receipt? {
+        return try _connectionManager.getReceipt(orderId).execute(Receipt.self)
     }
     
-    public func getVersion(_ subscription: String?) throws -> String? {
-        throw HiveError.NotImplementedException(nil)
+    public func getVersion() throws -> String? {
+        return try _connectionManager.getVersion().execute()?.getString()
     }
 }

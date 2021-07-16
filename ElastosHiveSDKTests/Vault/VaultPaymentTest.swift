@@ -23,58 +23,83 @@
 import XCTest
 @testable import ElastosHiveSDK
 import ElastosDIDSDK
-/*
+import AwaitKit
+
 class VaultPaymentTest: XCTestCase {
-    let planName: String = "Rookie"
-    private var paymentService: VaultSubscription?
+    private let _orderId: String = "60ee8c056fdd17b16bb5b4c2"
+    private let _transId: String = "280a24034bfb241c31b5a73c792c9d05df2b1f79bb98733c5358aeb909c27010"
+    private let _pricingPlanName: String = "Rookie"
+
+    private var _paymentService: PaymentService?
 
     override func setUpWithError() throws {
         Log.setLevel(.Debug)
-        let testData = TestData.shared
-        self.paymentService = try VaultSubscription(testData.appContext, testData.providerAddress)
+        XCTAssertNoThrow({ [self] in
+            let testData = TestData.shared()
+            _paymentService = VaultSubscription(testData.appContext, testData.providerAddress)
+        })
     }
     
-    func test01GetPricingPlanList() {
-        let lock = XCTestExpectation(description: "wait for get pricing plan list.")
-        self.paymentService!.getPricingPlanList().done({ pricingPlan in
-            XCTAssert(pricingPlan.count > 0)
-            lock.fulfill()
-        }).catch { error in
-            XCTFail("\(error)")
-            lock.fulfill()
-        }
-        self.wait(for: [lock], timeout: 1000.0)
+    func test01GetVersion() {
+        XCTAssertNoThrow({ [self] in
+            let version = try await(_paymentService!.getVersion())
+            XCTAssert(version != nil)
+        })
     }
     
-    func test02GetPricingPlan() {
-        let lock = XCTestExpectation(description: "wait for get pricing plan.")
-        self.paymentService!.getPricingPlan(self.planName).done({ pricingPlan in
-            XCTAssert(pricingPlan != nil)
-            lock.fulfill()
-        }).catch { error in
-            XCTFail()
-            lock.fulfill()
-        }
-        self.wait(for: [lock], timeout: 1000.0)
+    func test02PlaceOrder() {
+        XCTAssertNoThrow({ [self] in
+            let order = try await(_paymentService!.placeOrder(_pricingPlanName))
+            XCTAssertNotNil(order)
+        })
+    }
+    
+    func test03PayOrder() {
+        XCTAssertNoThrow({ [self] in
+            let receipt = try await(_paymentService!.payOrder(_orderId, _transId))
+            XCTAssertNotNil(receipt.receiptId)
+            XCTAssertNotNil(receipt.orderId)
+        })
+    }
+    
+    func test04GetOrder() {
+        XCTAssertNoThrow({ [self] in
+            let order = try await(_paymentService!.getOrder(_orderId))
+            XCTAssertNotNil(order)
+            XCTAssertNotNil(order.orderId)
+        })
+    }
+    
+    func test05GetOrders() {
+        XCTAssertNoThrow({ [self] in
+            let orders = try await(_paymentService!.getOrderList())
+            XCTAssertNotNil(orders)
+            XCTAssert(orders.count != 0)
+        })
+    }
+    
+    func test06GetReceipt() {
+        XCTAssertNoThrow({ [self] in
+            let receipt = try await(_paymentService!.getReceipt(_orderId))
+            XCTAssertNotNil(receipt)
+            XCTAssertNotNil(receipt.receiptId)
+            XCTAssertNotNil(receipt.orderId)
+        })
     }
 
-    func test03OrderProcess() {
-        let lock = XCTestExpectation(description: "wait for get pricing plan.")
-        try! self.paymentService!.placeOrder(self.planName).then({ order -> Promise<Order?> in
-            XCTAssert(order != nil)
-            return self.paymentService!.getOrder(order!.orderId!)
-        }).then({ order -> Promise<Receipt?> in
-            XCTAssert(order != nil)
-            return self.paymentService!.payOrder(order!.orderId!, [])
-        }).done({ receipt in
-            XCTAssert(receipt != nil)
-            lock.fulfill()
-        }).catch { error in
-            XCTFail("\(error)")
-            lock.fulfill()
-        }
-        self.wait(for: [lock], timeout: 1000.0)
+    func test07MakeOrderProcess() {
+        XCTAssertNoThrow({ [self] in
+            var order = try await(_paymentService!.placeOrder(_pricingPlanName))
+            XCTAssertNotNil(order)
+            XCTAssertNotNil(order.orderId)
+            order = try await(_paymentService!.getOrder(order.orderId!))
+            XCTAssertNotNil(order)
+            XCTAssertNotNil(order.orderId)
+            let receipt = try await(_paymentService!.payOrder(order.orderId!, _transId))
+            XCTAssertNotNil(receipt)
+            XCTAssertNotNil(receipt.receiptId)
+            XCTAssertNotNil(receipt.orderId)
+        })
     }
-    
 }
-*/
+
