@@ -26,18 +26,26 @@ public class AccessToken: CodeFetcher {
     private var _jwtCode: String?
     private var _remoteFetcher: CodeFetcher?
     private var _storage: DataStorage?
+    private var _endpoint: ServiceEndpoint
+
     
     public var flush: ((String) -> Void)?
-//    public var target: (() -> Any)?
     
     public init(_ endpoint: ServiceEndpoint, _ storage: DataStorage?) {
+        _endpoint = endpoint
         _remoteFetcher = RemoteFetcher(endpoint)
         
     }
-//    
-//    public func getCanonicalizedAccessToken() -> String {
-//        
-//    }
+    
+    public func getCanonicalizedAccessToken() -> String {
+        do {
+            try _jwtCode = fetch()
+
+        } catch {
+            print(error)
+        }
+        return "token " + _jwtCode!
+    }
     
     public func fetch() throws -> String? {
         if _jwtCode != nil {
@@ -52,11 +60,9 @@ public class AccessToken: CodeFetcher {
                 if self.flush != nil {
                     self.flush!(_jwtCode!)
                 }
-//                _bridge?.flush(_jwtCode!)
-                saveToken(_jwtCode)
+                saveToken(_jwtCode!)
             }
         } else {
-//            _bridge?.flush(_jwtCode!)
             if self.flush != nil {
                 self.flush!(_jwtCode!)
             }
@@ -69,159 +75,51 @@ public class AccessToken: CodeFetcher {
     }
     
     private func restoreToken() -> String? {
-     
-        return nil
-//        let endpoint: ServiceEndpoint? = _bridge?.target() as! ServiceEndpoint
-//        if endpoint == nil {
-//            return nil
-//        }
-//
-//        var jwtCode: String? = nil
-//        var serviceDid: String? = nil
-//        var address: String? = nil
-    }
-    
-//    private func restoreToken() -> String? {
-//
-//        let endpoint: ServiceEndpoint = _bridge?.target() as! ServiceEndpoint
-//        if endpoint == nil {
-//            return nil
-//        }
-//
-//        var jwtCode: String = nil
-//        var serviceDid: String
-//        var address: String
-//
-//                serviceDid = endpoint.getServiceInstanceDid();
-//                address    = endpoint.getProviderAddress();
-//
-//                if (serviceDid != null)
-//                    jwtCode = storage.loadAccessToken(serviceDid);
-//
-//                if (jwtCode != null && isExpired(jwtCode)) {
-//                    storage.clearAccessTokenByAddress(address);
-//                    storage.clearAccessToken(serviceDid);
-//                }
-//
-//                if (jwtCode == null)
-//                    jwtCode = storage.loadAccessTokenByAddress(address);
-//
-//
-//                if (jwtCode != null && isExpired(jwtCode)) {
-//                    storage.clearAccessTokenByAddress(address);
-//                    storage.clearAccessToken(serviceDid);
-//                }
-//
-//                return jwtCode;
-//    }
-    
-    private func isExpired(_ jwtCode: String?) -> Bool? {
-        return false
-    }
-    
-    private func saveToken(_ jwtCode: String?) {
+        if _endpoint == nil {
+            return nil
+        }
+        
+        var jwtCode: String?
+        var serviceDid: String?
+        var address: String?
+        
+        serviceDid = _endpoint.serviceInstanceDid
+        address = _endpoint.providerAddress
+        
+        if serviceDid != nil {
+            jwtCode = _storage?.loadAccessToken(serviceDid!)
+        }
+        
+        if jwtCode != nil && isExpired(jwtCode) {
+            _storage?.clearAccessTokenByAddress(address!)
+            _storage?.clearAccessToken(serviceDid!)
+        }
+        
+        if jwtCode == nil {
+            jwtCode = _storage?.loadAccessTokenByAddress(address!)
+        }
+        
+        if jwtCode != nil && isExpired(jwtCode) {
+            _storage?.clearAccessTokenByAddress(address!)
+            _storage?.clearAccessToken(serviceDid!)
+        }
+        return jwtCode
         
     }
     
-    private func clearToken() {
- 
+    private func isExpired(_ jwtCode: String?) -> Bool {
+        return false
     }
-
     
-//    public AccessToken(ServiceEndpoint endpoint, DataStorage storage, BridgeHandler bridge) {
-//            remoteFetcher = new RemoteFetcher(endpoint);
-//            this.storage = storage;
-//            this.bridge = bridge;
-//        }
-//
-//        public String getCanonicalizedAccessToken() {
-//            try {
-//                jwtCode = fetch();
-//            } catch (Exception e) {
-//                // TODO:
-//                return null;
-//            }
-//            return "token " + jwtCode;
-//        }
-//
-//        @Override
-//        public String fetch() throws NodeRPCException {
-//            if (jwtCode != null)
-//                return jwtCode;
-//
-//            jwtCode = restoreToken();
-//            if (jwtCode == null) {
-//                jwtCode = remoteFetcher.fetch();
-//
-//                if (jwtCode != null) {
-//                    bridge.flush(jwtCode);
-//                    saveToken(jwtCode);
-//                }
-//            } else {
-//                bridge.flush(jwtCode);
-//            }
-//            return jwtCode;
-//        }
-//
-//        @Override
-//        public void invalidate() {
-//            clearToken();
-//        }
-//
-//        private String restoreToken() {
-//            ServiceEndpoint endpoint = (ServiceEndpoint)bridge.target();
-//            if (endpoint == null)
-//                return null;
-//
-//            String jwtCode = null;
-//            String serviceDid;
-//            String address;
-//
-//            serviceDid = endpoint.getServiceInstanceDid();
-//            address    = endpoint.getProviderAddress();
-//
-//            if (serviceDid != null)
-//                jwtCode = storage.loadAccessToken(serviceDid);
-//
-//            if (jwtCode != null && isExpired(jwtCode)) {
-//                storage.clearAccessTokenByAddress(address);
-//                storage.clearAccessToken(serviceDid);
-//            }
-//
-//            if (jwtCode == null)
-//                jwtCode = storage.loadAccessTokenByAddress(address);
-//
-//
-//            if (jwtCode != null && isExpired(jwtCode)) {
-//                storage.clearAccessTokenByAddress(address);
-//                storage.clearAccessToken(serviceDid);
-//            }
-//
-//            return jwtCode;
-//        }
-//
-//        private boolean isExpired(String jwtCode) {
-//            // return System.currentTimeMillis() >= (getExpiresTime() * 1000);
-//            return false;
-//        }
-//
-//        private void saveToken(String jwtCode) {
-//            ServiceEndpoint endpoint = (ServiceEndpoint)bridge.target();
-//            if (endpoint == null)
-//                return;
-//
-//            storage.storeAccessToken(endpoint.getServiceInstanceDid(), jwtCode);
-//            storage.storeAccessTokenByAddress(endpoint.getProviderAddress(), jwtCode);
-//        }
-//
-//        private void clearToken() {
-//            ServiceEndpoint endpoint = (ServiceEndpoint)bridge.target();
-//            if (endpoint == null)
-//                return;
-//
-//            storage.clearAccessToken(endpoint.getServiceInstanceDid());
-//            storage.clearAccessTokenByAddress(endpoint.getProviderAddress());
-//        }
+    private func saveToken(_ jwtCode: String) {
+        _storage?.storeAccessToken(_endpoint.serviceInstanceDid!, jwtCode);
+        _storage?.storeAccessTokenByAddress(_endpoint.providerAddress, jwtCode);
+    }
+    
+    private func clearToken() {
+        _storage?.clearAccessToken(_endpoint.serviceInstanceDid!)
+        _storage?.clearAccessTokenByAddress(_endpoint.providerAddress)
+    }
 }
 
 
