@@ -23,57 +23,57 @@
 import XCTest
 @testable import ElastosHiveSDK
 import ElastosDIDSDK
+import AwaitKit
 
-//class BackupSubscriptionTest: XCTestCase {
-//    private var subscription: BackupSubscription?
-//
-//    override func setUpWithError() throws {
-//        let testData: TestData = TestData.shared;
-//        self.subscription = try BackupSubscription(testData.appContext, testData.providerAddress)
-//    }
-//    
-//    func test01Subscribe() throws {
-//        let lock = XCTestExpectation(description: "wait for subscribe.")
-//        self.subscription!.subscribe().done({ backupInfo in
-//            lock.fulfill()
-//        }).catch({ error in
-//            XCTFail("\(error)")
-//            lock.fulfill()
-//        })
-//        self.wait(for: [lock], timeout: 1000.0)
-//    }
-//    
-//    func test02Activate() throws {
-//        let lock = XCTestExpectation(description: "wait for activate.")
-//        self.subscription!.activate().done ({ _ in
-//            lock.fulfill()
-//        }).catch({ error in
-//            XCTFail("\(error)")
-//            lock.fulfill()
-//        })
-//        self.wait(for: [lock], timeout: 1000.0)
-//    }
-//    
-//    func test03Deactivate() throws {
-//        let lock = XCTestExpectation(description: "wait for deactivate.")
-//        self.subscription!.deactivate().done ({ _ in
-//            lock.fulfill()
-//        }).catch({ error in
-//            XCTFail("\(error)")
-//            lock.fulfill()
-//        })
-//        self.wait(for: [lock], timeout: 1000.0)
-//    }
-//
-//    func testUnsubscribe() throws {
-//        let lock = XCTestExpectation(description: "wait for unsubscribe.")
-//        self.subscription!.activate().done ({ _ in
-//            lock.fulfill()
-//        }).catch({ error in
-//            XCTFail("\(error)")
-//            lock.fulfill()
-//        })
-//        self.wait(for: [lock], timeout: 1000.0)
-//    }
-//
-//}
+class BackupSubscriptionTest: XCTestCase {
+    private var _subscription: BackupSubscription?
+
+    override func setUpWithError() throws {
+        XCTAssertNoThrow({ [self] in
+            let testData = TestData.shared()
+            _subscription = BackupSubscription(testData.appContext, testData.providerAddress)
+        })
+    }
+    
+    func test01GetPricingPlanList() {
+        XCTAssertNoThrow({ [self] in
+            let plans = try await(_subscription!.getPricingPlanList())
+            XCTAssertNotNil(plans)
+            XCTAssert(plans.count != 0)
+        })
+    }
+    
+    func test02GetPricingPlan() {
+        XCTAssertNoThrow({ [self] in
+            let plan = try await(_subscription!.getPricingPlan("Rookie"))
+            XCTAssertNotNil(plan)
+            XCTAssert(plan.name == "Rookie")
+        })
+    }
+    
+    func test03Subscribe() {
+        XCTAssertNoThrow({ [self] in
+            _ = try await(_subscription!.subscribe())
+        })
+    }
+    
+    func test04CheckSubscription() {
+        XCTAssertNoThrow({ [self] in
+            XCTAssertNotNil(try await(_subscription!.checkSubscription()))
+        })
+    }
+    
+    func test05Unsubscribe() {
+        XCTAssertNoThrow({ [self] in
+            try await(_subscription!.unsubscribe())
+        })
+    }
+  
+    func test06GetFileHashProcess() {
+        XCTAssertNoThrow({ [self] in
+            try await(_subscription!.subscribe())
+        })
+        
+        // TODO
+    }   
+}
