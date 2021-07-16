@@ -23,6 +23,7 @@
 import XCTest
 @testable import ElastosHiveSDK
 import ElastosDIDSDK
+import AwaitKit
 
 class DatabaseServiceTest: XCTestCase {
     private let COLLECTION_NAME = "works"
@@ -35,10 +36,11 @@ class DatabaseServiceTest: XCTestCase {
 
     func test1CreateCollection() {
         let lock = XCTestExpectation(description: "wait for create collection.")
-        databaseService?.createCollection(COLLECTION_NAME).done { _ in
-            XCTAssertTrue(true)
+        do {
+            _ = try await(databaseService!.createCollection(COLLECTION_NAME))
             lock.fulfill()
-        }.catch { error in
+        } catch {
+            print(error)
             lock.fulfill()
             XCTFail()
         }

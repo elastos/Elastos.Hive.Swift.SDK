@@ -35,13 +35,15 @@ extension DataRequest {
         let response1 = response(responseSerializer: JSONResponseSerializer(options: options))
         switch response1.result {
         case .success(let re):
-//            let json = re as! [String : Any]
-//            if json["_status"] as! String != "OK" {
-//                let errorObject = JSON(json)
-//                let code = errorObject["_error"] ["code"];
-//                let message = errorObject["_error"] ["message"];
-//                throw HiveError.hiveSdk(message: "get error from server: error code = \(code), message = \(message)")
+            let json = re as! [String : Any]
+//            if response?.statusCode != 200 && response?.statusCode != 201 {
+//                throw HiveError
 //            }
+            if json["error"] != nil  {
+                let errorObject = JSON(json)
+                throw NetworkError.NetworkException(message: "\(errorObject["error"]["message"])")
+            }
+
             
             let result = T(JSON: re as! [String : Any])!
 //            try result.checkResponseVaild()
