@@ -25,19 +25,18 @@ import XCTest
 import ElastosDIDSDK
 
 class PromotionServiceTest: XCTestCase {
+    private var _promotionService: PromotionService?
     
-//    private var promotionService: PromotionProtocol?
-//
-//    override func setUpWithError() throws {
-//        self.promotionService = try TestData.shared.newBackup().promotionService
-//    }
-//    
-//    func testPromote() throws {
-//        self.promotionService?.promote().done({ () in
-//            XCTAssert(true)
-//        }).catch({ error in
-//            XCTFail("\(error)")
-//        })
-//    }
-
+    override func setUpWithError() throws {
+        XCTAssertNoThrow({ [self] in
+            let testData = TestData.shared()
+            _promotionService = testData.newBackup().promotionService
+        })
+    }
+    
+    public func testPromote() {
+        XCTAssertNoThrow({ [self] in
+            try await(_promotionService!.promote())
+        })
+    }
 }

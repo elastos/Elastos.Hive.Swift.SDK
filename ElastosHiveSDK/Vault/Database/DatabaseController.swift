@@ -64,12 +64,12 @@ public class DatabaseController {
         return try _connectionManager.update(collectionName, UpdateParams(filter, update, options)).execute(UpdateResult.self)
     }
 
-    public func deleteOne(_ collectionName: String, _ filter: Dictionary<String, Any>?, _ options: DeleteOptions?) throws -> DeleteResult? {
+    public func deleteOne(_ collectionName: String, _ filter: Dictionary<String, Any>?) throws -> DeleteResult? {
         throw HiveError.NotImplementedException("")
     }
 
-    public func deleteMany(_ collectionName: String, _ filter: Dictionary<String, Any>?, _ options: DeleteOptions?) throws -> DeleteResult? {
-        return try _connectionManager.delete(collectionName, DeleteParams(filter, options)).execute(DeleteResult.self)
+    public func deleteMany(_ collectionName: String, _ filter: Dictionary<String, Any>?) throws -> DeleteResult? {
+        return try _connectionManager.delete(collectionName, DeleteParams(filter, nil)).execute(DeleteResult.self)
     }
 
     public func countDocuments(_ collectionName: String, _ filter: Dictionary<String, Any>?, _ options: CountOptions) throws -> Int64? {

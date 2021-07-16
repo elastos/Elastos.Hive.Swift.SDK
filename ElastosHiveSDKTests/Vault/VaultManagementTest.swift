@@ -23,13 +23,16 @@
 import XCTest
 @testable import ElastosHiveSDK
 import ElastosDIDSDK
+import AwaitKit
 
 class VaultManagementTest: XCTestCase {
-    
-    private var vault: Vault?
+    private var _vault: Vault?
 
     override func setUp() {
-        self.vault = TestData.shared().newVault()
+        XCTAssertNoThrow({ [self] in
+            let testData = TestData.shared()
+            _vault = testData.newVault()
+        })
     }
     
     override func tearDown() {
@@ -53,26 +56,14 @@ class VaultManagementTest: XCTestCase {
     }
     
     func testGetVersion() {
-//        let lock = XCTestExpectation(description: "wait for get node version.")
-//        self.vault?.getVersion().done({ version in
-//            XCTAssert(version.count > 0, "get node version success.")
-//            lock.fulfill()
-//        }).catch { error in
-//            XCTFail("\(error)")
-//            lock.fulfill()
-//        }
-//        self.wait(for: [lock], timeout: 1000.0)
+        XCTAssertNoThrow({ [self] in
+            XCTAssertNotNil(try await(_vault!.getNodeVersion))
+        })
     }
     
     func testGetCommitHash() {
-//        let lock = XCTestExpectation(description: "wait for get commit hash.")
-//        self.vault?.getCommitHash().done({ hash in
-//            XCTAssert(hash.count > 0, "get commit hash success.")
-//            lock.fulfill()
-//        }).catch { error in
-//            XCTFail("\(error)")
-//            lock.fulfill()
-//        }
-//        self.wait(for: [lock], timeout: 1000.0)
+        XCTAssertNoThrow({ [self] in
+            XCTAssertNotNil(try await(_vault!.getLatestCommitId))
+        })
     }
 }

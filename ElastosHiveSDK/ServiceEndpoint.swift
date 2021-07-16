@@ -141,28 +141,14 @@ public class ServiceEndpoint: NodeRPCConnection {
     }
     
     public func getNodeVersion() -> Promise<NodeVersion> {
-        return Promise<Any>.async().then { _ -> Promise<NodeVersion> in
-            return Promise<NodeVersion> { resolver in
-                do {
-                    let nodeVersion: NodeVersion = try AboutController(self).getNodeVersion()
-                    resolver.fulfill(nodeVersion)
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try AboutController(self).getNodeVersion()
         }
     }
     
     public func getLatestCommitId() -> Promise<String> {
-        return Promise<Any>.async().then { _ -> Promise<String> in
-            return Promise<String> { resolver in
-                do {
-                    let commitId: String = try AboutController(self).getCommitId()!
-                    resolver.fulfill(commitId)
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try AboutController(self).getCommitId()!
         }
     }
 }

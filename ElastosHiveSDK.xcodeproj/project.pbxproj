@@ -46,6 +46,7 @@
 		11E573FF22C4C33400F85419 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FB22C4C33400F85419 /* String.swift */; };
 		11ED682A22FF1078004C17D0 /* ElastosHiveSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED682922FF1077004C17D0 /* ElastosHiveSDK.swift */; };
 		30037BB426A048730085AE4A /* TestAppContextProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30037BB226A048720085AE4A /* TestAppContextProvider.swift */; };
+		30037BBB26A17B700085AE4A /* ScriptingCrossingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30037BBA26A17B700085AE4A /* ScriptingCrossingTest.swift */; };
 		30091C1526181EC6003EB5CE /* BackupStateResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C1426181EC6003EB5CE /* BackupStateResponse.swift */; };
 		30091C1926182250003EB5CE /* AuthenticationServiceRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C1826182250003EB5CE /* AuthenticationServiceRender.swift */; };
 		30091C1C26182326003EB5CE /* HiveVaultRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C1B26182326003EB5CE /* HiveVaultRender.swift */; };
@@ -271,7 +272,6 @@
 		30E94821260AFF7500452FF5 /* BackupSubscriptionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E94820260AFF7500452FF5 /* BackupSubscriptionTest.swift */; };
 		30E9482D260B0F4600452FF5 /* big_ios.png in Resources */ = {isa = PBXBuildFile; fileRef = 30E9482C260B0F4600452FF5 /* big_ios.png */; };
 		30E94830260B0F5E00452FF5 /* FilesServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E9482F260B0F5E00452FF5 /* FilesServiceTest.swift */; };
-		30EC87352626D1E100F15FB2 /* ScriptingServiceCallerPermissionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30EC87342626D1E000F15FB2 /* ScriptingServiceCallerPermissionTest.swift */; };
 		30EC875D2627CA5E00F15FB2 /* FileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30EC875C2627CA5E00F15FB2 /* FileStorage.swift */; };
 		6DDA50FA35E7A18E5EF0C90E /* Pods_ElastosHiveSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D17AD36AC88E073FD2B2D930 /* Pods_ElastosHiveSDK.framework */; };
 		A39C4980225399860027BDF9 /* ElastosHiveSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = A39C4972225399860027BDF9 /* ElastosHiveSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -341,6 +341,7 @@
 		13C6D592C180032E4F31BEF6 /* Pods-ElastosHiveSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDK.debug.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDK/Pods-ElastosHiveSDK.debug.xcconfig"; sourceTree = "<group>"; };
 		2368C8CBAE94193EAF7DB87D /* Pods-ElastosHiveSDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDKTests.debug.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDKTests/Pods-ElastosHiveSDKTests.debug.xcconfig"; sourceTree = "<group>"; };
 		30037BB226A048720085AE4A /* TestAppContextProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestAppContextProvider.swift; sourceTree = "<group>"; };
+		30037BBA26A17B700085AE4A /* ScriptingCrossingTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptingCrossingTest.swift; sourceTree = "<group>"; };
 		30091C1426181EC6003EB5CE /* BackupStateResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupStateResponse.swift; sourceTree = "<group>"; };
 		30091C1826182250003EB5CE /* AuthenticationServiceRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationServiceRender.swift; sourceTree = "<group>"; };
 		30091C1B26182326003EB5CE /* HiveVaultRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiveVaultRender.swift; sourceTree = "<group>"; };
@@ -564,7 +565,6 @@
 		30E94820260AFF7500452FF5 /* BackupSubscriptionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupSubscriptionTest.swift; sourceTree = "<group>"; };
 		30E9482C260B0F4600452FF5 /* big_ios.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = big_ios.png; sourceTree = "<group>"; };
 		30E9482F260B0F5E00452FF5 /* FilesServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesServiceTest.swift; sourceTree = "<group>"; };
-		30EC87342626D1E000F15FB2 /* ScriptingServiceCallerPermissionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptingServiceCallerPermissionTest.swift; sourceTree = "<group>"; };
 		30EC875C2627CA5E00F15FB2 /* FileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileStorage.swift; sourceTree = "<group>"; };
 		556E8D39E54EDBDFA4DEAD42 /* Pods-TestHost.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestHost.release.xcconfig"; path = "Target Support Files/Pods-TestHost/Pods-TestHost.release.xcconfig"; sourceTree = "<group>"; };
 		5F09DA7DC9D47111E630261C /* Pods_TestHost.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TestHost.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -617,7 +617,7 @@
 				30DB96532600E49300ACF19F /* VaultSubscriptionTest.swift */,
 				3065A5E826156A0D00C20661 /* VaultPaymentTest.swift */,
 				304F24382628066700DDB5C0 /* VaultManagementTest.swift */,
-				30EC87342626D1E000F15FB2 /* ScriptingServiceCallerPermissionTest.swift */,
+				30037BBA26A17B700085AE4A /* ScriptingCrossingTest.swift */,
 			);
 			path = Vault;
 			sourceTree = "<group>";
@@ -1407,7 +1407,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				30D393492609DC5B007A9E09 /* ScriptingServiceTest.swift in Sources */,
-				30EC87352626D1E100F15FB2 /* ScriptingServiceCallerPermissionTest.swift in Sources */,
 				30D387CF269FDDFD0079E895 /* UserDID.swift in Sources */,
 				304F243D262808EA00DDB5C0 /* PromotionServiceTest.swift in Sources */,
 				3065A5E926156A0D00C20661 /* VaultPaymentTest.swift in Sources */,
@@ -1418,6 +1417,7 @@
 				30DB966A2601AA7300ACF19F /* NodeConfig.swift in Sources */,
 				30DB96542600E49300ACF19F /* VaultSubscriptionTest.swift in Sources */,
 				30DED27C269F3AD300CB3A38 /* Config.swift in Sources */,
+				30037BBB26A17B700085AE4A /* ScriptingCrossingTest.swift in Sources */,
 				30E94830260B0F5E00452FF5 /* FilesServiceTest.swift in Sources */,
 				303CD5A326079D2400865472 /* UserConfig.swift in Sources */,
 				30D387D0269FDDFD0079E895 /* AppDID.swift in Sources */,

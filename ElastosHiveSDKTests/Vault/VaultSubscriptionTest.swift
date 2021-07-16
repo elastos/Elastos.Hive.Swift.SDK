@@ -80,18 +80,4 @@ class VaultSubscriptionTest: XCTestCase {
         // TODO
         
     }
-    
-//    @Disabled
-//    @Test @Order(6) void testGetFileHashProcess() {
-//        //prepare for access vault service
-//        Assertions.assertDoesNotThrow(() -> {
-//            subscription.subscribe().get();
-//        });
-//        //function usage
-//        new FilesServiceTest().testHash();
-//        //release for disable vault service accessing
-//        Assertions.assertDoesNotThrow(() -> {
-//            subscription.unsubscribe().get();
-//        });
-//    }
 }
