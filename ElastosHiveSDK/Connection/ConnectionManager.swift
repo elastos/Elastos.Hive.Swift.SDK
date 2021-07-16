@@ -64,62 +64,36 @@ extension DataRequest {
 }
 
 public class ConnectionManager {
-//    private var _serviceEndpoint: ServiceEndpoint
-//    public var hiveApi: HiveAPi
-    public var accessionToken: String?
     public var tokenResolver: TokenResolver?
     public let lock: NSLock = NSLock()
     public let baseURL: String
     public var accessToken: AccessToken?
-
     
     public init(_ baseURL: String) {
         self.baseURL = baseURL
     }
 
-//    init(_ serviceEndpoint: ServiceEndpoint) {
-//        self._serviceEndpoint = serviceEndpoint
-////        self.hiveApi = HiveAPi(self._serviceEndpoint.providerAddress)
-//    }
-//
-    func headersStream() throws -> HTTPHeaders {
+    func headersStream() -> HTTPHeaders {
         self.lock.lock()
-        let token = try self.tokenResolver!.getToken()!.canonicalizedAccessToken
+        let token = self.accessToken?.getCanonicalizedAccessToken()
         self.lock.unlock()
-        self.accessionToken = token
-        return ["Content-Type": "application/octet-stream", "Authorization": "\(token)", "Transfer-Encoding": "chunked", "Connection": "Keep-Alive"]
+        return ["Content-Type": "application/octet-stream", "Authorization": "\(token!)", "Transfer-Encoding": "chunked", "Connection": "Keep-Alive"]
     }
-//
-    func headers() throws -> HTTPHeaders {
+
+    func headers() -> HTTPHeaders {
         self.lock.lock()
-        let token = try self.tokenResolver!.getToken()!.canonicalizedAccessToken
+        let token = self.accessToken?.getCanonicalizedAccessToken()
         self.lock.unlock()
-        self.accessionToken = token
-        return ["Content-Type": "application/json;charset=UTF-8", "Authorization": "\(token)"]
+        return ["Content-Type": "application/json;charset=UTF-8", "Authorization": "\(token!)"]
     }
     
     func defaultHeaders() -> HTTPHeaders {
         return ["Content-Type": "application/json;charset=UTF-8"]
     }
-
-//    public static func request(url: URLConvertible,
-//                               method: HTTPMethod = .get,
-//                               parameters: Parameters? = nil,
-//                               headers: HTTPHeaders? = nil) -> DataRequest {
-//
-//        Log.d("Hive Debug ==> request url ->", url as Any)
-//        Log.d("Hive Debug ==> request parameters ->", parameters as Any)
-//        Log.d("Hive Debug ==> request headers ->", headers as Any)
-//
-//        let req: DataRequest = AF.request(url,
-//                                          method: method,
-//                                          parameters: parameters,
-//                                          encoding: JSONEncoding.default,
-//                                          headers: headers) { $0.timeoutInterval = HiveAPi.defaultTimeout }
-//        return req
-//    }
     
     public func createDataNoAuthRequest(_ url: String,  _ method: HTTPMethod, _ parameters: Dictionary<String, Any>?) throws -> DataRequest {
+        print("url = \(url)\nheader = \(self.defaultHeaders())")
+
         return AF.request(url,
                           method: method,
                           parameters: parameters,
@@ -128,15 +102,11 @@ public class ConnectionManager {
     }
     
     public func createDataRequest(_ url: String,  _ method: HTTPMethod, _ parameters: Dictionary<String, Any>?) throws -> DataRequest {
-        
-        if self.accessionToken == nil {
-            self.accessionToken = try self.accessToken?.fetch()
-        }
-        
+        print("url = \(url)\nheader = \(self.headers())")
         return AF.request(url,
                           method: method,
                           parameters: parameters,
                           encoding: JSONEncoding.default,
-                          headers:nil) { $0.timeoutInterval = HiveAPi.defaultTimeout }
+                          headers:self.headers()) { $0.timeoutInterval = HiveAPi.defaultTimeout }
     }
 }

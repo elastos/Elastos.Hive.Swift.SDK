@@ -32,6 +32,7 @@ class DatabaseServiceTest: XCTestCase {
         XCTAssertNoThrow(databaseService = TestData.shared().newVault().databaseService)
     }
     
+
     func test1CreateCollection() {
         let lock = XCTestExpectation(description: "wait for create collection.")
         databaseService?.createCollection(COLLECTION_NAME).done { _ in
