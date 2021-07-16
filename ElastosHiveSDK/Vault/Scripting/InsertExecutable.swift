@@ -24,10 +24,10 @@ import Foundation
 import ObjectMapper
 
 public class InsertExecutableBody: DatabaseBody {
-    private var _document: Dictionary<String, String>?
-    private var _options: Dictionary<String, String>?
+    private var _document: Dictionary<String, Any>?
+    private var _options: Dictionary<String, Any>?
     
-    public init(_ collection: String?, _ document: Dictionary<String, String>?, _ options: Dictionary<String, String>?) {
+    public init(_ collection: String?, _ document: Dictionary<String, Any>?, _ options: Dictionary<String, Any>?) {
         super.init(collection)
         _document = document
         _options = options
@@ -39,12 +39,12 @@ public class InsertExecutableBody: DatabaseBody {
 }
 
 public class InsertExecutable: Executable {
-    public init(_ name: String?, _ collectionName: String?, _ document: Dictionary<String, String>?, _ options:  Dictionary<String, String>?) {
+    public init(_ name: String?, _ collectionName: String?, _ document: Dictionary<String, Any>?, _ options:  Dictionary<String, Any>?) {
         super.init(name, ExecutableType.INSERT, nil)
         self.body = InsertExecutableBody(collectionName, document, options)
     }
     
-    public init(_ name: String?, _ collectionName: String?, _ document: Dictionary<String, String>?) {
+    public init(_ name: String?, _ collectionName: String?, _ document: Dictionary<String, Any>?) {
         super.init(name, ExecutableType.INSERT, nil)
         self.body = InsertExecutableBody(collectionName, document, nil)
     }

@@ -23,7 +23,7 @@
 import Foundation
 import ObjectMapper
 
-public class DatabaseServiceRender: DatabaseService {    
+public class DatabaseServiceRender: DatabaseService {
     public let _controller: DatabaseController
     
     public init(_ serviceEndpoint: ServiceEndpoint) {
@@ -150,10 +150,10 @@ public class DatabaseServiceRender: DatabaseService {
         }
     }
 
-    public func deleteOne(_ collection: String, _ filter: [String : Any], options: DeleteOptions) -> Promise<Void> {
+    public func deleteOne(_ collection: String, _ filter: [String : Any]) -> Promise<Void> {
         return Promise<Void> { resolver in
             do {
-                _ = try _controller.deleteOne(collection, filter, nil)
+                _ = try _controller.deleteOne(collection, filter)
                 resolver.fulfill(Void())
             } catch {
                 resolver.reject(error)
@@ -161,10 +161,10 @@ public class DatabaseServiceRender: DatabaseService {
         }
     }
 
-    public func deleteMany(_ collection: String, _ filter: [String : Any], options: DeleteOptions) -> Promise<Void> {
+    public func deleteMany(_ collection: String, _ filter: [String : Any]) -> Promise<Void> {
         return Promise<Void> { resolver in
             do {
-                _ = try _controller.deleteMany(collection, filter, nil)
+                _ = try _controller.deleteMany(collection, filter)
                 resolver.fulfill(Void())
             } catch {
                 resolver.reject(error)

@@ -126,7 +126,7 @@ public protocol DatabaseService {
     ///   - options:
     ///
     /// - returns:
-    func deleteOne(_ collection: String, _ filter: [String: Any], options: DeleteOptions) -> Promise<Void>
+    func deleteOne(_ collection: String, _ filter: [String: Any]) -> Promise<Void>
 
     /// Delete many existing documents in a given collection
     ///
@@ -136,5 +136,5 @@ public protocol DatabaseService {
     ///   - options:
     ///
     /// - returns:
-    func deleteMany(_ collection: String, _ filter: [String: Any], options: DeleteOptions) -> Promise<Void>
+    func deleteMany(_ collection: String, _ filter: [String: Any]) -> Promise<Void>
 }
