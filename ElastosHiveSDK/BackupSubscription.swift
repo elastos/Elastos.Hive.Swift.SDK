@@ -23,23 +23,25 @@
 import Foundation
 import ObjectMapper
 
-public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentService {
-    private var _subscriptionController: SubscriptionController!
-    
+public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentService {    
+    private var _subscriptionController: SubscriptionController?
+    private var _paymentController: PaymentController?
+
     public override init(_ context: AppContext, _ providerAddress: String) {
         super.init(context, providerAddress)
         _subscriptionController = SubscriptionController(self)
+        _paymentController = PaymentController(self)
     }
     
     public func getPricingPlanList() -> Promise<Array<PricingPlan>> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _subscriptionController.getBackupPricingPlanList()
+            return try _subscriptionController!.getBackupPricingPlanList()
         }
     }
     
     public func getPricingPlan(_ planName: String) -> Promise<PricingPlan> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _subscriptionController.getBackupPricingPlan(planName)
+            return try _subscriptionController!.getBackupPricingPlan(planName)
         }
     }
     
@@ -52,19 +54,19 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentSe
             if credential != nil {
                 throw HiveError.NotImplementedException("Paid pricing plan will be supported later")
             }
-            return try _subscriptionController.subscribeToBackup(nil)
+            return try _subscriptionController!.subscribeToBackup(nil)
         }
     }
     
     public func unsubscribe() -> Promise<Void> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _subscriptionController.unsubscribeBackup()
+            return try _subscriptionController!.unsubscribeBackup()
         }
     }
     
     public func checkSubscription() -> Promise<BackupInfo> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _subscriptionController.getBackupInfo()
+            return try _subscriptionController!.getBackupInfo()
         }
     }
     
@@ -84,7 +86,7 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentSe
         }
     }
     
-    public func payOrder(_ orderId: String, _ transIds: [String]) -> Promise<Receipt> {
+    public func payOrder(_ orderId: String, _ transIds: String) -> Promise<Receipt> {
         return Promise<Void>.async().then { _ -> Promise<Receipt> in
             return Promise<Receipt> { resolver in
                 resolver.reject(HiveError.NotImplementedException("Payment will be supported later"))
@@ -108,11 +110,17 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentSe
         }
     }
     
-    public func getReceiptList() -> Promise<Array<Receipt>> {
-        return Promise<Void>.async().then { _ -> Promise<Array<Receipt>> in
-            return Promise<Array<Receipt>> { resolver in
-                resolver.reject(HiveError.NotImplementedException("Payment will be supported later"))
-            }
+//    public func getReceiptList() -> Promise<Array<Receipt>> {
+//        return Promise<Void>.async().then { _ -> Promise<Array<Receipt>> in
+//            return Promise<Array<Receipt>> { resolver in
+//                resolver.reject(HiveError.NotImplementedException("Payment will be supported later"))
+//            }
+//        }
+//    }
+
+    public func getVersion() -> Promise<String?> {
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _paymentController!.getVersion()
         }
     }
 }
