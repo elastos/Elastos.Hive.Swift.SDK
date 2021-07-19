@@ -48,7 +48,7 @@ class FilesServiceTest: XCTestCase {
     override func setUpWithError() throws {
         let testData: TestData = TestData.shared();
 
-        _filesService = try testData.newVault().filesService
+        _filesService = testData.newVault().filesService
         
         self.bundlePath = Bundle(for: type(of: self))
         self.localTxtFilePath = self.bundlePath?.path(forResource: "test_ios", ofType: "txt")
@@ -65,12 +65,14 @@ class FilesServiceTest: XCTestCase {
     }
     
     public func test01UploadText() {
-        
+        XCTAssertNoThrow(try { [self] in
+            try uploadTextReally()
+            verifyRemoteFileExists(self.remoteTxtFilePath!)
+        }())
     }
     
     private func uploadTextReally() throws {
         do {
-            let lock = XCTestExpectation(description: "wait for test upload bin.")
             let data = try Data(contentsOf: URL(fileURLWithPath: self.localImgFilePath!))
             let fileWriter = try await(_filesService!.getUploadWriter(remoteImgFilePath!))
             try fileWriter.write(data: data, { err in
@@ -82,23 +84,97 @@ class FilesServiceTest: XCTestCase {
         } catch {
             print(error)
         }
-       
     }
     
-//    @Test @Order(5) void testList() {
-//        Assertions.assertDoesNotThrow(() -> {
-//            List<FileInfo> files = filesService.list(remoteRootDir).get();
-//            Assertions.assertNotNull(files);
-//            Assertions.assertTrue(files.size() >= 2);
-//            List<String> names = files.stream().map(FileInfo::getName).collect(Collectors.toList());
-//            Assertions.assertTrue(names.contains(FILE_NAME_TXT));
-//            Assertions.assertTrue(names.contains(FILE_NAME_IMG));
-//        });
-//    }
-
-    public func testList() {
+    public func test02UploadBin() {
         XCTAssertNoThrow(try { [self] in
-            XCTAssertNotNil(try await(_filesService!.hash(self.remoteTxtFilePath!)))
+            let data = try Data(contentsOf: URL(fileURLWithPath: self.localImgFilePath!))
+            let fileWriter = try await(_filesService!.getUploadWriter(self.remoteImgFilePath!))
+            try fileWriter.write(data: data, { err in
+                
+            })
+            fileWriter.close { (success, error) in
+
+            }
+        }())
+    }
+
+    func test03DownloadText() {
+        XCTAssertNoThrow(try { [self] in
+            let reader = try await(_filesService!.getDownloadReader(self.remoteImgFilePath!))
+            let targetUrl = createFilePathForDownload("test_ios_download.txt")
+            while !reader.didLoadFinish {
+                if let data = reader.read({ error in
+                    XCTFail("\(error)")
+                }) {
+                    if let fileHandle = try? FileHandle(forWritingTo: targetUrl) {
+                        fileHandle.seekToEndOfFile()
+                        fileHandle.write(data)
+                        fileHandle.closeFile()
+                    } else {
+                        
+                    }
+                }
+            }
+            reader.close { (success, error) in
+                
+            }
+
+        }())
+    }
+
+
+    func createFilePathForDownload(_ downloadPath: String) -> URL {
+        let dir = FileManager.default.urls(for: FileManager.SearchPathDirectory.cachesDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).last
+        let fileurl = dir?.appendingPathComponent(downloadPath)
+        if !FileManager.default.fileExists(atPath: fileurl!.path) {
+            FileManager.default.createFile(atPath: fileurl!.path, contents: nil, attributes: nil)
+        } else {
+            try? FileManager.default.removeItem(atPath: fileurl!.path)
+            FileManager.default.createFile(atPath: fileurl!.path, contents: nil, attributes: nil)
+        }
+        return fileurl!
+    }
+    
+    public func test04DownloadBin() {
+        XCTAssertNoThrow(try { [self] in
+            let reader = try await(_filesService!.getDownloadReader(self.remoteImgFilePath!))
+            let fileurl = createFilePathForDownload("swift_download.png")
+            while !reader.didLoadFinish {
+                if let data = reader.read({ error in
+                    XCTFail("\(error)")
+                }) {
+                    if let fileHandle = try? FileHandle(forWritingTo: fileurl) {
+                        fileHandle.seekToEndOfFile()
+                        fileHandle.write(data)
+                        fileHandle.closeFile()
+                    } else {
+                        
+                    }
+                }
+            }
+            reader.close { (success, error) in
+                
+            }
+        }())
+        
+    }
+//    @Test @Order(4) void test04DownloadBin() {
+//        try (InputStream in = filesService.getDownloadStream(remoteImgFilePath).get()) {
+//            Assertions.assertNotNull(in);
+//            Utils.cacheBinFile(in, localCacheRootDir, FILE_NAME_IMG);
+//            Assertions.assertTrue(isFileContentEqual(localImgFilePath, localCacheRootDir + FILE_NAME_IMG));
+//        } catch (Exception e) {
+//            Assertions.fail(Throwables.getStackTraceAsString(e));
+//        }
+//    }
+//
+    public func test05List() {
+        XCTAssertNoThrow(try { [self] in
+            let files = try await(_filesService!.list(self.remoteRootDir!))
+            XCTAssertNotNil(files)
+            XCTAssertTrue(files.count > 2)
+            // TODO
         }())
     }
 
