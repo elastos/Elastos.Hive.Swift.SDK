@@ -24,6 +24,7 @@ import Foundation
 import ObjectMapper
 
 public class DatabaseServiceRender: DatabaseService {
+    
     public let _controller: DatabaseController
     
     public init(_ serviceEndpoint: ServiceEndpoint) {
@@ -120,10 +121,10 @@ public class DatabaseServiceRender: DatabaseService {
         }
     }
     
-    public func query(_ collection: String, _ query: Dictionary<String, Any>, _ options: QueryOptions) throws -> Promise<Array<Dictionary<String, Any>>> {
+    public func query(_ collection: String, _ query: Dictionary<String, Any>?, _ options: QueryOptions?) -> Promise<Array<Dictionary<String, Any>>> {
         return Promise<Array<Dictionary<String, Any>>> { resolver in
             do {
-                resolver.fulfill(try _controller.query(collection, query, options)!)
+                resolver.fulfill(try _controller.query(collection, query, options!)!)
             } catch {
                 resolver.reject(error)
             }

@@ -73,7 +73,6 @@ class BackupSubscriptionTest: XCTestCase {
         XCTAssertNoThrow({ [self] in
             try await(_subscription!.subscribe())
         })
-        
         // TODO
     }   
 }
