@@ -93,8 +93,13 @@ public protocol DatabaseService {
     ///  - returns: a Dictionary array result of document
     func findMany(_ collection: String, _ query: [String: Any], _ options: FindOptions) -> Promise<Array<Dictionary<String, Any>>>
     
-    
-    
+    /// Find many documents by many options.
+    /// - Parameters:
+    ///   - collection: the collection name
+    ///   - query: query optional, a JSON object specifying elements which must be present for a document to be included in the result set
+    ///   - options: optional,refer to QueryOptions
+    ///  - returns: a Dictionary array result of document
+    func query(_ collection: String, _ query: Dictionary<String, Any>?, _ options: QueryOptions?) -> Promise<Array<Dictionary<String, Any>>>
 
     /// Update an existing document in a given collection
     ///

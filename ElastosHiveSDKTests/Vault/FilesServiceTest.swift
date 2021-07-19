@@ -101,12 +101,11 @@ class FilesServiceTest: XCTestCase {
 //                filesService.hash(remoteTxtFilePath).get()));
 //    }
 
-//    public func test06Hash() {
-//        XCTAssertNoThrow({ [self] in
-//            XCTAssertNotNil(try await(_filesService?.hash(self.remoteTxtFilePath!)))
-//        })
-//    }
-    
+    public func test06Hash() {
+        XCTAssertNoThrow({ [self] in
+            XCTAssertNotNil(try await(_filesService!.hash(self.remoteTxtFilePath!)))
+        })
+    }
     
     public func test07Move() {
         XCTAssertNoThrow({ [self] in

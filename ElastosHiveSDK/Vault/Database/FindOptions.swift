@@ -27,23 +27,23 @@ import ObjectMapper
 public class FindOptions {
     private var _skip: Int64?
     private var _limit: Int64?
-
-    public var skip: Int64? {
-        set {
-            _skip = newValue
-        }
-        get {
-            return _skip
-        }
+    
+    public func setSkip(_ skip: Int64) -> FindOptions {
+        _skip = skip
+        return self
     }
     
+    public func setLimit(_ limit: Int64) -> FindOptions {
+        _limit = limit
+        return self
+    }
+
+    public var skip: Int64? {
+        return _skip
+    }
+
     public var limit: Int64? {
-        set {
-            _limit = newValue
-        }
-        get {
-            return _limit
-        }
+        return _limit
     }
 
     public func getSkipStr() -> String {

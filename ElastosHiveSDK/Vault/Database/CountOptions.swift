@@ -32,32 +32,47 @@ public class CountOptions: Mappable {
         
     }
     
-    public var skip: Int64 {
-        set {
-            _skip = newValue
-        }
-        get {
-            return _skip!
-        }
+    public func setLimit(_ limit:Int64) -> CountOptions {
+        _limit = limit
+        return self
     }
     
-    public var limit: Int64 {
-        set {
-            _limit = newValue
-        }
-        get {
-            return _limit!
-        }
+    public func setSkip(_ skip:Int64) -> CountOptions {
+        _skip = skip
+        return self
     }
     
-    public var maxTimeMS: Int64 {
-        set {
-            _maxTimeMS = newValue
-        }
-        get {
-            return _maxTimeMS!
-        }
+    public func setMaxTimeMS(_ maxTimeMS:Int64) -> CountOptions {
+        _maxTimeMS = maxTimeMS
+        return self
     }
+    
+//    public var skip: Int64 {
+//        set {
+//            _skip = newValue
+//        }
+//        get {
+//            return _skip!
+//        }
+//    }
+//
+//    public var limit: Int64 {
+//        set {
+//            _limit = newValue
+//        }
+//        get {
+//            return _limit!
+//        }
+//    }
+//
+//    public var maxTimeMS: Int64 {
+//        set {
+//            _maxTimeMS = newValue
+//        }
+//        get {
+//            return _maxTimeMS!
+//        }
+//    }
     
     required public init?(map: Map) {
         

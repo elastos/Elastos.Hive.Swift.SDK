@@ -27,12 +27,16 @@ public class UpdateOptions: Mappable {
     private var _upsert: Bool?
     private var _bypassDocumentValidation: Bool?
     
-    public func setUpsert(_ upsert: Bool) -> UpdateOptions? {
+    public init() {
+        
+    }
+    
+    public func setUpsert(_ upsert: Bool) -> UpdateOptions {
         self._upsert = upsert
         return self
     }
     
-    public func setBypassDocumentValidation(_ bypassDocumentValidation: Bool) -> UpdateOptions? {
+    public func setBypassDocumentValidation(_ bypassDocumentValidation: Bool) -> UpdateOptions {
         self._bypassDocumentValidation = bypassDocumentValidation
         return self
     }

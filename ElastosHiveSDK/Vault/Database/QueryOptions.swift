@@ -33,6 +33,10 @@ public class QueryOptions: Mappable {
     private var _showRecordId: Bool?
     private var _batchSize: Int64?
     
+    public init() {
+        
+    }
+    
     public func setSkip(_ skip: Int64) -> QueryOptions {
         self._skip = skip;
         return self;
