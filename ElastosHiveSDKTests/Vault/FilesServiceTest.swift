@@ -95,11 +95,12 @@ class FilesServiceTest: XCTestCase {
 //            Assertions.assertTrue(names.contains(FILE_NAME_IMG));
 //        });
 //    }
-//
-//    @Test @Order(6) void testHash() {
-//        Assertions.assertDoesNotThrow(() -> Assertions.assertNotNull(
-//                filesService.hash(remoteTxtFilePath).get()));
-//    }
+
+    public func testList() {
+        XCTAssertNoThrow(try { [self] in
+            XCTAssertNotNil(try await(_filesService!.hash(self.remoteTxtFilePath!)))
+        }())
+    }
 
     public func test06Hash() {
         XCTAssertNoThrow({ [self] in

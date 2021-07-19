@@ -40,14 +40,8 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentSer
     }
     
     public func getPricingPlan(_ planName: String) -> Promise<PricingPlan> {
-        return Promise<Any>.async().then { [self] _ -> Promise<PricingPlan> in
-            return Promise<PricingPlan> { resolver in
-                do {
-                    resolver.fulfill(try _subscriptionController!.getBackupPricingPlan(planName))
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _subscriptionController!.getVaultPricingPlan(planName)
         }
     }
     
@@ -56,18 +50,8 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentSer
     }
     
     public func subscribe(_ credential: String?) -> Promise<VaultInfo> {
-        return Promise<Any>.async().then { [self] _ -> Promise<VaultInfo> in
-            return Promise<VaultInfo> { resolver in
-                if credential != nil {
-                    resolver.reject(HiveError.NotImplementedException("Paid pricing plan will be supported later"))
-                }
-                
-                do {
-                    resolver.fulfill(try _subscriptionController!.subscribeToVault(nil))
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _subscriptionController!.subscribeToVault(credential)
         }
     }
     
@@ -85,14 +69,8 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentSer
     }
     
     public func checkSubscription() -> Promise<VaultInfo> {
-        return Promise<Any>.async().then { [self] _ -> Promise<VaultInfo> in
-            return Promise<VaultInfo> { resolver in
-                do {
-                    resolver.fulfill(try _subscriptionController!.getVaultInfo())
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _subscriptionController!.getVaultInfo()
         }
     }
     
