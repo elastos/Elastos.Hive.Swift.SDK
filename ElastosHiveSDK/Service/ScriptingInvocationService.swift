@@ -36,7 +36,7 @@ public protocol ScriptingInvocationService {
     ///    - resultType: String, byte[], FileReader
     ///    - T: String, byte[], FileReader
     /// - returns:  String, Data, JSON, FileReader
-    func callScript<T>(_ name: String, _ params: [String : Any], _ targetDid: String, _ targetAppDid: String, _ resultType: T.Type) -> Promise<T>;
+    func callScript<T>(_ name: String, _ params: [String : Any]?, _ targetDid: String, _ targetAppDid: String, _ resultType: T.Type) -> Promise<T>;
     
     /// Invoke the execution of the script to upload a file in the streaming mode. The upload works a bit differently from other executable queries because there are two steps to this executable. First, register a script on the vault, then you call this API actually to upload the file
     /// - parameters:

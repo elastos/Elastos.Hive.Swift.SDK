@@ -30,7 +30,7 @@ public class ScriptRunner: ServiceEndpoint, ScriptingInvocationService {
         _controller = ScriptingController(self)
     }
 
-    public func callScript<T>(_ name: String, _ params: [String : Any], _ targetDid: String, _ targetAppDid: String, _ resultType: T.Type) -> Promise<T> {
+    public func callScript<T>(_ name: String, _ params: [String : Any]?, _ targetDid: String, _ targetAppDid: String, _ resultType: T.Type) -> Promise<T> {
         return Promise<Any>.async().then { [self] _ -> Promise<T> in
             return Promise<T> { resolver in
                 do {
