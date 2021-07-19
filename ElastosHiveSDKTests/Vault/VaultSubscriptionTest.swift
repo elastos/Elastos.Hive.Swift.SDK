@@ -27,24 +27,19 @@ import AwaitKit
 
 class VaultSubscriptionTest: XCTestCase {
     private let pricePlanName: String = "Rookie"
-    
     private var _subscription: VaultSubscription?
+    private let testData = TestData.shared()
     
-    override func setUpWithError() throws {
-        XCTAssertNoThrow({ [self] in
-            let testData = TestData.shared()
-            _subscription = VaultSubscription(testData.appContext, testData.providerAddress)
-        })
+    override func setUp() {
+        XCTAssertNoThrow(
+            _subscription = VaultSubscription(testData.appContext, testData.providerAddress))
     }
     
     public func test01GetPricingPlanList() {
-        do {
+        XCTAssertNoThrow({ [self] in
             let plans = try await(_subscription!.getPricingPlanList())
             XCTAssertTrue(plans.count > 0)
-        } catch {
-            print(error)
-            XCTFail()
-        }
+        })
     }
     
     public func test02GetPricingPlan() {

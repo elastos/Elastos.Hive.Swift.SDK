@@ -34,9 +34,9 @@ class ScriptingCrossingTest: XCTestCase {
     private var _scriptRunner: ScriptRunner?
     private var _databaseService: DatabaseService?
 
-    private var _targetDid: String
-    private var _callDid: String
-    private var _appDid: String
+    private var _targetDid: String!
+    private var _callDid: String!
+    private var _appDid: String!
 
     override func setUpWithError() throws {
         XCTAssertNoThrow({ [self] in
@@ -99,14 +99,14 @@ class ScriptingCrossingTest: XCTestCase {
     private func remove_permission_for_caller() {
         XCTAssertNoThrow({ [self] in
             let filter = ["collection" : _collectionGroupMessage, "did" : _callDid]
-            try await(_databaseService?.deleteOne(_collectionGroup, filter))
+            try await(_databaseService!.deleteOne(_collectionGroup, filter))
         })
     }
     
     public func run_script_without_group_permission() {
         XCTAssertNoThrow({ [self] in
             let params = ["author" : "John", "content" : "message"]
-            try await(_scriptRunner!.callScript(_scriptName, params, _targetDid, _appDid, JSON.self)))
+            try await(_scriptRunner!.callScript(_scriptName, params, _targetDid, _appDid, JSON.self))
         })
     }
     

@@ -53,7 +53,7 @@ public class SubscriptionController {
     }
     
     public func getBackupPricingPlanList() throws -> [PricingPlan] {
-        return try _connectionManager.getPricePlans("backup", "").execute()?.getArray(PricingPlan.self) as! [PricingPlan]
+        return try _connectionManager.getPricePlans("backup", "").execute(PricingPlanCollection.self).backupPlans!
     }
 
     public func getBackupPricingPlan(_ planName: String?) throws -> PricingPlan {

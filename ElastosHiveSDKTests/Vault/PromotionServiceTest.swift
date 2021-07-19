@@ -23,6 +23,7 @@
 import XCTest
 @testable import ElastosHiveSDK
 import ElastosDIDSDK
+import AwaitKit
 
 class PromotionServiceTest: XCTestCase {
     private var _promotionService: PromotionService?

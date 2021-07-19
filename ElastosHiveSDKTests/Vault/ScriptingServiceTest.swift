@@ -179,19 +179,19 @@ class ScriptingServiceTest: XCTestCase {
         })
     }
 
-    private func callScriptFileUpload(_ scriptName: String, _ fileName: String) -> String {
-        do {
-            let result = try await(_scriptRunner!.callScript(scriptName, Executable.createRunFileParams(fileName), _targetDid!, _appDid!, JSON.self))
-            XCTAssertNotNil(result)
-            XCTAssert(result[scriptName] != nil)
-            XCTAssert(result[scriptName]["transaction_id"] != nil)
-            return result[scriptName]["transaction_id"].string!
-            
-        } catch {
-            print(error)
-        }
-
-    }
+//    private func callScriptFileUpload(_ scriptName: String, _ fileName: String) -> String {
+//        do {
+//            let result = try await(_scriptRunner!.callScript(scriptName, Executable.createRunFileParams(fileName), _targetDid!, _appDid!, JSON.self))
+//            XCTAssertNotNil(result)
+//            XCTAssert(result[scriptName] != nil)
+//            XCTAssert(result[scriptName]["transaction_id"] != nil)
+//            return result[scriptName]["transaction_id"].string!
+//            
+//        } catch {
+//            print(error)
+//        }
+//
+//    }
     
     private func uploadFileByTransActionId(_ transactionId: String) {
         
