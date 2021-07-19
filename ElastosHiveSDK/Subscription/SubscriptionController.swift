@@ -34,7 +34,7 @@ public class SubscriptionController {
     }
     
     public func getVaultPricingPlan(_ planName: String?) throws -> PricingPlan {
-        return try _connectionManager.getPricePlans("vault", "").execute(PricingPlanCollection.self).pricingPlans!.first!
+        return try _connectionManager.getPricePlans("vault", planName!).execute(PricingPlanCollection.self).pricingPlans!.first!
     }
     
     public func getVaultInfo() throws -> VaultInfo {
@@ -57,7 +57,7 @@ public class SubscriptionController {
     }
 
     public func getBackupPricingPlan(_ planName: String?) throws -> PricingPlan {
-        return try _connectionManager.getPricePlans("backup", "").execute()?.getArray(PricingPlan.self)?.first as! PricingPlan
+        return try _connectionManager.getPricePlans("backup", planName!).execute(PricingPlanCollection.self).backupPlans!.first!
     }
 
     public func getBackupInfo() throws -> BackupInfo {

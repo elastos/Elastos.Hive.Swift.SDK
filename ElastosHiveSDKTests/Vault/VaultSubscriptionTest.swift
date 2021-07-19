@@ -43,23 +43,21 @@ class VaultSubscriptionTest: XCTestCase {
     }
     
     public func test02GetPricingPlan() {
-        do {
+        XCTAssertNoThrow(try { [self] in
             let plan = try await(_subscription!.getPricingPlan(pricePlanName))
             XCTAssertTrue(plan.name == pricePlanName)
-        } catch {
-            print(error)
-            XCTFail()
-        }
+        }())
     }
     
+    // Disable
     public func test03Subscribe() {
-        XCTAssertNoThrow(try await(_subscription!.subscribe()) )
+        XCTAssertNoThrow(try await(_subscription!.subscribe()))
     }
     
     public func test04CheckSubscription() {
-        XCTAssertNoThrow({ [self] in
-            XCTAssertNotNil(try await(_subscription!.subscribe()))
-        })
+        XCTAssertNoThrow(try { [self] in
+            XCTAssertNotNil(try await(_subscription!.checkSubscription()))
+        }())
     }
     
     public func test05CheckSubscription() {

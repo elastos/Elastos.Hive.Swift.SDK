@@ -613,11 +613,11 @@
 				3045A739260237FC0037527A /* DatabaseServiceTest.swift */,
 				30E9482F260B0F5E00452FF5 /* FilesServiceTest.swift */,
 				304F243C262808EA00DDB5C0 /* PromotionServiceTest.swift */,
-				30D393482609DC5B007A9E09 /* ScriptingServiceTest.swift */,
-				30DB96532600E49300ACF19F /* VaultSubscriptionTest.swift */,
-				3065A5E826156A0D00C20661 /* VaultPaymentTest.swift */,
-				304F24382628066700DDB5C0 /* VaultManagementTest.swift */,
 				30037BBA26A17B700085AE4A /* ScriptingCrossingTest.swift */,
+				30D393482609DC5B007A9E09 /* ScriptingServiceTest.swift */,
+				304F24382628066700DDB5C0 /* VaultManagementTest.swift */,
+				3065A5E826156A0D00C20661 /* VaultPaymentTest.swift */,
+				30DB96532600E49300ACF19F /* VaultSubscriptionTest.swift */,
 			);
 			path = Vault;
 			sourceTree = "<group>";
