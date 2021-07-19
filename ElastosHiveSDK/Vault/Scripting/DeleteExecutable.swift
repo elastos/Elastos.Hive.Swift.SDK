@@ -23,31 +23,31 @@
 import Foundation
 import ObjectMapper
 
-//public class DeleteExecutableBody: DatabaseBody {
-//    private var _filter: Dictionary<String, String>?
-//    
-//    public init(_ collection: String?, _ filter: Dictionary<String, String>?) {
-//        super.init(collection)
-//        _filter = filter
-//    }
-//    
-//    required init?(map: Map) {
-//        fatalError("init(map:) has not been implemented")
-//    }
-//}
-//
-//public class DeleteExecutable: Executable {
-//    public init(_ name: String?, _ collectionName: String?, _ filter: Dictionary<String, String>?) {
-//        super.init(name, ExecutableType.DELETE, nil)
-//        self.body = DeleteExecutableBody(collectionName, filter)
-//    }
-//    
-//    public init(_ name: String?, _ collectionName: String?) {
-//        super.init(name, ExecutableType.DELETE, nil)
-//        self.body = DeleteExecutableBody(collectionName, nil)
-//    }
-//    
-//    required public init?(map: Map) {
-//        fatalError("init(map:) has not been implemented")
-//    }
-//}
+public class DeleteExecutableBody: DatabaseBody {
+    private var _filter: Dictionary<String, Any>?
+    
+    public init(_ collection: String?, _ filter: Dictionary<String, Any>?) {
+        super.init(collection)
+        _filter = filter
+    }
+    
+    required init?(map: Map) {
+        fatalError("init(map:) has not been implemented")
+    }
+}
+
+public class DeleteExecutable: Executable {
+    public init(_ name: String?, _ collectionName: String?, _ filter: Dictionary<String, Any>?) {
+        super.init(name, ExecutableType.DELETE, nil)
+        self.body = DeleteExecutableBody(collectionName, filter)
+    }
+    
+    public init(_ name: String?, _ collectionName: String?) {
+        super.init(name, ExecutableType.DELETE, nil)
+        self.body = DeleteExecutableBody(collectionName, nil)
+    }
+    
+    required public init?(map: Map) {
+        fatalError("init(map:) has not been implemented")
+    }
+}

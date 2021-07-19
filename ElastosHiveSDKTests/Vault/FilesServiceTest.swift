@@ -23,8 +23,9 @@
 import XCTest
 @testable import ElastosHiveSDK
 import ElastosDIDSDK
+import AwaitKit
 
-/*
+
 class FilesServiceTest: XCTestCase {
     
     private let FILE_NAME_TXT: String = "test_ios.txt"
@@ -41,13 +42,13 @@ class FilesServiceTest: XCTestCase {
     private var remoteNotExistsFilePath: String?
     private var remoteBackupTxtFilePath: String?
 
-    private var filesService: FilesProtocol?
+    private var _filesService: FilesService?
     private var subscription: VaultSubscription?
     
     override func setUpWithError() throws {
-        let testData: TestData = TestData.shared;
+        let testData: TestData = TestData.shared();
 
-        self.filesService = try testData.newVault().filesService
+        _filesService = try testData.newVault().filesService
         
         self.bundlePath = Bundle(for: type(of: self))
         self.localTxtFilePath = self.bundlePath?.path(forResource: "test_ios", ofType: "txt")
@@ -60,9 +61,128 @@ class FilesServiceTest: XCTestCase {
         self.remoteBackupTxtFilePath = "backup" + "/" + FILE_NAME_NOT_EXISTS
         
         self.subscription = try VaultSubscription(testData.appContext, testData.providerAddress)
-        self.filesService = try testData.newVault().filesService
+        _filesService = try testData.newVault().filesService
+    }
+    
+    public func test01UploadText() {
+        
+    }
+    
+    private func uploadTextReally() throws {
+        do {
+            let lock = XCTestExpectation(description: "wait for test upload bin.")
+            let data = try Data(contentsOf: URL(fileURLWithPath: self.localImgFilePath!))
+            let fileWriter = try await(_filesService!.getUploadWriter(remoteImgFilePath!))
+            try fileWriter.write(data: data, { err in
+                
+            })
+            fileWriter.close { (success, error) in
+                
+            }
+        } catch {
+            print(error)
+        }
+       
+    }
+    
+    public func test07Move() {
+        XCTAssertNoThrow({ [self] in
+            _ = try await(_filesService!.delete(self.remoteBackupTxtFilePath!))
+            _ = try await(_filesService!.move(self.remoteTxtFilePath!, self.remoteBackupTxtFilePath!))
+            verifyRemoteFileExists(self.remoteBackupTxtFilePath!)
+        })
+    }
+    
+    public func test08Copy() {
+        XCTAssertNoThrow({ [self] in
+            _ = try await(_filesService!.copy(self.remoteBackupTxtFilePath!, self.remoteTxtFilePath!))
+            verifyRemoteFileExists(self.remoteTxtFilePath!)
+        })
+    }
+    
+    func test09DeleteFile() {
+        XCTAssertNoThrow({ [self] in
+            _ = try await(_filesService!.delete(self.remoteTxtFilePath!))
+            _ = try await(_filesService!.delete(self.remoteBackupTxtFilePath!))
+        })
+    }
+    
+    func verifyRemoteFileExists(_ path: String) {
+        XCTAssertNoThrow({ [self] in
+            XCTAssertNotNil(try await(_filesService!.stat(path)))
+        })
     }
 
+    
+//    private void uploadTextReally() throws IOException, ExecutionException, InterruptedException {
+//            try (Writer writer = filesService.getUploadWriter(remoteTxtFilePath).get();
+//                 FileReader fileReader = new FileReader(localTxtFilePath)) {
+//                Assertions.assertNotNull(writer);
+//                char[] buffer = new char[1];
+//                while (fileReader.read(buffer) != -1) {
+//                    writer.write(buffer);
+//                }
+//            }
+//        }
+    
+//    @Test @Order(1) void testUploadText() {
+
+        
+//    @Test @Order(2) void testUploadBin() {
+//        try (OutputStream out = filesService.getUploadStream(remoteImgFilePath).get()) {
+//            Assertions.assertNotNull(out);
+//            out.write(Utils.readImage(localImgFilePath));
+//            out.flush();
+//        } catch (Exception e) {
+//            Assertions.fail(Throwables.getStackTraceAsString(e));
+//        }
+//        verifyRemoteFileExists(remoteImgFilePath);
+//    }
+
+    func test02UploadBin() {
+        do {
+            let lock = XCTestExpectation(description: "wait for test upload bin.")
+            let data = try Data(contentsOf: URL(fileURLWithPath: self.localImgFilePath!))
+            let fileWriter = try await(_filesService!.getUploadWriter(remoteImgFilePath!))
+            try fileWriter.write(data: data, { err in
+                
+            })
+            fileWriter.close { (success, error) in
+                
+            }
+            
+            
+//            let data = try Data(contentsOf: URL(fileURLWithPath: self.localImgFilePath!))
+//            self.filesService!.upload(self.remoteImgFilePath!).done({ (fileWriter) in
+//                try fileWriter.write(data: data, { err in
+//
+//                })
+//                fileWriter.close { (success, error) in
+//                    XCTAssert(success)
+//                    XCTAssert(error == nil)
+//                    lock.fulfill()
+//                }
+//            }).catch { error in
+//                XCTFail("\(error)")
+//                lock.fulfill()
+//            }
+//            self.wait(for: [lock], timeout: 10000.0)
+//
+//            let lockB = XCTestExpectation(description: "check verify remote file exists.")
+//            self.verifyRemoteFileExists(self.remoteImgFilePath!).done { fileInfo in
+//                XCTAssert(fileInfo.size > 0)
+//                lockB.fulfill()
+//            }.catch { error in
+//                XCTFail("\(error)")
+//                lockB.fulfill()
+//            }
+//            self.wait(for: [lockB], timeout: 10000.0)
+        } catch {
+            XCTFail("\(error)")
+        }
+    }
+    
+    /*
     func test01UploadText() {
         let lock = XCTestExpectation(description: "wait for test upload text.")
         do {
@@ -348,5 +468,6 @@ class FilesServiceTest: XCTestCase {
             })
         }
     }
+    */
 }
-*/
+

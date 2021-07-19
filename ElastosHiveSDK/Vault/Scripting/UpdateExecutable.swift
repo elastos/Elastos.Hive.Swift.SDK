@@ -24,11 +24,11 @@ import Foundation
 import ObjectMapper
 
 public class UpdateExecutableBody: DatabaseBody {
-    private var _filter: Dictionary<String, String>?
-    private var _update: Dictionary<String, String>?
-    private var _options: Dictionary<String, String>?
+    private var _filter: Dictionary<String, Any>?
+    private var _update: Dictionary<String, Any>?
+    private var _options: Dictionary<String, Any>?
     
-    public init(_ collection: String?, _ filter: Dictionary<String, String>?, _ update: Dictionary<String, String>?, _ options: Dictionary<String, String>?) {
+    public init(_ collection: String?, _ filter: Dictionary<String, Any>?, _ update: Dictionary<String, Any>?, _ options: Dictionary<String, Any>?) {
         super.init(collection)
         _filter = filter
         _update = update
@@ -41,12 +41,12 @@ public class UpdateExecutableBody: DatabaseBody {
 }
 
 public class UpdateExecutable: Executable {
-    public init(_ name: String?, _ collectionName: String?, _ filter: Dictionary<String, String>?, _ update: Dictionary<String, String>?, _ options: Dictionary<String, String>?) {
+    public init(_ name: String?, _ collectionName: String?, _ filter: Dictionary<String, Any>?, _ update: Dictionary<String, Any>?, _ options: Dictionary<String, Any>?) {
         super.init(name, ExecutableType.UPDATE, nil)
         super.body = UpdateExecutableBody(collectionName, filter, update, options)
     }
     
-    public init(_ name: String, _ collectionName: String, _ filter: Dictionary<String, String>?, _ update: Dictionary<String, String>?) {
+    public init(_ name: String, _ collectionName: String, _ filter: Dictionary<String, Any>?, _ update: Dictionary<String, Any>?) {
         super.init(name, ExecutableType.UPDATE, nil)
         super.body = UpdateExecutableBody(collectionName, filter, update, nil)
     }

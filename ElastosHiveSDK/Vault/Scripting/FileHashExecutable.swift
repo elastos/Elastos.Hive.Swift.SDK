@@ -21,12 +21,15 @@
  */
 
 import Foundation
+import ObjectMapper
 
-//public class FileHashExecutable: Executable {
-//    
-//    
-//    public  FileHashExecutable(String name) {
-//        super(name, Type.FILE_HASH, null);
-//        super.setBody(new FileBody());
-//    }
-//}
+public class FileHashExecutable: Executable {
+    public init(_ name: String) {
+        super.init(name, ExecutableType.FILE_HASH, nil)
+        self.body = FileBody()
+    }
+    
+    required public init?(map: Map) {
+        fatalError("init(map:) has not been implemented")
+    }
+}
