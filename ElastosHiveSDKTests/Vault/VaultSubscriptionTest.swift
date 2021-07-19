@@ -36,10 +36,10 @@ class VaultSubscriptionTest: XCTestCase {
     }
     
     public func test01GetPricingPlanList() {
-        XCTAssertNoThrow({ [self] in
+        XCTAssertNoThrow(try { [self] in
             let plans = try await(_subscription!.getPricingPlanList())
             XCTAssertTrue(plans.count > 0)
-        })
+        }())
     }
     
     public func test02GetPricingPlan() {

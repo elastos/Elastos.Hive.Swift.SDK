@@ -34,9 +34,9 @@ class DatabaseServiceTest: XCTestCase {
     }
 
     func test1CreateCollection() {
-        XCTAssertNoThrow({ [self] in
+        XCTAssertNoThrow(try { [self] in
             XCTAssertNotNil(try await(_databaseService!.createCollection(COLLECTION_NAME)))
-        })
+        }())
     }
     
     func test2InsertOne() {
