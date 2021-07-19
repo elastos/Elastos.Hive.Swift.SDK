@@ -34,14 +34,8 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentSer
     }
     
     public func getPricingPlanList() -> Promise<Array<PricingPlan>> {
-        return Promise<Any>.async().then { [self] _ -> Promise<Array<PricingPlan>> in
-            return Promise<Array<PricingPlan>> { resolver in
-                do {
-                    resolver.fulfill(try _subscriptionController!.getBackupPricingPlanList())
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _subscriptionController!.getBackupPricingPlanList()
         }
     }
     

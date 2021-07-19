@@ -85,6 +85,29 @@ class FilesServiceTest: XCTestCase {
        
     }
     
+//    @Test @Order(5) void testList() {
+//        Assertions.assertDoesNotThrow(() -> {
+//            List<FileInfo> files = filesService.list(remoteRootDir).get();
+//            Assertions.assertNotNull(files);
+//            Assertions.assertTrue(files.size() >= 2);
+//            List<String> names = files.stream().map(FileInfo::getName).collect(Collectors.toList());
+//            Assertions.assertTrue(names.contains(FILE_NAME_TXT));
+//            Assertions.assertTrue(names.contains(FILE_NAME_IMG));
+//        });
+//    }
+//
+//    @Test @Order(6) void testHash() {
+//        Assertions.assertDoesNotThrow(() -> Assertions.assertNotNull(
+//                filesService.hash(remoteTxtFilePath).get()));
+//    }
+
+//    public func test06Hash() {
+//        XCTAssertNoThrow({ [self] in
+//            XCTAssertNotNil(try await(_filesService?.hash(self.remoteTxtFilePath!)))
+//        })
+//    }
+    
+    
     public func test07Move() {
         XCTAssertNoThrow({ [self] in
             _ = try await(_filesService!.delete(self.remoteBackupTxtFilePath!))
