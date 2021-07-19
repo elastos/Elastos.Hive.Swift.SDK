@@ -34,18 +34,7 @@ public class DatabaseServiceRender: DatabaseService {
     public func createCollection(_ name: String) -> Promise<Void> {
         DispatchQueue.global().async(.promise) { [self] in
             return try _controller.createCollection(name)
-
         }
-//        return Promise<Any>.async().then{ [self] _ -> Promise<Void> in
-//            return Promise<Void> { resolver in
-//                do {
-//                    try _controller.createCollection(name)
-//                    resolver.fulfill(Void())
-//                } catch {
-//                    resolver.reject(error)
-//                }
-//            }
-//        }
     }
 
     public func deleteCollection(_ name: String) -> Promise<Void> {
