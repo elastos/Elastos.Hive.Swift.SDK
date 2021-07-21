@@ -27,7 +27,7 @@ public class QueryOptions: Mappable {
     private var _skip: Int64?
     private var _limit: Int64?
     private var _projection: Dictionary<String, Any>?
-    private var _sort: [SortItem?]?
+    private var _sort: [Any]?
     private var _allowPartialResults: Bool?
     private var _returnKey: Bool?
     private var _showRecordId: Bool?
@@ -52,15 +52,15 @@ public class QueryOptions: Mappable {
         return self;
     }
     
-    public func setSort(_ sort: [SortItem]?) -> QueryOptions {
-        self._sort = sort;
+    public func setSort(_ sort: [Any]?) -> QueryOptions {
+        self._sort = [sort as Any];
         return self;
     }
     
-    public func setSort(_ sort: SortItem?) -> QueryOptions {
-        self._sort = [sort];
-        return self;
-    }
+//    public func setSort(_ sort: SortItem?) -> QueryOptions {
+//        self._sort = [sort];
+//        return self;
+//    }
     
     public func setAllowPartialResults(_ allowPartialResults: Bool?) -> QueryOptions {
         self._allowPartialResults = allowPartialResults;

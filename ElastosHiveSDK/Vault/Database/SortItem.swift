@@ -21,6 +21,7 @@
  */
 
 import Foundation
+import ObjectMapper
 
 public enum SortItemOrder: Int {
     case ASCENDING = 1
@@ -30,8 +31,12 @@ public enum SortItemOrder: Int {
 public class SortItem {
     private var _storage: [Any] = []
     
-    public init (_ key: String?, _ order: SortItemOrder?) {
+    public func getJsonValue() -> Array<Any> {
+        return _storage
+    }
+    
+    public init (_ key: String, _ order: SortItemOrder) {
         _storage.append(key)
-        _storage.append(order)
+        _storage.append(order.rawValue)
     }
 }
