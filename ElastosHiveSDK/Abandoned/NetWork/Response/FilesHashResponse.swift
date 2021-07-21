@@ -23,17 +23,17 @@
 import Foundation
 import ObjectMapper
 
-public class FilesHashResponse: HiveResponse {
-    private var _sha256: String?
-    
-    public var sha256: String {
-        get {
-            return _sha256!
-        }
-    }
-
-    public override func mapping(map: Map) {
-        super.mapping(map: map)
-        _sha256 <- map["SHA256"]
-    }
-}
+//public class FilesHashResponse: HiveResponse {
+//    private var _sha256: String?
+//
+//    public var sha256: String {
+//        get {
+//            return _sha256!
+//        }
+//    }
+//
+//    public override func mapping(map: Map) {
+//        super.mapping(map: map)
+//        _sha256 <- map["SHA256"]
+//    }
+//}

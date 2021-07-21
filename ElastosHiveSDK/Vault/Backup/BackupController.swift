@@ -37,7 +37,7 @@ public class BackupController {
         try _ = _connectionManager.restoreFromNode(RequestParams(credential)).execute()
     }
     
-    public func checkResult() throws -> BackupResult {
-        try _connectionManager.getState().execute()!.getBackupState()
+    public func checkResult() throws -> BackupResultState {
+        try _connectionManager.getState().execute(BackupResult.self).getStatusResult()
     }
 }

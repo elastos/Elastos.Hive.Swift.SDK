@@ -238,49 +238,6 @@ class FilesServiceTest: XCTestCase {
 //        verifyRemoteFileExists(remoteImgFilePath);
 //    }
 
-    func test02UploadBin() {
-        do {
-            let lock = XCTestExpectation(description: "wait for test upload bin.")
-            let data = try Data(contentsOf: URL(fileURLWithPath: self.localImgFilePath!))
-            let fileWriter = try await(_filesService!.getUploadWriter(remoteImgFilePath!))
-            try fileWriter.write(data: data, { err in
-                
-            })
-            fileWriter.close { (success, error) in
-                
-            }
-            
-            
-//            let data = try Data(contentsOf: URL(fileURLWithPath: self.localImgFilePath!))
-//            self.filesService!.upload(self.remoteImgFilePath!).done({ (fileWriter) in
-//                try fileWriter.write(data: data, { err in
-//
-//                })
-//                fileWriter.close { (success, error) in
-//                    XCTAssert(success)
-//                    XCTAssert(error == nil)
-//                    lock.fulfill()
-//                }
-//            }).catch { error in
-//                XCTFail("\(error)")
-//                lock.fulfill()
-//            }
-//            self.wait(for: [lock], timeout: 10000.0)
-//
-//            let lockB = XCTestExpectation(description: "check verify remote file exists.")
-//            self.verifyRemoteFileExists(self.remoteImgFilePath!).done { fileInfo in
-//                XCTAssert(fileInfo.size > 0)
-//                lockB.fulfill()
-//            }.catch { error in
-//                XCTFail("\(error)")
-//                lockB.fulfill()
-//            }
-//            self.wait(for: [lockB], timeout: 10000.0)
-        } catch {
-            XCTFail("\(error)")
-        }
-    }
-    
     /*
     func test01UploadText() {
         let lock = XCTestExpectation(description: "wait for test upload text.")

@@ -31,22 +31,22 @@ class BackupServiceTest: XCTestCase {
     private var _backupService: BackupService?
     
     override func setUpWithError() throws {
-        XCTAssertNoThrow({ [self] in
+        XCTAssertNoThrow(try { [self] in
             let testData = TestData.shared()
             _backupService = try testData.backupService()
-        })
+        }())
     }
     
     func test01StartBackup() {
-        XCTAssertNoThrow({ [self] in
+        XCTAssertNoThrow(try { [self] in
             try await(_backupService!.startBackup())
-        })
+        }())
     }
 
     func test02CheckResult() {
-        XCTAssertNoThrow({ [self] in
+        XCTAssertNoThrow(try { [self] in
             XCTAssertNotNil(try await(_backupService!.checkResult()))
-        })
+        }())
     }
     
     func test03StopBackup() {
@@ -54,9 +54,9 @@ class BackupServiceTest: XCTestCase {
     }
     
     func test04RestoreFrom() {
-        XCTAssertNoThrow({ [self] in
+        XCTAssertNoThrow(try { [self] in
             try await(_backupService!.restoreFrom())
-        })
+        }())
     }
     
     func testStopRestore() {

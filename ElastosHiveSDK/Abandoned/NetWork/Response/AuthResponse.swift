@@ -22,18 +22,18 @@
 
 import Foundation
 import ObjectMapper
-
-public class AuthResponse: HiveResponse {
-    private var _accessToken: String?
-    
-    public var accessToken: String {
-        get {
-            return _accessToken!
-        }
-    }
-    
-    public override func mapping(map: Map) {
-        super.mapping(map: map)
-        _accessToken <- map["access_token"]
-    }
-}
+//
+//public class AuthResponse: HiveResponse {
+//    private var _accessToken: String?
+//    
+//    public var accessToken: String {
+//        get {
+//            return _accessToken!
+//        }
+//    }
+//    
+//    public override func mapping(map: Map) {
+//        super.mapping(map: map)
+//        _accessToken <- map["access_token"]
+//    }
+//}

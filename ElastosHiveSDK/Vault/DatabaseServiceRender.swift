@@ -38,15 +38,8 @@ public class DatabaseServiceRender: DatabaseService {
     }
 
     public func deleteCollection(_ name: String) -> Promise<Void> {
-        return Promise<Any>.async().then{ [self] _ -> Promise<Void> in
-            return Promise<Void> { resolver in
-                do {
-                    try _controller.deleteCollection(name)
-                    resolver.fulfill(Void())
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        DispatchQueue.global().async(.promise) { [self] in
+            return try _controller.deleteCollection(name)
         }
     }
 

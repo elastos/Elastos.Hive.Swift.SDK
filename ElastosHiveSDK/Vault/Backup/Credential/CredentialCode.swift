@@ -51,8 +51,8 @@ public class CredentialCode {
         return _jwtCode
     }
     
-    private func restoreToken() -> String {
-        return _storage.loadBackupCredential(_targetServiceDid)!
+    private func restoreToken() -> String? {
+        return _storage.loadBackupCredential(_targetServiceDid)
     }
 
     private func saveToken(_ jwtCode: String) {
