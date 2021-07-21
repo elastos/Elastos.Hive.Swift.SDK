@@ -62,7 +62,7 @@ class ScriptingServiceTest: XCTestCase {
             _databaseService = testData.newVault().databaseService
             _appDid = testData.appId
             _targetDid = testData.userDid
-        })
+        }())
     }
     
     public func test01Insert() {
@@ -73,21 +73,21 @@ class ScriptingServiceTest: XCTestCase {
     }
     
     private func registerScriptInsert(_ scriptName: String) {
-        XCTAssertNoThrow({ [self] in
+        XCTAssertNoThrow(try { [self] in
             let doc = ["author" : "$params.author", "content" : "$params.content"]
             let options = ["bypass_document_validation" : false, "ordered" : true]
             try await(_scriptingService!.registerScript(scriptName, InsertExecutable(scriptName, _collectionName, doc, options), false, false))
-        })
+        }())
     }
     
     private func callScriptInsert(_ scriptName: String) {
-        XCTAssertNoThrow({ [self] in
+        XCTAssertNoThrow(try { [self] in
             let params = ["author" : "John", "content" : "message"]
-            let result = try await(_scriptRunner!.callScript(scriptName, params, _targetDid!, _appDid!,  JSON.self))
+            let result = try await(_scriptRunner!.callScript(scriptName, params, _targetDid!, _appDid!, JSON.self))
             XCTAssertNotNil(result)
             XCTAssert(result[scriptName] != nil)
             XCTAssert(result[scriptName]["inserted_id"] != nil)
-        })
+        }())
     }
 
     private func registerScriptFindWithoutCondition(_ scriptName: String) {

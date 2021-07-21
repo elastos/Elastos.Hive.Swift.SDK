@@ -31,7 +31,7 @@ extension DataRequest {
             if re is NSNull {
                 return HiveResponse([:])
             }
-            print("*******\n\(re)*******\n")
+            print("*******response*******\n\(re)*******\n")
             let json = re as! [String : Any]
             //            if response?.statusCode != 200 && response?.statusCode != 201 {
             //                throw HiveError
@@ -70,7 +70,7 @@ extension DataRequest {
             if re is NSNull {
                 return T(JSON: [:])!
             }
-            print("*******\n\(re)*******\n")
+            print("*******response*******\n\(re)*******\n")
             let json = re as! [String : Any]
             //            if response?.statusCode != 200 && response?.statusCode != 201 {
             //                throw HiveError

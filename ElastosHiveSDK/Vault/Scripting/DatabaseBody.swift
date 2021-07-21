@@ -33,6 +33,6 @@ public class DatabaseBody: Mappable {
     required public init?(map: Map) {}
     
     public func mapping(map: Map) {
-//        self._collection <- map["collection"]
+        self._collection <- map["collection"]
     }
 }

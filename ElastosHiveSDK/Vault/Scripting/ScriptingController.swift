@@ -32,6 +32,7 @@ public class ScriptingController {
     public func registerScript(_ name: String, _ condition: Condition?, _ executable: Executable?, _ allowAnonymousUser: Bool?, _ allowAnonymousApp: Bool?) throws {
         let params = RegScriptParams()
             .setExecutable(executable)
+            .setAllowAnonymousUser(allowAnonymousUser)
             .setAllowAnonymousApp(allowAnonymousApp)
             .setCondition(condition)
         _ = try _connectionManager?.registerScript(name, params).execute()?.getString()
