@@ -49,12 +49,12 @@ public class InsertExecutable: Executable {
     
     public init(_ name: String?, _ collectionName: String?, _ document: Dictionary<String, Any>?, _ options:  Dictionary<String, Any>?) {
         super.init(name, ExecutableType.INSERT, nil)
-        _insertExecutableBody = InsertExecutableBody(collectionName, document, options)
+        self.body = InsertExecutableBody(collectionName, document, options)
     }
     
     public init(_ name: String?, _ collectionName: String?, _ document: Dictionary<String, Any>?) {
         super.init(name, ExecutableType.INSERT, nil)
-        _insertExecutableBody = InsertExecutableBody(collectionName, document, nil)
+        self.body = InsertExecutableBody(collectionName, document, nil)
     }
     
     required public init?(map: Map) {
@@ -63,6 +63,6 @@ public class InsertExecutable: Executable {
     
     public override func mapping(map: Map) {
         super.mapping(map: map)
-        _insertExecutableBody <- map["body"]
+//        _insertExecutableBody <- map["body"]
     }
 }
