@@ -28,7 +28,7 @@ extension DataRequest {
         let response1 = response(responseSerializer: JSONResponseSerializer(options: options))
         switch response1.result {
         case .success(let re):
-            print("*******\n\(self.HTTPBody)\(re)*******\n")
+            print("*******\n\(re)*******\n")
             let json = re as! [String : Any]
             //            if response?.statusCode != 200 && response?.statusCode != 201 {
             //                throw HiveError
@@ -63,6 +63,7 @@ extension DataRequest {
         let response1 = response(responseSerializer: JSONResponseSerializer(options: options))
         switch response1.result {
         case .success(let re):
+            print("*******\n\(re)*******\n")
             let json = re as! [String : Any]
             //            if response?.statusCode != 200 && response?.statusCode != 201 {
             //                throw HiveError

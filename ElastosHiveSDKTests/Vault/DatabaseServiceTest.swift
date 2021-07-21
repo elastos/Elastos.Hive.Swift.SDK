@@ -40,27 +40,27 @@ class DatabaseServiceTest: XCTestCase {
     }
     
     func test2InsertOne() {
-        XCTAssertNoThrow({ [self] in
+        XCTAssertNoThrow(try { [self] in
             let docNode = ["author" : "john doe1", "title" : "Eve for Dummies1"]
             XCTAssertNotNil(try await(_databaseService!.insertOne(COLLECTION_NAME, docNode, InsertOptions().bypassDocumentValidation(false))))
-        })
+        }())
     }
     
     public func test03InsertMany() {
-        XCTAssertNoThrow({ [self] in
+        XCTAssertNoThrow(try { [self] in
             let nodes = [
                 ["author" : "john doe2", "title" : "Eve for Dummies2"],
                 ["author" : "john doe3", "title" : "Eve for Dummies3"],
             ]
             XCTAssertNotNil(try await(_databaseService!.insertMany(COLLECTION_NAME, nodes, InsertOptions().bypassDocumentValidation(false).ordered(true))))
-        })
+        }())
     }
     
     public func test04FindOne() {
-        XCTAssertNoThrow({ [self] in
+        XCTAssertNoThrow(try { [self] in
             let query = ["author" : "john doe1"]
             XCTAssertNotNil(try await(_databaseService!.findOne(COLLECTION_NAME, query, FindOptions().setSkip(0).setLimit(0))))
-        })
+        }())
     }
   
     public func test05FindMany() {
