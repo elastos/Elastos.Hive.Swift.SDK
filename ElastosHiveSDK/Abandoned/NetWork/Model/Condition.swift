@@ -30,12 +30,14 @@ public class Condition: NSObject, Mappable {
     
     public var _type: String?
     public var _name: String?
-    public var _body: Any?
+    public var _body: HiveRootBody?
 
     public init(_ name: String?, _ type: String?, _ body: Any?) {
         self._name = name
         self._type = type
-        self._body = body
+        if body != nil {
+            self._body = body as! HiveRootBody
+        }
     }
     
     required public init?(map: Map) {}
@@ -48,7 +50,7 @@ public class Condition: NSObject, Mappable {
     
     final var body: Any? {
         set {
-            _body = newValue
+            _body = newValue as! HiveRootBody
         }
         get {
             return _body

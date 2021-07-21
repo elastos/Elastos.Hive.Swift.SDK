@@ -31,14 +31,8 @@ public class ScriptRunner: ServiceEndpoint, ScriptingInvocationService {
     }
 
     public func callScript<T>(_ name: String, _ params: [String : Any]?, _ targetDid: String, _ targetAppDid: String, _ resultType: T.Type) -> Promise<T> {
-        return Promise<Any>.async().then { [self] _ -> Promise<T> in
-            return Promise<T> { resolver in
-                do {
-                    resolver.fulfill(try _controller!.callScript(name, params, targetDid, targetDid, resultType))
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _controller!.callScript(name, params, targetDid, targetAppDid, resultType)
         }
     }
 

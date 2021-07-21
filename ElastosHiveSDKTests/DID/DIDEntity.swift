@@ -63,5 +63,10 @@ public class DIDEntity: NSObject {
     var getStorePassword: String {
         return storepass
     }
+    
+    public override var description: String {
+        
+        return did!.description
+    }
 }
 

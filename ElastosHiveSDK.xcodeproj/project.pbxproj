@@ -245,6 +245,7 @@
 		3065A6032615B2CF00C20661 /* NodeCommitHashResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3065A6022615B2CF00C20661 /* NodeCommitHashResponse.swift */; };
 		3065A6062615B6BB00C20661 /* Alamofire+Hive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3065A6052615B6BB00C20661 /* Alamofire+Hive.swift */; };
 		3087254126A809E800E186F2 /* VersionResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3087254026A809E800E186F2 /* VersionResult.swift */; };
+		3087254C26A87BF300E186F2 /* HiveRootBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3087254B26A87BF100E186F2 /* HiveRootBody.swift */; };
 		308E08992688D68F0089F479 /* CodeFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 308E08982688D68F0089F479 /* CodeFetcher.swift */; };
 		308E089D2688D7320089F479 /* AuthApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 308E089C2688D7320089F479 /* AuthApi.swift */; };
 		308F2C7D2608DAC800F2ADFD /* AuthToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103757223FF96AB004216D0 /* AuthToken.swift */; };
@@ -538,6 +539,7 @@
 		3065A6022615B2CF00C20661 /* NodeCommitHashResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeCommitHashResponse.swift; sourceTree = "<group>"; };
 		3065A6052615B6BB00C20661 /* Alamofire+Hive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Alamofire+Hive.swift"; sourceTree = "<group>"; };
 		3087254026A809E800E186F2 /* VersionResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionResult.swift; sourceTree = "<group>"; };
+		3087254B26A87BF100E186F2 /* HiveRootBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiveRootBody.swift; sourceTree = "<group>"; };
 		308E08982688D68F0089F479 /* CodeFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeFetcher.swift; sourceTree = "<group>"; };
 		308E089C2688D7320089F479 /* AuthApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthApi.swift; sourceTree = "<group>"; };
 		30967514268AB25400FF8406 /* ExecutableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExecutableType.swift; sourceTree = "<group>"; };
@@ -972,6 +974,7 @@
 				3053BEA02684CA5F005828B0 /* AndCondition.swift */,
 				3053BE9A2684CA5F005828B0 /* Context.swift */,
 				30967517268AB6B700FF8406 /* DatabaseBody.swift */,
+				3087254B26A87BF100E186F2 /* HiveRootBody.swift */,
 				3053BE8C2684CA5F005828B0 /* DeleteExecutable.swift */,
 				3053BE962684CA5F005828B0 /* FileDownloadExecutable.swift */,
 				3053BE932684CA5F005828B0 /* FileHashExecutable.swift */,
@@ -1500,6 +1503,7 @@
 				30091C1C26182326003EB5CE /* HiveVaultRender.swift in Sources */,
 				3053BE4C2684C9AE005828B0 /* AboutController.swift in Sources */,
 				3053BE442684C974005828B0 /* NodeRPCConnection.swift in Sources */,
+				3087254C26A87BF300E186F2 /* HiveRootBody.swift in Sources */,
 				3053BF162684CA96005828B0 /* Order.swift in Sources */,
 				1170FB142502019C0049E81D /* Vault.swift in Sources */,
 				3053BEE42684CA5F005828B0 /* FindExecutable.swift in Sources */,

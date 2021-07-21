@@ -23,19 +23,10 @@
 import Foundation
 import ObjectMapper
 
-public class DatabaseBody: HiveRootBody {
-    private var _collection: String?
+public class HiveRootBody: Mappable {
+    public init() {}
     
-    public init(_ collection: String?) {
-        super.init()
-        self._collection = collection
-    }
+    public required init?(map: Map) {}
     
-    public required init?(map: Map) {
-        fatalError("init(map:) has not been implemented")
-    }
-    
-    public override func mapping(map: Map) {
-        self._collection <- map["collection"]
-    }
+    public func mapping(map: Map) {}
 }
