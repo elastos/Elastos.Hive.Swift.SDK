@@ -39,15 +39,23 @@ public class PaymentController {
     }
     
     public func payOrder(_ orderId: String?, _ transIds: String?) throws -> Receipt? {
-        return try _connectionManager.payOrder(PayOrderParams()).execute(Receipt.self)
+        return try _connectionManager.payOrder(orderId!, PayOrderParams(transIds!)).execute(Receipt.self)
     }
     
     public func getOrderInfo(_ orderId: String?) throws -> Order? {
         throw HiveError.NotImplementedException(nil)
     }
     
-    public func getOrders(_ subscription: String?) throws -> [Order]? {
-        throw HiveError.NotImplementedException(nil)
+    public func getOrder(_ orderId: String) throws -> Order? {
+        return try getOrdersInternal("vault", nil)?.first
+    }
+    
+    public func getOrders(_ subscription: String) throws -> [Order]? {
+        return try getOrdersInternal(subscription, nil)
+    }
+    
+    private func getOrdersInternal(_ subscription: String , _ orderId: String?) throws -> [Order]? {
+        return try _connectionManager.getOrders(subscription, orderId).execute(OrderCollection.self).getOrders
     }
     
     public func getReceipt(_ orderId: String) throws -> Receipt? {

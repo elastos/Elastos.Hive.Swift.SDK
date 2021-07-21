@@ -26,16 +26,14 @@ import ObjectMapper
 public class OrderCollection: Mappable  {
     private var _orders: [Order]?
 
-    public var orderList: [Order]? {
-        get {
-            return _orders
-        }
+    public var getOrders: [Order]? {
+        return _orders
     }
     
     required public init?(map: Map) {}
     
     public func mapping(map: Map) {
-        _orders <- map["value"]
+        _orders <- map["orders"]
     }
 }
 

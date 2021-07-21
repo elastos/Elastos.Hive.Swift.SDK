@@ -33,13 +33,13 @@ extension ConnectionManager {
         return try self.createDataRequest(url, .put, params.toJSON())
     }
     
-    public func payOrder(_ params: PayOrderParams) throws -> DataRequest {
-        let url = self.baseURL + "/api/v2/payment/order/{order_id}"
+    public func payOrder(_ orderId: String, _ params: PayOrderParams) throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/payment/order/\(orderId)"
         return try self.createDataRequest(url, .post, params.toJSON())
     }
     
-    public func getOrders(_ subscription: String) throws -> DataRequest {
-        let url = self.baseURL + "/api/v2/payment/order?subscription=\(subscription)"
+    public func getOrders(_ subscription: String, _ orderId: String?) throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/payment/order?subscription=\(subscription)&order_id=\(orderId ?? "")"
         return try self.createDataRequest(url, .get, nil)
     }
 
