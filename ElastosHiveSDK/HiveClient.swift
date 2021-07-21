@@ -169,6 +169,51 @@ public class HiveClientHandle: NSObject {
             }
         }
     }
+    
+    /// run script by hive url
+    /// - Parameters:
+    ///   - scriptUrl: hive://target_did@target_app_did/script_name?params={key=value}
+    ///   - resultType: resultType
+    /// - Returns:
+    public func callScriptUrl<T>(_ scriptUrl: String, _ resultType: T.Type) -> Promise<T> {
+        return parseHiveURL(scriptUrl).then { hiveinfo -> Promise<T> in
+            return hiveinfo.callScript(resultType)
+        }
+    }
+    
+    /// Convenient method that first calls a script by url using callScriptURL(), and expects the
+    /// JSON output to contain a file download information. If this is the case, the file download is
+    /// starting and a file reader is returned.
+    /// - Parameters:
+    ///   - scriptUrl:
+    ///   - resultType:
+    /// - Returns:
+    public func downloadFileByScriptUrl(_ scriptUrl: String) -> Promise<FileReader> {
+        return parseHiveURL(scriptUrl).then { hiveinfo -> Promise<FileReader> in
+            return hiveinfo.downloadFile()
+        }
+    }
+    
+    /// Parses a Hive standard url into a url info that can later be executed to get the result or the
+    /// target url.
+    ///
+    /// For example, later calling a url such as ...
+    ///      hive://userdid:appdid/getAvatar
+    ///
+    /// ... results in a call to the "getAvatar" script, previously registered by "userdid" on his vault,
+    /// in the "appdid" scope. This is similar to calling:
+    ///      hiveClient.getVault(userdid).getScripting().call("getAvatar");
+    ///
+    /// Usage example (assuming the url is a call to a getAvatar script that contains a FileDownload
+    /// executable named "download"):
+    /// - let hiveURLInfo = hiveclient.parseHiveURL(urlstring)
+    /// - let scriptOutput = hiveURLInfo.callScript()
+    /// - hiveURLInfo.getVault().getScripting().downloadFile(scriptOutput.items["download"].getTransferID())
+    public func parseHiveURL(_ scriptUrl: String) -> Promise<HiveURLInfo> {
+        return DispatchQueue.global().async(.promise) { [self] in
+            return try HiveURLInfoImpl(self, context, authenticationAdapterImpl, scriptUrl)
+        }
+    }
 }
 
 public class AuthenticationAdapterImpl: AuthenticationAdapter {
@@ -179,5 +224,69 @@ public class AuthenticationAdapterImpl: AuthenticationAdapter {
     
     public func authenticate(_ context: ApplicationContext, _ jwtToken: String) -> Promise<String> {
         return context.getAuthorization(jwtToken)
+    }
+}
+
+public class HiveURLInfoImpl: HiveURLInfo {
+
+    private let HIVE_URL_PREFIX = "hive://"
+    private var targetDid: String
+    private var appDid: String
+    private var scriptName: String
+    private var params: [String : Any] = [: ]
+    private var _client: HiveClientHandle
+    private var _context: ApplicationContext
+    private var _authenticationAdapter: AuthenticationAdapter
+    private var _vault: Vault!
+    
+    init(_ client: HiveClientHandle,_ context: ApplicationContext, _ authenticationAdapter: AuthenticationAdapter, _ scriptUrl: String) throws {
+        if scriptUrl.prefix(7) != HIVE_URL_PREFIX {
+            throw HiveError.invalidParameterError(des: "Invalid hive script url: no hive prefix.")
+        }
+        
+        let parts = scriptUrl.suffix(scriptUrl.count - HIVE_URL_PREFIX.count).split(separator: "/")
+        
+        if (parts.count < 2) {
+            throw HiveError.invalidParameterError(des: "Invalid hive script url: must contain at least one slash.")
+        }
+
+        let dids = parts[0].split(separator: "@")
+        if (dids.count != 2) {
+            throw HiveError.invalidParameterError(des: "Invalid hive script url: must contain two dids.")
+        }
+        let star = scriptUrl.count - (HIVE_URL_PREFIX.count + parts[0].count + 1)
+        let values = scriptUrl.suffix(star).split(separator: "?")
+        if (values.count != 2) {
+            throw HiveError.invalidParameterError(des: "Invalid hive script url: must contain script name and params.")
+        }
+        targetDid = String(dids[0])
+        appDid = String(dids[1])
+        scriptName = String(values[0])
+        let data = String(values[1].suffix(values[1].count - 7)).data(using: String.Encoding.utf8)
+        params = try JSONSerialization.jsonObject(with: data!,
+                        options: .mutableContainers) as! [String : Any]
+        _client = client
+        _context = context
+        _authenticationAdapter = authenticationAdapter
+    }
+    
+    public func callScript<T>(_ resultType: T.Type) -> Promise<T> {
+        return getVault().then { [self] vault -> Promise<T> in
+            return vault.scripting.callScript(scriptName, params, appDid, resultType)
+        }
+    }
+    
+    public func downloadFile() -> Promise<FileReader> {
+        return getVault().then { [self] vault -> Promise<JSON> in
+            _vault = vault
+            return vault.scripting.callScript(scriptName, self.params, appDid, JSON.self)
+        }.then { [self] result -> Promise<FileReader> in
+            return _vault.scripting.downloadFile(result[scriptName]["transaction_id"].stringValue)
+        }
+    }
+
+    public func getVault() -> Promise<Vault> {
+//        return _client.getVault(targetDid, "https://hive2.trinity-tech.io")
+        return _client.getVault(targetDid, nil)
     }
 }
