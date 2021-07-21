@@ -78,13 +78,14 @@ public class DatabaseController {
     
     public func findOne(_ collectionName: String, _ filter: Dictionary<String, Any>?, _ options: FindOptions?) throws -> Dictionary<String, Any>? {
         let docs = try find(collectionName, filter, options)
-        return (docs != nil && docs?.count ?? 0 > 0) ? docs?.first : nil
+        return docs?.first
     }
 
     public func find(_ collectionName: String, _ filter: Dictionary<String, Any>?, _ options: FindOptions?) throws -> Array<Dictionary<String, Any>>? {
         let skip: String = (options != nil ? options!.getSkipStr() : "")
         let limit: String = (options != nil ? options!.getLimitStr() : "")
-        return try _connectionManager.find(collectionName, DatabaseController.jsonNode2Str(filter)!, skip, limit).execute()?.getArray(Dictionary<String, Any>.self)
+        
+        return try _connectionManager.find(collectionName, (DatabaseController.jsonNode2Str(filter)?.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!)!, skip, limit).execute(FindResult.self).documents
     }
 
     public func query(_ collectionName: String, _ filter: Dictionary<String, Any>?, _ options: QueryOptions) throws -> Array<Dictionary<String, Any>>? {

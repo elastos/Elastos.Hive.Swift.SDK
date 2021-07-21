@@ -130,7 +130,7 @@ public class TestBackupRender: BackupContext {
     public func getAuthorization(_ srcDid: String?, _ targetDid: String?, _ targetHost: String?) -> Promise<String>? {
         return Promise<String> { resolver in
             let auth = try userDid.issueBackupDiplomaFor(srcDid!, targetHost!, targetDid!)
-            resolver.fulfill(auth.description)
+            resolver.fulfill(auth.toString(true))
         }
     }
 

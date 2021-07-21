@@ -25,24 +25,20 @@ import ObjectMapper
 
 public class InsertResult: Mappable {
     private var _acknowledged: Bool = false
-    private var _insertedId: String?
+    private var _insertedIds: [String]?
     
     public var acknowledged: Bool {
-        get {
-            return _acknowledged
-        }
+        return _acknowledged
     }
     
-    public var insertedId: String {
-        get {
-            return _insertedId!
-        }
+    public var insertedIds: [String]? {
+        return _insertedIds
     }
     
     public required init?(map: Map) {}
     
     public func mapping(map: Map) {
         _acknowledged <- map["acknowledged"]
-        _insertedId <- map["inserted_id"]
+        _insertedIds <- map["inserted_ids"]
     }
 }

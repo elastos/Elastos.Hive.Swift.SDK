@@ -44,26 +44,14 @@ public class DatabaseServiceRender: DatabaseService {
     }
 
     public func insertOne(_ collection: String, _ doc: [String : Any], _ options: InsertOptions) -> Promise<InsertResult> {
-        return Promise<Any>.async().then{ [self] _ -> Promise<InsertResult> in
-            return Promise<InsertResult> { resolver in
-                do {
-                    resolver.fulfill(try _controller.insertOne(collection, doc, options)!)
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _controller.insertOne(collection, doc, options)!
         }
     }
     
     public func insertMany(_ collection: String, _ docs: [Dictionary<String, Any>], _ options: InsertOptions) -> Promise<InsertResult> {
-        return Promise<Any>.async().then{ [self] _ -> Promise<InsertResult> in
-            return Promise<InsertResult> { resolver in
-                do {
-                    resolver.fulfill(try _controller.insertMany(collection, docs, options)!)
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _controller.insertMany(collection, docs, options)!
         }
     }
 
@@ -80,14 +68,8 @@ public class DatabaseServiceRender: DatabaseService {
     }
 
     public func findOne(_ collection: String, _ query: [String : Any], _ options: FindOptions) -> Promise<Dictionary<String, Any>> {
-        return Promise<Any>.async().then{ [self] _ -> Promise<Dictionary<String, Any>> in
-            return Promise<Dictionary<String, Any>> { resolver in
-                do {
-                    resolver.fulfill(try _controller.findOne(collection, query, options)!)
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _controller.findOne(collection, query, options)!
         }
     }
 
