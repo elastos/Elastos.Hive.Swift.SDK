@@ -36,20 +36,33 @@ public class InsertExecutableBody: DatabaseBody {
     required init?(map: Map) {
         fatalError("init(map:) has not been implemented")
     }
+    
+    public override func mapping(map: Map) {
+        super.mapping(map: map)
+        _options <- map["options"]
+        _document <- map["document"]
+    }
 }
 
 public class InsertExecutable: Executable {
+    private var _insertExecutableBody: InsertExecutableBody?
+    
     public init(_ name: String?, _ collectionName: String?, _ document: Dictionary<String, Any>?, _ options:  Dictionary<String, Any>?) {
         super.init(name, ExecutableType.INSERT, nil)
-        self.body = InsertExecutableBody(collectionName, document, options)
+        _insertExecutableBody = InsertExecutableBody(collectionName, document, options)
     }
     
     public init(_ name: String?, _ collectionName: String?, _ document: Dictionary<String, Any>?) {
         super.init(name, ExecutableType.INSERT, nil)
-        self.body = InsertExecutableBody(collectionName, document, nil)
+        _insertExecutableBody = InsertExecutableBody(collectionName, document, nil)
     }
     
     required public init?(map: Map) {
         fatalError("init(map:) has not been implemented")
+    }
+    
+    public override func mapping(map: Map) {
+        super.mapping(map: map)
+        _insertExecutableBody <- map["body"]
     }
 }

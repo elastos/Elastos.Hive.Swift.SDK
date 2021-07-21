@@ -42,74 +42,38 @@ public class ScriptingServiceRender: ScriptingService {
     }
     
     public func registerScript(_ name: String, _ condition: Condition?, _ executable: Executable, _ allowAnonymousUser: Bool, _ allowAnonymousApp: Bool) -> Promise<Void> {
-        return Promise<Any>.async().then { [self] _ -> Promise<Void> in
-            return Promise<Void> { resolver in
-                do {
-                    resolver.fulfill(try _controller.registerScript(name, condition, executable, allowAnonymousUser, allowAnonymousApp))
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _controller.registerScript(name, condition, executable, allowAnonymousUser, allowAnonymousApp)
         }
     }
     
     public func unregisterScript(_ name: String) -> Promise<Void> {
-        return Promise<Any>.async().then { [self] _ -> Promise<Void> in
-            return Promise<Void> { resolver in
-                do {
-                    resolver.fulfill(try _controller.unregisterScript(name))
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _controller.unregisterScript(name)
         }
     }
     
     public func callScript<T>(_ name: String, _ params: [String : Any]?, _ targetDid: String, _ targetAppDid: String, _ resultType: T.Type) -> Promise<T> {
-        return Promise<Any>.async().then { [self] _ -> Promise<T> in
-            return Promise<T> { resolver in
-                do {
-                    resolver.fulfill(try _controller.callScript(name, params, targetDid, targetAppDid, resultType))
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _controller.callScript(name, params, targetDid, targetAppDid, resultType)
         }
     }
 
     public func callScriptUrl<T>(_ name: String, _ params: String, _ targetDid: String, _ targetAppDid: String, _ resultType: T.Type) -> Promise<T> {
-        return Promise<Any>.async().then { [self] _ -> Promise<T> in
-            return Promise<T> { resolver in
-                do {
-                    resolver.fulfill(try _controller.callScriptUrl(name, params, targetDid, targetAppDid, resultType))
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _controller.callScriptUrl(name, params, targetDid, targetAppDid, resultType)
         }
     }
     
     public func uploadFile(_ transactionId: String) -> Promise<FileWriter> {
-        return Promise<Any>.async().then { [self] _ -> Promise<FileWriter> in
-            return Promise<FileWriter> { resolver in
-                do {
-                    resolver.fulfill(try _controller.uploadFile(transactionId))
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _controller.uploadFile(transactionId)
         }
     }
 
     public func downloadFile(_ transactionId: String) -> Promise<FileReader> {
-        return Promise<Any>.async().then { [self] _ -> Promise<FileReader> in
-            return Promise<FileReader> { resolver in
-                do {
-                    resolver.fulfill(try _controller.downloadFile(transactionId))
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _controller.downloadFile(transactionId)
         }
     }
 }
