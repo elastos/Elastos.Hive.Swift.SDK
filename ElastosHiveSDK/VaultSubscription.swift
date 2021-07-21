@@ -75,11 +75,14 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentSer
     }
     
     public func placeOrder(_ planName: String) -> Promise<Order> {
-        return Promise<Void>.async().then { _ -> Promise<Order> in
-            return Promise<Order> { resolver in
-                resolver.reject(HiveError.NotImplementedException("Payment will be supported later"))
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _paymentController!.placeOrder("vault", planName)!
         }
+//        return Promise<Void>.async().then { _ -> Promise<Order> in
+//            return Promise<Order> { resolver in
+//                resolver.reject(HiveError.NotImplementedException("Payment will be supported later"))
+//            }
+//        }
     }
     
     public func getOrder(_ orderId: String) -> Promise<Order> {

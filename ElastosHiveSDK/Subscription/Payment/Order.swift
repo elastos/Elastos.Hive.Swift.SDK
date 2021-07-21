@@ -25,62 +25,50 @@ import ObjectMapper
 
 public class Order: Mappable  {
     private var _orderId: String?
-    private var _did: String?
-    private var _appId: String?
-    private var _pricingInfo: PricingPlan?
-    private var _payTxids: [String]?
-    private var _state: String?
-    private var _type: String?
-    private var _createTime: Double?
-    private var _finishTime: Double?
+    private var _subscription: String?
+    private var _pricingName: String?
+    private var _elaAmount: Double?
+    private var _elaAddress: String?
+    private var _proof: String?
+    private var _createTime: Int64?
     
     public var orderId: String? {
         return _orderId
     }
     
-    public var did: String? {
-        return _did
+    public var subscription: String? {
+        return _subscription
     }
     
-    public var appId: String? {
-        return _appId
+    public var pricingName: String? {
+        return _pricingName
     }
     
-    public var pricingInfo: PricingPlan? {
-        return _pricingInfo
+    public var elaAmount: Double? {
+        return _elaAmount
+    }
+  
+    public var elaAddress: String? {
+        return _elaAddress
     }
     
-    public var payTxids: [String]? {
-        return _payTxids
+    public var proof: String? {
+        return _proof
     }
     
-    public var state: String? {
-        return _state
-    }
-    
-    public var type: String? {
-        return _type
-    }
-    
-    public var createTime: Double? {
+    public var createTime: Int64? {
         return _createTime
-    }
-    
-    public var finishTime: Double? {
-        return _finishTime
     }
     
     required public init?(map: Map) {}
     
     public func mapping(map: Map) {
         _orderId <- map["order_id"]
-        _did <- map["did"]
-        _appId <- map["app_id"]
-        _pricingInfo <- map["pricing_info"]
-        _payTxids <- map["pay_txids"]
-        _state <- map["state"]
-        _type <- map["type"]
-        _createTime <- map["creat_time"]
-        _finishTime <- map["finish_time"]
+        _subscription <- map["subscription"]
+        _pricingName <- map["pricing_name"]
+        _elaAmount <- map["ela_amount"]
+        _elaAddress <- map["ela_address"]
+        _proof <- map["proof"]
+        _createTime <- map["create_time"]
     }
 }

@@ -30,6 +30,10 @@ public class PaymentController {
         _connectionManager = serviceEndpoint.connectionManager!
     }
     
+    public func placeOrder(_ subscription: String?, _ pricingPlan: String?) throws -> Order? {
+        return try _connectionManager.placeOrder(CreateOrderParams(subscription!, pricingPlan!)).execute(Order.self)
+    }
+    
     public func createOrder(_ subscription: String?, _ pricingPlan: String?) throws -> Order? {
         return try _connectionManager.createOrder(CreateOrderParams("", "")).execute(Order.self)
     }
@@ -51,6 +55,6 @@ public class PaymentController {
     }
     
     public func getVersion() throws -> String? {
-        return try _connectionManager.getVersion().execute()?.getString()
+        return try _connectionManager.getVersion().execute(VersionResult.self).version
     }
 }

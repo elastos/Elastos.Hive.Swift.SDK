@@ -37,21 +37,21 @@ class VaultPaymentTest: XCTestCase {
         XCTAssertNoThrow({ [self] in
             let testData = TestData.shared()
             _paymentService = VaultSubscription(testData.appContext, testData.providerAddress)
-        })
+        }())
     }
     
     func test01GetVersion() {
-        XCTAssertNoThrow({ [self] in
+        XCTAssertNoThrow(try { [self] in
             let version = try await(_paymentService!.getVersion())
             XCTAssert(version != nil)
-        })
+        }())
     }
     
     func test02PlaceOrder() {
-        XCTAssertNoThrow({ [self] in
+        XCTAssertNoThrow(try { [self] in
             let order = try await(_paymentService!.placeOrder(_pricingPlanName))
             XCTAssertNotNil(order)
-        })
+        }())
     }
     
     func test03PayOrder() {

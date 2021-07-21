@@ -23,6 +23,11 @@
 import Foundation
 
 extension ConnectionManager {
+    public func placeOrder(_ params: CreateOrderParams) throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/payment/order"
+        return try self.createDataRequest(url, .put, params.toJSON())
+    }
+    
     public func createOrder(_ params: CreateOrderParams) throws -> DataRequest {
         let url = self.baseURL + "/api/v2/payment/order"
         return try self.createDataRequest(url, .put, params.toJSON())
