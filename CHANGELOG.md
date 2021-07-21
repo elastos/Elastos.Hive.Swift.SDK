@@ -1,3 +1,11 @@
+07/21/2021 Li Aihong liaihong@trinity-tech.io
+
+**version 2.1.6-pre**, main changes to previous version:
+
+```markdown
+- Add parseHiveURL and downloadFileByScriptUrl method in HiveClient.
+```
+
 06/30/2021 Li Aihong liaihong@trinity-tech.io
 
 **version 2.1.4-pre**, main changes to previous version:
