@@ -125,8 +125,8 @@ class DatabaseServiceTest: XCTestCase {
     }
     
     func test12DeleteCollection() {
-        XCTAssertNoThrow({ [self] in
+        XCTAssertNoThrow(try { [self] in
             _ = try await(_databaseService!.deleteCollection(COLLECTION_NAME))
-        })
+        }())
     }
 }

@@ -41,7 +41,7 @@ extension DataRequest {
             
 //            let result = T(JSON: re as! [String : Any])!
             //            try result.checkResponseVaild()
-            return nil
+            return HiveResponse(json)
         case .failure(let error):
             let e = error
             switch e {

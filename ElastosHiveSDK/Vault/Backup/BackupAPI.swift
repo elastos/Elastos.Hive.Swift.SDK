@@ -30,7 +30,7 @@ extension ConnectionManager {
     
     public func saveToNode(_ params: RequestParams) throws -> DataRequest {
         let url = self.baseURL + "/api/v2/vault/content?to=hive_node"
-        return try self.createDataRequest(url, .post, nil)
+        return try self.createDataRequest(url, .post, params.toJSON())
     }
     
     public func restoreFromNode(_ params: RequestParams) throws -> DataRequest {

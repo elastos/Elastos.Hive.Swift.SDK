@@ -35,9 +35,9 @@ internal extension DataRequest {
                 throw HiveError.hiveSdk(message: "get error from server: error code = \(code), message = \(message)")
             }
             
-            let response: HiveResponse = HiveResponse(JSON: re as! [String : Any])!
-            response.json = JSON(re).dictionaryObject!
-            return response
+//            let response: HiveResponse = HiveResponse(re as! [String : Any])
+//            response.json = JSON(re).dictionaryObject!
+            return HiveResponse(re as! [String : Any])
         case .failure(let error):
             switch error {
             case .responseSerializationFailed(_):

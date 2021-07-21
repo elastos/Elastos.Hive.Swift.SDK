@@ -42,14 +42,8 @@ public class BackupServiceRender: BackupService {
     }
     
     public func startBackup() -> Promise<Void> {
-        return Promise<Any>.async().then { [self] _ -> Promise<Void> in
-            return Promise<Void> { resolver in
-                do {
-                    resolver.fulfill(try _controller.startBackup(try _credentialCode!.getToken()!))
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _controller.startBackup(try _credentialCode!.getToken()!)
         }
     }
     
@@ -81,15 +75,9 @@ public class BackupServiceRender: BackupService {
         }
     }
 
-    public func checkResult() -> Promise<BackupResult> {
-        return Promise<Any>.async().then { [self] _ -> Promise<BackupResult> in
-            return Promise<BackupResult> { resolver in
-                do {
-                    resolver.fulfill(try _controller.checkResult())
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+    public func checkResult() throws -> Promise<BackupResultState> {
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _controller.checkResult()
         }
     }
 }

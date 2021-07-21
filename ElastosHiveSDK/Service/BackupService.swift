@@ -23,7 +23,7 @@
 import Foundation
 
 
-public enum BackupResult {
+public enum BackupResultState {
     case stop
     case backup
     case restore
@@ -68,5 +68,5 @@ public protocol BackupService {
     /// Check the current status of the node side backup process.
     ///
     /// - returns: void
-    func checkResult() -> Promise<BackupResult>
+    func checkResult() throws -> Promise<BackupResultState>
 }

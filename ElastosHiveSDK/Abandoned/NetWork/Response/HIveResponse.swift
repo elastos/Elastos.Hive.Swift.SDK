@@ -25,35 +25,33 @@ import ObjectMapper
 
 
 
-public class HiveResponse: Mappable, HiveCheckValidProtocol{
-    public var httpStatusCode: Int?
-    public var status: String
-    public var json: [String: Any] = [: ]
+public class HiveResponse {
+    public var _json: [String: Any] = [: ]
+    
+    public init(_ json: [String: Any]) {
+        _json = json
+    }
 
-    required public init?(map: Map) {
-        try! self.status = map.value("_status")
-    }
-    
-    public func mapping(map: Map) {
-        status <- map["_status"]
-    }
-    
-    public func checkResponseVaild() throws {
-        
-    }
-    
+//    required public init?(map: Map) {
+//        try! self.status = map.value("_status")
+//    }
+//
+//    public func mapping(map: Map) {
+//        status <- map["_status"]
+//    }
+//
+//    public func checkResponseVaild() throws {
+//
+//    }
+//
     public func getCount() -> Int64 {
         return 0
     }
-    
+
     public func getString() -> String {
         return ""
     }
-    
-    public func getBackupState() -> BackupResult {
-        return BackupResult.unknown
-    }
-    
+
     public func getArray<T>(_ elementType: T.Type) -> Array<T>? {
         return Array()
     }

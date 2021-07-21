@@ -21,3 +21,29 @@
  */
 
 import Foundation
+import ObjectMapper
+
+public class BackupResult: Mappable {
+    private var _state: String?
+    private var _result: String?
+    
+    public required init?(map: Map) {}
+
+    public func mapping(map: Map) {
+        _state <- map["state"]
+        _result <- map["result"]
+    }
+
+    public func getStatusResult() throws -> BackupResultState {
+        switch (_state) {
+        case "stop":
+            return BackupResultState.stop
+        case "backup":
+            return BackupResultState.backup
+        case "restore":
+            return BackupResultState.restore
+        default:
+            throw HiveError.unknownBackupState(_result ?? "result is null")
+        }
+    }
+}
