@@ -24,7 +24,6 @@ import Foundation
 import ObjectMapper
 
 extension DataRequest {
-    
     func execute(options: JSONSerialization.ReadingOptions = .allowFragments) throws -> HiveResponse? {
         let response1 = response(responseSerializer: JSONResponseSerializer(options: options))
         switch response1.result {
@@ -132,7 +131,7 @@ public class ConnectionManager {
     }
     
     public func createDataRequest(_ url: String,  _ method: HTTPMethod, _ parameters: Dictionary<String, Any>?) throws -> DataRequest {
-        print("url = \(url)\nheader = \(self.headers())")
+        print("*******\nurl = \(url)\nheader = \(self.headers())\nrequest body = \(parameters ?? [:])\n*******\n")
         return AF.request(url,
                           method: method,
                           parameters: parameters,
