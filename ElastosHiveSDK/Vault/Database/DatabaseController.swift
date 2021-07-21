@@ -73,7 +73,7 @@ public class DatabaseController {
     }
 
     public func countDocuments(_ collectionName: String, _ filter: Dictionary<String, Any>?, _ options: CountOptions) throws -> Int64? {
-        return try _connectionManager.count(collectionName, CountParams(filter, options)).execute()!.getCount()
+        return try _connectionManager.count(collectionName, CountParams(filter, options)).execute(CountResult.self).count
     }
     
     public func findOne(_ collectionName: String, _ filter: Dictionary<String, Any>?, _ options: FindOptions?) throws -> Dictionary<String, Any>? {
@@ -88,7 +88,7 @@ public class DatabaseController {
         return try _connectionManager.find(collectionName, (DatabaseController.jsonNode2Str(filter)?.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!)!, skip, limit).execute(FindResult.self).documents
     }
 
-    public func query(_ collectionName: String, _ filter: Dictionary<String, Any>?, _ options: QueryOptions) throws -> Array<Dictionary<String, Any>>? {
-        return try _connectionManager.query(QueryParams(collectionName, filter, options)).execute()?.getArray(Dictionary<String, Any>.self)
+    public func query(_ collectionName: String, _ filter: Dictionary<String, Any>?, _ options: QueryOptions?) throws -> Array<Dictionary<String, Any>>? {
+        return try _connectionManager.query(QueryParams(collectionName, filter, options)).execute(QueryResult.self).documents
     }
 }

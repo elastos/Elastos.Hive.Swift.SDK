@@ -28,6 +28,9 @@ extension DataRequest {
         let response1 = response(responseSerializer: JSONResponseSerializer(options: options))
         switch response1.result {
         case .success(let re):
+            if re is NSNull {
+                return HiveResponse([:])
+            }
             print("*******\n\(re)*******\n")
             let json = re as! [String : Any]
             //            if response?.statusCode != 200 && response?.statusCode != 201 {
@@ -63,6 +66,10 @@ extension DataRequest {
         let response1 = response(responseSerializer: JSONResponseSerializer(options: options))
         switch response1.result {
         case .success(let re):
+            // TODO
+            if re is NSNull {
+                return T(JSON: [:])!
+            }
             print("*******\n\(re)*******\n")
             let json = re as! [String : Any]
             //            if response?.statusCode != 200 && response?.statusCode != 201 {

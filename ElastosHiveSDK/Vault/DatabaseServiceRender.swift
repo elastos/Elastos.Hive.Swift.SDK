@@ -24,7 +24,6 @@ import Foundation
 import ObjectMapper
 
 public class DatabaseServiceRender: DatabaseService {
-    
     public let _controller: DatabaseController
     
     public init(_ serviceEndpoint: ServiceEndpoint) {
@@ -56,14 +55,8 @@ public class DatabaseServiceRender: DatabaseService {
     }
 
     public func countDocuments(_ collection: String, _ query: [String : Any], _ options: CountOptions) -> Promise<Int64> {
-        return Promise<Any>.async().then{ [self] _ -> Promise<Int64> in
-            return Promise<Int64> { resolver in
-                do {
-                    resolver.fulfill(try _controller.countDocuments(collection, query, options)!)
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _controller.countDocuments(collection, query, options)!
         }
     }
 
@@ -74,34 +67,20 @@ public class DatabaseServiceRender: DatabaseService {
     }
 
     public func findMany(_ collection: String, _ query: [String : Any], _ options: FindOptions) -> Promise<Array<Dictionary<String, Any>>> {
-        return Promise<Any>.async().then{ [self] _ -> Promise<Array<Dictionary<String, Any>>> in
-            return Promise<Array<Dictionary<String, Any>>> { resolver in
-                do {
-                    resolver.fulfill(try _controller.find(collection, query, options)!)
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _controller.find(collection, query, options)!
         }
     }
     
     public func query(_ collection: String, _ query: Dictionary<String, Any>?, _ options: QueryOptions?) -> Promise<Array<Dictionary<String, Any>>> {
-        return Promise<Array<Dictionary<String, Any>>> { resolver in
-            do {
-                resolver.fulfill(try _controller.query(collection, query, options!)!)
-            } catch {
-                resolver.reject(error)
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _controller.query(collection, query, options)!
         }
     }
     
     public func updateOne(_ collection: String, _ filter: [String : Any], _ update: [String : Any], _ options: UpdateOptions) -> Promise<UpdateResult> {
-        return Promise<UpdateResult> { resolver in
-            do {
-                resolver.fulfill(try _controller.updateOne(collection, filter, update, options)!)
-            } catch {
-                resolver.reject(error)
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _controller.updateOne(collection, filter, update, options)!
         }
     }
 
@@ -127,13 +106,17 @@ public class DatabaseServiceRender: DatabaseService {
     }
 
     public func deleteMany(_ collection: String, _ filter: [String : Any]) -> Promise<Void> {
-        return Promise<Void> { resolver in
-            do {
-                _ = try _controller.deleteMany(collection, filter)
-                resolver.fulfill(Void())
-            } catch {
-                resolver.reject(error)
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            _ = try _controller.deleteMany(collection, filter)
+//            return 
+//            return Promise<Void> { resolver in
+//                do {
+//                    _ = try _controller.deleteMany(collection, filter)
+//                    resolver.fulfill(Void())
+//                } catch {
+//                    resolver.reject(error)
+//                }
+//            }
         }
     }
 }
