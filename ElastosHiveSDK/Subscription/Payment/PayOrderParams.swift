@@ -24,11 +24,15 @@ import Foundation
 import ObjectMapper
 
 public class PayOrderParams: Mappable {
-    public init () {}
+    private var _transactionId: String?
+    
+    public init (_ transactionId: String) {
+        _transactionId = transactionId
+    }
     
     required public init?(map: Map) {}
     
     public func mapping(map: Map) {
-        
+        _transactionId <- map["transaction_id"]
     }
 }

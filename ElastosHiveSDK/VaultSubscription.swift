@@ -78,52 +78,39 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentSer
         return DispatchQueue.global().async(.promise){ [self] in
             return try _paymentController!.placeOrder("vault", planName)!
         }
-//        return Promise<Void>.async().then { _ -> Promise<Order> in
-//            return Promise<Order> { resolver in
-//                resolver.reject(HiveError.NotImplementedException("Payment will be supported later"))
-//            }
-//        }
     }
     
     public func getOrder(_ orderId: String) -> Promise<Order> {
-        return Promise<Void>.async().then { _ -> Promise<Order> in
-            return Promise<Order> { resolver in
-                resolver.reject(HiveError.NotImplementedException("Payment will be supported later"))
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _paymentController!.getOrder(orderId)!;
         }
     }
     
-    public func payOrder(_ orderId: String, _ transIds: String) -> Promise<Receipt> {
-        return Promise<Void>.async().then { _ -> Promise<Receipt> in
-            return Promise<Receipt> { resolver in
-                resolver.reject(HiveError.NotImplementedException("Payment will be supported later"))
-            }
+    public func payOrder(_ orderId: String, _ transactionId: String) -> Promise<Receipt> {
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _paymentController!.payOrder(orderId, transactionId)!;
         }
     }
     
     public func getOrderList() -> Promise<Array<Order>> {
-        return Promise<Void>.async().then { _ -> Promise<Array<Order>> in
-            return Promise<Array<Order>> { resolver in
-                resolver.reject(HiveError.NotImplementedException("Payment will be supported later"))
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _paymentController!.getOrders("vault")!;
         }
     }
     
-    public func getReceipt(_ receiptId: String) -> Promise<Receipt> {
-        return Promise<Void>.async().then { _ -> Promise<Receipt> in
-            return Promise<Receipt> { resolver in
-                resolver.reject(HiveError.NotImplementedException("Payment will be supported later"))
-            }
+    public func getReceipt(_ orderId: String) -> Promise<Receipt> {
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _paymentController!.getReceipt(orderId)!
         }
     }
     
-    public func getReceiptList() -> Promise<Array<Receipt>> {
-        return Promise<Void>.async().then { _ -> Promise<Array<Receipt>> in
-            return Promise<Array<Receipt>> { resolver in
-                resolver.reject(HiveError.NotImplementedException("Payment will be supported later"))
-            }
-        }
-    }
+//    public func getReceiptList() -> Promise<Array<Receipt>> {
+//        return Promise<Void>.async().then { _ -> Promise<Array<Receipt>> in
+//            return Promise<Array<Receipt>> { resolver in
+//                resolver.reject(HiveError.NotImplementedException("Payment will be supported later"))
+//            }
+//        }
+//    }
     
     public func getVersion() -> Promise<String?> {
         return DispatchQueue.global().async(.promise){ [self] in
