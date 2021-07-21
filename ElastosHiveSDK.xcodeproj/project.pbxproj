@@ -155,6 +155,9 @@
 		118F2DA6250F33AB00447A0A /* RawCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2DA4250F33AB00447A0A /* RawCondition.swift */; };
 		118F2DAD25105C3700447A0A /* FileTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118F2DAC25105C3700447A0A /* FileTest.swift */; };
 		119B26C3257735FA0084B859 /* HiveError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 119B26C2257735FA0084B859 /* HiveError.swift */; };
+		11B15AFF26A819590001687D /* HiveURLInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B15AFE26A819590001687D /* HiveURLInfo.swift */; };
+		11B15B0026A819590001687D /* HiveURLInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B15AFE26A819590001687D /* HiveURLInfo.swift */; };
+		11B15B2A26A836410001687D /* HiveURLTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B15B2926A836410001687D /* HiveURLTest.swift */; };
 		11C9EAE5254A637500080995 /* InsertOneResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C9EAE4254A637500080995 /* InsertOneResult.swift */; };
 		11D1F4E8257E395300BC5A54 /* InstanceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D1F4E7257E395300BC5A54 /* InstanceTest.swift */; };
 		11D26F4022CA3B3300E4099A /* ElastosHiveSDK_macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 11D26F3E22CA3B3300E4099A /* ElastosHiveSDK_macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -317,6 +320,8 @@
 		118F2DA4250F33AB00447A0A /* RawCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawCondition.swift; sourceTree = "<group>"; };
 		118F2DAC25105C3700447A0A /* FileTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTest.swift; sourceTree = "<group>"; };
 		119B26C2257735FA0084B859 /* HiveError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HiveError.swift; sourceTree = "<group>"; };
+		11B15AFE26A819590001687D /* HiveURLInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiveURLInfo.swift; sourceTree = "<group>"; };
+		11B15B2926A836410001687D /* HiveURLTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiveURLTest.swift; sourceTree = "<group>"; };
 		11C9EAE4254A637500080995 /* InsertOneResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertOneResult.swift; sourceTree = "<group>"; };
 		11D1F4E7257E395300BC5A54 /* InstanceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstanceTest.swift; sourceTree = "<group>"; };
 		11D26F3C22CA3B3300E4099A /* ElastosHiveSDK_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ElastosHiveSDK_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -397,6 +402,7 @@
 				111CA54A252027760030D39C /* TestError.swift */,
 				1170FB19250507C70049E81D /* DBTest.swift */,
 				118F2D82250F1A7200447A0A /* ScriptTest.swift */,
+				11B15B2926A836410001687D /* HiveURLTest.swift */,
 				118F2DAC25105C3700447A0A /* FileTest.swift */,
 				1163D8E3256D667800F3DC98 /* PaymentTest.swift */,
 				111BD89A256CE08600746A51 /* VersionTest.swift */,
@@ -650,6 +656,7 @@
 				111D477824ED0C1200B7462B /* VaultAuthHelper.swift */,
 				1103757223FF96AB004216D0 /* AuthToken.swift */,
 				A3FD3C80228000EE0031413A /* HiveClient.swift */,
+				11B15AFE26A819590001687D /* HiveURLInfo.swift */,
 				1103757523FF96B5004216D0 /* ConnectHelper.swift */,
 				1127462C24FE3343007D6356 /* DatabaseClient.swift */,
 				1127462F24FE3369007D6356 /* FileClient.swift */,
@@ -912,6 +919,7 @@
 				11D1F4E8257E395300BC5A54 /* InstanceTest.swift in Sources */,
 				118F2DAD25105C3700447A0A /* FileTest.swift in Sources */,
 				111CA54B252027760030D39C /* TestError.swift in Sources */,
+				11B15B2A26A836410001687D /* HiveURLTest.swift in Sources */,
 				118F2D85250F1ABA00447A0A /* Constance.swift in Sources */,
 				118F2D83250F1A7200447A0A /* ScriptTest.swift in Sources */,
 				1154C309255E36D500FE1E53 /* AppInstanceFactory.swift in Sources */,
@@ -960,6 +968,7 @@
 				111D47FB24F7A79800B7462B /* Condition.swift in Sources */,
 				111D478F24F399AC00B7462B /* VaultApi.swift in Sources */,
 				111D47E724F7927D00B7462B /* InsertManyResult.swift in Sources */,
+				11B15B0026A819590001687D /* HiveURLInfo.swift in Sources */,
 				111D47E424F7910100B7462B /* UpdateOptions.swift in Sources */,
 				118F2D9A250F2CF400447A0A /* DbInsertQuery.swift in Sources */,
 				118F2D8E250F28BA00447A0A /* RawExecutable.swift in Sources */,
@@ -999,6 +1008,7 @@
 				111D47F024F7A18900B7462B /* FileInfo.swift in Sources */,
 				11D3C68925A4A4EC00317F4B /* UserVaultAuthHelper.swift in Sources */,
 				1127463024FE3369007D6356 /* FileClient.swift in Sources */,
+				11B15AFF26A819590001687D /* HiveURLInfo.swift in Sources */,
 				11E92CE92560E1D4007EFC95 /* PropertiesExecutable.swift in Sources */,
 				1112421E2579E5CC002BFAEB /* Order.swift in Sources */,
 				1103756D23FF9689004216D0 /* DataResponse.swift in Sources */,
