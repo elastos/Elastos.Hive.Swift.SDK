@@ -263,8 +263,14 @@ public class HiveURLInfoImpl: HiveURLInfo {
         appDid = String(dids[1])
         scriptName = String(values[0])
         let data = String(values[1].suffix(values[1].count - 7)).data(using: String.Encoding.utf8)
-        params = try JSONSerialization.jsonObject(with: data!,
-                        options: .mutableContainers) as! [String : Any]
+        do {
+            params = try JSONSerialization.jsonObject(with: data!,
+                            options: .mutableContainers) as! [String : Any]
+        }
+        catch {
+            throw HiveError.IllegalArgument(des: "Invalid parameters format in hive script url.")
+        }
+
         _client = client
         _context = context
         _authenticationAdapter = authenticationAdapter
