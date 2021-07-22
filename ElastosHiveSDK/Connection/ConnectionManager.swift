@@ -122,7 +122,10 @@ public class ConnectionManager {
         self.lock.lock()
         let token = self.accessToken?.getCanonicalizedAccessToken()
         self.lock.unlock()
-        return ["Content-Type": "application/json;charset=UTF-8", "Authorization": "\(token!)"]
+        
+        var header = self.defaultHeaders()
+        header.add(name: "Authorization", value: token!)
+        return header
     }
     
     func defaultHeaders() -> HTTPHeaders {

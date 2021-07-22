@@ -32,47 +32,47 @@ class BackupSubscriptionTest: XCTestCase {
         XCTAssertNoThrow({ [self] in
             let testData = TestData.shared()
             _subscription = BackupSubscription(testData.appContext, testData.providerAddress)
-        })
+        }())
     }
     
     func test01GetPricingPlanList() {
-        XCTAssertNoThrow({ [self] in
+        XCTAssertNoThrow(try { [self] in
             let plans = try await(_subscription!.getPricingPlanList())
             XCTAssertNotNil(plans)
             XCTAssert(plans.count != 0)
-        })
+        }())
     }
     
     func test02GetPricingPlan() {
-        XCTAssertNoThrow({ [self] in
+        XCTAssertNoThrow(try { [self] in
             let plan = try await(_subscription!.getPricingPlan("Rookie"))
             XCTAssertNotNil(plan)
             XCTAssert(plan.name == "Rookie")
-        })
+        }())
     }
     
     func test03Subscribe() {
-        XCTAssertNoThrow({ [self] in
+        XCTAssertNoThrow(try { [self] in
             _ = try await(_subscription!.subscribe())
-        })
+        }())
     }
     
     func test04CheckSubscription() {
-        XCTAssertNoThrow({ [self] in
+        XCTAssertNoThrow(try { [self] in
             XCTAssertNotNil(try await(_subscription!.checkSubscription()))
-        })
+        }())
     }
     
-    func test05Unsubscribe() {
-        XCTAssertNoThrow({ [self] in
+    func test06Unsubscribe() {
+        XCTAssertNoThrow(try { [self] in
             try await(_subscription!.unsubscribe())
-        })
+        }())
     }
   
-    func test06GetFileHashProcess() {
-        XCTAssertNoThrow({ [self] in
-            try await(_subscription!.subscribe())
-        })
-        // TODO
-    }   
+//    func test06GetFileHashProcess() {
+//        XCTAssertNoThrow({ [self] in
+//            try await(_subscription!.subscribe())
+//        })
+//        // TODO
+//    }
 }

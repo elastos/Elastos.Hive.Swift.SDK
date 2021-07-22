@@ -22,6 +22,7 @@
 
 import Foundation
 
+
 public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URLSessionDataDelegate, StreamDelegate {
     var uploadBoundStreams: BoundStreams
     var task: URLSessionTask? = nil
@@ -32,6 +33,7 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     private var writerCompleteWithError: HandleBlock?
     var uploadDidFinsish: Bool = false
     let _connectionManager: ConnectionManager?
+    var _resolver: Resolver<Bool>?
     
     init(_ uploadURL: URL, _ connectionManager: ConnectionManager) {
         self._connectionManager = connectionManager
@@ -55,7 +57,7 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         config.requestCachePolicy = .reloadIgnoringLocalCacheData
         let operationQueue = OperationQueue() // Run in a background queue to not block the main operations (main thread)
         let session = URLSession(configuration: config, delegate: self, delegateQueue: operationQueue)
-        var request = try! URLRequest(url: uploadURL, method: .post, headers: self._connectionManager!.headersStream())
+        var request = try! URLRequest(url: uploadURL, method: .put, headers: self._connectionManager!.headersStream())
         request.addValue("chunked", forHTTPHeaderField: "Transfer-Encoding")
         task = session.uploadTask(withStreamedRequest: request)
         Log.d("Hive Debug ==> request url ->", request.url as Any)
@@ -96,6 +98,44 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
 //        self.task?.resume()
 //    }
     
+    public func write(data: Data) throws -> Promise<Bool> {
+        return Promise<Bool> { resolver in
+            _resolver = resolver
+            let dataSize = data.count
+            var totalBytesWritten = 0
+            var availableRetries = 5
+            while totalBytesWritten < dataSize {
+                
+                let remainingBytesToWrite = dataSize - totalBytesWritten
+
+                // Keep reading the input buffer at the position we haven't read yet (advanced by).
+                let bytesWritten = data.advanced(by: totalBytesWritten).withUnsafeBytes() { (buffer: UnsafePointer<UInt8>) -> Int in
+
+                    return self.uploadBoundStreams.output.write(buffer, maxLength: min(dataSize, remainingBytesToWrite))
+                }
+
+                if bytesWritten == -1 {
+                    // Something wrong happened - wait a moment - TODO: retry, and throw an exception in case of error several times
+                    if availableRetries == 0 {
+                        throw HiveError.failure(des: "Failed to write data after several attempts")
+                    }
+
+                    availableRetries = availableRetries - 1
+                    Thread.sleep(forTimeInterval: 1.0)
+                }
+                else {
+                    totalBytesWritten = totalBytesWritten + bytesWritten
+                }
+            }
+            
+            self.close { (result, error) in
+                
+            }
+        }
+        
+    }
+
+    
     public func write(data: Data, _ error: @escaping (_ error: HiveError) -> Void) throws {
         self.writerBlock = error
         let dataSize = data.count
@@ -124,6 +164,8 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
                 totalBytesWritten = totalBytesWritten + bytesWritten
             }
         }
+        
+
     }
     
     public func flush() {
@@ -145,11 +187,13 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         Log.d("Hive Debug ==> response body ->", response as Any)
         let code = response?.statusCode
         guard code != nil else {
+            _resolver?.reject(HiveError.failure(des: "unknow error."))
             self.writerBlock?(HiveError.failure(des: "unknow error."))
             self.writerCompleteWithError?(false, HiveError.failure(des: "unknow error."))
             return
         }
         guard 200...299 ~= code! else {
+            _resolver?.reject(HiveError.failure(des: String(data: data, encoding: .utf8)))
             self.writerBlock?(HiveError.failure(des: String(data: data, encoding: .utf8)))
             self.writerCompleteWithError?(false, HiveError.failure(des: String(data: data, encoding: .utf8)))
             return
@@ -166,10 +210,12 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         Log.d("Hive Debug ==> response Code ->", response?.statusCode as Any)
         Log.d("Hive Debug ==> response body ->", response as Any)
         guard error == nil else {
+            _resolver?.reject(HiveError.netWork(des: error))
             self.writerBlock?(HiveError.netWork(des: error))
             self.writerCompleteWithError?(false, HiveError.netWork(des: error))
             return
         }
+        _resolver?.fulfill(true)
         self.uploadDidFinsish = true
         self.writerCompleteWithError?(true, nil)
         Log.d("Hive Debug ==> upload success", "")

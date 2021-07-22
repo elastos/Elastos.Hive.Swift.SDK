@@ -50,7 +50,7 @@ extension ConnectionManager {
     
     public func delete(_ path: String) throws -> DataRequest {
         let url = self.baseURL + "/api/v2/vault/files/\(path)"
-        return try self.createDataRequest(url, .get, nil)
+        return try self.createDataRequest(url, .delete, nil)
     }
 }
 
