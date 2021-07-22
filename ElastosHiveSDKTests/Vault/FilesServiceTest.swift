@@ -72,53 +72,45 @@ class FilesServiceTest: XCTestCase {
     }
     
     private func uploadTextReally() throws {
-        do {
-            let data = try Data(contentsOf: URL(fileURLWithPath: self.localImgFilePath!))
-            let fileWriter = try await(_filesService!.getUploadWriter(remoteImgFilePath!))
-            try fileWriter.write(data: data, { err in
-                
-            })
-            fileWriter.close { (success, error) in
-                
-            }
-        } catch {
-            print(error)
-        }
+        XCTAssertNoThrow(try { [self] in
+            let data = try Data(contentsOf: URL(fileURLWithPath: self.localTxtFilePath!))
+            let fileWriter = try await(_filesService!.getUploadWriter(remoteTxtFilePath!))
+            let result = try await(fileWriter.write(data: data))
+            XCTAssertTrue(result)
+        }())
     }
     
     public func test02UploadBin() {
         XCTAssertNoThrow(try { [self] in
             let data = try Data(contentsOf: URL(fileURLWithPath: self.localImgFilePath!))
             let fileWriter = try await(_filesService!.getUploadWriter(self.remoteImgFilePath!))
-            try fileWriter.write(data: data, { err in
-                
-            })
-            fileWriter.close { (success, error) in
-
-            }
+            let result = try await(fileWriter.write(data: data))
+            XCTAssertTrue(result)
         }())
     }
 
     func test03DownloadText() {
         XCTAssertNoThrow(try { [self] in
-            let reader = try await(_filesService!.getDownloadReader(self.remoteImgFilePath!))
+            let reader = try await(_filesService!.getDownloadReader(self.remoteTxtFilePath!))
             let targetUrl = createFilePathForDownload("test_ios_download.txt")
-            while !reader.didLoadFinish {
-                if let data = reader.read({ error in
-                    XCTFail("\(error)")
-                }) {
-                    if let fileHandle = try? FileHandle(forWritingTo: targetUrl) {
-                        fileHandle.seekToEndOfFile()
-                        fileHandle.write(data)
-                        fileHandle.closeFile()
-                    } else {
-                        
-                    }
-                }
-            }
-            reader.close { (success, error) in
-                
-            }
+            let result = try await(reader.read(targetUrl))
+            XCTAssertTrue(result)
+//            while !reader.didLoadFinish {
+//                if let data = reader.read({ error in
+//                    XCTFail("\(error)")
+//                }) {
+//                    if let fileHandle = try? FileHandle(forWritingTo: targetUrl) {
+//                        fileHandle.seekToEndOfFile()
+//                        fileHandle.write(data)
+//                        fileHandle.closeFile()
+//                    } else {
+//
+//                    }
+//                }
+//            }
+//            reader.close { (success, error) in
+//
+//            }
 
         }())
     }
@@ -140,22 +132,24 @@ class FilesServiceTest: XCTestCase {
         XCTAssertNoThrow(try { [self] in
             let reader = try await(_filesService!.getDownloadReader(self.remoteImgFilePath!))
             let fileurl = createFilePathForDownload("swift_download.png")
-            while !reader.didLoadFinish {
-                if let data = reader.read({ error in
-                    XCTFail("\(error)")
-                }) {
-                    if let fileHandle = try? FileHandle(forWritingTo: fileurl) {
-                        fileHandle.seekToEndOfFile()
-                        fileHandle.write(data)
-                        fileHandle.closeFile()
-                    } else {
-                        
-                    }
-                }
-            }
-            reader.close { (success, error) in
-                
-            }
+            let result = try await(reader.read(fileurl))
+            XCTAssertTrue(result)
+//            while !reader.didLoadFinish {
+//                if let data = reader.read({ error in
+//                    XCTFail("\(error)")
+//                }) {
+//                    if let fileHandle = try? FileHandle(forWritingTo: fileurl) {
+//                        fileHandle.seekToEndOfFile()
+//                        fileHandle.write(data)
+//                        fileHandle.closeFile()
+//                    } else {
+//
+//                    }
+//                }
+//            }
+//            reader.close { (success, error) in
+//
+//            }
         }())
         
     }
@@ -199,17 +193,17 @@ class FilesServiceTest: XCTestCase {
         })
     }
     
-    func test09DeleteFile() {
-        XCTAssertNoThrow({ [self] in
+    public func test09DeleteFile() {
+        XCTAssertNoThrow(try { [self] in
             _ = try await(_filesService!.delete(self.remoteTxtFilePath!))
             _ = try await(_filesService!.delete(self.remoteBackupTxtFilePath!))
-        })
+        }())
     }
     
     func verifyRemoteFileExists(_ path: String) {
-        XCTAssertNoThrow({ [self] in
+        XCTAssertNoThrow(try { [self] in
             XCTAssertNotNil(try await(_filesService!.stat(path)))
-        })
+        }())
     }
 
     

@@ -25,6 +25,7 @@ import XCTest
 import ElastosDIDSDK
 import AwaitKit
 
+// Disabled
 class VaultManagementTest: XCTestCase {
     private var _vault: Vault?
 
@@ -32,7 +33,7 @@ class VaultManagementTest: XCTestCase {
         XCTAssertNoThrow({ [self] in
             let testData = TestData.shared()
             _vault = testData.newVault()
-        })
+        }())
     }
     
     override func tearDown() {
@@ -56,14 +57,14 @@ class VaultManagementTest: XCTestCase {
     }
     
     func testGetVersion() {
-        XCTAssertNoThrow({ [self] in
-            XCTAssertNotNil(try await(_vault!.getNodeVersion))
-        })
+        XCTAssertNoThrow(try { [self] in
+            XCTAssertNotNil(try await(_vault!.getNodeVersion()))
+        }())
     }
     
     func testGetCommitHash() {
-        XCTAssertNoThrow({ [self] in
-            XCTAssertNotNil(try await(_vault!.getLatestCommitId))
-        })
+        XCTAssertNoThrow(try { [self] in
+            XCTAssertNotNil(try await(_vault!.getLatestCommitId()))
+        }())
     }
 }

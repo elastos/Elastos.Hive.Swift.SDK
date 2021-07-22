@@ -30,94 +30,50 @@ public class FilesServiceRender: FilesService {
     }
     
     public func getUploadWriter(_ path: String) -> Promise<FileWriter> {
-        return Promise<Any>.async().then { [self] _ -> Promise<FileWriter> in
-            return Promise<FileWriter> { resolver in
-                resolver.fulfill(_controller!.getUploadWriter(path))
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return _controller!.getUploadWriter(path)
         }
     }
     
     public func getDownloadReader(_ path: String) -> Promise<FileReader> {
-        return Promise<Any>.async().then { [self] _ -> Promise<FileReader> in
-            return Promise<FileReader> { resolver in
-                do {
-                    resolver.fulfill(try _controller!.getDownloadReader(path))
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _controller!.getDownloadReader(path)
         }
     }
     
     public func list(_ path: String) -> Promise<Array<FileInfo>> {
-        return Promise<Any>.async().then { [self] _ -> Promise<Array<FileInfo>> in
-            return Promise<Array<FileInfo>> { resolver in
-                do {
-                    resolver.fulfill(try _controller!.listChildren(path))
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _controller!.listChildren(path)
         }
     }
     
     public func stat(_ path: String) -> Promise<FileInfo> {
-        return Promise<Any>.async().then { [self] _ -> Promise<FileInfo> in
-            return Promise<FileInfo> { resolver in
-                do {
-                    resolver.fulfill(try _controller!.getProperty(path))
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _controller!.getProperty(path)
         }
     }
     
     public func hash(_ path: String) -> Promise<String> {
-        return Promise<Any>.async().then { [self] _ -> Promise<String> in
-            return Promise<String> { resolver in
-                do {
-                    resolver.fulfill(try _controller!.getHash(path))
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _controller!.getHash(path)
         }
     }
     
     public func move(_ source: String, _ target: String) -> Promise<Void> {
-        return Promise<Any>.async().then { [self] _ -> Promise<Void> in
-            return Promise<Void> { resolver in
-                do {
-                    resolver.fulfill(try _controller!.moveFile(source, target))
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _controller!.moveFile(source, target)
         }
     }
     
     public func copy(_ source: String, _ target: String) -> Promise<Void> {
-        return Promise<Any>.async().then { [self] _ -> Promise<Void> in
-            return Promise<Void> { resolver in
-                do {
-                    resolver.fulfill(try _controller!.copyFile(source, target))
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _controller!.copyFile(source, target)
         }
     }
     
     public func delete(_ path: String) -> Promise<Void> {
-        return Promise<Any>.async().then { [self] _ -> Promise<Void> in
-            return Promise<Void> { resolver in
-                do {
-                    resolver.fulfill(try _controller!.delete(path))
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _controller!.delete(path)
         }
     }
 }

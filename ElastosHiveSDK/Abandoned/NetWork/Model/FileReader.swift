@@ -43,6 +43,7 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     private var readerBlock : RequestBlock?
     private var readerCompleteWithError: HandleBlock?
     private var connectionManager: ConnectionManager?
+    private var _resolver: Resolver<Bool>?
     
     
     public init(_ url: URL,_ connectionManager: ConnectionManager,_ method: HTTPMethod) throws {
@@ -80,6 +81,28 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         self.task?.resume()
     }
     
+    public func read(_ targetUrl: URL) -> Promise<Bool> {
+        return Promise<Bool> { resolver in
+            _resolver = resolver
+            while !self.didLoadFinish {
+                if let data = self.read({ error in
+                    
+                }) {
+                    if let fileHandle = try? FileHandle(forWritingTo: targetUrl) {
+                        fileHandle.seekToEndOfFile()
+                        fileHandle.write(data)
+                        fileHandle.closeFile()
+                    } else {
+                        
+                    }
+                }
+            }
+            self.close { [self] (result, error) in
+                _resolver!.fulfill(result)
+            }
+        }
+    }
+
     public func read(_ error: @escaping (_ error: HiveError) -> Void) -> Data? {
         return read(BUFFER_SIZE, error)
     }
