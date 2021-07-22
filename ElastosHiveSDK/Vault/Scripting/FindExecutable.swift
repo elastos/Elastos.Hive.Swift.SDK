@@ -36,6 +36,12 @@ public class FindExecutableBody: DatabaseBody {
     required init?(map: Map) {
         fatalError("init(map:) has not been implemented")
     }
+    
+    public override func mapping(map: Map) {
+        super.mapping(map: map)
+        _filter <- map["filter"]
+        _options <- map["options"]
+    }
 }
 
 /**
@@ -44,13 +50,11 @@ public class FindExecutableBody: DatabaseBody {
  */
 public class FindExecutable: Executable {
     public init(_ name: String?, _ collectionName: String?, _ filter: Dictionary<String, Any>?, _ options: Dictionary<String, Any>?) {
-        super.init(name, ExecutableType.FIND, nil)
-        self.body = FindExecutableBody(collectionName, filter, options)
+        super.init(name, ExecutableType.FIND, FindExecutableBody(collectionName, filter, options))
     }
     
     public init(_ name: String?, _ collectionName: String?, _ filter: Dictionary<String, String>?) {
-       super.init(name, ExecutableType.FIND, nil)
-       self.body = FindExecutableBody(collectionName, filter, nil)
+       super.init(name, ExecutableType.FIND, FindExecutableBody(collectionName, filter, nil))
    }
     
     required public init?(map: Map) {

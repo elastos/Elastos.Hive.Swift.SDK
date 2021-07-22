@@ -23,15 +23,26 @@
 import Foundation
 import ObjectMapper
 
-public class QueryHasResultConditionBody {
+public class QueryHasResultConditionBody: HiveRootBody {
     private var _collection: String?
     private var _filter: Dictionary<String, String>?
     private var _options: QueryHasResultConditionOptions?
     
     public init(_ collectionName: String?, _ filter: Dictionary<String, String>?, _ options: QueryHasResultConditionOptions?) {
+        super.init()
         _collection = collectionName
         _filter = filter
         _options = options
+    }
+    
+    public required init?(map: Map) {
+        fatalError("init(map:) has not been implemented")
+    }
+    
+    public override func mapping(map: Map) {
+        _collection <- map["collection"]
+        _filter <- map["filter"]
+        _options <- map["options"]
     }
 }
 
@@ -56,16 +67,18 @@ public class QueryHasResultCondition: Condition {
     private static let TYPE: String = "queryHasResults"
     
     public init(_ name: String?, _ collectionName: String?, _ filter: Dictionary<String, String>?, _ options: Any?) {
-        super.init(name, QueryHasResultCondition.TYPE, nil)
-        self.body = QueryHasResultConditionBody(collectionName, filter, (options as! QueryHasResultConditionOptions))
+        super.init(name, QueryHasResultCondition.TYPE, QueryHasResultConditionBody(collectionName, filter, (options as! QueryHasResultConditionOptions)))
     }
     
     public init(_ name: String?, _ collectionName: String?, _ filter: Dictionary<String, String>?) {
-        super.init(name, QueryHasResultCondition.TYPE, nil)
-        self.body = QueryHasResultConditionBody(collectionName, filter, nil)
+        super.init(name, QueryHasResultCondition.TYPE, QueryHasResultConditionBody(collectionName, filter, nil))
     }
     
     required public init?(map: Map) {
         fatalError("init(map:) has not been implemented")
+    }
+    
+    public override func mapping(map: Map) {
+        super.mapping(map: map)
     }
 }

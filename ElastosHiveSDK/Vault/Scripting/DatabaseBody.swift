@@ -36,6 +36,7 @@ public class DatabaseBody: HiveRootBody {
     }
     
     public override func mapping(map: Map) {
+        super.mapping(map: map)
         self._collection <- map["collection"]
     }
 }

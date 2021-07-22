@@ -40,7 +40,7 @@ extension ConnectionManager {
     }
     
     public func runScriptUrl(_ scriptName: String, _ targetDid: String, _ targetAppDid: String, _ params: String) throws -> DataRequest {
-        let url = self.baseURL + "/api/v2/vault/scripting/\(scriptName)/\(targetDid)/\(targetAppDid)/\(params)"
+        let url = self.baseURL + "/api/v2/vault/scripting/\(scriptName)/\(targetDid)@\(targetAppDid)/\(params.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? "")"
         return try self.createDataRequest(url, .get, nil)
     }
     
