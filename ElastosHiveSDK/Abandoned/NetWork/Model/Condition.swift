@@ -23,11 +23,7 @@
 import Foundation
 import ObjectMapper
 
-public class Condition: NSObject, Mappable {
-//    public static let TYPE_AND = "and"
-//    public static let TYPE_OR = "or"
-//    public static let TYPE_QUERY_HAS_RESULTS = "queryHasResults"
-    
+public class Condition: NSObject, Mappable {    
     public var _type: String?
     public var _name: String?
     public var _body: HiveRootBody?

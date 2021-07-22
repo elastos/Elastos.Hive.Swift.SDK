@@ -31,19 +31,7 @@ public class HiveResponse {
     public init(_ json: [String: Any]) {
         _json = json
     }
-
-//    required public init?(map: Map) {
-//        try! self.status = map.value("_status")
-//    }
-//
-//    public func mapping(map: Map) {
-//        status <- map["_status"]
-//    }
-//
-//    public func checkResponseVaild() throws {
-//
-//    }
-//
+    
     public func getCount() -> Int64 {
         return 0
     }

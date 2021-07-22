@@ -41,13 +41,13 @@ public class ScriptingController {
     public func callScript<T>(_ name: String, _ params: Dictionary<String, Any>?, _ targetDid: String?, _ targetAppDid: String?, _ resultType: T.Type) throws -> T {
         let context = Context().setTargetDid(targetDid).setTargetAppDid(targetAppDid)
         let runScriptParams = RunScriptParams().setContext(context).setParams(params)
-        let json = try _connectionManager?.runScript(name, runScriptParams).execute()?.getString()
-        return try handleResult(JSON(json as Any), resultType)
+        let response = try _connectionManager?.runScript(name, runScriptParams).execute()
+        return try handleResult(JSON(response?._json as Any), resultType)
     }
     
     public func callScriptUrl<T>(_ name: String, _ params: String, _ targetDid: String, _ targetAppDid: String, _ resultType: T.Type) throws -> T {
-        let json = try _connectionManager?.runScriptUrl(name, targetDid, targetAppDid, params).execute()
-        return try handleResult(JSON(json as Any), resultType)
+        let response = try _connectionManager?.runScriptUrl(name, targetDid, targetAppDid, params).execute()
+        return try handleResult(JSON(response?._json as Any), resultType)
     }
 
     public func uploadFile(_ transactionId: String) throws -> FileWriter {
@@ -75,18 +75,12 @@ public class ScriptingController {
             let data = try JSONSerialization.data(withJSONObject: dic, options: [])
             let str = String(data: data, encoding: String.Encoding.utf8)
             return str as! T
-        }
-        // The Dictionary type
-        else if resultType.self == Dictionary<String, Any>.self {
+        } else if resultType.self == Dictionary<String, Any>.self {// The Dictionary type
             let dic = json.dictionaryObject
             return dic as! T
-        }
-        // The JSON type
-        else if resultType.self == JSON.self {
-            return json as! T
-        }
-        // the Data type
-        else {
+        } else if resultType.self == JSON.self { // The JSON type
+            return JSON(json) as! T
+        } else { // the Data type
             let result = json.dictionaryObject as Any
             let checker = JSONSerialization.isValidJSONObject(result)
             guard checker else {

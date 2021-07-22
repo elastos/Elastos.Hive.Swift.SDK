@@ -38,20 +38,29 @@ public class UpdateExecutableBody: DatabaseBody {
     required init?(map: Map) {
         fatalError("init(map:) has not been implemented")
     }
+    
+    public override func mapping(map: Map) {
+        super.mapping(map: map)
+        _filter <- map["filter"]
+        _update <- map["update"]
+        _options <- map["options"]
+    }
 }
 
 public class UpdateExecutable: Executable {
     public init(_ name: String?, _ collectionName: String?, _ filter: Dictionary<String, Any>?, _ update: Dictionary<String, Any>?, _ options: Dictionary<String, Any>?) {
-        super.init(name, ExecutableType.UPDATE, nil)
-        super.body = UpdateExecutableBody(collectionName, filter, update, options)
+        super.init(name, ExecutableType.UPDATE, UpdateExecutableBody(collectionName, filter, update, options))
     }
     
     public init(_ name: String, _ collectionName: String, _ filter: Dictionary<String, Any>?, _ update: Dictionary<String, Any>?) {
-        super.init(name, ExecutableType.UPDATE, nil)
-        super.body = UpdateExecutableBody(collectionName, filter, update, nil)
+        super.init(name, ExecutableType.UPDATE, UpdateExecutableBody(collectionName, filter, update, nil))
     }
     
     required public init?(map: Map) {
         fatalError("init(map:) has not been implemented")
+    }
+    
+    public override func mapping(map: Map) {
+        super.mapping(map: map)
     }
 }
