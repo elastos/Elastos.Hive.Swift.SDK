@@ -47,31 +47,10 @@
 		11ED682A22FF1078004C17D0 /* ElastosHiveSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ED682922FF1077004C17D0 /* ElastosHiveSDK.swift */; };
 		30037BB426A048730085AE4A /* TestAppContextProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30037BB226A048720085AE4A /* TestAppContextProvider.swift */; };
 		30037BBB26A17B700085AE4A /* ScriptingCrossingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30037BBA26A17B700085AE4A /* ScriptingCrossingTest.swift */; };
-		30091C1526181EC6003EB5CE /* BackupStateResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C1426181EC6003EB5CE /* BackupStateResponse.swift */; };
 		30091C1926182250003EB5CE /* AuthenticationServiceRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C1826182250003EB5CE /* AuthenticationServiceRender.swift */; };
 		30091C1C26182326003EB5CE /* HiveVaultRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C1B26182326003EB5CE /* HiveVaultRender.swift */; };
-		30091C1F26182600003EB5CE /* SignInResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C1E26182600003EB5CE /* SignInResponse.swift */; };
-		30091C2226182D56003EB5CE /* AuthResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C2126182D56003EB5CE /* AuthResponse.swift */; };
 		30091C2526183207003EB5CE /* BackupRemoteResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C2426183206003EB5CE /* BackupRemoteResolver.swift */; };
-		30091C282619E935003EB5CE /* CountDocResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C272619E935003EB5CE /* CountDocResponse.swift */; };
-		30091C2B2619E9A3003EB5CE /* DeleteDocResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C2A2619E9A3003EB5CE /* DeleteDocResponse.swift */; };
-		30091C2E2619EA12003EB5CE /* FilesHashResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C2D2619EA12003EB5CE /* FilesHashResponse.swift */; };
-		30091C312619EAD5003EB5CE /* FilesListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C302619EAD5003EB5CE /* FilesListResponse.swift */; };
-		30091C342619EB46003EB5CE /* FilesPropertiesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C332619EB46003EB5CE /* FilesPropertiesResponse.swift */; };
-		30091C382619F451003EB5CE /* FindDocResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C372619F451003EB5CE /* FindDocResponse.swift */; };
-		30091C3B2619F558003EB5CE /* FindDocsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C3A2619F558003EB5CE /* FindDocsResponse.swift */; };
-		30091C3E2619F5E2003EB5CE /* InsertDocResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C3D2619F5E2003EB5CE /* InsertDocResponse.swift */; };
-		30091C412619F663003EB5CE /* InsertDocsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C402619F663003EB5CE /* InsertDocsResponse.swift */; };
-		30091C442619F6DA003EB5CE /* OrderListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C432619F6DA003EB5CE /* OrderListResponse.swift */; };
-		30091C482619F73A003EB5CE /* PaymentCreateResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C472619F73A003EB5CE /* PaymentCreateResponse.swift */; };
-		30091C4B2619F7C2003EB5CE /* PaymentVersionResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C4A2619F7C2003EB5CE /* PaymentVersionResponse.swift */; };
 		30091C4F2619F84B003EB5CE /* ChannelMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C4E2619F84B003EB5CE /* ChannelMessage.swift */; };
-		30091C522619F929003EB5CE /* PopMessageResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C512619F929003EB5CE /* PopMessageResponse.swift */; };
-		30091C552619F998003EB5CE /* PubsubChannelsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C542619F998003EB5CE /* PubsubChannelsResponse.swift */; };
-		30091C582619F9C7003EB5CE /* RegisterScriptResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C572619F9C7003EB5CE /* RegisterScriptResponse.swift */; };
-		30091C5B2619FA49003EB5CE /* UpdateDocResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C5A2619FA49003EB5CE /* UpdateDocResponse.swift */; };
-		30091C5F2619FAC8003EB5CE /* VaultCreateResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C5E2619FAC8003EB5CE /* VaultCreateResponse.swift */; };
-		30091C622619FB01003EB5CE /* VaultInfoResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30091C612619FB01003EB5CE /* VaultInfoResponse.swift */; };
 		30099A6925FE68A800506AA8 /* LocalResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30099A6825FE68A800506AA8 /* LocalResolver.swift */; };
 		3019D3CD261079D300A3C3C5 /* DataStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3019D3CC261079D300A3C3C5 /* DataStorage.swift */; };
 		3019D3D126107B2C00A3C3C5 /* AuthRequestParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3019D3D026107B2C00A3C3C5 /* AuthRequestParams.swift */; };
@@ -238,11 +217,6 @@
 		3053BF1F2684CAD2005828B0 /* PromotionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BF1E2684CAD2005828B0 /* PromotionController.swift */; };
 		3065A5E4261551D800C20661 /* HIveResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3065A5E3261551D800C20661 /* HIveResponse.swift */; };
 		3065A5E926156A0D00C20661 /* VaultPaymentTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3065A5E826156A0D00C20661 /* VaultPaymentTest.swift */; };
-		3065A5F026157EAF00C20661 /* PaymentPackageResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3065A5EF26157EAF00C20661 /* PaymentPackageResponse.swift */; };
-		3065A5F3261592E600C20661 /* OrderInfoResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3065A5F2261592E600C20661 /* OrderInfoResponse.swift */; };
-		3065A5FA26159DB100C20661 /* PaymentPlanResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3065A5F926159DB100C20661 /* PaymentPlanResponse.swift */; };
-		3065A5FD2615AE1500C20661 /* NodeVersionResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3065A5FC2615AE1500C20661 /* NodeVersionResponse.swift */; };
-		3065A6032615B2CF00C20661 /* NodeCommitHashResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3065A6022615B2CF00C20661 /* NodeCommitHashResponse.swift */; };
 		3065A6062615B6BB00C20661 /* Alamofire+Hive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3065A6052615B6BB00C20661 /* Alamofire+Hive.swift */; };
 		3087254126A809E800E186F2 /* VersionResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3087254026A809E800E186F2 /* VersionResult.swift */; };
 		3087254C26A87BF300E186F2 /* HiveRootBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3087254B26A87BF100E186F2 /* HiveRootBody.swift */; };
@@ -342,31 +316,10 @@
 		2368C8CBAE94193EAF7DB87D /* Pods-ElastosHiveSDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ElastosHiveSDKTests.debug.xcconfig"; path = "Target Support Files/Pods-ElastosHiveSDKTests/Pods-ElastosHiveSDKTests.debug.xcconfig"; sourceTree = "<group>"; };
 		30037BB226A048720085AE4A /* TestAppContextProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestAppContextProvider.swift; sourceTree = "<group>"; };
 		30037BBA26A17B700085AE4A /* ScriptingCrossingTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptingCrossingTest.swift; sourceTree = "<group>"; };
-		30091C1426181EC6003EB5CE /* BackupStateResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupStateResponse.swift; sourceTree = "<group>"; };
 		30091C1826182250003EB5CE /* AuthenticationServiceRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationServiceRender.swift; sourceTree = "<group>"; };
 		30091C1B26182326003EB5CE /* HiveVaultRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiveVaultRender.swift; sourceTree = "<group>"; };
-		30091C1E26182600003EB5CE /* SignInResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInResponse.swift; sourceTree = "<group>"; };
-		30091C2126182D56003EB5CE /* AuthResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthResponse.swift; sourceTree = "<group>"; };
 		30091C2426183206003EB5CE /* BackupRemoteResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupRemoteResolver.swift; sourceTree = "<group>"; };
-		30091C272619E935003EB5CE /* CountDocResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountDocResponse.swift; sourceTree = "<group>"; };
-		30091C2A2619E9A3003EB5CE /* DeleteDocResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteDocResponse.swift; sourceTree = "<group>"; };
-		30091C2D2619EA12003EB5CE /* FilesHashResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesHashResponse.swift; sourceTree = "<group>"; };
-		30091C302619EAD5003EB5CE /* FilesListResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesListResponse.swift; sourceTree = "<group>"; };
-		30091C332619EB46003EB5CE /* FilesPropertiesResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesPropertiesResponse.swift; sourceTree = "<group>"; };
-		30091C372619F451003EB5CE /* FindDocResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindDocResponse.swift; sourceTree = "<group>"; };
-		30091C3A2619F558003EB5CE /* FindDocsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindDocsResponse.swift; sourceTree = "<group>"; };
-		30091C3D2619F5E2003EB5CE /* InsertDocResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertDocResponse.swift; sourceTree = "<group>"; };
-		30091C402619F663003EB5CE /* InsertDocsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertDocsResponse.swift; sourceTree = "<group>"; };
-		30091C432619F6DA003EB5CE /* OrderListResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderListResponse.swift; sourceTree = "<group>"; };
-		30091C472619F73A003EB5CE /* PaymentCreateResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentCreateResponse.swift; sourceTree = "<group>"; };
-		30091C4A2619F7C2003EB5CE /* PaymentVersionResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentVersionResponse.swift; sourceTree = "<group>"; };
 		30091C4E2619F84B003EB5CE /* ChannelMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelMessage.swift; sourceTree = "<group>"; };
-		30091C512619F929003EB5CE /* PopMessageResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopMessageResponse.swift; sourceTree = "<group>"; };
-		30091C542619F998003EB5CE /* PubsubChannelsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PubsubChannelsResponse.swift; sourceTree = "<group>"; };
-		30091C572619F9C7003EB5CE /* RegisterScriptResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterScriptResponse.swift; sourceTree = "<group>"; };
-		30091C5A2619FA49003EB5CE /* UpdateDocResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateDocResponse.swift; sourceTree = "<group>"; };
-		30091C5E2619FAC8003EB5CE /* VaultCreateResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultCreateResponse.swift; sourceTree = "<group>"; };
-		30091C612619FB01003EB5CE /* VaultInfoResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultInfoResponse.swift; sourceTree = "<group>"; };
 		30099A6825FE68A800506AA8 /* LocalResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalResolver.swift; sourceTree = "<group>"; };
 		3019D3CC261079D300A3C3C5 /* DataStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStorage.swift; sourceTree = "<group>"; };
 		3019D3D026107B2C00A3C3C5 /* AuthRequestParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthRequestParams.swift; sourceTree = "<group>"; };
@@ -532,11 +485,6 @@
 		3053BF1E2684CAD2005828B0 /* PromotionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromotionController.swift; sourceTree = "<group>"; };
 		3065A5E3261551D800C20661 /* HIveResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HIveResponse.swift; sourceTree = "<group>"; };
 		3065A5E826156A0D00C20661 /* VaultPaymentTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultPaymentTest.swift; sourceTree = "<group>"; };
-		3065A5EF26157EAF00C20661 /* PaymentPackageResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentPackageResponse.swift; sourceTree = "<group>"; };
-		3065A5F2261592E600C20661 /* OrderInfoResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderInfoResponse.swift; sourceTree = "<group>"; };
-		3065A5F926159DB100C20661 /* PaymentPlanResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentPlanResponse.swift; sourceTree = "<group>"; };
-		3065A5FC2615AE1500C20661 /* NodeVersionResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeVersionResponse.swift; sourceTree = "<group>"; };
-		3065A6022615B2CF00C20661 /* NodeCommitHashResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeCommitHashResponse.swift; sourceTree = "<group>"; };
 		3065A6052615B6BB00C20661 /* Alamofire+Hive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Alamofire+Hive.swift"; sourceTree = "<group>"; };
 		3087254026A809E800E186F2 /* VersionResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionResult.swift; sourceTree = "<group>"; };
 		3087254B26A87BF100E186F2 /* HiveRootBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiveRootBody.swift; sourceTree = "<group>"; };
@@ -745,33 +693,7 @@
 		3019D3D82610AB2500A3C3C5 /* Response */ = {
 			isa = PBXGroup;
 			children = (
-				30091C2126182D56003EB5CE /* AuthResponse.swift */,
-				30091C1426181EC6003EB5CE /* BackupStateResponse.swift */,
-				30091C272619E935003EB5CE /* CountDocResponse.swift */,
-				30091C2A2619E9A3003EB5CE /* DeleteDocResponse.swift */,
-				30091C2D2619EA12003EB5CE /* FilesHashResponse.swift */,
-				30091C302619EAD5003EB5CE /* FilesListResponse.swift */,
-				30091C332619EB46003EB5CE /* FilesPropertiesResponse.swift */,
-				30091C372619F451003EB5CE /* FindDocResponse.swift */,
-				30091C3A2619F558003EB5CE /* FindDocsResponse.swift */,
 				3065A5E3261551D800C20661 /* HIveResponse.swift */,
-				30091C3D2619F5E2003EB5CE /* InsertDocResponse.swift */,
-				30091C402619F663003EB5CE /* InsertDocsResponse.swift */,
-				3065A6022615B2CF00C20661 /* NodeCommitHashResponse.swift */,
-				3065A5FC2615AE1500C20661 /* NodeVersionResponse.swift */,
-				3065A5F2261592E600C20661 /* OrderInfoResponse.swift */,
-				30091C432619F6DA003EB5CE /* OrderListResponse.swift */,
-				30091C472619F73A003EB5CE /* PaymentCreateResponse.swift */,
-				3065A5EF26157EAF00C20661 /* PaymentPackageResponse.swift */,
-				3065A5F926159DB100C20661 /* PaymentPlanResponse.swift */,
-				30091C4A2619F7C2003EB5CE /* PaymentVersionResponse.swift */,
-				30091C512619F929003EB5CE /* PopMessageResponse.swift */,
-				30091C542619F998003EB5CE /* PubsubChannelsResponse.swift */,
-				30091C572619F9C7003EB5CE /* RegisterScriptResponse.swift */,
-				30091C1E26182600003EB5CE /* SignInResponse.swift */,
-				30091C5A2619FA49003EB5CE /* UpdateDocResponse.swift */,
-				30091C5E2619FAC8003EB5CE /* VaultCreateResponse.swift */,
-				30091C612619FB01003EB5CE /* VaultInfoResponse.swift */,
 			);
 			path = Response;
 			sourceTree = "<group>";
@@ -1458,7 +1380,6 @@
 				3053BEDC2684CA5F005828B0 /* FileHashExecutable.swift in Sources */,
 				30ACCB06261DFD3200178300 /* ScriptUpdateExecutableBody.swift in Sources */,
 				111D47F024F7A18900B7462B /* FileInfo.swift in Sources */,
-				30091C442619F6DA003EB5CE /* OrderListResponse.swift in Sources */,
 				3053BEED2684CA5F005828B0 /* HiveVaultRender.swift in Sources */,
 				3053BE652684CA38005828B0 /* PromotionService.swift in Sources */,
 				3053BF152684CA96005828B0 /* OrderCollection.swift in Sources */,
@@ -1466,7 +1387,6 @@
 				3053BE422684C974005828B0 /* NodeRPCException.swift in Sources */,
 				3053BED12684CA5F005828B0 /* FindOptions.swift in Sources */,
 				3053BF1F2684CAD2005828B0 /* PromotionController.swift in Sources */,
-				30091C5B2619FA49003EB5CE /* UpdateDocResponse.swift in Sources */,
 				304EA37A261D39CB007ADD47 /* PayOrderRequestParams.swift in Sources */,
 				3053BE362684C974005828B0 /* ConnectionManager.swift in Sources */,
 				304EA38C261D3E97007ADD47 /* FilesMoveRequestParams.swift in Sources */,
@@ -1478,9 +1398,7 @@
 				3053BEDE2684CA5F005828B0 /* RunScriptParams.swift in Sources */,
 				3053BEBC2684CA5F005828B0 /* CountResult.swift in Sources */,
 				308E089D2688D7320089F479 /* AuthApi.swift in Sources */,
-				30091C2B2619E9A3003EB5CE /* DeleteDocResponse.swift in Sources */,
 				1147720923F678BD00C7C36F /* SwiftyJSON.swift in Sources */,
-				30091C412619F663003EB5CE /* InsertDocsResponse.swift in Sources */,
 				3053BED42684CA5F005828B0 /* FindResult.swift in Sources */,
 				3053BE6E2684CA38005828B0 /* PubSubProtocol.swift in Sources */,
 				3053BEC92684CA5F005828B0 /* QueryParams.swift in Sources */,
@@ -1488,7 +1406,6 @@
 				3053BEE02684CA5F005828B0 /* UpdateExecutable.swift in Sources */,
 				3053BE4D2684C9AE005828B0 /* CommitHash.swift in Sources */,
 				3053BED82684CA5F005828B0 /* RegScriptResult.swift in Sources */,
-				30091C5F2619FAC8003EB5CE /* VaultCreateResponse.swift in Sources */,
 				3053BF122684CA96005828B0 /* PricingPlan.swift in Sources */,
 				3019D3CD261079D300A3C3C5 /* DataStorage.swift in Sources */,
 				3033734F25F9F703004D0D93 /* AppContext.swift in Sources */,
@@ -1522,7 +1439,6 @@
 				3053BDFC2684C8DF005828B0 /* PromotionServiceRender.swift in Sources */,
 				3053BEF12684CA5F005828B0 /* FilesController.swift in Sources */,
 				3053BF172684CA96005828B0 /* CreateOrderParams.swift in Sources */,
-				30091C3B2619F558003EB5CE /* FindDocsResponse.swift in Sources */,
 				3033735325F9F7BD004D0D93 /* AppContextProvider.swift in Sources */,
 				3045A75926024C1E0037527A /* ScriptingServiceRender.swift in Sources */,
 				303CD55D26075D2A00865472 /* ScriptRunner.swift in Sources */,
@@ -1539,10 +1455,8 @@
 				303D685E261E92F500981858 /* ScriptInsertExecutableBody.swift in Sources */,
 				3053BE3E2684C974005828B0 /* AuthController.swift in Sources */,
 				3053BE3D2684C974005828B0 /* AccessCode.swift in Sources */,
-				30091C342619EB46003EB5CE /* FilesPropertiesResponse.swift in Sources */,
 				304EA3A8261D422F007ADD47 /* ScriptContext.swift in Sources */,
 				30ACCB03261DFC1800178300 /* ScriptDeleteExecutableBody.swift in Sources */,
-				30091C2226182D56003EB5CE /* AuthResponse.swift in Sources */,
 				1103757923FF96BF004216D0 /* Log.swift in Sources */,
 				3053BEC22684CA5F005828B0 /* CreateCollectionResult.swift in Sources */,
 				3053BEDF2684CA5F005828B0 /* FileDownloadExecutable.swift in Sources */,
@@ -1553,16 +1467,13 @@
 				302E9F632695A250008200D3 /* NetworkError.swift in Sources */,
 				3053BE642684CA38005828B0 /* DatabaseService.swift in Sources */,
 				3048ACAC26437C1C00B417B6 /* Provider.swift in Sources */,
-				30091C282619E935003EB5CE /* CountDocResponse.swift in Sources */,
 				3053BF132684CA96005828B0 /* SubscriptionAPI.swift in Sources */,
 				3053BE4F2684C9AE005828B0 /* NodeVersion.swift in Sources */,
 				3053BE372684C974005828B0 /* AccessToken.swift in Sources */,
 				3053BEF52684CA5F005828B0 /* HashInfo.swift in Sources */,
 				3053BF1A2684CA96005828B0 /* PaymentAPI.swift in Sources */,
-				30091C4B2619F7C2003EB5CE /* PaymentVersionResponse.swift in Sources */,
 				3053BEE62684CA5F005828B0 /* OrCondition.swift in Sources */,
 				3053BEBD2684CA5F005828B0 /* DeleteParams.swift in Sources */,
-				30091C3E2619F5E2003EB5CE /* InsertDocResponse.swift in Sources */,
 				3053BE382684C974005828B0 /* SignInRequest.swift in Sources */,
 				3053BE682684CA38005828B0 /* SubscriptionService.swift in Sources */,
 				30967525268B6E6300FF8406 /* FileBody.swift in Sources */,
@@ -1572,12 +1483,9 @@
 				3053BE3B2684C974005828B0 /* ChallengeResponse.swift in Sources */,
 				30221071261C962D00578934 /* ScriptFindBody.swift in Sources */,
 				304EA38F261D3F0E007ADD47 /* FilesDeleteRequestParams.swift in Sources */,
-				3065A5F3261592E600C20661 /* OrderInfoResponse.swift in Sources */,
 				3053BE3C2684C974005828B0 /* RemoteFetcher.swift in Sources */,
-				30091C622619FB01003EB5CE /* VaultInfoResponse.swift in Sources */,
 				3087254126A809E800E186F2 /* VersionResult.swift in Sources */,
 				110357E7256FA420003F639F /* FileWriter.swift in Sources */,
-				30091C482619F73A003EB5CE /* PaymentCreateResponse.swift in Sources */,
 				3053BEE12684CA5F005828B0 /* FilePropertiesExecutable.swift in Sources */,
 				3053BE4E2684C9AE005828B0 /* AboutApi.swift in Sources */,
 				3053BEC72684CA5F005828B0 /* InsertParams.swift in Sources */,
@@ -1590,12 +1498,9 @@
 				3053BF182684CA96005828B0 /* Receipt.swift in Sources */,
 				30DB96572600E4C700ACF19F /* VaultSubscription.swift in Sources */,
 				3053BEC02684CA5F005828B0 /* CountParams.swift in Sources */,
-				30091C582619F9C7003EB5CE /* RegisterScriptResponse.swift in Sources */,
 				3022108F261CBCC700578934 /* SignInRequestParams.swift in Sources */,
 				3053BEFD2684CA5F005828B0 /* RequestParams.swift in Sources */,
-				3065A6032615B2CF00C20661 /* NodeCommitHashResponse.swift in Sources */,
 				3053BEEA2684CA5F005828B0 /* AggregatedCondition.swift in Sources */,
-				30091C312619EAD5003EB5CE /* FilesListResponse.swift in Sources */,
 				304EA376261D3978007ADD47 /* PopMessageRequestParams.swift in Sources */,
 				3022108C261CBBCB00578934 /* CreateCollectionRequestParams.swift in Sources */,
 				3053BF112684CA96005828B0 /* VaultInfo.swift in Sources */,
@@ -1603,7 +1508,6 @@
 				304EA37D261D3A26007ADD47 /* PaymentCreateRequestParams.swift in Sources */,
 				3053BEE92684CA5F005828B0 /* AndCondition.swift in Sources */,
 				3053BEF92684CA5F005828B0 /* CredentialCode.swift in Sources */,
-				3065A5F026157EAF00C20661 /* PaymentPackageResponse.swift in Sources */,
 				3053BE672684CA38005828B0 /* FilesService.swift in Sources */,
 				3053BDFB2684C8DF005828B0 /* PromotionAPI.swift in Sources */,
 				3053BECC2684CA5F005828B0 /* DatabaseController.swift in Sources */,
@@ -1613,7 +1517,6 @@
 				3053BE3F2684C974005828B0 /* BridgeHandlerProtocol.swift in Sources */,
 				30221092261CBE0200578934 /* PubsubRequestParams.swift in Sources */,
 				30091C2526183207003EB5CE /* BackupRemoteResolver.swift in Sources */,
-				30091C382619F451003EB5CE /* FindDocResponse.swift in Sources */,
 				3053BED32684CA5F005828B0 /* SortItem.swift in Sources */,
 				3053BEE52684CA5F005828B0 /* AggregatedExecutable.swift in Sources */,
 				3053BEF42684CA5F005828B0 /* ChildrenInfo.swift in Sources */,
@@ -1625,7 +1528,6 @@
 				3053BF142684CA96005828B0 /* SubscriptionController.swift in Sources */,
 				1129C19424052CC500CD77F2 /* Alamofire+Synchronous.swift in Sources */,
 				3053BDFD2684C8DF005828B0 /* ServiceBuilder.swift in Sources */,
-				3065A5FA26159DB100C20661 /* PaymentPlanResponse.swift in Sources */,
 				3053BEFB2684CA5F005828B0 /* BackupAPI.swift in Sources */,
 				3053BF002684CA5F005828B0 /* AuthenticationServiceRender.swift in Sources */,
 				3053BE6D2684CA38005828B0 /* ScriptingInvocationService.swift in Sources */,
@@ -1634,24 +1536,19 @@
 				3065A6062615B6BB00C20661 /* Alamofire+Hive.swift in Sources */,
 				3019D42C2612213900A3C3C5 /* HiveAPi.swift in Sources */,
 				3053BE692684CA38005828B0 /* BackupService.swift in Sources */,
-				30091C552619F998003EB5CE /* PubsubChannelsResponse.swift in Sources */,
 				3053BEEE2684CA5F005828B0 /* NodeManageServiceRender.swift in Sources */,
 				3053BEEB2684CA5F005828B0 /* BackupServiceRender.swift in Sources */,
 				3053BE6A2684CA38005828B0 /* CloudBackupContext.swift in Sources */,
 				3065A5E4261551D800C20661 /* HIveResponse.swift in Sources */,
 				304EA386261D3DE9007ADD47 /* FindDocRequestParams.swift in Sources */,
 				3045A75226024BF40037527A /* PubSubServiceRender.swift in Sources */,
-				30091C522619F929003EB5CE /* PopMessageResponse.swift in Sources */,
 				3053BECD2684CA5F005828B0 /* QueryOptions.swift in Sources */,
-				30091C2E2619EA12003EB5CE /* FilesHashResponse.swift in Sources */,
-				30091C1526181EC6003EB5CE /* BackupStateResponse.swift in Sources */,
 				30EC875D2627CA5E00F15FB2 /* FileStorage.swift in Sources */,
 				30967515268AB25400FF8406 /* ExecutableType.swift in Sources */,
 				3053BEDA2684CA5F005828B0 /* RegScriptParams.swift in Sources */,
 				3053BE542684CA10005828B0 /* HiveError.swift in Sources */,
 				3053BF1B2684CA96005828B0 /* PricingPlanCollection.swift in Sources */,
 				1103757023FF96A0004216D0 /* LogLevel.swift in Sources */,
-				3065A5FD2615AE1500C20661 /* NodeVersionResponse.swift in Sources */,
 				3053BEF02684CA5F005828B0 /* FilesServiceRender.swift in Sources */,
 				3053BECE2684CA5F005828B0 /* InsertOptions.swift in Sources */,
 				3019D3D126107B2C00A3C3C5 /* AuthRequestParams.swift in Sources */,
@@ -1663,7 +1560,6 @@
 				3053BE6C2684CA38005828B0 /* PaymentService.swift in Sources */,
 				3053BE412684C974005828B0 /* UploadOutputStream.swift in Sources */,
 				308E08992688D68F0089F479 /* CodeFetcher.swift in Sources */,
-				30091C1F26182600003EB5CE /* SignInResponse.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
