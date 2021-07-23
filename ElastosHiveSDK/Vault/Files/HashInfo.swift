@@ -21,3 +21,32 @@
  */
 
 import Foundation
+import ObjectMapper
+
+public class HashInfo: Mappable {
+    private var _name: String?
+    private var _algorithm: String?
+    private var _hash: String?
+    
+    public var name: String? {
+        return _name
+    }
+    
+    public var algorithm: String? {
+        return _algorithm
+    }
+    
+    public var hash: String? {
+        return _hash
+    }
+
+    required public init?(map: Map) {
+
+    }
+    
+    public func mapping(map: Map) {
+        _name <- map["name"]
+        _algorithm <- map["algorithm"]
+        _hash <- map["hash"]
+    }
+}

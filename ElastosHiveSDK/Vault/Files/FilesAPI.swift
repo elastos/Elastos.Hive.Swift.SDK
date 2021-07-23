@@ -40,12 +40,12 @@ extension ConnectionManager {
     
     public func copy(_ path: String, _ dest: String) throws -> DataRequest {
         let url = self.baseURL + "/api/v2/vault/files/\(path)?dest=\(dest)"
-        return try self.createDataRequest(url, .get, nil)
+        return try self.createDataRequest(url, .put, nil)
     }
     
     public func move(_ path: String, _ to: String) throws -> DataRequest {
         let url = self.baseURL + "/api/v2/vault/files/\(path)?to=\(to)"
-        return try self.createDataRequest(url, .get, nil)
+        return try self.createDataRequest(url, .patch, nil)
     }
     
     public func delete(_ path: String) throws -> DataRequest {

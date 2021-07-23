@@ -40,7 +40,7 @@ public class FilesController {
     }
     
     public func listChildren(_ path: String) throws -> [FileInfo] {
-        return try _connectionManager.listChildren(path).execute()?.getArray(FileInfo.self) as! [FileInfo]
+        return try _connectionManager.listChildren(path).execute(ChildrenInfo.self).value!
     }
     
     public func getProperty(_ path: String) throws -> FileInfo {
@@ -48,15 +48,15 @@ public class FilesController {
     }
     
     public func getHash(_ path: String) throws -> String {
-        return try _connectionManager.getHash(path).execute()!.getString()
+        return try _connectionManager.getHash(path).execute(HashInfo.self).hash!
     }
 
     public func copyFile(_ srcPath: String, _ destPath: String) throws {
-        return _ = try _connectionManager.copy(srcPath, destPath).execute()
+        return _ = try _connectionManager.copy(srcPath, destPath).execute(GeneralResult.self)
     }
 
     public func moveFile(_ srcPath: String, _ destPath: String) throws {
-        return _ = try _connectionManager.move(srcPath, destPath).execute()
+        return _ = try _connectionManager.move(srcPath, destPath).execute(GeneralResult.self)
     }
 
     public func delete(_ path: String) throws {

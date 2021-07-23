@@ -30,8 +30,8 @@ public class FileInfo: Mappable {
     private var _name: String?
     private var _isFile: Bool?
     private var _size: Int?
-    private var _created : Int64?
-    private var _updated : Int64?
+    private var _created : Double?
+    private var _updated : Double?
 
     public var name: String? {
         return _name
@@ -45,13 +45,13 @@ public class FileInfo: Mappable {
         return _size
     }
 
-//    public var created: Date? {
-//        return Date(timeIntervalSinceReferenceDate: _created * 1000)
-//    }
-//    
-//    public var updated: Date? {
-//        return Date(timeIntervalSinceReferenceDate: _updated * 1000)
-//    }
+    public var created: Date? {
+        return Date(timeIntervalSinceReferenceDate: _created! * 1000)
+    }
+    
+    public var updated: Date? {
+        return Date(timeIntervalSinceReferenceDate: _updated! * 1000)
+    }
     
     required public init?(map: Map) {
 

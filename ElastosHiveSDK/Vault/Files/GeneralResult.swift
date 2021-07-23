@@ -21,3 +21,21 @@
  */
 
 import Foundation
+import ObjectMapper
+
+public class GeneralResult: Mappable {
+    private var _name: String?
+
+    public var name: String? {
+        return _name
+    }
+    
+    required public init?(map: Map) {
+
+    }
+    
+    public func mapping(map: Map) {
+        _name <- map["name"]
+    }
+}
+
