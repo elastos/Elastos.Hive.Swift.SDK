@@ -92,6 +92,7 @@ class DatabaseServiceTest: XCTestCase {
         }())
     }
 
+    // Disabled
     public func test08UpdateOne() {
         XCTAssertNoThrow(try { [self] in
             let filter = ["author" : "john doe1"]

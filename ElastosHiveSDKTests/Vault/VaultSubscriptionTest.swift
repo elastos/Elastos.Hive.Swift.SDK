@@ -26,13 +26,15 @@ import ElastosDIDSDK
 import AwaitKit
 
 class VaultSubscriptionTest: XCTestCase {
-    private let pricePlanName: String = "Rookie"
+    private let PRICING_PLAN_NAME: String = "Rookie"
+    
     private var _subscription: VaultSubscription?
-    private let testData = TestData.shared()
     
     override func setUp() {
-        XCTAssertNoThrow(
-            _subscription = VaultSubscription(testData.appContext, testData.providerAddress))
+        XCTAssertNoThrow({
+            let testData: TestData = TestData.shared()
+            _subscription = VaultSubscription(testData.appContext, testData.providerAddress)
+        }())
     }
     
     public func test01GetPricingPlanList() {
@@ -44,8 +46,8 @@ class VaultSubscriptionTest: XCTestCase {
     
     public func test02GetPricingPlan() {
         XCTAssertNoThrow(try { [self] in
-            let plan = try await(_subscription!.getPricingPlan(pricePlanName))
-            XCTAssertTrue(plan.name == pricePlanName)
+            let plan = try await(_subscription!.getPricingPlan(PRICING_PLAN_NAME))
+            XCTAssertTrue(plan.name == PRICING_PLAN_NAME)
         }())
     }
     
@@ -61,16 +63,16 @@ class VaultSubscriptionTest: XCTestCase {
     }
     
     public func test05CheckSubscription() {
-        XCTAssertNoThrow({ [self] in
+        XCTAssertNoThrow(try { [self] in
             try await(_subscription!.unsubscribe())
-        })
+        }())
     }
     
+    // Disabled
     public func test06GetFileHashProcess() {
-        XCTAssertNoThrow({ [self] in
+        XCTAssertNoThrow(try { [self] in
             try await(_subscription!.subscribe())
-        })
-        // TODO
-        
+            FilesServiceTest().test06Hash()
+        }())
     }
 }
