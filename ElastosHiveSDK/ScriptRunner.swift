@@ -43,26 +43,14 @@ public class ScriptRunner: ServiceEndpoint, ScriptingInvocationService {
     }
 
     public func uploadFile(_ transactionId: String) -> Promise<FileWriter> {
-        return Promise<Any>.async().then { [self] _ -> Promise<FileWriter> in
-            return Promise<FileWriter> { resolver in
-                do {
-                    resolver.fulfill(try _controller!.uploadFile(transactionId))
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _controller!.uploadFile(transactionId)
         }
     }
 
     public func downloadFile(_ transactionId: String) -> Promise<FileReader> {
-        return Promise<Any>.async().then { [self] _ -> Promise<FileReader> in
-            return Promise<FileReader> { resolver in
-                do {
-                    resolver.fulfill(try _controller!.downloadFile(transactionId))
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _controller!.downloadFile(transactionId)
         }
     }
 }
