@@ -22,9 +22,9 @@
 
 import Foundation
 
-extension HiveAPi {
-    func promoteToVault() -> String {
-        return self.baseURL + self.apiPath + "/backup/promotion"
+extension ConnectionManager {
+    public func promoteToVault() throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/backup/promotion"
+        return try self.createDataRequest(url, .post, nil)
     }
-   
 }
