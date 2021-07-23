@@ -64,8 +64,8 @@ class HiveURLTest: XCTestCase {
 
     func testCallScriptUrl4Download() {
         let lock = XCTestExpectation(description: "wait for test.")
-        let scriptName = "download_file";
-        let executable = DownloadExecutable(name: "download_file", path: "$params.path", output: true)
+        let scriptName = "download_f0";
+        let executable = DownloadExecutable(name: scriptName, path: "$params.path", output: true)
         scripting.registerScript(scriptName, executable, false, false).then { [self] succ -> Promise<FileReader> in
             return (user?.client.downloadFileByScriptUrl(SCRIPT_URL_DOWNLOAD))!
         }.done { [self] reader in
@@ -87,6 +87,8 @@ class HiveURLTest: XCTestCase {
                 }
             }
             reader.close { (success, error) in
+                let fileData = try? Data(contentsOf: fileurl)
+                XCTAssertTrue(fileData != nil && fileData!.count > 0)
                 lock.fulfill()
                 print(success)
             }

@@ -287,7 +287,14 @@ public class HiveURLInfoImpl: HiveURLInfo {
             _vault = vault
             return vault.scripting.callScript(scriptName, self.params, appDid, JSON.self)
         }.then { [self] result -> Promise<FileReader> in
-            return _vault.scripting.downloadFile(result[scriptName]["transaction_id"].stringValue)
+            var transaction_id = ""
+            for (_, value) in result {
+                if value["transaction_id"].stringValue != "" {
+                    transaction_id = value["transaction_id"].stringValue
+                    break
+                }
+            }
+            return _vault.scripting.downloadFile(transaction_id)
         }
     }
 
