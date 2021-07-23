@@ -44,40 +44,13 @@ extension ConnectionManager {
         return try self.createDataRequest(url, .get, nil)
     }
     
-    public func downloadFile(_ transactionId: String) throws -> DataRequest {
-        let url = "/api/v2/vault/scripting/stream/\(transactionId)"
-        return try self.createDataRequest(url, .get, nil)
-    }
+//    public func downloadFile(_ transactionId: String) throws -> DataRequest {
+//        let url = self.baseURL + "/api/v2/vault/scripting/stream/\(transactionId)"
+//        return try self.createDataRequest(url, .get, nil)
+//    }
     
     public func unregisterScript(_ scriptName: String) throws -> DataRequest {
-        let url = "/api/v2/vault/scripting/\(scriptName)"
+        let url = self.baseURL + "/api/v2/vault/scripting/\(scriptName)"
         return try self.createDataRequest(url, .delete, nil)
     }
 }
-//
-//extension HiveAPi {
-//    func registerScript() -> String {
-//        return self.baseURL + self.apiPath + "/scripting/set_script"
-//    }
-//
-//    func callScript() -> String {
-//        return self.baseURL + self.apiPath + "/scripting/run_script"
-//    }
-//
-//    func callScriptUrl(_ targetDid: String, _ appDid: String, _ scriptName: String, _ params: String?) -> String {
-//        var paramsEncodingString = ""
-//        if params != nil {
-//            paramsEncodingString = "?params=" + params!.percentEncodingString()
-//        }
-//        return self.baseURL + self.apiPath + "/scripting/run_script_url/" + targetDid + "@" + appDid + "/" + scriptName + paramsEncodingString
-//    }
-//
-//    func runScriptUpload(_ transactionId: String) -> String {
-//        return self.baseURL + self.apiPath + "/scripting/run_script_upload/\(transactionId)"
-//    }
-//
-//    func runScriptDownload(_ transactionId: String) -> String {
-//        return self.baseURL + self.apiPath + "/scripting/run_script_download/\(transactionId)"
-//    }
-//
-//}

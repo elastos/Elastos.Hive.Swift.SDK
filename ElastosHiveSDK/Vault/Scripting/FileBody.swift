@@ -23,16 +23,19 @@
 import Foundation
 import ObjectMapper
 
-public class FileBody: Mappable {
+public class FileBody: HiveRootBody {
     private var _path: String?
     
-    public init() {
+    public override init() {
+        super.init()
         _path = "$params.path"
     }
     
-    public required init?(map: Map) {}
+    public required init?(map: Map) {
+        super.init(map: map)
+    }
     
-    public func mapping(map: Map) {
+    public override func mapping(map: Map) {
         _path <- map["path"]
     }
 }
