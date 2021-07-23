@@ -21,24 +21,21 @@
 */
 
 import Foundation
-import ObjectMapper
 
-public class FilesMoveRequestParams: Mappable {
-    private var _srcPath: String?
-    private var _dstPath: String?
-    
-    public init(_ srcPath: String, _ dstPath: String) {
-        self._srcPath = srcPath
-        self._dstPath = dstPath
-    }
-    
-    required public init?(map: Map) {
+public protocol PubSubService {
+    func publish(_ channelName: String) -> Promise<Bool>
 
-    }
+    func remove(_ channelName: String) -> Promise<Bool>
+
+    func getPublishedChannels() -> Promise<Array<String>>
+
+    func getSubscribedChannels() -> Promise<Array<String>>
+
+    func subscribe(_ channelName: String, _ pubDid: String, _ pubAppId: String) -> Promise<Bool>
+
+    func unsubscribe(_ channelName: String, _ pubDid: String, _ pubAppId: String) -> Promise<Bool>
+
+    func push(_ channelName: String, _ message: String) -> Promise<Bool>
     
-    public func mapping(map: Map) {
-        _srcPath <- map["src_path"]
-        _dstPath <- map["dst_path"]
-    }
+    func pop(_ channelName: String, _ pubDid: String, _ pubAppId: String, _ limit: Int) -> Promise<Array<ChannelMessage>>
 }
-
