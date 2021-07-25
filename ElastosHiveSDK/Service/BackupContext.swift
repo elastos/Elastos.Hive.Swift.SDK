@@ -24,6 +24,6 @@ import Foundation
 
 public protocol BackupContext {
     func getType() -> String?
-    func getParameter(_ key: String) -> String
+    func getParameter(_ key: String) -> String?
     func getAuthorization(_ srcDid: String?, _ targetDid: String?, _ targetHost: String?) -> Promise<String>?
 }

@@ -21,3 +21,10 @@
  */
 
 import Foundation
+
+public class DescendingSortItem: SortItem {
+    public init(_ key: String) {
+        super.init(key, SortItemOrder.DESCENDING)
+    }
+}
+

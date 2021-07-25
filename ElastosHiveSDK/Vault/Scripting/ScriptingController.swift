@@ -35,7 +35,7 @@ public class ScriptingController {
             .setAllowAnonymousUser(allowAnonymousUser)
             .setAllowAnonymousApp(allowAnonymousApp)
             .setCondition(condition)
-        _ = try _connectionManager?.registerScript(name, params).execute()?.getString()
+        _ = try _connectionManager?.registerScript(name, params).execute(RegScriptResult.self)
     }
     
     public func callScript<T>(_ name: String, _ params: Dictionary<String, Any>?, _ targetDid: String?, _ targetAppDid: String?, _ resultType: T.Type) throws -> T {

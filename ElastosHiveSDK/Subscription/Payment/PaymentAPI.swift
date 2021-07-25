@@ -42,11 +42,6 @@ extension ConnectionManager {
         let url = self.baseURL + "/api/v2/payment/order?subscription=\(subscription)&order_id=\(orderId ?? "")"
         return try self.createDataRequest(url, .get, nil)
     }
-
-//    public func getReceipts(_ subscription: String) throws -> DataRequest {
-//        let url = self.baseURL + "/api/v2/payment/receipt?subscription=\(subscription)"
-//        return try self.createDataRequest(url, .get, nil)
-//    }
     
     public func getReceipt(_ orderId: String) throws -> DataRequest {
         let url = self.baseURL + "/api/v2/payment/receipt?order_id=\(orderId)"

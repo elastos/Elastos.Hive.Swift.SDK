@@ -21,12 +21,17 @@
  */
 
 import Foundation
+import ObjectMapper
 
 /**
  * Vault script condition that succeeds only if all the contained conditions are successful.
  */
-//public class AndCondition: AggregatedCondition {
-//    public init(_ name: String, _ conditions: [Condition?]?) {
-//        
-//    }
-//}
+public class AndCondition: AggregatedCondition {
+    public init(_ name: String, _ conditions: [Condition]?) {
+        super.init(name, AggregatedConditionType.AND.rawValue, conditions)
+    }
+    
+    required public init?(map: Map) {
+        fatalError("init(map:) has not been implemented")
+    }
+}

@@ -24,11 +24,9 @@ import Foundation
 
 public class HiveIndex {
     private var _key: String?
-    private var _order: Order?
+    private var _order: SortItemOrder?
     
-//    public Index(String key, Order order) {
-
-    public init(_ key: String?, _ order: Order?) {
+    public init(_ key: String?, _ order: SortItemOrder?) {
         self._key = key
         self._order = order
     }
@@ -36,9 +34,9 @@ public class HiveIndex {
     public var key: String? {
         return _key
     }
-//
-//    public var order: String? {
-//        return _order
-//    }
+
+    public var order: SortItemOrder? {
+        return _order
+    }
     
 }
