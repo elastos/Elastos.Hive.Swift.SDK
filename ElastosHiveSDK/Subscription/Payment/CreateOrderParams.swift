@@ -24,13 +24,10 @@ import Foundation
 import ObjectMapper
 
 public class CreateOrderParams: Mappable {
-    private var _subscription: String
-    private var _pricingPlan: String
+    private var _subscription: String?
+    private var _pricingPlan: String?
 
-    required public init?(map: Map) {
-        try! self._subscription = map.value("subscription")
-        try! self._pricingPlan = map.value("pricing_name")
-    }
+    required public init?(map: Map) {}
     
     public func mapping(map: Map) {
         _subscription <- map["subscription"]

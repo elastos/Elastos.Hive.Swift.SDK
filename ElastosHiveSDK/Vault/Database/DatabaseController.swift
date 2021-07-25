@@ -39,11 +39,11 @@ public class DatabaseController {
     }
 
     public func deleteCollection(_ collectionName: String) throws {
-        try _connectionManager.deleteCollection(collectionName).execute()
+        _ = try _connectionManager.deleteCollection(collectionName).execute()
     }
 
     public static func jsonNode2Str(_ dic: Dictionary<String, Any>?) -> String? {
-        let data = try? JSONSerialization.data(withJSONObject: dic, options: [])
+        let data = try? JSONSerialization.data(withJSONObject: dic as Any, options: [])
         let str = String(data: data!, encoding: String.Encoding.utf8)
         return str
     }

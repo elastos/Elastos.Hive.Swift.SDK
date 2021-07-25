@@ -22,6 +22,31 @@
 
 import Foundation
 
-public protocol HiveCheckValidProtocol {
-    func checkResponseVaild() throws;
+public class HiveBackupContext: BackupContext {
+    public func getParameter(_ parameter: String) -> String? {
+        switch parameter {
+        case "targetAddress":
+            return getTargetProviderAddress()
+        case "targetServiceDid":
+            return getTargetServiceDid()
+        default:
+            return nil
+        }
+    }
+    
+    public func getType() -> String? {
+        return nil
+    }
+    
+    public func getAuthorization(_ srcDid: String?, _ targetDid: String?, _ targetHost: String?) -> Promise<String>? {
+        return nil
+    }
+    
+    public func getTargetProviderAddress() -> String? {
+        return nil
+    }
+    
+    public func getTargetServiceDid() -> String? {
+        return nil
+    }
 }

@@ -23,7 +23,6 @@
 import Foundation
 import ObjectMapper
 
-
 public class FindOptions {
     private var _skip: Int64?
     private var _limit: Int64?

@@ -40,7 +40,6 @@ public class BackupInfo: Mappable {
         _created <- map["created"]
         _updated <- map["updated"]
         _pricePlan <- map["price_plan"]
-
     }
     
     public var serviceDid: String? {

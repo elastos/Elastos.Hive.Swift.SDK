@@ -51,37 +51,6 @@ internal extension DataRequest {
             throw error
         }
     }
-    
-    func get<T: Mappable & HiveCheckValidProtocol>(options: JSONSerialization.ReadingOptions = .allowFragments, _ resultType: T.Type) throws -> T {
-        let response1 = response(responseSerializer: JSONResponseSerializer(options: options))
-        switch response1.result {
-        case .success(let re):
-            let json = re as! [String : Any]
-            if json["_status"] as! String != "OK" {
-                let errorObject = JSON(json)
-                let code = errorObject["_error"] ["code"];
-                let message = errorObject["_error"] ["message"];
-                throw HiveError.hiveSdk(message: "get error from server: error code = \(code), message = \(message)")
-            }
-            
-            let result = T(JSON: re as! [String : Any])!
-            try result.checkResponseVaild()
-            return result
-        case .failure(let error):
-            let e = error
-            switch e {
-            case .responseSerializationFailed(_):
-                var des = ""
-                if response1.data != nil {
-                    des = String(data: response1.data!, encoding: .utf8) ?? ""
-                }
-                let err = HiveError.responseSerializationFailed(des: des)
-                throw err
-            default: break
-            }
-            throw error
-        }
-    }
 }
 
 extension DownloadRequest {
