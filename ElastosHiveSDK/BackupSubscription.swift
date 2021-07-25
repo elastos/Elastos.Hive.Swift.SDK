@@ -71,26 +71,20 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentSe
     }
     
     public func placeOrder(_ planName: String) -> Promise<Order> {
-        return Promise<Void>.async().then { _ -> Promise<Order> in
-            return Promise<Order> { resolver in
-                resolver.reject(HiveError.NotImplementedException("Payment will be supported later"))
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            throw HiveError.NotImplementedException("Payment will be supported later")
         }
     }
     
     public func getOrder(_ orderId: String) -> Promise<Order> {
-        return Promise<Void>.async().then { _ -> Promise<Order> in
-            return Promise<Order> { resolver in
-                resolver.reject(HiveError.NotImplementedException("Payment will be supported later"))
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            throw HiveError.NotImplementedException("Payment will be supported later")
         }
     }
     
     public func payOrder(_ orderId: String, _ transIds: String) -> Promise<Receipt> {
-        return Promise<Void>.async().then { _ -> Promise<Receipt> in
-            return Promise<Receipt> { resolver in
-                resolver.reject(HiveError.NotImplementedException("Payment will be supported later"))
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            throw HiveError.NotImplementedException("Payment will be supported later")
         }
     }
     

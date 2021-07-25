@@ -34,10 +34,8 @@ public class BackupServiceRender: BackupService {
     
     public func setupContext(_ backupContext: BackupContext) -> Promise<Void> {
         _credentialCode = CredentialCode(_serviceEndpoint, backupContext)
-        return Promise<Any>.async().then { _ -> Promise<Void> in
-            return Promise<Void> { resolver in
-                resolver.fulfill(Void())
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return Void()
         }
     }
     
@@ -48,30 +46,21 @@ public class BackupServiceRender: BackupService {
     }
     
     public func stopBackup() -> Promise<Void> {
-        return Promise<Any>.async().then { _ -> Promise<Void> in
-            return Promise<Void> { resolver in
-                resolver.reject(HiveError.NotImplementedException(nil))
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return Void()
         }
     }
 
     public func restoreFrom() -> Promise<Void> {
-        return Promise<Any>.async().then { [self] _ -> Promise<Void> in
-            return Promise<Void> { resolver in
-                do {
-                    resolver.fulfill(try _controller.restoreFrom(try _credentialCode!.getToken()!))
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _controller.restoreFrom(try _credentialCode!.getToken()!)
         }
+
     }
 
     public func stopRestore() -> Promise<Void> {
-        return Promise<Any>.async().then { _ -> Promise<Void> in
-            return Promise<Void> { resolver in
-                resolver.reject(HiveError.NotImplementedException(nil))
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return Void()
         }
     }
 

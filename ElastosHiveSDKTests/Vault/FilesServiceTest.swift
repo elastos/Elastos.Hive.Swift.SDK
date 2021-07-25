@@ -25,7 +25,6 @@ import XCTest
 import ElastosDIDSDK
 import AwaitKit
 
-
 class FilesServiceTest: XCTestCase {
     
     private let FILE_NAME_TXT: String = "test_ios.txt"

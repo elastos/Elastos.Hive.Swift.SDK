@@ -20,6 +20,8 @@
 * SOFTWARE.
 */
 
+import Foundation
+
 /// This class is used to fetch some possible information from remote hive node.
 /// eg. version;
 ///     latest commit Id;

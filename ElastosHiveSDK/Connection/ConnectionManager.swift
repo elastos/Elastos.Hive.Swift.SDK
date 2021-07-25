@@ -102,7 +102,6 @@ extension DataRequest {
 }
 
 public class ConnectionManager {
-    public var tokenResolver: TokenResolver?
     public let lock: NSLock = NSLock()
     public let baseURL: String
     public var accessToken: AccessToken?
@@ -139,7 +138,7 @@ public class ConnectionManager {
                           method: method,
                           parameters: parameters,
                           encoding: JSONEncoding.default,
-                          headers:self.defaultHeaders()) { $0.timeoutInterval = HiveAPi.defaultTimeout }
+                          headers:self.defaultHeaders()) { $0.timeoutInterval = 30 }
     }
     
     public func createDataRequest(_ url: String,  _ method: HTTPMethod, _ parameters: Dictionary<String, Any>?) throws -> DataRequest {
@@ -148,6 +147,6 @@ public class ConnectionManager {
                           method: method,
                           parameters: parameters,
                           encoding: JSONEncoding.default,
-                          headers:self.headers()) { $0.timeoutInterval = HiveAPi.defaultTimeout }
+                          headers:self.headers()) { $0.timeoutInterval = 30 }
     }
 }
