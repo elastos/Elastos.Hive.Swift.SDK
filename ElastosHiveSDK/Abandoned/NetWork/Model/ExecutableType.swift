@@ -20,7 +20,6 @@
  * SOFTWARE.
  */
 
-
 import Foundation
 
 public enum ExecutableType: String {

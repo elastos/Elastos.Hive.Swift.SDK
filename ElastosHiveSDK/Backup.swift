@@ -35,5 +35,4 @@ public class Backup: ServiceEndpoint {
             return _promotionService!
         }
     }
-    
 }

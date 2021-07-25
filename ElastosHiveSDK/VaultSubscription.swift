@@ -56,15 +56,8 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentSer
     }
     
     public func unsubscribe() -> Promise<Void> {
-        return Promise<Any>.async().then { [self] _ -> Promise<Void> in
-            return Promise<Void> { resolver in
-                do {
-                    try _subscriptionController!.unsubscribeBackup()
-                    resolver.fulfill(Void())
-                } catch {
-                    resolver.reject(error)
-                }
-            }
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _subscriptionController!.unsubscribeBackup()
         }
     }
     

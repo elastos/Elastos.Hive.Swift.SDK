@@ -83,26 +83,21 @@ public class AppContext {
     }
     
     private static func getProviderAddress(targetDid: String, preferredProviderAddress: String?) -> Promise<String> {
-        return Promise<Any>.async().then { _ -> Promise<String> in
-            return Promise<String> { resolver in
-                if preferredProviderAddress != nil {
-                    resolver.fulfill(preferredProviderAddress!)
-                    return
-                }
-                
-                let did = try DID(targetDid)
-                let doc = try did.resolve()
-                guard doc != nil else {
-                    resolver.reject(HiveError.ProviderNotFoundException("The DID \(targetDid) has not published onto sideChain"))
-                    return
-                }
-                let services = try doc!.selectServices(byType: "HiveVault")
-                if services.count == 0 {
-                    resolver.reject(HiveError.ProviderNotSetException("No 'HiveVault' services declared on DID document \(targetDid)"))
-                    return
-                }
-                resolver.fulfill(services[0].endpoint)
+        return DispatchQueue.global().async(.promise){
+            if preferredProviderAddress != nil {
+                return preferredProviderAddress!
             }
+            
+            let did = try DID(targetDid)
+            let doc = try did.resolve()
+            guard doc != nil else {
+                throw HiveError.ProviderNotFoundException("The DID \(targetDid) has not published onto sideChain")
+            }
+            let services = try doc!.selectServices(byType: "HiveVault")
+            if services.count == 0 {
+                throw HiveError.ProviderNotSetException("No 'HiveVault' services declared on DID document \(targetDid)")
+            }
+            return services[0].endpoint
         }
     }
 }

@@ -23,24 +23,10 @@
 import Foundation
 import ObjectMapper
 
-
-
 public class HiveResponse {
     public var _json: [String: Any] = [: ]
     
     public init(_ json: [String: Any]) {
         _json = json
-    }
-    
-    public func getCount() -> Int64 {
-        return 0
-    }
-
-    public func getString() -> String {
-        return ""
-    }
-
-    public func getArray<T>(_ elementType: T.Type) -> Array<T>? {
-        return Array()
     }
 }
