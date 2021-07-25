@@ -30,18 +30,10 @@ public class AboutController {
     }
     
     public func getNodeVersion() throws -> NodeVersion {
-        do {
-            return try _connectionManager.version().execute(NodeVersion.self)
-        } catch {
-            throw error
-        }
+        return try _connectionManager.version().execute(NodeVersion.self)
     }
     
     public func getCommitId() throws -> String? {
-        do {
-            return try _connectionManager.commitId().execute(CommitHash.self).commitId
-        } catch {
-            throw error
-        }
+        return try _connectionManager.commitId().execute(CommitHash.self).commitId
     }
 }
