@@ -82,11 +82,12 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     }
     
     public func read(_ targetUrl: URL) -> Promise<Bool> {
-        return Promise<Bool> { resolver in
-            _resolver = resolver
+        return DispatchQueue.global().async(.promise){ [self] in
+            var hiveError: HiveError? = nil
             while !self.didLoadFinish {
-                if let data = self.read({ error in
-                    
+                if let data = self.read({ [self] error in
+                    hiveError = error
+                    self.task?.cancel()
                 }) {
                     if let fileHandle = try? FileHandle(forWritingTo: targetUrl) {
                         fileHandle.seekToEndOfFile()
@@ -96,10 +97,24 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
                         
                     }
                 }
+                if hiveError != nil {
+                    throw hiveError!
+                }
             }
-            self.close { [self] (result, error) in
-                _resolver!.fulfill(result)
+            
+            var _result: Bool = false
+            self.close {(result, error) in
+                if error != nil {
+                    hiveError = error
+                } else {
+                    _result = result
+                }
             }
+            
+            if hiveError != nil {
+                throw hiveError!
+            }
+            return _result
         }
     }
 
@@ -151,21 +166,36 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     }
 
     public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
-
         let response = dataTask.response as? HTTPURLResponse
         Log.d("Hive Debug ==> didReceive ->", response.debugDescription )
         let code = response?.statusCode
-//        guard code != nil else {
-//            self.resolver.reject(HiveError.failure(des: "unkonw error."))
-//            return
-//        }
-//        if code == 200 {
-//            resolver.fulfill(self)
-//        }
+
         guard 200...299 ~= code! else {
-//            resolver.reject(HiveError.failure(des: String(data: data, encoding: .utf8)))
-            self.readerBlock?(HiveError.NetworkException(String(data: data, encoding: .utf8)))
-            self.readerCompleteWithError?(false, HiveError.NetworkException(String(data: data, encoding: .utf8)))
+            
+            var error: HiveError? = nil
+            switch code {
+            case ConnectionManager.BAD_REQUEST:
+                error = HiveError.InvalidParameterException("\(error.debugDescription)")
+            case ConnectionManager.UNAUTHORIZED:
+                error = HiveError.UnauthorizedException("\(error.debugDescription)")
+            case ConnectionManager.FORBIDDEN:
+                error = HiveError.VaultForbiddenException("\(error.debugDescription)")
+            case ConnectionManager.NOT_FOUND:
+                error = HiveError.NotFoundException("\(error.debugDescription)")
+            case ConnectionManager.ALREADY_EXISTS:
+                error = HiveError.AlreadyExistsException("\(error.debugDescription)")
+            case ConnectionManager.INSUFFICIENT_STORAGE:
+                error = HiveError.InsufficientStorageException("\(error.debugDescription)")
+            default: break
+            }
+            
+            if error == nil {
+                error = HiveError.NetworkException(String(data: data, encoding: .utf8))
+            }
+            
+            
+            self.readerBlock?(error!)
+            self.readerCompleteWithError?(false, error!)
             self.task?.cancel()
             return
         }
@@ -191,31 +221,48 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         let response = task.response as? HTTPURLResponse
         Log.d("Hive Debug ==> response Code ->", response?.statusCode as Any)
         Log.d("Hive Debug ==> didCompleteWithError ->", response as Any)
-        if let _ = error {
-            self.readerBlock?(HiveError.NetworkException("\(error)"))
-            self.readerCompleteWithError?(false, HiveError.NetworkException("\(error)"))
-            return
-        }
+        
         let code = response?.statusCode
         guard code != nil else {
             self.readerCompleteWithError?(false, HiveError.NetworkException("unkonw error."))
             return
         }
         guard 200...299 ~= code! else {
-            if code == 401 {
-                self.authFailure?(HiveError.NetworkException("code: 401"))
-                self.task?.cancel()
-                return
+            
+            var error: HiveError? = nil
+            switch code {
+            case ConnectionManager.BAD_REQUEST:
+                error = HiveError.InvalidParameterException("\(error.debugDescription)")
+            case ConnectionManager.UNAUTHORIZED:
+                error = HiveError.UnauthorizedException("\(error.debugDescription)")
+            case ConnectionManager.FORBIDDEN:
+                error = HiveError.VaultForbiddenException("\(error.debugDescription)")
+            case ConnectionManager.NOT_FOUND:
+                error = HiveError.NotFoundException("\(error.debugDescription)")
+            case ConnectionManager.ALREADY_EXISTS:
+                error = HiveError.AlreadyExistsException("\(error.debugDescription)")
+            case ConnectionManager.INSUFFICIENT_STORAGE:
+                error = HiveError.InsufficientStorageException("\(error.debugDescription)")
+            default: break
             }
-            else if code == 404 {
-                self.readerBlock?(HiveError.NetworkException("file not found."))
-                self.readerCompleteWithError?(false, HiveError.NetworkException("file not found."))
-                return
+            
+            if error == nil {
+                error = HiveError.NetworkException("unknow error")
             }
-            self.readerBlock?(HiveError.NetworkException("\(error)"))
-            self.readerCompleteWithError?(false, HiveError.NetworkException("code: \(code ?? 0)"))
+            
+            
+            self.readerBlock?(error!)
+            self.readerCompleteWithError?(false, error!)
+            self.task?.cancel()
             return
         }
+        
+        if let _ = error {
+            self.readerBlock?(HiveError.NetworkException("\(error)"))
+            self.readerCompleteWithError?(false, HiveError.NetworkException("\(error)"))
+            return
+        }
+        
         self.downloadDidFinsish = true
         downloadBoundStreams.output.close()
         self.readerCompleteWithError?(true, nil)
