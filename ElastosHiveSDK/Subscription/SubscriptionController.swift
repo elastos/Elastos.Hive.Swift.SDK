@@ -41,11 +41,8 @@ public class SubscriptionController {
         return try _connectionManager.getVaultInfo().execute(VaultInfo.self)
     }
 
-    public func subscribeToVault(_ credential: String?) throws -> VaultInfo {
-        if credential == nil {
-            throw HiveError.NotImplementedException(nil)
-        }
-        return try _connectionManager.subscribeToVault(credential!).execute(VaultInfo.self)
+    public func subscribeToVault() throws -> VaultInfo {
+        return try _connectionManager.subscribeToVault().execute(VaultInfo.self)
     }
     
     public func unsubscribeVault() throws {

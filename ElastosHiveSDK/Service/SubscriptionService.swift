@@ -40,9 +40,8 @@ public protocol SubscriptionService {
 
     /// Let a new user subscribe to the entity service on the specified back-end node, where the entity service would be vault or backup service. Currently this method would only support for subscription to a entity service with free pricing plan. When there is already a corresponding service existed, no new service would be subscribed or created.
     ///
-    /// - parameter credential: The credential used to subscribe to a vault or backup service, currently this parameter would be reserved for future usage.
     /// - returns: The basic information of the newly created or existing vault on success, otherwise, the specific exception would returned in the wrapper.
-    func subscribe(_ credential: String?) -> Promise<T>
+    func subscribe() -> Promise<T>
     
     /// Let user to unsubscribe to an existing but useless vault or backup service.
     ///

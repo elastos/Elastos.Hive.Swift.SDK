@@ -28,17 +28,17 @@ extension DataRequest {
         let response1 = response(responseSerializer: JSONResponseSerializer(options: options))
         let code = response1.response?.statusCode
         switch code {
-        case 401:
-            throw HiveError.UnauthorizedException("\(error.debugDescription)")
-        case 403:
-            throw HiveError.VaultForbiddenException("\(error.debugDescription)")
-        case 400:
+        case ConnectionManager.BAD_REQUEST:
             throw HiveError.InvalidParameterException("\(error.debugDescription)")
-        case 404:
+        case ConnectionManager.UNAUTHORIZED:
+            throw HiveError.UnauthorizedException("\(error.debugDescription)")
+        case ConnectionManager.FORBIDDEN:
+            throw HiveError.VaultForbiddenException("\(error.debugDescription)")
+        case ConnectionManager.NOT_FOUND:
             throw HiveError.NotFoundException("\(error.debugDescription)")
-        case 455:
+        case ConnectionManager.ALREADY_EXISTS:
             throw HiveError.AlreadyExistsException("\(error.debugDescription)")
-        case 507:
+        case ConnectionManager.INSUFFICIENT_STORAGE:
             throw HiveError.InsufficientStorageException("\(error.debugDescription)")
         default: break
         }
@@ -67,17 +67,17 @@ extension DataRequest {
         let response1 = response(responseSerializer: JSONResponseSerializer(options: options))
         let code = response1.response?.statusCode
         switch code {
-        case 401:
-            throw HiveError.UnauthorizedException("\(error.debugDescription)")
-        case 403:
-            throw HiveError.VaultForbiddenException("\(error.debugDescription)")
-        case 400:
+        case ConnectionManager.BAD_REQUEST:
             throw HiveError.InvalidParameterException("\(error.debugDescription)")
-        case 404:
+        case ConnectionManager.UNAUTHORIZED:
+            throw HiveError.UnauthorizedException("\(error.debugDescription)")
+        case ConnectionManager.FORBIDDEN:
+            throw HiveError.VaultForbiddenException("\(error.debugDescription)")
+        case ConnectionManager.NOT_FOUND:
             throw HiveError.NotFoundException("\(error.debugDescription)")
-        case 455:
+        case ConnectionManager.ALREADY_EXISTS:
             throw HiveError.AlreadyExistsException("\(error.debugDescription)")
-        case 507:
+        case ConnectionManager.INSUFFICIENT_STORAGE:
             throw HiveError.InsufficientStorageException("\(error.debugDescription)")
         default: break
         }
@@ -109,6 +109,13 @@ public class ConnectionManager {
     public let baseURL: String
     public var accessToken: AccessToken?
     
+    public static let BAD_REQUEST: Int = 400
+    public static let UNAUTHORIZED: Int = 401
+    public static let FORBIDDEN: Int = 403
+    public static let NOT_FOUND: Int = 404
+    public static let ALREADY_EXISTS: Int = 455
+    public static let INSUFFICIENT_STORAGE: Int = 507
+
     public init(_ baseURL: String) {
         self.baseURL = baseURL
     }
