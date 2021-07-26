@@ -45,6 +45,7 @@ class FilesServiceTest: XCTestCase {
     private var subscription: VaultSubscription?
     
     override func setUpWithError() throws {
+        Log.setLevel(.Debug)
         let testData: TestData = TestData.shared();
 
         _filesService = testData.newVault().filesService

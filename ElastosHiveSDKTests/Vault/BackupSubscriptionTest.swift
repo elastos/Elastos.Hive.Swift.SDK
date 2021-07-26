@@ -29,6 +29,7 @@ class BackupSubscriptionTest: XCTestCase {
     private var _subscription: BackupSubscription?
 
     override func setUpWithError() throws {
+        Log.setLevel(.Debug)
         XCTAssertNoThrow({ [self] in
             let testData = TestData.shared()
             _subscription = BackupSubscription(testData.appContext, testData.providerAddress)

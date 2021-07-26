@@ -51,6 +51,7 @@ class ScriptingServiceTest: XCTestCase {
     private let _collectionName: String = "script_database";
 
     override func setUpWithError() throws {
+        Log.setLevel(.Debug)
         XCTAssertNoThrow({ [self] in
             let testData = TestData.shared()
             _scriptingService = testData.newVault().scriptingService

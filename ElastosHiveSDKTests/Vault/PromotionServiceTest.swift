@@ -29,6 +29,7 @@ class PromotionServiceTest: XCTestCase {
     private var _promotionService: PromotionService?
     
     override func setUpWithError() throws {
+        Log.setLevel(.Debug)
         XCTAssertNoThrow({ [self] in
             let testData = TestData.shared()
             _promotionService = testData.newBackup().promotionService

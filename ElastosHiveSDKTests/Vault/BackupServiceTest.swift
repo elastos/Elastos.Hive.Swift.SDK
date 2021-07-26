@@ -31,6 +31,7 @@ class BackupServiceTest: XCTestCase {
     private var _backupService: BackupService?
     
     override func setUpWithError() throws {
+        Log.setLevel(.Debug)
         XCTAssertNoThrow(try { [self] in
             let testData = TestData.shared()
             _backupService = try testData.backupService()
