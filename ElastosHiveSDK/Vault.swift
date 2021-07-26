@@ -22,7 +22,19 @@
 
 import Foundation
 
-/// This class explicitly represents the vault service subscribed by "userDid".
+/**
+ * This class explicitly represents the vault service subscribed by "userDid".
+ *
+ * To use the vault, subscription is required.
+ *
+ *      VaultSubscription subscription = new VaultSubscription(appContext, providerAddress);
+ *      subscription.subscribe().get();
+ *
+ * Then the services belongs to the vault will be got by this class.
+ *
+ *      Vault vault = new Vault(appContext, providerAddress);
+ *      FilesService filesService = vault.getFilesService();
+ */
 public class Vault: ServiceEndpoint {
     private var _filesService: FilesService!
     private var _database: DatabaseService!
@@ -38,18 +50,30 @@ public class Vault: ServiceEndpoint {
         _backupService = builder.createBackupService()
     }
     
+    /// Get the files service of the vault.
+    ///
+    /// - returns: The instance of the files service.
     public var filesService: FilesService {
         return _filesService
     }
-
+    
+    /// Get the database service of the vault.
+    ///
+    /// - returns: The instance of the database service.
     public var databaseService: DatabaseService {
         return _database
     }
     
+    /// Get the scripting service of the vault.
+    ///
+    /// - returns: The instance of the scripting service.
     public var scriptingService: ScriptingService {
         return _scripting
     }
     
+    /// Get the backup service of the vault.
+    ///
+    /// - returns: The instance of the backup service.
     public var backupService: BackupService {
         return _backupService
     }

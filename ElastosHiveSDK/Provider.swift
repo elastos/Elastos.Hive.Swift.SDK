@@ -35,6 +35,11 @@ public class Provider: ServiceEndpoint {
         super.init(context, "") // TODO:
     }
     
+    /// Create by the application context and the provider address.
+    ///
+    /// - parameters:
+    ///   - context: The application context
+    ///   - providerAddress: The provider address
     public override init(_ context: AppContext, _ providerAddress: String) {
         super.init(context, providerAddress)
     }

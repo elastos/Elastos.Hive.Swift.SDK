@@ -23,6 +23,17 @@
 import Foundation
 import ElastosDIDSDK
 
+/**
+ * The service end-point represents the service provides some API functions. It supports:
+ *
+ * Access token management.
+ * Local cache for the access token.
+ * The service DID of the hive node.
+ * The provider address.
+ *
+ * The service end-point is just like the map of the hive node. The application can communicate
+ *         with the hive node APIs by its sub-class.
+ */
 public class ServiceEndpoint: NodeRPCConnection {
     public var connectionManager: ConnectionManager?
     
@@ -36,6 +47,11 @@ public class ServiceEndpoint: NodeRPCConnection {
     private var _accessToken: AccessToken?
     private var _dataStorage: DataStorage?
     
+    /// Create by the application context, and the address of the provider.
+    ///
+    /// - parameters:
+    ///   - context: The application context.
+    ///   - providerAddress: The address of the provider.
     public init(_ context: AppContext, _ providerAddress: String) {
         _context = context
         _providerAddress = providerAddress
@@ -61,51 +77,44 @@ public class ServiceEndpoint: NodeRPCConnection {
         self.connectionManager?.accessToken = _accessToken;
     }
     
+    /// Get the application context.
+    ///
+    /// - returns: The application context.
     public var appContext: AppContext {
         return _context
     }
 
-    /**
-     * Get the end-point address of this service End-point.
-     *
-     * @return provider address
-     */
+    /// Get the end-point address of this service End-point.
+    ///
+    /// - returns: provider address
     public var providerAddress: String {
         return _providerAddress
     }
     
-    /**
-     * Get the user DID string of this serviceEndpoint.
-     *
-     * @return user did
-     */
+    /// Get the user DID string of this serviceEndpoint.
+    ///
+    /// - returns: user did
     public var userDid: String? {
         return _context.userDid
     }
     
-    /**
-     * Get the application DID in the current calling context.
-     *
-     * @return application did
-     */
+    /// Get the application DID in the current calling context.
+    ///
+    /// - returns: application did
     public var appDid: String? {
         return _appDid
     }
     
-    /**
-     * Get the application instance DID in the current calling context;
-     *
-     * @return application instance did
-     */
+    /// Get the application instance DID in the current calling context;
+    ///
+    /// - returns: application instance did
     public var appInstanceDid: String? {
         return _appInstanceDid
     }
     
-    /**
-     * Get the remote node service application DID.
-     *
-     * @return node service did
-     */
+    /// Get the remote node service application DID.
+    ///
+    /// - returns: node service did
     public var serviceDid: String? {
         try!{
             throw HiveError.NotImplementedException(nil)
@@ -113,11 +122,9 @@ public class ServiceEndpoint: NodeRPCConnection {
         return nil
     }
     
-    /**
-     * Get the remote node service instance DID where is serving the storage service.
-     *
-     * @return node service instance did
-     */
+    /// Get the remote node service instance DID where is serving the storage service.
+    ///
+    /// - returns: node service instance did
     public var serviceInstanceDid: String? {
         return _serviceInstanceDid
     }
@@ -128,10 +135,14 @@ public class ServiceEndpoint: NodeRPCConnection {
         _serviceInstanceDid = serviceInstanceDid
     }
     
+    /// Get the instance of the data storage.
+    ///
+    /// - returns: The instance of the data storage.
     public func getStorage() -> DataStorage {
         return _dataStorage!
     }
     
+    /// Refresh the access token. This will do remote refresh if not exist.
     public func refreshAccessToken() throws {
         try _ = _accessToken?.fetch()
     }
@@ -140,12 +151,18 @@ public class ServiceEndpoint: NodeRPCConnection {
         return _accessToken!
     }
     
+    /// Get the version of the hive node.
+    ///
+    /// - returns: The version of the hive node.
     public func getNodeVersion() -> Promise<NodeVersion> {
         return DispatchQueue.global().async(.promise){ [self] in
             return try AboutController(self).getNodeVersion()
         }
     }
     
+    /// Get the last commit ID of the hive node.
+    ///
+    /// - returns: The last commit ID.
     public func getLatestCommitId() -> Promise<String> {
         return DispatchQueue.global().async(.promise){ [self] in
             return try AboutController(self).getCommitId()!

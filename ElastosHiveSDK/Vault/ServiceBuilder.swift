@@ -22,6 +22,11 @@
 
 import Foundation
 
+/**
+ * The service builder for the services of the backup hive node.
+ *
+ * TODO: to be implemented.
+ */
 public class ServiceBuilder {
     private var _serviceEndpoint: ServiceEndpoint
     

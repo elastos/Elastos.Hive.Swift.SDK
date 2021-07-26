@@ -24,7 +24,9 @@ import Foundation
 import ElastosDIDSDK
 
 /// The application context would contain the resources list below:
-/// - the reference of application context provider
+/// - The reference of application context provider.
+/// - The user did which uses this application.
+/// Normally, there are only one application context for one application.
 public class AppContext {
     
     private static var resolverHasSetup: Bool = false
@@ -36,14 +38,23 @@ public class AppContext {
         _contextProvider = provider
     }
     
+    /// Get the provider of the application context.
+    /// - returns: The provider of the application context.
     public var appContextProvider: AppContextProvider {
         return _contextProvider
     }
     
+    /// Get the user DID.
+    /// - returns: The user DID.
     public var userDid: String {
         return _userDid
     }
-
+    
+    /// Setup the resolver for the DID verification.
+    ///
+    /// - parameters:
+    ///   - resolver: The URL of the resolver.
+    ///   - cacheDir: The local directory for DID cache.
     public static func setupResover(_ resolver: String, _ cacheDir: String) throws {
         guard resolverHasSetup == false else {
             throw HiveError.DIDResoverAlreadySetupException(nil)
@@ -57,6 +68,12 @@ public class AppContext {
         }
     }
     
+    /// Create the application context.
+    ///
+    /// - parameters:
+    ///   - provider: The provider of the application context.
+    ///   - userDid: The user DID.
+    /// - returns: The application context.
     public static func build(_ provider: AppContextProvider, _ userDid: String) throws -> AppContext {
         guard provider.getLocalDataDir() != nil else {
             throw HiveError.BadContextProviderException("Missing method to acquire data location")
@@ -73,16 +90,22 @@ public class AppContext {
         return AppContext(provider, userDid)
     }
     
-    
+    /// Get the URL address of the provider throw the document of the user DID. The will access the property of the document of the user DID.
+    ///
+    /// - parameters:
+    ///   - targetDid: The user DID.
+    /// - returns: The URL address of the provider.
     public static func getProviderAddress(_ targetDid: String) -> Promise<String> {
-        return getProviderAddress(targetDid: targetDid, preferredProviderAddress: nil)
-    }
-
-    public static func getProviderAddress(_ targetDid: String, _ preferredProviderAddress: String) -> Promise<String> {
-        return getProviderAddress(targetDid: targetDid, preferredProviderAddress: preferredProviderAddress)
+        return getProviderAddress(targetDid, nil)
     }
     
-    private static func getProviderAddress(targetDid: String, preferredProviderAddress: String?) -> Promise<String> {
+    /// Get the URL address of the provider by the user DID. The will access the property of the user DID.
+    ///
+    /// - parameters:
+    ///   - targetDid: The user DID.
+    ///   - preferredProviderAddress: The preferred URL address of the provider.
+    /// - returns: The URL address of the provider.    
+    private static func getProviderAddress(_ targetDid: String, _ preferredProviderAddress: String?) -> Promise<String> {
         return DispatchQueue.global().async(.promise){
             if preferredProviderAddress != nil {
                 return preferredProviderAddress!

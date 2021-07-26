@@ -23,6 +23,7 @@
 import Foundation
 
 /**
+ * Mongo database service.
  * TODO: refine APIs like *One, *Many, find*.
  */
 public protocol DatabaseService {
@@ -38,7 +39,7 @@ public protocol DatabaseService {
     ///
     /// - parameters:
     ///    - name: the collection name
-    /// - Returns fail(false) or success(true)
+    /// - returns fail(false) or success(true)
     func deleteCollection(_ name: String) -> Promise<Void>
 
     /// Insert a new document in a given collection
@@ -48,7 +49,7 @@ public protocol DatabaseService {
     ///          the document does not have an _id field one will be added automatically
     ///   - options: bypass_document_validation: (optional) If True, allows
     ///              the write to opt-out of document level validation. Default is False.
-    /// - returns: Results returned by InsertOneResult wrapper
+    /// - returns: Results returned by InsertResult wrapper
     func insertOne(_ collection: String, _ doc: [String: Any], _ options: InsertOptions) -> Promise<InsertResult>
   
     /// Insert many new documents in a given collection
@@ -61,7 +62,7 @@ public protocol DatabaseService {
     ///              in the order provided. If an error occurs all remaining inserts are aborted. If False, documents will be inserted on the server in arbitrary order, possibly in parallel,
     ///              and all document inserts will be attempted.
     ///              bypass_document_validation: (optional) If True, allows the write to opt-out of document level validation. Default is False.
-    /// - returns: Results returned by `InsertManyResult` wrapper
+    /// - returns: Results returned by `InsertResult` wrapper
     func insertMany(_ collection: String, _ docs: Array<[String: Any]>,_ options: InsertOptions) -> Promise<InsertResult>
     
     /// Count documents
@@ -120,26 +121,25 @@ public protocol DatabaseService {
     ///   - update: The modifications to apply.
     ///   - options: optional, refer to UpdateOptions
     ///
-    /// - returns: Results returned by `UpdateResult` wrapper
+    /// - returns: returned by UpdateResult wrapper
     func updateMany(_ collection: String, _ filter: [String: Any], _ update: [String: Any], _ options: UpdateOptions) -> Promise<UpdateResult>
 
-    /// Delete an existing document in a given collection
+    /// Delete an existing document in a given collection.
     /// 
     /// - parameters:
     ///   - collection: the collection name
     ///   - filter: A query that matches the document to delete.
-    ///   - options:
     ///
-    /// - returns:
+    /// - returns: Delete result
     func deleteOne(_ collection: String, _ filter: [String: Any]) -> Promise<Void>
 
-    /// Delete many existing documents in a given collection
+    /// Delete many existing documents in a given collection.
     ///
     /// - parameters:
     ///   - collection: the collection name
     ///   - filter: A query that matches the document to delete.
     ///   - options:
     ///
-    /// - returns:
+    /// - returns: Delete result
     func deleteMany(_ collection: String, _ filter: [String: Any]) -> Promise<Void>
 }

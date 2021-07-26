@@ -22,6 +22,9 @@
 
 import Foundation
 
+/**
+ * The backup context for hive node server.
+ */
 public class HiveBackupContext: BackupContext {
     public func getParameter(_ parameter: String) -> String? {
         switch parameter {
@@ -42,10 +45,14 @@ public class HiveBackupContext: BackupContext {
         return nil
     }
     
+    /// Get the host URL of the backup server.
+    /// - returns: Host URL.
     public func getTargetProviderAddress() -> String? {
         return nil
     }
     
+    /// Get the service DID of the backup server.
+    /// - returns: The service DID.
     public func getTargetServiceDid() -> String? {
         return nil
     }

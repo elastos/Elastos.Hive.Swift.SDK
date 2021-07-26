@@ -22,21 +22,34 @@
 
 import Foundation
 
+/**
+ * The access token is made by hive node and represents the user DID and the application DID.
+ *
+ * Some of the node APIs requires access token when handling request.
+ */
 public class AccessToken: CodeFetcher {
     private var _jwtCode: String?
     private var _remoteFetcher: CodeFetcher?
     private var _storage: DataStorage?
     private var _endpoint: ServiceEndpoint
-
     
+    // The bridge handle is used for caller to do sth when getting the access token.
     public var flush: ((String) -> Void)?
     
+    /// Create the access token by service end point, data storage, and bridge handler.
+    ///
+    /// - parameters:
+    ///   - endpoint: The service end point.
+    ///   - storage: The data storage which is used to save the access token.
     public init(_ endpoint: ServiceEndpoint, _ storage: DataStorage?) {
         _endpoint = endpoint
         _remoteFetcher = RemoteFetcher(endpoint)
         _storage = storage        
     }
     
+    /// Get the access token without exception.
+    ///
+    /// - returns: null if not exists.
     public func getCanonicalizedAccessToken() -> String {
         do {
             try _jwtCode = fetch()
