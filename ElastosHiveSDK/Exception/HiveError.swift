@@ -23,109 +23,81 @@
 import Foundation
 
 public enum HiveError: Error {
-    case failure(des: String?)
-    case IllegalArgument(des: String?)
-    case netWork(des: Error?)
-    case fileNotFound(des: String?)
-    case jsonSerializationInvalidType(des: String?)
-    case responseSerializationFailed(des: String?)
-    case hiveSdk(message: String)
-    case failedToGetBackupState
-    case unknownBackupState(_ state: String)
-    case ProviderNotFoundException(_ message: String)
-    case ProviderNotSetException(_ message: String)
-    case VaultAlreadyExistException(_ message: String)
-    case UnsupportedOperationException
-    case BackupAlreadyExistException(_ message: String)
-    case FileDoesNotExistsException
-    case HiveSdkException(_ message: String)
-    case HttpFailedException(_ message: String)
-    case IllegalDidFormatException(_ message: String)
-    case InvalidParameterException(_ message: String)
-    case NoEnoughSpaceException(_ message: String)
-    case UnauthorizedStateException(_ message: String? = "")
-    case UnsupportedFileTypeException(_ message: String)
-    case VaultLockedException(_ message: String)
-    case UnsupportedMethodException
-    
-    
-    case DIDResoverAlreadySetupException
-    case DIDResolverSetupException(_ message: String)
-    case BadContextProviderException(_ message: String)
-    case DIDResolverNotSetupException
+    case AlreadyExistsException(_ message: String?)
+    case BackupIsInProcessingException(_ message: String?)
+    case BackupNotFoundException(_ message: String?)
+    case BadContextProviderException(_ message: String?)
+    case DIDNotPublishedException(_ message: String?)
+    case DIDResolverNotSetupException(_ message: String?)
+    case DIDResolverSetupException(_ message: String?)
+    case DIDResoverAlreadySetupException(_ message: String?)
+    case IllegalDidFormatException(_ message: String?)
+    case InsufficientStorageException(_ message: String?)
+    case NetworkException(_ message: String?)
+    case NotFoundException(_ message: String?)
     case NotImplementedException(_ message: String?)
+    case PathNotExistException(_ message: String?)
+    case PricingPlanNotFoundException(_ message: String?)
+    case ProviderNotSetException(_ message: String?)
+    case ScriptNotFoundException(_ message: String?)
     case ServerUnkownException(_ message: String?)
-    case IllegalArgumentException(_ message: String?)
-
-    
+    case UnauthorizedException(_ message: String?)
+    case VaultForbiddenException(_ message: String?)
+    case VaultNotFoundException(_ message: String?)
+    case DefaultException(_ message: String?)
+    case InvalidParameterException(_ message: String?)
 }
 
 extension HiveError {
     
     public var description: String {
         switch self {
-        case .unknownBackupState(let state):
-            return "Unknown state : \(state)"
-        case .failure(let des):
-            return des ?? "Operation failed"
-        case .IllegalArgument(let des):
-            return des ?? ""
-        case .netWork(let des):
-            return des.debugDescription
-        case .fileNotFound(let des):
-            return des ?? ""
-        case .jsonSerializationInvalidType(let des):
-            return des ?? ""
-        case .responseSerializationFailed(let des):
-            return des ?? ""
-        case .hiveSdk(let message):
-            return message
-        case .failedToGetBackupState:
-            return "Failed to get back-up state."
-        case .DIDResoverAlreadySetupException:
-            return "Resolver already settup, replicated setup not allowed"
+        case .AlreadyExistsException(let message):
+            return "AlreadyExistsException: \(message ?? "")"
+        case .BackupIsInProcessingException(let message):
+            return "BackupIsInProcessingException: \(message ?? "")"
+        case .BackupNotFoundException(let message):
+            return "BackupNotFoundException: \(message ?? "")"
         case .BadContextProviderException(let message):
-            return "BadContextProviderException: \(message)"
-        case .DIDResolverNotSetupException:
-            return "DID Resolver has not been setup before"
-        case .ProviderNotFoundException(let message):
-            return "ProviderNotFoundException: \(message)"
-        case .ProviderNotSetException(let message):
-            return "ProviderNotSetException: \(message)"
-        case .VaultAlreadyExistException(let message):
-            return "VaultAlreadyExistException: \(message)"
-        case .UnsupportedOperationException:
-            return "unsupported operation exception"
-        case .BackupAlreadyExistException(let message):
-            return "BackupAlreadyExistException: \(message)"
-        case .FileDoesNotExistsException:
-            return "FileDoesNotExistsException"
-        case .UnsupportedFileTypeException:
-            return "Unsupport file type"
-        case .HiveSdkException(let message):
-            return "HiveSdkException \(message)"
-        case .HttpFailedException(let message):
-            return "HttpFailedException \(message)"
-        case .IllegalDidFormatException(let message):
-            return "IllegalDidFormatException \(message)"
-        case .InvalidParameterException(let message):
-            return "InvalidParameterException \(message)"
-        case .NoEnoughSpaceException(let message):
-            return "NoEnoughSpaceException \(message)"
-        case .UnauthorizedStateException(let message):
-            return "UnauthorizedStateException \(message)"
-        case .VaultLockedException(let message):
-            return "VaultLockedException \(message)"
-        case .UnsupportedMethodException:
-            return "This method will be supported in the later versions"
+            return "BadContextProviderException: \(message ?? "")"
+        case .DIDNotPublishedException(let message):
+            return "DIDNotPublishedException: \(message ?? "")"
+        case .DIDResolverNotSetupException(let message):
+            return "DIDResolverNotSetupException: \(message ?? "")"
         case .DIDResolverSetupException(let message):
-            return "DIDResolverSetupException \(message)"
+            return "DIDResolverSetupException: \(message ?? "")"
+        case .DIDResoverAlreadySetupException(let message):
+            return "DIDResoverAlreadySetupException: \(message ?? "")"
+        case .IllegalDidFormatException(let message):
+            return "IllegalDidFormatException: \(message ?? "")"
+        case .InsufficientStorageException(let message):
+            return "InsufficientStorageException: \(message ?? "")"
+        case .NetworkException(let message):
+            return "NetworkException: \(message ?? "")"
+        case .NotFoundException(let message):
+            return "NotFoundException: \(message ?? "")"
         case .NotImplementedException(let message):
-            return "NotImplementedException \(message ?? "")"
+            return "NotImplementedException: \(message ?? "")"
+        case .PathNotExistException(let message):
+            return "PathNotExistException: \(message ?? "")"
+        case .PricingPlanNotFoundException(let message):
+            return "PricingPlanNotFoundException: \(message ?? "")"
+        case .ProviderNotSetException(let message):
+            return "ProviderNotSetException: \(message ?? "")"
+        case .ScriptNotFoundException(let message):
+            return "ScriptNotFoundException: \(message ?? "")"
         case .ServerUnkownException(let message):
-            return "ServerUnkownException \(message ?? "")"
-        case .IllegalArgumentException(let message):
-            return "IllegalArgumentException \(message ?? "")"
+            return "ServerUnkownException: \(message ?? "")"
+        case .UnauthorizedException(let message):
+            return "UnauthorizedException: \(message ?? "")"
+        case .VaultForbiddenException(let message):
+            return "VaultForbiddenException: \(message ?? "")"
+        case .VaultNotFoundException(let message):
+            return "VaultNotFoundException: \(message ?? "")"
+        case .DefaultException(let message):
+            return "DefaultException: \(message ?? "")"
+        case .InvalidParameterException(let message):
+            return "InvalidParameterException: \(message ?? "")"
         }
     }
     

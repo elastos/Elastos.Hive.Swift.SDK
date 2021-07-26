@@ -43,7 +43,7 @@ public class BackupResult: Mappable {
         case "restore":
             return BackupResultState.restore
         default:
-            throw HiveError.unknownBackupState(_result ?? "result is null")
+            throw HiveError.DefaultException(_result ?? "result is null")
         }
     }
 }

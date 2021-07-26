@@ -46,7 +46,7 @@ public class AppContext {
 
     public static func setupResover(_ resolver: String, _ cacheDir: String) throws {
         guard resolverHasSetup == false else {
-            throw HiveError.DIDResoverAlreadySetupException
+            throw HiveError.DIDResoverAlreadySetupException(nil)
         }
         
         do {
@@ -67,7 +67,7 @@ public class AppContext {
         }
         
         guard self.resolverHasSetup else{
-            throw HiveError.DIDResolverNotSetupException
+            throw HiveError.DIDResolverNotSetupException(nil)
         }
 
         return AppContext(provider, userDid)
@@ -91,7 +91,7 @@ public class AppContext {
             let did = try DID(targetDid)
             let doc = try did.resolve()
             guard doc != nil else {
-                throw HiveError.ProviderNotFoundException("The DID \(targetDid) has not published onto sideChain")
+                throw HiveError.DIDNotPublishedException("The DID \(targetDid) has not published onto sideChain")
             }
             let services = try doc!.selectServices(byType: "HiveVault")
             if services.count == 0 {
