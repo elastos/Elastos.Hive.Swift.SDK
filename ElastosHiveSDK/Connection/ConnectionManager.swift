@@ -36,6 +36,10 @@ extension DataRequest {
             throw HiveError.InvalidParameterException("\(error.debugDescription)")
         case 404:
             throw HiveError.NotFoundException("\(error.debugDescription)")
+        case 455:
+            throw HiveError.AlreadyExistsException("\(error.debugDescription)")
+        case 507:
+            throw HiveError.InsufficientStorageException("\(error.debugDescription)")
         default: break
         }
         
@@ -71,6 +75,10 @@ extension DataRequest {
             throw HiveError.InvalidParameterException("\(error.debugDescription)")
         case 404:
             throw HiveError.NotFoundException("\(error.debugDescription)")
+        case 455:
+            throw HiveError.AlreadyExistsException("\(error.debugDescription)")
+        case 507:
+            throw HiveError.InsufficientStorageException("\(error.debugDescription)")
         default: break
         }
         
