@@ -117,7 +117,7 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
                 if bytesWritten == -1 {
                     // Something wrong happened - wait a moment - TODO: retry, and throw an exception in case of error several times
                     if availableRetries == 0 {
-                        throw HiveError.failure(des: "Failed to write data after several attempts")
+                        throw HiveError.NetworkException("Failed to write data after several attempts")
                     }
 
                     availableRetries = availableRetries - 1
@@ -154,7 +154,7 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
             if bytesWritten == -1 {
                 // Something wrong happened - wait a moment - TODO: retry, and throw an exception in case of error several times
                 if availableRetries == 0 {
-                    throw HiveError.failure(des: "Failed to write data after several attempts")
+                    throw HiveError.NetworkException("Failed to write data after several attempts")
                 }
 
                 availableRetries = availableRetries - 1
@@ -187,15 +187,15 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         Log.d("Hive Debug ==> response body ->", response as Any)
         let code = response?.statusCode
         guard code != nil else {
-            _resolver?.reject(HiveError.failure(des: "unknow error."))
-            self.writerBlock?(HiveError.failure(des: "unknow error."))
-            self.writerCompleteWithError?(false, HiveError.failure(des: "unknow error."))
+            _resolver?.reject(HiveError.NetworkException("unknow error."))
+            self.writerBlock?(HiveError.NetworkException("unknow error."))
+            self.writerCompleteWithError?(false, HiveError.NetworkException("unknow error."))
             return
         }
         guard 200...299 ~= code! else {
-            _resolver?.reject(HiveError.failure(des: String(data: data, encoding: .utf8)))
-            self.writerBlock?(HiveError.failure(des: String(data: data, encoding: .utf8)))
-            self.writerCompleteWithError?(false, HiveError.failure(des: String(data: data, encoding: .utf8)))
+            _resolver?.reject(HiveError.NetworkException(String(data: data, encoding: .utf8)))
+            self.writerBlock?(HiveError.NetworkException(String(data: data, encoding: .utf8)))
+            self.writerCompleteWithError?(false, HiveError.NetworkException(String(data: data, encoding: .utf8)))
             return
         }
     }
@@ -210,9 +210,9 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         Log.d("Hive Debug ==> response Code ->", response?.statusCode as Any)
         Log.d("Hive Debug ==> response body ->", response as Any)
         guard error == nil else {
-            _resolver?.reject(HiveError.netWork(des: error))
-            self.writerBlock?(HiveError.netWork(des: error))
-            self.writerCompleteWithError?(false, HiveError.netWork(des: error))
+            _resolver?.reject(HiveError.NetworkException("\(error!)"))
+            self.writerBlock?(HiveError.NetworkException("\(error!)"))
+            self.writerCompleteWithError?(false, HiveError.NetworkException("\(error!)"))
             return
         }
         _resolver?.fulfill(true)

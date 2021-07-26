@@ -164,8 +164,8 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
 //        }
         guard 200...299 ~= code! else {
 //            resolver.reject(HiveError.failure(des: String(data: data, encoding: .utf8)))
-            self.readerBlock?(HiveError.failure(des: String(data: data, encoding: .utf8)))
-            self.readerCompleteWithError?(false, HiveError.failure(des: String(data: data, encoding: .utf8)))
+            self.readerBlock?(HiveError.NetworkException(String(data: data, encoding: .utf8)))
+            self.readerCompleteWithError?(false, HiveError.NetworkException(String(data: data, encoding: .utf8)))
             self.task?.cancel()
             return
         }
@@ -192,31 +192,28 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         Log.d("Hive Debug ==> response Code ->", response?.statusCode as Any)
         Log.d("Hive Debug ==> didCompleteWithError ->", response as Any)
         if let _ = error {
-            self.readerBlock?(HiveError.netWork(des: error))
-            self.readerCompleteWithError?(false, HiveError.netWork(des: error))
+            self.readerBlock?(HiveError.NetworkException("\(error)"))
+            self.readerCompleteWithError?(false, HiveError.NetworkException("\(error)"))
             return
         }
         let code = response?.statusCode
         guard code != nil else {
-            self.readerCompleteWithError?(false, HiveError.failure(des: "unkonw error."))
-//            self.resolver.reject(HiveError.failure(des: "unkonw error."))
+            self.readerCompleteWithError?(false, HiveError.NetworkException("unkonw error."))
             return
         }
         guard 200...299 ~= code! else {
             if code == 401 {
-                self.authFailure?(HiveError.failure(des: "code: 401"))
+                self.authFailure?(HiveError.NetworkException("code: 401"))
                 self.task?.cancel()
                 return
             }
             else if code == 404 {
-                self.readerBlock?(HiveError.fileNotFound(des: "file not found."))
-                self.readerCompleteWithError?(false, HiveError.fileNotFound(des: "file not found."))
-//                resolver.reject(HiveError.fileNotFound(des: "file not found."))
+                self.readerBlock?(HiveError.NetworkException("file not found."))
+                self.readerCompleteWithError?(false, HiveError.NetworkException("file not found."))
                 return
             }
-            self.readerBlock?(HiveError.netWork(des: error))
-            self.readerCompleteWithError?(false, HiveError.failure(des: "code: \(code ?? 0)"))
-//            resolver.reject(HiveError.failure(des: "code: \(code ?? 0)"))
+            self.readerBlock?(HiveError.NetworkException("\(error)"))
+            self.readerCompleteWithError?(false, HiveError.NetworkException("code: \(code ?? 0)"))
             return
         }
         self.downloadDidFinsish = true

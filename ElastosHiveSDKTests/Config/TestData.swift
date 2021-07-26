@@ -118,7 +118,7 @@ public class TestData {
     }
 }
 
-public class TestBackupRender: BackupContext {
+public class TestBackupRender: BackupContext {    
     public var nodeConfig: NodeConfig
     public var userDid: UserDID
     public var _type: String?
@@ -139,7 +139,7 @@ public class TestBackupRender: BackupContext {
         self.nodeConfig = nodeConfig
     }
     
-    public func getParameter(_ key: String) -> String {
+    public func getParameter(_ key: String) -> String? {
         if key == "targetDid" {
             return self.nodeConfig.targetDid
         } else if key == "targetHost" {

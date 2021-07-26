@@ -70,7 +70,6 @@
 		3053BDFB2684C8DF005828B0 /* PromotionAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BDF82684C8DF005828B0 /* PromotionAPI.swift */; };
 		3053BDFC2684C8DF005828B0 /* PromotionServiceRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BDF92684C8DF005828B0 /* PromotionServiceRender.swift */; };
 		3053BDFD2684C8DF005828B0 /* ServiceBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BDFA2684C8DF005828B0 /* ServiceBuilder.swift */; };
-		3053BE352684C974005828B0 /* ConnectionClosure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE242684C974005828B0 /* ConnectionClosure.swift */; };
 		3053BE362684C974005828B0 /* ConnectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE252684C974005828B0 /* ConnectionManager.swift */; };
 		3053BE372684C974005828B0 /* AccessToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE272684C974005828B0 /* AccessToken.swift */; };
 		3053BE382684C974005828B0 /* SignInRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3053BE282684C974005828B0 /* SignInRequest.swift */; };
@@ -291,7 +290,6 @@
 		3053BDF82684C8DF005828B0 /* PromotionAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromotionAPI.swift; sourceTree = "<group>"; };
 		3053BDF92684C8DF005828B0 /* PromotionServiceRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromotionServiceRender.swift; sourceTree = "<group>"; };
 		3053BDFA2684C8DF005828B0 /* ServiceBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceBuilder.swift; sourceTree = "<group>"; };
-		3053BE242684C974005828B0 /* ConnectionClosure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectionClosure.swift; sourceTree = "<group>"; };
 		3053BE252684C974005828B0 /* ConnectionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectionManager.swift; sourceTree = "<group>"; };
 		3053BE272684C974005828B0 /* AccessToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessToken.swift; sourceTree = "<group>"; };
 		3053BE282684C974005828B0 /* SignInRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInRequest.swift; sourceTree = "<group>"; };
@@ -768,7 +766,6 @@
 			isa = PBXGroup;
 			children = (
 				3053BE262684C974005828B0 /* Auth */,
-				3053BE242684C974005828B0 /* ConnectionClosure.swift */,
 				110357E2256FA3CA003F639F /* FileReader.swift */,
 				110357E6256FA420003F639F /* FileWriter.swift */,
 				3053BE252684C974005828B0 /* ConnectionManager.swift */,
@@ -1212,7 +1209,6 @@
 				3053BEC12684CA5F005828B0 /* DatabaseAPI.swift in Sources */,
 				3053BE3A2684C974005828B0 /* ChallengeRequest.swift in Sources */,
 				3053BEC62684CA5F005828B0 /* QueryResult.swift in Sources */,
-				3053BE352684C974005828B0 /* ConnectionClosure.swift in Sources */,
 				30A996FB25FCEB420002B014 /* RemoteResolver.swift in Sources */,
 				3053BF192684CA96005828B0 /* PaymentController.swift in Sources */,
 				3053BEFE2684CA5F005828B0 /* BackupController.swift in Sources */,

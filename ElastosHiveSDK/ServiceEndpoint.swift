@@ -108,7 +108,7 @@ public class ServiceEndpoint: NodeRPCConnection {
      */
     public var serviceDid: String? {
         try!{
-            throw HiveError.UnsupportedMethodException
+            throw HiveError.NotImplementedException(nil)
         }()
         return nil
     }
