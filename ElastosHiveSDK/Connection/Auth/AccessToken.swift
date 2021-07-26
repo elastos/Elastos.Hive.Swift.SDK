@@ -34,7 +34,7 @@ public class AccessToken: CodeFetcher {
     public init(_ endpoint: ServiceEndpoint, _ storage: DataStorage?) {
         _endpoint = endpoint
         _remoteFetcher = RemoteFetcher(endpoint)
-        
+        _storage = storage        
     }
     
     public func getCanonicalizedAccessToken() -> String {

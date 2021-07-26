@@ -31,6 +31,7 @@ class VaultSubscriptionTest: XCTestCase {
     private var _subscription: VaultSubscription?
     
     override func setUp() {
+        Log.setLevel(.Debug)
         XCTAssertNoThrow({
             let testData: TestData = TestData.shared()
             _subscription = VaultSubscription(testData.appContext, testData.providerAddress)
