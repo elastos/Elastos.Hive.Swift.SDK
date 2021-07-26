@@ -39,6 +39,7 @@ class FilesServiceTest: XCTestCase {
     private var remoteTxtFilePath: String?
     private var remoteImgFilePath: String?
     private var remoteNotExistsFilePath: String?
+    private var remoteNotExistsDirPath: String?
     private var remoteBackupTxtFilePath: String?
 
     private var _filesService: FilesService?
@@ -59,6 +60,8 @@ class FilesServiceTest: XCTestCase {
         self.remoteImgFilePath = self.remoteRootDir! + "/" + FILE_NAME_IMG
         self.remoteNotExistsFilePath = self.remoteRootDir! + "/" + FILE_NAME_NOT_EXISTS
         self.remoteBackupTxtFilePath = self.remoteRootDir! + "/" + FILE_NAME_TXT + "2"
+        
+        self.remoteNotExistsDirPath = remoteNotExistsFilePath
         
         self.subscription = try VaultSubscription(testData.appContext, testData.providerAddress)
         _filesService = try testData.newVault().filesService
@@ -105,6 +108,24 @@ class FilesServiceTest: XCTestCase {
             let result = try await(reader.read(fileurl))
             XCTAssertTrue(result)
         }())
+    }
+    
+    public func test04DownloadBin4NotFoundException() {
+        do {
+            let reader = try await(_filesService!.getDownloadReader(self.remoteNotExistsFilePath!))
+            let fileurl = createFilePathForDownload("swift_download.png")
+            let result = try await(reader.read(fileurl))
+            XCTAssertTrue(result)
+        } catch {
+            if let error = error as? HiveError {
+                switch error {
+                case .NotFoundException:
+                    XCTAssertTrue(true)
+                default:
+                    XCTAssertTrue(false)
+                }
+            }
+        }
     }
     
     public func test05List() {
