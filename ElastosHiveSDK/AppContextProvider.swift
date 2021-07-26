@@ -21,24 +21,21 @@
  */
 
 /**
- * The application context provider.
+ * The provider of the application context provides some information for communicate with the hive node.
  */
 import Foundation
 
 public protocol AppContextProvider {
 
-    /// The method for upper Application to implement to set up the directory
-    ///    to store local data, especially for access tokens.
+    /// The method for upper Application to implement to set up the directory to store local data, especially for access tokens.
     /// - returns: The full path to the directory
     func getLocalDataDir() -> String?
     
-    /// The method for upper Application to implement to provide current application
-    /// instance did document as the running context.
+    /// The method for upper Application to implement to provide current application instance did document as the running context.
     /// - returns: The application instance did document.
     func getAppInstanceDocument() -> DIDDocument?
 
-    /// The method for upper Application to implement to acquire the authorization
-    /// code from user's approval.
+    /// The method for upper Application to implement to acquire the authorization code from user's approval.
     /// - parameters authenticationChallengeJWtCode: The input challenge code from back-end node service.
     /// - returns: The credential issued by user.
     func getAuthorization(_ authenticationChallengeJWTcode: String) -> Promise<String>?

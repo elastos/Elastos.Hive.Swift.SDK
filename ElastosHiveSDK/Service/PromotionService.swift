@@ -22,6 +22,9 @@
 
 import Foundation
 
+/**
+ * The promotion service is for upgrading the backup node to the vault node.
+ */
 public protocol PromotionService {
     /// Promote the backup node to vault node by backup data.
     ///

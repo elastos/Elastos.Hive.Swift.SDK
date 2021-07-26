@@ -22,6 +22,20 @@
 
 import Foundation
 
+/**
+ * The script runner is used on the script calling side.
+ *
+ * To call the script, the script owner need register the script first.
+ *
+ *         Vault vault = new Vault(appContext, providerAddress);
+ *         ScriptingService scriptingService = vault.getScriptingService();
+ *         scriptingService.registerScript(...);
+ *
+ * Then the script caller can use this class to execute the script.
+ *
+ *         ScriptRunner scriptRunner = new ScriptRunner(callerAppContext, providerAddress);
+ *         scriptRunner.callScript(...).get();
+ */
 public class ScriptRunner: ServiceEndpoint, ScriptingInvocationService {
     private var _controller: ScriptingController!
 
@@ -36,6 +50,15 @@ public class ScriptRunner: ServiceEndpoint, ScriptingInvocationService {
         }
     }
 
+    /// Executes a previously registered server side script with a direct URL where the values can be passed as part of the query. Vault owner or external users are allowed to call scripts on someone's vault.
+    ///
+    /// - parameters:
+    ///   - name: The call's script name
+    ///   - params: The parameters for the script.
+    ///   - targetDid: The script owner's user did.
+    ///   - targetAppDid: The script owner's application did.
+    ///   - resultType: Objects
+    /// - returns: Result for specific script type
     public func callScriptUrl<T>(_ name: String, _ params: String, _ targetDid: String, _ targetAppDid: String, _ resultType: T.Type) -> Promise<T> {
         return DispatchQueue.global().async(.promise){ [self] in
             return try _controller!.callScriptUrl(name, params, targetDid, targetAppDid, resultType)

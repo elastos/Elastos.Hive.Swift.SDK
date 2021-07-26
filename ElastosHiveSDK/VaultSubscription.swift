@@ -23,10 +23,21 @@
 import Foundation
 import ObjectMapper
 
+/**
+ * The vault subscription is used for the vault management.
+ *
+ * Subscribe the vault is the first step to use the service in the vault.
+ */
 public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentService {
     private var _subscriptionController: SubscriptionController!
     private var _paymentController: PaymentController?
 
+    /// Create by the application context, and the address of the provider.
+    ///
+    /// - parameters:
+    ///   - context: The application context.
+    ///   - providerAddress: The address of the provider.
+    /// - throws: HiveException
     public override init(_ context: AppContext, _ providerAddress: String) {
         super.init(context, providerAddress)
         _subscriptionController = SubscriptionController(self)

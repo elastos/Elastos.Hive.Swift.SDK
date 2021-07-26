@@ -23,10 +23,20 @@
 import Foundation
 import ObjectMapper
 
+/**
+ * The backup subscription is for subscribe or unsubscribe the backup service.
+ *
+ * With the backup service, the vault data can be backup for security purpose.
+ */
 public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentService {    
     private var _subscriptionController: SubscriptionController?
     private var _paymentController: PaymentController?
 
+    /// Create by the application context and the address of the provider which can save the vault data.
+    ///
+    /// - parameters:
+    ///   - context: The application context.
+    ///   - providerAddress: The address of the provider.
     public override init(_ context: AppContext, _ providerAddress: String) {
         super.init(context, providerAddress)
         _subscriptionController = SubscriptionController(self)
