@@ -28,8 +28,8 @@ extension ConnectionManager {
         return try self.createDataRequest(url, .get, nil)
     }
     
-    func subscribeToVault(_ credential: String) throws -> DataRequest {
-        let url = self.baseURL + "/api/v2/subscription/vault?credential=\(credential)"
+    func subscribeToVault() throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/subscription/vault"
         return try self.createDataRequest(url, .put, nil)
     }
 

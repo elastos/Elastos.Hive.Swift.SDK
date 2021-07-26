@@ -57,12 +57,8 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentSer
     }
     
     public func subscribe() -> Promise<VaultInfo> {
-        return subscribe(nil)
-    }
-    
-    public func subscribe(_ credential: String?) -> Promise<VaultInfo> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _subscriptionController!.subscribeToVault(credential)
+            return try _subscriptionController!.subscribeToVault()
         }
     }
     
