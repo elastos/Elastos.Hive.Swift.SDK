@@ -21,16 +21,10 @@
 		30F890C22642E99100D8D4D2 /* CrossConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F890BC2642E99100D8D4D2 /* CrossConfig.swift */; };
 		30F890C32642E99100D8D4D2 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F890BD2642E99100D8D4D2 /* TestData.swift */; };
 		30F890C42642E99100D8D4D2 /* ApplicationConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F890BE2642E99100D8D4D2 /* ApplicationConfig.swift */; };
-		30F890CA2642E9DE00D8D4D2 /* DApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F890C62642E9DE00D8D4D2 /* DApp.swift */; };
-		30F890CB2642E9DE00D8D4D2 /* DIDEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F890C72642E9DE00D8D4D2 /* DIDEntity.swift */; };
-		30F890CC2642E9DE00D8D4D2 /* DIDApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F890C82642E9DE00D8D4D2 /* DIDApp.swift */; };
-		30F890CD2642E9DE00D8D4D2 /* Entity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F890C92642E9DE00D8D4D2 /* Entity.swift */; };
 		30F890D02642EA1200D8D4D2 /* SdkContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F890CF2642EA1200D8D4D2 /* SdkContext.swift */; };
 		30F890D72642EB3B00D8D4D2 /* OwnerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F890D62642EB3B00D8D4D2 /* OwnerViewController.swift */; };
 		30F890DB2642EB4700D8D4D2 /* CallerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F890DA2642EB4700D8D4D2 /* CallerViewController.swift */; };
 		30F890DE2642EBC200D8D4D2 /* ScriptOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F890DD2642EBC200D8D4D2 /* ScriptOwner.swift */; };
-		30F890E42642EE3000D8D4D2 /* DummyAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F890E32642EE3000D8D4D2 /* DummyAdapter.swift */; };
-		30F890E72642EE8900D8D4D2 /* TestAppContextProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F890E62642EE8900D8D4D2 /* TestAppContextProvider.swift */; };
 		30F890EF264302DA00D8D4D2 /* test_ios.txt in Resources */ = {isa = PBXBuildFile; fileRef = 30F890EA264302DA00D8D4D2 /* test_ios.txt */; };
 		30F890F0264302DA00D8D4D2 /* Local.conf in Resources */ = {isa = PBXBuildFile; fileRef = 30F890EB264302DA00D8D4D2 /* Local.conf */; };
 		30F890F1264302DA00D8D4D2 /* Production.conf in Resources */ = {isa = PBXBuildFile; fileRef = 30F890EC264302DA00D8D4D2 /* Production.conf */; };
@@ -55,16 +49,10 @@
 		30F890BC2642E99100D8D4D2 /* CrossConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CrossConfig.swift; path = ../../../../../ElastosHiveSDKTests/Config/CrossConfig.swift; sourceTree = "<group>"; };
 		30F890BD2642E99100D8D4D2 /* TestData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestData.swift; path = ../../../../../ElastosHiveSDKTests/Config/TestData.swift; sourceTree = "<group>"; };
 		30F890BE2642E99100D8D4D2 /* ApplicationConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ApplicationConfig.swift; path = ../../../../../ElastosHiveSDKTests/Config/ApplicationConfig.swift; sourceTree = "<group>"; };
-		30F890C62642E9DE00D8D4D2 /* DApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DApp.swift; path = ../../../../../ElastosHiveSDKTests/DID/DApp.swift; sourceTree = "<group>"; };
-		30F890C72642E9DE00D8D4D2 /* DIDEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DIDEntity.swift; path = ../../../../../ElastosHiveSDKTests/DID/DIDEntity.swift; sourceTree = "<group>"; };
-		30F890C82642E9DE00D8D4D2 /* DIDApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DIDApp.swift; path = ../../../../../ElastosHiveSDKTests/DID/DIDApp.swift; sourceTree = "<group>"; };
-		30F890C92642E9DE00D8D4D2 /* Entity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Entity.swift; path = ../../../../../ElastosHiveSDKTests/DID/Entity.swift; sourceTree = "<group>"; };
 		30F890CF2642EA1200D8D4D2 /* SdkContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SdkContext.swift; sourceTree = "<group>"; };
 		30F890D62642EB3B00D8D4D2 /* OwnerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnerViewController.swift; sourceTree = "<group>"; };
 		30F890DA2642EB4700D8D4D2 /* CallerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallerViewController.swift; sourceTree = "<group>"; };
 		30F890DD2642EBC200D8D4D2 /* ScriptOwner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptOwner.swift; sourceTree = "<group>"; };
-		30F890E32642EE3000D8D4D2 /* DummyAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DummyAdapter.swift; path = ../../../../../ElastosHiveSDKTests/DID/DummyAdapter.swift; sourceTree = "<group>"; };
-		30F890E62642EE8900D8D4D2 /* TestAppContextProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestAppContextProvider.swift; path = ../../../../../ElastosHiveSDKTests/DID/TestAppContextProvider.swift; sourceTree = "<group>"; };
 		30F890EA264302DA00D8D4D2 /* test_ios.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = test_ios.txt; path = ../../../../ElastosHiveSDKTests/Resources/test_ios.txt; sourceTree = "<group>"; };
 		30F890EB264302DA00D8D4D2 /* Local.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Local.conf; path = ../../../../ElastosHiveSDKTests/Resources/Local.conf; sourceTree = "<group>"; };
 		30F890EC264302DA00D8D4D2 /* Production.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Production.conf; path = ../../../../ElastosHiveSDKTests/Resources/Production.conf; sourceTree = "<group>"; };
@@ -110,8 +98,6 @@
 				303C53D126369BD400224B30 /* MainTabBarController.swift */,
 				30F890E9264302C600D8D4D2 /* Resources */,
 				30F890D42642EB2E00D8D4D2 /* Controller */,
-				30F890D52642EB2E00D8D4D2 /* Model */,
-				30F890D32642EB2E00D8D4D2 /* View */,
 				30F890B52642E94B00D8D4D2 /* SDK */,
 				3077F59A2634F8A900A701ED /* AppDelegate.swift */,
 				30F890CF2642EA1200D8D4D2 /* SdkContext.swift */,
@@ -127,7 +113,6 @@
 			children = (
 				30F890E02642EC0500D8D4D2 /* Other */,
 				30F890B62642E94B00D8D4D2 /* Scripting */,
-				30F890B72642E94B00D8D4D2 /* Did */,
 				30F890B82642E94B00D8D4D2 /* Config */,
 			);
 			path = SDK;
@@ -143,19 +128,6 @@
 			path = Scripting;
 			sourceTree = "<group>";
 		};
-		30F890B72642E94B00D8D4D2 /* Did */ = {
-			isa = PBXGroup;
-			children = (
-				30F890E62642EE8900D8D4D2 /* TestAppContextProvider.swift */,
-				30F890E32642EE3000D8D4D2 /* DummyAdapter.swift */,
-				30F890C62642E9DE00D8D4D2 /* DApp.swift */,
-				30F890C82642E9DE00D8D4D2 /* DIDApp.swift */,
-				30F890C72642E9DE00D8D4D2 /* DIDEntity.swift */,
-				30F890C92642E9DE00D8D4D2 /* Entity.swift */,
-			);
-			path = Did;
-			sourceTree = "<group>";
-		};
 		30F890B82642E94B00D8D4D2 /* Config */ = {
 			isa = PBXGroup;
 			children = (
@@ -169,13 +141,6 @@
 			path = Config;
 			sourceTree = "<group>";
 		};
-		30F890D32642EB2E00D8D4D2 /* View */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
 		30F890D42642EB2E00D8D4D2 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
@@ -183,13 +148,6 @@
 				30F890DA2642EB4700D8D4D2 /* CallerViewController.swift */,
 			);
 			path = Controller;
-			sourceTree = "<group>";
-		};
-		30F890D52642EB2E00D8D4D2 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		30F890E02642EC0500D8D4D2 /* Other */ = {
@@ -349,17 +307,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				30E9A33526452CAC00E430E4 /* UIColor+Extension.swift in Sources */,
-				30F890E72642EE8900D8D4D2 /* TestAppContextProvider.swift in Sources */,
-				30F890CB2642E9DE00D8D4D2 /* DIDEntity.swift in Sources */,
 				30F890C02642E99100D8D4D2 /* UserConfig.swift in Sources */,
 				30F890C12642E99100D8D4D2 /* ClientConfig.swift in Sources */,
 				30F890C22642E99100D8D4D2 /* CrossConfig.swift in Sources */,
-				30F890CA2642E9DE00D8D4D2 /* DApp.swift in Sources */,
-				30F890E42642EE3000D8D4D2 /* DummyAdapter.swift in Sources */,
 				303C53D226369BD400224B30 /* MainTabBarController.swift in Sources */,
-				30F890CC2642E9DE00D8D4D2 /* DIDApp.swift in Sources */,
 				30F890C42642E99100D8D4D2 /* ApplicationConfig.swift in Sources */,
-				30F890CD2642E9DE00D8D4D2 /* Entity.swift in Sources */,
 				3048ACBC2643C02D00B417B6 /* ScriptConst.swift in Sources */,
 				30F890D02642EA1200D8D4D2 /* SdkContext.swift in Sources */,
 				3048ACBF2643E75500B417B6 /* ScriptCaller.swift in Sources */,
