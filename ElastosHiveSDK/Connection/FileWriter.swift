@@ -34,6 +34,7 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     var uploadDidFinsish: Bool = false
     let _connectionManager: ConnectionManager?
     var _resolver: Resolver<Bool>?
+    private var hiveError: HiveError?
     
     init(_ uploadURL: URL, _ connectionManager: ConnectionManager) {
         self._connectionManager = connectionManager
@@ -66,41 +67,8 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         self.task?.resume()
     }
     
-//    init(url: URL, authHelper: VaultAuthHelper) {
-//        var input: InputStream? = nil
-//        var output: OutputStream? = nil
-//        self._connectionManager = nil
-//
-//        Stream.getBoundStreams(withBufferSize: BUFFER_SIZE,
-//                               inputStream: &input,
-//                               outputStream: &output)
-//
-//        uploadBoundStreams = BoundStreams(input: input!, output: output!)
-//
-//        super.init()
-//
-//        // Get out output stream ready for writing data we willreceive from clients
-//        uploadBoundStreams.output.delegate = self
-//        uploadBoundStreams.output.schedule(in: .current, forMode: .default)
-//        uploadBoundStreams.output.open()
-//
-//        // Start the upload task. This task will wait for input stream data
-//        let config = URLSessionConfiguration.default
-//        config.requestCachePolicy = .reloadIgnoringLocalCacheData
-//        let operationQueue = OperationQueue() // Run in a background queue to not block the main operations (main thread)
-//        let session = URLSession(configuration: config, delegate: self, delegateQueue: operationQueue)
-//        var request = try! URLRequest(url: url, method: .post, headers: HiveHeader(authHelper).headersStream())
-//        request.addValue("chunked", forHTTPHeaderField: "Transfer-Encoding")
-//        task = session.uploadTask(withStreamedRequest: request)
-//        Log.d("Hive Debug ==> request url ->", request.url as Any)
-//        Log.d("Hive Debug ==> request headers ->", request.allHTTPHeaderFields as Any)
-//
-//        self.task?.resume()
-//    }
-    
     public func write(data: Data) throws -> Promise<Bool> {
-        return Promise<Bool> { resolver in
-            _resolver = resolver
+        return DispatchQueue.global().async(.promise){ [self] in
             let dataSize = data.count
             var totalBytesWritten = 0
             var availableRetries = 5
@@ -126,15 +94,32 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
                 else {
                     totalBytesWritten = totalBytesWritten + bytesWritten
                 }
+                
+                if self.hiveError != nil {
+                    throw self.hiveError!
+                }
             }
             
-            self.close { (result, error) in
+            var _result: Bool = false
+            self.close {(result, error) in
+                if error != nil {
+                    self.hiveError = error
+                } else {
+                    _result = result
+                }
+            }
+            
+            if hiveError != nil {
+                throw hiveError!
+            }
+            
+            // while until upload success or false
+            while self.uploadDidFinsish == false {
                 
             }
+            return _result
         }
-        
     }
-
     
     public func write(data: Data, _ error: @escaping (_ error: HiveError) -> Void) throws {
         self.writerBlock = error
@@ -164,8 +149,6 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
                 totalBytesWritten = totalBytesWritten + bytesWritten
             }
         }
-        
-
     }
     
     public func flush() {
@@ -181,21 +164,38 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     }
     
     public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
-        // "{\"_status\":\"OK\"}\n"
         let response = dataTask.response as? HTTPURLResponse
         Log.d("Hive Debug ==> response Code ->", response?.statusCode as Any)
         Log.d("Hive Debug ==> response body ->", response as Any)
         let code = response?.statusCode
-        guard code != nil else {
-            _resolver?.reject(HiveError.NetworkException("unknow error."))
-            self.writerBlock?(HiveError.NetworkException("unknow error."))
-            self.writerCompleteWithError?(false, HiveError.NetworkException("unknow error."))
-            return
-        }
+        
         guard 200...299 ~= code! else {
-            _resolver?.reject(HiveError.NetworkException(String(data: data, encoding: .utf8)))
-            self.writerBlock?(HiveError.NetworkException(String(data: data, encoding: .utf8)))
-            self.writerCompleteWithError?(false, HiveError.NetworkException(String(data: data, encoding: .utf8)))
+            
+            var error: HiveError? = nil
+            switch code {
+            case ConnectionManager.BAD_REQUEST:
+                error = HiveError.InvalidParameterException("\(error.debugDescription)")
+            case ConnectionManager.UNAUTHORIZED:
+                error = HiveError.UnauthorizedException("\(error.debugDescription)")
+            case ConnectionManager.FORBIDDEN:
+                error = HiveError.VaultForbiddenException("\(error.debugDescription)")
+            case ConnectionManager.NOT_FOUND:
+                error = HiveError.NotFoundException("\(error.debugDescription)")
+            case ConnectionManager.ALREADY_EXISTS:
+                error = HiveError.AlreadyExistsException("\(error.debugDescription)")
+            case ConnectionManager.INSUFFICIENT_STORAGE:
+                error = HiveError.InsufficientStorageException("\(error.debugDescription)")
+            default: break
+            }
+            
+            if error == nil {
+                error = HiveError.NetworkException(String(data: data, encoding: .utf8))
+            }
+            
+            self.hiveError = error
+            
+            self.writerBlock?(self.hiveError!)
+            self.writerCompleteWithError?(false, self.hiveError!)
             return
         }
     }
@@ -209,15 +209,40 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         let response = task.response as? HTTPURLResponse
         Log.d("Hive Debug ==> response Code ->", response?.statusCode as Any)
         Log.d("Hive Debug ==> response body ->", response as Any)
-        guard error == nil else {
-            _resolver?.reject(HiveError.NetworkException("\(error!)"))
-            self.writerBlock?(HiveError.NetworkException("\(error!)"))
-            self.writerCompleteWithError?(false, HiveError.NetworkException("\(error!)"))
+
+        let code = response?.statusCode
+        guard 200...299 ~= code! else {
+            
+            var error: HiveError? = nil
+            switch code {
+            case ConnectionManager.BAD_REQUEST:
+                error = HiveError.InvalidParameterException("\(error.debugDescription)")
+            case ConnectionManager.UNAUTHORIZED:
+                error = HiveError.UnauthorizedException("\(error.debugDescription)")
+            case ConnectionManager.FORBIDDEN:
+                error = HiveError.VaultForbiddenException("\(error.debugDescription)")
+            case ConnectionManager.NOT_FOUND:
+                error = HiveError.NotFoundException("\(error.debugDescription)")
+            case ConnectionManager.ALREADY_EXISTS:
+                error = HiveError.AlreadyExistsException("\(error.debugDescription)")
+            case ConnectionManager.INSUFFICIENT_STORAGE:
+                error = HiveError.InsufficientStorageException("\(error.debugDescription)")
+            default: break
+            }
+            
+            if error == nil {
+                error = HiveError.NetworkException("\(error!)")
+            }
+            
+            self.hiveError = error
+            
+            self.writerBlock?(self.hiveError!)
+            self.writerCompleteWithError?(false, self.hiveError!)
             return
         }
-        _resolver?.fulfill(true)
-        self.uploadDidFinsish = true
+        
         self.writerCompleteWithError?(true, nil)
+        self.uploadDidFinsish = true
         Log.d("Hive Debug ==> upload success", "")
     }
 }

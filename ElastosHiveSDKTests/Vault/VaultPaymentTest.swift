@@ -91,6 +91,7 @@ class VaultPaymentTest: XCTestCase {
         }())
     }
 
+    //Disabled
     func test07MakeOrderProcess() {
         XCTAssertNoThrow(try { [self] in
             var order = try await(_paymentService!.placeOrder(_pricingPlanName))

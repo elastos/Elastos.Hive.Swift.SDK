@@ -38,6 +38,7 @@ class BackupServiceTest: XCTestCase {
         }())
     }
     
+    //Disabled
     func test01StartBackup() {
         XCTAssertNoThrow(try { [self] in
             try await(_backupService!.startBackup())
@@ -50,16 +51,19 @@ class BackupServiceTest: XCTestCase {
         }())
     }
     
+    //Disabled
     func test03StopBackup() {
         // TODO
     }
     
+    //Disabled
     func test04RestoreFrom() {
         XCTAssertNoThrow(try { [self] in
             try await(_backupService!.restoreFrom())
         }())
     }
     
+    //Disabled
     func testStopRestore() {
         // TODO
     }

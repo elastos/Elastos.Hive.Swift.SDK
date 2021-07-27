@@ -63,6 +63,7 @@ class VaultSubscriptionTest: XCTestCase {
         }())
     }
     
+    //Disabled
     public func test05CheckSubscription() {
         XCTAssertNoThrow(try { [self] in
             try await(_subscription!.unsubscribe())
