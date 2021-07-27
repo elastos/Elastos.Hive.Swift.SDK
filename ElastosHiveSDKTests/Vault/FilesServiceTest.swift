@@ -34,13 +34,14 @@ class FilesServiceTest: XCTestCase {
     private var bundlePath: Bundle?
     private var localTxtFilePath: String?
     private var localImgFilePath: String?
-    private var localCacheRootDir: String?
     private var remoteRootDir: String?
     private var remoteTxtFilePath: String?
     private var remoteImgFilePath: String?
     private var remoteNotExistsFilePath: String?
     private var remoteNotExistsDirPath: String?
     private var remoteBackupTxtFilePath: String?
+    private var localCacheImgPath: String?
+    private var localCacheTxtPath: String?
 
     private var _filesService: FilesService?
     private var subscription: VaultSubscription?
@@ -60,11 +61,13 @@ class FilesServiceTest: XCTestCase {
         self.remoteImgFilePath = self.remoteRootDir! + "/" + FILE_NAME_IMG
         self.remoteNotExistsFilePath = self.remoteRootDir! + "/" + FILE_NAME_NOT_EXISTS
         self.remoteBackupTxtFilePath = self.remoteRootDir! + "/" + FILE_NAME_TXT + "2"
+        self.localCacheImgPath = "swift_download.png"
+        self.localCacheTxtPath = "test_ios_download.txt"
         
         self.remoteNotExistsDirPath = remoteNotExistsFilePath
         
-        self.subscription = try VaultSubscription(testData.appContext, testData.providerAddress)
-        _filesService = try testData.newVault().filesService
+        self.subscription = VaultSubscription(testData.appContext, testData.providerAddress)
+        _filesService = testData.newVault().filesService
     }
     
     public func test01UploadText() {
@@ -95,18 +98,23 @@ class FilesServiceTest: XCTestCase {
     func test03DownloadText() {
         XCTAssertNoThrow(try { [self] in
             let reader = try await(_filesService!.getDownloadReader(self.remoteTxtFilePath!))
-            let targetUrl = createFilePathForDownload("test_ios_download.txt")
+            let targetUrl = createFilePathForDownload(self.localCacheTxtPath!)
             let result = try await(reader.read(targetUrl))
             XCTAssertTrue(result)
+            let isEqual = try self.isFileContentEqual(self.localTxtFilePath!, self.localCacheTxtPath!)
+            XCTAssertTrue(isEqual)
         }())
     }
 
     public func test04DownloadBin() {
         XCTAssertNoThrow(try { [self] in
             let reader = try await(_filesService!.getDownloadReader(self.remoteImgFilePath!))
-            let fileurl = createFilePathForDownload("swift_download.png")
+            let fileurl = createFilePathForDownload(self.localCacheImgPath!)
             let result = try await(reader.read(fileurl))
             XCTAssertTrue(result)
+            let isEqual = try self.isFileContentEqual(self.localImgFilePath!, self.localCacheImgPath!)
+            XCTAssertTrue(isEqual)
+
         }())
     }
     
@@ -142,12 +150,42 @@ class FilesServiceTest: XCTestCase {
         }())
     }
     
+    public func test05List4NotFoundException() {
+        do {
+            _ = try await(_filesService!.list(self.remoteNotExistsDirPath!))
+        } catch  {
+            if let error = error as? HiveError {
+                switch error {
+                case .NotFoundException:
+                    XCTAssertTrue(true)
+                default:
+                    XCTAssertTrue(false)
+                }
+            }
+        }
+    }
+    
     public func test06Hash() {
         XCTAssertNoThrow(try { [self] in
             XCTAssertTrue(try await(_filesService!.hash(self.remoteTxtFilePath!)).count > 0)
         }())
     }
 
+    public func test06Hash4NotFoundException() {
+        do {
+            _ = try await(_filesService!.hash(self.remoteNotExistsDirPath!))
+        } catch  {
+            if let error = error as? HiveError {
+                switch error {
+                case .NotFoundException:
+                    XCTAssertTrue(true)
+                default:
+                    XCTAssertTrue(false)
+                }
+            }
+        }
+    }
+    
     public func test07Move() {
         XCTAssertNoThrow(try { [self] in
             _ = try await(_filesService!.delete(self.remoteBackupTxtFilePath!))
@@ -156,11 +194,41 @@ class FilesServiceTest: XCTestCase {
         }())
     }
     
+    public func test07Move4NotFoundException() {
+        do {
+            _ = try await(_filesService!.move(self.remoteNotExistsFilePath!, self.remoteNotExistsFilePath! + "_bak"))
+        } catch  {
+            if let error = error as? HiveError {
+                switch error {
+                case .NotFoundException:
+                    XCTAssertTrue(true)
+                default:
+                    XCTAssertTrue(false)
+                }
+            }
+        }
+    }
+    
     public func test08Copy() {
         XCTAssertNoThrow(try { [self] in
             _ = try await(_filesService!.copy(self.remoteBackupTxtFilePath!, self.remoteTxtFilePath!))
             verifyRemoteFileExists(self.remoteTxtFilePath!)
         }())
+    }
+    
+    public func test08Copy4NotFoundException() {
+        do {
+            _ = try await(_filesService!.copy(self.remoteNotExistsFilePath!, self.remoteNotExistsFilePath! + "_bak"))
+        } catch  {
+            if let error = error as? HiveError {
+                switch error {
+                case .NotFoundException:
+                    XCTAssertTrue(true)
+                default:
+                    XCTAssertTrue(false)
+                }
+            }
+        }
     }
     
     public func test09DeleteFile() {
@@ -187,5 +255,17 @@ class FilesServiceTest: XCTestCase {
             XCTAssertNotNil(try await(_filesService!.stat(path)))
         }())
     }
+    
+    public func isFileContentEqual(_ srcFile: String, _ dstFile: String) throws -> Bool {
+        let dir = FileManager.default.urls(for: FileManager.SearchPathDirectory.cachesDirectory,
+                                           in: FileManager.SearchPathDomainMask.userDomainMask).last!
+        let fileURL = dir.appendingPathComponent(dstFile)
+        let downloadData = try! Data(contentsOf: fileURL)
+        let originalData = try Data(contentsOf: URL(fileURLWithPath: srcFile))
+        
+        return downloadData == originalData
+    }
+
+
 }
 

@@ -50,10 +50,6 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         var input: InputStream? = nil
         var output: OutputStream? = nil
         self.connectionManager = connectionManager;
-//        if !(resolver is Resolver<FileReader>) {
-//             throw HiveError.InvalidParameterException("only support FileReader as resolver")
-//        }
-//        self.resolver = resolver as! Resolver<FileReader>
         Stream.getBoundStreams(withBufferSize: BUFFER_SIZE,
                                inputStream: &input,
                                outputStream: &output)
@@ -87,7 +83,6 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
             while !self.didLoadFinish {
                 if let data = self.read({ [self] error in
                     hiveError = error
-                    self.task?.cancel()
                 }) {
                     if let fileHandle = try? FileHandle(forWritingTo: targetUrl) {
                         fileHandle.seekToEndOfFile()
