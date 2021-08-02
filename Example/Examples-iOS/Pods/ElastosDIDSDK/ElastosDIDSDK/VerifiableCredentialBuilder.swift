@@ -22,219 +22,238 @@
 
 import Foundation
 
+/// Create a credential builder.
 @objc(VerifiableCredentialBuilder)
 public class VerifiableCredentialBuilder: NSObject {
+    private var _issuer: VerifiableCredentialIssuer
     private var _target: DID
+    private var _credential: VerifiableCredential?
     private var _signKey: DIDURL
     private var _forDoc: DIDDocument
 
-    private var credential: VerifiableCredential?
-
-    init(_ target: DID, _ doc: DIDDocument, _ signKey: DIDURL) {
-        self._target  = target
-        self._forDoc  = doc
-        self._signKey = signKey
-
-        self.credential = VerifiableCredential()
-        self.credential!.setIssuer(doc.subject)
+    init(_ issuer: VerifiableCredentialIssuer, _ target: DID, _ doc: DIDDocument, _ signKey: DIDURL) {
+        _issuer = issuer
+        _target  = target
+        _forDoc  = doc
+        _signKey = signKey
+        
+        _credential = VerifiableCredential()
+        _credential?.setIssuer(issuer.did)
+        _credential?.setSubject(VerifiableCredentialSubject(target))
+    }
+    
+    private func checkNotSealed() throws {
+        guard let _ = _credential else {
+            throw DIDError.UncheckedError.IllegalStateError.AlreadySealedError()
+        }
     }
 
-    /// Set  an identifier for credential
-    /// - Parameter id: An identifier of credential.
+    /// Set the credential id.
+    /// - Parameter id: the credential id
     /// - Throws: if an error occurred, throw error.
-    /// - Returns: VerifiableCredentialBuilder instance.
+    /// - Returns: VerifiableCredentialBuilder object.
     @objc
     public func withId(_ id: DIDURL) throws -> VerifiableCredentialBuilder {
-        guard let _ = credential else {
-            throw DIDError.invalidState(Errors.CREDENTIAL_ALREADY_SEALED)
+        try checkNotSealed()
+        try checkArgument(id.did != nil || id.did != _target, "Invalid id")
+        var _id = id
+        if id.did == nil {
+            _id = try DIDURL(_target, id)
         }
-
-        credential!.setId(id)
+        
+        _credential!.setId(_id)
         return self
     }
-    /// Set  an identifier for credential
-    /// - Parameter id: An identifier of credential.
+    
+    /// Set the credential id.
+    /// - Parameter id: the credential id
     /// - Throws: if an error occurred, throw error.
-    /// - Returns: VerifiableCredentialBuilder instance.
+    /// - Returns: VerifiableCredentialBuilder object.
     @objc(withIdString:error:)
     public func withId(_ id: String) throws -> VerifiableCredentialBuilder {
-        guard !id.isEmpty else {
-            throw DIDError.illegalArgument()
-        }
+        try checkArgument(!id.isEmpty , "id is nil")
 
         return try withId(DIDURL(_target, id))
     }
 
-    /// Set  type for credential
+    /// Set Credential types.
     /// - Parameter types: the credential types, which declare what data to expect in the credential
     /// - Throws: if an error occurred, throw error.
-    /// - Returns: VerifiableCredentialBuilder instance.
+    /// - Returns: VerifiableCredentialBuilder object.
     public func withTypes(_ types: String...) throws -> VerifiableCredentialBuilder {
-        guard let _ = credential else {
-            throw DIDError.invalidState(Errors.CREDENTIAL_ALREADY_SEALED)
-        }
-        guard types.count > 0 else {
-            throw DIDError.illegalArgument()
-        }
-
-        credential!.setType(types)
+        try checkNotSealed()
+        try checkArgument(types.count > 0, "Invalid types")
+        _credential!.setType(types)
+        
         return self
     }
-
-    /// Set  type for credential
+   
+    /// Set Credential types.
     /// - Parameter types: the credential types, which declare what data to expect in the credential
     /// - Throws: if an error occurred, throw error.
-    /// - Returns: VerifiableCredentialBuilder instance.
+    /// - Returns: VerifiableCredentialBuilder object.
     @objc
     public func withTypes(_ types: Array<String>) throws -> VerifiableCredentialBuilder {
-         guard let _ = credential else {
-             throw DIDError.invalidState(Errors.CREDENTIAL_ALREADY_SEALED)
-         }
-         guard types.count > 0 else {
-             throw DIDError.illegalArgument()
-         }
 
-         credential!.setType(types)
-         return self
+        try checkNotSealed()
+        try checkArgument(types.count > 0, "Invalid types")
+        _credential!.setType(types)
+        
+        return self
      }
 
     /// Set credential default expiration date
     /// - Throws: if an error occurred, throw error.
-    /// - Returns: VerifiableCredentialBuilder instance.
+    /// - Returns: VerifiableCredentialBuilder object.
     @objc
     public func withDefaultExpirationDate() throws -> VerifiableCredentialBuilder {
-        guard let _ = credential else {
-            throw DIDError.invalidState(Errors.CREDENTIAL_ALREADY_SEALED)
-        }
-
-        credential!.setExpirationDate(maxExpirationDate())
+        try checkNotSealed()
+        _credential!.setExpirationDate(maxExpirationDate())
+        
         return self
     }
-
-    /// Set credential expiration date
-    /// - Parameter expirationDate: when the credential will expire
+    
+    /// Set expire time for the credential.
+    /// - Parameter expirationDate: the expires time
     /// - Throws: if an error occurred, throw error.
-    /// - Returns: VerifiableCredentialBuilder instance.
+    /// - Returns: VerifiableCredentialBuilder object.
     @objc
     public func withExpirationDate(_ expirationDate: Date) throws -> VerifiableCredentialBuilder {
-        guard let _ = credential else {
-            throw DIDError.invalidState(Errors.CREDENTIAL_ALREADY_SEALED)
+        try checkNotSealed()
+        var _expirationDate = expirationDate
+
+        if _expirationDate > maxExpirationDate() {
+            _expirationDate = maxExpirationDate()
         }
 
-        guard !DateHelper.isExpired(expirationDate, maxExpirationDate()) else {
-            throw DIDError.illegalArgument()
-        }
-
-        // TODO: check
-        credential!.setExpirationDate(expirationDate)
+        _credential!.setExpirationDate(expirationDate)
         return self
     }
-
-    /// Set claims about the subject of the credential.
-    /// - Parameter properites: Credential dictionary data.
+    
+    /// Set the claim properties to the credential subject from a dictionary object.
+    /// - Parameter properites: a dictionary include the claims
     /// - Throws: if an error occurred, throw error.
-    /// - Returns: VerifiableCredentialBuilder instance.
+    /// - Returns: VerifiableCredentialBuilder object.
     @objc
     public func withProperties(_ properites: Dictionary<String, String>) throws -> VerifiableCredentialBuilder {
-        guard let _ = credential else {
-            throw DIDError.invalidState(Errors.CREDENTIAL_ALREADY_SEALED)
-        }
+        try checkNotSealed()
         guard !properites.isEmpty else {
-            throw DIDError.illegalArgument()
+            return self
         }
         // TODO: CHECK
         let jsonNode = JsonNode(properites)
         let subject = VerifiableCredentialSubject(_target)
         subject.setProperties(jsonNode)
-        credential!.setSubject(subject)
+        _credential!.setSubject(subject)
         
         return self
     }
-
-    /// Set claims about the subject of the credential.
+    
+    /// Set the claim properties to the credential subject from JSON string.
     /// - Parameter json: Credential dictionary string
     /// - Throws: if an error occurred, throw error.
-    /// - Returns: VerifiableCredentialBuilder instance.
+    /// - Returns: VerifiableCredentialBuilder object.
     @objc(withPropertiesWithJson:error:)
     public func withProperties(_ json: String) throws -> VerifiableCredentialBuilder {
-        guard let _ = credential else {
-            throw DIDError.invalidState(Errors.CREDENTIAL_ALREADY_SEALED)
-        }
-        guard !json.isEmpty else {
-            throw DIDError.illegalArgument()
-        }
+        try checkNotSealed()
+        try checkArgument(!json.isEmpty, "properties is nil")
+
         // TODO: CHECK
         let dic = try (JSONSerialization.jsonObject(with: json.data(using: .utf8)!, options: [JSONSerialization.ReadingOptions.init(rawValue: 0)]) as? [String: Any])
         guard let _ = dic else {
-            throw DIDError.malformedCredential("properties data formed error.")
+            throw DIDError.CheckedError.DIDSyntaxError.MalformedCredentialError("properties data formed error.")
         }
         let jsonNode = JsonNode(dic!)
         let subject = VerifiableCredentialSubject(_target)
         subject.setProperties(jsonNode)
-        credential!.setSubject(subject)
+        _credential!.setSubject(subject)
         
         return self
     }
-
+    
+    /// Add new claim property to the credential subject.
+    /// - Parameters:
+    ///   - key: the property name
+    ///   - value: the property value
+    /// - Returns: VerifiableCredentialBuilder object.
+    @objc(withPropertiesWith::error:)
+    public func withProperties(_ key: String, _ value: String) throws -> VerifiableCredentialBuilder {
+        try checkNotSealed()
+        try checkArgument(!key.isEmpty && key != "id", "Invalid name")
+        _credential?.subject?.setProperties(key, value)
+        
+        return self
+    }
+    
     /// Set claims about the subject of the credential.
     /// - Parameter properties: Credential dictionary JsonNode
     /// - Throws: if an error occurred, throw error.
-    /// - Returns: VerifiableCredentialBuilder instance.
+    /// - Returns: VerifiableCredentialBuilder object.
     @objc(withPropertiesWithJsonNode:errro:)
     public func withProperties(_ properties: JsonNode) throws -> VerifiableCredentialBuilder {
-        guard let _ = credential else {
-            throw DIDError.invalidState(Errors.CREDENTIAL_ALREADY_SEALED)
-        }
-        guard properties.count > 0 else {
-            throw DIDError.illegalArgument()
-        }
+        try checkNotSealed()
+        try checkArgument(properties.count > 0, "properties is nil ")
 
         let subject = VerifiableCredentialSubject(_target)
         subject.setProperties(properties)
 
-        credential!.setSubject(subject)
+        _credential!.setSubject(subject)
         return self
     }
+    
+    private func sanitize() throws {
+        guard _credential?.id != nil else {
+            throw DIDError.CheckedError.DIDSyntaxError.MalformedCredentialError("Missing credential id")
+        }
+        guard _credential?.getTypes() != nil, _credential!.getTypes().count != 0 else {
+            throw DIDError.CheckedError.DIDSyntaxError.MalformedCredentialError("Missing credential type")
+        }
+        _credential?.setIssuanceDate(DateFormatter.currentDate())
+        if _credential!.hasExpirationDate() {
+            _ = try withDefaultExpirationDate()
+        }
+        
+        _credential?.setProof(nil)
+    }
 
-    /// Finish modiy VerifiableCredential.
-    /// - Parameter storePassword: Pass word to sign.
+    /// Seal the credential object, attach the generated proof to the
+    /// credential.
+    /// - Parameter storePassword: the password for DIDStore
     /// - Throws: if an error occurred, throw error.
-    /// - Returns: A handle to VerifiableCredential.
+    /// - Returns: the sealed credential object
     @objc
     public func sealed(using storePassword: String) throws -> VerifiableCredential {
-        guard let _ = credential else {
-            throw DIDError.invalidState(Errors.CREDENTIAL_ALREADY_SEALED)
+        try checkNotSealed()
+        try checkArgument(!storePassword.isEmpty, "Invalid storePassword")
+        guard _credential!.checkIntegrity() else {
+            throw DIDError.CheckedError.DIDSyntaxError.MalformedCredentialError("imcomplete credential")
         }
-        guard !storePassword.isEmpty else {
-            throw DIDError.illegalArgument()
-        }
-        guard credential!.checkIntegrity() else {
-            throw DIDError.malformedCredential("imcomplete credential")
-        }
-
-        credential!.setIssuanceDate(DateHelper.currentDate())
-        if credential!.getExpirationDate() == nil {
+        try sanitize()
+        
+        _credential!.setIssuanceDate(DateFormatter.currentDate())
+        if try _credential!.getExpirationDate() == nil {
             _ = try withDefaultExpirationDate()
         }
 
-        guard let data = credential!.toJson(true, true).data(using: .utf8) else {
-            throw DIDError.illegalArgument("credential is nil")
+        guard let data = _credential!.toJson(true, true).data(using: .utf8) else {
+            throw DIDError.UncheckedError.IllegalArgumentErrors.IllegalArgumentError("credential is nil")
         }
         let signature = try _forDoc.sign(_signKey, storePassword, [data])
-        let proof = VerifiableCredentialProof(Constants.DEFAULT_PUBLICKEY_TYPE, _signKey, signature)
+        let proof = VerifiableCredentialProof(_signKey, signature)
 
-        credential!.setProof(proof)
+        _credential!.setProof(proof)
 
         // invalidate builder
-        let sealed = self.credential!
-        self.credential = nil
+        let sealed = self._credential!
+        self._credential = nil
 
         return sealed
     }
 
     private func maxExpirationDate() -> Date {
-        guard credential?.getIssuanceDate() == nil else {
-            return DateFormatter.convertToWantDate(credential!.issuanceDate, Constants.MAX_VALID_YEARS)
+        
+        guard _credential?.issuanceDate == nil else {
+            return DateFormatter.convertToWantDate(_credential!.issuanceDate!, Constants.MAX_VALID_YEARS)
         }
         return DateFormatter.convertToWantDate(Date(), Constants.MAX_VALID_YEARS)
     }

@@ -57,40 +57,39 @@ public class DIDURL: NSObject {
     private var _parameters: OrderedDictionary<String, String>?
     private var _path: String?
     private var _queryParameters: OrderedDictionary<String, String>?
-    private var _metadata: CredentialMeta?
+    private var _metadata: CredentialMetadata?
 
-    /// Create a new DID URL according to DID and fragment.
+    ///  Constructs the DIDURl with the given value.
     /// - Parameters:
-    ///   - id: A valid didurl guaranteed containing valid did.
-    ///   - url: A fragment string.
+    ///   - baseRef: base the owner of DIDURL
+    ///   - url: url the DIDURl string
     /// - Throws: If error occurs, throw error.
     @objc
-    public init(_ id: DID, _ url: String) throws {
-        guard !url.isEmpty else {
-            throw DIDError.illegalArgument("empty didurl string")
-        }
+    public init(_ baseRef: DID, _ url: String) throws {
         super.init()
+        try checkArgument(!url.isEmpty, "Invalid url")
         var fragment = url
         if url.hasPrefix("did:") {
             do {
                 try ParserHelper.parse(url, false, DIDURL.Listener(self))
             } catch {
                 Log.e(DIDURL.TAG, "Parsing didurl error: malformed didurl string \(url)")
-                throw DIDError.malformedDIDURL("malformed DIDURL \(url)")
+                throw DIDError.UncheckedError.IllegalArgumentErrors.MalformedDIDURLError("malformed DIDURL \(url)")
             }
 
-            guard did == id else {
-                throw DIDError.illegalArgument("Mismatched arguments")
+            guard did == baseRef else {
+                throw DIDError.UncheckedError.IllegalArgumentErrors.IllegalArgumentError("Mismatched arguments")
             }
             return
         }
 
-        if url.hasPrefix("#") {
-            let starIndex = fragment.index(fragment.startIndex, offsetBy: 1)
-            let endIndex  = fragment.index(starIndex, offsetBy: fragment.count - 2)
-            fragment  = String(fragment[starIndex...endIndex])
+        if !url.hasPrefix("#") {
+            fragment = "#" + fragment
         }
-        self._did = id
+        let starIndex = fragment.index(fragment.startIndex, offsetBy: 1)
+        let endIndex  = fragment.index(starIndex, offsetBy: fragment.count - 2)
+        fragment  = String(fragment[starIndex...endIndex])
+        self._did = baseRef
         self._fragment = fragment
     }
 
@@ -99,22 +98,41 @@ public class DIDURL: NSObject {
     /// - Throws: If error occurs, throw error.
     @objc
     public init(_ url: String) throws {
-        guard !url.isEmpty else {
-            throw DIDError.illegalArgument()
-        }
         super.init()
+        try checkArgument(!url.isEmpty, "Invalid url")
         do {
             try ParserHelper.parse(url, false, DIDURL.Listener(self))
         } catch {
             Log.e(DIDURL.TAG, "Parsing didurl error: malformed didurl string \(url)")
-            throw DIDError.malformedDIDURL("malformed DIDURL \(url)")
+            throw DIDError.UncheckedError.IllegalArgumentErrors.MalformedDIDURLError("malformed DIDURL \(url)")
         }
+    }
+    
+    public init(_ baseRef: DID, _ url: DIDURL) throws {
+        _did = url._did == nil ? baseRef : url.did
+        _parameters = url._parameters
+        _path = url._path
+        _queryParameters = url._queryParameters
+        _fragment = url._fragment
+        _metadata = url._metadata
+    }
+
+    public class func valueOf(_ baseRef: DID, _ url: String) throws -> DIDURL? {
+        return url.isEmpty ? nil : try DIDURL(baseRef, url)
+    }
+    
+    public class func valueOf(_ baseRef: String, _ url: String) throws -> DIDURL? {
+        return url.isEmpty ? nil : try DIDURL(DID.valueOf(baseRef)!, url)
+    }
+    
+    public class func valueOf(_ url: String) throws -> DIDURL {
+        return try DIDURL(url)
     }
 
     // A valid didurl guaranteed containing valid did.
     @objc
-    public var did: DID {
-        return _did!
+    public var did: DID? {
+        return _did
     }
 
     /// Set did
@@ -211,35 +229,51 @@ public class DIDURL: NSObject {
         self._queryParameters![forKey] = value
     }
 
-    func setMetadata(_ metadata: CredentialMeta) {
+    func setMetadata(_ metadata: CredentialMetadata) {
         self._metadata = metadata
     }
 
     /// Get CredentialMetaData from Credential.
     /// - Returns: Return the handle to CredentialMetaData
     @objc
-    public func getMetadata() -> CredentialMeta {
+    public func getMetadata() -> CredentialMetadata {
         if  self._metadata == nil {
-            self._metadata = CredentialMeta()
+            self._metadata = CredentialMetadata()
         }
         return self._metadata!
-    }
-
-    /// Save Credential(DIDURL) MetaData.
-    /// - Throws: If error occurs, throw error.
-    @objc
-    public func saveMetadata() throws {
-        if (_metadata != nil && _metadata!.attachedStore) {
-            try _metadata?.store?.storeCredentialMetadata(did, self, _metadata!)
-        }
     }
 }
 
 extension DIDURL {
+    
+    func toString(_ base: DID) -> String {
+        var builder: String = ""
+        if did != nil && did != base {
+            builder.append(did!.toString())
+        }
+        if (parameters() != nil) {
+            builder.append(";")
+            builder.append(parameters()!)
+        }
+        if !(path?.isEmpty ?? true) {
+            builder.append(path!)
+        }
+        if (queryParameters() != nil) {
+            builder.append("?")
+            builder.append(queryParameters()!)
+        }
+        if !(_fragment?.isEmpty ?? true) {
+            builder.append("#")
+            builder.append(fragment!)
+        }
+        
+        return builder
+    }
+
     func toString() -> String {
         var builder: String = ""
 
-        builder.append(did.toString())
+        builder.append(did!.toString())
         if (parameters() != nil) {
             builder.append(";")
             builder.append(parameters()!)
@@ -292,6 +326,11 @@ extension DIDURL {
             return equalsTo(object as! String)
         }
     }
+    
+    @objc
+    public func compareTo(_ id: DIDURL) -> ComparisonResult {
+        return self.toString().compare(id.toString())
+    }
 }
 
 // DIDURL used as hash key.
@@ -323,14 +362,14 @@ extension DIDURL {
         override func exitMethod(_ ctx: DIDURLParser.MethodContext) {
             let method = ctx.getText()
             if  method != Constants.METHOD {
-                print("Unknown method: \(method)")
+                Log.d(NSStringFromClass(Listener.self), "Unknown method: \(method)")
             }
-            self.didURL?.did.setMethod(Constants.METHOD)
+            self.didURL?.did!.setMethod(Constants.METHOD)
         }
 
         override func exitMethodSpecificString(
                             _ ctx: DIDURLParser.MethodSpecificStringContext) {
-            self.didURL?.did.setMethodSpecificId(ctx.getText())
+            self.didURL?.did!.setMethodSpecificId(ctx.getText())
         }
 
         override func enterParams(_ ctx: DIDURLParser.ParamsContext) {
@@ -342,7 +381,7 @@ extension DIDURL {
             if  method != Constants.METHOD {
                 Log.e(DIDURL.TAG, "Unknown parameter method: \(method)")
             }
-            self.didURL?.did.setMethod(method)
+            self.didURL?.did!.setMethod(method)
         }
 
         override func exitParamQName(_ ctx: DIDURLParser.ParamQNameContext) {

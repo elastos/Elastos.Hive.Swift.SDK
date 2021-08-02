@@ -23,30 +23,98 @@
 import Foundation
 import PromiseKit
 
+/// A Presentation object is used to combine and present credentials.
+/// They can be packaged in such a way that the authorship of the data is
+/// verifiable. The data in a presentation is often all about the same
+/// subject, but there is no limit to the number of subjects or issuers
+/// in the presentation.
+///
+/// This also helps prevent a verifier from reusing a verifiable presentation as
+/// their own.
 @objc(VerifiablePresentation)
 public class VerifiablePresentation: NSObject {
-    private var _type: String
+    /// Default presentation type
+    let DEFAULT_PRESENTATION_TYPE = "VerifiablePresentation"
+    let ID = "id"
+    let TYPE = "type"
+    let HOLDER = "holder"
+    let VERIFIABLE_CREDENTIAL = "verifiableCredential"
+    let CREATED = "created"
+    let PROOF = "proof"
+    let NONCE = "nonce"
+    let REALM = "realm"
+    let VERIFICATION_METHOD = "verificationMethod"
+    let SIGNATURE = "signature"
+
+    var _id:DIDURL?
+    var _types: [String] = []
+    var _holder: DID?
+    var _credentialsArray: [VerifiableCredential] = [ ]
     private var _createdDate: Date
-    private var _verifiableCredentials: Dictionary<DIDURL, VerifiableCredential>
+    private var _verifiableCredentials: [DIDURL: VerifiableCredential] = [: ]
     private var _proof: VerifiablePresentationProof?
     
+    /// Default constructor.
     override init() {
-        self._type = Constants.DEFAULT_PRESENTATION_TYPE
-        self._createdDate = DateHelper.currentDate()
-        self._verifiableCredentials = Dictionary<DIDURL, VerifiableCredential>()
+        self._createdDate = DateFormatter.currentDate()
+    }
+    
+    /// Constructs a presentation object for given holder.
+    /// - Parameter holder: the holder's DID of this presentation object
+    init(_ holder: DID) {
+        self._holder = holder
+        self._createdDate = DateFormatter.currentDate()
+    }
+    
+    /// Copy constructor.
+    /// - Parameters:
+    ///   - vp: the source VerifiablePresentation object
+    init(_ vp: VerifiablePresentation, _ withProof: Bool) {
+        self._id = vp.id
+        self._types = vp.types
+        self._holder = vp.holder
+        self._createdDate = vp.createdDate
+        self._credentialsArray = vp.credentials
+        self._verifiableCredentials = vp._verifiableCredentials
+        if (withProof) {
+            self._proof = vp.proof
+        }
     }
 
-    /// Get Presentation Type.
-    @objc
-    public var type: String {
-        return _type
+    /// Get the id of this presentation object.
+    public var id: DIDURL? {
+        return _id
+    }
+    
+    func setId(_ id: DIDURL){
+        _id = id
+    }
+    
+    /// Get the types of this presentation object.
+    public var types: [String] {
+        return _types
+    }
+    
+    public var credentialCount: Int {
+        
+        return credentials.count
+    }
+    
+    /// Get the holder of this presentation object.
+    public var holder: DID? {
+        // NOTICE:
+        //
+        // DID 2 SDK should add the holder field as a mandatory field when
+        // create the presentation, at the same time should treat the holder
+        // field as an optional field when parse the presentation.
+        //
+        // This will ensure compatibility with the presentations that
+        // created by the old SDK.
+        let h = _holder != nil ? _holder : proof.verificationMethod.did
+        return h
     }
 
-    func setType(_ type: String) {
-        self._type = type
-    }
-
-    /// Get time created Presentation.
+    /// Get the time created this presentation object.
     @objc
     public var createdDate: Date {
         return _createdDate
@@ -56,102 +124,143 @@ public class VerifiablePresentation: NSObject {
         self._createdDate = newDate
     }
 
-    /// Get Credential count in Presentation.
+    /// Get the count of Credentials in this presentation object.
     @objc
     public var cedentialCount: Int {
         return _verifiableCredentials.count
     }
 
-    /// Get Credential list for signing the Presentation.
+    /// Get all Credentials in this presentation object.
     @objc
     public var credentials: Array<VerifiableCredential> {
-        var credentials = Array<VerifiableCredential>()
-        for credential in _verifiableCredentials.values {
-            credentials.append(credential)
-        }
-        return credentials
+        return _credentialsArray
     }
 
     /// Add one credential to verifiable credential array.
     /// - Parameter credential: The handle to Credential.
     @objc
     public func appendCredential(_ credential: VerifiableCredential) {
-        self._verifiableCredentials[credential.getId()] = credential
+        self._verifiableCredentials[credential.getId()!] = credential
     }
 
-    /// Get Credential list for signing the Presentation.
-    /// - Parameter ofId: The Credential Id.
-    /// - Returns: The handle to Credential
-    @objc
-    public func credential(ofId: DIDURL) -> VerifiableCredential? {
-        return self._verifiableCredentials[ofId]
+    /// Get the specified credential.
+    /// - Parameter ofId: the specified credential id
+    /// - Returns: the credential object
+    public func credential(ofId: DIDURL) throws -> VerifiableCredential? {
+        var id = ofId
+        if id.did == nil {
+            id = try DIDURL(holder!, id)
+        }
+        return self._verifiableCredentials[id]
     }
 
-    /// Get Credential list for signing the Presentation.
-    /// - Parameter ofId: The Credential Id.
-    /// - Throws: if an error occurred, throw error.
-    /// - Returns: The handle to Credential
+    /// Get the specified credential.
+    /// - Parameter ofId: the specified credential id
+    /// - Returns: the credential object
     public func credential(ofId: String) throws -> VerifiableCredential? {
-        return self._verifiableCredentials[try DIDURL(self.signer, ofId)]
+        return self._verifiableCredentials[try DIDURL(self.holder!, ofId)]
     }
 
-    /// Get Credential list for signing the Presentation.
-    /// - Parameter ofId: The Credential Id.
-    /// - Throws: if an error occurred, throw error.
-    /// - Returns: The handle to Credential
+    /// Get the specified credential with Object-c
+    /// - Parameter ofId: the specified credential id
+    /// - Returns: the credential object
     @objc
     public func credential(ofId: String, error: NSErrorPointer) -> VerifiableCredential? {
         do {
-            return self._verifiableCredentials[try DIDURL(self.signer, ofId)]
+            return self._verifiableCredentials[try DIDURL(self.holder!, ofId)]
         } catch let aError as NSError {
             error?.pointee = aError
             return nil
         }
     }
 
-    /// Get the DID for signing the Presentation.
-    @objc
-    public var signer: DID {
-        return proof.verificationMethod.did
-    }
-
-    func getSigner() -> DID? {
-        return self._proof?.verificationMethod.did
-    }
-
-    /// Presentation is genuine or not.
-    @objc
-    public var isGenuine: Bool {
-        let doc: DIDDocument?
-        do {
-            doc = try signer.resolve()
-        } catch {
-            doc = nil
+    /// Sanitize routine before sealing or after deserialization.
+    func sanitize() throws {
+        guard !types.isEmpty else {
+            throw DIDError.CheckedError.DIDSyntaxError.MalformedPresentationError("Missing presentation type")
         }
+        
+        if _credentialsArray.count > 0 {
+            for vc in _credentialsArray {
+                do {
+                    try vc.sanitize()
+                } catch {
+                    throw DIDError.CheckedError.DIDSyntaxError.MalformedPresentationError("Credential invalid: \(String(describing: vc.id))")
+                }
+                
+                guard _verifiableCredentials[vc.id!] == nil else {
+                    throw DIDError.CheckedError.DIDSyntaxError.MalformedPresentationError("Duplicated credential id: \(String(describing: vc.id))")
+                }
+                
+                _verifiableCredentials[vc.id!] = vc
+            }
+        }
+        
+        guard proof.verificationMethod.did != nil else {
+            throw DIDError.CheckedError.DIDSyntaxError.MalformedPresentationError("Invalid verification method")
+        }
+    }
 
-        guard let _ = doc else {
+    /// Check whether the presentation is genuine or not.
+    /// - Throws: DIDResolveError if error occurs when resolving the DIDs
+    /// - Returns: whether the credential object is genuine
+    public func isGenuine() throws -> Bool {
+        return try isGenuine(nil)
+    }
+    
+    /// Check whether the presentation is genuine or not.
+    /// - Parameter listener: the listener for the verification events and messages
+    /// - Throws: DIDResolveError if error occurs when resolving the DIDs
+    /// - Returns: whether the credential object is genuine
+    public func isGenuine(listener: VerificationEventListener) throws -> Bool {
+        return try isGenuine(listener)
+    }
+    
+    /// Check whether the presentation is genuine or not.
+    func isGenuine(_ listener: VerificationEventListener?) throws -> Bool {
+        let holderDoc = try holder!.resolve()
+
+        guard let _ = holderDoc else {
+            listener?.failed(context: self, args: "VP \(String(describing: id)): can not resolve the holder's document")
+            listener?.failed(context: self, args: "VP \(String(describing: id)): is not genuine")
+            
             return false
         }
         
         // Check the integrity of signer's document.
-        guard doc!.isGenuine else {
+        guard try holderDoc!.isGenuine(listener) else {
+            listener?.failed(context: self, args: "VP \(String(describing: id)): holder's document is not genuine")
+            listener?.failed(context: self, args: "VP \(String(describing: id)): is not genuine")
+            
             return false
         }
         // Unsupported public key type
         guard proof.type == Constants.DEFAULT_PUBLICKEY_TYPE else {
+            listener?.failed(context: self, args: "VP \(String(describing: id)): key type '\(proof.type)' for proof is not supported")
+            listener?.failed(context: self, args: "VP \(String(describing: id)): is not genuine")
+            
             return false
         }
         // Credential should be signed by authenticationKey.
-        guard doc!.containsAuthenticationKey(forId: proof.verificationMethod) else {
+        guard try holderDoc!.containsAuthenticationKey(forId: proof.verificationMethod) else {
+            listener?.failed(context: self, args: "VP \(String(describing: id)): Key '\(proof.verificationMethod)' for proof is not an authencation key of '\(String(describing: proof.verificationMethod.did))'")
+            listener?.failed(context: self, args: "VP \(String(describing: id)): is not genuine")
+            
             return false
         }
 
         // All credentials should be owned by signer
         for credential in _verifiableCredentials.values {
-            guard credential.subject.did == signer else {
+            guard credential.subject!.did == holder else {
+                listener?.failed(context: self, args: "VP \(String(describing: id)): credential '\(String(describing: credential.id))' not owned by the holder '\(String(describing: holder))'")
+                listener?.failed(context: self, args: "VP \(String(describing: id)): is not genuine")
+                
                 return false
             }
-            guard credential.isGenuine else {
+            guard try credential.isGenuine(listener) else {
+                listener?.failed(context: self, args: "VP \(String(describing: id)): credential '\(String(describing: credential.id))' is not genuine")
+                listener?.failed(context: self, args: "VP \(String(describing: id)): is not genuine")
+                
                 return false
             }
         }
@@ -165,54 +274,121 @@ public class VerifiablePresentation: NSObject {
             data.append(d)
         }
 
-        return (try? doc!.verify(proof.verificationMethod, proof.signature, data)) ?? false
+        let result = (try? holderDoc!.verify(proof.verificationMethod, proof.signature, data)) ?? false
+        
+        if (result) {
+            listener?.succeeded(context: self, args: "VP \(String(describing: id)): is genuine")
+        } else {
+            listener?.failed(context: self, args: "VP \(String(describing: id)): proof is invalid, signature mismatch")
+            listener?.failed(context: self, args: "VP \(String(describing: id)): is not genuine")
+        }
+        
+        return result
     }
 
-    /// Presentation is genuine or not.
+    /// Check whether the presentation is genuine or not in asynchronous mode.
     /// - Returns: flase if not genuine, true if genuine.
     public func isGenuineAsync() -> Promise<Bool> {
-        return Promise<Bool> { $0.fulfill(isGenuine) }
+        return Promise<Bool> { $0.fulfill(try isGenuine()) }
     }
 
+    /// Check whether the presentation is genuine or not in asynchronous mode.
+    /// - Parameter listener: the listener for the verification events and messages
+    /// - Returns: flase if not genuine, true if genuine.
+    public func isGenuineAsync(listener: VerificationEventListener) -> Promise<Bool> {
+        return Promise<Bool> { $0.fulfill(try isGenuine(listener)) }
+    }
 
-    /// Presentation is genuine or not.
+    /// Check whether the presentation is genuine or not in asynchronous mode with Object-C
     /// - Returns: flase if not genuine, true if genuine.
     @objc
     public func isGenuineAsyncUsingObjectC() -> AnyPromise {
         return AnyPromise(__resolverBlock: { [self] resolver in
-            resolver(isGenuine)
+            do {
+                resolver(try isGenuine())
+            }
+            catch {
+                resolver(error)
+            }
         })
     }
 
-    /// Presentation is valid or not.
-    @objc
-    public var isValid: Bool {
+    /// Check whether the presentation is genuine or not in asynchronous mode with Object-C
+    /// - Parameter listener: the listener for the verification events and messages
+    /// - Returns: flase if not genuine, true if genuine.
+    @objc (isGenuineWithListenerAsyncUsingObjectC:)
+    public func isGenuineAsyncUsingObjectC(listener: VerificationEventListener) -> AnyPromise {
+        return AnyPromise(__resolverBlock: { [self] resolver in
+            do {
+                resolver(try isGenuine(listener))
+            }
+            catch {
+                resolver(error)
+            }
+        })
+    }
+    
+    /// Check whether the presentation is valid or not.
+    /// - Throws: DIDResolveError if error occurs when resolve the DID
+    /// - Returns: whether the credential object is valid
+    public func isValid() throws -> Bool {
+        return try isValid(nil)
+    }
+    
+    /// Check whether the presentation is valid or not.
+    /// - Parameter listener: the listener for the verification events and messages
+    /// - Throws: DIDResolveError if error occurs when resolve the DID
+    /// - Returns: whether the credential object is valid
+    public func isValid(listener: VerificationEventListener) throws -> Bool {
+        return try isValid(listener)
+    }
+    
+    /// Check whether the presentation is valid or not.
+    func isValid(_ listener: VerificationEventListener?) throws -> Bool {
         let doc: DIDDocument?
         do {
-            doc = try signer.resolve()
+            doc = try holder!.resolve()
         } catch {
             doc = nil
         }
-
+        if doc == nil {
+            listener?.failed(context: self, args: "VP \(String(describing: id)): can not resolve the holder's document")
+            listener?.failed(context: self, args: "VP \(String(describing: id)): is invalid")
+        }
         // Check the validity of signer's document.
-        guard doc!.isValid else {
+        guard try doc!.isValid(listener) else {
+            listener?.failed(context: self, args: "VP \(String(describing: id)): holder's document is invalid")
+            listener?.failed(context: self, args: "VP \(String(describing: id)): is invalid")
+            
             return false
         }
         // Unsupported public key type.
         guard proof.type == Constants.DEFAULT_PUBLICKEY_TYPE else {
+            listener?.failed(context: self, args: "VP \(String(describing: id)): Key type '\(proof.type)' for proof is not supported")
+            listener?.failed(context: self, args: "VP \(String(describing: id)): is invalid")
+            
             return false
         }
         // Credential should be signed by authenticationKey.
-        guard doc!.containsAuthenticationKey(forId: proof.verificationMethod) else {
+        guard try doc!.containsAuthenticationKey(forId: proof.verificationMethod) else {
+            listener?.failed(context: self, args: "VP \(String(describing: id)): Key '\(proof.verificationMethod)' for proof is not an authencation key of '\(String(describing: proof.verificationMethod.did))'")
+            listener?.failed(context: self, args: "VP \(String(describing: id)): is invalid")
+            
             return false
         }
 
         // All credentials should be owned by signer.
         for credential in self._verifiableCredentials.values {
-            guard credential.subject.did == signer else {
+            guard credential.subject!.did == holder else {
+                listener?.failed(context: self, args: "VP \(String(describing: id)): credential '\(String(describing: credential.id))' not owned by the holder '\(String(describing: holder))'")
+                listener?.failed(context: self, args: "VP \(String(describing: id)): is not genuine")
+                
                 return false
             }
-            guard credential.isValid else {
+            guard try credential.isValid(listener) else {
+                listener?.failed(context: self, args: "VP \(String(describing: id)): credential '\(String(describing: credential.id))' is invalid")
+                listener?.failed(context: self, args: "VP \(String(describing: id)): is invalid")
+                
                 return false
             }
         }
@@ -226,25 +402,60 @@ public class VerifiablePresentation: NSObject {
             data.append(d)
         }
 
-        return (try? doc!.verify(proof.verificationMethod, proof.signature, data)) ?? false
+        let result = (try? doc!.verify(proof.verificationMethod, proof.signature, data)) ?? false
+        
+        if (result) {
+            listener?.succeeded(context: self, args: "VP \(String(describing: id)): is valid")
+        } else {
+            listener?.failed(context: self, args: "VP \(String(describing: id)): proof is invalid, signature mismatch")
+            listener?.failed(context: self, args: "VP \(String(describing: id)): is invalid")
+        }
+        
+        return result
     }
 
-    /// Presentation is valid or not.
+    /// Check whether the credential is valid in asynchronous mode.
     /// - Returns: flase if not valid, true if valid.
     public func isValidAsync() -> Promise<Bool> {
-        return Promise<Bool> { $0.fulfill(isValid) }
+        return Promise<Bool> { $0.fulfill(try isValid()) }
     }
 
-    /// Presentation is valid or not.
+    /// Check whether the credential is valid in asynchronous mode.
+    /// - Parameter listener: the listener for the verification events and messages
+    /// - Returns: Returns: flase if not valid, true if valid.
+    public func isValidAsync(listener: VerificationEventListener) -> Promise<Bool> {
+        return Promise<Bool> { $0.fulfill(try isValid(listener)) }
+    }
+    
+    /// Check whether the credential is valid in asynchronous mode with Object-C
     /// - Returns: flase if not valid, true if valid.
     @objc
     public func isValidAsyncUsingObjectC() -> AnyPromise {
         return AnyPromise(__resolverBlock: { [self] resolver in
-            resolver(isValid)
+            do {
+                resolver(try isValid())
+            }
+            catch {
+                resolver(error)
+            }
+        })
+    }
+    
+    /// Check whether the credential is valid in asynchronous mode with Object-C
+    /// - Returns: flase if not valid, true if valid.
+    @objc (isValidWithListenerAsyncUsingObjectC:)
+    public func isValidAsyncUsingObjectC(listener: VerificationEventListener) -> AnyPromise {
+        return AnyPromise(__resolverBlock: { [self] resolver in
+            do {
+                resolver(try isValid(listener))
+            }
+            catch {
+                resolver(error)
+            }
         })
     }
 
-    /// Get presentation proof.
+    /// Get the proof object of this presentation.
     @objc
     public var proof: VerifiablePresentationProof {
         // Guaranteed that this field would not be nil becausesi the object
@@ -252,53 +463,66 @@ public class VerifiablePresentation: NSObject {
         return _proof!
     }
 
-    func getProof() -> VerifiablePresentationProof? {
-        return _proof
-    }
-
     func setProof(_ proof: VerifiablePresentationProof) {
         self._proof = proof
     }
 
     private func parse(_ node: JsonNode) throws {
-        let error = { (des) -> DIDError in
-            return DIDError.malformedPresentation(des)
+
+        let id = node.get(forKey: ID)?.asString()
+        if let _ = id {
+            _id = try DIDURL(id!)
         }
 
         let serializer = JsonSerializer(node)
         var options: JsonSerializer.Options
-
-        options = JsonSerializer.Options()
-                                .withHint("presentation type")
-                                .withError(error)
-        let type = try serializer.getString(Constants.TYPE, options)
-        guard type == Constants.DEFAULT_PRESENTATION_TYPE else {
-            throw DIDError.malformedPresentation("unkown presentation type:\(type)")
+        // _holder
+        let holder = node.get(forKey: HOLDER)?.asString()
+        if holder != nil && holder! != "" {
+            _holder = try DID(holder!)
         }
-        setType(type)
 
+        let types = node.get(forKey: TYPE)?.asArray()
+        if let _ = types {
+            types?.forEach{ v in
+                _types.append(v.asString()!)
+            }
+        }
+        else {
+            options = JsonSerializer.Options()
+            guard let type = try serializer.getString(Constants.TYPE, options) else {
+                throw DIDError.CheckedError.DIDSyntaxError.MalformedPresentationError("Mssing presentation type")
+            }
+            guard type == Constants.DEFAULT_PRESENTATION_TYPE else {
+                throw DIDError.CheckedError.DIDSyntaxError.MalformedPresentationError("unkown presentation type:\(type)")
+            }
+            _types.append(type)
+        }
+        
         options = JsonSerializer.Options()
-                                .withHint("presentation created date")
-                                .withError(error)
-        let createdDate = try serializer.getDate(Constants.CREATED, options)
+        guard let createdDate = try serializer.getDate(Constants.CREATED, options) else {
+            throw DIDError.CheckedError.DIDSyntaxError.MalformedPresentationError("presentation created date")
+        }
         setCreatedDate(createdDate)
 
         let arrayNode = node.get(forKey: Constants.VERIFIABLE_CREDENTIAL)?.asArray()
         guard let _ = arrayNode else {
-            throw DIDError.malformedPresentation("missing credential")
+            throw DIDError.CheckedError.DIDSyntaxError.MalformedPresentationError("missing credential")
         }
 
         for node in arrayNode! {
-            appendCredential(try VerifiableCredential.fromJson(node, nil))
+            _credentialsArray.append(try VerifiableCredential.fromJson(node, nil))
         }
 
         let subNode = node.get(forKey: Constants.PROOF)
         guard let _ = subNode else {
-            throw DIDError.malformedPresentation("missing presentation proof")
+            throw DIDError.CheckedError.DIDSyntaxError.MalformedPresentationError("missing presentation proof")
         }
 
         let proof = try VerifiablePresentationProof.fromJson(subNode!, nil)
         setProof(proof)
+        
+        try sanitize()
     }
 
     /// Get Presentation from json context.
@@ -307,18 +531,15 @@ public class VerifiablePresentation: NSObject {
     /// - Returns: The handle to Presentation
     @objc
     public static func fromJson(_ json: String) throws -> VerifiablePresentation {
-        guard !json.isEmpty else {
-            throw DIDError.illegalArgument()
-        }
-
+        try checkArgument(!json.isEmpty, "Invalid json.")
         let data: [String: Any]?
         do {
             data = try JSONSerialization.jsonObject(with: json.data(using: .utf8)!, options: []) as? [String: Any]
         } catch {
-            throw DIDError.malformedPresentation("parse presentation json error")
+            throw DIDError.CheckedError.DIDSyntaxError.MalformedPresentationError("parse presentation json error")
         }
         guard let _ = data else {
-            throw DIDError.malformedPresentation("parse presentation json error")
+            throw DIDError.CheckedError.DIDSyntaxError.MalformedPresentationError("parse presentation json error")
         }
         let vp = VerifiablePresentation()
         try vp.parse(JsonNode(data!))
@@ -341,10 +562,33 @@ public class VerifiablePresentation: NSObject {
      */
     func toJson(_ generator: JsonGenerator, _ forSign: Bool) {
         generator.writeStartObject()
+        
+        if let _ = id {
+            generator.writeStringField(Constants.ID, id!.toString())
+        }
 
-        generator.writeStringField(Constants.TYPE, self.type)
-        generator.writeStringField(Constants.CREATED, DateHelper.formateDate(self.createdDate))
+        if types.count > 1 {
+            generator.writeFieldName(TYPE)
+            generator.writeStartArray()
+            types.forEach { type in
+                generator.writeString(type)
+            }
+            generator.writeEndArray()
+        }
+        else {
+            if types.count == 1 {
+                generator.writeStringField(Constants.TYPE, types[0])
+            }
+        }
+        
+        // holder
+        if let _ = _holder {
+            generator.writeStringField(HOLDER, holder!.toString())
+        }
 
+        // created
+        generator.writeStringField(Constants.CREATED, DateFormatter.convertToUTCStringFromDate(self.createdDate))
+        
         // verifiable credentials
         generator.writeFieldName(Constants.VERIFIABLE_CREDENTIAL)
         generator.writeStartArray()
@@ -376,40 +620,41 @@ public class VerifiablePresentation: NSObject {
     }
 
     func toJson(_ forSign: Bool) -> Data {
-        return toJson(forSign).data(using: .utf8)!
+        let json: String = toJson(forSign)
+        return json.data(using: .utf8)!
     }
 
     private class func editing(_ did: DID, _ signKey: DIDURL?,
                                _ store: DIDStore) throws -> VerifiablePresentationBuilder {
 
-        let signer: DIDDocument?
+        let holder: DIDDocument?
         let useKey: DIDURL
 
         do {
-            signer = try store.loadDid(did)
-            if signer == nil {
-                throw DIDError.didStoreError("Can not load DID.")
+            holder = try store.loadDid(did)
+            if holder == nil {
+                throw DIDError.CheckedError.DIDStoreError.DIDStorageError("Can not load DID.")
             }
         } catch {
-            throw DIDError.unknownFailure("Can not load DID")
+            throw DIDError.CheckedError.DIDStoreError.DIDStorageError("Can not load DID")
         }
 
         // If no 'signKey' provided, use default public key. Otherwise,
         // need to check whether 'signKey' is authenticationKey or not.
         if signKey == nil {
-            useKey = signer!.defaultPublicKey
+            useKey = holder!.defaultPublicKeyId()!
         } else {
-            guard signer!.containsAuthenticationKey(forId: signKey!) else {
-                throw DIDError.illegalArgument("Not an authentication key.")
+            guard try holder!.containsAuthenticationKey(forId: signKey!) else {
+                throw DIDError.UncheckedError.IllegalArgumentErrors.InvalidKeyError("Not an authentication key.")
             }
             useKey = signKey!
         }
 
-        guard signer!.containsPrivateKey(forId: useKey) else {
-            throw DIDError.unknownFailure(Errors.NO_PRIVATE_KEY_EXIST)
+        guard try holder!.containsPrivateKey(forId: useKey) else {
+            throw DIDError.UncheckedError.IllegalArgumentErrors.InvalidKeyError(Errors.NO_PRIVATE_KEY_EXIST)
         }
 
-        return VerifiablePresentationBuilder(signer!, useKey)
+        return VerifiablePresentationBuilder(holder!, useKey)
     }
 
     /// Get VerifiablePresentation Builder to modify VerifiableCredential.

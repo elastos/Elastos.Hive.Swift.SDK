@@ -22,22 +22,77 @@
 
 import Foundation
 
+/// Presentation Builder object to create presentation.
 @objc(VerifiablePresentationBuilder)
 public class VerifiablePresentationBuilder: NSObject {
-    private let _signer: DIDDocument
+    private let DEFAULT_PRESENTATION_TYPE = "VerifiablePresentation"
+    private let _holder: DIDDocument
     private let _signKey: DIDURL
     private var _realm: String?
     private var _nonce: String?
 
     private var presentation: VerifiablePresentation?
-
-    init(_ signer: DIDDocument, _ signKey: DIDURL) {
-        self._signer = signer
+    
+    /// Create a Builder object with given holder and sign key.
+    /// - Parameters:
+    ///   - holder: the holder's DID document
+    ///   - signKey: the key to sign the presentation
+    init(_ holder: DIDDocument, _ signKey: DIDURL) {
+        self._holder = holder
         self._signKey = signKey
 
-        self.presentation = VerifiablePresentation()
+        self.presentation = VerifiablePresentation(_holder.subject)
     }
+    
+    /// Set the id for the presentation.
+    /// - Parameter id: the presentation id
+    /// - Returns: the Builder instance for method chaining
+    public func withId(_ id: DIDURL) throws -> VerifiablePresentationBuilder {
+        try checkNotSealed()
+        try checkArgument((id.did == nil || id.did == _holder.subject),
+                "Invalid id")
+        presentation?.setId(try DIDURL(_holder.subject, id))
+        
+       return self
+    }
+    
+    /// Set the id for the presentation.
+    /// - Parameter id: the presentation id
+    /// - Returns: the Builder instance for method chaining
+    public func withId(_ id: String) throws -> VerifiablePresentationBuilder {
+        
+        return try withId(DIDURL.valueOf(_holder.subject, id)!)
+    }
+    
+    /// Set credential types.
+    /// - Parameter type: the type strings
+    /// - Returns: the Builder instance for method chaining
+    public func withType(_ type: String) throws -> VerifiablePresentationBuilder {
+        try checkNotSealed()
+        presentation!._types.append(type)
+        
+       return self
+    }
+   
+    /// Set credential types.
+    /// - Parameter type: the type strings
+    /// - Returns: the Builder instance for method chaining
+    public func withTypes(_ types: Array<String>) throws -> VerifiablePresentationBuilder {
 
+        try checkNotSealed()
+        try checkArgument(types.count > 0, "Invalid types")
+        presentation?._types.append(contentsOf: types)
+        return self
+     }
+    
+    /// Set credential types.
+    /// - Parameter type: the type strings
+    /// - Returns: the Builder instance for method chaining
+    public func withTypes(_ types: String...) throws -> VerifiablePresentationBuilder {
+        
+        return try withTypes(types)
+    }
+    
     /// Set verifiable credentials for presentation.
     /// - Parameter credentials: Verifiable credentials
     /// - Throws: if an error occurred, throw error.
@@ -55,74 +110,71 @@ public class VerifiablePresentationBuilder: NSObject {
     @objc
     public func withCredentials(_ credentials: Array<VerifiableCredential>) throws
         -> VerifiablePresentationBuilder {
-
-        guard let _ = presentation else {
-            throw DIDError.invalidState(Errors.PRESENTATION_ALREADY_SEALED)
-        }
-
+        try checkNotSealed()
+        
         for credential in credentials {
             // Presentation should be signed by the subject of Credentials
-            guard credential.subject.did == self._signer.subject else {
-                throw DIDError.illegalArgument(
-                    "Credential \(credential.getId()) not match with requested id")
+            guard credential.subject!.did == self._holder.subject else {
+                throw DIDError.UncheckedError.IllegalArgumentErrors.IllegalUsageError(
+                    "Credential \(String(describing: credential.getId())) not match with requested id")
             }
             guard credential.checkIntegrity() else {
-                throw DIDError.illegalArgument("incomplete credential \(credential.toString())")
+                throw DIDError.UncheckedError.IllegalArgumentErrors.DIDObjectAlreadyExistError("incomplete credential \(credential.toString())")
             }
-
+            presentation!._credentialsArray.append(credential)
             presentation!.appendCredential(credential)
         }
         return self
     }
 
-    /// Set realm for presentation.
-    /// - Parameter realm: Target areas to which the expression applies, such as website domain names, application names, etc.
+    private func checkNotSealed() throws {
+        guard let _ = presentation else {
+            throw DIDError.UncheckedError.IllegalStateError.AlreadySealedError()
+        }
+    }
+    
+    /// Set realm for the new presentation.
+    /// - Parameter realm: the realm string
     /// - Throws: if an error occurred, throw error.
-    /// - Returns: VerifiablePresentationBuilder instance.
+    /// - Returns: the Builder instance for method chaining
     @objc
     public func withRealm(_ realm: String) throws -> VerifiablePresentationBuilder {
-        guard let _ = presentation else {
-            throw DIDError.invalidState(Errors.PRESENTATION_ALREADY_SEALED)
-        }
-        guard !realm.isEmpty else {
-            throw DIDError.illegalArgument()
-        }
+        try checkNotSealed()
+        try checkArgument(!realm.isEmpty, "Invalid realm")
 
         self._realm = realm
         return self
     }
 
-    /// Set nonce for presentation.
-    /// - Parameter nonce: Random value used for signature operation
+    /// Set nonce for the new presentation.
+    /// - Parameter nonce:  the nonce string
     /// - Throws: if an error occurred, throw error.
-    /// - Returns: VerifiablePresentationBuilder instance.
+    /// - Returns: the Builder instance for method chaining
     @objc
     public func withNonce(_ nonce: String) throws -> VerifiablePresentationBuilder {
-        guard let _ = presentation else {
-            throw DIDError.invalidState(Errors.PRESENTATION_ALREADY_SEALED)
-        }
-        guard !nonce.isEmpty else {
-            throw DIDError.illegalArgument()
-        }
+        try checkNotSealed()
+        try checkArgument(!nonce.isEmpty, "Invalid nonce")
 
         self._nonce = nonce
         return self
     }
 
-    /// Finish modiy VerifiablePresentation.
-    /// - Parameter storePassword: Pass word to sign.
+    /// Seal the presentation object, attach the generated proof to the
+    /// presentation.
+    /// - Parameter storePassword: the password for DIDStore
     /// - Throws: if an error occurred, throw error.
-    /// - Returns: A handle to VerifiablePresentation.
+    /// - Returns: the new presentation object
     @objc
     public func sealed(using storePassword: String) throws -> VerifiablePresentation {
-        guard let _ = presentation else {
-            throw DIDError.invalidState(Errors.PRESENTATION_ALREADY_SEALED)
-        }
-        guard !storePassword.isEmpty else {
-            throw DIDError.illegalArgument()
-        }
-        guard _realm != nil && _nonce != nil else {
-            throw DIDError.invalidState("Missing realm and nonce")
+        try checkNotSealed()
+        try checkArgument(!storePassword.isEmpty, "Invalid storePassword")
+        try checkArgument(_realm != nil && _nonce != nil, "Missing realm and nonce")
+
+        if presentation!.types.count == 0 {
+            presentation!._types.append(DEFAULT_PRESENTATION_TYPE)
+        } else {
+            let t = presentation!._types.sorted()
+            presentation!._types = t
         }
 
         var data: [Data] = []
@@ -133,7 +185,7 @@ public class VerifiablePresentationBuilder: NSObject {
         if let nonce = _nonce {
             data.append(nonce.data(using: .utf8)!)
         }
-        let signature = try _signer.sign(_signKey, storePassword, data)
+        let signature = try _holder.sign(_signKey, storePassword, data)
 
         let proof = VerifiablePresentationProof(_signKey, _realm!, _nonce!, signature)
         presentation!.setProof(proof)

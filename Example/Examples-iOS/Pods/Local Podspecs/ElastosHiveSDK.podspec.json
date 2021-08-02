@@ -28,9 +28,12 @@
       "~> 6.9"
     ],
     "ElastosDIDSDK": [
-      "~> 1.5"
+      "~> 2.1.4"
     ],
     "ObjectMapper": [
+
+    ],
+    "AwaitKit": [
 
     ]
   },

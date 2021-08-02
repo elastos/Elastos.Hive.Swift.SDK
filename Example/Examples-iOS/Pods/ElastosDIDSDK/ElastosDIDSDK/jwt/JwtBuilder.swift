@@ -30,9 +30,9 @@ public class JwtBuilder: NSObject {
     var issuer: String
     var jwt: JWT?
     var publicKeyClosure: ((_ id: String?) throws -> Data)?
-    var privateKeyClosure: ((_ id: String?, _ storepass: String) throws -> Data)?
+    var privateKeyClosure: ((_ id: String?, _ storePassword: String) throws -> Data)?
 
-    init(issuer: String, publicKey: @escaping (_ id: String?) throws -> Data, privateKey: @escaping (_ id: String?, _ storepass: String) throws -> Data) {
+    init(issuer: String, publicKey: @escaping (_ id: String?) throws -> Data, privateKey: @escaping (_ id: String?, _ storePassword: String) throws -> Data) {
         self.issuer = issuer
         publicKeyClosure = publicKey
         privateKeyClosure = privateKey
@@ -183,8 +183,8 @@ public class JwtBuilder: NSObject {
     @objc
     public func setClaimsWithJson(value: String) throws -> JwtBuilder {
         let dic = try JSONSerialization.jsonObject(with: value.data(using: .utf8)!, options: []) as? [String : Any]
-        guard dic != nil else {
-            throw DIDError.illegalArgument("TODO")
+        guard let _ = dic else {
+            throw DIDError.UncheckedError.IllegalArgumentErrors.DataParsingError("Invalid json.")
         }
         return setClaims(claim: dic! )
     }

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2020 Elastos Foundation
+* Copyright (c) 2021 Elastos Foundation
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -22,19 +22,13 @@
 
 import Foundation
 
-@objc(DIDHistory)
-public protocol DIDHistory {
-
-    /// Get did.
-    func getDid() -> DID
-
-    /// Get resolve result status.
-    func getsStatus() -> ResolveResultStatus
-
-    /// Get all DIDTransaction.
-    func getAllTransactions() -> [DIDTransaction]
-
-    /// The count of transaction.
-    func getTransactionCount() -> Int
-
+/// A filter for DIDURLs.
+/// Instances of this interface may be passed to the
+/// listCredentials(CredentialFilter) method of the DIDStore class.
+public protocol CredentialFilter {
+    
+    /// Tests whether or not the specified id should be included in a id list.
+    /// - Parameter id: the DIDURL to be tested
+    /// - Return true if and only if DIDURL should be included
+    func accept(_ id: DIDURL) -> Bool
 }

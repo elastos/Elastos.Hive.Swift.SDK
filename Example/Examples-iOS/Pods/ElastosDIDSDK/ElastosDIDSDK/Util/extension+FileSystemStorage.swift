@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2020 Elastos Foundation
+* Copyright (c) 2021 Elastos Foundation
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -19,33 +19,12 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 */
-
 import Foundation
 
-class PathExtracter {
-    private let path: String
-
-    init(_ path: String) {
-        self.path = path
-    }
-
-    /*
-     * example: /foo/bar/example.txt
-     * dirNamePart() -> "/foo/bar/"
-     */
-    func dirname() -> String {
-        let index = path.range(of: "/", options: .backwards)?.lowerBound
-        let str = index.map(path.prefix(upTo:)) ?? ""
-        return "\(str)/"
-    }
-
-    /*
-     * example: /foo/bar/example.txt
-     * baseNamePart() -> "exmaple.txt"
-     */
-    func basename() -> String {
-        let arr = path.components(separatedBy: "/")
-        let str = arr.last ?? ""
-        return String(str)
+extension FileSystemStorage {
+    func checkArgument(_ full: Bool, _ mesg: String) throws {
+        guard full else {
+            throw DIDError.UncheckedError.IllegalArgumentErrors.IllegalArgumentError(mesg)
+        }
     }
 }

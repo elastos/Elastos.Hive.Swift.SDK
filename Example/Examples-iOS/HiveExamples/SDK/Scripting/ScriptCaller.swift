@@ -41,7 +41,7 @@ class ScriptCaller {
     }
     
     public func runScript() -> Promise<JSON> {
-        return self.scriptRunner!.callScript(ScriptConst.SCRIPT_NAME, ["author" : "John", "content" : "message"], self.ownerDid, self.appDid, JSON.self)
+        return self.scriptRunner!.callScript(ScriptConst.SCRIPT_NAME, ["author" : "John", "content" : "message"], self.ownerDid!, self.appDid!, JSON.self)
     }
     
 }
