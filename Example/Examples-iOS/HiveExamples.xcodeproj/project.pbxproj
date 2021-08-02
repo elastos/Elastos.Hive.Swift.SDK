@@ -28,8 +28,6 @@
 		30F890C22642E99100D8D4D2 /* CrossConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F890BC2642E99100D8D4D2 /* CrossConfig.swift */; };
 		30F890C42642E99100D8D4D2 /* ApplicationConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F890BE2642E99100D8D4D2 /* ApplicationConfig.swift */; };
 		30F890D02642EA1200D8D4D2 /* SdkContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F890CF2642EA1200D8D4D2 /* SdkContext.swift */; };
-		30F890D72642EB3B00D8D4D2 /* OwnerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F890D62642EB3B00D8D4D2 /* OwnerViewController.swift */; };
-		30F890DB2642EB4700D8D4D2 /* CallerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F890DA2642EB4700D8D4D2 /* CallerViewController.swift */; };
 		30F890DE2642EBC200D8D4D2 /* ScriptOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F890DD2642EBC200D8D4D2 /* ScriptOwner.swift */; };
 		30F890EF264302DA00D8D4D2 /* test_ios.txt in Resources */ = {isa = PBXBuildFile; fileRef = 30F890EA264302DA00D8D4D2 /* test_ios.txt */; };
 		30F890F0264302DA00D8D4D2 /* Local.conf in Resources */ = {isa = PBXBuildFile; fileRef = 30F890EB264302DA00D8D4D2 /* Local.conf */; };
@@ -62,8 +60,6 @@
 		30F890BC2642E99100D8D4D2 /* CrossConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CrossConfig.swift; path = ../../../../../ElastosHiveSDKTests/Config/CrossConfig.swift; sourceTree = "<group>"; };
 		30F890BE2642E99100D8D4D2 /* ApplicationConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ApplicationConfig.swift; path = ../../../../../ElastosHiveSDKTests/Config/ApplicationConfig.swift; sourceTree = "<group>"; };
 		30F890CF2642EA1200D8D4D2 /* SdkContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SdkContext.swift; sourceTree = "<group>"; };
-		30F890D62642EB3B00D8D4D2 /* OwnerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnerViewController.swift; sourceTree = "<group>"; };
-		30F890DA2642EB4700D8D4D2 /* CallerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallerViewController.swift; sourceTree = "<group>"; };
 		30F890DD2642EBC200D8D4D2 /* ScriptOwner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptOwner.swift; sourceTree = "<group>"; };
 		30F890EA264302DA00D8D4D2 /* test_ios.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = test_ios.txt; path = ../../../../ElastosHiveSDKTests/Resources/test_ios.txt; sourceTree = "<group>"; };
 		30F890EB264302DA00D8D4D2 /* Local.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Local.conf; path = ../../../../ElastosHiveSDKTests/Resources/Local.conf; sourceTree = "<group>"; };
@@ -168,8 +164,6 @@
 		30F890D42642EB2E00D8D4D2 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				30F890D62642EB3B00D8D4D2 /* OwnerViewController.swift */,
-				30F890DA2642EB4700D8D4D2 /* CallerViewController.swift */,
 				30D882A926B7C25500C35703 /* DashboardViewController.swift */,
 				30D882AC26B7C70C00C35703 /* HomeViewController.swift */,
 			);
@@ -349,9 +343,7 @@
 				30D8825A26B78FB700C35703 /* AppDID.swift in Sources */,
 				3077F59B2634F8A900A701ED /* AppDelegate.swift in Sources */,
 				30F890DE2642EBC200D8D4D2 /* ScriptOwner.swift in Sources */,
-				30F890D72642EB3B00D8D4D2 /* OwnerViewController.swift in Sources */,
 				30158CBA26AFE81D00CF4D09 /* Config.swift in Sources */,
-				30F890DB2642EB4700D8D4D2 /* CallerViewController.swift in Sources */,
 				30F890BF2642E99100D8D4D2 /* NodeConfig.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

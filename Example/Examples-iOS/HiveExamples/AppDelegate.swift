@@ -45,8 +45,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func viewControllers() -> [UINavigationController]{
         let home = UINavigationController(rootViewController: HomeViewController())
-//        ownerViewController.tabBarItem.image = UIImage(systemName: "search")
-        let callerViewController = UINavigationController(rootViewController: CallerViewController())
         let dashboard = UINavigationController(rootViewController: DashboardViewController())
 
         
