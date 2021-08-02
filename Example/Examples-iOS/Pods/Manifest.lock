@@ -21,6 +21,7 @@ PODS:
     - ElastosDIDSDK (~> 2.1.4)
     - ObjectMapper
     - PromiseKit (~> 6.9)
+    - SwiftyJSON
   - KituraContracts (1.2.1):
     - LoggerAPI (~> 1.7)
   - LoggerAPI (1.9.200):
@@ -55,7 +56,6 @@ DEPENDENCIES:
   - RxSwift
   - SnapKit
   - SVProgressHUD
-  - SwiftyJSON
 
 SPEC REPOS:
   trunk:
@@ -90,7 +90,7 @@ SPEC CHECKSUMS:
   BlueRSA: 6f9776d62d9773502415a7db3bcbb2bbb3f71fc3
   CYLTabBarController: f5460b8446f82d016945d4d53895a1ef185b79e3
   ElastosDIDSDK: 67367706c2f8012a0d5684741d241d3c2e89ffb7
-  ElastosHiveSDK: da34b1daa35de75bfa505b7366ba9614fa3f24da
+  ElastosHiveSDK: ff8baa630facb4d04ea1cdd9d9226029d555b1e1
   KituraContracts: e845e60dc8627ad0a76fa55ef20a45451d8f830b
   LoggerAPI: ad9c4a6f1e32f518fdb43a1347ac14d765ab5e3d
   Logging: beeb016c9c80cf77042d62e83495816847ef108b
@@ -105,6 +105,6 @@ SPEC CHECKSUMS:
   Swifter: e71dd674404923d7f03ebb03f3f222d1c570bc8e
   SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
 
-PODFILE CHECKSUM: d250329b31c6ffb448ba73d73599010f712cb793
+PODFILE CHECKSUM: 99d2274ae9bc8e243c4fcf730acbfd272f87f3a2
 
 COCOAPODS: 1.10.1

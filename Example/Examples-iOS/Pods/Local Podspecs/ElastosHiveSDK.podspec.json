@@ -35,6 +35,9 @@
     ],
     "AwaitKit": [
 
+    ],
+    "SwiftyJSON": [
+
     ]
   },
   "pod_target_xcconfig": {

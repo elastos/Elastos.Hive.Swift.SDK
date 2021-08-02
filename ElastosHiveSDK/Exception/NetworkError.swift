@@ -21,6 +21,7 @@
  */
 
 import Foundation
+import SwiftyJSON
 
 public enum NetworkError: Error {
     case NetworkException(message: String?)

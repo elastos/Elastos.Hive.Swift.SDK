@@ -34,8 +34,6 @@
 		1129C19424052CC500CD77F2 /* Alamofire+Synchronous.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1129C19324052CC500CD77F2 /* Alamofire+Synchronous.swift */; };
 		1129C19524052CC500CD77F2 /* Alamofire+Synchronous.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1129C19324052CC500CD77F2 /* Alamofire+Synchronous.swift */; };
 		1137942E227ED9AD004A1F65 /* ElastosHiveSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A39C496F225399860027BDF9 /* ElastosHiveSDK.framework */; };
-		1147720923F678BD00C7C36F /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1147720823F678BD00C7C36F /* SwiftyJSON.swift */; };
-		1147720A23F678BD00C7C36F /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1147720823F678BD00C7C36F /* SwiftyJSON.swift */; };
 		116B2F3025B6C0F200635D97 /* Backup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116B2F2F25B6C0F200635D97 /* Backup.swift */; };
 		1170FB142502019C0049E81D /* Vault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FB132502019C0049E81D /* Vault.swift */; };
 		11D26F4022CA3B3300E4099A /* ElastosHiveSDK_macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 11D26F3E22CA3B3300E4099A /* ElastosHiveSDK_macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -253,7 +251,6 @@
 		1129C19324052CC500CD77F2 /* Alamofire+Synchronous.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Alamofire+Synchronous.swift"; sourceTree = "<group>"; };
 		11379429227ED9AD004A1F65 /* ElastosHiveSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ElastosHiveSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1137942D227ED9AD004A1F65 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1147720823F678BD00C7C36F /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		116B2F2F25B6C0F200635D97 /* Backup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backup.swift; sourceTree = "<group>"; };
 		1170FB132502019C0049E81D /* Vault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vault.swift; sourceTree = "<group>"; };
 		11D26F3C22CA3B3300E4099A /* ElastosHiveSDK_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ElastosHiveSDK_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -482,14 +479,6 @@
 				1137942D227ED9AD004A1F65 /* Info.plist */,
 			);
 			path = ElastosHiveSDKTests;
-			sourceTree = "<group>";
-		};
-		1147720723F678BD00C7C36F /* SwiftyJSON */ = {
-			isa = PBXGroup;
-			children = (
-				1147720823F678BD00C7C36F /* SwiftyJSON.swift */,
-			);
-			path = SwiftyJSON;
 			sourceTree = "<group>";
 		};
 		1151E9A0256CCC6000024303 /* Log */ = {
@@ -863,7 +852,6 @@
 				3053BE562684CA38005828B0 /* Service */,
 				3053BF032684CA96005828B0 /* Subscription */,
 				3053BE702684CA5F005828B0 /* Vault */,
-				1147720723F678BD00C7C36F /* SwiftyJSON */,
 			);
 			path = ElastosHiveSDK;
 			sourceTree = "<group>";
@@ -1139,7 +1127,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1147720A23F678BD00C7C36F /* SwiftyJSON.swift in Sources */,
 				11D26F4522CA3B4B00E4099A /* String.swift in Sources */,
 				1129C19524052CC500CD77F2 /* Alamofire+Synchronous.swift in Sources */,
 				1103757A23FF96BF004216D0 /* Log.swift in Sources */,
@@ -1167,7 +1154,6 @@
 				3053BEDE2684CA5F005828B0 /* RunScriptParams.swift in Sources */,
 				3053BEBC2684CA5F005828B0 /* CountResult.swift in Sources */,
 				308E089D2688D7320089F479 /* AuthApi.swift in Sources */,
-				1147720923F678BD00C7C36F /* SwiftyJSON.swift in Sources */,
 				3053BED42684CA5F005828B0 /* FindResult.swift in Sources */,
 				3053BE6E2684CA38005828B0 /* PubSubService.swift in Sources */,
 				3053BEC92684CA5F005828B0 /* QueryParams.swift in Sources */,
