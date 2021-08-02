@@ -24,6 +24,7 @@ import Foundation
 import ElastosHiveSDK
 import SwiftyJSON
 import AwaitKit
+import PromiseKit
 
 class ScriptOwner {
     private var sdkContext: SdkContext?
@@ -35,63 +36,48 @@ class ScriptOwner {
     public init(_ sdkContext: SdkContext) throws {
         self.sdkContext = sdkContext
         self.scriptingService = sdkContext.newVault().scriptingService
-        self.databaseService = try sdkContext.newVault().databaseService
+        self.databaseService = sdkContext.newVault().databaseService
         self.callDid = self.sdkContext?.callerDid
     }
     
     public func cleanTwoCollections() -> Promise<Void> {
-        let promiseA = self.databaseService!.deleteCollection(ScriptConst.COLLECTION_GROUP)
-        let promiseB = self.databaseService!.deleteCollection(ScriptConst.COLLECTION_GROUP_MESSAGE)
-        return Promise.
-
-}
-
-
-    private CompletableFuture<Void> cleanTwoCollections() {
-        return databaseService.deleteCollection(ScriptConst.COLLECTION_GROUP)
-                .thenCompose(s -> databaseService.deleteCollection(ScriptConst.COLLECTION_GROUP_MESSAGE));
+        return self.databaseService!.deleteCollection(ScriptConst.COLLECTION_GROUP).then { () -> Promise<Void> in
+            return self.databaseService!.deleteCollection(ScriptConst.COLLECTION_GROUP_MESSAGE)
+        }
     }
-
-    private CompletableFuture<Void> createTwoCollections() {
-        return databaseService.createCollection(ScriptConst.COLLECTION_GROUP)
-                .thenCompose(s->databaseService.createCollection(ScriptConst.COLLECTION_GROUP_MESSAGE));
+    
+    public func createTwoCollections() -> Promise<Void> {
+        return self.databaseService!.createCollection(ScriptConst.COLLECTION_GROUP).then { () -> Promise<Void> in
+            return self.databaseService!.createCollection(ScriptConst.COLLECTION_GROUP_MESSAGE)
+        }
     }
-
-    private CompletableFuture<InsertResult> addPermission2Caller() {
-        // The document to save the permission of the user DID.
-        ObjectNode conditionDoc = JsonNodeFactory.instance.objectNode();
-        conditionDoc.put("collection", ScriptConst.COLLECTION_GROUP_MESSAGE);
-        conditionDoc.put("did", callDid);
-        // Insert persmission to COLLECTION_GROUP
-        return databaseService.insertOne(
-                ScriptConst.COLLECTION_GROUP,
-                conditionDoc,
-                new InsertOptions().bypassDocumentValidation(false));
+    
+    private func addPermission2Caller() -> Promise<InsertResult> {
+        let conditionDoc: [String : Any] = ["collection" : ScriptConst.COLLECTION_GROUP_MESSAGE, "did" : self.callDid!]
+        return self.databaseService!.insertOne(ScriptConst.COLLECTION_GROUP, conditionDoc , InsertOptions().bypassDocumentValidation(false))
     }
-
-    private CompletableFuture<Void> doSetScript() {
+    
+    private func doSetScript() -> Promise<Void> {
         // The condition to restrict the user DID.
-        ObjectNode filter = JsonNodeFactory.instance.objectNode();
-        filter.put("collection",ScriptConst.COLLECTION_GROUP_MESSAGE);
-        filter.put("did","$caller_did");
+        let filter = ["collection" : ScriptConst.COLLECTION_GROUP_MESSAGE, "did" : "$caller_did"]
         // The message is for inserting to the COLLECTION_GROUP_MESSAGE.
-        ObjectNode msgDoc = JsonNodeFactory.instance.objectNode();
-        msgDoc.put("author", "$params.author");
-        msgDoc.put("content", "$params.content");
-        ObjectNode options = JsonNodeFactory.instance.objectNode();
-        options.put("bypass_document_validation", false);
-        options.put("ordered", true);
+        let msgDoc = ["author" : "$params.author", "content" : "$params.content"]
+        let options = ["bypass_document_validation" : false, "ordered" : true]
         // register the script for caller to insert message to COLLECTION_GROUP_MESSAGE
-        return scriptingService.registerScript(ScriptConst.SCRIPT_NAME,
-                new QueryHasResultCondition("verify_user_permission", ScriptConst.COLLECTION_GROUP, filter),
-                new InsertExecutable(ScriptConst.SCRIPT_NAME, ScriptConst.COLLECTION_GROUP_MESSAGE, msgDoc, options),
-                false, false);
+        return self.scriptingService!.registerScript(ScriptConst.SCRIPT_NAME,
+                                                 QueryHasResultCondition("verify_user_permission", ScriptConst.COLLECTION_GROUP, filter),
+                                                 InsertExecutable(ScriptConst.SCRIPT_NAME, ScriptConst.COLLECTION_GROUP_MESSAGE, msgDoc, options))
+        
+    }
+    
+    public func setScript() -> Promise<Void> {
+        cleanTwoCollections().then { _ -> Promise<Void> in
+            return self.createTwoCollections()
+        }.then { _ -> Promise<InsertResult> in
+            return self.addPermission2Caller()
+        }.then { _ -> Promise<Void> in
+            return self.doSetScript()
+        }
     }
 
-    public CompletableFuture<Void> setScript() {
-        return cleanTwoCollections()
-                .thenCompose(s->createTwoCollections())
-                .thenCompose(s->addPermission2Caller())
-                .thenCompose(s->doSetScript());
-    }
 }

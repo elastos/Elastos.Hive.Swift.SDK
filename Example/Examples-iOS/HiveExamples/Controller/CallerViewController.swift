@@ -65,7 +65,7 @@ class CallerViewController: UIViewController {
         }
         
         do {
-            self.sdkContext = SdkContext.instance
+            self.sdkContext = try SdkContext()
             self.scriptCaller = try ScriptCaller(self.sdkContext!)
         } catch {
             print("\(error)")
