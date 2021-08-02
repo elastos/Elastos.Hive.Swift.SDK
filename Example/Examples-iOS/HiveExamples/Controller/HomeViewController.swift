@@ -8,6 +8,7 @@
 import UIKit
 import RxSwift
 import SnapKit
+import RxCocoa
 
 class HomeViewController: UIViewController {
     private var scriptOwner: ScriptOwner?
@@ -18,7 +19,7 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.scriptOwner = try! ScriptOwner(try! SdkContext())
+        self.scriptOwner = try! ScriptOwner(SdkContext.instance)
         
         self.view.backgroundColor = UIColor.white
         self.navigationController?.navigationBar.isTranslucent = false

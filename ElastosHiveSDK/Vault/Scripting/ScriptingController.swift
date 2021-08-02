@@ -68,10 +68,6 @@ public class ScriptingController {
         // The String type
         if resultType.self == String.self {
             let dic = json.dictionaryObject as Any
-            let checker = JSONSerialization.isValidJSONObject(dic)
-//            guard checker else {
-//                throw HiveError.jsonSerializationInvalidType(des: "HiveSDK serializate: JSONSerialization Invalid type in JSON.")
-//            }
             let data = try JSONSerialization.data(withJSONObject: dic, options: [])
             let str = String(data: data, encoding: String.Encoding.utf8)
             return str as! T
@@ -82,10 +78,6 @@ public class ScriptingController {
             return JSON(json) as! T
         } else { // the Data type
             let result = json.dictionaryObject as Any
-            let checker = JSONSerialization.isValidJSONObject(result)
-//            guard checker else {
-//                throw HiveError.jsonSerializationInvalidType(des: "HiveSDK serializate: JSONSerialization Invalid type in JSON.")
-//            }
             let data = try JSONSerialization.data(withJSONObject: result, options: [])
             return data as! T
         }

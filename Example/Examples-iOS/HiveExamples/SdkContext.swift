@@ -31,9 +31,9 @@ public enum EnvironmentType: Int {
 }
 
 public final class SdkContext {
-//    static let instance = {
-//        try! SdkContext()
-//    }()
+    static let instance = {
+        try! SdkContext()
+    }()
     
     private var _userDid: UserDID
     private var _callerDid: UserDID
