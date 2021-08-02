@@ -39,7 +39,7 @@ class OwnerViewController: UIViewController {
         self.tabBarController?.tabBar.isTranslucent = false
         
         do {
-            self.sdkContext = SdkContext.instance
+            self.sdkContext = try SdkContext()
             self.scriptOwner = try ScriptOwner(self.sdkContext!)
         } catch  {
             print(error)
@@ -72,18 +72,18 @@ class OwnerViewController: UIViewController {
             make.right.bottom.equalTo(self.view).offset(-20)
         }
         
-        self.registerScriptButton.rx.tap.subscribe { event in
-                self.scriptOwner?.setScript().done({ result in
-                DispatchQueue.main.async {
-                    self.textView.text = "success"
-                }
-            }).catch({ error in
-                DispatchQueue.main.async {
-                    self.textView.text = "\(error)"
-                }
-            })
-           
-        }.disposed(by: self.disposeBag)
+//        self.registerScriptButton.rx.tap.subscribe { event in
+//                self.scriptOwner?.setScript().done({ result in
+//                DispatchQueue.main.async {
+//                    self.textView.text = "success"
+//                }
+//            }).catch({ error in
+//                DispatchQueue.main.async {
+//                    self.textView.text = "\(error)"
+//                }
+//            })
+//           
+//        }.disposed(by: self.disposeBag)
     }
     
 }

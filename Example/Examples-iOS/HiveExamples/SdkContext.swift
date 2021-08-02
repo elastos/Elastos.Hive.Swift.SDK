@@ -30,10 +30,10 @@ public enum EnvironmentType: Int {
     case LOCAL
 }
 
-final class SdkContext {
-    static let instance = {
-        try! SdkContext()
-    }()
+public final class SdkContext {
+//    static let instance = {
+//        try! SdkContext()
+//    }()
     
     private var _userDid: UserDID
     private var _callerDid: UserDID

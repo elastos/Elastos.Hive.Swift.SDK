@@ -24,24 +24,20 @@ import Foundation
 import ElastosHiveSDK
 import SwiftyJSON
 
-class ScriptCaller {
-    private var sdkContext: SdkContext?
+public class ScriptCaller {
     private var scriptRunner: ScriptRunner?
     
-    private var ownerDid: String?
-    private var callDid: String?
+    private var userDid: String?
     private var appDid: String?
-    
-    public init(_ sdkContext: SdkContext) throws {
-        self.sdkContext = sdkContext
-        self.scriptRunner = try self.sdkContext?.newCallerScriptRunner()
-        self.ownerDid = self.sdkContext?.ownerDid
-        self.callDid = self.sdkContext?.callerDid
-        self.appDid = self.sdkContext?.appId
+
+    init(_ sdkContext: SdkContext) {
+        self.scriptRunner = sdkContext.newCallerScriptRunner()
+        self.userDid = sdkContext.userDid
+        self.appDid = sdkContext.appId
     }
-    
+
     public func runScript() -> Promise<JSON> {
-        return self.scriptRunner!.callScript(ScriptConst.SCRIPT_NAME, ["author" : "John", "content" : "message"], self.ownerDid!, self.appDid!, JSON.self)
+        let params = ["author" : "John", "content" : "message"]
+        return self.scriptRunner!.callScript(ScriptConst.SCRIPT_NAME, params, self.userDid!, self.appDid!, JSON.self)
     }
-    
 }
