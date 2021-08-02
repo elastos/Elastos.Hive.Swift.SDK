@@ -44,19 +44,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func viewControllers() -> [UINavigationController]{
-        let ownerViewController = UINavigationController(rootViewController: OwnerViewController())
-        ownerViewController.tabBarItem.image = UIImage(systemName: "search")
+        let home = UINavigationController(rootViewController: HomeViewController())
+//        ownerViewController.tabBarItem.image = UIImage(systemName: "search")
         let callerViewController = UINavigationController(rootViewController: CallerViewController())
-        return [ownerViewController, callerViewController]
+        let dashboard = UINavigationController(rootViewController: DashboardViewController())
+
+        
+        return [home, dashboard]
     }
     
     func tabBarItemsAttributesForController() ->  [[String : String]] {
         
-        let tabBarItemA = [CYLTabBarItemTitle:"Owner",
+        let tabBarItemA = [CYLTabBarItemTitle:"home",
                            CYLTabBarItemImage:"icon1",
                            CYLTabBarItemSelectedImage:"icon1"]
         
-        let tabBarItemB = [CYLTabBarItemTitle:"Caller",
+        let tabBarItemB = [CYLTabBarItemTitle:"dashboard",
                            CYLTabBarItemImage:"icon2",
                            CYLTabBarItemSelectedImage:"icon2"]
         

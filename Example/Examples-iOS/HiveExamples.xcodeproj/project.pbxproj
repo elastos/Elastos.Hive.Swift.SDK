@@ -19,6 +19,8 @@
 		30D8825B26B78FB700C35703 /* DIDEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D8825726B78FB700C35703 /* DIDEntity.swift */; };
 		30D8825C26B78FB700C35703 /* TestAppContextProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D8825826B78FB700C35703 /* TestAppContextProvider.swift */; };
 		30D8825D26B78FB700C35703 /* UserDID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D8825926B78FB700C35703 /* UserDID.swift */; };
+		30D882AA26B7C25500C35703 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D882A926B7C25500C35703 /* DashboardViewController.swift */; };
+		30D882AD26B7C70C00C35703 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D882AC26B7C70C00C35703 /* HomeViewController.swift */; };
 		30E9A33526452CAC00E430E4 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E9A33426452CAC00E430E4 /* UIColor+Extension.swift */; };
 		30F890BF2642E99100D8D4D2 /* NodeConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F890B92642E99100D8D4D2 /* NodeConfig.swift */; };
 		30F890C02642E99100D8D4D2 /* UserConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F890BA2642E99100D8D4D2 /* UserConfig.swift */; };
@@ -51,6 +53,8 @@
 		30D8825726B78FB700C35703 /* DIDEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DIDEntity.swift; sourceTree = "<group>"; };
 		30D8825826B78FB700C35703 /* TestAppContextProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestAppContextProvider.swift; sourceTree = "<group>"; };
 		30D8825926B78FB700C35703 /* UserDID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDID.swift; sourceTree = "<group>"; };
+		30D882A926B7C25500C35703 /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
+		30D882AC26B7C70C00C35703 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		30E9A33426452CAC00E430E4 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		30F890B92642E99100D8D4D2 /* NodeConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NodeConfig.swift; path = ../../../../../ElastosHiveSDKTests/Config/NodeConfig.swift; sourceTree = "<group>"; };
 		30F890BA2642E99100D8D4D2 /* UserConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserConfig.swift; path = ../../../../../ElastosHiveSDKTests/Config/UserConfig.swift; sourceTree = "<group>"; };
@@ -166,6 +170,8 @@
 			children = (
 				30F890D62642EB3B00D8D4D2 /* OwnerViewController.swift */,
 				30F890DA2642EB4700D8D4D2 /* CallerViewController.swift */,
+				30D882A926B7C25500C35703 /* DashboardViewController.swift */,
+				30D882AC26B7C70C00C35703 /* HomeViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -331,8 +337,10 @@
 				30D8825D26B78FB700C35703 /* UserDID.swift in Sources */,
 				30F890C02642E99100D8D4D2 /* UserConfig.swift in Sources */,
 				30F890C12642E99100D8D4D2 /* ClientConfig.swift in Sources */,
+				30D882AD26B7C70C00C35703 /* HomeViewController.swift in Sources */,
 				30F890C22642E99100D8D4D2 /* CrossConfig.swift in Sources */,
 				303C53D226369BD400224B30 /* MainTabBarController.swift in Sources */,
+				30D882AA26B7C25500C35703 /* DashboardViewController.swift in Sources */,
 				30D8825B26B78FB700C35703 /* DIDEntity.swift in Sources */,
 				30F890C42642E99100D8D4D2 /* ApplicationConfig.swift in Sources */,
 				3048ACBC2643C02D00B417B6 /* ScriptConst.swift in Sources */,
