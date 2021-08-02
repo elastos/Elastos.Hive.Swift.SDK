@@ -22,26 +22,135 @@
 
 import Foundation
 import ElastosHiveSDK
+import ElastosDIDSDK
 
-public class HiveExampleBackupContext {
-    public var nodeConfig: NodeConfig
-    public var userDid: DIDApp?
-    public var _type: String?
-    public var type: String {
-        get {
-            return _type!
+public enum EnvironmentType: Int {
+    case DEVELOPING
+    case PRODUCTION
+    case LOCAL
+}
+
+final class SdkContext {
+    static let instance = {
+        try! SdkContext()
+    }()
+    
+    private var _userDid: UserDID
+    private var _callerDid: UserDID
+    private var _appInstanceDid: AppDID
+    private var _nodeConfig: NodeConfig
+    private var _context: AppContext
+    private var _contextCaller: AppContext
+    private var _storePath: String
+
+    public init() throws {
+        var file: String? = nil
+        let bundle = Bundle(for: type(of: self))
+        switch EnvironmentType.DEVELOPING {
+        case .DEVELOPING:
+            file = bundle.path(forResource: "Developing", ofType: "conf")
+        case .PRODUCTION:
+            file = bundle.path(forResource: "Production", ofType: "conf")
+        case .LOCAL:
+            file = bundle.path(forResource: "Local", ofType: "conf")
         }
+        
+        let jsonData = try Data(contentsOf: URL(fileURLWithPath: file!))
+        let json = try JSONSerialization.jsonObject(with: jsonData)
+        
+        let clientConfig = ClientConfig(JSON: json as! [String : Any])
+        
+        try AppContext.setupResover(clientConfig!.resolverUrl, "data/didCache")
+        let applicationConfig = clientConfig!.applicationConfig
+        _appInstanceDid = try AppDID(applicationConfig.name, applicationConfig.mnemonic, applicationConfig.passPhrase, applicationConfig.storepass)
+        let userConfig = clientConfig!.userConfig
+        _userDid = try UserDID(userConfig.name, userConfig.mnemonic, userConfig.passPhrase, userConfig.storepass)
+        _nodeConfig = clientConfig!.nodeConfig
+        
+        let userConfigCaller: UserConfig = clientConfig!.crossConfig.userConfig
+        _callerDid = try UserDID(userConfigCaller.name, userConfigCaller.mnemonic, userConfigCaller.passPhrase, userConfigCaller.storepass)
+        
+        
+        _storePath = "\(NSHomeDirectory())/Library/Caches/data/store" + "/" + _nodeConfig.storePath
+        _context = try AppContext.build(TestAppContextProvider(_storePath, _userDid, _appInstanceDid), _userDid.description)
+        _contextCaller = try AppContext.build(TestAppContextProvider(_storePath, _callerDid, _appInstanceDid), _callerDid.description)
+    }
+    
+    public var storePath: String {
+        return _storePath
+    }
+    
+    public var appContext: AppContext {
+        return _context
+    }
+    
+    public var providerAddress: String {
         set {
-            _type = newValue
+            _nodeConfig.provider = newValue
+        }
+        get {
+            return _nodeConfig.provider
+        }
+    }
+ 
+    public func newVault() -> Vault {
+        return Vault(_context, providerAddress)
+    }
+    
+    public func newScriptRunner() -> ScriptRunner {
+        return ScriptRunner(_context, providerAddress)
+    }
+    
+    public func newCallerScriptRunner() -> ScriptRunner {
+        return ScriptRunner(_contextCaller, providerAddress)
+    }
+    
+    public func newBackup() -> Backup {
+        return Backup(_context, _nodeConfig.targetHost)
+    }
+    
+    public func backupService() throws -> BackupServiceRender {
+        let backService = newVault().backupService
+        _ = try backService.setupContext(TestBackupRender(_userDid, newVault(), _nodeConfig))
+        return backService as! BackupServiceRender
+    }
+    
+    public var appId: String {
+        return _appInstanceDid.appId
+    }
+    
+    public var userDid: String {
+        return _userDid.description
+    }
+       
+    public var callerDid: String {
+        return _callerDid.description
+    }
+
+}
+
+public class TestBackupRender: BackupContext {
+    public var nodeConfig: NodeConfig
+    public var userDid: UserDID
+    public var _type: String?
+    
+    public func getType() -> String? {
+        return _type
+    }
+    
+    public func getAuthorization(_ srcDid: String?, _ targetDid: String?, _ targetHost: String?) -> Promise<String>? {
+        return Promise<String> { resolver in
+            let auth = try userDid.issueBackupDiplomaFor(srcDid!, targetHost!, targetDid!)
+            resolver.fulfill(auth.toString(true))
         }
     }
 
-    public init(_ userDid: DIDApp, _ vault: Vault, _ nodeConfig: NodeConfig) {
+    public init(_ userDid: UserDID, _ vault: Vault, _ nodeConfig: NodeConfig) {
         self.userDid = userDid
         self.nodeConfig = nodeConfig
     }
     
-    public func getParameter(_ key: String) -> String {
+    public func getParameter(_ key: String) -> String? {
         if key == "targetDid" {
             return self.nodeConfig.targetDid
         } else if key == "targetHost" {
@@ -49,144 +158,4 @@ public class HiveExampleBackupContext {
         }
         return ""
     }
-    
-    public func getAuthorization(_ srcDid: String, _ targetDid: String, _ targetHost: String) -> Promise<String> {
-        return Promise<String> { resolver in
-            do {
-                let auth = try userDid!.issueBackupDiplomaFor(srcDid, targetHost, targetDid)
-                resolver.fulfill(auth.description)
-            } catch {
-                resolver.reject(error)
-            }
-        }
-    }
-    
-}
-
-final class SdkContext {
-    
-    static let instance = {
-        try! SdkContext()
-    }()
-    
-    private var _userDid: DIDApp?
-    private var _userDidCaller: DIDApp?
-    private var _callerDid: String?
-    private var _appInstanceDid: DApp?
-    private var _nodeConfig: NodeConfig?
-    private var _context: AppContext?
-    private var _contextCaller: AppContext?
-    
-    private init() throws {
-        
-        //TODO set environment config
-        var fileName: String? = nil
-        let bundle = Bundle.main
-        switch EnvironmentType.DEVELOPING {
-        case .DEVELOPING:
-            fileName = bundle.path(forResource: "Developing", ofType: "conf")
-        case .PRODUCTION:
-            fileName = bundle.path(forResource: "Production", ofType: "conf")
-        case .LOCAL:
-            fileName = bundle.path(forResource: "Local", ofType: "conf")
-        }
-                
-        let jsonData = try Data(contentsOf: URL(fileURLWithPath: fileName!))
-        let json = try JSONSerialization.jsonObject(with: jsonData)
-
-        let clientConfig = ClientConfig(JSON: json as! [String : Any])
-        self._nodeConfig = clientConfig?.nodeConfig
-        
-        let paths = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.allDomainsMask, true)
-        let path = paths.first! + "data/didCache"
-        
-        try AppContext.setupResover(clientConfig!.resolverUrl, path)
-        
-        let adapter = DummyAdapter()
-        let applicationConfig = clientConfig!.applicationConfig
-
-        self._appInstanceDid = try DApp(applicationConfig.name,
-                                        applicationConfig.mnemonic,
-                                        adapter,applicationConfig.passPhrase,
-                                        applicationConfig.storepass)
-
-        let userConfig: UserConfig = clientConfig!.userConfig
-        self._userDid = DIDApp(userConfig.name,
-                               userConfig.mnemonic,
-                               adapter,
-                               userConfig.passPhrase,
-                               userConfig.storepass)
-
-        
-        let userConfigCaller: UserConfig = clientConfig!.crossConfig.userConfig
-        self._userDidCaller = DIDApp(userConfigCaller.name,
-                                     userConfigCaller.mnemonic,
-                                     adapter,
-                                     userConfigCaller.passPhrase,
-                                     userConfigCaller.storepass)
-        //初始化Application Context
-        let storePath = "\(NSHomeDirectory())/Library/Caches/data/store" + "/" + self._nodeConfig!.storePath
-        self._context = try AppContext.build(TestAppContextProvider(storePath,
-                                                                    self._userDid!,
-                                                                    self._appInstanceDid!),
-                                             self._nodeConfig!.ownerDid)
-        self._contextCaller = try AppContext.build(TestAppContextProvider(storePath,
-                                                                          self._userDid!,
-                                                                          self._appInstanceDid!),
-                                                   self._nodeConfig!.ownerDid)
-        
-        self._callerDid = userConfigCaller.did;
-
-    }
-    
-    
-    private func getLocalRootDir() -> String {
-        return ""
-    }
-    
-    private func getLocalDidCacheDir(_ envName: String) -> String {
-        return ""
-    }
-    
-    private func getLocalDidStoreRootDir(_ envName: String) -> String {
-        return ""
-    }
-    
-    public var appContext: AppContext {
-        return self._context!
-    }
-    
-    public var ownerDid: String {
-        return self._nodeConfig!.ownerDid
-    }
-    
-    public var providerAddress: String {
-        return self._nodeConfig!.provider
-    }
-    
-    public func newVault() throws -> Vault {
-        return try Vault(self._context!, _nodeConfig!.provider)
-    }
-    
-    public func newScriptRunner() throws -> ScriptRunner {
-        return try ScriptRunner(self._context!, _nodeConfig!.provider)
-    }
-    
-    public func newCallerScriptRunner() throws -> ScriptRunner {
-        return try ScriptRunner(self._contextCaller!, _nodeConfig!.provider)
-    }
-
-    public func newBackup() throws -> Backup {
-        return try Backup(self._context!, _nodeConfig!.targetHost)
-    }
-    
-    public var appId: String {
-        return self._appInstanceDid!.appId
-    }
-    
-    public var callerDid: String {
-
-        return self._callerDid!
-    }
-
 }

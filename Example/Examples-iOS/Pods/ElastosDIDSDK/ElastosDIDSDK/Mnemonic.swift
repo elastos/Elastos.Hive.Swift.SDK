@@ -22,17 +22,24 @@
 
 import Foundation
 
+///  Mnemonic object compliant with
+/// <a href="https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki">the BIP 39
+/// specification</a>. Support all languages that listed in bip-0039.
+///
+/// <p>
+/// Mnemonic object can generate a random mnemonic words list, or convert the
+/// works list to seed that use to generate the root extended private key.
 @objc(Mnemonic)
 public class Mnemonic: NSObject {
     @objc public static let DID_CHINESE_SIMPLIFIED = "chinese_simplified"
     @objc public static let DID_CHINESE_TRADITIONAL = "chinese_traditional"
-    @objc public static let DID_CZECH = "Czech"
+    @objc public static let DID_CZECH = "czech"
     @objc public static let DID_ENGLISH = "english"
-    @objc public static let DID_FRENCH = "French"
-    @objc public static let DID_ITALIAN = "Italian"
+    @objc public static let DID_FRENCH = "french"
+    @objc public static let DID_ITALIAN = "italian"
     @objc public static let DID_JAPANESE = "japanese"
-    @objc public static let DID_KOREAN = "Korean"
-    @objc public static let DID_SPANISH = "Spanish"
+    @objc public static let DID_KOREAN = "korean"
+    @objc public static let DID_SPANISH = "spanish"
 
     /// Gernerate a random mnemonic.
     /// - Parameter language: The language for DID.
@@ -40,17 +47,15 @@ public class Mnemonic: NSObject {
     /// - Throws: Language is empty or failure to generate mnemonic will throw error.
     /// - Returns: Random mnemonic.
     @objc
-    public class func generate(_ language: String) throws -> String {
-        guard !language.isEmpty else {
-            throw DIDError.illegalArgument("language is empty.")
-        }
+    public static func generate(_ language: String) throws -> String {
+        try checkArgument(!language.isEmpty, "language is empty.")
 
         let result = language.withCString { (clanuage) in
             return HDKey_GenerateMnemonic(clanuage)
         }
 
         guard let _ = result else {
-            throw DIDError.illegalArgument("generate mnemonic failed.")
+            throw DIDError.UncheckedError.IllegalArgumentErrors.IllegalArgumentError("generate mnemonic failed.")
         }
 
         return String(cString: result!)
@@ -58,19 +63,22 @@ public class Mnemonic: NSObject {
     
     /// Check mnemonic.
     /// - Parameters:
-    ///   - language: The language for DID.
-    ///   support language string: “chinese_simplified”, “chinese_traditional”, “czech”, “english”, “french”, “italian”, “japanese”, “korean”, “spanish”.
     ///   - mnemonic: mnemonic string.
     /// - Throws: mnemonic or language is empty.
     /// - Returns: true, if mnemonic is valid. or else, return false.
-    public class func isValid(_ language: String, _ mnemonic: String) throws -> Bool {
-        guard !mnemonic.isEmpty else {
-            throw DIDError.illegalArgument("Invalid mnemonic.")
+    public static func checkIsValid(_ mnemonic: String) throws -> Bool {
+        try checkArgument(!mnemonic.isEmpty, "Invalid mnemonic.")
+        let language = try getLanguage(mnemonic)
+        return language.withCString { (clang) in
+            return mnemonic.withCString { (cmnemonic) in
+                return HDKey_MnemonicIsValid(cmnemonic, clang)
+            }
         }
-
-        guard !language.isEmpty else {
-            throw DIDError.illegalArgument("Invalid password..")
-        }
+    }
+    
+    static func isValid(_ language: String, _ mnemonic: String) throws -> Bool {
+        try checkArgument(!mnemonic.isEmpty, "Invalid mnemonic.")
+        try checkArgument(!language.isEmpty, "Invalid language.")
 
         return language.withCString { (clang) in
             return mnemonic.withCString { (cmnemonic) in
@@ -87,12 +95,40 @@ public class Mnemonic: NSObject {
     /// - Throws: mnemonic or language is empty.
     /// - Returns: true, if mnemonic is valid. or else, return false.
     @objc
-    public class func isValid(_ language: String, _ mnemonic: String, error: NSErrorPointer) -> Bool {
+    public static func checkIsValid(_ mnemonic: String, error: NSErrorPointer) -> Bool {
         do {
-            return try isValid(language, mnemonic)
+            return try checkIsValid(mnemonic)
         }  catch let aError as NSError {
             error?.pointee = aError
             return false
         }
+    }
+    
+    /// Get the language name from a mnemonic string.
+    /// - Parameter mnemonic: a mnemonic string.
+    /// - Throws: a language name
+    public static func getLanguage(_ mnemonic: String) throws -> String {
+        try checkArgument(!mnemonic.isEmpty, "Invalid menmonic")
+        let langs = [Mnemonic.DID_ENGLISH,
+                     Mnemonic.DID_SPANISH,
+                     Mnemonic.DID_FRENCH,
+                     Mnemonic.DID_CZECH,
+                     Mnemonic.DID_ITALIAN,
+                     Mnemonic.DID_CHINESE_SIMPLIFIED,
+                     Mnemonic.DID_CHINESE_TRADITIONAL,
+                     Mnemonic.DID_JAPANESE,
+                     Mnemonic.DID_KOREAN]
+
+        for lang in langs {
+            do {
+                if try Mnemonic.isValid(lang, mnemonic) {
+                    return lang
+                }
+                continue
+            } catch {
+                continue
+            }
+        }
+        throw DIDError.UncheckedError.IllegalArgumentErrors.IllegalUsageError("Invalid menmonic")
     }
 }

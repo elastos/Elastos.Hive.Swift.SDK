@@ -45,6 +45,25 @@ final class LRUCache<Key: Hashable, Value> {
         self.initCapacity = initCapacity
         self.maxCapacity = max(initCapacity, maxCapacity)
     }
+    
+    func setValueWithoutLock(_ value: Value, for key: Key) {
+        let payload = CachePayload(key: key, value: value)
+        
+        if let node = self.nodesDict[key] {
+            node.payload = payload
+            self.list.moveToHead(node)
+        } else {
+            let node = self.list.addHead(payload)
+            self.nodesDict[key] = node
+        }
+        
+        if self.list.count > self.maxCapacity {
+            let nodeRemoved = self.list.removeLast()
+            if let key = nodeRemoved?.payload.key {
+                self.nodesDict[key] = nil
+            }
+        }
+    }
 
     func setValue(_ value: Value, for key: Key) {
         lock.acquireWriteLock {
@@ -68,6 +87,15 @@ final class LRUCache<Key: Hashable, Value> {
         }
     }
 
+    func keys() -> [Key] {
+        var keys: [Key] = []
+        self.nodesDict.forEach { (k, v) in
+            keys.append(k)
+        }
+        
+        return keys
+    }
+    
     func getValue(for key: Key) -> Value? {
         lock.acquireReadLock {
             guard let node = nodesDict[key] else {
@@ -79,6 +107,29 @@ final class LRUCache<Key: Hashable, Value> {
         }
     }
     
+    func getValue(for key: Key, _ filter: () throws -> Value?) throws -> Value? {
+        try lock.acquireReadLock {
+            var node = nodesDict[key]
+            var value = node?.payload.value
+            if node == nil || value == nil {
+                value = try filter()
+                guard let _ = value else {
+                    return nil
+                }
+                // TODO Lock
+                if maxCapacity == 0 {
+                    return value
+                }
+                setValueWithoutLock(value!, for: key)
+                node = nodesDict[key]
+            }
+            
+            list.moveToHead(node!)
+            let result = node!.payload.value
+            return result
+        }
+    }
+
     func containsKey(for key: Key) -> Bool {
         let value = nodesDict[key]
         return value != nil
@@ -168,6 +219,7 @@ final class DoubleLinkedList<T> {
         next?.previous = previous
 
         node.next = head
+        head?.previous = node
         node.previous = nil
 
         if node === tail {

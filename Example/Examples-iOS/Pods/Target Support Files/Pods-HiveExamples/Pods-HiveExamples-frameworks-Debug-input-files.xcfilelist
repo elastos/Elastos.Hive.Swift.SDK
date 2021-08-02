@@ -1,5 +1,6 @@
 ${PODS_ROOT}/Target Support Files/Pods-HiveExamples/Pods-HiveExamples-frameworks.sh
 ${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework
+${BUILT_PRODUCTS_DIR}/AwaitKit/AwaitKit.framework
 ${BUILT_PRODUCTS_DIR}/BlueCryptor/Cryptor.framework
 ${BUILT_PRODUCTS_DIR}/BlueRSA/CryptorRSA.framework
 ${BUILT_PRODUCTS_DIR}/CYLTabBarController/CYLTabBarController.framework
@@ -16,4 +17,5 @@ ${BUILT_PRODUCTS_DIR}/RxRelay/RxRelay.framework
 ${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework
 ${BUILT_PRODUCTS_DIR}/SVProgressHUD/SVProgressHUD.framework
 ${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework
+${BUILT_PRODUCTS_DIR}/Swifter/Swifter.framework
 ${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework

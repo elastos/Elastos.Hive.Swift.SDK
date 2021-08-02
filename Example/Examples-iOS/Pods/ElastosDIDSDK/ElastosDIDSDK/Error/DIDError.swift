@@ -23,82 +23,265 @@
 import Foundation
 
 public enum DIDError: Error {
-    case unknownFailure (_ des: String? = nil)
-    case illegalArgument(_ des: String? = nil)
-
-    case malformedMeta  (_ des: String? = nil)
-    case malformedDID   (_ des: String? = nil)
-    case malformedDIDURL(_ des: String? = nil)
-    case malformedDocument  (_ des: String? = nil)
-    case malformedCredential(_ des: String? = nil)
-    case malformedPresentation(_ des: String? = nil)
-
-    case didStoreError  (_ des: String? = nil)
-
-    case didResolveError(_ des: String? = nil)
-    case didDeactivated (_ des: String? = nil)
-    case didExpired     (_ des: String? = nil)
-    case didtransactionError(_ des: String? = nil)
-    case didNotFoundError(_ des: String? = nil)
-
-    case invalidState   (_ des: String? = nil)
-    case invalidKeyError(_ des: String? = nil)
-
-    case notFoundError (_ des: String? = nil)
-    case didMetaDateLocalFormatError (_ des: String? = nil)
-    case didNotUpToDate (_ des: String? = nil)
-    case didNotGenuine (_ des: String? = nil)
+    public enum UncheckedError {
+        public enum IllegalArgumentErrors {
+            case MalformedDIDError(_ des: String? = nil)
+            case MalformedDIDURLError(_ des: String? = nil)
+            case DIDObjectAlreadyExistError(_ des: String? = nil)
+            case DIDObjectNotExistError(_ des: String? = nil)
+            case InvalidKeyError(_ des: String? = nil)
+            case NotControllerError(_ des: String? = nil)
+            case IllegalUsageError(_ des: String? = nil)
+            case InvalidExpires(_ des: String? = nil)
+            case NullPointerErroe(_ des: String? = nil)
+            case DataParsingError(_ des: String? = nil)
+            case IllegalArgumentError(_ des: String? = nil)
+            case EncryptToBase64Error(_ des: String? = nil)
+        }
+        
+        public enum IllegalStateError {
+            case DIDNotFoundError(_ des: String? = nil)
+            case DIDDeactivatedError(_ des: String? = nil)
+            case DIDAlreadyExistError(_ des: String? = nil)
+            case DIDExpiredError(_ des: String? = nil)
+            case DIDNotUpToDateError(_ des: String? = nil)
+            case DIDNotGenuineError(_ des: String? = nil)
+            case CredentialNotGenuineError(_ des: String? = nil)
+            case CredentialExpiredError(_ des: String? = nil)
+            case CredentialRevokedError(_ des: String? = nil)
+            case CredentialAlreadyExistError(_ des: String? = nil)
+            case RootIdentityAlreadyExistError(_ des: String? = nil)
+            case NotCustomizedDIDError(_ des: String? = nil)
+            case NoEffectiveControllerError(_ des: String? = nil)
+            case NotAttachedWithStoreError(_ des: String? = nil)
+            case NotPrimitiveDIDError(_ des: String? = nil)
+            case AlreadySignedError(_ des: String? = nil)
+            case AlreadySealedError(_ des: String? = nil)
+            case UnknownInternalError(_ des: String? = nil)
+            /// Constructs a DIDControllersChangedException with null as its error
+            /// detail message.
+            case DIDControllersChangedError(_ des: String? = nil)
+        }
+        
+        public enum UnsupportedOperationError {
+            case DIDObjectHasReferenceError(_ des: String? = nil)
+            case CanNotRemoveEffectiveControllerError(_ des: String? = nil)
+            case NotCustomizedDIDError(_ des: String? = nil)
+        }
+    }
+    
+    public enum CheckedError {
+        public enum MnemonicError {
+        }
+        
+        public enum DIDSyntaxError {
+            case MalformedDocumentError(_ des: String? = nil)
+            case MalformedCredentialError(_ des: String? = nil)
+            case MalformedPresentationError(_ des: String? = nil)
+            case MalformedExportDataError(_ des: String? = nil)
+            case MalformedIDChainRequestError(_ des: String? = nil)
+            case MalformedIDChainTransactionError(_ des: String? = nil)
+            case MalformedResolveRequestError(_ des: String? = nil)
+            case MalformedResolveResponseError(_ des: String? = nil)
+            case MalformedResolveResultError(_ des: String? = nil)
+            case MalformedTransferTicketError(_ des: String? = nil)
+        }
+        
+        public enum DIDStoreError {
+            public enum DIDStorageErrors {
+                case DIDStoreVersionMismatchError(_ des: String? = nil)
+            }
+            case DIDStorageError(_ des: String? = nil)
+            case DIDStoreError(_ des: String? = nil)
+            case WrongPasswordError(_ des: String? = nil)
+            case DIDStoreCryptoError(_ des: String? = nil)
+            case MissingDocumentError(_ des: String? = nil)
+            case InvalidPublickeyError(_ des: String? = nil)
+            case InvalidDIDMetadataError(_ des: String? = nil)
+            case ConflictMergeError(_ des: String? = nil)
+        }
+        
+        public enum DIDBackendError {
+            public enum DIDResolveErrors {
+                case NetworkError(_ des: String? = nil)
+            }
+            case DIDTransactionError(_ des: String? = nil)
+            case DIDResolveError(_ des: String? = nil)
+            case UnsupportedOperationError(_ des: String? = nil)
+        }
+    }
 }
 
-extension DIDError {
-    static func desription(_ error: DIDError) -> String {
-        switch error {
-        case .unknownFailure(let des):
-            return des ?? "unknown failure"
-        case .illegalArgument(let des):
-            return des ?? "invalid arguments"
+// MARK: - Error Descriptions
+extension DIDError.UncheckedError.IllegalArgumentErrors: LocalizedError {
+        
+    public var errorDescription: String? {
+        switch self {
+        case .MalformedDIDError(let des):
+            return des
+        case .MalformedDIDURLError(let des):
+            return des
+        case .DIDObjectAlreadyExistError(let des):
+            return des
+        case .DIDObjectNotExistError(let des):
+            return des
+        case .InvalidKeyError(let des):
+            return des
+        case .NotControllerError(let des):
+            return des
+        case .IllegalUsageError(let des):
+            return des
+        case .InvalidExpires(let des):
+            return des
+        case .NullPointerErroe(let des):
+            return des
+        case .DataParsingError(let des):
+            return des
+        case .IllegalArgumentError(let des):
+            return des
+        case .EncryptToBase64Error(let des):
+            return des
+        }
+    }
+}
 
-        case .malformedMeta(let des):
-            return des ?? "malformed metadata"
-        case .malformedDID(let des):
-            return des ?? "malformed DID string"
-        case .malformedDIDURL(let des):
-            return des ?? "malformed DIDURL string"
-        case .malformedDocument(let des):
-            return des ?? "malformed DID document"
-        case .malformedCredential(let des):
-            return des ?? "malformed credential"
-        case .malformedPresentation(let des):
-            return des ?? "malformed presentation"
+extension DIDError.UncheckedError.IllegalStateError: LocalizedError {
+    
+    public var errorDescription: String? {
+        switch self {
+        case .DIDNotFoundError(let des):
+            return des
+        case .DIDDeactivatedError(let des):
+            return des
+        case .DIDAlreadyExistError(let des):
+            return des
+        case .DIDExpiredError(let des):
+            return des
+        case .DIDNotUpToDateError(let des):
+            return des
+        case .DIDNotGenuineError(let des):
+            return des
+        case .CredentialNotGenuineError(let des):
+            return des
+        case .CredentialExpiredError(let des):
+            return des
+        case .CredentialRevokedError(let des):
+            return des
+        case .CredentialAlreadyExistError(let des):
+            return des
+        case .RootIdentityAlreadyExistError(let des):
+            return des
+        case .NotCustomizedDIDError(let des):
+            return des
+        case .NoEffectiveControllerError(let des):
+            return des
+        case .NotAttachedWithStoreError(let des):
+            return des
+        case .NotPrimitiveDIDError(let des):
+            return des
+        case .AlreadySignedError(let des):
+            return des
+        case .AlreadySealedError(let des):
+            return des
+        case .UnknownInternalError(let des):
+            return des
+        case .DIDControllersChangedError(let des):
+            return des
+        }
+    }
+}
 
-        case .didStoreError(let des):
-            return des ?? "unknown didstore error"
+extension DIDError.UncheckedError.UnsupportedOperationError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .DIDObjectHasReferenceError(let des):
+            return des
+        case .CanNotRemoveEffectiveControllerError(let des):
+            return des
+        case .NotCustomizedDIDError(let des):
+            return des
+        }
+    }
+}
 
-        case .didResolveError(let des):
-            return des ?? "did resolve failure"
-        case .didDeactivated(let des):
-            return des ?? "did was deactivated"
-        case .didExpired(let des):
-            return des ?? "did was expired"
+extension DIDError.CheckedError.DIDSyntaxError: LocalizedError {
+    
+    public var errorDescription: String? {
+        switch self {
+        case .MalformedDocumentError(let des):
+            return des
+        case .MalformedCredentialError(let des):
+            return des
+        case .MalformedPresentationError(let des):
+            return des
+        case .MalformedExportDataError(let des):
+            return des
+        case .MalformedIDChainRequestError(let des):
+            return des
+        case .MalformedIDChainTransactionError(let des):
+            return des
+        case .MalformedResolveRequestError(let des):
+            return des
+        case .MalformedResolveResponseError(let des):
+            return des
+        case .MalformedResolveResultError(let des):
+            return des
+        case .MalformedTransferTicketError(let des):
+            return des
+        }
+    }
+}
 
-        case .didtransactionError(let des):
-            return des ?? "did transaction failure"
+extension DIDError.CheckedError.DIDStoreError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .WrongPasswordError(let des):
+            return des
+        case .DIDStoreCryptoError(let des):
+            return des
+        case .ConflictMergeError(let des):
+            return des
+        case .InvalidDIDMetadataError(let des):
+            return des
+        case .InvalidPublickeyError(let des):
+            return des
+        case .MissingDocumentError(let des):
+            return des
+        case .DIDStoreError(let des):
+            return des
+        case .DIDStorageError(let des):
+            return des
+        }
+    }
+}
 
-        case .invalidState(let des):
-            return des ?? "invalid wrong state"
+extension DIDError.CheckedError.DIDStoreError.DIDStorageErrors: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .DIDStoreVersionMismatchError(let des):
+            return des
+        }
+    }
+}
 
-        case .notFoundError(let des):
-            return des ?? "not found"
-        case .didNotFoundError(let des):
-            return des ?? "did not found"
-        case .invalidKeyError(let des):
-            return des ?? "invalid key"
-        case .didMetaDateLocalFormatError(let des):
-            return des ?? "Loading metadata format error."
-        case .didNotUpToDate(let des):
-            return des ?? "DID document not up-to-date."
-        case .didNotGenuine(let des):
-            return des ?? "Publish failed because document is not genuine."
+extension DIDError.CheckedError.DIDBackendError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .DIDTransactionError(let des):
+            return des
+        case .DIDResolveError(let des):
+            return des
+        case .UnsupportedOperationError(let des):
+            return des
+        }
+    }
+}
+
+extension DIDError.CheckedError.DIDBackendError.DIDResolveErrors: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .NetworkError(let des):
+            return des
         }
     }
 }

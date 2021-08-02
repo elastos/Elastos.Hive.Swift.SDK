@@ -22,47 +22,76 @@
 
 import Foundation
 import ElastosHiveSDK
+import SwiftyJSON
+import AwaitKit
 
 class ScriptOwner {
     private var sdkContext: SdkContext?
-    private var scriptingService: ScriptingProtocol?
-    private var databaseService: DatabaseProtocol?
-    
-    private var ownerDid: String?
+    private var scriptingService: ScriptingService?
+    private var databaseService: DatabaseService?
+
     private var callDid: String?
-    private var appDid: String?
 
     public init(_ sdkContext: SdkContext) throws {
         self.sdkContext = sdkContext
-        self.scriptingService = try self.sdkContext?.newVault().scriptingService
-        self.databaseService = try self.sdkContext?.newVault().databaseService
-        self.ownerDid = self.sdkContext?.ownerDid
+        self.scriptingService = sdkContext.newVault().scriptingService
+        self.databaseService = try sdkContext.newVault().databaseService
         self.callDid = self.sdkContext?.callerDid
-        self.appDid = self.sdkContext?.appId
     }
     
-    public func setScript() -> Promise<Bool> {
-        
-        let createGroup: Promise<Bool> = self.databaseService!.createCollection(ScriptConst.COLLECTION_GROUP, nil)
-        let createMessage: Promise<Bool> = self.databaseService!.createCollection(ScriptConst.COLLECTION_GROUP_MESSAGE, nil)
+    public func cleanTwoCollections() -> Promise<Void> {
+        let promiseA = self.databaseService!.deleteCollection(ScriptConst.COLLECTION_GROUP)
+        let promiseB = self.databaseService!.deleteCollection(ScriptConst.COLLECTION_GROUP_MESSAGE)
+        return Promise.
 
-        let docNode = ["collection" : ScriptConst.COLLECTION_GROUP_MESSAGE, "did" : self.callDid!]
-        let addPermission: Promise<InsertDocResponse> = self.databaseService!.insertOne(ScriptConst.COLLECTION_GROUP, docNode, InsertOneOptions(false))
-        
-        let filter: Dictionary<String, String> = ["collection": ScriptConst.COLLECTION_GROUP_MESSAGE,
-                                                  "did": "$caller_did"]
-        let condition = Condition("verify_user_permission", "queryHasResults", ScriptFindBody(ScriptConst.COLLECTION_GROUP, filter))
-        let body = ScriptInsertExecutableBody(ScriptConst.COLLECTION_GROUP_MESSAGE,
-            ["author" : "$params.author", "content" : "$params.content"],
-            ["bypass_document_validation" : false, "ordered" : true])
-        let executable = Executable.createInsertExecutable(ScriptConst.SCRIPT_NAME, body)
-        let setScript: Promise<Bool> = self.scriptingService!.registerScript(ScriptConst.SCRIPT_NAME, condition, executable, false, false)
-        
-        return when(fulfilled: createGroup, createMessage).then { (r1, r2) -> Promise<InsertDocResponse> in
-            return addPermission
-        }.then { response -> Promise<Bool> in
-            return setScript
-        }
+}
+
+
+    private CompletableFuture<Void> cleanTwoCollections() {
+        return databaseService.deleteCollection(ScriptConst.COLLECTION_GROUP)
+                .thenCompose(s -> databaseService.deleteCollection(ScriptConst.COLLECTION_GROUP_MESSAGE));
     }
-    
+
+    private CompletableFuture<Void> createTwoCollections() {
+        return databaseService.createCollection(ScriptConst.COLLECTION_GROUP)
+                .thenCompose(s->databaseService.createCollection(ScriptConst.COLLECTION_GROUP_MESSAGE));
+    }
+
+    private CompletableFuture<InsertResult> addPermission2Caller() {
+        // The document to save the permission of the user DID.
+        ObjectNode conditionDoc = JsonNodeFactory.instance.objectNode();
+        conditionDoc.put("collection", ScriptConst.COLLECTION_GROUP_MESSAGE);
+        conditionDoc.put("did", callDid);
+        // Insert persmission to COLLECTION_GROUP
+        return databaseService.insertOne(
+                ScriptConst.COLLECTION_GROUP,
+                conditionDoc,
+                new InsertOptions().bypassDocumentValidation(false));
+    }
+
+    private CompletableFuture<Void> doSetScript() {
+        // The condition to restrict the user DID.
+        ObjectNode filter = JsonNodeFactory.instance.objectNode();
+        filter.put("collection",ScriptConst.COLLECTION_GROUP_MESSAGE);
+        filter.put("did","$caller_did");
+        // The message is for inserting to the COLLECTION_GROUP_MESSAGE.
+        ObjectNode msgDoc = JsonNodeFactory.instance.objectNode();
+        msgDoc.put("author", "$params.author");
+        msgDoc.put("content", "$params.content");
+        ObjectNode options = JsonNodeFactory.instance.objectNode();
+        options.put("bypass_document_validation", false);
+        options.put("ordered", true);
+        // register the script for caller to insert message to COLLECTION_GROUP_MESSAGE
+        return scriptingService.registerScript(ScriptConst.SCRIPT_NAME,
+                new QueryHasResultCondition("verify_user_permission", ScriptConst.COLLECTION_GROUP, filter),
+                new InsertExecutable(ScriptConst.SCRIPT_NAME, ScriptConst.COLLECTION_GROUP_MESSAGE, msgDoc, options),
+                false, false);
+    }
+
+    public CompletableFuture<Void> setScript() {
+        return cleanTwoCollections()
+                .thenCompose(s->createTwoCollections())
+                .thenCompose(s->addPermission2Caller())
+                .thenCompose(s->doSetScript());
+    }
 }

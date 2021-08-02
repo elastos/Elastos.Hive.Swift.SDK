@@ -28,468 +28,202 @@ public class IDChainRequest: NSObject {
 
     /// The specification string of IDChain Request
     @objc public static let CURRENT_SPECIFICATION = "elastos/did/1.0"
+    public static let DID_SPECIFICATION = "elastos/did/1.0"
+    public static let CREDENTIAL_SPECIFICATION = "elastos/credential/1.0"
 
-    // header
-    private var _specification: String                // must have value
-    private var _operation: IDChainRequestOperation   // must have value
-    private var _previousTransactionId: String?
+    var _header: IDChainHeader?
+    var _payload: String?
+    var _proof: IDChainProof?
 
-    // payload
-    private var _did: DID?
-    private var _doc: DIDDocument?
-    private var _payload: String?
+    let HEADER = "header"
+    let PAYLOAD = "payload"
+    let PROOF = "proof"
 
-    // signature
-    private var _keyType: String?
-    private var _signKey: DIDURL?
-    private var _signature: String?
+    public let SPECIFICATION = "specification"
+    private let OPERATION = "operation"
+    private let PREVIOUS_TXID = "previousTxid"
+    private let TICKET = "ticket"
 
-    private init(_ operation: IDChainRequestOperation) {
-        self._specification = IDChainRequest.CURRENT_SPECIFICATION
-        self._operation = operation
+    private let TYPE = "type"
+    private let VERIFICATION_METHOD = "verificationMethod"
+    private let SIGNATURE = "signature"
+
+    override init() {
+        
     }
-
-    /// Constructs the 'create' IDChain Request.
+    
+    /// Create a ID chain request with given operation.
+    /// - Parameter operation: the operation
+    init(_ operation: IDChainRequestOperation) {
+        self._header = IDChainHeader(operation)
+    }
+    
+    /// Create a DID update request with given previous transaction id.
     /// - Parameters:
-    ///   - doc: the DID Document be packed into Request
-    ///   - signKey: the key to sign Request
-    ///   - storePassword: the password for DIDStore
-    /// - Throws: didStoreError: there is no store to attach.
-    /// - Throws: invalidKeyError: there is no an authentication key.
-    /// - Returns: the IDChainRequest object
-    @objc
-    public class func create(_ doc: DIDDocument,
-                      _ signKey: DIDURL,
-                      _ storePassword: String) throws -> IDChainRequest {
-
-        return try IDChainRequest(.CREATE)
-                .setPayload(doc)
-                .sealed(signKey, storePassword)
+    ///   - operation: should be UPDATE operation
+    ///   - previousTxid: the previous transaction id of target DID
+    init(_ operation: IDChainRequestOperation, _ previousTxid: String) {
+        self._header = IDChainHeader(operation, previousTxid)
     }
-
-    /// Constructs the 'update' IDChain Request.
+    
+    /// Create a DID transfer request with given ticket.
     /// - Parameters:
-    ///   - doc: the DID Document be packed into Request
-    ///   - previousTransactionId: the previous transaction id string
-    ///   - signKey: the key to sign Request
-    ///   - storePassword: the password for DIDStore
-    /// - Throws: didStoreError: there is no store to attach.
-    /// - Throws: invalidKeyError: there is no an authentication key.
-    /// - Returns: the IDChainRequest object
-    @objc
-    public class func update(_ doc: DIDDocument,
-                      _ previousTransactionId: String,
-                      _ signKey: DIDURL,
-                      _ storePassword: String) throws -> IDChainRequest {
-
-        return try IDChainRequest(.UPDATE)
-                .setPreviousTransactionId(previousTransactionId)
-                .setPayload(doc)
-                .sealed(signKey, storePassword)
+    ///   - operation: should be TRANSFER operation
+    ///   - ticket: the transfer ticket object
+    init(_ operation: IDChainRequestOperation, _ ticket: TransferTicket) {
+        self._header = IDChainHeader(operation, ticket)
+    }
+    
+    /// Copy constructor.
+    /// - Parameter request: another ID chain request object
+    init(_ request: IDChainRequest) {
+        self._header = request.header
+        self._payload = request.payload
+        self._proof = request.proof
+    }
+    
+    /// Get the request header object.
+    public var header: IDChainHeader? {
+        return _header
     }
 
-    /// Constructs the 'deactivate' IDChain Request.
-    /// - Parameters:
-    ///   - doc: the DID Document be packed into Request
-    ///   - signKey: the key to sign Request
-    ///   - storePassword: the password for DIDStore
-    /// - Throws: didStoreError: there is no store to attach.
-    /// - Throws: invalidKeyError: there is no an authentication key.
-    /// - Returns: the IDChainRequest object
-    @objc
-    public class func deactivate(_ doc: DIDDocument,
-                      _ signKey: DIDURL,
-                      _ storePassword: String) throws -> IDChainRequest {
-
-        return try IDChainRequest(.DEACTIVATE)
-                .setPayload(doc)
-                .sealed(signKey, storePassword)
+    /// Get the operation of this request.
+    public var operation: IDChainRequestOperation? {
+        return _header?.operation
     }
-
-    /// Constructs the 'deactivate' IDChain Request.
-    /// - Parameters:
-    ///   - target: the DID to be deactivated
-    ///   - targetSignKey: the target DID's key to sign
-    ///   - doc: the authorizer's document
-    ///   - signKey: the key to sign Request
-    ///   - storePassword: the password for DIDStore
-    /// - Throws: didStoreError: there is no store to attach.
-    /// - Throws: invalidKeyError: there is no an authentication key.
-    /// - Returns: the IDChainRequest object
-    @objc
-    public class func deactivate(_ target: DID,
-                      _ targetSignKey: DIDURL,
-                      _ doc: DIDDocument,
-                      _ signKey: DIDURL,
-                      _ storePassword: String) throws -> IDChainRequest {
-
-        return try IDChainRequest(.DEACTIVATE)
-                .setPayload(target)
-                .sealed(targetSignKey, doc, signKey, storePassword)
-    }
-
-    /// Get operation string.
-    @objc
-    public var operation: IDChainRequestOperation {
-        return self._operation
-    }
-
-    /// Get previous transaction id string.
-    @objc
-    public var previousTransactionId: String? {
-        return self._previousTransactionId
-    }
-
-    /// Get payload of IDChain Request.
-    @objc
+    
+    /// Get the payload of this ID chain request.
     public var payload: String? {
-        return self._payload
+        return _payload
     }
-
-    /// Get DID of IDChain Request.
-    @objc
-    public var did: DID? {
-        return self._did
+    
+    /// Set the header for this ID chain request.
+    /// - Parameter header: the IDChainHeader format payload
+    func setHeader(_ header: IDChainHeader) {
+        self._header = header
     }
-
-    /// Get DID Document of IDChain Request.
-    @objc
-    public var document: DIDDocument? {
-        return self._doc
-    }
-
-    private func setPreviousTransactionId(_ transactionId: String) -> IDChainRequest {
-        self._previousTransactionId = transactionId
-        return self
-    }
-
-    private func setPayload(_ did: DID) -> IDChainRequest {
-        self._did = did
-        self._doc = nil
-        self._payload = did.description
-
-        return self
-    }
-
-    private func setPayload(_ doc: DIDDocument) throws -> IDChainRequest {
-        self._did = doc.subject
-        self._doc = doc
-
-        if self._operation != .DEACTIVATE {
-            let json = doc.toString()
-            let capacity = json.count * 3
-
-            let cInput = json.toUnsafePointerUInt8()
-            let cPayload = UnsafeMutablePointer<CChar>.allocate(capacity: capacity)
-            let re = base64_url_encode(cPayload, cInput, json.lengthOfBytes(using: .utf8))
-            cPayload[re] = 0
-            self._payload = String(cString: cPayload)
-
-//            memset(cPayload, 0, capacity)
-//
-//            var ref = json
-//            let ssz = ref.withUTF8 { ptr in
-//                return base64_url_encode(cPayload, ptr.baseAddress!, json.count)
-//            }
-//
-//            guard ssz > 0 else {
-//                throw DIDError.unknownFailure("base58 encoding error")
-//            }
-        } else {
-            self._payload = doc.subject.toString()
-        }
-
-        return self
-    }
-
-    private func setPayload(_ payload: String) throws  -> IDChainRequest {
-        do {
-            if self._operation != .DEACTIVATE {
-//                let buffer = UnsafeMutablePointer<Int8>.allocate(capacity: capacity)
-//                memset(buffer, 0, capacity)
-//
-//                var ref = payload
-//                let ssz = ref.withUTF8 { (ptr) in
-//                    return base64_url_encode(buffer, ptr.baseAddress!, payload.count)
-//                }
-//
-//                guard ssz > 0 else {
-//                    throw DIDError.unknownFailure("base58 encoding error")
-//                }
-//
-//                var json = String(cString: buffer)
-//                let endIndex = json.index(json.startIndex, offsetBy: ssz)
-//                json = String(json[json.startIndex..<endIndex])
-
-                let capacity = payload.count * 3
-                let buffer: UnsafeMutablePointer<UInt8> = UnsafeMutablePointer<UInt8>.allocate(capacity: capacity)
-                let cp = payload.toUnsafePointerInt8()
-                let c = base64_url_decode(buffer, cp)
-                buffer[c] = 0
-                let json: String = String(cString: buffer)
-                self._doc = try DIDDocument.convertToDIDDocument(fromJson: json)
-                self._did = _doc!.subject
-            } else {
-                self._doc = nil
-                self._did = try DID(payload)
-            }
-        } catch {
-            throw DIDError.didtransactionError("Parse playload error.")
-        }
-
+    
+    /// Set the payload for this ID chain request.
+    /// - Parameter payload: the string format payload
+    func setPayload(_ payload: String) {
         self._payload = payload
-        return self
     }
-
-    private func setProof(_ keyType: String,
-                          _ signKey: DIDURL,
-                          _ signature: String) -> IDChainRequest {
-
-        self._keyType = keyType
-        self._signKey = signKey
-        self._signature = signature
-        return self
+    
+    /// Get the proof object of this ID chain request.
+    public var proof: IDChainProof? {
+        return _proof
     }
+    
+    /// Set the proof object for the ID chain request.
+    /// - Parameter proof: the proof object
+    func setProof(_ proof: IDChainProof) {
+        self._proof = proof
+    }
+    
+    /// Get the signing inputs for generating the proof signature.
+    /// - Returns: the array object of input Data arrays
+    func getSigningInputs() -> [Data] {
+        let prevTxid = operation == .UPDATE ? header?.previousTxid! : ""
+        let ticket = operation == .TRANSFER ? header?.ticket! : ""
 
-    private func sealed(_ signKey: DIDURL,
-                        _ storePassword: String) throws -> IDChainRequest {
-
-        let prevTxid = _operation == .UPDATE ? self._previousTransactionId! : ""
         var inputs: [Data] = []
 
-        if let data = _specification.data(using: .utf8)  {
+        if let spec = header?.specification, let data = spec.data(using: .utf8) {
             inputs.append(data)
         }
-        if let data = _operation.description.data(using: .utf8)  {
+        if let oper = operation, let data = oper.description.data(using: .utf8)  {
             inputs.append(data)
         }
-        if let data = prevTxid.description.data(using: .utf8)  {
+        if let data = prevTxid?.data(using: .utf8)  {
             inputs.append(data)
         }
-        if let data = _payload!.data(using: .utf8)  {
+        if let data = ticket?.data(using: .utf8)  {
+            inputs.append(data)
+        }
+        if let pay = _payload,let data = pay.data(using: .utf8)  {
             inputs.append(data)
         }
 
-        self._signature = try _doc!.sign(signKey, storePassword, inputs)
-        self._signKey = signKey
-        self._keyType = Constants.DEFAULT_PUBLICKEY_TYPE
-
-        return self
+        return inputs
     }
-
-    private func sealed(_ targetSignKey: DIDURL,
-                        _ doc: DIDDocument,
-                        _ signKey: DIDURL,
-                        _ storePassword: String) throws -> IDChainRequest {
-
-        let prevTxid = operation == .UPDATE ? self._previousTransactionId! : ""
-        var inputs: [Data] = []
-        if let data = _specification.data(using: .utf8)  {
-            inputs.append(data)
-        }
-        if let data = _operation.description.data(using: .utf8)  {
-            inputs.append(data)
-        }
-        if let data = prevTxid.description.data(using: .utf8)  {
-            inputs.append(data)
-        }
-        if let data = _payload!.data(using: .utf8)  {
-            inputs.append(data)
-        }
-
-        self._signature = try doc.sign(signKey, storePassword, inputs)
-        self._signKey = targetSignKey
-        self._keyType = Constants.DEFAULT_PUBLICKEY_TYPE
-
-        return self
+    
+    /// Abstract method to get the DIDDocument of the request signer.
+    /// - Returns: the signer's DIDDocument object
+    func getSignerDocument() throws -> DIDDocument? {
+        return DIDDocument()
     }
-
-    private func checkValid() throws -> Bool {
-        // internally using builder pattern "create/update/deactivate" to create
-        // new IDChainRequest object.
-        // Always be sure have "_doc/_signKey/_storePass" in the object.
-        var doc: DIDDocument?
-        if self._operation != .DEACTIVATE {
-            doc = self._doc!
-            guard doc!.containsAuthenticationKey(forId: _signKey!) else {
-                return false
-            }
-        } else {
-            do {
-                doc = try self._did!.resolve()
-                guard let _ = doc else {
-                    return false
-                }
-            } catch {
-                return false
-            }
-            guard doc!.containsAuthenticationKey(forId: _signKey!) ||
-                  doc!.containsAuthorizationKey (forId: _signKey!) else {
-                return false
-            }
-        }
-
-        let prevTxid = operation == .UPDATE ? self._previousTransactionId!: ""
-        var inputs: [Data] = []
-        if let data = _specification.data(using: .utf8)  {
-            inputs.append(data)
-        }
-        if let data = _operation.description.data(using: .utf8)  {
-            inputs.append(data)
-        }
-        if let data = prevTxid.description.data(using: .utf8)  {
-            inputs.append(data)
-        }
-        if let data = _payload!.data(using: .utf8)  {
-            inputs.append(data)
-        }
-
-        return try doc!.verify(_signKey!, _signature!, inputs)
-    }
-
-    @objc
-    public var isValid: Bool {
-        do {
-            return try self.checkValid()
-        } catch {
+    
+    /// Return whether this ID chain request is valid or not.
+    /// - Returns: true if valid, otherwise false
+    public func isValid() throws -> Bool {
+        let signKey = proof!.verificationMethod
+        let doc = try getSignerDocument()
+        guard doc != nil else {
             return false
         }
+        
+        guard try doc!.isValid() else {
+            return false
+        }
+        
+        if operation != IDChainRequestOperation.DEACTIVATE {
+            if try !doc!.containsAuthenticationKey(forId: signKey) {
+                return false
+            }
+        }
+        else {
+            if (!doc!.isCustomizedDid()) {
+                // the signKey should be default key or authorization key
+                if try (doc!.defaultPublicKeyId() != signKey &&
+                         doc!.authorizationKey(ofId: signKey) == nil) {
+                    return false
+                }
+            } else {
+                // the signKey should be controller's default key
+                let controller = doc?.controllerDocument(signKey.did!)
+                if (controller == nil || controller!.defaultPublicKeyId() != signKey) {
+                    return false
+                }
+            }
+        }
+        
+        return try doc!.verify(proof!.verificationMethod, proof!.signature, getSigningInputs())
     }
-
-    @objc
-    public class func fromJson(_ node: JsonNode) throws -> IDChainRequest {
-        let error = { (des: String) -> DIDError in
-            return DIDError.didResolveError(des)
+    
+    func serialize(_ force: Bool) -> String {
+        let generator = JsonGenerator()
+        generator.writeStartObject()
+        generator.writeFieldName(HEADER)
+        header?.serialize(generator)
+        
+        if let _ = payload {
+            generator.writeStringField(PAYLOAD, payload!)
         }
+        generator.writeFieldName(PROOF)
+        proof?.serialize(generator)
+        generator.writeEndObject()
 
-        var subNode = node.get(forKey: Constants.HEADER)
-        guard let _ = subNode else {
-            throw DIDError.didResolveError("missing header")
-        }
+        return generator.toString()
+    }
+    
+    func sanitize() throws {
+        print("TODO:")
+    }
+    
+    class func deserialize(_ content: JsonNode) throws -> IDChainRequest {
 
-        var serializer = JsonSerializer(subNode!)
-        var options: JsonSerializer.Options
-
-        options = JsonSerializer.Options()
-                                .withHint(Constants.SPECIFICATION)
-                                .withError(error)
-        let specs = try serializer.getString(Constants.SPECIFICATION, options)
-        guard specs == IDChainRequest.CURRENT_SPECIFICATION else {
-            throw DIDError.didResolveError("Unknown ID request specification.")
-        }
-
-        options = JsonSerializer.Options()
-                                .withHint(Constants.OPERATION)
-                                .withError(error)
-        let opstr = try serializer.getString(Constants.OPERATION, options)
-        let operation = IDChainRequestOperation.valueOf(opstr)
-
-        let request = IDChainRequest(operation)
-        if operation == .UPDATE {
-            options = JsonSerializer.Options()
-                                .withHint(Constants.PREVIOUS_TXID)
-                                .withError(error)
-            let transactionId = try serializer.getString(Constants.PREVIOUS_TXID, options)
-            _ = request.setPreviousTransactionId(transactionId)
-        }
-
-        serializer = JsonSerializer(node)
-        options = JsonSerializer.Options()
-                                .withHint(Constants.PAYLOAD)
-                                .withError(error)
-        let payload = try serializer.getString(Constants.PAYLOAD, options)
-        _  = try request.setPayload(payload)
-
-        subNode = node.get(forKey: Constants.PROOF)
-        guard let _ = subNode else {
-            throw DIDError.didResolveError("missing proof.")
-        }
-
-        serializer = JsonSerializer(subNode!)
-        options = JsonSerializer.Options()
-                                .withOptional()
-                                .withRef(Constants.DEFAULT_PUBLICKEY_TYPE)
-                                .withHint(Constants.KEY_TYPE)
-                                .withError(error)
-        let keyType = try serializer.getString(Constants.KEY_TYPE, options)
-        guard keyType == Constants.DEFAULT_PUBLICKEY_TYPE else {
-            throw DIDError.didResolveError("unkown signature key type")
-        }
-
-        options = JsonSerializer.Options()
-                                .withRef(request.did)
-                                .withHint(Constants.VERIFICATION_METHOD)
-                                .withError(error)
-        let signKey = try serializer.getDIDURL(Constants.VERIFICATION_METHOD, options)
-
-        options = JsonSerializer.Options()
-                                .withHint(Constants.SIGNATURE)
-                                .withError(error)
-        let signature = try serializer.getString(Constants.SIGNATURE, options)
-
-        _ = request.setProof(keyType, signKey!, signature)
+        let header = IDChainHeader.parse(content.get(forKey: "header")!)
+        let payload = content.get(forKey: "payload")!.asString()
+        let proof = try IDChainProof.parse(content.get(forKey: "proof")!)
+        let request = IDChainRequest()
+        request.setHeader(header)
+        request.setProof(proof)
+        request.setPayload(payload!)
+        
         return request
     }
-
-    @objc(fromJsonWithData:error:)
-    public class func fromJson(_ json: Data) throws -> IDChainRequest {
-        guard !json.isEmpty else {
-            throw DIDError.illegalArgument()
-        }
-
-        let data: Any
-        do {
-            data = try JSONSerialization.jsonObject(with: json, options: [])
-        } catch {
-            throw DIDError.didResolveError("Parse resolve result error")
-        }
-        return try fromJson(JsonNode(data))
-    }
-
-    @objc(fromJsonWithString:error:)
-    public class func fromJson(_ json: String) throws -> IDChainRequest {
-        return try fromJson(json.data(using: .utf8)!)
-    }
-
-    @objc
-    public func toJson(_ generator: JsonGenerator, _ normalized: Bool) {
-        generator.writeStartObject()
-        generator.writeFieldName(Constants.HEADER)
-
-        generator.writeStartObject()
-        generator.writeStringField(Constants.SPECIFICATION, self._specification)
-        generator.writeStringField(Constants.OPERATION, self.operation.toString())
-        if self._operation == .UPDATE {
-            generator.writeFieldName(Constants.PREVIOUS_TXID)
-            generator.writeString(self.previousTransactionId!)
-        }
-        generator.writeEndObject() // end of header.
-
-        // payload
-        generator.writeStringField(Constants.PAYLOAD, self.payload!)
-
-        // signature
-        generator.writeFieldName(Constants.PROOF)
-        generator.writeStartObject()
-
-        var keyId: String
-        if normalized {
-            generator.writeStringField(Constants.KEY_TYPE, self._keyType!)
-            keyId = self._signKey!.description
-        } else {
-            keyId = "#" + self._signKey!.fragment!
-        }
-        generator.writeStringField(Constants.VERIFICATION_METHOD, keyId)
-        generator.writeStringField(Constants.SIGNATURE, self._signature!)
-
-        generator.writeEndObject()  // end of signature.
-        generator.writeEndObject()
-    }
-
-    @objc
-    public func toJson(_ normalized: Bool) -> String {
-        let generator = JsonGenerator()
-        toJson(generator, normalized)
-        return generator.toString()
+    
+    public func serialize(_ generator: JsonGenerator) {
+        
     }
 }

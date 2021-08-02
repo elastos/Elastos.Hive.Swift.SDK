@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2020 Elastos Foundation
+* Copyright (c) 2021 Elastos Foundation
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -22,30 +22,30 @@
 
 import Foundation
 
-@objc(CredentialMeta)
-public class CredentialMeta: Metadata {
-    private let ALIAS = RESERVED_PREFIX + "alias"
-
-    override init(store: DIDStore) {
-        super.init(store: store)
+public class DIDResolveResponse: ResolveResponse {
+    
+    init(_ responseId: String, _ result: DIDBiography) {
+        super.init(responseId, result)
     }
-
-    /// init
-    @objc
-    public required init() {
-        super.init()
+    
+    override init(_ responseId: String, _ code: Int, _ message: String) {
+        super.init(responseId, code, message)
     }
+    
+    class func deserialize(_ input: Data) throws -> DIDResolveResponse {
+        let json: [String: Any] = try input.dataToDictionary()
+        let id = "\(String(describing: json["id"]))"
+        let result: [String: Any]? = json["result"] as? [String: Any]
+        let err: [String: Any]? = json["error"] as? [String: Any]
+        if let _ = result {
+            let bio = try DIDBiography.deserialize(result!)
+            return DIDResolveResponse(id, bio)
+        }
+        else {
+            let code = err!["code"]
+            let message = "\(String(describing: err!["message"]))"
 
-    /// The name of alias.
-    @objc
-    public var aliasName: String? {
-        return self.get(key: ALIAS) as? String
-    }
-
-    /// Set alias for did.
-    /// - Parameter alias: The ailas string.
-    @objc
-    public func setAlias(_ alias: String?) {
-        self.put(key: ALIAS, value: alias as Any)
+            return DIDResolveResponse(id, code as! Int, message)
+        }
     }
 }

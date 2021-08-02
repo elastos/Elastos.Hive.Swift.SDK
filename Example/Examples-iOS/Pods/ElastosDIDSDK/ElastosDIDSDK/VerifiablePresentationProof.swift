@@ -22,6 +22,8 @@
 
 import Foundation
 
+/// The proof information for verifiable presentation.
+/// The default proof type is ECDSAsecp256r1.
 @objc(VerifiablePresentationProof)
 public class VerifiablePresentationProof: NSObject {
     private let _type: String
@@ -30,6 +32,13 @@ public class VerifiablePresentationProof: NSObject {
     private let _nonce: String
     private let _signature: String
     
+    /// Create the proof object with the given values.
+    /// - Parameters:
+    ///   - type: the type string
+    ///   - method: the sign key
+    ///   - realm: where is presentation use
+    ///   - nonce: the nonce string
+    ///   - signature: the signature string
     init(_ type: String,  _ method: DIDURL, _ realm: String,  _ nonce: String, _ signature: String) {
         self._type = type
         self._verificationMethod = method
@@ -38,77 +47,79 @@ public class VerifiablePresentationProof: NSObject {
         self._signature = signature
     }
     
+    /// Create the proof object with the given values.
+    /// - Parameters:
+    ///   - method: the sign key
+    ///   - realm: where is presentation use
+    ///   - nonce: the nonce string
+    ///   - signature: the signature string
     convenience init(_ method: DIDURL, _ realm: String, _ nonce: String, _ signature: String) {
         self.init(Constants.DEFAULT_PUBLICKEY_TYPE, method, realm, nonce, signature)
     }
 
-    /// The type of target data is a verifiable expression
+    /// Get the proof type.
     @objc
     public var type: String {
         return _type
     }
 
-    /// Proof method, the value is the public key reference used for signing and verification in the provider DID document
+    /// Get the verification method.
     @objc
     public var verificationMethod: DIDURL {
         return _verificationMethod
     }
 
-    /// Target areas to which the expression applies, such as website domain names, application names, etc.
+    /// Get the realm string of this presentation object.
     @objc
     public var realm: String {
         return _realm
     }
 
-    /// Random value used for signature operation
+    /// Get the nonce string of this presentation object.
     @objc
     public var nonce: String {
         return _nonce
     }
 
-    /// The signed value, using Base64 encoding
+    /// Get signature value of this presentation object.
     @objc
     public var signature: String {
         return _signature
     }
 
     class func fromJson(_ node: JsonNode, _ ref: DID?) throws -> VerifiablePresentationProof {
-        let error = { (des) -> DIDError in
-            return DIDError.malformedPresentation(des)
-        }
-
         let serializer = JsonSerializer(node)
         var options: JsonSerializer.Options
 
         options = JsonSerializer.Options()
                                 .withOptional()
                                 .withRef(Constants.DEFAULT_PUBLICKEY_TYPE)
-                                .withError(error)
-                                .withHint("presentation proof type")
-        let type = try serializer.getString(Constants.TYPE, options)
+        guard let type = try serializer.getString(Constants.TYPE, options) else {
+            throw DIDError.CheckedError.DIDSyntaxError.MalformedPresentationError("Mssing presentation proof type")
+        }
 
         options = JsonSerializer.Options()
                                 .withRef(ref)
-                                .withError(error)
-                                .withHint("presentation proof verificationMethod")
-        let method = try serializer.getDIDURL(Constants.VERIFICATION_METHOD, options)
+        guard let method = try serializer.getDIDURL(Constants.VERIFICATION_METHOD, options) else {
+            throw DIDError.CheckedError.DIDSyntaxError.MalformedPresentationError("Mssing presentation proof verificationMethod")
+        }
 
         options = JsonSerializer.Options()
-                                .withError(error)
-                                .withHint("presentation proof realm")
-        let realm = try serializer.getString(Constants.REALM, options)
+        guard let realm = try serializer.getString(Constants.REALM, options) else {
+            throw DIDError.CheckedError.DIDSyntaxError.MalformedPresentationError("Mssing presentation proof realm")
+        }
 
         options = JsonSerializer.Options()
-                                .withError(error)
-                                .withHint("presentation proof nonce")
-        let nonce = try serializer.getString(Constants.NONCE, options)
+        guard let nonce = try serializer.getString(Constants.NONCE, options) else {
+            throw DIDError.CheckedError.DIDSyntaxError.MalformedPresentationError("Mssing presentation proof nonce")
+        }
 
         options = JsonSerializer.Options()
-                                .withError(error)
-                                .withHint("presentation proof signature")
-        let signature = try serializer.getString(Constants.SIGNATURE, options)
+        guard let signature = try serializer.getString(Constants.SIGNATURE, options) else {
+            throw DIDError.CheckedError.DIDSyntaxError.MalformedPresentationError("Mssing presentation proof signature")
+        }
 
-        return VerifiablePresentationProof(type, method!, realm, nonce, signature)
+        return VerifiablePresentationProof(type, method, realm, nonce, signature)
     }
 
     func toJson(_ generator: JsonGenerator) {

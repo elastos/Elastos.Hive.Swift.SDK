@@ -31,33 +31,51 @@ public class VerifiableCredentialIssuer: NSObject {
         // use the default public key if no signKey provided.
         var key = signKey
         if  key == nil {
-            key = doc.defaultPublicKey
+            key = doc.defaultPublicKeyId()
         }
 
         // The key would be used to sign verifiable crendetial when using
         // builder to create a new verifiable credential. So,
         // should make sure the key would be authenticationKey and
         // has corresponding private key to make sign.
-        guard doc.containsAuthenticationKey(forId: key!) else {
-            throw DIDError.illegalArgument()
+        guard try doc.containsAuthenticationKey(forId: key!) else {
+            throw DIDError.UncheckedError.IllegalArgumentErrors.InvalidKeyError()
         }
-        guard doc.containsPrivateKey(forId: key!) else {
-            throw DIDError.illegalArgument(Errors.NO_PRIVATE_KEY_EXIST)
+        guard try doc.containsPrivateKey(forId: key!) else {
+            throw DIDError.UncheckedError.IllegalArgumentErrors.InvalidKeyError(Errors.NO_PRIVATE_KEY_EXIST)
         }
 
         self._issuerDoc = doc
         self._signKey = key!
     }
+/*
+     private void init(DIDDocument doc, DIDURL signKey) throws DIDStoreException {
+         this.self = doc;
 
+         if (signKey == null) {
+             signKey = self.getDefaultPublicKeyId();
+             if (signKey == null)
+                 throw new InvalidKeyException("Need explict sign key or effective controller");
+         } else {
+             if (!self.isAuthenticationKey(signKey))
+                 throw new InvalidKeyException(signKey.toString());
+         }
+
+         if (!doc.hasPrivateKey(signKey))
+             throw new InvalidKeyException("No private key: " + signKey);
+
+         this.signKey = signKey;
+     }
+     */
     private convenience init(_ did: DID, signKey: DIDURL? , _ store: DIDStore) throws {
         let doc: DIDDocument?
         do {
             doc = try store.loadDid(did)
             if doc == nil {
-                throw DIDError.didStoreError("Can not load DID.")
+                throw DIDError.CheckedError.DIDStoreError.DIDStorageError("Can not load DID.")
             }
         } catch {
-            throw DIDError.didResolveError("Can not resolve did")
+            throw DIDError.CheckedError.DIDBackendError.DIDResolveError("Can not resolve did")
         }
         try self.init(doc: doc!, signKey: signKey)
     }
@@ -119,7 +137,7 @@ public class VerifiableCredentialIssuer: NSObject {
     /// - Returns: VerifiableCredentialBuilder instance.
     @objc
     public func editingVerifiableCredentialFor(did: String) throws -> VerifiableCredentialBuilder {
-        return VerifiableCredentialBuilder(try DID(did), _issuerDoc, signKey)
+        return VerifiableCredentialBuilder(self, try DID(did), _issuerDoc, signKey)
     }
 
     /// Get VerifiableCredential Builder to modify VerifiableCredential.
@@ -127,6 +145,6 @@ public class VerifiableCredentialIssuer: NSObject {
     /// - Returns: VerifiableCredentialBuilder instance.
     @objc(editingVerifiableCredentialForDid:)
     public func editingVerifiableCredentialFor(did: DID) -> VerifiableCredentialBuilder {
-        return VerifiableCredentialBuilder(did, _issuerDoc, signKey)
+        return VerifiableCredentialBuilder(self, did, _issuerDoc, signKey)
     }
 }

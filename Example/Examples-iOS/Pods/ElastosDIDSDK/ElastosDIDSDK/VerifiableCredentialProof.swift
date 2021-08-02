@@ -23,68 +23,98 @@
 import Foundation
 
 @objc(VerifiableCredentialProof)
+/// The proof information for verifiable credential.
+/// The default proof type is ECDSAsecp256r1.
 public class VerifiableCredentialProof: NSObject {
     private var _type: String
     private var _verificationMethod: DIDURL
     private var _signature: String
+    private var _created: Date?
     
-    init(_ type: String, _ method: DIDURL, _ signature: String) {
+    /// Constructs the Proof object with the given values.
+    /// - Parameters:
+    ///   - type: the verification method type
+    ///   - method: the verification method, normally it's a public key
+    ///   - signature: the signature encoded in base64 URL safe format
+    init(_ type: String, _ method: DIDURL, _ created: Date?, _ signature: String) {
         self._type = type
+        self._verificationMethod = method
+        self._created = created
+        self._signature = signature
+    }
+    
+    /// Constructs the Proof object with the given values.
+    /// - Parameters:
+    ///   - method: the verification method, normally it's a public key
+    ///   - signature: the signature encoded in base64 URL safe format
+    init(_ method: DIDURL, _ signature: String) {
+        self._type = Constants.DEFAULT_PUBLICKEY_TYPE
         self._verificationMethod = method
         self._signature = signature
     }
 
-    /// The cryptographic signature suite that was used to generate the signature
+    /// Get the verification method type.
     @objc
     public var type: String {
         return _type
     }
-
-    /// The public key identifier that created the signature
+    
+    /// Get the created time stamp.
+    public var created: Date? {
+        return _created
+    }
+    
+    /// Get the verification method, normally it's a public key id.
     @objc
     public var verificationMethod: DIDURL {
         return _verificationMethod
     }
 
-    /// The signed value, using Base64 encoding
+    /// Get the signature.
+    /// the signature encoded in URL safe base64 string
     @objc
     public var signature: String {
         return _signature
     }
-    
-    class func fromJson(_ node: JsonNode, _ ref: DID?) throws -> VerifiableCredentialProof {
-        let error = { (des) -> DIDError in
-            return DIDError.malformedCredential(des)
-        }
 
+    class func fromJson(_ node: JsonNode, _ ref: DID?) throws -> VerifiableCredentialProof {
         let serializer = JsonSerializer(node)
         var options: JsonSerializer.Options
 
         options = JsonSerializer.Options()
                                 .withOptional()
                                 .withRef(Constants.DEFAULT_PUBLICKEY_TYPE)
-                                .withHint("credential proof type")
-                                .withError(error)
-        let type = try serializer.getString(Constants.TYPE, options)
+        guard let type = try serializer.getString(Constants.TYPE, options) else {
+            throw DIDError.CheckedError.DIDSyntaxError.MalformedCredentialError("Mssing credential proof type")
+        }
 
+        options = JsonSerializer.Options()
+                                .withOptional()
+                                .withRef(Constants.CREATED)
+        let create = try serializer.getDate(Constants.CREATED, options)
+        
         options = JsonSerializer.Options()
                                 .withRef(ref)
-                                .withHint("credential proof verificationMethod")
-                                .withError(error)
-        let method = try serializer.getDIDURL(Constants.VERIFICATION_METHOD, options)
+        guard let method = try serializer.getDIDURL(Constants.VERIFICATION_METHOD, options) else {
+            throw DIDError.CheckedError.DIDSyntaxError.MalformedCredentialError("Mssing credential proof verificationMethod")
+        }
 
         options = JsonSerializer.Options()
-                                .withHint("credential proof signature")
-                                .withError(error)
-        let signature = try serializer.getString(Constants.SIGNATURE, options)
-
-        return VerifiableCredentialProof(type, method!, signature)
+        guard let signature = try serializer.getString(Constants.SIGNATURE, options) else {
+            throw DIDError.CheckedError.DIDSyntaxError.MalformedCredentialError("Mssing credential proof signature")
+        }
+        
+        return VerifiableCredentialProof(type, method, create, signature)
     }
 
     func toJson(_ generator: JsonGenerator, _ ref: DID?, _ normalized: Bool) {
         generator.writeStartObject()
         if normalized || type != Constants.DEFAULT_PUBLICKEY_TYPE {
             generator.writeStringField(Constants.TYPE, type)
+        }
+        if let _ = created {
+            generator.writeFieldName(Constants.CREATED)
+            generator.writeString(DateFormatter.convertToUTCStringFromDate(self.created!))
         }
 
         generator.writeFieldName(Constants.VERIFICATION_METHOD)

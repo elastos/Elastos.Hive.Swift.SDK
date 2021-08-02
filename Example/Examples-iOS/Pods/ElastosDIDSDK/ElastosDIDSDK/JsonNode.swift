@@ -30,6 +30,7 @@ public enum JsonNodeType: Int {
     case NUMBER
     case DICTIONARY
     case STRING
+    case DATE
 }
 
 @objc(JsonNode)
@@ -123,6 +124,8 @@ public class JsonNode: NSObject {
             let data = try! JSONSerialization.data(withJSONObject: result, options: [])
             resultString = String(data: data, encoding: String.Encoding.utf8)!
             resultString = resultString.replacingOccurrences(of: "\\\"", with: "\"")
+            resultString = resultString.replacingOccurrences(of: "\"{", with: "{")
+            resultString = resultString.replacingOccurrences(of: "}\"", with: "}")
             return resultString;
 
         } else {
@@ -252,6 +255,10 @@ public class JsonNode: NSObject {
         return self.node as? Int
     }
 
+    public func asDate() -> Date? {
+        return self.node as? Date
+    }
+    
     @objc
     public func asIntegerWithOC() -> NSNumber? {
         if let result = self.node as? Int {
@@ -308,6 +315,8 @@ public class JsonNode: NSObject {
             return JsonNodeType.NUMBER
         } else if self.node is Float {
             return JsonNodeType.NUMBER
+        }else if self.node is Date {
+            return JsonNodeType.DATE
         }else {
             return JsonNodeType.NIL
         }

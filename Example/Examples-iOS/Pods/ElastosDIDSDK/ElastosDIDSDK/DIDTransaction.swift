@@ -22,21 +22,45 @@
 
 import Foundation
 
-@objc(DIDTransaction)
-public protocol DIDTransaction {
+public class DIDTransaction: IDTransactionInfo {
 
-    /// Get did.
-    func getDid() -> DID
-
-    /// Get transaction id.
-    func getTransactionId() -> String
-
-    /// Get timestamp.
-    func getTimestamp() -> Date
-
-    /// Get IDChain request operation.
-    func getOperation() -> IDChainRequestOperation
-
-    /// Get DIDDocument.
-    func getDocument() -> DIDDocument
+    var _request: DIDRequest
+    
+    init(_ txid: String, _ timestamp: Date, _ request: DIDRequest) {
+        self._request = request
+        super.init(txid, timestamp, request)
+    }
+    
+    public override var request: DIDRequest {
+        return _request
+    }
+    
+    public var did: DID? {
+        return request.did
+    }
+    
+    public override func serialize(_ generator: JsonGenerator) {
+        generator.writeStartObject()
+        generator.writeStringField(Constants.TXID, self.transactionId)
+        generator.writeStringField(Constants.TIMESTAMP, DateFormatter.convertToUTCStringFromDate(self.timestamp))
+        
+        generator.writeFieldName(Constants.OPERATION)
+        request.serialize(generator)
+        generator.writeEndObject()
+    }
+    
+    public override func serialize() -> String {
+        let generator = JsonGenerator()
+        serialize(generator)
+        
+        return generator.toString()
+    }
+    
+    public class func deserialize(_ json: [String: Any]) throws -> DIDTransaction {
+        let txid = json[Constants.TXID] as! String
+        let timestamp = json[Constants.TXID] as! String
+        let op = json[Constants.OPERATION]
+        let request = try DIDRequest.deserialize(JsonNode(op as Any))
+        return DIDTransaction(txid, DateFormatter.convertToUTCDateFromString(timestamp)!, request)
+    }
 }

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2020 Elastos Foundation
+* Copyright (c) 2021 Elastos Foundation
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -22,32 +22,41 @@
 
 import Foundation
 
-@objc(ResolveResultStatus)
-public enum ResolveResultStatus: Int, CustomStringConvertible {
-    case STATUS_VALID = 0
-    case STATUS_EXPIRED = 1
-    case STATUS_DEACTIVATED = 2
-    case STATUS_NOT_FOUND = 3
+public class CredentialList: ResolveResult {
+    static let DID = "did"
+    static let CREDENTIALS = "credentials"
 
-    func toString() -> String {
-        let desc: String
-        switch self.rawValue {
-        case 0:
-            desc = "valid"
-        case 1:
-            desc = "expired"
-        case 2:
-            desc = "deactivated"
-        case 3:
-            desc = "notfound"
-        default:
-            desc = "notfound"
-        }
-        return desc;
+    static let DEFAULT_SIZE = 128
+    static let MAX_SIZE = 512
+
+    private var _did: DID
+    private var _credentialIds: [DIDURL] = [ ]
+    
+    init(_ did: DID) {
+        self._did = did
     }
-
-    /// ResolveResultStatus string.
-    public var description: String {
-        return toString()
+    
+    public var did: DID {
+        return _did
+    }
+    
+    public var count: Int {
+        return credentialIds.count
+    }
+    
+    public func getCredentialId(_ index: Int) -> DIDURL {
+        return credentialIds[index]
+    }
+    
+    public var credentialIds: [DIDURL] {
+        return _credentialIds
+    }
+    
+    public func appendCredentialId(_ id: DIDURL) {
+        _credentialIds.append(id)
+    }
+    
+    override func sanitize() throws {
+        
     }
 }
