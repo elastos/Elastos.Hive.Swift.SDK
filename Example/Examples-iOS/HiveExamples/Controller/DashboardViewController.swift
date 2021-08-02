@@ -9,12 +9,14 @@ import UIKit
 import RxSwift
 import SnapKit
 import RxCocoa
+import SVProgressHUD
 
 class DashboardViewController: UIViewController {
     private var scriptCaller: ScriptCaller?
     let textView: UITextView = UITextView()
     let runScriptButton = UIButton()
     let disposeBag = DisposeBag()
+    var loadingFlag: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,12 +53,21 @@ class DashboardViewController: UIViewController {
         }
         
         self.runScriptButton.rx.tap.subscribe { event in
+            if self.loadingFlag == true {
+                return
+            }
+            self.loadingFlag = true
+            SVProgressHUD.show()
             self.scriptCaller!.runScript().done({ result in
                 DispatchQueue.main.async {
-                    self.textView.text = "success"
+                    self.loadingFlag = false
+                    SVProgressHUD.dismiss()
+                    self.textView.text = "\(result)"
                 }
             }).catch({ error in
                 DispatchQueue.main.async {
+                    self.loadingFlag = false
+                    SVProgressHUD.dismiss()
                     self.textView.text = "\(error)"
                 }
             })

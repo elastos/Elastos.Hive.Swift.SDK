@@ -24,6 +24,8 @@ import XCTest
 @testable import ElastosHiveSDK
 import ElastosDIDSDK
 import AwaitKit
+import SwiftyJSON
+
 
 class ScriptingCrossingTest: XCTestCase {
     private let COLLECTION_GROUP: String = "st_group";

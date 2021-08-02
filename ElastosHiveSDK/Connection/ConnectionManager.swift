@@ -22,6 +22,7 @@
 
 import Foundation
 import ObjectMapper
+import SwiftyJSON
 
 extension DataRequest {
     func execute(options: JSONSerialization.ReadingOptions = .allowFragments) throws -> HiveResponse? {

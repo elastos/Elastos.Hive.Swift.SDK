@@ -12,7 +12,7 @@ def import_pods
   pod 'ReadWriteLock', '~> 1.0'
   pod 'ObjectMapper'
   pod 'AwaitKit'
-  
+  pod 'SwiftyJSON'
 
 end
 

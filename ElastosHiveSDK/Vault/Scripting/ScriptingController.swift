@@ -21,6 +21,7 @@
  */
 
 import Foundation
+import SwiftyJSON
 
 public class ScriptingController {
     private var _connectionManager: ConnectionManager?

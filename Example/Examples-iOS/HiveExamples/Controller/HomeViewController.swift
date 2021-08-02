@@ -9,12 +9,14 @@ import UIKit
 import RxSwift
 import SnapKit
 import RxCocoa
+import SVProgressHUD
 
 class HomeViewController: UIViewController {
     private var scriptOwner: ScriptOwner?
     let textView: UITextView = UITextView()
     let registerScriptButton = UIButton()
     let disposeBag = DisposeBag()
+    var loadingFlag: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,12 +32,21 @@ class HomeViewController: UIViewController {
         self.registerScriptButton.layer.cornerRadius = 4
         self.registerScriptButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
         self.registerScriptButton.rx.tap.subscribe { event in
+            if self.loadingFlag == true {
+                return
+            }
+            self.loadingFlag = true
+            SVProgressHUD.show()
             self.scriptOwner!.setScript().done({ result in
                 DispatchQueue.main.async {
+                    SVProgressHUD.dismiss()
+                    self.loadingFlag = false
                     self.textView.text = "success"
                 }
             }).catch({ error in
                 DispatchQueue.main.async {
+                    SVProgressHUD.dismiss()
+                    self.loadingFlag = false
                     self.textView.text = "\(error)"
                 }
             })

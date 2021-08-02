@@ -10,7 +10,6 @@ target 'HiveExamples' do
   pod 'SnapKit'
   pod 'RxSwift'
   pod 'RxCocoa'
-  pod 'SwiftyJSON'
   pod 'SVProgressHUD'
   
 end

@@ -24,6 +24,7 @@ import XCTest
 @testable import ElastosHiveSDK
 import ElastosDIDSDK
 import AwaitKit
+import SwiftyJSON
 
 private let FIND_NAME: String = "get_group_messages"
 private let FIND_NO_CONDITION_NAME: String = "script_no_condition"
@@ -169,7 +170,7 @@ class ScriptingServiceTest: XCTestCase {
             let params = ["author" : "John"]
             let result = try await(_scriptRunner!.callScript(scriptName, params, _targetDid!, _appDid!, JSON.self))
             XCTAssertNotNil(result)
-            XCTAssert(result[scriptName]["deleted_count"].number! > 0)
+            XCTAssert(result[scriptName]["deleted_count"].int! > 0)
         }())
     }
     

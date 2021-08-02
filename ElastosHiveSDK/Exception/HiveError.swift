@@ -21,6 +21,7 @@
  */
 
 import Foundation
+import SwiftyJSON
 
 public enum HiveError: Error {
     case AlreadyExistsException(_ message: String?)
