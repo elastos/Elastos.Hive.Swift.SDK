@@ -1,3 +1,2 @@
 #!/bin/sh
-jazzy --min-acl public
-
+jazzy --podspec ElastosHiveSDK.podspec
