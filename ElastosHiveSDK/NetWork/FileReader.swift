@@ -42,6 +42,7 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     var authFailure : RequestBlock?
     private var readerBlock : RequestBlock?
     private var readerCompleteWithError: HandleBlock?
+    private var isError = false
   
     init(url: URL, authHelper: VaultAuthHelper, method: HTTPMethod, resolver: Resolver<FileReader>) {
         var input: InputStream? = nil
@@ -94,7 +95,9 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     }
 
     public var didLoadFinish: Bool {
-        
+        if isError {
+            return isError
+        }
         return self.downloadDidFinsish && self.readDidFinish
     }
     
@@ -126,6 +129,7 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         Log.d("Hive Debug ==> didReceive ->", response.debugDescription )
         let code = response?.statusCode
         guard code != nil else {
+            isError = true
             self.resolver.reject(HiveError.failure(des: "unkonw error."))
             return
         }
@@ -133,6 +137,7 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
             resolver.fulfill(self)
         }
         guard 200...299 ~= code! else {
+            isError = true
             resolver.reject(HiveError.failure(des: String(data: data, encoding: .utf8)))
             self.readerBlock?(HiveError.failure(des: String(data: data, encoding: .utf8)))
             self.readerCompleteWithError?(false, HiveError.failure(des: String(data: data, encoding: .utf8)))
@@ -162,23 +167,27 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         Log.d("Hive Debug ==> response Code ->", response?.statusCode as Any)
         Log.d("Hive Debug ==> didCompleteWithError ->", response as Any)
         if let _ = error {
+            isError = true
             self.readerBlock?(HiveError.netWork(des: error))
             self.readerCompleteWithError?(false, HiveError.netWork(des: error))
             return
         }
         let code = response?.statusCode
         guard code != nil else {
+            isError = true
             self.readerCompleteWithError?(false, HiveError.failure(des: "unkonw error."))
             self.resolver.reject(HiveError.failure(des: "unkonw error."))
             return
         }
         guard 200...299 ~= code! else {
             if code == 401 {
+                isError = true
                 self.authFailure?(HiveError.failure(des: "code: 401"))
                 self.task?.cancel()
                 return
             }
             else if code == 404 {
+                isError = true
                 self.readerBlock?(HiveError.fileNotFound(des: "file not found."))
                 self.readerCompleteWithError?(false, HiveError.fileNotFound(des: "file not found."))
                 resolver.reject(HiveError.fileNotFound(des: "file not found."))
