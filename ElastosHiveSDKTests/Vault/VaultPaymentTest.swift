@@ -34,9 +34,9 @@ class VaultPaymentTest: XCTestCase {
 
     override func setUpWithError() throws {
         Log.setLevel(.Debug)
-        XCTAssertNoThrow({ [self] in
+        XCTAssertNoThrow(try { [self] in
             let testData = TestData.shared()
-            _paymentService = VaultSubscription(testData.appContext, testData.providerAddress)
+            _paymentService = try VaultSubscription(testData.appContext, testData.providerAddress)
         }())
     }
     

@@ -24,5 +24,5 @@ import Foundation
 
 public protocol CodeFetcher {
     func fetch() throws -> String?
-    func invalidate()
+    func invalidate() throws
 }

@@ -121,16 +121,16 @@ public class ConnectionManager {
         self.baseURL = baseURL
     }
     
-    func headersStream() -> HTTPHeaders {
+    func headersStream() throws -> HTTPHeaders {
         self.lock.lock()
-        let token = self.accessToken?.getCanonicalizedAccessToken()
+        let token = try self.accessToken?.getCanonicalizedAccessToken()
         self.lock.unlock()
         return ["Content-Type": "application/octet-stream", "Authorization": "\(token!)", "Transfer-Encoding": "chunked", "Connection": "Keep-Alive"]
     }
     
-    func headers() -> HTTPHeaders {
+    func headers() throws -> HTTPHeaders {
         self.lock.lock()
-        let token = self.accessToken?.getCanonicalizedAccessToken()
+        let token = try self.accessToken?.getCanonicalizedAccessToken()
         self.lock.unlock()
         
         var header = self.defaultHeaders()
@@ -151,11 +151,11 @@ public class ConnectionManager {
     }
     
     public func createDataRequest(_ url: String,  _ method: HTTPMethod, _ parameters: Dictionary<String, Any>?) throws -> DataRequest {
-        Log.d("Hive Debug", "*******\nurl = \(url)\nheader = \(self.headers())\nrequest body = \(parameters ?? [:])\n*******\n")
+        Log.d("Hive Debug", "*******\nurl = \(url)\nheader = \(try self.headers())\nrequest body = \(parameters ?? [:])\n*******\n")
         return AF.request(url,
                           method: method,
                           parameters: parameters,
                           encoding: JSONEncoding.default,
-                          headers:self.headers()) { $0.timeoutInterval = 30 }
+                          headers:try self.headers()) { $0.timeoutInterval = 30 }
     }
 }

@@ -32,7 +32,7 @@ class DatabaseServiceTest: XCTestCase {
     
     override func setUp() {
         Log.setLevel(.Debug)
-        XCTAssertNoThrow(_databaseService = TestData.shared().newVault().databaseService)
+        XCTAssertNoThrow(_databaseService = try TestData.shared().newVault().databaseService)
     }
     
     func test01CreateCollection() {

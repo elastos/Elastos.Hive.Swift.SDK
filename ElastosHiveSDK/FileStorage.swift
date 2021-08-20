@@ -32,7 +32,7 @@ public class FileStorage: DataStorage {
     private static let BACKUP: String  = "credential-backup";
     private static let TOKENS: String = "tokens";
     
-    public init(_ rootPath: String, _ userDid: String) {
+    public init(_ rootPath: String, _ userDid: String) throws {
         var path = rootPath
         if String(path.last!) != File.separator {
             path = path + File.separator
@@ -43,96 +43,75 @@ public class FileStorage: DataStorage {
         
         let fileManager = FileManager.default
         if !fileManager.fileExists(atPath: _basePath!) {
-            do {
-                try fileManager.createDirectory(atPath: _basePath!, withIntermediateDirectories: true, attributes: nil)
-            } catch {
-                print(error)
-            }
+            try fileManager.createDirectory(atPath: _basePath!, withIntermediateDirectories: true, attributes: nil)
         }
     }
     
-    public func loadBackupCredential(_ serviceDid: String) -> String? {
-        return readContent(makeFullPath(FileStorage.BACKUP, compatDid(serviceDid)))
+    public func loadBackupCredential(_ serviceDid: String) throws -> String? {
+        return try readContent(makeFullPath(FileStorage.BACKUP, compatDid(serviceDid)))
     }
     
-    public func loadAccessToken(_ serviceDid: String) -> String? {
-        return readContent(makeFullPath(FileStorage.TOKENS, compatDid(serviceDid)));
+    public func loadAccessToken(_ serviceDid: String) throws -> String? {
+        return try readContent(makeFullPath(FileStorage.TOKENS, compatDid(serviceDid)));
     }
     
-    public func loadAccessTokenByAddress(_ providerAddress: String) -> String? {
-        return readContent(makeFullPath(FileStorage.TOKENS, providerAddress.sha256));
+    public func loadAccessTokenByAddress(_ providerAddress: String) throws -> String? {
+        return try readContent(makeFullPath(FileStorage.TOKENS, providerAddress.sha256));
     }
 
-    public func storeBackupCredential(_ serviceDid: String, _ credential: String) {
-        writeContent(makeFullPath(FileStorage.BACKUP, compatDid(serviceDid)), credential);
+    public func storeBackupCredential(_ serviceDid: String, _ credential: String) throws {
+        try writeContent(makeFullPath(FileStorage.BACKUP, compatDid(serviceDid)), credential);
     }
 
-    public func storeAccessToken(_ serviceDid: String, _ accessToken: String) {
-        writeContent(makeFullPath(FileStorage.TOKENS, compatDid(serviceDid)), accessToken);
+    public func storeAccessToken(_ serviceDid: String, _ accessToken: String) throws {
+        try writeContent(makeFullPath(FileStorage.TOKENS, compatDid(serviceDid)), accessToken);
     }
 
-    public func storeAccessTokenByAddress(_ providerAddress: String, _ accessToken: String) {
-        writeContent(makeFullPath(FileStorage.TOKENS, providerAddress.sha256), accessToken);
+    public func storeAccessTokenByAddress(_ providerAddress: String, _ accessToken: String) throws {
+        try writeContent(makeFullPath(FileStorage.TOKENS, providerAddress.sha256), accessToken);
     }
 
-    public func clearBackupCredential(_ serviceDid: String) {
-        deleteContent(makeFullPath(FileStorage.BACKUP, compatDid(serviceDid)));
+    public func clearBackupCredential(_ serviceDid: String) throws {
+        try deleteContent(makeFullPath(FileStorage.BACKUP, compatDid(serviceDid)))
     }
        
-    public func clearAccessToken(_ serviceDid: String) {
-        deleteContent(makeFullPath(FileStorage.TOKENS, compatDid(serviceDid)));
+    public func clearAccessToken(_ serviceDid: String) throws {
+        try deleteContent(makeFullPath(FileStorage.TOKENS, compatDid(serviceDid)))
     }
 
-    public func clearAccessTokenByAddress(_ providerAddress: String) {
-        deleteContent(makeFullPath(FileStorage.TOKENS, providerAddress.sha256));
+    public func clearAccessTokenByAddress(_ providerAddress: String) throws {
+        try deleteContent(makeFullPath(FileStorage.TOKENS, providerAddress.sha256))
     }
     
-    private func readContent(_ path: String) -> String? {
+    private func readContent(_ path: String) throws -> String? {
         let fileManager = FileManager.default
         if fileManager.fileExists(atPath: path) == false {
             return nil
         } else {
-            do {
-                return try String(contentsOfFile:path, encoding: String.Encoding.utf8)
-            } catch {
-                print(error)
-                return nil
-            }
+            return try String(contentsOfFile:path, encoding: String.Encoding.utf8)
         }
     }
     
-    private func writeContent(_ path: String, _ content: String) {
+    private func writeContent(_ path: String, _ content: String) throws {
         let fileManager = FileManager.default
         
         let index = path.range(of: "/", options: .backwards)?.lowerBound
         let directoryPath = String(index.map(path.prefix(upTo:)) ?? "" + "/")
         
         if fileManager.fileExists(atPath: directoryPath) == false {
-            do {
-                try fileManager.createDirectory(atPath: directoryPath,
-                                                withIntermediateDirectories: true,
-                                                attributes: nil)
-            } catch {
-                print(error)
-            }
+            try fileManager.createDirectory(atPath: directoryPath,
+                                            withIntermediateDirectories: true,
+                                            attributes: nil)
         }
         
         fileManager.createFile(atPath: path, contents: nil, attributes: nil)
-        do {
-            let writer = try FileHandle(forWritingTo: URL(fileURLWithPath: path))
-            writer.write(content.data(using: .utf8)!)
-        } catch {
-            print(error)
-        }
+        let writer = try FileHandle(forWritingTo: URL(fileURLWithPath: path))
+        writer.write(content.data(using: .utf8)!)
     }
     
-    private func deleteContent(_ path: String) {
+    private func deleteContent(_ path: String) throws {
         let fileManager = FileManager.default
-        do {
-            try fileManager.removeItem(atPath: path)
-        } catch {
-            print(error)
-        }
+        try fileManager.removeItem(atPath: path)
     }
     
     private func makeFullPath(_ segPath: String, _ fileName: String) -> String {

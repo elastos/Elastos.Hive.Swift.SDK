@@ -52,27 +52,27 @@ public class ServiceEndpoint: NodeRPCConnection {
     /// - parameters:
     ///   - context: The application context.
     ///   - providerAddress: The address of the provider.
-    public init(_ context: AppContext, _ providerAddress: String) {
+    public init(_ context: AppContext, _ providerAddress: String) throws {
         _context = context
         _providerAddress = providerAddress
         super.init()
         self.connectionManager = ConnectionManager(_providerAddress)
         
         var dataDir = _context.appContextProvider.getLocalDataDir()
-//        if String((dataDir?.last)!) != "\\" {
-//            dataDir = dataDir! + "\\"
-//        }
-        
-        _dataStorage = FileStorage(dataDir!, _context.userDid)
+        _dataStorage = try FileStorage(dataDir!, _context.userDid)
         _accessToken = AccessToken(self, _dataStorage)
+        var err: Error?
         _accessToken!.flush = { (value) in
             do {
                 let claims = try JwtParserBuilder().build().parseClaimsJwt(value).claims
                 self.flushDids(claims.getAudience()!, claims.getIssuer()!)
             } catch {
+                err = error
                 print(error)
             }
-            
+        }
+        guard err == nil else {
+            throw err!
         }
         self.connectionManager?.accessToken = _accessToken;
     }

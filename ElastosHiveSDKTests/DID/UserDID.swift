@@ -6,11 +6,7 @@ public class UserDID: DIDEntity {
 
     public override init(_ name: String, _ mnemonic: String, _ phrasepass: String, _ storepass: String) throws {
         try super.init(name, mnemonic, phrasepass, storepass)
-        do {
-            issuer = try VerifiableCredentialIssuer(getDocument())
-        } catch {
-            print(error)
-        }
+        issuer = try VerifiableCredentialIssuer(getDocument())
     }
 
     public func issueDiplomaFor(_ dapp: AppDID) throws -> VerifiableCredential {

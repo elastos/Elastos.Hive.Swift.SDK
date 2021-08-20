@@ -32,7 +32,7 @@ class PromotionServiceTest: XCTestCase {
         Log.setLevel(.Debug)
         XCTAssertNoThrow({ [self] in
             let testData = TestData.shared()
-            _promotionService = testData.newBackup().promotionService
+            _promotionService = try testData.newBackup().promotionService
         })
     }
     

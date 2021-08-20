@@ -59,13 +59,8 @@ public class AppContext {
         guard resolverHasSetup == false else {
             throw HiveError.DIDResoverAlreadySetupException(nil)
         }
-        
-        do {
-            try DIDBackend.initialize(DefaultDIDAdapter(resolver))
-            resolverHasSetup = true
-        } catch {
-            throw error //TODO: need to throw specific error.
-        }
+        try DIDBackend.initialize(DefaultDIDAdapter(resolver))
+        resolverHasSetup = true
     }
     
     /// Create the application context.

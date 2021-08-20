@@ -53,18 +53,18 @@ class ScriptingServiceTest: XCTestCase {
 
     override func setUpWithError() throws {
         Log.setLevel(.Debug)
-        XCTAssertNoThrow({ [self] in
+        XCTAssertNoThrow(try { [self] in
             let testData = TestData.shared()
-            _scriptingService = testData.newVault().scriptingService
-            _scriptRunner = testData.newScriptRunner()
-            _filesService = testData.newVault().filesService
-            _databaseService = testData.newVault().databaseService
+            _scriptingService = try testData.newVault().scriptingService
+            _scriptRunner = try testData.newScriptRunner()
+            _filesService = try testData.newVault().filesService
+            _databaseService = try testData.newVault().databaseService
             _appDid = testData.appId
             _targetDid = testData.userDid
             
             self.bundlePath =  Bundle(for: type(of: self))
             self.localDstFilePath = self.bundlePath?.path(forResource: "test_ios", ofType: "txt")
-            _filesService = testData.newVault().filesService
+            _filesService = try testData.newVault().filesService
         }())
     }
     
