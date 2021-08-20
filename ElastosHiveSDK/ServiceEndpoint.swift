@@ -59,9 +59,9 @@ public class ServiceEndpoint: NodeRPCConnection {
         self.connectionManager = ConnectionManager(_providerAddress)
         
         var dataDir = _context.appContextProvider.getLocalDataDir()
-        if String((dataDir?.last)!) != "\\" {
-            dataDir = dataDir! + "\\"
-        }
+//        if String((dataDir?.last)!) != "\\" {
+//            dataDir = dataDir! + "\\"
+//        }
         
         _dataStorage = FileStorage(dataDir!, _context.userDid)
         _accessToken = AccessToken(self, _dataStorage)

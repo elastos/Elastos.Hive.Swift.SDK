@@ -23,7 +23,7 @@
 import Foundation
 
 public class File {
-    public static let separator: String = "\\"
+    public static let separator: String = "/"
 }
 
 public class FileStorage: DataStorage {
