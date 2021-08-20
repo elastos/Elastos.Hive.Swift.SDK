@@ -38,8 +38,8 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentSer
     ///   - context: The application context.
     ///   - providerAddress: The address of the provider.
     /// - throws: HiveException
-    public override init(_ context: AppContext, _ providerAddress: String) {
-        super.init(context, providerAddress)
+    public override init(_ context: AppContext, _ providerAddress: String) throws {
+        try super.init(context, providerAddress)
         _subscriptionController = SubscriptionController(self)
         _paymentController = PaymentController(self)
     }

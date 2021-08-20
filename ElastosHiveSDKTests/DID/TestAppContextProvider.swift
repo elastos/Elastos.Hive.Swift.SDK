@@ -5,7 +5,7 @@ import ElastosHiveSDK
 public class TestAppContextProvider: AppContextProvider {
     public func getAuthorization(_ authenticationChallengeJWTcode: String) -> Promise<String>? {
         return Promise<String> { resolver in
-            resolver.fulfill(signAuthorization(authenticationChallengeJWTcode)!)
+            resolver.fulfill(try signAuthorization(authenticationChallengeJWTcode)!)
         }
     }
     
@@ -27,10 +27,11 @@ public class TestAppContextProvider: AppContextProvider {
         self.appInstanceDid = appInstanceDid
     }
     
-    public func signAuthorization(_ jwtToken: String) -> String? {
+    public func signAuthorization(_ jwtToken: String) throws -> String? {
         
         var accessToken: String?
         let semaphore: DispatchSemaphore = DispatchSemaphore(value: 0)
+        var err: Error?
         DispatchQueue.global().async { [self] in
             do {
                 let claims = try JwtParserBuilder().build().parseClaimsJwt(jwtToken).claims
@@ -43,11 +44,14 @@ public class TestAppContextProvider: AppContextProvider {
                 accessToken = token
                 semaphore.signal()
             } catch{
-                print(error)
+                err = error
                 semaphore.signal()
             }
         }
         semaphore.wait()
+        guard err == nil else {
+            throw err!
+        }
         return accessToken!
     }
 }

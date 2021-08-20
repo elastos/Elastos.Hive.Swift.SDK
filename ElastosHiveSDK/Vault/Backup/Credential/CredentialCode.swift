@@ -39,24 +39,24 @@ public class CredentialCode {
             return _jwtCode
         }
         
-        _jwtCode = restoreToken()
+        _jwtCode = try restoreToken()
         if _jwtCode == nil {
             _jwtCode = try _remoteResolver.fetch()
         }
         
         if _jwtCode != nil {
-            saveToken(_jwtCode!)
+            try saveToken(_jwtCode!)
         }
         
         return _jwtCode
     }
     
-    private func restoreToken() -> String? {
-        return _storage.loadBackupCredential(_targetServiceDid)
+    private func restoreToken() throws -> String? {
+        return try _storage.loadBackupCredential(_targetServiceDid)
     }
 
-    private func saveToken(_ jwtCode: String) {
-        _storage.storeBackupCredential(_targetServiceDid, _jwtCode!);
+    private func saveToken(_ jwtCode: String) throws {
+        try _storage.storeBackupCredential(_targetServiceDid, _jwtCode!);
     }
 
 }

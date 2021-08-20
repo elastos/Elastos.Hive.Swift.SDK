@@ -50,7 +50,7 @@ class FilesServiceTest: XCTestCase {
         Log.setLevel(.Debug)
         let testData: TestData = TestData.shared();
 
-        _filesService = testData.newVault().filesService
+        _filesService = try testData.newVault().filesService
         
         self.bundlePath = Bundle(for: type(of: self))
         self.localTxtFilePath = self.bundlePath?.path(forResource: "test_ios", ofType: "txt")
@@ -66,8 +66,8 @@ class FilesServiceTest: XCTestCase {
         
         self.remoteNotExistsDirPath = remoteNotExistsFilePath
         
-        self.subscription = VaultSubscription(testData.appContext, testData.providerAddress)
-        _filesService = testData.newVault().filesService
+        self.subscription = try VaultSubscription(testData.appContext, testData.providerAddress)
+        _filesService = try testData.newVault().filesService
     }
     
     public func test01UploadText() {

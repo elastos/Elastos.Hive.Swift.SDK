@@ -50,13 +50,8 @@ public class AccessToken: CodeFetcher {
     /// Get the access token without exception.
     ///
     /// - returns: null if not exists.
-    public func getCanonicalizedAccessToken() -> String {
-        do {
-            try _jwtCode = fetch()
-
-        } catch {
-            print(error)
-        }
+    public func getCanonicalizedAccessToken() throws -> String {
+        try _jwtCode = fetch()
         return "token " + _jwtCode!
     }
     
@@ -65,7 +60,7 @@ public class AccessToken: CodeFetcher {
             return _jwtCode
         }
 
-        _jwtCode = restoreToken()
+        _jwtCode = try restoreToken()
         if _jwtCode == nil {
             _jwtCode = try _remoteFetcher?.fetch()
 
@@ -73,7 +68,7 @@ public class AccessToken: CodeFetcher {
                 if self.flush != nil {
                     self.flush!(_jwtCode!)
                 }
-                saveToken(_jwtCode!)
+                try saveToken(_jwtCode!)
             }
         } else {
             if self.flush != nil {
@@ -83,11 +78,11 @@ public class AccessToken: CodeFetcher {
         return _jwtCode
     }
     
-    public func invalidate() {
-        clearToken()
+    public func invalidate() throws {
+        try clearToken()
     }
     
-    private func restoreToken() -> String? {
+    private func restoreToken() throws -> String? {
         if _endpoint == nil {
             return nil
         }
@@ -100,21 +95,21 @@ public class AccessToken: CodeFetcher {
         address = _endpoint.providerAddress
         
         if serviceDid != nil {
-            jwtCode = _storage?.loadAccessToken(serviceDid!)
+            jwtCode = try _storage?.loadAccessToken(serviceDid!)
         }
         
         if jwtCode != nil && isExpired(jwtCode) {
-            _storage?.clearAccessTokenByAddress(address!)
-            _storage?.clearAccessToken(serviceDid!)
+            try _storage?.clearAccessTokenByAddress(address!)
+            try _storage?.clearAccessToken(serviceDid!)
         }
         
         if jwtCode == nil {
-            jwtCode = _storage?.loadAccessTokenByAddress(address!)
+            jwtCode = try _storage?.loadAccessTokenByAddress(address!)
         }
         
         if jwtCode != nil && isExpired(jwtCode) {
-            _storage?.clearAccessTokenByAddress(address!)
-            _storage?.clearAccessToken(serviceDid!)
+            try _storage?.clearAccessTokenByAddress(address!)
+            try _storage?.clearAccessToken(serviceDid!)
         }
         return jwtCode
         
@@ -124,14 +119,14 @@ public class AccessToken: CodeFetcher {
         return false
     }
     
-    private func saveToken(_ jwtCode: String) {
-        _storage?.storeAccessToken(_endpoint.serviceInstanceDid!, jwtCode);
-        _storage?.storeAccessTokenByAddress(_endpoint.providerAddress, jwtCode);
+    private func saveToken(_ jwtCode: String) throws {
+        try _storage?.storeAccessToken(_endpoint.serviceInstanceDid!, jwtCode);
+        try _storage?.storeAccessTokenByAddress(_endpoint.providerAddress, jwtCode);
     }
     
-    private func clearToken() {
-        _storage?.clearAccessToken(_endpoint.serviceInstanceDid!)
-        _storage?.clearAccessTokenByAddress(_endpoint.providerAddress)
+    private func clearToken() throws {
+        try _storage?.clearAccessToken(_endpoint.serviceInstanceDid!)
+        try _storage?.clearAccessTokenByAddress(_endpoint.providerAddress)
     }
 }
 

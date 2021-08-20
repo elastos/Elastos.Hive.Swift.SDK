@@ -42,11 +42,11 @@ class ScriptingCrossingTest: XCTestCase {
 
     override func setUpWithError() throws {
         Log.setLevel(.Debug)
-        XCTAssertNoThrow({ [self] in
+        XCTAssertNoThrow(try { [self] in
             let testData = TestData.shared()
-            _scriptingService = testData.newVault().scriptingService
-            _scriptRunner = testData.newCallerScriptRunner()
-            _databaseService = testData.newVault().databaseService
+            _scriptingService = try testData.newVault().scriptingService
+            _scriptRunner = try testData.newCallerScriptRunner()
+            _databaseService = try testData.newVault().databaseService
             _targetDid = testData.userDid
             _appDid = testData.appId
             _callDid = testData.callerDid

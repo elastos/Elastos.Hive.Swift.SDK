@@ -41,8 +41,8 @@ public class Vault: ServiceEndpoint {
     private var _scripting: ScriptingService!
     private var _backupService: BackupService!
     
-    public override init(_ context: AppContext, _ providerAddress: String) {
-        super.init(context, providerAddress)
+    public override init(_ context: AppContext, _ providerAddress: String) throws {
+        try super.init(context, providerAddress)
         let builder = ServiceBuilder(self)
         _filesService = builder.createFilesService()
         _database = builder.createDatabase()

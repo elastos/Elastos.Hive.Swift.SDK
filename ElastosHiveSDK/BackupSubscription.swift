@@ -37,8 +37,8 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentSe
     /// - parameters:
     ///   - context: The application context.
     ///   - providerAddress: The address of the provider.
-    public override init(_ context: AppContext, _ providerAddress: String) {
-        super.init(context, providerAddress)
+    public override init(_ context: AppContext, _ providerAddress: String) throws {
+        try super.init(context, providerAddress)
         _subscriptionController = SubscriptionController(self)
         _paymentController = PaymentController(self)
     }

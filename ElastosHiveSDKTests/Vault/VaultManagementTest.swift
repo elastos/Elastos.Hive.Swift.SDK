@@ -31,9 +31,9 @@ class VaultManagementTest: XCTestCase {
 
     override func setUp() {
         Log.setLevel(.Debug)
-        XCTAssertNoThrow({ [self] in
+        XCTAssertNoThrow(try { [self] in
             let testData = TestData.shared()
-            _vault = testData.newVault()
+            _vault = try testData.newVault()
         }())
     }
     

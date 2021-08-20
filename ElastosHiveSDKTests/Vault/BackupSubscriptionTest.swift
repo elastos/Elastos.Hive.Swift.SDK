@@ -30,9 +30,9 @@ class BackupSubscriptionTest: XCTestCase {
 
     override func setUpWithError() throws {
         Log.setLevel(.Debug)
-        XCTAssertNoThrow({ [self] in
+        XCTAssertNoThrow(try { [self] in
             let testData = TestData.shared()
-            _subscription = BackupSubscription(testData.appContext, testData.providerAddress)
+            _subscription = try BackupSubscription(testData.appContext, testData.providerAddress)
         }())
     }
     

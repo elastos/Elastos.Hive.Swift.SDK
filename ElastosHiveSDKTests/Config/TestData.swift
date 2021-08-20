@@ -83,24 +83,24 @@ public class TestData {
         }
     }
  
-    public func newVault() -> Vault {
-        return Vault(_context, providerAddress)
+    public func newVault() throws -> Vault {
+        return try Vault(_context, providerAddress)
     }
     
-    public func newScriptRunner() -> ScriptRunner {
-        return ScriptRunner(_context, providerAddress)
+    public func newScriptRunner() throws -> ScriptRunner {
+        return try ScriptRunner(_context, providerAddress)
     }
     
-    public func newCallerScriptRunner() -> ScriptRunner {
-        return ScriptRunner(_callerContext, providerAddress)
+    public func newCallerScriptRunner() throws -> ScriptRunner {
+        return try ScriptRunner(_callerContext, providerAddress)
     }
     
-    public func newBackup() -> Backup {
-        return Backup(_context, _nodeConfig.targetHost)
+    public func newBackup() throws -> Backup {
+        return try Backup(_context, _nodeConfig.targetHost)
     }
     
     public func backupService() throws -> BackupServiceRender {
-        let backService = newVault().backupService
+        let backService = try newVault().backupService
         _ = try backService.setupContext(TestBackupRender(_userDid, newVault(), _nodeConfig))
         return backService as! BackupServiceRender
     }

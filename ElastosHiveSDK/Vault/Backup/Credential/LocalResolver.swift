@@ -33,42 +33,42 @@ public class LocalResolver: CodeFetcher {
     }
     
     public func fetch() throws -> String? {
-        var token: String? = restoreToken()
+        var token: String? = try restoreToken()
         if token == nil {
             token = try _nextResolver?.fetch()
-            saveToken(token!)
+            try saveToken(token!)
         }
         
         return token
     }
     
-    public func invalidate() {
-        clearToken()
+    public func invalidate() throws {
+        try clearToken()
     }
     
-    private func restoreToken() -> String? {
+    private func restoreToken() throws -> String? {
         let storage: DataStorage = _serviceEndpoint!.getStorage()
 
         if _serviceEndpoint?.serviceInstanceDid == nil {
             return nil
         }
 
-        return storage.loadBackupCredential(_serviceEndpoint!.serviceInstanceDid!)
+        return try storage.loadBackupCredential(_serviceEndpoint!.serviceInstanceDid!)
     }
     
-    private func saveToken(_ token: String) {
+    private func saveToken(_ token: String) throws {
         let storage: DataStorage = _serviceEndpoint!.getStorage()
         
         if _serviceEndpoint?.serviceInstanceDid != nil {
-            storage.storeBackupCredential(_serviceEndpoint!.serviceInstanceDid!, token)
+            try storage.storeBackupCredential(_serviceEndpoint!.serviceInstanceDid!, token)
         }
     }
     
-    private func clearToken() {
+    private func clearToken() throws {
         let storage: DataStorage = (_serviceEndpoint?.getStorage())!
         
         if _serviceEndpoint?.serviceInstanceDid != nil {
-            storage.clearBackupCredential((_serviceEndpoint?.serviceInstanceDid)!)
+            try storage.clearBackupCredential((_serviceEndpoint?.serviceInstanceDid)!)
         }
     }
 }

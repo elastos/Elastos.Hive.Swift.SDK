@@ -31,8 +31,8 @@ import Foundation
 ///     How much disk storage filled there;
 ///     etc.
 public class Provider: ServiceEndpoint {
-    public init(_ context: AppContext) {
-        super.init(context, "") // TODO:
+    public init(_ context: AppContext) throws {
+        try super.init(context, "") // TODO:
     }
     
     /// Create by the application context and the provider address.
@@ -40,8 +40,8 @@ public class Provider: ServiceEndpoint {
     /// - parameters:
     ///   - context: The application context
     ///   - providerAddress: The provider address
-    public override init(_ context: AppContext, _ providerAddress: String) {
-        super.init(context, providerAddress)
+    public override init(_ context: AppContext, _ providerAddress: String) throws {
+        try super.init(context, providerAddress)
     }
 }
 
