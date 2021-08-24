@@ -57,7 +57,7 @@ public class DatabaseController {
     }
 
     public func updateOne(_ collectionName: String, _ filter: Dictionary<String, Any>?, _ update: Dictionary<String, Any>?, _ options: UpdateOptions) throws -> UpdateResult? {
-        return try _connectionManager.update(collectionName, UpdateParams(filter, update, options)).execute(UpdateResult.self)
+        throw HiveError.NotImplementedException("")
     }
 
     public func updateMany(_ collectionName: String, _ filter: Dictionary<String, Any>?, _ update: Dictionary<String, Any>?, _ options: UpdateOptions) throws -> UpdateResult? {
