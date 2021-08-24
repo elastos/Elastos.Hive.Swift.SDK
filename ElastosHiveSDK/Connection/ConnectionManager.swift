@@ -151,7 +151,6 @@ public class ConnectionManager {
     }
     
     public func createDataRequest(_ url: String,  _ method: HTTPMethod, _ parameters: Dictionary<String, Any>?) throws -> DataRequest {
-        Log.d("Hive Debug", "*******\nurl = \(url)\nheader = \(try self.headers())\nrequest body = \(parameters ?? [:])\n*******\n")
         return AF.request(url,
                           method: method,
                           parameters: parameters,
