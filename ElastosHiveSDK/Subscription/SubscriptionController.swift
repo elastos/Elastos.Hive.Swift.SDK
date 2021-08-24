@@ -66,7 +66,7 @@ public class SubscriptionController {
     }
 
     public func unsubscribeBackup() throws {
-        try _ = _connectionManager.unsubscribeVault().execute()
+        try _ = _connectionManager.unsubscribeBackup().execute()
     }
 }
 
