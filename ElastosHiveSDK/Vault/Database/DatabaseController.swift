@@ -65,7 +65,7 @@ public class DatabaseController {
     }
 
     public func deleteOne(_ collectionName: String, _ filter: Dictionary<String, Any>?) throws -> DeleteResult? {
-        throw HiveError.NotImplementedException("")
+        try _connectionManager.delete(collectionName, DeleteParams(filter, nil)).execute(DeleteResult.self)
     }
 
     public func deleteMany(_ collectionName: String, _ filter: Dictionary<String, Any>?) throws -> DeleteResult? {
