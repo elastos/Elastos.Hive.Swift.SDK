@@ -26,15 +26,12 @@ import ObjectMapper
 public class Receipt: Mappable  {
     private var _receiptId: String?
     private var _orderId: String?
-    private var _customerDid: String?
-    
-    private var _transId: String?
-    private var _transTime: Int64?
-    private var _transAmount: Double?
-    private var _currency: Double?
-    
-    private var _createdTime: Int64?
-    
+    private var _transactionId: String?
+    private var _pricingName: String?
+    private var _paidDid: String?
+    private var _elaAmount: Double?
+    private var _proof: String?
+
     public init() {
         
     }
@@ -51,39 +48,33 @@ public class Receipt: Mappable  {
         }
     }
     
-    public var customerDid: String? {
+    public var transactionId: String? {
         get {
-            return _customerDid
+            return _transactionId
         }
     }
     
-    public var transId: String? {
+    public var pricingName: String? {
         get {
-            return _transId
+            return _pricingName
         }
     }
     
-    public var transTime: Int64? {
+    public var paidDid: String? {
         get {
-            return _transTime
-        }
-    }
-
-    public var transAmount: Double? {
-        get {
-            return _transAmount
-        }
-    }
-
-    public var currency: Double? {
-        get {
-            return _currency
+            return _paidDid
         }
     }
     
-    public var createdTime: Int64? {
+    public var elaAmount: Double? {
         get {
-            return _createdTime
+            return _elaAmount
+        }
+    }
+    
+    public var proof: String? {
+        get {
+            return _proof
         }
     }
     
@@ -92,7 +83,13 @@ public class Receipt: Mappable  {
     }
     
     public func mapping(map: Map) {
-        
+        _receiptId <- map["receipt_id"]
+        _orderId <- map["order_id"]
+        _transactionId <- map["transaction_id"]
+        _pricingName <- map["pricing_name"]
+        _paidDid <- map["paid_did"]
+        _elaAmount <- map["ela_amount"]
+        _proof <- map["proof"]
     }
 }
 
