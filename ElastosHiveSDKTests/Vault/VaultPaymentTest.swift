@@ -26,8 +26,8 @@ import ElastosDIDSDK
 import AwaitKit
 
 class VaultPaymentTest: XCTestCase {
-    private let _orderId: String = "612780f4ba0ab3bbcc766532"
-    private let _transId: String = "a8122198bcc35afb6e53a308bf87ffee7c9560f57611b2331b88229138caf3c7"
+    private let _orderId: String = "6127343bbfc927fef353e6a7"
+    private let _transId: String = "a7e5cd568e15523e656330c892045b2fd1640bbe62ee28531e23908d1c2862ec"
     private let _pricingPlanName: String = "Rookie"
 
     private var _paymentService: PaymentService?
