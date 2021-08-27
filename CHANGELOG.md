@@ -1,3 +1,14 @@
+08/27/2021  Li Aihong liaihong@trinity-tech.io
+
+**version 2.3.0**, main changes to previous version:
+
+```markdown
+- Refines all modules codes for better performance.
+- Upgrades for the new version APIs of node v2.2.0.
+- Includes subscription, database, files, scripting, and backup.
+- Refine access token and backup credential handling process.
+```
+
 04/22/2021 HanCongYang warship20092008@gmail.com
 
 **version 2.2.2**, main changes to previous version:
