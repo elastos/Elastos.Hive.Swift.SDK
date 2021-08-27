@@ -74,7 +74,15 @@ class VaultSubscriptionTest: XCTestCase {
     public func test06GetFileHashProcess() {
         XCTAssertNoThrow(try { [self] in
             try await(_subscription!.subscribe())
-            FilesServiceTest().test06Hash()
+            try Hash()
         }())
     }
+    
+    func Hash() throws {
+        let remoteTxtFilePath = "hive/test_ios.txt"
+//        let testData: TestData = TestData.shared()
+//        _filesService = try testData.newVault().filesService
+//        XCTAssertTrue(try await(_filesService!.hash(remoteTxtFilePath)).count > 0)
+    }
 }
+

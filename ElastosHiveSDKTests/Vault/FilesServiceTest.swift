@@ -25,6 +25,7 @@ import XCTest
 import ElastosDIDSDK
 import AwaitKit
 
+public var _filesService: FilesService?
 class FilesServiceTest: XCTestCase {
     
     private let FILE_NAME_TXT: String = "test_ios.txt"
@@ -43,7 +44,6 @@ class FilesServiceTest: XCTestCase {
     private var localCacheImgPath: String?
     private var localCacheTxtPath: String?
 
-    private var _filesService: FilesService?
     private var subscription: VaultSubscription?
     
     override func setUpWithError() throws {
