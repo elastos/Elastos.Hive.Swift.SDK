@@ -29,7 +29,7 @@ public class CredentialCode {
     
     public init(_ endpoint: ServiceEndpoint, _ context: BackupContext) {
         _targetServiceDid = context.getParameter("targetDid")!
-        let remoteResolver: CodeFetcher = RemoteResolver(endpoint, context, _targetServiceDid, context.getParameter("targetAddress")!)
+        let remoteResolver: CodeFetcher = RemoteResolver(endpoint, context, _targetServiceDid, context.getParameter("targetHost")!)
         _remoteResolver = LocalResolver(endpoint, remoteResolver)
         _storage = endpoint.getStorage()
     }

@@ -44,22 +44,26 @@ extension DataRequest {
         default: break
         }
         
-        switch response1.result {
-        case .success(let re):
-            if re is NSNull {
-                return HiveResponse([:])
-            } else if re is [String : Any] {
-                Log.d("Hive Debug", "*******response*******\n\(re)*******\n")
-                let json = re as! [String : Any]
-                if json["error"] != nil  {
-                    let errorObject = JSON(json)
-                    throw NetworkError.NetworkException(message: "\(errorObject["error"]["message"])")
+        if response1.data != nil {
+            switch response1.result {
+            case .success(let re):
+                if re is NSNull {
+                    return HiveResponse([:])
+                } else if re is [String : Any] {
+                    Log.d("Hive Debug", "*******response*******\n\(re)*******\n")
+                    let json = re as! [String : Any]
+                    if json["error"] != nil  {
+                        let errorObject = JSON(json)
+                        throw NetworkError.NetworkException(message: "\(errorObject["error"]["message"])")
+                    }
+                    return HiveResponse(json)
                 }
-                return HiveResponse(json)
+                return nil
+            case .failure(let error):
+                throw error
             }
-            return nil
-        case .failure(let error):
-            throw error
+        } else {
+            return HiveResponse([:])
         }
     }
     
@@ -83,25 +87,30 @@ extension DataRequest {
         default: break
         }
         
-        switch response1.result {
-        case .success(let re):
-            if re is NSNull {
-                return T(JSON: [:])!
-            } else if re is [String : Any] {
-                Log.d("Hive Debug", "*******response*******\n\(re)*******\n")
-                let json = re as! [String : Any]
-                if json["error"] != nil  {
-                    let errorObject = JSON(json)
-                    throw NetworkError.NetworkException(message: "\(errorObject["error"]["message"])")
+        if response1.data != nil {
+            switch response1.result {
+            case .success(let re):
+                if re is NSNull {
+                    return T(JSON: [:])!
+                } else if re is [String : Any] {
+                    Log.d("Hive Debug", "*******response*******\n\(re)*******\n")
+                    let json = re as! [String : Any]
+                    if json["error"] != nil  {
+                        let errorObject = JSON(json)
+                        throw NetworkError.NetworkException(message: "\(errorObject["error"]["message"])")
+                    }
+                    
+                    let result = T(JSON: re as! [String : Any])!
+                    return result
                 }
-                
-                let result = T(JSON: re as! [String : Any])!
-                return result
+                throw HiveError.NetworkException("unvalid json response")
+            case .failure(let error):
+                throw error
             }
-            throw HiveError.NetworkException("unvalid json response")
-        case .failure(let error):
-            throw error
+        } else {
+            return T(JSON: [:])!
         }
+        
     }
 }
 
