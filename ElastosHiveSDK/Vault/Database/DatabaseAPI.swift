@@ -38,13 +38,13 @@ extension ConnectionManager {
         return try self.createDataRequest(url, .post, params.toJSON())
     }
     
-    public func update(_ collection: String, _ params: UpdateParams) throws -> DataRequest {
-        let url = self.baseURL + "/api/v2/vault/db/collection/\(collection)"
+    public func update(_ collection: String, _ params: UpdateParams, _ updateone: Bool) throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/vault/db/collection/\(collection)?updateone=\(updateone)"
         return try self.createDataRequest(url, .patch, params.toJSON())
     }
 
-    public func delete(_ collection: String, _ params: DeleteParams) throws -> DataRequest {
-        let url = self.baseURL + "/api/v2/vault/db/collection/\(collection)"
+    public func delete(_ collection: String, _ params: DeleteParams, _ deleteone: Bool) throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/vault/db/collection/\(collection)?deleteone=\(deleteone)"
         return try self.createDataRequest(url, .delete, params.toJSON())
     }
     

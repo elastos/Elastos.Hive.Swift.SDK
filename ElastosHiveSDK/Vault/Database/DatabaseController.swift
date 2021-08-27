@@ -57,19 +57,19 @@ public class DatabaseController {
     }
 
     public func updateOne(_ collectionName: String, _ filter: Dictionary<String, Any>?, _ update: Dictionary<String, Any>?, _ options: UpdateOptions) throws -> UpdateResult? {
-        return try _connectionManager.update(collectionName, UpdateParams(filter, update, options)).execute(UpdateResult.self)
+        return try _connectionManager.update(collectionName, UpdateParams(filter, update, options), true).execute(UpdateResult.self)
     }
 
     public func updateMany(_ collectionName: String, _ filter: Dictionary<String, Any>?, _ update: Dictionary<String, Any>?, _ options: UpdateOptions) throws -> UpdateResult? {
-        return try _connectionManager.update(collectionName, UpdateParams(filter, update, options)).execute(UpdateResult.self)
+        return try _connectionManager.update(collectionName, UpdateParams(filter, update, options), false).execute(UpdateResult.self)
     }
 
     public func deleteOne(_ collectionName: String, _ filter: Dictionary<String, Any>?) throws -> DeleteResult? {
-        try _connectionManager.delete(collectionName, DeleteParams(filter, nil)).execute(DeleteResult.self)
+        try _connectionManager.delete(collectionName, DeleteParams(filter, nil), true).execute(DeleteResult.self)
     }
 
     public func deleteMany(_ collectionName: String, _ filter: Dictionary<String, Any>?) throws -> DeleteResult? {
-        return try _connectionManager.delete(collectionName, DeleteParams(filter, nil)).execute(DeleteResult.self)
+        return try _connectionManager.delete(collectionName, DeleteParams(filter, nil), false).execute(DeleteResult.self)
     }
 
     public func countDocuments(_ collectionName: String, _ filter: Dictionary<String, Any>?, _ options: CountOptions) throws -> Int64? {
