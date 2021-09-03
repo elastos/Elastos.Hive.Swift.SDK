@@ -10,7 +10,7 @@ public class DApp: Entity {
     public func createPresentation(_ vc: VerifiableCredential, _ realm: String, _ nonce: String) throws -> VerifiablePresentation {
         let vpb: VerifiablePresentationBuilder = try VerifiablePresentation.editingVerifiablePresentation(for: self.did!, using: self.store!)
         let vcs = [vc]
-        let vp = try vpb.withCredentials(vcs).withRealm(realm).withNonce(nonce).sealed(using: storepass)
+        let vp = try vpb.withCredentials(vcs).withRealm(realm).withNonce(nonce).seal(using: storepass)
 
         print("VerifiableCredential: ")
         print(vp.description)

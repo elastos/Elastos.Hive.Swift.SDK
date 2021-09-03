@@ -23,7 +23,7 @@ public class DIDApp: Entity {
             .withTypes("AppIdCredential")
             .withProperties(subject)
             .withExpirationDate(exp!)
-            .sealed(using: storepass)
+            .seal(using: storepass)
 
         print("VerifiableCredential:")
         let vcStr = vc.toString(true)
