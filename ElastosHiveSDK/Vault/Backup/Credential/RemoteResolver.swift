@@ -24,6 +24,7 @@ import Foundation
 import ObjectMapper
 import AwaitKit
 
+/// RemoteResolver is for accessing the code by the network and can be invalidate.
 public class RemoteResolver: CodeFetcher {
     private var _serviceEndpoint: ServiceEndpoint?
     private var _backupContext: BackupContext
@@ -37,6 +38,8 @@ public class RemoteResolver: CodeFetcher {
         _targetHost = targetAddress
     }
  
+    /// Fetch the code.
+    /// - Returns: The code.
     public func fetch() throws -> String? {
         if _serviceEndpoint?.serviceInstanceDid == nil {
             try _serviceEndpoint?.refreshAccessToken()
@@ -46,5 +49,6 @@ public class RemoteResolver: CodeFetcher {
         return try await(promise!)
     }
     
+    /// Invalidate the code for getting the code from remote server.
     public func invalidate() {}
 }

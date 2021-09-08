@@ -32,6 +32,9 @@ public class BackupServiceRender: BackupService {
         _controller = BackupController(serviceEndpoint)
     }
     
+    /// Set-up a context for get more detailed information for backup server.
+    /// - Parameter backupContext: context for providing backup server details.
+    /// - Returns: Void
     public func setupContext(_ backupContext: BackupContext) -> Promise<Void> {
         _credentialCode = CredentialCode(_serviceEndpoint, backupContext)
         return DispatchQueue.global().async(.promise){ [self] in
@@ -39,31 +42,45 @@ public class BackupServiceRender: BackupService {
         }
     }
     
+    /// Backup process in node side is a continues process. Vault node server backup whole vault data to
+    /// backup server and keep syncing with it. This is for user personal data security.
+    ///
+    /// <p>This function is for starting a background scheduler to update data to backup server. It's an
+    /// async process.</p>
+    /// - Returns: Void
     public func startBackup() -> Promise<Void> {
         return DispatchQueue.global().async(.promise){ [self] in
             return try _controller.startBackup(try _credentialCode!.getToken()!)
         }
     }
     
+    /// As startBackup() shows, this is just for stopping the async process in vault node side.
+    /// - Returns: Void
     public func stopBackup() -> Promise<Void> {
         return DispatchQueue.global().async(.promise){ [self] in
             return Void()
         }
     }
 
+    /// This is for restore vault data from backup server only once.
+    /// The action is processed async in node side.
+    /// - Returns: Void
     public func restoreFrom() -> Promise<Void> {
         return DispatchQueue.global().async(.promise){ [self] in
             return try _controller.restoreFrom(try _credentialCode!.getToken()!)
         }
-
     }
 
+    /// Stop the running restore process in background.
+    /// - Returns: Void
     public func stopRestore() -> Promise<Void> {
         return DispatchQueue.global().async(.promise){ [self] in
             return Void()
         }
     }
 
+    /// Check the current status of the node side backup process.
+    /// - Returns: Void
     public func checkResult() throws -> Promise<BackupResultState> {
         return DispatchQueue.global().async(.promise){ [self] in
             return try _controller.checkResult()

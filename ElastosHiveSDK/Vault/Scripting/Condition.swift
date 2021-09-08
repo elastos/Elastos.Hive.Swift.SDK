@@ -23,6 +23,8 @@
 import Foundation
 import ObjectMapper
 
+/// The condition is used for registering the script.
+/// If the condition matches, the script will be executed normally.
 public class Condition: NSObject, Mappable {    
     public var _type: String?
     public var _name: String?

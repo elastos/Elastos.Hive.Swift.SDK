@@ -32,6 +32,9 @@ public class RemoteFetcher: CodeFetcher {
         _controller = AuthController(serviceEndpoint, (_contextProvider.getAppInstanceDocument())!)
     }
 
+    /// Fetch the code.
+    /// - Throws: HiveError The exception shows the error returned by hive node.
+    /// - Returns: The code.
     public func fetch() throws -> String? {
         let challenge: String = try _controller.signIn(_contextProvider.getAppInstanceDocument()!)!
         let auth = try await(_contextProvider.getAuthorization(challenge)!)
@@ -39,6 +42,7 @@ public class RemoteFetcher: CodeFetcher {
         return try _controller.auth(auth)
     }
 
+    /// Invalidate the code for getting the code from remote server.
     public func invalidate() {
 
     }

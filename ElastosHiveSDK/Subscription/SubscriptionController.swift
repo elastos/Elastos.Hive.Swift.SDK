@@ -22,6 +22,7 @@
 
 import Foundation
 
+/// The subscription controller is for subscribing the vault or the backup.
 public class SubscriptionController {
     private var _connectionManager: ConnectionManager
     
@@ -29,42 +30,72 @@ public class SubscriptionController {
         _connectionManager = serviceEndpoint.connectionManager!
     }
      
+    /// Get the pricing plan list of the vault which can be used for upgrading the vault.
+    /// - Throws: HiveError The error comes from the hive node.
+    /// - Returns: The price plan list.
     public func getVaultPricingPlanList() throws -> [PricingPlan] {
         return try _connectionManager.getPricePlans("vault", "").execute(PricingPlanCollection.self).pricingPlans!
     }
     
+    /// Get the pricing plan for the vault by name.
+    /// - Parameter planName: The name of the pricing plan.
+    /// - Throws: HiveError The error comes from the hive node.
+    /// - Returns: The pricing plan
     public func getVaultPricingPlan(_ planName: String?) throws -> PricingPlan {
         return try _connectionManager.getPricePlans("vault", planName!).execute(PricingPlanCollection.self).pricingPlans!.first!
     }
     
+    /// Get the details of the vault.
+    /// - Throws: HiveError The error comes from the hive node.
+    /// - Returns: The details of the vault.
     public func getVaultInfo() throws -> VaultInfo {
         return try _connectionManager.getVaultInfo().execute(VaultInfo.self)
     }
 
+    /// Subscribe the vault with the free pricing plan.
+    /// - Throws: HiveError The error comes from the hive node.
+    /// - Returns: The details of the new created vault.
     public func subscribeToVault() throws -> VaultInfo {
         return try _connectionManager.subscribeToVault().execute(VaultInfo.self)
     }
     
+    /// Unsubscribe the vault.
+    /// - Throws: HiveError The error comes from the hive node.
     public func unsubscribeVault() throws {
         try _ = _connectionManager.unsubscribeVault().execute()
     }
     
+    /// Get the pricing plan list of the backup service which can be used for upgrading the service.
+    /// - Throws: HiveError The error comes from the hive node.
+    /// - Returns: The price plan list.
     public func getBackupPricingPlanList() throws -> [PricingPlan] {
         return try _connectionManager.getPricePlans("backup", "").execute(PricingPlanCollection.self).backupPlans!
     }
 
+    /// Get the pricing plan for the backup by name.
+    /// - Parameter planName: The name of the pricing plan.
+    /// - Throws: HiveError The error comes from the hive node.
+    /// - Returns: The pricing plan
     public func getBackupPricingPlan(_ planName: String?) throws -> PricingPlan {
         return try _connectionManager.getPricePlans("backup", planName!).execute(PricingPlanCollection.self).backupPlans!.first!
     }
 
+    /// Get the details of the backup service.
+    /// - Throws: HiveError The error comes from the hive node.
+    /// - Returns: The details of the backup service.
     public func getBackupInfo() throws -> BackupInfo {
         return try _connectionManager.getBackupInfo().execute(BackupInfo.self)
     }
 
+    /// Subscribe the backup service with the free pricing plan.
+    /// - Throws: HiveError The error comes from the hive node.
+    /// - Returns: The details of the new created backup service.
     public func subscribeToBackup(_ reserved: String?) throws -> BackupInfo {
         return try _connectionManager.subscribeToBackup(reserved).execute(BackupInfo.self)
     }
 
+    /// Unsubscribe the backup service.
+    /// - Throws: HiveError The error comes from the hive node.
     public func unsubscribeBackup() throws {
         try _ = _connectionManager.unsubscribeBackup().execute()
     }

@@ -23,6 +23,8 @@
 import Foundation
 import ObjectMapper
 
+/// Client side representation of a back-end execution that runs a mongo "find" query and returns some items
+/// as a result.
 public class FindExecutableBody: DatabaseBody {
     private var _filter: Dictionary<String, Any>?
     private var _options: Dictionary<String, Any>?

@@ -22,6 +22,7 @@
 
 import Foundation
 
+/// DescendingSortItem presents the condition of the query operation.
 public class DescendingSortItem: SortItem {
     public init(_ key: String) {
         super.init(key, SortItemOrder.DESCENDING)

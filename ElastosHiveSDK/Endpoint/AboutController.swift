@@ -22,17 +22,26 @@
 
 import Foundation
 
+/// The AboutController is for getting the basic information of the hive node.
 public class AboutController {
     private var _connectionManager: ConnectionManager
     
+    /// Create the about controller by the RPC connection.
+    /// - Parameter serviceEndpoint: connection The connection instance.
     public init(_ serviceEndpoint: ServiceEndpoint) {
         _connectionManager = serviceEndpoint.connectionManager!
     }
     
+    /// Get the version of the hive node.
+    /// - Throws: HiveError The exception shows the error from the request.
+    /// - Returns: the version
     public func getNodeVersion() throws -> NodeVersion {
         return try _connectionManager.version().execute(NodeVersion.self)
     }
     
+    /// Get the commit id of the github of the hive node.
+    /// - Throws: HiveError The exception shows the error from the request.
+    /// - Returns: The commit id.
     public func getCommitId() throws -> String? {
         return try _connectionManager.commitId().execute(CommitHash.self).commitId
     }

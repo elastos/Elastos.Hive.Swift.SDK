@@ -23,6 +23,7 @@
 
 import Foundation
 
+/// The payment controller is the wrapper class for accessing the payment module.
 public class PaymentController {
     private var _connectionManager: ConnectionManager
     
@@ -30,6 +31,12 @@ public class PaymentController {
         _connectionManager = serviceEndpoint.connectionManager!
     }
     
+    /// This is for creating the payment order which upgrades the pricing plan of the vault or the backup.
+    /// - Parameters:
+    ///   - subscription: The value is "vault" or "backup".
+    ///   - pricingPlan: The pricing plan name.
+    /// - Throws: HiveError The error comes from the hive node.
+    /// - Returns: The details of the order.
     public func placeOrder(_ subscription: String?, _ pricingPlan: String?) throws -> Order? {
         return try _connectionManager.placeOrder(CreateOrderParams(subscription!, pricingPlan!)).execute(Order.self)
     }
@@ -38,6 +45,12 @@ public class PaymentController {
         return try _connectionManager.createOrder(CreateOrderParams("", "")).execute(Order.self)
     }
     
+    /// Pay the order by the order id and the transaction id.
+    /// - Parameters:
+    ///   - orderId: The order id.
+    ///   - transIds: The transaction id.
+    /// - Throws: HiveError The error comes from the hive node.
+    /// - Returns: The receipt which is the proof of the payment of the order for the user.
     public func payOrder(_ orderId: String?, _ transIds: String?) throws -> Receipt? {
         return try _connectionManager.payOrder(orderId!, PayOrderParams(transIds!)).execute(Receipt.self)
     }
@@ -46,10 +59,18 @@ public class PaymentController {
         throw HiveError.NotImplementedException(nil)
     }
     
+    /// Get the order information by the order id.
+    /// - Parameter orderId: The order id.
+    /// - Throws: HiveError The error comes from the hive node.
+    /// - Returns: The details of the order.
     public func getOrder(_ orderId: String) throws -> Order? {
         return try getOrdersInternal("vault", nil)?.first
     }
     
+    /// Get the orders by the subscription type.
+    /// - Parameter subscription: The value is "vault" or "backup".
+    /// - Throws: HiveError The error comes from the hive node.
+    /// - Returns: The order list, MUST not empty.
     public func getOrders(_ subscription: String) throws -> [Order]? {
         return try getOrdersInternal(subscription, nil)
     }
@@ -58,10 +79,17 @@ public class PaymentController {
         return try _connectionManager.getOrders(subscription, orderId).execute(OrderCollection.self).getOrders
     }
     
+    /// Get the receipt by the order id.
+    /// - Parameter orderId: The order id.
+    /// - Throws: HiveError The error comes from the hive node.
+    /// - Returns: The details of the receipt.
     public func getReceipt(_ orderId: String) throws -> Receipt? {
         return try _connectionManager.getReceipt(orderId).execute(Receipt.self)
     }
     
+    /// Get the version of the payment module.
+    /// - Throws: HiveError The error comes from the hive node.
+    /// - Returns: The version.
     public func getVersion() throws -> String? {
         return try _connectionManager.getVersion().execute(VersionResult.self).version
     }

@@ -23,6 +23,7 @@
 import Foundation
 import ObjectMapper
 
+/// Convenient class to delete the documents from the collection.
 public class DeleteExecutableBody: DatabaseBody {
     private var _filter: Dictionary<String, Any>?
     

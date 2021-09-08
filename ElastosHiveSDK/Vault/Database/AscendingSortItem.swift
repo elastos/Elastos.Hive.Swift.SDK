@@ -23,6 +23,7 @@
 import Foundation
 import ObjectMapper
 
+/// AscendingSortItem presents the condition of the query operation.
 public class AscendingSortItem: SortItem {
     public init(_ key: String) {
         super.init(key, SortItemOrder.ASCENDING)

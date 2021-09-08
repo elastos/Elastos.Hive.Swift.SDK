@@ -32,6 +32,8 @@ public class LocalResolver: CodeFetcher {
         _nextResolver = next
     }
     
+    /// Fetch the code.
+    /// - Returns: The code.
     public func fetch() throws -> String? {
         var token: String? = try restoreToken()
         if token == nil {
@@ -42,6 +44,7 @@ public class LocalResolver: CodeFetcher {
         return token
     }
     
+    /// Invalidate the code for getting the code from remote server.
     public func invalidate() throws {
         try clearToken()
     }

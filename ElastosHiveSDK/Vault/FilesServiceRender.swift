@@ -22,6 +22,8 @@
 
 import Foundation
 
+/// Vault provides a storage for files saving.
+/// Files can be uploading, downloading and getting the status and information.
 public class FilesServiceRender: FilesService {
     private var _controller: FilesController?
     
@@ -29,48 +31,79 @@ public class FilesServiceRender: FilesService {
         _controller = FilesController(serviceEndpoint)
     }
     
+    /// Get the FileWriter for uploading the content of the file.
+    /// - Parameter path: The uploading file path.
+    /// - Returns: The FileWriter.
     public func getUploadWriter(_ path: String) -> Promise<FileWriter> {
         return DispatchQueue.global().async(.promise){ [self] in
             return _controller!.getUploadWriter(path)
         }
     }
     
+    /// Get the FileReader for downloading the content of the file.
+    /// - Parameter path: The download file path.
+    /// - Returns: The FileReader.
     public func getDownloadReader(_ path: String) -> Promise<FileReader> {
         return DispatchQueue.global().async(.promise){ [self] in
             return try _controller!.getDownloadReader(path)
         }
     }
     
+    /// Returns the list of all files in a given folder.
+    /// - Parameter path: the path for the remote folder
+    /// - Returns: the result is List if success
     public func list(_ path: String) -> Promise<Array<FileInfo>> {
         return DispatchQueue.global().async(.promise){ [self] in
             return try _controller!.listChildren(path)
         }
     }
     
+    /// Information about the target file or folder.
+    /// - Parameter path: the path for the remote file or folder
+    /// - Returns: the new CompletionStage, the result is FileInfo
+    ///         if success
     public func stat(_ path: String) -> Promise<FileInfo> {
         return DispatchQueue.global().async(.promise){ [self] in
             return try _controller!.getProperty(path)
         }
     }
     
+    /// Returns the SHA256 hash of the given file.
+    /// - Parameter path: path for the remote file
+    /// - Returns: the new CompletionStage, the result is the base64 hash string
+    ///         if the hash successfully calculated
     public func hash(_ path: String) -> Promise<String> {
         return DispatchQueue.global().async(.promise){ [self] in
             return try _controller!.getHash(path)
         }
     }
     
+    /// Moves (or renames) a file or folder.
+    /// - Parameters:
+    ///   - source: the path to the file or folder to move
+    ///   - target: the path to the target file or folder
+    /// - Returns: Void
     public func move(_ source: String, _ target: String) -> Promise<Void> {
         return DispatchQueue.global().async(.promise){ [self] in
             return try _controller!.moveFile(source, target)
         }
     }
     
+    /// Copies a file or a folder (recursively).
+    /// - Parameters:
+    ///   - source: the path for the remote source file or folder
+    ///   - target: the path for the remote destination file or folder
+    /// - Returns: Void
     public func copy(_ source: String, _ target: String) -> Promise<Void> {
         return DispatchQueue.global().async(.promise){ [self] in
             return try _controller!.copyFile(source, target)
         }
     }
     
+    /// Deletes a file, or a folder. In case the given path is a folder,
+    /// deletion is recursive.
+    /// - Parameter path: the path for the remote file or folder
+    /// - Returns: Void
     public func delete(_ path: String) -> Promise<Void> {
         return DispatchQueue.global().async(.promise){ [self] in
             return try _controller!.delete(path)

@@ -23,6 +23,7 @@
 import Foundation
 import ObjectMapper
 
+/// Convenient class for downloading file by the script.
 public class FileDownloadExecutable: Executable {
     public init(_ name: String?) {
         super.init(name, ExecutableType.FILE_DOWNLOAD, nil)

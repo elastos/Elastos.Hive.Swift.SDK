@@ -22,6 +22,7 @@
 
 import Foundation
 
+/// Index presents the condition of the query operation.
 public class HiveIndex {
     private var _key: String?
     private var _order: SortItemOrder?

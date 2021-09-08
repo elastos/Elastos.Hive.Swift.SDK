@@ -23,8 +23,7 @@
 import Foundation
 import ObjectMapper
 
-
-
+/// The pricing plan is for upgrading the service of the vault or the backup.
 public class PricingPlan: Mappable {
     public var amount: Double?
     public var currency: String?

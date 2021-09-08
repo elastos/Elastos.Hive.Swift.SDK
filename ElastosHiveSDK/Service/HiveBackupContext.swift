@@ -37,10 +37,17 @@ public class HiveBackupContext: BackupContext {
         }
     }
     
+    /// Get the backup destination type which the vault want to go.
     public func getType() -> String? {
         return nil
     }
     
+    /// Get the authorization information for the backup processing. The authorization information is for the hive node
+    /// to access the backup server which the backup information is in.
+    /// - Parameters:
+    ///   - srcDid: hive node service instance DID.
+    ///   - targetDid: The instance did of the destination of the backup.
+    ///   - targetHost: The host url of the destination of the backup.
     public func getAuthorization(_ srcDid: String?, _ targetDid: String?, _ targetHost: String?) -> Promise<String>? {
         return nil
     }

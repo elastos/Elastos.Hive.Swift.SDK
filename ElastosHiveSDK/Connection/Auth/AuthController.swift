@@ -23,10 +23,15 @@
 import Foundation
 import ElastosDIDSDK
 
+/// The authorization controller is the wrapper class for accessing hive node auth module.
 public class AuthController {
     private var _connectionManager: ConnectionManager
     private var _expectationAudience: String
     
+    /// Create the auth controller with the node RPC connection and application instance did document.
+    /// - Parameters:
+    ///   - serviceEndpoint: The service endpoint
+    ///   - appInstanceDidDoc: The application instance did document.
     public init(_ serviceEndpoint: ServiceEndpoint, _ appInstanceDidDoc: DIDDocument) {
         _connectionManager = serviceEndpoint.connectionManager!
         _expectationAudience = appInstanceDidDoc.subject.description
@@ -40,6 +45,10 @@ public class AuthController {
         return nil
    }
     
+    /// Sign in to hive node
+    /// - Parameter appInstanceDidDoc: The application
+    /// - Throws: HiveError The exception shows the error result of the request.
+    /// - Returns: The challenge.
     public func signIn(_ appInstanceDidDoc: DIDDocument) throws -> String? {
         let challenge: ChallengeRequest = try _connectionManager.signIn(SignInRequest(self.convertStringToDictionary(text: appInstanceDidDoc.description))).execute(ChallengeRequest.self)
         if try !checkValid(challenge.getChallenge, _expectationAudience) {
@@ -48,6 +57,10 @@ public class AuthController {
         return challenge.getChallenge
     }
     
+    /// The auth operation is for getting the access token for node APIs.
+    /// - Parameter challengeResponse: The challenge returned by sign in.
+    /// - Throws: HiveError The exception shows the error result of the request.
+    /// - Returns: The access token.
     public func auth(_ challengeResponse: String) throws -> String? {
         let token: AccessCode = try _connectionManager.auth(ChallengeResponse(challengeResponse)).execute(AccessCode.self)
         

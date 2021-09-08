@@ -22,34 +22,43 @@
 
 import Foundation
 
-/**
- * The service builder for the services of the backup hive node.
- *
- * TODO: to be implemented.
- */
+/// The service builder for the services of the backup hive node.
+/// Helper class to create service instance.
 public class ServiceBuilder {
     private var _serviceEndpoint: ServiceEndpoint
     
+    /// Create by the service end point.
+    /// - Parameter serviceEndpoint: The service end point.
     public init(_ serviceEndpoint: ServiceEndpoint) {
         _serviceEndpoint = serviceEndpoint
     }
 
+    /// Create the service for the files module.
+    /// - Returns: The instance of file service.
     public func createFilesService() -> FilesService {
         return FilesServiceRender(_serviceEndpoint)
     }
     
+    /// Create the service for the database module.
+    /// - Returns: The instance of database service.
     public func createDatabase() -> DatabaseService {
         return DatabaseServiceRender(_serviceEndpoint);
     }
 
+    /// Create the service of the scripting module.
+    /// - Returns: The instance of scripting service.
     public func createScriptingService() -> ScriptingService{
         return ScriptingServiceRender(_serviceEndpoint)
     }
 
+    /// Create the service of the backup module.
+    /// - Returns: The instance of the backup service.
     public func createBackupService() -> BackupService {
         return BackupServiceRender(_serviceEndpoint)
     }
     
+    /// Create the service of the promotion module.
+    /// - Returns: The instance of the promotion service.
     public func createPromotionService() -> PromotionService {
         return PromotionServiceRender(_serviceEndpoint)
     }

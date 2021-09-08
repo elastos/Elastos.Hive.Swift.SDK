@@ -23,6 +23,7 @@
 import Foundation
 import ObjectMapper
 
+/// The executable to upload the file content.
 public class FileUploadExecutable: Executable {
     public init(_ name: String?) {
         super.init(name, ExecutableType.FILE_UPLOAD, nil)

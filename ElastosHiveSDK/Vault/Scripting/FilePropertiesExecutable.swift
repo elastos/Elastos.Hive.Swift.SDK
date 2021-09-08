@@ -23,6 +23,7 @@
 import Foundation
 import ObjectMapper
 
+/// The executable to get the properties of the file.
 public class FilePropertiesExecutable: Executable {
     public init(_ name: String?) {
         super.init(name, ExecutableType.FILE_PROPERTIES, nil)

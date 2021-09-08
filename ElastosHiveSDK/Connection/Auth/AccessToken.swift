@@ -55,6 +55,9 @@ public class AccessToken: CodeFetcher {
         return "token " + _jwtCode!
     }
     
+    /// Fetch the code.
+    /// - Throws: NodeRPCError The exception shows the error returned by hive node.
+    /// - Returns: The code.
     public func fetch() throws -> String? {
         if _jwtCode != nil {
             return _jwtCode
@@ -78,6 +81,7 @@ public class AccessToken: CodeFetcher {
         return _jwtCode
     }
     
+    /// Invalidate the code for getting the code from remote server.
     public func invalidate() throws {
         try clearToken()
     }
@@ -112,7 +116,6 @@ public class AccessToken: CodeFetcher {
             try _storage?.clearAccessToken(serviceDid!)
         }
         return jwtCode
-        
     }
     
     private func isExpired(_ jwtCode: String?) -> Bool {

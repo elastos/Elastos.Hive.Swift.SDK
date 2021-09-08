@@ -23,6 +23,7 @@
 import Foundation
 import ObjectMapper
 
+/// Represents the executable of the script.
 public class Executable: Condition {
     private var _output: Bool?
     

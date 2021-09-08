@@ -21,12 +21,17 @@
  */
 import Foundation
 
+/// The credential code is used for the backup of the vault data.
 public class CredentialCode {
     private var _targetServiceDid: String
     private var _jwtCode: String?
     private var _remoteResolver: CodeFetcher
     private var _storage: DataStorage
     
+    /// Create the credential code by service end point and the backup context.
+    /// - Parameters:
+    ///   - endpoint: The service end point.
+    ///   - context: The backup context.
     public init(_ endpoint: ServiceEndpoint, _ context: BackupContext) {
         _targetServiceDid = context.getParameter("targetDid")!
         let remoteResolver: CodeFetcher = RemoteResolver(endpoint, context, _targetServiceDid, context.getParameter("targetHost")!)
@@ -34,6 +39,9 @@ public class CredentialCode {
         _storage = endpoint.getStorage()
     }
     
+    /// Get the token of the credential code.
+    /// - Throws: HiveError The error comes from the hive node.
+    /// - Returns: The token of the credential code.
     public func getToken() throws -> String? {
         if _jwtCode != nil {
             return _jwtCode

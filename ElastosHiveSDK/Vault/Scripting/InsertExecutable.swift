@@ -23,6 +23,7 @@
 import Foundation
 import ObjectMapper
 
+/// The executable to wrapper the "insert" operation to the mongo database of the hive node.
 public class InsertExecutableBody: DatabaseBody {
     private var _document: Dictionary<String, Any>?
     private var _options: Dictionary<String, Any>?

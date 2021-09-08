@@ -25,7 +25,11 @@ import Foundation
 public protocol BridgeHandlerProtocol {
     associatedtype T
 
+    /// Flush the value of the access token.
+    /// - Parameter value: The value of the access token.
     func flush(_ value: String)
+    
+    /// The target is what the access token for.
     func target() -> T
     func setTarget(_ target: T)
     func invalidate()
