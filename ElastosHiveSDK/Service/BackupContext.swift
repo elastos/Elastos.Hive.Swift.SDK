@@ -22,8 +22,21 @@
 
 import Foundation
 
+/// Backup context to provide backup information when doing backup relating things for the vault.
 public protocol BackupContext {
+    
+    /// Get the backup destination type which the vault want to go.
     func getType() -> String?
+    
+    /// Get the parameter for backup operation by key.
+    /// - Parameter key: The parameter name.
     func getParameter(_ key: String) -> String?
+    
+    /// Get the authorization information for the backup processing. The authorization information is for the hive node
+    /// to access the backup server which the backup information is in.
+    /// - Parameters:
+    ///   - srcDid: hive node service instance DID.
+    ///   - targetDid: The instance did of the destination of the backup.
+    ///   - targetHost: The host url of the destination of the backup.
     func getAuthorization(_ srcDid: String?, _ targetDid: String?, _ targetHost: String?) -> Promise<String>?
 }

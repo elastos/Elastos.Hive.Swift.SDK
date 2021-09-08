@@ -23,6 +23,7 @@
 import Foundation
 import ObjectMapper
 
+/// This contains the details of the backup service.
 public class BackupInfo: Mappable {
     public var _serviceDid: String?
     public var _storageQuota: Int?

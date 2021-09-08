@@ -22,6 +22,7 @@
 import Foundation
 import ObjectMapper
 
+/// This contains the details of the vault service.
 public class VaultInfo: Mappable {
     public var _serviceDid: String?
     public var _storageQuota: Int?

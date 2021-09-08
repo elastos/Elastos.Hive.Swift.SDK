@@ -23,6 +23,9 @@
 import Foundation
 import ObjectMapper
 
+/// Vault script condition to check if a database query returns results or not.
+/// This is a way for example to check if a user is in a group, if a message contains comments, if a user
+/// is in a list, etc.
 public class QueryHasResultConditionBody: HiveRootBody {
     private var _collection: String?
     private var _filter: Dictionary<String, String>?

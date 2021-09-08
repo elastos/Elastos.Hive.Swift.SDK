@@ -22,6 +22,8 @@
 
 import Foundation
 
+/// Cloud backup context is used for the user to backup the vault data to the cloud service,
+/// such as google driver, etc.
 public class CloudBackupContext: BackupContext {
     public func getParameter(_ key: String) -> String? {
         switch key {
@@ -44,14 +46,17 @@ public class CloudBackupContext: BackupContext {
         return nil
     }
     
+    /// Get the client ID for access the cloud service.
     public func getClientId() -> String? {
         return nil
     }
     
+    /// Get the redirect URL.
     public func getRedirectUrl() -> String? {
         return nil
     }
     
+    /// Get the application scope.
     public func getAppScope() -> String? {
         return nil
     }

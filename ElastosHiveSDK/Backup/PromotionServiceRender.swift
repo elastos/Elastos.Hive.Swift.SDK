@@ -29,6 +29,9 @@ public class PromotionServiceRender: PromotionService {
         _controller = PromotionController(serviceEndpoint)
     }
     
+    /// Promote the backup node to vault node by backup data.
+    ///
+    /// - returns: Void.
     public func promote() -> Promise<Void> {
         return DispatchQueue.global().async(.promise){ [self] in try _controller.promote() }
     }

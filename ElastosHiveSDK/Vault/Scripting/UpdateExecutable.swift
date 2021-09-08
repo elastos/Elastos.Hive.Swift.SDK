@@ -23,6 +23,7 @@
 import Foundation
 import ObjectMapper
 
+/// The executable to update the documents of the mongo database.
 public class UpdateExecutableBody: DatabaseBody {
     private var _filter: Dictionary<String, Any>?
     private var _update: Dictionary<String, Any>?

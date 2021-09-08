@@ -22,6 +22,7 @@
 
 import Foundation
 
+/// The data storage for the access token, the backup credential, etc. which comes from the hive node.
 public protocol DataStorage {
     func loadBackupCredential(_ serviceDid: String) throws -> String?
     func loadAccessToken(_ serviceDid: String) throws -> String?

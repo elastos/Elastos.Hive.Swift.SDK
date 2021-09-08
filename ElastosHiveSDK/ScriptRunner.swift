@@ -44,6 +44,15 @@ public class ScriptRunner: ServiceEndpoint, ScriptingInvocationService {
         _controller = ScriptingController(self)
     }
 
+    /// Invoke the execution of a specified script registered previously by the vault owner, where the script is defined with certain preset routines. It's the general invocation method for external users to call.
+    /// - parameters:
+    ///    - name: The name of script to invoke.
+    ///    - params: The parameters as input to the invocation.
+    ///    - targetDid: The script owner's user did. Skipped when owner calls.
+    ///    - targetAppDid: The script owner's application did. Skipped when owner calls.
+    ///    - resultType: String, byte[], FileReader
+    ///    - T: String, byte[], FileReader
+    /// - returns:  String, Data, JSON, FileReader
     public func callScript<T>(_ name: String, _ params: [String : Any]?, _ targetDid: String, _ targetAppDid: String, _ resultType: T.Type) -> Promise<T> {
         return DispatchQueue.global().async(.promise){ [self] in
             return try _controller!.callScript(name, params, targetDid, targetAppDid, resultType)
@@ -65,12 +74,20 @@ public class ScriptRunner: ServiceEndpoint, ScriptingInvocationService {
         }
     }
 
+    /// Invoke the execution of the script to upload a file in the streaming mode. The upload works a bit differently from other executable queries because there are two steps to this executable. First, register a script on the vault, then you call this API actually to upload the file
+    /// - parameters:
+    ///    - transactionId: The streaming identifier to the upload process
+    /// - returns:FileWriter
     public func uploadFile(_ transactionId: String) -> Promise<FileWriter> {
         return DispatchQueue.global().async(.promise){ [self] in
             return try _controller!.uploadFile(transactionId)
         }
     }
 
+    /// Invoke the execution of the script to download a file in the streaming mode. The upload works a bit differently from other executable queries because there are two steps to this executable. First, register a script on the vault, then you call this API actually to download the file
+    /// - parameters:
+    ///    - transactionId: The streaming identifier to the upload process
+    /// - returns: FileReader
     public func downloadFile(_ transactionId: String) -> Promise<FileReader> {
         return DispatchQueue.global().async(.promise){ [self] in
             return try _controller!.downloadFile(transactionId)

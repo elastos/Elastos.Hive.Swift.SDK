@@ -23,6 +23,7 @@
 import Foundation
 import ObjectMapper
 
+/// The executable to get the hash code of the file content.
 public class FileHashExecutable: Executable {
     public init(_ name: String) {
         super.init(name, ExecutableType.FILE_HASH, nil)

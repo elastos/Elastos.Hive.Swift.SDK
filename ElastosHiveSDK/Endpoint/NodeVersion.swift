@@ -23,6 +23,7 @@
 import Foundation
 import ObjectMapper
 
+/// The version of the hive node is returned by getNodeVersion()
 public class NodeVersion: Mappable {
     private var _major: Int64?
     private var _minor: Int64?

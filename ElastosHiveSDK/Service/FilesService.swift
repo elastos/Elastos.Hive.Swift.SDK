@@ -28,7 +28,7 @@ import Foundation
  */
 public protocol FilesService {
     
-    /// Initiates an upload sequence by returning a Write or OutputStream object that can be used to write small file chunks. After writing, flush() must be called to actually send the data remotely.
+    /// Initiates an upload sequence by returning a Write or OutputStream object that can be used to write small file chunks.
     /// - parameter path: the path for the remote file
     /// - returns: the new CompletionStage, the result is the FileWriter interface for upload the file content if success; null otherwise
     func getUploadWriter(_ path: String) -> Promise<FileWriter>
