@@ -59,13 +59,13 @@ class VaultManagementTest: XCTestCase {
     
     func testGetVersion() {
         XCTAssertNoThrow(try { [self] in
-            XCTAssertNotNil(try await(_vault!.getNodeVersion()))
+            XCTAssertNotNil(try `await`(_vault!.getNodeVersion()))
         }())
     }
     
     func testGetCommitHash() {
         XCTAssertNoThrow(try { [self] in
-            XCTAssertNotNil(try await(_vault!.getLatestCommitId()))
+            XCTAssertNotNil(try `await`(_vault!.getLatestCommitId()))
         }())
     }
 }

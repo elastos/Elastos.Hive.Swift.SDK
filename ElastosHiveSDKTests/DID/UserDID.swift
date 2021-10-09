@@ -20,7 +20,7 @@ public class UserDID: DIDEntity {
             .withTypes("AppIdCredential")
             .withProperties(subject)
             .withExpirationDate(exp!)
-            .sealed(using: storepass)
+            .seal(using: storepass)
 
         print("VerifiableCredential:")
         let vcStr = vc.toString(true)
@@ -40,7 +40,7 @@ public class UserDID: DIDEntity {
             .withTypes("BackupCredential")
             .withProperties(subject)
             .withExpirationDate(exp!)
-            .sealed(using: storepass)
+            .seal(using: storepass)
 
         print("BackupCredential:")
         let vcStr = vc.toString(true)

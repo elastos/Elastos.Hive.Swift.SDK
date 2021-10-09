@@ -42,14 +42,14 @@ class VaultPaymentTest: XCTestCase {
     
     func test01GetVersion() {
         XCTAssertNoThrow(try { [self] in
-            let version = try await(_paymentService!.getVersion())
+            let version = try `await`(_paymentService!.getVersion())
             XCTAssert(version != nil)
         }())
     }
     
     func test02PlaceOrder() {
         XCTAssertNoThrow(try { [self] in
-            let order = try await(_paymentService!.placeOrder(_pricingPlanName))
+            let order = try `await`(_paymentService!.placeOrder(_pricingPlanName))
             XCTAssertNotNil(order)
         }())
     }
@@ -57,7 +57,7 @@ class VaultPaymentTest: XCTestCase {
     // Disabled
     func test03PayOrder() {
         XCTAssertNoThrow(try { [self] in
-            let receipt = try await(_paymentService!.payOrder(_orderId, _transId))
+            let receipt = try `await`(_paymentService!.payOrder(_orderId, _transId))
             XCTAssertNotNil(receipt.receiptId)
             XCTAssertNotNil(receipt.orderId)
         }())
@@ -66,7 +66,7 @@ class VaultPaymentTest: XCTestCase {
     // Disabled
     func test04GetOrder() {
         XCTAssertNoThrow(try { [self] in
-            let order = try await(_paymentService!.getOrder(_orderId))
+            let order = try `await`(_paymentService!.getOrder(_orderId))
             XCTAssertNotNil(order)
             XCTAssertNotNil(order.orderId)
         }())
@@ -75,7 +75,7 @@ class VaultPaymentTest: XCTestCase {
     // Disabled
     func test05GetOrders() {
         XCTAssertNoThrow(try { [self] in
-            let orders = try await(_paymentService!.getOrderList())
+            let orders = try `await`(_paymentService!.getOrderList())
             XCTAssertNotNil(orders)
             XCTAssert(orders.count != 0)
         }())
@@ -84,7 +84,7 @@ class VaultPaymentTest: XCTestCase {
     // Disabled
     func test06GetReceipt() {
         XCTAssertNoThrow(try { [self] in
-            let receipt = try await(_paymentService!.getReceipt(_orderId))
+            let receipt = try `await`(_paymentService!.getReceipt(_orderId))
             XCTAssertNotNil(receipt)
             XCTAssertNotNil(receipt.receiptId)
             XCTAssertNotNil(receipt.orderId)
@@ -94,13 +94,13 @@ class VaultPaymentTest: XCTestCase {
     //Disabled
     func test07MakeOrderProcess() {
         XCTAssertNoThrow(try { [self] in
-            var order = try await(_paymentService!.placeOrder(_pricingPlanName))
+            var order = try `await`(_paymentService!.placeOrder(_pricingPlanName))
             XCTAssertNotNil(order)
             XCTAssertNotNil(order.orderId)
-            order = try await(_paymentService!.getOrder(order.orderId!))
+            order = try `await`(_paymentService!.getOrder(order.orderId!))
             XCTAssertNotNil(order)
             XCTAssertNotNil(order.orderId)
-            let receipt = try await(_paymentService!.payOrder(order.orderId!, _transId))
+            let receipt = try `await`(_paymentService!.payOrder(order.orderId!, _transId))
             XCTAssertNotNil(receipt)
             XCTAssertNotNil(receipt.receiptId)
             XCTAssertNotNil(receipt.orderId)

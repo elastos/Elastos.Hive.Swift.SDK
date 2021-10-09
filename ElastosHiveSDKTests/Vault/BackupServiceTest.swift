@@ -41,13 +41,13 @@ class BackupServiceTest: XCTestCase {
     //Disabled
     func test01StartBackup() {
         XCTAssertNoThrow(try { [self] in
-            try await(_backupService!.startBackup())
+            try `await`(_backupService!.startBackup())
         }())
     }
 
     func test02CheckResult() {
         XCTAssertNoThrow(try { [self] in
-            XCTAssertNotNil(try await(_backupService!.checkResult()))
+            XCTAssertNotNil(try `await`(_backupService!.checkResult()))
         }())
     }
     
@@ -59,7 +59,7 @@ class BackupServiceTest: XCTestCase {
     //Disabled
     func test04RestoreFrom() {
         XCTAssertNoThrow(try { [self] in
-            try await(_backupService!.restoreFrom())
+            try `await`(_backupService!.restoreFrom())
         }())
     }
     

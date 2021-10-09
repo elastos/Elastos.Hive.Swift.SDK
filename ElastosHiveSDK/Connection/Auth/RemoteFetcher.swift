@@ -37,7 +37,7 @@ public class RemoteFetcher: CodeFetcher {
     /// - Returns: The code.
     public func fetch() throws -> String? {
         let challenge: String = try _controller.signIn(_contextProvider.getAppInstanceDocument()!)!
-        let auth = try await(_contextProvider.getAuthorization(challenge)!)
+        let auth = try `await`(_contextProvider.getAuthorization(challenge)!)
 
         return try _controller.auth(auth)
     }

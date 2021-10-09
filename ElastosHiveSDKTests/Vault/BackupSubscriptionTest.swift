@@ -38,7 +38,7 @@ class BackupSubscriptionTest: XCTestCase {
     
     func test01GetPricingPlanList() {
         XCTAssertNoThrow(try { [self] in
-            let plans = try await(_subscription!.getPricingPlanList())
+            let plans = try `await`(_subscription!.getPricingPlanList())
             XCTAssertNotNil(plans)
             XCTAssert(plans.count != 0)
         }())
@@ -46,7 +46,7 @@ class BackupSubscriptionTest: XCTestCase {
     
     func test02GetPricingPlan() {
         XCTAssertNoThrow(try { [self] in
-            let plan = try await(_subscription!.getPricingPlan("Rookie"))
+            let plan = try `await`(_subscription!.getPricingPlan("Rookie"))
             XCTAssertNotNil(plan)
             XCTAssert(plan.name == "Rookie")
         }())
@@ -54,19 +54,19 @@ class BackupSubscriptionTest: XCTestCase {
     
     func test03Subscribe() {
         XCTAssertNoThrow(try { [self] in
-            _ = try await(_subscription!.subscribe())
+            _ = try `await`(_subscription!.subscribe())
         }())
     }
     
     func test04CheckSubscription() {
         XCTAssertNoThrow(try { [self] in
-            XCTAssertNotNil(try await(_subscription!.checkSubscription()))
+            XCTAssertNotNil(try `await`(_subscription!.checkSubscription()))
         }())
     }
     
     func test06Unsubscribe() {
         XCTAssertNoThrow(try { [self] in
-            try await(_subscription!.unsubscribe())
+            try `await`(_subscription!.unsubscribe())
         }())
     }
   
