@@ -37,13 +37,13 @@ class DatabaseServiceTest: XCTestCase {
     
     func test01CreateCollection() {
         XCTAssertNoThrow(try { [self] in
-            XCTAssertNotNil(try await(_databaseService!.createCollection(COLLECTION_NAME)))
+            XCTAssertNotNil(try `await`(_databaseService!.createCollection(COLLECTION_NAME)))
         }())
     }
     
     func test02CreateCollection4AlreadyExistsException() {
         do {
-            _ = try await(_databaseService!.createCollection(COLLECTION_NAME))
+            _ = try `await`(_databaseService!.createCollection(COLLECTION_NAME))
         } catch {
             if let error = error as? HiveError {
                 switch error {
@@ -59,14 +59,14 @@ class DatabaseServiceTest: XCTestCase {
     func test02InsertOne() {
         XCTAssertNoThrow(try { [self] in
             let docNode = ["author" : "john doe1", "title" : "Eve for Dummies1"]
-            XCTAssertNotNil(try await(_databaseService!.insertOne(COLLECTION_NAME, docNode, InsertOptions().bypassDocumentValidation(false))))
+            XCTAssertNotNil(try `await`(_databaseService!.insertOne(COLLECTION_NAME, docNode, InsertOptions().bypassDocumentValidation(false))))
         }())
     }
     
     func test02InsertOne4NotFoundException() {
         do {
             let docNode = ["author" : "john doe1", "title" : "Eve for Dummies1"]
-            try await(_databaseService!.insertOne(COLLECTION_NAME_NOT_EXIST, docNode, InsertOptions().bypassDocumentValidation(false)))
+            try `await`(_databaseService!.insertOne(COLLECTION_NAME_NOT_EXIST, docNode, InsertOptions().bypassDocumentValidation(false)))
         } catch {
             if let error = error as? HiveError {
                 switch error {
@@ -85,7 +85,7 @@ class DatabaseServiceTest: XCTestCase {
                 ["author" : "john doe2", "title" : "Eve for Dummies2"],
                 ["author" : "john doe3", "title" : "Eve for Dummies3"],
             ]
-            XCTAssertNotNil(try await(_databaseService!.insertMany(COLLECTION_NAME, nodes, InsertOptions().bypassDocumentValidation(false).ordered(true))))
+            XCTAssertNotNil(try `await`(_databaseService!.insertMany(COLLECTION_NAME, nodes, InsertOptions().bypassDocumentValidation(false).ordered(true))))
         }())
     }
     
@@ -95,7 +95,7 @@ class DatabaseServiceTest: XCTestCase {
                 ["author" : "john doe2", "title" : "Eve for Dummies2"],
                 ["author" : "john doe3", "title" : "Eve for Dummies3"],
             ]
-            _ = try await(_databaseService!.insertMany(COLLECTION_NAME_NOT_EXIST, nodes, InsertOptions().bypassDocumentValidation(false).ordered(true)))
+            _ = try `await`(_databaseService!.insertMany(COLLECTION_NAME_NOT_EXIST, nodes, InsertOptions().bypassDocumentValidation(false).ordered(true)))
         } catch {
             if let error = error as? HiveError {
                 switch error {
@@ -111,14 +111,14 @@ class DatabaseServiceTest: XCTestCase {
     public func test04FindOne() {
         XCTAssertNoThrow(try { [self] in
             let query = ["author" : "john doe1"]
-            XCTAssertNotNil(try await(_databaseService!.findOne(COLLECTION_NAME, query, FindOptions().setSkip(0).setLimit(0))))
+            XCTAssertNotNil(try `await`(_databaseService!.findOne(COLLECTION_NAME, query, FindOptions().setSkip(0).setLimit(0))))
         }())
     }
     
     public func test04FindOne4NotFoundException() {
         do {
             let query = ["author" : "john doe1"]
-            _ = try await(_databaseService!.findOne(COLLECTION_NAME_NOT_EXIST, query, FindOptions().setSkip(0).setLimit(0)))
+            _ = try `await`(_databaseService!.findOne(COLLECTION_NAME_NOT_EXIST, query, FindOptions().setSkip(0).setLimit(0)))
         } catch {
             if let error = error as? HiveError {
                 switch error {
@@ -134,14 +134,14 @@ class DatabaseServiceTest: XCTestCase {
     public func test05FindMany() {
         XCTAssertNoThrow(try { [self] in
             let query = ["author" : "john doe1"]
-            XCTAssertTrue(try await(_databaseService!.findMany(COLLECTION_NAME, query, FindOptions().setSkip(0).setLimit(0))).count > 0)
+            XCTAssertTrue(try `await`(_databaseService!.findMany(COLLECTION_NAME, query, FindOptions().setSkip(0).setLimit(0))).count > 0)
         }())
     }
     
     public func test05FindMany4NotFoundException() {
         do {
             let query = ["author" : "john doe1"]
-            try await(_databaseService!.findMany(COLLECTION_NAME_NOT_EXIST, query, FindOptions().setSkip(0).setLimit(0)))
+            try `await`(_databaseService!.findMany(COLLECTION_NAME_NOT_EXIST, query, FindOptions().setSkip(0).setLimit(0)))
         } catch {
             if let error = error as? HiveError {
                 switch error {
@@ -157,14 +157,14 @@ class DatabaseServiceTest: XCTestCase {
     public func test06Query() {
         XCTAssertNoThrow(try { [self] in
             let query = ["author" : "john doe1"]
-            XCTAssertTrue(try await(_databaseService!.query(COLLECTION_NAME, query, nil)).count > 0)
+            XCTAssertTrue(try `await`(_databaseService!.query(COLLECTION_NAME, query, nil)).count > 0)
         }())
     }
     
     public func test06Query4NotFoundException() {
         do {
             let query = ["author" : "john doe1"]
-            _ = try await(_databaseService!.query(COLLECTION_NAME_NOT_EXIST, query, nil))
+            _ = try `await`(_databaseService!.query(COLLECTION_NAME_NOT_EXIST, query, nil))
         } catch {
             if let error = error as? HiveError {
                 switch error {
@@ -181,21 +181,21 @@ class DatabaseServiceTest: XCTestCase {
         XCTAssertNoThrow(try { [self] in
             let query = ["author" : "john doe1"]
             let options = QueryOptions().setSort(AscendingSortItem("_id").getJsonValue())
-            XCTAssertTrue(try await(_databaseService!.query(COLLECTION_NAME, query, options)).count > 0)
+            XCTAssertTrue(try `await`(_databaseService!.query(COLLECTION_NAME, query, options)).count > 0)
         }())
     }
     
     public func test07CountDoc() {
         XCTAssertNoThrow(try { [self] in
             let filter = ["author" : "john doe1"]
-            XCTAssertTrue(try await(_databaseService!.countDocuments(COLLECTION_NAME, filter, CountOptions().setLimit(1).setSkip(0).setMaxTimeMS(1000000000))) > 0)
+            XCTAssertTrue(try `await`(_databaseService!.countDocuments(COLLECTION_NAME, filter, CountOptions().setLimit(1).setSkip(0).setMaxTimeMS(1000000000))) > 0)
         }())
     }
     
     public func test07CountDoc4NotFoundException() {
         do {
             let filter = ["author" : "john doe1"]
-            _ = try await(_databaseService!.countDocuments(COLLECTION_NAME_NOT_EXIST, filter, CountOptions().setLimit(1).setSkip(0).setMaxTimeMS(1000000000)))
+            _ = try `await`(_databaseService!.countDocuments(COLLECTION_NAME_NOT_EXIST, filter, CountOptions().setLimit(1).setSkip(0).setMaxTimeMS(1000000000)))
         } catch {
             if let error = error as? HiveError {
                 switch error {
@@ -214,7 +214,7 @@ class DatabaseServiceTest: XCTestCase {
             let filter = ["author" : "john doe1"]
             let doc = ["author" : "john doe1", "title" : "Eve for Dummies1_1"]
             let update = ["$set" : doc]
-            XCTAssertNotNil(try await(_databaseService!.updateOne(COLLECTION_NAME, filter, update, UpdateOptions().setBypassDocumentValidation(false).setUpsert(true))))
+            XCTAssertNotNil(try `await`(_databaseService!.updateOne(COLLECTION_NAME, filter, update, UpdateOptions().setBypassDocumentValidation(false).setUpsert(true))))
         }())
     }
     
@@ -224,7 +224,7 @@ class DatabaseServiceTest: XCTestCase {
         let doc = ["author" : "john doe1", "title" : "Eve for Dummies1_1"]
         let update = ["$set" : doc]
         do {
-            try await(_databaseService!.updateOne(COLLECTION_NAME_NOT_EXIST, filter, update, UpdateOptions().setBypassDocumentValidation(false).setUpsert(true)))
+            try `await`(_databaseService!.updateOne(COLLECTION_NAME_NOT_EXIST, filter, update, UpdateOptions().setBypassDocumentValidation(false).setUpsert(true)))
         } catch {
             if let error = error as? HiveError {
                 switch error {
@@ -242,7 +242,7 @@ class DatabaseServiceTest: XCTestCase {
             let filter = ["author" : "john doe1"]
             let doc = ["author" : "john doe1", "title" : "Eve for Dummies1_2"]
             let update = ["$set" : doc]
-            XCTAssertNotNil(try await(_databaseService!.updateMany(COLLECTION_NAME, filter, update, UpdateOptions().setBypassDocumentValidation(true))))
+            XCTAssertNotNil(try `await`(_databaseService!.updateMany(COLLECTION_NAME, filter, update, UpdateOptions().setBypassDocumentValidation(true))))
         }())
     }
     
@@ -251,7 +251,7 @@ class DatabaseServiceTest: XCTestCase {
         let doc = ["author" : "john doe1", "title" : "Eve for Dummies1_2"]
         let update = ["$set" : doc]
         do {
-            _ = try await(_databaseService!.updateMany(COLLECTION_NAME_NOT_EXIST, filter, update, UpdateOptions().setBypassDocumentValidation(true)))
+            _ = try `await`(_databaseService!.updateMany(COLLECTION_NAME_NOT_EXIST, filter, update, UpdateOptions().setBypassDocumentValidation(true)))
         } catch {
             if let error = error as? HiveError {
                 switch error {
@@ -269,7 +269,7 @@ class DatabaseServiceTest: XCTestCase {
         // TODO: deleteOne need be implemented.
         XCTAssertNoThrow(try { [self] in
             let filter = ["author" : "john doe2"]
-            _ = try await(_databaseService!.deleteOne(COLLECTION_NAME, filter))
+            _ = try `await`(_databaseService!.deleteOne(COLLECTION_NAME, filter))
         }())
     }
     
@@ -278,7 +278,7 @@ class DatabaseServiceTest: XCTestCase {
         // TODO: deleteOne need be implemented.
         let filter = ["author" : "john doe2"]
         do {
-            _ = try await(_databaseService!.deleteOne(COLLECTION_NAME_NOT_EXIST, filter))
+            _ = try `await`(_databaseService!.deleteOne(COLLECTION_NAME_NOT_EXIST, filter))
         } catch {
             if let error = error as? HiveError {
                 switch error {
@@ -294,14 +294,14 @@ class DatabaseServiceTest: XCTestCase {
     func test11DeleteMany() {
         XCTAssertNoThrow(try { [self] in
             let filter = ["author" : "john doe2"]
-            _ = try await(_databaseService!.deleteMany(COLLECTION_NAME, filter))
+            _ = try `await`(_databaseService!.deleteMany(COLLECTION_NAME, filter))
         }())
     }
     
     func test11DeleteMany4NotFoundException() {
         let filter = ["author" : "john doe2"]
         do {
-            _ = try await(_databaseService!.deleteMany(COLLECTION_NAME_NOT_EXIST, filter))
+            _ = try `await`(_databaseService!.deleteMany(COLLECTION_NAME_NOT_EXIST, filter))
         } catch {
             if let error = error as? HiveError {
                 switch error {
@@ -316,7 +316,7 @@ class DatabaseServiceTest: XCTestCase {
     
     func test12DeleteCollection() {
         XCTAssertNoThrow(try { [self] in
-            _ = try await(_databaseService!.deleteCollection(COLLECTION_NAME))
+            _ = try `await`(_databaseService!.deleteCollection(COLLECTION_NAME))
         }())
     }
 }

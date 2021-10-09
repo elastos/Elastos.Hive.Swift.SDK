@@ -40,40 +40,40 @@ class VaultSubscriptionTest: XCTestCase {
     
     public func test01GetPricingPlanList() {
         XCTAssertNoThrow(try { [self] in
-            let plans = try await(_subscription!.getPricingPlanList())
+            let plans = try `await`(_subscription!.getPricingPlanList())
             XCTAssertTrue(plans.count > 0)
         }())
     }
     
     public func test02GetPricingPlan() {
         XCTAssertNoThrow(try { [self] in
-            let plan = try await(_subscription!.getPricingPlan(PRICING_PLAN_NAME))
+            let plan = try `await`(_subscription!.getPricingPlan(PRICING_PLAN_NAME))
             XCTAssertTrue(plan.name == PRICING_PLAN_NAME)
         }())
     }
     
     // Disable
     public func test03Subscribe() {
-        XCTAssertNoThrow(try await(_subscription!.subscribe()))
+        XCTAssertNoThrow(try `await`(_subscription!.subscribe()))
     }
     
     public func test04CheckSubscription() {
         XCTAssertNoThrow(try { [self] in
-            XCTAssertNotNil(try await(_subscription!.checkSubscription()))
+            XCTAssertNotNil(try `await`(_subscription!.checkSubscription()))
         }())
     }
     
     //Disabled
     public func test05Unsubscribe() {
         XCTAssertNoThrow(try { [self] in
-            try await(_subscription!.unsubscribe())
+            try `await`(_subscription!.unsubscribe())
         }())
     }
     
     // Disabled
     public func test06GetFileHashProcess() {
         XCTAssertNoThrow(try { [self] in
-            try await(_subscription!.subscribe())
+            try `await`(_subscription!.subscribe())
             try Hash()
         }())
     }

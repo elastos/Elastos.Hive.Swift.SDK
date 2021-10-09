@@ -80,8 +80,8 @@ class FilesServiceTest: XCTestCase {
     private func uploadTextReally() throws {
         XCTAssertNoThrow(try { [self] in
             let data = try Data(contentsOf: URL(fileURLWithPath: self.localTxtFilePath!))
-            let fileWriter = try await(_filesService!.getUploadWriter(remoteTxtFilePath!))
-            let result = try await(fileWriter.write(data: data))
+            let fileWriter = try `await`(_filesService!.getUploadWriter(remoteTxtFilePath!))
+            let result = try `await`(fileWriter.write(data: data))
             XCTAssertTrue(result)
         }())
     }
@@ -89,17 +89,17 @@ class FilesServiceTest: XCTestCase {
     public func test02UploadBin() {
         XCTAssertNoThrow(try { [self] in
             let data = try Data(contentsOf: URL(fileURLWithPath: self.localImgFilePath!))
-            let fileWriter = try await(_filesService!.getUploadWriter(self.remoteImgFilePath!))
-            let result = try await(fileWriter.write(data: data))
+            let fileWriter = try `await`(_filesService!.getUploadWriter(self.remoteImgFilePath!))
+            let result = try `await`(fileWriter.write(data: data))
             XCTAssertTrue(result)
         }())
     }
 
     func test03DownloadText() {
         XCTAssertNoThrow(try { [self] in
-            let reader = try await(_filesService!.getDownloadReader(self.remoteTxtFilePath!))
+            let reader = try `await`(_filesService!.getDownloadReader(self.remoteTxtFilePath!))
             let targetUrl = createFilePathForDownload(self.localCacheTxtPath!)
-            let result = try await(reader.read(targetUrl))
+            let result = try `await`(reader.read(targetUrl))
             XCTAssertTrue(result)
             let isEqual = try self.isFileContentEqual(self.localTxtFilePath!, self.localCacheTxtPath!)
             XCTAssertTrue(isEqual)
@@ -108,9 +108,9 @@ class FilesServiceTest: XCTestCase {
 
     public func test04DownloadBin() {
         XCTAssertNoThrow(try { [self] in
-            let reader = try await(_filesService!.getDownloadReader(self.remoteImgFilePath!))
+            let reader = try `await`(_filesService!.getDownloadReader(self.remoteImgFilePath!))
             let fileurl = createFilePathForDownload(self.localCacheImgPath!)
-            let result = try await(reader.read(fileurl))
+            let result = try `await`(reader.read(fileurl))
             XCTAssertTrue(result)
             let isEqual = try self.isFileContentEqual(self.localImgFilePath!, self.localCacheImgPath!)
             XCTAssertTrue(isEqual)
@@ -120,9 +120,9 @@ class FilesServiceTest: XCTestCase {
     
     public func test04DownloadBin4NotFoundException() {
         do {
-            let reader = try await(_filesService!.getDownloadReader(self.remoteNotExistsFilePath!))
+            let reader = try `await`(_filesService!.getDownloadReader(self.remoteNotExistsFilePath!))
             let fileurl = createFilePathForDownload("swift_download.png")
-            let result = try await(reader.read(fileurl))
+            let result = try `await`(reader.read(fileurl))
             XCTAssertTrue(result)
         } catch {
             if let error = error as? HiveError {
@@ -138,7 +138,7 @@ class FilesServiceTest: XCTestCase {
     
     public func test05List() {
         XCTAssertNoThrow(try { [self] in
-            let files = try await(_filesService!.list(self.remoteRootDir!))
+            let files = try `await`(_filesService!.list(self.remoteRootDir!))
             XCTAssertNotNil(files)
             XCTAssertTrue(files.count >= 2)
             var fileInfos = [String]()
@@ -152,7 +152,7 @@ class FilesServiceTest: XCTestCase {
     
     public func test05List4NotFoundException() {
         do {
-            _ = try await(_filesService!.list(self.remoteNotExistsDirPath!))
+            _ = try `await`(_filesService!.list(self.remoteNotExistsDirPath!))
         } catch  {
             if let error = error as? HiveError {
                 switch error {
@@ -167,13 +167,13 @@ class FilesServiceTest: XCTestCase {
     
     public func test06Hash() {
         XCTAssertNoThrow(try { [self] in
-            XCTAssertTrue(try await(_filesService!.hash(self.remoteTxtFilePath!)).count > 0)
+            XCTAssertTrue(try `await`(_filesService!.hash(self.remoteTxtFilePath!)).count > 0)
         }())
     }
 
     public func test06Hash4NotFoundException() {
         do {
-            _ = try await(_filesService!.hash(self.remoteNotExistsDirPath!))
+            _ = try `await`(_filesService!.hash(self.remoteNotExistsDirPath!))
         } catch  {
             if let error = error as? HiveError {
                 switch error {
@@ -188,15 +188,15 @@ class FilesServiceTest: XCTestCase {
     
     public func test07Move() {
         XCTAssertNoThrow(try { [self] in
-            _ = try await(_filesService!.delete(self.remoteBackupTxtFilePath!))
-            _ = try await(_filesService!.move(self.remoteTxtFilePath!, self.remoteBackupTxtFilePath!))
+            _ = try `await`(_filesService!.delete(self.remoteBackupTxtFilePath!))
+            _ = try `await`(_filesService!.move(self.remoteTxtFilePath!, self.remoteBackupTxtFilePath!))
             verifyRemoteFileExists(self.remoteBackupTxtFilePath!)
         }())
     }
     
     public func test07Move4NotFoundException() {
         do {
-            _ = try await(_filesService!.move(self.remoteNotExistsFilePath!, self.remoteNotExistsFilePath! + "_bak"))
+            _ = try `await`(_filesService!.move(self.remoteNotExistsFilePath!, self.remoteNotExistsFilePath! + "_bak"))
         } catch  {
             if let error = error as? HiveError {
                 switch error {
@@ -211,14 +211,14 @@ class FilesServiceTest: XCTestCase {
     
     public func test08Copy() {
         XCTAssertNoThrow(try { [self] in
-            _ = try await(_filesService!.copy(self.remoteBackupTxtFilePath!, self.remoteTxtFilePath!))
+            _ = try `await`(_filesService!.copy(self.remoteBackupTxtFilePath!, self.remoteTxtFilePath!))
             verifyRemoteFileExists(self.remoteTxtFilePath!)
         }())
     }
     
     public func test08Copy4NotFoundException() {
         do {
-            _ = try await(_filesService!.copy(self.remoteNotExistsFilePath!, self.remoteNotExistsFilePath! + "_bak"))
+            _ = try `await`(_filesService!.copy(self.remoteNotExistsFilePath!, self.remoteNotExistsFilePath! + "_bak"))
         } catch  {
             if let error = error as? HiveError {
                 switch error {
@@ -233,8 +233,8 @@ class FilesServiceTest: XCTestCase {
     
     public func test09DeleteFile() {
         XCTAssertNoThrow(try { [self] in
-            _ = try await(_filesService!.delete(self.remoteTxtFilePath!))
-            _ = try await(_filesService!.delete(self.remoteBackupTxtFilePath!))
+            _ = try `await`(_filesService!.delete(self.remoteTxtFilePath!))
+            _ = try `await`(_filesService!.delete(self.remoteBackupTxtFilePath!))
         }())
     }
     
@@ -252,7 +252,7 @@ class FilesServiceTest: XCTestCase {
     
     func verifyRemoteFileExists(_ path: String) {
         XCTAssertNoThrow(try { [self] in
-            XCTAssertNotNil(try await(_filesService!.stat(path)))
+            XCTAssertNotNil(try `await`(_filesService!.stat(path)))
         }())
     }
     

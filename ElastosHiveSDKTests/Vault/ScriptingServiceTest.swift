@@ -79,14 +79,14 @@ class ScriptingServiceTest: XCTestCase {
         XCTAssertNoThrow(try { [self] in
             let doc = ["author" : "$params.author", "content" : "$params.content"]
             let options = ["bypass_document_validation" : false, "ordered" : true]
-            try await(_scriptingService!.registerScript(scriptName, InsertExecutable(scriptName, _collectionName, doc, options), false, false))
+            try `await`(_scriptingService!.registerScript(scriptName, InsertExecutable(scriptName, _collectionName, doc, options), false, false))
         }())
     }
     
     private func callScriptInsert(_ scriptName: String) {
         XCTAssertNoThrow(try { [self] in
             let params = ["author" : "John", "content" : "message"]
-            let result = try await(_scriptRunner!.callScript(scriptName, params, _targetDid!, _appDid!, JSON.self))
+            let result = try `await`(_scriptRunner!.callScript(scriptName, params, _targetDid!, _appDid!, JSON.self))
             XCTAssertNotNil(result)
             XCTAssert(result[scriptName]["inserted_id"].string!.count > 0)
         }())
@@ -100,13 +100,13 @@ class ScriptingServiceTest: XCTestCase {
     private func registerScriptFindWithoutCondition(_ scriptName: String) {
         XCTAssertNoThrow(try { [self] in
             let filter = ["author" : "John"]
-            let result = try await(_scriptingService!.registerScript(scriptName, FindExecutable(scriptName, _collectionName, filter), false, false))
+            let result = try `await`(_scriptingService!.registerScript(scriptName, FindExecutable(scriptName, _collectionName, filter), false, false))
         }())
     }
     
     private func callScriptFindWithoutCondition(_ scriptName: String) {
         XCTAssertNoThrow(try { [self] in
-            _ = try await(_scriptRunner!.callScriptUrl(scriptName, "{}", _targetDid!, _appDid!, String.self))
+            _ = try `await`(_scriptRunner!.callScriptUrl(scriptName, "{}", _targetDid!, _appDid!, String.self))
         }())
     }
     
@@ -118,13 +118,13 @@ class ScriptingServiceTest: XCTestCase {
     private func registerScriptFind(_ scriptName: String) {
         XCTAssertNoThrow(try { [self] in
             let filter = ["author" : "John"]
-            _ = try await(_scriptingService!.registerScript(scriptName, QueryHasResultCondition("verify_user_permission", COLLECTION_NAME, filter), FindExecutable(scriptName, COLLECTION_NAME, filter).setOutput(true), false, false))
+            _ = try `await`(_scriptingService!.registerScript(scriptName, QueryHasResultCondition("verify_user_permission", COLLECTION_NAME, filter), FindExecutable(scriptName, COLLECTION_NAME, filter).setOutput(true), false, false))
         }())
     }
     
     private func callScriptFind(_ scriptName: String) {
         XCTAssertNoThrow(try { [self] in
-            XCTAssertNotNil(try await(_scriptRunner!.callScript(scriptName, nil, _targetDid!, _appDid!, String.self)))
+            XCTAssertNotNil(try `await`(_scriptRunner!.callScript(scriptName, nil, _targetDid!, _appDid!, String.self)))
         }())
     }
     
@@ -139,14 +139,14 @@ class ScriptingServiceTest: XCTestCase {
             let set = ["author" : "$params.author", "content" : "$params.content"]
             let update = ["$set" : set]
             let options = ["bypass_document_validation" : false, "upsert" :true]
-            _ = try await(_scriptingService!.registerScript(scriptName, UpdateExecutable(scriptName, COLLECTION_NAME, filter, update, options), false, false))
+            _ = try `await`(_scriptingService!.registerScript(scriptName, UpdateExecutable(scriptName, COLLECTION_NAME, filter, update, options), false, false))
         }())
     }
     
     private func callScriptUpdate(_ scriptName: String) {
         XCTAssertNoThrow(try { [self] in
             let params = ["author" : "John", "content" : "message"]
-            let result = try await(_scriptRunner!.callScript(scriptName, params, _targetDid!, _appDid!, JSON.self))
+            let result = try `await`(_scriptRunner!.callScript(scriptName, params, _targetDid!, _appDid!, JSON.self))
             XCTAssertNotNil(result)
             XCTAssert(result[scriptName] != nil)
             XCTAssert(result[scriptName]["upserted_id"] != nil)
@@ -161,14 +161,14 @@ class ScriptingServiceTest: XCTestCase {
     private func registerScriptDelete(_ scriptName: String) {
         XCTAssertNoThrow(try { [self] in
             let filter = ["author" : "$params.author"]
-            try await(_scriptingService!.registerScript(scriptName, DeleteExecutable(scriptName, COLLECTION_NAME, filter), false, false))
+            try `await`(_scriptingService!.registerScript(scriptName, DeleteExecutable(scriptName, COLLECTION_NAME, filter), false, false))
         }())
     }
    
     private func callScriptDelete(_ scriptName: String) {
         XCTAssertNoThrow(try { [self] in
             let params = ["author" : "John"]
-            let result = try await(_scriptRunner!.callScript(scriptName, params, _targetDid!, _appDid!, JSON.self))
+            let result = try `await`(_scriptRunner!.callScript(scriptName, params, _targetDid!, _appDid!, JSON.self))
             XCTAssertNotNil(result)
             XCTAssert(result[scriptName]["deleted_count"].int! > 0)
         }())
@@ -183,13 +183,13 @@ class ScriptingServiceTest: XCTestCase {
 
     private func registerScriptFileUpload(_ scriptName: String) {
         XCTAssertNoThrow(try { [self] in
-            try await(_scriptingService!.registerScript(scriptName, FileUploadExecutable(scriptName).setOutput(true), false, false))
+            try `await`(_scriptingService!.registerScript(scriptName, FileUploadExecutable(scriptName).setOutput(true), false, false))
         }())
     }
      
     private func callScriptFileUpload(_ scriptName: String, _ fileName: String) -> String? {
         do {
-            let result = try await(_scriptRunner!.callScript(scriptName, Executable.createRunFileParams(fileName), _targetDid!, _appDid!, JSON.self))
+            let result = try `await`(_scriptRunner!.callScript(scriptName, Executable.createRunFileParams(fileName), _targetDid!, _appDid!, JSON.self))
             return result[scriptName]["transaction_id"].string
         } catch {
             print(error)
@@ -199,9 +199,9 @@ class ScriptingServiceTest: XCTestCase {
     
     private func uploadFileByTransActionId(_ transactionId: String) {
         XCTAssertNoThrow(try { [self] in
-            let fileWriter = try await(_scriptRunner!.uploadFile(transactionId))
+            let fileWriter = try `await`(_scriptRunner!.uploadFile(transactionId))
             let data = try Data(contentsOf: URL(fileURLWithPath: self.localDstFilePath!))
-            let result = try await(fileWriter.write(data: data))
+            let result = try `await`(fileWriter.write(data: data))
             XCTAssertTrue(result)
         }())
     }
@@ -214,13 +214,13 @@ class ScriptingServiceTest: XCTestCase {
     
     private func registerScriptFileDownload(_ scriptName: String) {
         XCTAssertNoThrow(try { [self] in
-            try await(_scriptingService!.registerScript(scriptName, FileDownloadExecutable(scriptName).setOutput(true), false, false))
+            try `await`(_scriptingService!.registerScript(scriptName, FileDownloadExecutable(scriptName).setOutput(true), false, false))
         }())
     }
     
     private func callScriptFileDownload(_ scriptName: String, _ fileName: String) -> String? {
         do {
-            let result = try await(_scriptRunner!.callScript(scriptName, Executable.createRunFileParams(fileName), _targetDid!, _appDid!, JSON.self))
+            let result = try `await`(_scriptRunner!.callScript(scriptName, Executable.createRunFileParams(fileName), _targetDid!, _appDid!, JSON.self))
             return result[scriptName]["transaction_id"].string
         } catch {
             print(error)
@@ -230,9 +230,9 @@ class ScriptingServiceTest: XCTestCase {
     
     private func downloadFileByTransActionId(_ transactionId: String) {
         XCTAssertNoThrow(try { [self] in
-            let reader = try await(_scriptRunner!.downloadFile(transactionId))
+            let reader = try `await`(_scriptRunner!.downloadFile(transactionId))
             let targetUrl = createFilePathForDownload("test_ios_download_script.txt")
-            let result = try await(reader.read(targetUrl))
+            let result = try `await`(reader.read(targetUrl))
             XCTAssertTrue(result)
         }())
     }
@@ -256,13 +256,13 @@ class ScriptingServiceTest: XCTestCase {
     
     public func registerScriptFileProperties(_ scriptName: String) {
         XCTAssertNoThrow(try { [self] in
-            try await(_scriptingService!.registerScript(scriptName, FilePropertiesExecutable(scriptName).setOutput(true), false, false))
+            try `await`(_scriptingService!.registerScript(scriptName, FilePropertiesExecutable(scriptName).setOutput(true), false, false))
         }())
     }
 
     public func callScriptFileProperties(_ scriptName: String, _ fileName: String) {
         XCTAssertNoThrow(try { [self] in
-            let result = try await(_scriptRunner!.callScript(scriptName, Executable.createRunFileParams(fileName), _targetDid!, _appDid!, JSON.self))
+            let result = try `await`(_scriptRunner!.callScript(scriptName, Executable.createRunFileParams(fileName), _targetDid!, _appDid!, JSON.self))
             XCTAssertNotNil(result)
             XCTAssert(result[scriptName]["size"].number!.intValue > 0)
         }())
@@ -275,13 +275,13 @@ class ScriptingServiceTest: XCTestCase {
 
     private func registerScriptFileHash(_ scriptName: String) {
         XCTAssertNoThrow(try { [self] in
-            try await(_scriptingService!.registerScript(scriptName, FileHashExecutable(scriptName).setOutput(true), false, false))
+            try `await`(_scriptingService!.registerScript(scriptName, FileHashExecutable(scriptName).setOutput(true), false, false))
         }())
     }
     
     private func callScriptFileHash(_ scriptName: String, _ fileName: String) {
         XCTAssertNoThrow(try { [self] in
-            let result = try await(_scriptRunner!.callScript(scriptName, Executable.createRunFileParams(fileName), _targetDid!, _appDid!, JSON.self))
+            let result = try `await`(_scriptRunner!.callScript(scriptName, Executable.createRunFileParams(fileName), _targetDid!, _appDid!, JSON.self))
             XCTAssertNotNil(result)
             XCTAssert(result[scriptName]["SHA256"].string!.count > 0)
         }())
@@ -289,7 +289,7 @@ class ScriptingServiceTest: XCTestCase {
     
     public func test10Unregister() {
         XCTAssertNoThrow(try { [self] in
-            try await(_scriptingService!.unregisterScript(FILE_HASH_NAME))
+            try `await`(_scriptingService!.unregisterScript(FILE_HASH_NAME))
             remove_test_database();
         }())
     }
@@ -299,7 +299,7 @@ class ScriptingServiceTest: XCTestCase {
      */
     public func create_test_database() {
         do {
-            _ = try await(_databaseService!.createCollection(_collectionName))
+            _ = try `await`(_databaseService!.createCollection(_collectionName))
         } catch {
             print("Failed to create collection: \(error)")
         }
@@ -310,7 +310,7 @@ class ScriptingServiceTest: XCTestCase {
      */
     public func remove_test_database() {
         do {
-            _ = try await(_databaseService!.deleteCollection(_collectionName))
+            _ = try `await`(_databaseService!.deleteCollection(_collectionName))
         } catch {
             print("Failed to remove collection: \(error)")
         }
@@ -322,7 +322,7 @@ class ScriptingServiceTest: XCTestCase {
     
     func verifyRemoteFileExists(_ path: String) {
         XCTAssertNoThrow(try { [self] in
-            XCTAssertNotNil(try await(_filesService!.stat(path)))
+            XCTAssertNotNil(try `await`(_filesService!.stat(path)))
         }())
     }
 }

@@ -68,15 +68,15 @@ class ScriptingCrossingTest: XCTestCase {
     
     private func init_for_caller() {
         XCTAssertNoThrow(try { [self] in
-            try await(_databaseService!.createCollection(COLLECTION_GROUP))
-            try await(_databaseService!.createCollection(COLLECTION_GROUP_MESSAGE))
+            try `await`(_databaseService!.createCollection(COLLECTION_GROUP))
+            try `await`(_databaseService!.createCollection(COLLECTION_GROUP_MESSAGE))
         }())
     }
    
     private func set_permission_for_caller() {
         XCTAssertNoThrow(try { [self] in
             let docNode: [String: Any] = ["collection" : COLLECTION_GROUP_MESSAGE, "did" : _callDid]
-            try await(_databaseService!.insertOne(COLLECTION_GROUP, docNode, InsertOptions().bypassDocumentValidation(false)))
+            try `await`(_databaseService!.insertOne(COLLECTION_GROUP, docNode, InsertOptions().bypassDocumentValidation(false)))
         }())
     }
     
@@ -85,7 +85,7 @@ class ScriptingCrossingTest: XCTestCase {
             let filter = ["collection" : COLLECTION_GROUP_MESSAGE, "did" : "$caller_did"]
             let doc = ["author" : "$params.author", "content" : "$params.content"]
             let options = ["bypass_document_validation" : false, "ordered" : true]
-            try await( _scriptingService!.registerScript(SCRIPT_NAME,
+            try `await`( _scriptingService!.registerScript(SCRIPT_NAME,
                                                          QueryHasResultCondition("verify_user_permission", COLLECTION_GROUP, filter),
                                                          InsertExecutable(SCRIPT_NAME, COLLECTION_GROUP_MESSAGE, doc, options)))
         }())
@@ -94,7 +94,7 @@ class ScriptingCrossingTest: XCTestCase {
     private func run_script_with_group_permission() {
         XCTAssertNoThrow(try { [self] in
             let params = ["author" : "John", "content" : "message"]
-            let result = try await(_scriptRunner!.callScript(SCRIPT_NAME, params, _targetDid, _appDid, JSON.self))
+            let result = try `await`(_scriptRunner!.callScript(SCRIPT_NAME, params, _targetDid, _appDid, JSON.self))
             XCTAssertNotNil(result)
             XCTAssertTrue(result[SCRIPT_NAME]["inserted_id"].string!.count > 0)
         }())
@@ -103,21 +103,21 @@ class ScriptingCrossingTest: XCTestCase {
     private func remove_permission_for_caller() {
         XCTAssertNoThrow(try { [self] in
             let filter = ["collection" : COLLECTION_GROUP_MESSAGE, "did" : _callDid]
-            try await(_databaseService!.deleteOne(COLLECTION_GROUP, filter))
+            try `await`(_databaseService!.deleteOne(COLLECTION_GROUP, filter))
         }())
     }
     
     public func run_script_without_group_permission() {
         XCTAssertNoThrow(try { [self] in
             let params = ["author" : "John", "content" : "message"]
-            try await(_scriptRunner!.callScript(SCRIPT_NAME, params, _targetDid, _appDid, JSON.self))
+            try `await`(_scriptRunner!.callScript(SCRIPT_NAME, params, _targetDid, _appDid, JSON.self))
         }())
     }
     
     public func uninit_for_caller() {
         XCTAssertNoThrow(try { [self] in
-            try await(_databaseService!.deleteCollection(COLLECTION_GROUP_MESSAGE))
-            try await(_databaseService!.deleteCollection(COLLECTION_GROUP))
+            try `await`(_databaseService!.deleteCollection(COLLECTION_GROUP_MESSAGE))
+            try `await`(_databaseService!.deleteCollection(COLLECTION_GROUP))
         }())
     }
 }

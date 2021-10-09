@@ -46,7 +46,7 @@ public class RemoteResolver: CodeFetcher {
         }
         
         let promise: Promise<String>? = _backupContext.getAuthorization(_serviceEndpoint?.serviceInstanceDid, _targetDid, _targetHost)
-        return try await(promise!)
+        return try `await`(promise!)
     }
     
     /// Invalidate the code for getting the code from remote server.
