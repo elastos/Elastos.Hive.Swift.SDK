@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
 
   s.name         = 'ElastosHiveSDK'
-  s.version      = '2.2.0-pre'
+  s.version      = '2.2.1-pre'
   s.summary      = 'Elastos Hive iOS SDK Distribution.'
   s.swift_version = '4.2'
   s.description  = 'Elastos hive ios sdk framework distribution.'
@@ -22,7 +22,7 @@ Pod::Spec.new do |s|
   s.source_files = 'ElastosHiveSDK/**/*.swift'
   s.dependency 'Alamofire','~> 5.0'
   s.dependency 'PromiseKit','~> 6.9'
-  s.dependency 'ElastosDIDSDK', '~> 2.2.0'
+  s.dependency 'ElastosDIDSDK', '~> 2.2.1'
   s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
   s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
 
