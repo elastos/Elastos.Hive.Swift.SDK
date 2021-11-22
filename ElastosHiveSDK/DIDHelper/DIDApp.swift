@@ -18,7 +18,7 @@ public class DIDApp: Entity {
         var components = DateComponents()
         components.year = 2025
         let exp = userCalendar.date(from: components)
-        let cb = issuer!.editingVerifiableCredentialFor(did: dapp.did!)
+        let cb = try issuer!.editingVerifiableCredentialFor(did: dapp.did!)
         let vc = try cb.withId("didapp")
             .withTypes("AppIdCredential")
             .withProperties(subject)
