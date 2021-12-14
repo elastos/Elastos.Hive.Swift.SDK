@@ -56,10 +56,10 @@ public class TestData {
             _storePath = "\(NSHomeDirectory())/Library/Caches/data/store" + "/" + _nodeConfig.storePath
             _context = try AppContext.build(TestAppContextProvider(_storePath, _userDid, _appInstanceDid), _userDid.description)
             
- //            let userConfigCaller: UserConfig = clientConfig!.crossConfig.userConfig
-//            _callerDid = try UserDID(userConfigCaller.name, userConfigCaller.mnemonic, userConfigCaller.passPhrase, userConfigCaller.storepass)
+             let userConfigCaller: UserConfig = clientConfig!.crossConfig.userConfig
+            _callerDid = try UserDID(userConfigCaller.name, userConfigCaller.mnemonic, userConfigCaller.passPhrase, userConfigCaller.storepass)
                         
-//            _callerContext = try AppContext.build(TestAppContextProvider(_storePath, _userDid, _appInstanceDid), _userDid.description)
+            _callerContext = try AppContext.build(TestAppContextProvider(_storePath, _userDid, _appInstanceDid), _userDid.description)
         }
         catch {
             print(error)
