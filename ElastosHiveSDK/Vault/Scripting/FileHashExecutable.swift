@@ -27,7 +27,7 @@ import ObjectMapper
 public class FileHashExecutable: Executable {
     public init(_ name: String) {
         super.init(name, ExecutableType.FILE_HASH, nil)
-        self.body = FileBody()
+        self._body = FileBody()
     }
     
     required public init?(map: Map) {

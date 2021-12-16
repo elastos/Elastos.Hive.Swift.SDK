@@ -32,7 +32,7 @@ class ScriptingCrossingTest: XCTestCase {
     private let COLLECTION_GROUP_MESSAGE: String = "st_group_message"
     private let SCRIPT_NAME: String = "get_group_message"
     private let HIVE_URL_SCRIPT_NAME = "downloadFileWithHiveUrl_ios"
-    private let HIVE_URL_FILE_NAME = "hiveUrl_ios.txt"
+    private let HIVE_URL_FILE_NAME = "hiveUrlIos.txt"
     private let HIVE_URL_FILE_CONTENT = "/Users/liaihong/Desktop/iosFileContentonHiveUrl.txt"
 
     private var _scriptingService: ScriptingService?

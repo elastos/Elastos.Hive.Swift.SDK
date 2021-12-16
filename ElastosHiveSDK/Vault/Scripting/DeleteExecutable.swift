@@ -40,12 +40,12 @@ public class DeleteExecutableBody: DatabaseBody {
 public class DeleteExecutable: Executable {
     public init(_ name: String?, _ collectionName: String?, _ filter: Dictionary<String, Any>?) {
         super.init(name, ExecutableType.DELETE, nil)
-        self.body = DeleteExecutableBody(collectionName, filter)
+        self._body = DeleteExecutableBody(collectionName, filter)
     }
     
     public init(_ name: String?, _ collectionName: String?) {
         super.init(name, ExecutableType.DELETE, nil)
-        self.body = DeleteExecutableBody(collectionName, nil)
+        self._body = DeleteExecutableBody(collectionName, nil)
     }
     
     required public init?(map: Map) {
