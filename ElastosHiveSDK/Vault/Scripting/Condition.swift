@@ -34,7 +34,7 @@ public class Condition: NSObject, Mappable {
         self._name = name
         self._type = type
         if body != nil {
-            self._body = body as! HiveRootBody
+            self._body = body as? HiveRootBody
         }
     }
     
@@ -48,7 +48,7 @@ public class Condition: NSObject, Mappable {
     
     final var body: Any? {
         set {
-            _body = newValue as! HiveRootBody
+            _body = newValue as? HiveRootBody
         }
         get {
             return _body

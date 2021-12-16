@@ -27,12 +27,17 @@ import ObjectMapper
 public class FileDownloadExecutable: Executable {
     public init(_ name: String?) {
         super.init(name, ExecutableType.FILE_DOWNLOAD, nil)
-        super.body = FileBody()
+        super._body = FileBody()
     }
     
     public init(_ name: String?, _ path: String) {
         super.init(name, ExecutableType.FILE_DOWNLOAD, nil)
-        super.body = FileBody(path)
+        super._body = FileBody(path)
+//        super.body = FileBody()
+    }
+    
+    public override func mapping(map: Map) {
+        super.mapping(map: map)
     }
     
     required public init?(map: Map) {

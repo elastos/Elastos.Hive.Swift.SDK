@@ -31,6 +31,7 @@ extension ConnectionManager {
     
     public func registerScript(_ scriptName: String, _ params: RegScriptParams) throws -> DataRequest {
         let url = self.baseURL + "/api/v2/vault/scripting/\(scriptName)"
+        print(params.toJSON())
         return try self.createDataRequest(url, .put, params.toJSON())
     }
     

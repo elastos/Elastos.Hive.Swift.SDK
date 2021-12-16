@@ -27,30 +27,32 @@ import ObjectMapper
  * Convenient class to store and serialize a sequence of executables.
  */
 public class AggregatedExecutable: Executable {
-    public init(_ name: String?) {
+    public var bodyArray: [FileDownloadExecutable]?
+    
+    init(_ name: String?) {
         super.init(name, ExecutableType.AGGREGATED, nil)
     }
     
-    public init(_ name: String?, _ executables: [Executable]?) {
+    init(_ name: String?, _ executables: [Executable]?) {
         super.init(name, ExecutableType.AGGREGATED, executables)
     }
     
     public func appendExecutable(_ executable: Executable?) -> AggregatedExecutable? {
-        if executable == nil || executable?.body == nil {
+        if executable == nil || executable?._body == nil {
             return self
         }
         
-        if super.body == nil {
+        if super._body == nil {
             if executable is AggregatedExecutable {
-                super.body = executable?.body as? HiveRootBody
+                super._body = executable?._body
             }
             else {
-                super.body = executable?.body as? HiveRootBody
+                self.bodyArray = [executable] as? [FileDownloadExecutable]
             }
         } else {
-            var es = super.body as! [Executable]
+            var es = super._body as! [Executable]
             if executable is AggregatedExecutable {
-                es.append(contentsOf: executable!.body as! [Executable])
+                es.append(contentsOf: executable!._body as! [Executable])
             } else {
                 es.append(executable!)
             }
@@ -61,5 +63,40 @@ public class AggregatedExecutable: Executable {
     required public init?(map: Map) {
         fatalError("init(map:) has not been implemented")
     }
+    
+    public override func mapping(map: Map) {
+        _type <- map["type"]
+        _name <- map["name"]
+        if bodyArray != nil {
+            bodyArray <- (map["body"], TestTransform())
+        } else {
+            _body <- map["body"]
+        }
+    }
 
 }
+
+open class TestTransform: TransformType {
+    public func transformFromJSON(_ value: Any?) -> [FileDownloadExecutable]? {
+        let vs = value as! [[String : Any]]
+        var array: [FileDownloadExecutable] = []
+        for i in vs {
+            let f = FileDownloadExecutable(JSON: i, context: nil)
+            array.append(f!)
+        }
+        
+        return array
+    }
+    
+    
+    public typealias Object = [FileDownloadExecutable]
+    public typealias JSON = [[String : Any]]
+    
+    public init() {}
+    
+    open func transformToJSON(_ value: [FileDownloadExecutable]?) -> [[String : Any]]? {
+       
+        return value?.toJSON()
+    }
+}
+

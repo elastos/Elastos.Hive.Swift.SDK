@@ -50,12 +50,12 @@ public class InsertExecutable: Executable {
     
     public init(_ name: String?, _ collectionName: String?, _ document: Dictionary<String, Any>?, _ options:  Dictionary<String, Any>?) {
         super.init(name, ExecutableType.INSERT, nil)
-        self.body = InsertExecutableBody(collectionName, document, options)
+        self._body = InsertExecutableBody(collectionName, document, options)
     }
     
     public init(_ name: String?, _ collectionName: String?, _ document: Dictionary<String, Any>?) {
         super.init(name, ExecutableType.INSERT, nil)
-        self.body = InsertExecutableBody(collectionName, document, nil)
+        self._body = InsertExecutableBody(collectionName, document, nil)
     }
     
     required public init?(map: Map) {

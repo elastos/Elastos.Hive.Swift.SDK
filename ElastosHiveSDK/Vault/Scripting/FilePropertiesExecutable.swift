@@ -27,7 +27,7 @@ import ObjectMapper
 public class FilePropertiesExecutable: Executable {
     public init(_ name: String?) {
         super.init(name, ExecutableType.FILE_PROPERTIES, nil)
-        super.body = FileBody()
+        super._body = FileBody()
     }
     
     required public init?(map: Map) {
