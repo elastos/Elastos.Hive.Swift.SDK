@@ -31,6 +31,11 @@ public class FileBody: HiveRootBody {
         _path = "$params.path"
     }
     
+    public init(_ path: String) {
+        super.init()
+        _path = path
+    }
+    
     public required init?(map: Map) {
         super.init(map: map)
     }

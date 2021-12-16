@@ -83,6 +83,12 @@ public class ScriptRunner: ServiceEndpoint, ScriptingInvocationService {
             return try _controller!.uploadFile(transactionId)
         }
     }
+    
+    public func downloadFileByHiveUrl(_ hiveUrl: String) -> Promise<FileReader> {
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _controller.downloadFileByHiveUrl(hiveUrl)
+        }
+    }
 
     /// Invoke the execution of the script to download a file in the streaming mode. The upload works a bit differently from other executable queries because there are two steps to this executable. First, register a script on the vault, then you call this API actually to download the file
     /// - parameters:

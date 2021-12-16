@@ -49,4 +49,12 @@ public protocol ScriptingInvocationService {
     ///    - transactionId: The streaming identifier to the upload process
     /// - returns: FileReader
     func downloadFile(_ transactionId: String) -> Promise<FileReader>;
+    
+    /// This is the compatible implementation for downloading file by the hive url
+    /// which comes from v1 version SDK. The hive url definition is as this format:
+    ///
+    /// - hive://<targetDid>@<targetAppDid>/<scriptName>?params=<paramJsonStr>
+    ///
+    /// - Returns: FileReader instance
+    func downloadFileByHiveUrl(_ hiveUrl: String) -> Promise<FileReader>
 }

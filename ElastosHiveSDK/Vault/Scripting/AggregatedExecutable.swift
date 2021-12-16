@@ -35,17 +35,29 @@ public class AggregatedExecutable: Executable {
         super.init(name, ExecutableType.AGGREGATED, executables)
     }
     
-//    public func appendExecutable(_ executable: Executable?) -> Executable? {
-//        if executable == nil || executable?.body == nil {
-//            return self
-//        }
-//        
-//        if super.body == nil {
-//            
-//        }
-//        // TODO
-//    }
-//    
+    public func appendExecutable(_ executable: Executable?) -> AggregatedExecutable? {
+        if executable == nil || executable?.body == nil {
+            return self
+        }
+        
+        if super.body == nil {
+            if executable is AggregatedExecutable {
+                super.body = executable?.body as? HiveRootBody
+            }
+            else {
+                super.body = executable?.body as? HiveRootBody
+            }
+        } else {
+            var es = super.body as! [Executable]
+            if executable is AggregatedExecutable {
+                es.append(contentsOf: executable!.body as! [Executable])
+            } else {
+                es.append(executable!)
+            }
+        }
+        return self
+    }
+    
     required public init?(map: Map) {
         fatalError("init(map:) has not been implemented")
     }

@@ -145,4 +145,10 @@ public class ScriptingServiceRender: ScriptingService {
             return try _controller.downloadFile(transactionId)
         }
     }
+    
+    public func downloadFileByHiveUrl(_ hiveUrl: String) -> Promise<FileReader> {
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _controller.downloadFileByHiveUrl(hiveUrl)
+        }
+    }
 }
