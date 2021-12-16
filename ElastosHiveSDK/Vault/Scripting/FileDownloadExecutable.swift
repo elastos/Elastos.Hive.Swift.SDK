@@ -30,6 +30,11 @@ public class FileDownloadExecutable: Executable {
         super.body = FileBody()
     }
     
+    public init(_ name: String?, _ path: String) {
+        super.init(name, ExecutableType.FILE_DOWNLOAD, nil)
+        super.body = FileBody(path)
+    }
+    
     required public init?(map: Map) {
         fatalError("init(map:) has not been implemented")
     }

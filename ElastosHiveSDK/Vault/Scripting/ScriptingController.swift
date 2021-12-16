@@ -98,6 +98,17 @@ public class ScriptingController {
         return try FileReader(URL(string: url)!, _connectionManager!, .get)
     }
 
+    public func downloadFileByHiveUrl(_ hiveUrl: String) throws -> FileReader {
+        let info = try HiveUrlInfo(hiveUrl)
+        let result = try callScript(info.scriptName, info.params,
+                                   info.targetDid, info.targetAppDid, JSON.self)
+        let tx = result[info.scriptName]["transaction_id"].string
+        guard tx != nil else {
+            throw HiveError.InvalidParameterException("Transaction id is nil.")
+        }
+        return try downloadFile(tx!)
+    }
+    
     /// Unregister the script.
     /// - Parameter name: The name of the script.
     public func unregisterScript(_ name: String) throws {

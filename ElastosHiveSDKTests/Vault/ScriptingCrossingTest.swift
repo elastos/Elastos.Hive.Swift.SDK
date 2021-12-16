@@ -28,13 +28,17 @@ import SwiftyJSON
 
 
 class ScriptingCrossingTest: XCTestCase {
-    private let COLLECTION_GROUP: String = "st_group";
-    private let COLLECTION_GROUP_MESSAGE: String = "st_group_message";
-    private let SCRIPT_NAME: String = "get_group_message";
+    private let COLLECTION_GROUP: String = "st_group"
+    private let COLLECTION_GROUP_MESSAGE: String = "st_group_message"
+    private let SCRIPT_NAME: String = "get_group_message"
+    private let HIVE_URL_SCRIPT_NAME = "downloadFileWithHiveUrl_ios"
+    private let HIVE_URL_FILE_NAME = "hiveUrl_ios.txt"
+    private let HIVE_URL_FILE_CONTENT = "/Users/liaihong/Desktop/iosFileContentonHiveUrl.txt"
 
     private var _scriptingService: ScriptingService?
     private var _scriptRunner: ScriptRunner?
     private var _databaseService: DatabaseService?
+    private var _filesService: FilesService?
 
     private var _targetDid: String!
     private var _callDid: String!
@@ -47,6 +51,8 @@ class ScriptingCrossingTest: XCTestCase {
             _scriptingService = try testData.newVault().scriptingService
             _scriptRunner = try testData.newCallerScriptRunner()
             _databaseService = try testData.newVault().databaseService
+            _filesService = try testData.newVault().filesService
+
             _targetDid = testData.userDid
             _appDid = testData.appId
             _callDid = testData.callerDid
@@ -118,6 +124,51 @@ class ScriptingCrossingTest: XCTestCase {
         XCTAssertNoThrow(try { [self] in
             try `await`(_databaseService!.deleteCollection(COLLECTION_GROUP_MESSAGE))
             try `await`(_databaseService!.deleteCollection(COLLECTION_GROUP))
+        }())
+    }
+    
+    func testDownloadByHiveUrl() {
+        do {
+            let hiveUrl = "hive://\(_targetDid!)@\(_appDid!)/\(HIVE_URL_SCRIPT_NAME)?params={\"empty\":0}"
+            uploadFile()
+            registerScript()
+            let reader = try `await`(_scriptRunner!.downloadFileByHiveUrl(hiveUrl))
+            
+            let targetUrl = createFilePathForDownload("test_ios_downloadurl_script.txt")
+            let result = try `await`(reader.read(targetUrl))
+            print("targetUrl == \(targetUrl)")
+        }
+        catch {
+            print(error)
+        }
+    }
+    
+    func createFilePathForDownload(_ downloadPath: String) -> URL {
+        let dir = FileManager.default.urls(for: FileManager.SearchPathDirectory.cachesDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).last
+        let fileurl = dir?.appendingPathComponent(downloadPath)
+        if !FileManager.default.fileExists(atPath: fileurl!.path) {
+            FileManager.default.createFile(atPath: fileurl!.path, contents: nil, attributes: nil)
+        } else {
+            try? FileManager.default.removeItem(atPath: fileurl!.path)
+            FileManager.default.createFile(atPath: fileurl!.path, contents: nil, attributes: nil)
+        }
+        return fileurl!
+    }
+    
+    private func uploadFile() {
+        XCTAssertNoThrow(try { [self] in
+            let fileWriter = try `await`(_filesService!.getUploadWriter(HIVE_URL_FILE_NAME))
+            let result = try `await`(fileWriter.write(data: HIVE_URL_FILE_CONTENT.data(using: .utf8)!))
+            XCTAssertTrue(result)
+        }())
+    }
+    
+    private func registerScript() {
+        XCTAssertNoThrow(try { [self] in
+            var executable = AggregatedExecutable("downloadGroup")
+            executable = executable.appendExecutable(FileDownloadExecutable("download", HIVE_URL_FILE_NAME))!
+            let result = try `await`(_scriptingService!.registerScript(HIVE_URL_SCRIPT_NAME, executable, true, true))
+            XCTAssertNil(result)
         }())
     }
 }

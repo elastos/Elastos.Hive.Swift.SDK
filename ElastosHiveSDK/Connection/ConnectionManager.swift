@@ -160,6 +160,7 @@ public class ConnectionManager {
     }
     
     public func createDataRequest(_ url: String,  _ method: HTTPMethod, _ parameters: Dictionary<String, Any>?) throws -> DataRequest {
+        print("Debug ==> request parameters -> ", parameters)
         return AF.request(url,
                           method: method,
                           parameters: parameters,
