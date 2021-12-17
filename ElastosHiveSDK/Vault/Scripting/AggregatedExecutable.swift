@@ -29,11 +29,11 @@ import ObjectMapper
 public class AggregatedExecutable: Executable {
     public var bodyArray: [FileDownloadExecutable]?
     
-    init(_ name: String?) {
+    public init(_ name: String?) {
         super.init(name, ExecutableType.AGGREGATED, nil)
     }
     
-    init(_ name: String?, _ executables: [Executable]?) {
+    public init(_ name: String?, _ executables: [Executable]?) {
         super.init(name, ExecutableType.AGGREGATED, executables)
     }
     

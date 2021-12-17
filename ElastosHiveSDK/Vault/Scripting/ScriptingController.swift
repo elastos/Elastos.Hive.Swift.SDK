@@ -102,11 +102,23 @@ public class ScriptingController {
         let info = try HiveUrlInfo(hiveUrl)
         let result = try callScript(info.scriptName, info.params,
                                    info.targetDid, info.targetAppDid, JSON.self)
-        let tx = result[info.scriptName]["transaction_id"].string
+        let tx = searchForEntity(result)
         guard tx != nil else {
             throw HiveError.InvalidParameterException("Transaction id is nil.")
         }
-        return try downloadFile(tx!)
+        return try downloadFile(tx)
+    }
+    
+    func searchForEntity(_ p: JSON) -> String {
+        var transaction_id = ""
+        p.forEach { k, v in
+            v.forEach { k, v in
+                if k == "transaction_id" {
+                    transaction_id = v.stringValue
+                }
+            }
+        }
+        return transaction_id
     }
     
     /// Unregister the script.
