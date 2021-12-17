@@ -169,7 +169,7 @@ class ScriptingCrossingTest: XCTestCase {
             let e = FileDownloadExecutable("download", HIVE_URL_FILE_NAME)
             executable = executable.appendExecutable(FileDownloadExecutable("download", HIVE_URL_FILE_NAME))!
             let result = try `await`(_scriptingService!.registerScript(HIVE_URL_SCRIPT_NAME, e, true, true))
-            XCTAssertNil(result)
+            XCTAssertNotNil(result)
         }())
     }
 }

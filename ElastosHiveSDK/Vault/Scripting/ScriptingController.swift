@@ -103,7 +103,7 @@ public class ScriptingController {
         let result = try callScript(info.scriptName, info.params,
                                    info.targetDid, info.targetAppDid, JSON.self)
         let tx = searchForEntity(result)
-        guard tx != nil else {
+        guard tx != "" else {
             throw HiveError.InvalidParameterException("Transaction id is nil.")
         }
         return try downloadFile(tx)
