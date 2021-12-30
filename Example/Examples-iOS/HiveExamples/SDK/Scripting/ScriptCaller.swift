@@ -31,7 +31,7 @@ public class ScriptCaller {
     private var appDid: String?
 
     init(_ sdkContext: SdkContext) {
-        self.scriptRunner = sdkContext.newCallerScriptRunner()
+        self.scriptRunner = try! sdkContext.newCallerScriptRunner()
         self.userDid = sdkContext.userDid
         self.appDid = sdkContext.appId
     }

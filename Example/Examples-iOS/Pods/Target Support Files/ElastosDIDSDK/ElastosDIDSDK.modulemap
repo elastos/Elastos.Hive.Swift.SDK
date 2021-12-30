@@ -1,6 +1,0 @@
-framework module ElastosDIDSDK {
-  umbrella header "ElastosDIDSDK-umbrella.h"
-
-  export *
-  module * { export * }
-}
