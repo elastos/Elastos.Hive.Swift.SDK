@@ -12,3 +12,6 @@ xcuserdata
 /ElastosHiveSDKTests/Externals/ElastosDIDSDK.framework
 /node_modules
 /package-lock.json
+/Example/Examples-iOS/Pods
+/Example/Examples-iOS/Podfile.lock
+/Example/Examples-iOS/HiveExamples.xcworkspace
