@@ -42,6 +42,7 @@ class DashboardViewController: UIViewController {
         }
         
         self.view.addSubview(self.textView)
+        self.textView.isEditable = false
         self.textView.layer.cornerRadius = 4
         self.textView.layer.borderColor = UIColor(rgb: 0x333333).cgColor
         self.textView.layer.borderWidth = 1

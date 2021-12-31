@@ -19,12 +19,12 @@ public class UserDID: DIDEntity {
         var components = DateComponents()
         components.year = 2025
         let exp = userCalendar.date(from: components)
-        let cb = issuer!.editingVerifiableCredentialFor(did: dapp.did!)
+        let cb = try issuer!.editingVerifiableCredentialFor(did: dapp.did!)
         let vc = try cb.withId("didapp")
             .withTypes("AppIdCredential")
             .withProperties(subject)
             .withExpirationDate(exp!)
-            .sealed(using: storepass)
+            .seal(using: storepass)
 
         print("VerifiableCredential:")
         let vcStr = vc.toString(true)
@@ -39,12 +39,12 @@ public class UserDID: DIDEntity {
         var components = DateComponents()
         components.year = 2025
         let exp = userCalendar.date(from: components)
-        let cb = issuer!.editingVerifiableCredentialFor(did: try DID(sourceDID))
+        let cb = try issuer!.editingVerifiableCredentialFor(did: try DID(sourceDID))
         let vc = try cb.withId("backupId")
             .withTypes("BackupCredential")
             .withProperties(subject)
             .withExpirationDate(exp!)
-            .sealed(using: storepass)
+            .seal(using: storepass)
 
         print("BackupCredential:")
         let vcStr = vc.toString(true)

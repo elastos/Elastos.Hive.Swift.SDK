@@ -27,34 +27,37 @@ import AwaitKit
 import PromiseKit
 
 class ScriptOwner {
-    private var sdkContext: SdkContext?
-    private var scriptingService: ScriptingService?
-    private var databaseService: DatabaseService?
-
+    var sdkContext: SdkContext
+    var scriptingService: ScriptingService
+    var databaseService: DatabaseService
+    var backupSubscription: BackupSubscription
+    var scriptRunner: ScriptRunner
     private var callDid: String?
 
     public init(_ sdkContext: SdkContext) throws {
         self.sdkContext = sdkContext
-        self.scriptingService = sdkContext.newVault().scriptingService
-        self.databaseService = sdkContext.newVault().databaseService
-        self.callDid = self.sdkContext?.callerDid
+        self.scriptingService = try sdkContext.newVault().scriptingService
+        self.databaseService = try sdkContext.newVault().databaseService
+        self.callDid = self.sdkContext.callerDid
+        self.backupSubscription = try self.sdkContext.creatBackUp()
+        self.scriptRunner = try self.sdkContext.newScriptRunner()
     }
     
     public func cleanTwoCollections() -> Promise<Void> {
-        return self.databaseService!.deleteCollection(ScriptConst.COLLECTION_GROUP).then { () -> Promise<Void> in
-            return self.databaseService!.deleteCollection(ScriptConst.COLLECTION_GROUP_MESSAGE)
+        return self.databaseService.deleteCollection(ScriptConst.COLLECTION_GROUP).then { () -> Promise<Void> in
+            return self.databaseService.deleteCollection(ScriptConst.COLLECTION_GROUP_MESSAGE)
         }
     }
     
     public func createTwoCollections() -> Promise<Void> {
-        return self.databaseService!.createCollection(ScriptConst.COLLECTION_GROUP).then { () -> Promise<Void> in
-            return self.databaseService!.createCollection(ScriptConst.COLLECTION_GROUP_MESSAGE)
+        return self.databaseService.createCollection(ScriptConst.COLLECTION_GROUP).then { () -> Promise<Void> in
+            return self.databaseService.createCollection(ScriptConst.COLLECTION_GROUP_MESSAGE)
         }
     }
     
     private func addPermission2Caller() -> Promise<InsertResult> {
         let conditionDoc: [String : Any] = ["collection" : ScriptConst.COLLECTION_GROUP_MESSAGE, "did" : self.callDid!]
-        return self.databaseService!.insertOne(ScriptConst.COLLECTION_GROUP, conditionDoc , InsertOptions().bypassDocumentValidation(false))
+        return self.databaseService.insertOne(ScriptConst.COLLECTION_GROUP, conditionDoc , InsertOptions().bypassDocumentValidation(false))
     }
     
     private func doSetScript() -> Promise<Void> {
@@ -64,7 +67,7 @@ class ScriptOwner {
         let msgDoc = ["author" : "$params.author", "content" : "$params.content"]
         let options = ["bypass_document_validation" : false, "ordered" : true]
         // register the script for caller to insert message to COLLECTION_GROUP_MESSAGE
-        return self.scriptingService!.registerScript(ScriptConst.SCRIPT_NAME,
+        return self.scriptingService.registerScript(ScriptConst.SCRIPT_NAME,
                                                  QueryHasResultCondition("verify_user_permission", ScriptConst.COLLECTION_GROUP, filter),
                                                  InsertExecutable(ScriptConst.SCRIPT_NAME, ScriptConst.COLLECTION_GROUP_MESSAGE, msgDoc, options))
         

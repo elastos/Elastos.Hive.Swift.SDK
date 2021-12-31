@@ -16,8 +16,12 @@ def import_pods
 
 end
 
+workspace 'ElastosHiveSDK.xcworkspace'
+xcodeproj 'ElastosHiveSDK.xcodeproj' 
+xcodeproj 'Example/Examples-iOS/HiveExamples.xcodeproj'
 
 target :ElastosHiveSDK do
+xcodeproj 'ElastosHiveSDK' 
 use_frameworks!
   platform :ios, '11.0'
   import_pods
@@ -28,3 +32,17 @@ use_frameworks!
 end
 
 
+target :"HiveExamples" do
+xcodeproj 'Example/Examples-iOS/HiveExamples'
+    source 'https://github.com/CocoaPods/Specs.git'
+    platform :ios, '11.0'
+    use_frameworks!
+    import_pods
+
+  pod 'CYLTabBarController'
+  pod 'SnapKit'
+  pod 'RxSwift'
+  pod 'RxCocoa'
+  pod 'SVProgressHUD'
+  pod 'SwiftyJSON'
+end

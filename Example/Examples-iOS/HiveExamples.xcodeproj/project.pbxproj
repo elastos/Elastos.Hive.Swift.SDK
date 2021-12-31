@@ -8,7 +8,19 @@
 
 /* Begin PBXBuildFile section */
 		042C40F106835EB637117CA3 /* Pods_HiveExamples.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FAEB7C8E746A46B60303AA3 /* Pods_HiveExamples.framework */; };
-		30158CBA26AFE81D00CF4D09 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30158CB926AFE81D00CF4D09 /* Config.swift */; };
+		1155A397277E47B100094352 /* ElastosHiveSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1155A396277E47B100094352 /* ElastosHiveSDK.framework */; };
+		1155A398277E47B100094352 /* ElastosHiveSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1155A396277E47B100094352 /* ElastosHiveSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1155A3A4277E55C100094352 /* NodeConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1155A39D277E544D00094352 /* NodeConfig.swift */; };
+		1155A3C2277E56A200094352 /* UserConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1155A3C1277E56A200094352 /* UserConfig.swift */; };
+		1155A3C4277E56D200094352 /* ClientConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1155A3C3277E56D200094352 /* ClientConfig.swift */; };
+		1155A3C6277E56F700094352 /* CrossConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1155A3C5277E56F700094352 /* CrossConfig.swift */; };
+		1155A3C8277E571100094352 /* ApplicationConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1155A3C7277E571100094352 /* ApplicationConfig.swift */; };
+		1155A3CA277E572D00094352 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1155A3C9277E572D00094352 /* Config.swift */; };
+		1155A3D1277E582A00094352 /* big_ios.png in Resources */ = {isa = PBXBuildFile; fileRef = 1155A3CC277E582A00094352 /* big_ios.png */; };
+		1155A3D2277E582A00094352 /* Production.conf in Resources */ = {isa = PBXBuildFile; fileRef = 1155A3CD277E582A00094352 /* Production.conf */; };
+		1155A3D3277E582A00094352 /* Local.conf in Resources */ = {isa = PBXBuildFile; fileRef = 1155A3CE277E582A00094352 /* Local.conf */; };
+		1155A3D4277E582A00094352 /* Developing.conf in Resources */ = {isa = PBXBuildFile; fileRef = 1155A3CF277E582A00094352 /* Developing.conf */; };
+		1155A3D5277E582A00094352 /* test_ios.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1155A3D0277E582A00094352 /* test_ios.txt */; };
 		303C53D226369BD400224B30 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303C53D126369BD400224B30 /* MainTabBarController.swift */; };
 		3048ACBC2643C02D00B417B6 /* ScriptConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3048ACBB2643C02D00B417B6 /* ScriptConst.swift */; };
 		3048ACBF2643E75500B417B6 /* ScriptCaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3048ACBE2643E75500B417B6 /* ScriptCaller.swift */; };
@@ -22,23 +34,38 @@
 		30D882AA26B7C25500C35703 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D882A926B7C25500C35703 /* DashboardViewController.swift */; };
 		30D882AD26B7C70C00C35703 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D882AC26B7C70C00C35703 /* HomeViewController.swift */; };
 		30E9A33526452CAC00E430E4 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E9A33426452CAC00E430E4 /* UIColor+Extension.swift */; };
-		30F890BF2642E99100D8D4D2 /* NodeConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F890B92642E99100D8D4D2 /* NodeConfig.swift */; };
-		30F890C02642E99100D8D4D2 /* UserConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F890BA2642E99100D8D4D2 /* UserConfig.swift */; };
-		30F890C12642E99100D8D4D2 /* ClientConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F890BB2642E99100D8D4D2 /* ClientConfig.swift */; };
-		30F890C22642E99100D8D4D2 /* CrossConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F890BC2642E99100D8D4D2 /* CrossConfig.swift */; };
-		30F890C42642E99100D8D4D2 /* ApplicationConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F890BE2642E99100D8D4D2 /* ApplicationConfig.swift */; };
 		30F890D02642EA1200D8D4D2 /* SdkContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F890CF2642EA1200D8D4D2 /* SdkContext.swift */; };
 		30F890DE2642EBC200D8D4D2 /* ScriptOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F890DD2642EBC200D8D4D2 /* ScriptOwner.swift */; };
-		30F890EF264302DA00D8D4D2 /* test_ios.txt in Resources */ = {isa = PBXBuildFile; fileRef = 30F890EA264302DA00D8D4D2 /* test_ios.txt */; };
-		30F890F0264302DA00D8D4D2 /* Local.conf in Resources */ = {isa = PBXBuildFile; fileRef = 30F890EB264302DA00D8D4D2 /* Local.conf */; };
-		30F890F1264302DA00D8D4D2 /* Production.conf in Resources */ = {isa = PBXBuildFile; fileRef = 30F890EC264302DA00D8D4D2 /* Production.conf */; };
-		30F890F2264302DA00D8D4D2 /* big_ios.png in Resources */ = {isa = PBXBuildFile; fileRef = 30F890ED264302DA00D8D4D2 /* big_ios.png */; };
-		30F890F3264302DA00D8D4D2 /* Developing.conf in Resources */ = {isa = PBXBuildFile; fileRef = 30F890EE264302DA00D8D4D2 /* Developing.conf */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		1155A399277E47B100094352 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				1155A398277E47B100094352 /* ElastosHiveSDK.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		1155A396277E47B100094352 /* ElastosHiveSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ElastosHiveSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1155A39D277E544D00094352 /* NodeConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeConfig.swift; sourceTree = "<group>"; };
+		1155A3C1277E56A200094352 /* UserConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserConfig.swift; sourceTree = "<group>"; };
+		1155A3C3277E56D200094352 /* ClientConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientConfig.swift; sourceTree = "<group>"; };
+		1155A3C5277E56F700094352 /* CrossConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CrossConfig.swift; sourceTree = "<group>"; };
+		1155A3C7277E571100094352 /* ApplicationConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApplicationConfig.swift; sourceTree = "<group>"; };
+		1155A3C9277E572D00094352 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		1155A3CC277E582A00094352 /* big_ios.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = big_ios.png; sourceTree = "<group>"; };
+		1155A3CD277E582A00094352 /* Production.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Production.conf; sourceTree = "<group>"; };
+		1155A3CE277E582A00094352 /* Local.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Local.conf; sourceTree = "<group>"; };
+		1155A3CF277E582A00094352 /* Developing.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Developing.conf; sourceTree = "<group>"; };
+		1155A3D0277E582A00094352 /* test_ios.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test_ios.txt; sourceTree = "<group>"; };
 		1FAEB7C8E746A46B60303AA3 /* Pods_HiveExamples.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HiveExamples.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		30158CB926AFE81D00CF4D09 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Config.swift; path = ../../../../../ElastosHiveSDKTests/Config/Config.swift; sourceTree = "<group>"; };
 		303C53D126369BD400224B30 /* MainTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		3048ACBB2643C02D00B417B6 /* ScriptConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptConst.swift; sourceTree = "<group>"; };
 		3048ACBE2643E75500B417B6 /* ScriptCaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptCaller.swift; sourceTree = "<group>"; };
@@ -54,20 +81,10 @@
 		30D882A926B7C25500C35703 /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
 		30D882AC26B7C70C00C35703 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		30E9A33426452CAC00E430E4 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
-		30F890B92642E99100D8D4D2 /* NodeConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NodeConfig.swift; path = ../../../../../ElastosHiveSDKTests/Config/NodeConfig.swift; sourceTree = "<group>"; };
-		30F890BA2642E99100D8D4D2 /* UserConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserConfig.swift; path = ../../../../../ElastosHiveSDKTests/Config/UserConfig.swift; sourceTree = "<group>"; };
-		30F890BB2642E99100D8D4D2 /* ClientConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClientConfig.swift; path = ../../../../../ElastosHiveSDKTests/Config/ClientConfig.swift; sourceTree = "<group>"; };
-		30F890BC2642E99100D8D4D2 /* CrossConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CrossConfig.swift; path = ../../../../../ElastosHiveSDKTests/Config/CrossConfig.swift; sourceTree = "<group>"; };
-		30F890BE2642E99100D8D4D2 /* ApplicationConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ApplicationConfig.swift; path = ../../../../../ElastosHiveSDKTests/Config/ApplicationConfig.swift; sourceTree = "<group>"; };
 		30F890CF2642EA1200D8D4D2 /* SdkContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SdkContext.swift; sourceTree = "<group>"; };
 		30F890DD2642EBC200D8D4D2 /* ScriptOwner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptOwner.swift; sourceTree = "<group>"; };
-		30F890EA264302DA00D8D4D2 /* test_ios.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = test_ios.txt; path = ../../../../ElastosHiveSDKTests/Resources/test_ios.txt; sourceTree = "<group>"; };
-		30F890EB264302DA00D8D4D2 /* Local.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Local.conf; path = ../../../../ElastosHiveSDKTests/Resources/Local.conf; sourceTree = "<group>"; };
-		30F890EC264302DA00D8D4D2 /* Production.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Production.conf; path = ../../../../ElastosHiveSDKTests/Resources/Production.conf; sourceTree = "<group>"; };
-		30F890ED264302DA00D8D4D2 /* big_ios.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = big_ios.png; path = ../../../../ElastosHiveSDKTests/Resources/big_ios.png; sourceTree = "<group>"; };
-		30F890EE264302DA00D8D4D2 /* Developing.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Developing.conf; path = ../../../../ElastosHiveSDKTests/Resources/Developing.conf; sourceTree = "<group>"; };
-		85A39FF029A1CCCFD3761303 /* Pods-HiveExamples.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HiveExamples.debug.xcconfig"; path = "Target Support Files/Pods-HiveExamples/Pods-HiveExamples.debug.xcconfig"; sourceTree = "<group>"; };
-		CFFE31723BEC6CE562183D6D /* Pods-HiveExamples.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HiveExamples.release.xcconfig"; path = "Target Support Files/Pods-HiveExamples/Pods-HiveExamples.release.xcconfig"; sourceTree = "<group>"; };
+		CD7C4295A654938E3C97FC53 /* Pods-HiveExamples.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HiveExamples.debug.xcconfig"; path = "Target Support Files/Pods-HiveExamples/Pods-HiveExamples.debug.xcconfig"; sourceTree = "<group>"; };
+		EA02A85C5881F268DC8549CA /* Pods-HiveExamples.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HiveExamples.release.xcconfig"; path = "Target Support Files/Pods-HiveExamples/Pods-HiveExamples.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,12 +93,25 @@
 			buildActionMask = 2147483647;
 			files = (
 				042C40F106835EB637117CA3 /* Pods_HiveExamples.framework in Frameworks */,
+				1155A397277E47B100094352 /* ElastosHiveSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1155A3CB277E582A00094352 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				1155A3CC277E582A00094352 /* big_ios.png */,
+				1155A3CD277E582A00094352 /* Production.conf */,
+				1155A3CE277E582A00094352 /* Local.conf */,
+				1155A3CF277E582A00094352 /* Developing.conf */,
+				1155A3D0277E582A00094352 /* test_ios.txt */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		30158CBC26AFE8A700CF4D09 /* Did */ = {
 			isa = PBXGroup;
 			children = (
@@ -98,8 +128,8 @@
 			children = (
 				3077F5992634F8A900A701ED /* HiveExamples */,
 				3077F5982634F8A900A701ED /* Products */,
-				4A5EA52A9CD3B0B3C27F4322 /* Pods */,
 				5A02186C6B9E23539CF3FCDE /* Frameworks */,
+				59EC3926C43DC81B43342114 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -115,11 +145,17 @@
 			isa = PBXGroup;
 			children = (
 				303C53D126369BD400224B30 /* MainTabBarController.swift */,
-				30F890E9264302C600D8D4D2 /* Resources */,
 				30F890D42642EB2E00D8D4D2 /* Controller */,
 				30F890B52642E94B00D8D4D2 /* SDK */,
 				3077F59A2634F8A900A701ED /* AppDelegate.swift */,
 				30F890CF2642EA1200D8D4D2 /* SdkContext.swift */,
+				1155A39D277E544D00094352 /* NodeConfig.swift */,
+				1155A3C1277E56A200094352 /* UserConfig.swift */,
+				1155A3C3277E56D200094352 /* ClientConfig.swift */,
+				1155A3C5277E56F700094352 /* CrossConfig.swift */,
+				1155A3C7277E571100094352 /* ApplicationConfig.swift */,
+				1155A3C9277E572D00094352 /* Config.swift */,
+				1155A3CB277E582A00094352 /* Resources */,
 				3077F5A32634F8AA00A701ED /* Assets.xcassets */,
 				3077F5A52634F8AA00A701ED /* LaunchScreen.storyboard */,
 				3077F5A82634F8AA00A701ED /* Info.plist */,
@@ -133,7 +169,6 @@
 				30158CBC26AFE8A700CF4D09 /* Did */,
 				30F890E02642EC0500D8D4D2 /* Other */,
 				30F890B62642E94B00D8D4D2 /* Scripting */,
-				30F890B82642E94B00D8D4D2 /* Config */,
 			);
 			path = SDK;
 			sourceTree = "<group>";
@@ -146,19 +181,6 @@
 				3048ACBE2643E75500B417B6 /* ScriptCaller.swift */,
 			);
 			path = Scripting;
-			sourceTree = "<group>";
-		};
-		30F890B82642E94B00D8D4D2 /* Config */ = {
-			isa = PBXGroup;
-			children = (
-				30F890BE2642E99100D8D4D2 /* ApplicationConfig.swift */,
-				30F890BB2642E99100D8D4D2 /* ClientConfig.swift */,
-				30F890BC2642E99100D8D4D2 /* CrossConfig.swift */,
-				30F890B92642E99100D8D4D2 /* NodeConfig.swift */,
-				30F890BA2642E99100D8D4D2 /* UserConfig.swift */,
-				30158CB926AFE81D00CF4D09 /* Config.swift */,
-			);
-			path = Config;
 			sourceTree = "<group>";
 		};
 		30F890D42642EB2E00D8D4D2 /* Controller */ = {
@@ -178,30 +200,20 @@
 			path = Other;
 			sourceTree = "<group>";
 		};
-		30F890E9264302C600D8D4D2 /* Resources */ = {
+		59EC3926C43DC81B43342114 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				30F890ED264302DA00D8D4D2 /* big_ios.png */,
-				30F890EE264302DA00D8D4D2 /* Developing.conf */,
-				30F890EB264302DA00D8D4D2 /* Local.conf */,
-				30F890EC264302DA00D8D4D2 /* Production.conf */,
-				30F890EA264302DA00D8D4D2 /* test_ios.txt */,
+				CD7C4295A654938E3C97FC53 /* Pods-HiveExamples.debug.xcconfig */,
+				EA02A85C5881F268DC8549CA /* Pods-HiveExamples.release.xcconfig */,
 			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
-		4A5EA52A9CD3B0B3C27F4322 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				85A39FF029A1CCCFD3761303 /* Pods-HiveExamples.debug.xcconfig */,
-				CFFE31723BEC6CE562183D6D /* Pods-HiveExamples.release.xcconfig */,
-			);
-			path = Pods;
+			name = Pods;
+			path = ../../Pods;
 			sourceTree = "<group>";
 		};
 		5A02186C6B9E23539CF3FCDE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1155A396277E47B100094352 /* ElastosHiveSDK.framework */,
 				1FAEB7C8E746A46B60303AA3 /* Pods_HiveExamples.framework */,
 			);
 			name = Frameworks;
@@ -219,6 +231,7 @@
 				3077F5942634F8A900A701ED /* Frameworks */,
 				3077F5952634F8A900A701ED /* Resources */,
 				E0E54918F095ABC3AC7226DB /* [CP] Embed Pods Frameworks */,
+				1155A399277E47B100094352 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -267,13 +280,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				30F890F2264302DA00D8D4D2 /* big_ios.png in Resources */,
-				30F890F1264302DA00D8D4D2 /* Production.conf in Resources */,
+				1155A3D1277E582A00094352 /* big_ios.png in Resources */,
+				1155A3D3277E582A00094352 /* Local.conf in Resources */,
+				1155A3D4277E582A00094352 /* Developing.conf in Resources */,
 				3077F5A72634F8AA00A701ED /* LaunchScreen.storyboard in Resources */,
-				30F890F3264302DA00D8D4D2 /* Developing.conf in Resources */,
-				30F890F0264302DA00D8D4D2 /* Local.conf in Resources */,
+				1155A3D2277E582A00094352 /* Production.conf in Resources */,
 				3077F5A42634F8AA00A701ED /* Assets.xcassets in Resources */,
-				30F890EF264302DA00D8D4D2 /* test_ios.txt in Resources */,
+				1155A3D5277E582A00094352 /* test_ios.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -327,24 +340,24 @@
 			buildActionMask = 2147483647;
 			files = (
 				30D8825C26B78FB700C35703 /* TestAppContextProvider.swift in Sources */,
+				1155A3C6277E56F700094352 /* CrossConfig.swift in Sources */,
 				30E9A33526452CAC00E430E4 /* UIColor+Extension.swift in Sources */,
+				1155A3C4277E56D200094352 /* ClientConfig.swift in Sources */,
+				1155A3CA277E572D00094352 /* Config.swift in Sources */,
 				30D8825D26B78FB700C35703 /* UserDID.swift in Sources */,
-				30F890C02642E99100D8D4D2 /* UserConfig.swift in Sources */,
-				30F890C12642E99100D8D4D2 /* ClientConfig.swift in Sources */,
 				30D882AD26B7C70C00C35703 /* HomeViewController.swift in Sources */,
-				30F890C22642E99100D8D4D2 /* CrossConfig.swift in Sources */,
 				303C53D226369BD400224B30 /* MainTabBarController.swift in Sources */,
 				30D882AA26B7C25500C35703 /* DashboardViewController.swift in Sources */,
 				30D8825B26B78FB700C35703 /* DIDEntity.swift in Sources */,
-				30F890C42642E99100D8D4D2 /* ApplicationConfig.swift in Sources */,
 				3048ACBC2643C02D00B417B6 /* ScriptConst.swift in Sources */,
 				30F890D02642EA1200D8D4D2 /* SdkContext.swift in Sources */,
 				3048ACBF2643E75500B417B6 /* ScriptCaller.swift in Sources */,
+				1155A3C2277E56A200094352 /* UserConfig.swift in Sources */,
 				30D8825A26B78FB700C35703 /* AppDID.swift in Sources */,
+				1155A3C8277E571100094352 /* ApplicationConfig.swift in Sources */,
 				3077F59B2634F8A900A701ED /* AppDelegate.swift in Sources */,
 				30F890DE2642EBC200D8D4D2 /* ScriptOwner.swift in Sources */,
-				30158CBA26AFE81D00CF4D09 /* Config.swift in Sources */,
-				30F890BF2642E99100D8D4D2 /* NodeConfig.swift in Sources */,
+				1155A3A4277E55C100094352 /* NodeConfig.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -480,13 +493,13 @@
 		};
 		3077F5AC2634F8AA00A701ED /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 85A39FF029A1CCCFD3761303 /* Pods-HiveExamples.debug.xcconfig */;
+			baseConfigurationReference = CD7C4295A654938E3C97FC53 /* Pods-HiveExamples.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = SZT3QS42T8;
+				DEVELOPMENT_TEAM = T4LVNDN76A;
 				INFOPLIST_FILE = HiveExamples/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -495,20 +508,20 @@
 				PRODUCT_BUNDLE_IDENTIFIER = HCY.HiveExamples;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
 		3077F5AD2634F8AA00A701ED /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CFFE31723BEC6CE562183D6D /* Pods-HiveExamples.release.xcconfig */;
+			baseConfigurationReference = EA02A85C5881F268DC8549CA /* Pods-HiveExamples.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = SZT3QS42T8;
+				DEVELOPMENT_TEAM = T4LVNDN76A;
 				INFOPLIST_FILE = HiveExamples/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -516,7 +529,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = HCY.HiveExamples;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

@@ -11,5 +11,7 @@ target 'HiveExamples' do
   pod 'RxSwift'
   pod 'RxCocoa'
   pod 'SVProgressHUD'
+  pod 'SwiftyJSON'
+
   
 end

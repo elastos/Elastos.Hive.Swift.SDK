@@ -7,8 +7,10 @@ xcuserdata
 
 /Podfile.lock
 /Products
-/ElastosHiveSDK.xcworkspace
 /ElastosHiveSDKTests/Externals/Antlr4.framework
 /ElastosHiveSDKTests/Externals/ElastosDIDSDK.framework
 /node_modules
 /package-lock.json
+/Example/Examples-iOS/Pods
+/Example/Examples-iOS/Podfile.lock
+/Example/Examples-iOS/HiveExamples.xcworkspace

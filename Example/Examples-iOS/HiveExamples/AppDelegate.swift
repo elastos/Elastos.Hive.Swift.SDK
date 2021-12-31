@@ -22,6 +22,7 @@
 
 import UIKit
 import CYLTabBarController
+import SVProgressHUD
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -38,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.rootViewController = mainTabBarVc
 
         self.window?.makeKeyAndVisible()
-        
+        SVProgressHUD.setDefaultMaskType(.black)
         UITabBar.appearance().backgroundColor = UIColor.white
         return true
     }
@@ -53,11 +54,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func tabBarItemsAttributesForController() ->  [[String : String]] {
         
-        let tabBarItemA = [CYLTabBarItemTitle:"home",
+        let tabBarItemA = [CYLTabBarItemTitle:"owner",
                            CYLTabBarItemImage:"icon1",
                            CYLTabBarItemSelectedImage:"icon1"]
         
-        let tabBarItemB = [CYLTabBarItemTitle:"dashboard",
+        let tabBarItemB = [CYLTabBarItemTitle:"caller",
                            CYLTabBarItemImage:"icon2",
                            CYLTabBarItemSelectedImage:"icon2"]
         
