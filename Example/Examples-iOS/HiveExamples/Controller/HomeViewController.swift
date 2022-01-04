@@ -26,12 +26,8 @@ class HomeViewController: UIViewController {
     let disposeBag = DisposeBag()
     var loadingFlag: Bool = false
     var imgDate: Data!
-    let scriptName = "upload_file"
-    let fileName = "test_ios_image"
-    let DOWNLOAD_FILE_NAME = "download_file"
-    var param: [String: String]!
-    var targetAppDid = ""
-    var targetDid = ""
+    let remoteImagePath = "ios_remote_image_demo"
+    let localImagePath = "ios_local_image_demo"
     var targetUrl: URL!
     
     override func viewDidLoad() {
@@ -153,15 +149,10 @@ class HomeViewController: UIViewController {
             }
             self.loadingFlag = true
             SVProgressHUD.show()
-            self.scriptOwner.scriptingService.registerScript(self.scriptName, FileDownloadExecutable(self.scriptName).setOutput(true), false, false).then { _ -> Promise<JSON> in
-                return self.scriptOwner.scriptRunner.callScript(self.scriptName, Executable.createRunFileParams(self.fileName), self.targetDid, self.targetAppDid, JSON.self)
-            }.then { json -> Promise<FileReader> in
-                let txid = json[self.scriptName]["transaction_id"].stringValue
-                return self.scriptOwner.scriptRunner.downloadFile(txid)
-            }.then{ reader -> Promise<Bool> in
-                self.targetUrl = self.createFilePathForDownload("test_ios_download_script")
+            self.scriptOwner.filesService.getDownloadReader(self.remoteImagePath).then { reader -> Promise<Bool> in
+                self.targetUrl = self.createFilePathForDownload(self.localImagePath)
                 return reader.read(self.targetUrl)
-            }.done{ success in
+            }.done { success in
                 DispatchQueue.main.async {
                     SVProgressHUD.dismiss()
                     self.loadingFlag = false
@@ -170,8 +161,7 @@ class HomeViewController: UIViewController {
                     let text = success == true ? "download image: success" : "download image: false"
                     self.textView.text = text
                 }
-            }
-            .catch { error in
+            }.catch { error in
                 DispatchQueue.main.async {
                     SVProgressHUD.dismiss()
                     self.loadingFlag = false
@@ -179,7 +169,6 @@ class HomeViewController: UIViewController {
                     self.textView.text = "\(error)\(errMsg)"
                 }
             }
-            
         }.disposed(by: self.disposeBag)
         
         //  showImage
@@ -231,35 +220,22 @@ class HomeViewController: UIViewController {
         }
         self.loadingFlag = true
         SVProgressHUD.show()
-        
-        param = Executable.createRunFileParams(fileName)
-        targetAppDid = self.scriptOwner.sdkContext.appId
-        targetDid = self.scriptOwner.sdkContext.userDid
-        self.scriptOwner.scriptingService.registerScript(scriptName, FileUploadExecutable(scriptName).setOutput(true), false, false)
-            .then { _ -> Promise<JSON> in
-                return self.scriptOwner.scriptingService.callScript(self.scriptName, self.param, self.targetDid, self.targetAppDid, JSON.self)
-            }.then { json -> Promise<FileWriter> in
-                print(json)
-                let txid = json[self.scriptName]["transaction_id"].stringValue
-                return self.scriptOwner.scriptRunner.uploadFile(txid)
-            }.then { writer in
-                return try writer.write(data: self.imgDate)
+        self.scriptOwner.filesService.getUploadWriter(remoteImagePath).then { writer in
+            return try writer.write(data: self.imgDate)
+        }.done { success in
+            DispatchQueue.main.async {
+                SVProgressHUD.dismiss()
+                self.loadingFlag = false
+                let text = success == true ? "upload image: success" : "upload image: false"
+                self.textView.text = text
             }
-            .done{ success in
-                DispatchQueue.main.async {
-                    SVProgressHUD.dismiss()
-                    self.loadingFlag = false
-                    let text = success == true ? "upload image: success" : "upload image: false"
-                    self.textView.text = text
-                }
+        }.catch { error in
+            DispatchQueue.main.async {
+                SVProgressHUD.dismiss()
+                self.loadingFlag = false
+                self.textView.text = "\(error)"
             }
-            .catch { error in
-                DispatchQueue.main.async {
-                    SVProgressHUD.dismiss()
-                    self.loadingFlag = false
-                    self.textView.text = "\(error)"
-                }
-            }
+        }
     }
 }
 

@@ -30,6 +30,7 @@ class ScriptOwner {
     var sdkContext: SdkContext
     var scriptingService: ScriptingService
     var databaseService: DatabaseService
+    var filesService: FilesService
     var backupSubscription: BackupSubscription
     var scriptRunner: ScriptRunner
     private var callDid: String?
@@ -38,6 +39,7 @@ class ScriptOwner {
         self.sdkContext = sdkContext
         self.scriptingService = try sdkContext.newVault().scriptingService
         self.databaseService = try sdkContext.newVault().databaseService
+        self.filesService = try sdkContext.newVault().filesService
         self.callDid = self.sdkContext.callerDid
         self.backupSubscription = try self.sdkContext.creatBackUp()
         self.scriptRunner = try self.sdkContext.newScriptRunner()
