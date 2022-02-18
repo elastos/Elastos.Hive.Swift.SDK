@@ -5,14 +5,10 @@ def import_pods
   pod 'PromiseKit'
   pod 'ElastosDIDSDK', '~> 2.2.1'
 
-  pod 'BlueRSA', '~> 1.0'
-  pod 'LoggerAPI', '~> 1.7'
-  pod 'KituraContracts', '~> 1.1'
-  pod 'BlueCryptor', '~> 1.0'
   pod 'ReadWriteLock', '~> 1.0'
   pod 'ObjectMapper'
-  pod 'AwaitKit', '~> 5.2.0'
   pod 'SwiftyJSON'
+  pod 'AwaitKit', '~> 5.2.0'
 
 end
 
@@ -28,13 +24,18 @@ use_frameworks!
   target 'ElastosHiveSDKTests' do
     inherit! :search_paths
     import_pods
+    pod 'BlueRSA', '~> 1.0'
+    pod 'KituraContracts', '~> 1.1'
+    pod 'LoggerAPI', '~> 1.7'
+    pod 'BlueCryptor', '~> 1.0'
+
   end
 end
 
 
 target :"HiveExamples" do
 xcodeproj 'Example/Examples-iOS/HiveExamples'
-    source 'https://github.com/CocoaPods/Specs.git'
+    #source 'https://github.com/CocoaPods/Specs.git'
     platform :ios, '11.0'
     use_frameworks!
     import_pods
@@ -45,4 +46,9 @@ xcodeproj 'Example/Examples-iOS/HiveExamples'
   pod 'RxCocoa'
   pod 'SVProgressHUD'
   pod 'SwiftyJSON'
+  pod 'BlueRSA', '~> 1.0'
+  pod 'KituraContracts', '~> 1.1'
+  pod 'LoggerAPI', '~> 1.7'
+  pod 'BlueCryptor', '~> 1.0'
+
 end
