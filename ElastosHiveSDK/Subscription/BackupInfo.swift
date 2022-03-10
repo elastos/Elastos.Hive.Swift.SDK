@@ -30,7 +30,7 @@ public class BackupInfo: Mappable {
     public var _storageUsed: Int?
     public var _created: Int64?
     public var _updated: Int64?
-    public var _pricePlan: String?
+    public var _pricingPlan: String?
     
     required public init?(map: Map) {}
     
@@ -40,7 +40,7 @@ public class BackupInfo: Mappable {
         _storageUsed <- map["storage_used"]
         _created <- map["created"]
         _updated <- map["updated"]
-        _pricePlan <- map["price_plan"]
+        _pricingPlan <- map["pricing_plan"]
     }
     
     public var serviceDid: String? {
@@ -64,6 +64,6 @@ public class BackupInfo: Mappable {
     }
 
     public var pricePlan: String? {
-        return _pricePlan
+        return _pricingPlan
     }
 }

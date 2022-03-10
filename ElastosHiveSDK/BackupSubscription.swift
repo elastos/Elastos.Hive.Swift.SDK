@@ -43,6 +43,12 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentSe
         _paymentController = PaymentController(self)
     }
     
+    public override init(_ context: AppContext) throws {
+        try super.init(context)
+        _subscriptionController = SubscriptionController(self)
+        _paymentController = PaymentController(self)
+    }
+
     /// Let users to get the all the pricing plan list in order to subscribe to a new vault or backup service on the user's requirement.
     ///
     /// - returns: Return a list of all pricing plan with specific type on success. Otherwise, the specific exception would be returned.

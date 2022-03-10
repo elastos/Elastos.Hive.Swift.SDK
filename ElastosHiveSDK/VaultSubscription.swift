@@ -28,7 +28,13 @@ import ObjectMapper
 public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentService {
     private var _subscriptionController: SubscriptionController!
     private var _paymentController: PaymentController?
-
+    
+    public override init(_ context: AppContext) throws {
+        try super.init(context)
+        _subscriptionController = SubscriptionController(self)
+        _paymentController = PaymentController(self)
+    }
+    
     /// Create by the application context, and the address of the provider.
     ///
     /// - parameters:

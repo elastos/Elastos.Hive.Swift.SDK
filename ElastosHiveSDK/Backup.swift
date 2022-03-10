@@ -54,6 +54,11 @@ public class Backup: ServiceEndpoint {
         self._promotionService = ServiceBuilder(self).createPromotionService()
     }
     
+    public override init(_ context: AppContext) throws {
+        try super.init(context)
+        self._promotionService = ServiceBuilder(self).createPromotionService()
+    }
+
     public var promotionService: PromotionService {
         get {
             return _promotionService!
