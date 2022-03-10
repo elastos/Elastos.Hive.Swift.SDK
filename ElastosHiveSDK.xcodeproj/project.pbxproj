@@ -1395,7 +1395,7 @@
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20211123234143;
+				CURRENT_PROJECT_VERSION = 20220311012111;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1416,7 +1416,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = "2.2.1-pre";
+				MARKETING_VERSION = "2.2.2-pre";
 				OTHER_CFLAGS = "-fembed-bitcode";
 				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -Xfrontend -debug-time-function-bodies";
 				PRODUCT_BUNDLE_IDENTIFIER = org.elastos.hivesdk;
@@ -1438,7 +1438,7 @@
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20211123234143;
+				CURRENT_PROJECT_VERSION = 20220311012111;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1459,7 +1459,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = "2.2.1-pre";
+				MARKETING_VERSION = "2.2.2-pre";
 				OTHER_CFLAGS = "-fembed-bitcode";
 				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -Xfrontend -debug-time-function-bodies";
 				PRODUCT_BUNDLE_IDENTIFIER = org.elastos.hivesdk;
