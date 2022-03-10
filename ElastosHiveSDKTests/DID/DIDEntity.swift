@@ -10,40 +10,47 @@ public class DIDEntity: NSObject {
     var store: DIDStore?
     var did: DID?
     
-    init(_ name: String, _ mnemonic: String, _ phrasepass: String, _ storepass: String) throws {
+    init(_ name: String, _ mnemonic: String, _ phrasepass: String, _ storepass: String, _ needResolve: Bool) throws {
         self.phrasepass = phrasepass
         self.storepass = storepass
         self.name = name
         super.init()
-        try initPrivateIdentity(mnemonic)
-        try initDid()
+        try initDid(mnemonic, needResolve)
     }
     
-    func initPrivateIdentity(_ mnemonic: String) throws {
+    func initDid(_ mnemonic: String, _ needResolve: Bool) throws {
         let storePath = "\(NSHomeDirectory())/Library/Caches/data/didCache/" + name
-        print("DIDEntity storePath == \(storePath)")
         store = try DIDStore.open(atPath: storePath)
-        identity = try store?.loadRootIdentity()
-        if (try store!.containsRootIdentities()) {
-            return // Already exists
-        }
-
-        identity = try RootIdentity.create(mnemonic, phrasepass, store!, storepass)
-        let re = try identity?.synchronize(0)
-        print(re)
+        let rootIdentity = try getRootIdentity(mnemonic)
+        try initDidByRootIdentity(rootIdentity, needResolve)
     }
     
-    func initDid() throws {
+    func getRootIdentity(_ mnemonic: String) throws -> RootIdentity {
+        let id = try RootIdentity.getId(mnemonic: mnemonic, passphrase: phrasepass)
+        return try store!.containsRootIdentity(id) ? store!.loadRootIdentity(id)!
+        : RootIdentity.create(mnemonic, phrasepass, store!, storepass)
+    }
+    
+    func initDidByRootIdentity(_ rootIdentity: RootIdentity, _ needResolve: Bool) throws {
         let dids = try store!.listDids()
         if (dids.count > 0) {
-            self.did = dids[0]
-            return
+            did = dids[0]
+        } else {
+            if (needResolve) {
+                // Sync the all information of the did with index 0.
+                let synced = try rootIdentity.synchronize(0)
+                print("\(name) identity synchronized result: \(synced)")
+                did = try rootIdentity.getDid(0)
+            } else {
+                // Only create the did on local store.
+                let doc = try rootIdentity.newDid(storepass)
+                did = doc.subject
+                print("\(name) My new DID created: \(did)")
+            }
         }
-
-        if let doc = try identity?.newDid(storepass) {
-            self.did = doc.subject
+        if (did == nil) {
+            throw  DIDError.UncheckedError.IllegalArgumentErrors.DIDObjectNotExistError("Can not get the did from the local store.")
         }
-        print("My new DID created: ", name, did!.description)
     }
     
     var getDIDStore: DIDStore {
