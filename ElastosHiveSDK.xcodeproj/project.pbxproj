@@ -28,10 +28,7 @@
 		1103757123FF96A0004216D0 /* LogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103756F23FF96A0004216D0 /* LogLevel.swift */; };
 		1103757923FF96BF004216D0 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103757823FF96BF004216D0 /* Log.swift */; };
 		1103757A23FF96BF004216D0 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103757823FF96BF004216D0 /* Log.swift */; };
-		1110DC7227BE76AE00252FD0 /* AwaitKitExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1110DC6E27BE76AE00252FD0 /* AwaitKitExtension.swift */; };
-		1110DC7327BE76AE00252FD0 /* DispatchQueue+Await.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1110DC6F27BE76AE00252FD0 /* DispatchQueue+Await.swift */; };
-		1110DC7427BE76AE00252FD0 /* DispatchQueue+Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1110DC7027BE76AE00252FD0 /* DispatchQueue+Async.swift */; };
-		1110DC7527BE76AE00252FD0 /* AwaitKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1110DC7127BE76AE00252FD0 /* AwaitKit.swift */; };
+		1105544D27D9D828006395B7 /* AppContentText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1105544C27D9D828006395B7 /* AppContentText.swift */; };
 		111D47F024F7A18900B7462B /* FileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47EF24F7A18900B7462B /* FileInfo.swift */; };
 		111D47F424F7A30300B7462B /* Executable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47F324F7A30300B7462B /* Executable.swift */; };
 		111D47FA24F7A79800B7462B /* Condition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47F924F7A79800B7462B /* Condition.swift */; };
@@ -250,10 +247,7 @@
 		110357E6256FA420003F639F /* FileWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileWriter.swift; sourceTree = "<group>"; };
 		1103756F23FF96A0004216D0 /* LogLevel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogLevel.swift; sourceTree = "<group>"; };
 		1103757823FF96BF004216D0 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
-		1110DC6E27BE76AE00252FD0 /* AwaitKitExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AwaitKitExtension.swift; sourceTree = "<group>"; };
-		1110DC6F27BE76AE00252FD0 /* DispatchQueue+Await.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DispatchQueue+Await.swift"; sourceTree = "<group>"; };
-		1110DC7027BE76AE00252FD0 /* DispatchQueue+Async.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DispatchQueue+Async.swift"; sourceTree = "<group>"; };
-		1110DC7127BE76AE00252FD0 /* AwaitKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AwaitKit.swift; sourceTree = "<group>"; };
+		1105544C27D9D828006395B7 /* AppContentText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContentText.swift; sourceTree = "<group>"; };
 		111D47EF24F7A18900B7462B /* FileInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileInfo.swift; sourceTree = "<group>"; };
 		111D47F324F7A30300B7462B /* Executable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Executable.swift; sourceTree = "<group>"; };
 		111D47F924F7A79800B7462B /* Condition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Condition.swift; sourceTree = "<group>"; };
@@ -462,17 +456,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1110DC6D27BE76AE00252FD0 /* AwaitKit */ = {
-			isa = PBXGroup;
-			children = (
-				1110DC6E27BE76AE00252FD0 /* AwaitKitExtension.swift */,
-				1110DC6F27BE76AE00252FD0 /* DispatchQueue+Await.swift */,
-				1110DC7027BE76AE00252FD0 /* DispatchQueue+Async.swift */,
-				1110DC7127BE76AE00252FD0 /* AwaitKit.swift */,
-			);
-			path = AwaitKit;
-			sourceTree = "<group>";
-		};
 		111D477B24EE4B0700B7462B /* Vault */ = {
 			isa = PBXGroup;
 			children = (
@@ -486,6 +469,7 @@
 				304F24382628066700DDB5C0 /* VaultManagementTest.swift */,
 				3065A5E826156A0D00C20661 /* VaultPaymentTest.swift */,
 				30DB96532600E49300ACF19F /* VaultSubscriptionTest.swift */,
+				1105544C27D9D828006395B7 /* AppContentText.swift */,
 			);
 			path = Vault;
 			sourceTree = "<group>";
@@ -850,7 +834,6 @@
 		A39C4971225399860027BDF9 /* ElastosHiveSDK */ = {
 			isa = PBXGroup;
 			children = (
-				1110DC6D27BE76AE00252FD0 /* AwaitKit */,
 				A39C4972225399860027BDF9 /* ElastosHiveSDK.h */,
 				A39C4973225399860027BDF9 /* Info.plist */,
 				3033734E25F9F703004D0D93 /* AppContext.swift */,
@@ -1138,6 +1121,7 @@
 				1155A3B3277E55F000094352 /* UserConfig.swift in Sources */,
 				30037BBB26A17B700085AE4A /* ScriptingCrossingTest.swift in Sources */,
 				30E94830260B0F5E00452FF5 /* FilesServiceTest.swift in Sources */,
+				1105544D27D9D828006395B7 /* AppContentText.swift in Sources */,
 				1155A3B2277E55F000094352 /* NodeConfig.swift in Sources */,
 				30D387D0269FDDFD0079E895 /* AppDID.swift in Sources */,
 				30D387CE269FDDFD0079E895 /* DIDEntity.swift in Sources */,
@@ -1185,7 +1169,6 @@
 				3053BE4D2684C9AE005828B0 /* CommitHash.swift in Sources */,
 				3053BED82684CA5F005828B0 /* RegScriptResult.swift in Sources */,
 				3053BF122684CA96005828B0 /* PricingPlan.swift in Sources */,
-				1110DC7327BE76AE00252FD0 /* DispatchQueue+Await.swift in Sources */,
 				3019D3CD261079D300A3C3C5 /* DataStorage.swift in Sources */,
 				3033734F25F9F703004D0D93 /* AppContext.swift in Sources */,
 				3053BED02684CA5F005828B0 /* CountOptions.swift in Sources */,
@@ -1227,7 +1210,6 @@
 				3053BE3D2684C974005828B0 /* AccessCode.swift in Sources */,
 				1103757923FF96BF004216D0 /* Log.swift in Sources */,
 				3053BEC22684CA5F005828B0 /* CreateCollectionResult.swift in Sources */,
-				1110DC7427BE76AE00252FD0 /* DispatchQueue+Async.swift in Sources */,
 				3053BEDF2684CA5F005828B0 /* FileDownloadExecutable.swift in Sources */,
 				3053BECA2684CA5F005828B0 /* UpdateParams.swift in Sources */,
 				3053BEE22684CA5F005828B0 /* InsertExecutable.swift in Sources */,
@@ -1239,7 +1221,6 @@
 				3053BF132684CA96005828B0 /* SubscriptionAPI.swift in Sources */,
 				3053BE4F2684C9AE005828B0 /* NodeVersion.swift in Sources */,
 				3053BE372684C974005828B0 /* AccessToken.swift in Sources */,
-				1110DC7527BE76AE00252FD0 /* AwaitKit.swift in Sources */,
 				3053BEF52684CA5F005828B0 /* HashInfo.swift in Sources */,
 				3053BF1A2684CA96005828B0 /* PaymentAPI.swift in Sources */,
 				3053BEE62684CA5F005828B0 /* OrCondition.swift in Sources */,
@@ -1283,7 +1264,6 @@
 				1129C19424052CC500CD77F2 /* Alamofire+Synchronous.swift in Sources */,
 				3053BDFD2684C8DF005828B0 /* ServiceBuilder.swift in Sources */,
 				3053BEFB2684CA5F005828B0 /* BackupAPI.swift in Sources */,
-				1110DC7227BE76AE00252FD0 /* AwaitKitExtension.swift in Sources */,
 				3053BE6D2684CA38005828B0 /* ScriptingInvocationService.swift in Sources */,
 				3053BEF62684CA5F005828B0 /* GeneralResult.swift in Sources */,
 				3053BE692684CA38005828B0 /* BackupService.swift in Sources */,

@@ -29,7 +29,7 @@ public class VaultInfo: Mappable {
     public var _storageUsed: Int?
     public var _created: Int64?
     public var _updated: Int64?
-    public var _pricePlan: Int64?
+    public var _pricingPlan: Int64?
 
     public var serviceDid: String? {
         return _serviceDid
@@ -51,8 +51,8 @@ public class VaultInfo: Mappable {
         return _updated
     }
 
-    public var pricePlan: Int64? {
-        return _pricePlan
+    public var pricingPlan: Int64? {
+        return _pricingPlan
     }
 
     public required init?(map: Map) {}
@@ -63,6 +63,6 @@ public class VaultInfo: Mappable {
         _storageUsed <- map["storage_used"]
         _created <- map["created"]
         _updated <- map["updated"]
-        _pricePlan <- map["price_plan"]
+        _pricingPlan <- map["pricing_plan"]
     }
 }

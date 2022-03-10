@@ -50,6 +50,12 @@ public class AppContext {
         return _userDid
     }
     
+    /// Get the provider address from user DID document.
+    /// - Returns: Provider Address
+    public func getProviderAddress() -> Promise<String> {
+        return AppContext.getProviderAddress(self.userDid)
+    }
+
     /// Setup the resolver for the DID verification.
     ///
     /// - parameters:

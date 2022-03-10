@@ -22,6 +22,7 @@
 
 import Foundation
 import ElastosDIDSDK
+import AwaitKit
 
 /**
  * The service end-point represents the service provides some API functions. It supports:
@@ -47,18 +48,35 @@ public class ServiceEndpoint: NodeRPCConnection {
     private var _accessToken: AccessToken?
     private var _dataStorage: DataStorage?
     
+    public init(_ context: AppContext) throws {
+        _providerAddress = try `await`(context.getProviderAddress())
+        _context = context
+        super.init()
+        try create(context, providerAddress)
+    }
+    
     /// Create by the application context, and the address of the provider.
     ///
     /// - parameters:
     ///   - context: The application context.
     ///   - providerAddress: The address of the provider.
     public init(_ context: AppContext, _ providerAddress: String) throws {
-        _context = context
         _providerAddress = providerAddress
+        _context = context
         super.init()
+        try create(context, providerAddress)
+    }
+
+    /// Create by the application context, and the address of the provider.
+    ///
+    /// - parameters:
+    ///   - context: The application context.
+    ///   - providerAddress: The address of the provider.
+    private func create(_ context: AppContext, _ providerAddress: String) throws {
+        
         self.connectionManager = ConnectionManager(_providerAddress)
         
-        var dataDir = _context.appContextProvider.getLocalDataDir()
+        let dataDir = _context.appContextProvider.getLocalDataDir()
         _dataStorage = try FileStorage(dataDir!, _context.userDid)
         _accessToken = AccessToken(self, _dataStorage)
         var err: Error?
@@ -90,7 +108,7 @@ public class ServiceEndpoint: NodeRPCConnection {
     public var providerAddress: String {
         return _providerAddress
     }
-    
+
     /// Get the user DID string of this serviceEndpoint.
     ///
     /// - returns: user did
