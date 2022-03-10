@@ -27,7 +27,8 @@ class AuthToken: NSObject {
     var accessToken: String
     var refreshToken: String
     var expiredTime: String
-
+    let TAG = "AuthToken"
+    
      init(_ refreshToken: String, _ accessToken: String, _ experitime: String) {
         self.accessToken = accessToken
         self.refreshToken = refreshToken
@@ -35,12 +36,11 @@ class AuthToken: NSObject {
     }
 
     func isExpired() -> Bool {
-        let currentSeconds = Int(Date().timeIntervalSince1970)
-        guard expiredTime.count != 10 else {
-            return "\(currentSeconds)" >= expiredTime
-        }
-        expiredIn = Date.convertTimeToTimeStamp(expiredTime)
-        return currentSeconds >= expiredIn
-//        return true
+        
+        let currentDate = Date.currentDate()
+        let expiredDate = Date.convertToUTCDateFromString(expiredTime)
+        Log.i(TAG, " expiredTime: \(expiredTime)")
+        
+        return currentDate > expiredDate
     }
 }
