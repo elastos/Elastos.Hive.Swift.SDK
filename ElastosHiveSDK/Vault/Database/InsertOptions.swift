@@ -26,12 +26,14 @@ import ObjectMapper
 public class InsertOptions: Mappable {
     private var _bypassDocumentValidation: Bool?
     private var _ordered: Bool?
+    private var _timestamp: Bool?
 
     required public init?(map: Map) {}
     
     public func mapping(map: Map) {
         _bypassDocumentValidation <- map["bypass_document_validation"]
         _ordered <- map["ordered"]
+        _timestamp <- map["timestamp"]
     }
     
     public init() {
@@ -56,6 +58,12 @@ public class InsertOptions: Mappable {
     
     public func ordered(_ value: Bool?) -> InsertOptions {
         _ordered = value
+        return self
+    }
+    
+    public func timestamp(_ value: Bool) -> InsertOptions  {
+        self._timestamp = value
+        
         return self
     }
 }
