@@ -93,6 +93,12 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentSer
         }
     }
     
+    public func getAppStats() -> Promise<[AppInfo]?> {
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _subscriptionController!.getAppStats()
+        }
+    }
+    
     /// Place an order for new subscription or extending the existing subscription service.
     ///
     /// - parameter planName: the name of the pricing plan

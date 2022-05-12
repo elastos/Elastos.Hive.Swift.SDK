@@ -164,4 +164,10 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentSe
             return try _paymentController!.getVersion()
         }
     }
+    
+    public func getAppStats() -> Promise<[AppInfo]?> {
+        return DispatchQueue.global().async(.promise){ [self] in
+            throw HiveError.NotImplementedException("")
+        }
+    }
 }

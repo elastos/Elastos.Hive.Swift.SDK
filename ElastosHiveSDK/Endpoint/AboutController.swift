@@ -21,6 +21,7 @@
  */
 
 import Foundation
+import PromiseKit
 
 /// The AboutController is for getting the basic information of the hive node.
 public class AboutController {
@@ -44,5 +45,11 @@ public class AboutController {
     /// - Returns: The commit id.
     public func getCommitId() throws -> String? {
         return try _connectionManager.commitId().execute(CommitHash.self).commitId
+    }
+    
+    /// Get the information of the hive node.
+    /// - Returns: The information of the hive node.
+    public func getNodeInfo() throws -> NodeInfo {
+      return try _connectionManager.info().execute(NodeInfo.self)
     }
 }

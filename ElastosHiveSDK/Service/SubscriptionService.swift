@@ -52,4 +52,9 @@ public protocol SubscriptionService {
     ///
     /// - Returns: The basic information of the newly created or existing vault on success, otherwise, the specific exception would returned in the wrapper.
     func checkSubscription() -> Promise<T>
+    
+    /// Get all application stats of the vault service
+    /// - Returns: The application list.
+    func getAppStats() -> Promise<[AppInfo]?>
+
 }

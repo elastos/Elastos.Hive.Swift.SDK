@@ -53,6 +53,11 @@ extension ConnectionManager {
         return try self.createDataRequest(url, .get, nil)
     }
     
+    func getVaultAppStats() throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/subscription/vault/app_stats"
+        return try self.createDataRequest(url, .get, nil)
+    }
+    
     // for subscription to backup service.
     func subscribeToBackup(_ credential: String?) throws -> DataRequest {
         let url = self.baseURL + "/api/v2/subscription/backup?credential=\(credential ?? "")"
