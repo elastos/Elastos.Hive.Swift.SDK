@@ -64,6 +64,21 @@ class VaultSubscriptionTest: XCTestCase {
     }
     
     //Disabled
+    public func test05_1GetAppStats() {
+        XCTAssertNoThrow(try { [self] in
+            let infos = try `await`(_subscription!.getAppStats())
+            XCTAssertNotNil(infos)
+            XCTAssertTrue(infos?.count > 0)
+            XCTAssertNotNil(infos[0].name)
+            XCTAssertNotNil(infos[0].developerDid)
+            XCTAssertNotNil(infos[0].iconUrl)
+            XCTAssertNotNil(infos[0].userDid)
+            XCTAssertNotNil(infos[0].appDid)
+            XCTAssertTrue(infos[0].usedStorageSize > 0)
+        }())
+    }
+    
+    //Disabled
     public func test05Unsubscribe() {
         XCTAssertNoThrow(try { [self] in
             try `await`(_subscription!.unsubscribe())

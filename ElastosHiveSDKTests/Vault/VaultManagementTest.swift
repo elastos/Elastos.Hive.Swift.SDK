@@ -68,4 +68,19 @@ class VaultManagementTest: XCTestCase {
             XCTAssertNotNil(try `await`(_vault!.getLatestCommitId()))
         }())
     }
+    
+    
+    func testGetNodeInfo() {
+        XCTAssertNoThrow(try { [self] in
+            let info = try `await`(_vault!.getNodeInfo())
+            
+            XCTAssertNotNil(info)
+            XCTAssertNotNil(info.name)
+            XCTAssertNotNil(info.developerDid)
+            XCTAssertNotNil(info.iconUrl)
+            XCTAssertNotNil(info.userDid)
+            XCTAssertNotNil(info.appDid)
+            XCTAssertTrue(info.usedStorageSize > 0)
+        }())
+    }
 }
