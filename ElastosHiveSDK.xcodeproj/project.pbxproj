@@ -45,6 +45,10 @@
 		1155A3B3277E55F000094352 /* UserConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1155A3AC277E55EF00094352 /* UserConfig.swift */; };
 		116B2F3025B6C0F200635D97 /* Backup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116B2F2F25B6C0F200635D97 /* Backup.swift */; };
 		1170FB142502019C0049E81D /* Vault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FB132502019C0049E81D /* Vault.swift */; };
+		11A4DF1D282A4A8C00C76F04 /* NodeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A4DF1C282A4A8C00C76F04 /* NodeInfo.swift */; };
+		11A4DF1E282A4A8C00C76F04 /* NodeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A4DF1C282A4A8C00C76F04 /* NodeInfo.swift */; };
+		11A4DF20282CA2B700C76F04 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A4DF1F282CA2B700C76F04 /* AppInfo.swift */; };
+		11A4DF22282CA2C500C76F04 /* AppStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A4DF21282CA2C500C76F04 /* AppStats.swift */; };
 		11D26F4022CA3B3300E4099A /* ElastosHiveSDK_macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 11D26F3E22CA3B3300E4099A /* ElastosHiveSDK_macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		11D26F4522CA3B4B00E4099A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FB22C4C33400F85419 /* String.swift */; };
 		11E573FF22C4C33400F85419 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FB22C4C33400F85419 /* String.swift */; };
@@ -264,6 +268,9 @@
 		1155A3AC277E55EF00094352 /* UserConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserConfig.swift; sourceTree = "<group>"; };
 		116B2F2F25B6C0F200635D97 /* Backup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backup.swift; sourceTree = "<group>"; };
 		1170FB132502019C0049E81D /* Vault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vault.swift; sourceTree = "<group>"; };
+		11A4DF1C282A4A8C00C76F04 /* NodeInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeInfo.swift; sourceTree = "<group>"; };
+		11A4DF1F282CA2B700C76F04 /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
+		11A4DF21282CA2C500C76F04 /* AppStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStats.swift; sourceTree = "<group>"; };
 		11D26F3C22CA3B3300E4099A /* ElastosHiveSDK_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ElastosHiveSDK_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		11D26F3E22CA3B3300E4099A /* ElastosHiveSDK_macOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ElastosHiveSDK_macOS.h; sourceTree = "<group>"; };
 		11E573FB22C4C33400F85419 /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
@@ -591,6 +598,7 @@
 				3053BE482684C9AE005828B0 /* AboutController.swift */,
 				3053BE492684C9AE005828B0 /* CommitHash.swift */,
 				3053BE4B2684C9AE005828B0 /* NodeVersion.swift */,
+				11A4DF1C282A4A8C00C76F04 /* NodeInfo.swift */,
 			);
 			path = Endpoint;
 			sourceTree = "<group>";
@@ -746,6 +754,8 @@
 			children = (
 				3053BF102684CA96005828B0 /* BackupInfo.swift */,
 				3053BF052684CA96005828B0 /* PricingPlan.swift */,
+				11A4DF1F282CA2B700C76F04 /* AppInfo.swift */,
+				11A4DF21282CA2C500C76F04 /* AppStats.swift */,
 				3053BF0F2684CA96005828B0 /* PricingPlanCollection.swift */,
 				3053BF062684CA96005828B0 /* SubscriptionAPI.swift */,
 				3053BF072684CA96005828B0 /* SubscriptionController.swift */,
@@ -1135,6 +1145,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				11D26F4522CA3B4B00E4099A /* String.swift in Sources */,
+				11A4DF1E282A4A8C00C76F04 /* NodeInfo.swift in Sources */,
 				1129C19524052CC500CD77F2 /* Alamofire+Synchronous.swift in Sources */,
 				1103757A23FF96BF004216D0 /* Log.swift in Sources */,
 				1103757123FF96A0004216D0 /* LogLevel.swift in Sources */,
@@ -1198,9 +1209,11 @@
 				3053BEF12684CA5F005828B0 /* FilesController.swift in Sources */,
 				3053BF172684CA96005828B0 /* CreateOrderParams.swift in Sources */,
 				3033735325F9F7BD004D0D93 /* AppContextProvider.swift in Sources */,
+				11A4DF1D282A4A8C00C76F04 /* NodeInfo.swift in Sources */,
 				3045A75926024C1E0037527A /* ScriptingServiceRender.swift in Sources */,
 				303CD55D26075D2A00865472 /* ScriptRunner.swift in Sources */,
 				3053BEC12684CA5F005828B0 /* DatabaseAPI.swift in Sources */,
+				11A4DF22282CA2C500C76F04 /* AppStats.swift in Sources */,
 				3053BE3A2684C974005828B0 /* ChallengeRequest.swift in Sources */,
 				3053BEC62684CA5F005828B0 /* QueryResult.swift in Sources */,
 				30A996FB25FCEB420002B014 /* RemoteResolver.swift in Sources */,
@@ -1246,6 +1259,7 @@
 				3053BEFD2684CA5F005828B0 /* RequestParams.swift in Sources */,
 				3053BEEA2684CA5F005828B0 /* AggregatedCondition.swift in Sources */,
 				3053BF112684CA96005828B0 /* VaultInfo.swift in Sources */,
+				11A4DF20282CA2B700C76F04 /* AppInfo.swift in Sources */,
 				3053BEE92684CA5F005828B0 /* AndCondition.swift in Sources */,
 				3001863E26AD8A5400584B74 /* HiveBackupContext.swift in Sources */,
 				3053BEF92684CA5F005828B0 /* CredentialCode.swift in Sources */,
@@ -1586,12 +1600,12 @@
 			buildSettings = {
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 20211123234703;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = X2ZZSKA63B;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -1629,12 +1643,12 @@
 			buildSettings = {
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 20211123234703;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = X2ZZSKA63B;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";

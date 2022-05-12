@@ -186,4 +186,13 @@ public class ServiceEndpoint: NodeRPCConnection {
             return try AboutController(self).getCommitId()!
         }
     }
+    
+    
+    /// Get the information of the hive node.
+    /// - Returns: The information.
+    public func getNodeInfo() -> Promise<NodeInfo> {
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try AboutController(self).getNodeInfo()
+        }
+    }
 }

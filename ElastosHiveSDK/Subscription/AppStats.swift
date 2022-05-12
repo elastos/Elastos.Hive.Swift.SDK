@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2020 Elastos Foundation
+* Copyright (c) 2022 Elastos Foundation
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -21,20 +21,19 @@
 */
 
 import Foundation
+import ObjectMapper
 
-extension ConnectionManager {
-    public func version() throws -> DataRequest {
-        let url = self.baseURL + "/api/v2/about/version"
-        return try self.createDataRequest(url, .get, nil)
+/// This contains the details of the backup service.
+public class AppStats: Mappable  {
+    // apps
+    public var _apps: [AppInfo]?
+    required public init?(map: Map) {}
+    
+    public func mapping(map: Map) {
+        _apps <- map["apps"]
     }
     
-    public func commitId() throws -> DataRequest {
-        let url = self.baseURL + "api/v2/about/commit_id"
-        return try self.createDataRequest(url, .get, nil)
-    }
-    
-    public func info() throws -> DataRequest {
-        let url = self.baseURL + "api/v2/about/info"
-        return try self.createDataRequest(url, .get, nil)
+    public var apps: [AppInfo]? {
+        return _apps
     }
 }
