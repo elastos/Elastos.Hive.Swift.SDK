@@ -50,7 +50,7 @@ public class FilesServiceRender: FilesService {
             if path.isEmpty {
                 throw HiveError.IllegalArgumentException("Empty path parameter")
             }
-            if is_public && scriptName != "" {
+            if is_public && scriptName == "" {
                 throw HiveError.IllegalArgumentException("Script name should be provided when public.")
             }
             return _controller!.getUploadWriter(path, is_public, scriptName)
