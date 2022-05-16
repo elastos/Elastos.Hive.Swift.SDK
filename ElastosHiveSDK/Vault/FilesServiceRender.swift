@@ -40,6 +40,22 @@ public class FilesServiceRender: FilesService {
         }
     }
     
+    public func getUploadWriter(_ path: String, _ scriptName: String) -> Promise<FileWriter> {
+        
+    }
+    
+    private func getUploadWriter(_ path: String, _ is_public: Bool _ scriptName: String)  -> Promise<FileWriter>  {
+        return DispatchQueue.global().async(.promise){ [self] in
+            if path.isEmpty {
+                throw HiveError.IllegalArgumentException("Empty path parameter")
+            }
+            if is_public && scriptName != "" {
+                throw HiveError.IllegalArgumentException("Script name should be provided when public.")
+            }
+            return _controller.getUploadWriter(path, is_public, scriptName)
+        }
+    }
+    
     /// Get the FileReader for downloading the content of the file.
     /// - Parameter path: The download file path.
     /// - Returns: The FileReader.

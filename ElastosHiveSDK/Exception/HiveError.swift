@@ -47,6 +47,8 @@ public enum HiveError: Error {
     case VaultNotFoundException(_ message: String?)
     case DefaultException(_ message: String?)
     case InvalidParameterException(_ message: String?)
+    case IllegalArgumentException(_ message: String?)
+    
 }
 
 extension HiveError {
@@ -99,7 +101,10 @@ extension HiveError {
             return "DefaultException: \(message ?? "")"
         case .InvalidParameterException(let message):
             return "InvalidParameterException: \(message ?? "")"
+        case .IllegalArgumentException(let message):
+            return "IllegalArgumentException: \(message ?? "")"
         }
+        
     }
     
     static func praseError(_ json: JSON) -> String {
