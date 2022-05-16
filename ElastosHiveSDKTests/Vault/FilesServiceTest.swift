@@ -249,6 +249,7 @@ class FilesServiceTest: XCTestCase {
             try? FileManager.default.removeItem(atPath: fileurl!.path)
             FileManager.default.createFile(atPath: fileurl!.path, contents: nil, attributes: nil)
         }
+        print(fileurl)
         return fileurl!
     }
     
@@ -271,30 +272,28 @@ class FilesServiceTest: XCTestCase {
 
     public func test10UploadPublicBin() {
         XCTAssertNoThrow(try { [self] in
-            let fileName = FILE_PUBLIC_NAME_BIN
-            let length = FILE_PUBLIC_NAME_BIN.count - 4
-            let scriptName = FILE_PUBLIC_NAME_BIN.prefix(length)
+            let fileName = FILE_PUBLIC_NAME_TXT
+            let length = FILE_PUBLIC_NAME_TXT.count - 4
+            let scriptName = FILE_PUBLIC_NAME_TXT.prefix(length)
             print("scriptName \(scriptName)")
-            var cid = ""
+            var cid = "Qmc4toiRA9NsCUEFgkdKDAeUkEj6UQzA4r9AXrtgaDX4CS"
             
             // Upload public file.
             let fileWriter =  try `await`(_filesService!.getUploadWriter(fileName, String(scriptName)))
-            var result = try `await`(fileWriter.write(data: FILE_PUBLIC_NAME_BIN.data(using: .utf8)!))
-//            let cid = result["cid"]
+            var result = try `await`(fileWriter.write(data: FILE_PUBLIC_NAME_TXT.data(using: .utf8)!))
+            cid = fileWriter.cid!
             print("result ======= \(result)")
-            
+
             // Download and verify normally.
             let reader = try `await`(_filesService!.getDownloadReader(fileName))
             let targetUrl = createFilePathForDownload(fileName)
             result = try `await`(reader.read(targetUrl))
             XCTAssertTrue(result)
-//            let isEqual = try self.isFileContentEqual(localImgFilePath, self.localCacheRootDir + FILE_NAME_IMG)
-//            XCTAssertTrue(isEqual)
-            
+//
             // Download by cid.
+            let ipfsTargetUrl = createFilePathForDownload("download_\(fileName)")
             let ipfsReader = try `await`(IpfsRunner(ipfsGatewayUrl: TestData.shared().getIpfsGatewayUrl()).getFileReader(cid))
-            
-            // Download by script.
+            _ = try `await`(ipfsReader.read(ipfsTargetUrl))
             
         }())
     }

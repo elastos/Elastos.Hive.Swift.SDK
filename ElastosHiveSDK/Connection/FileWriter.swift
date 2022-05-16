@@ -35,6 +35,7 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     let _connectionManager: ConnectionManager?
     var _resolver: Resolver<Bool>?
     private var hiveError: HiveError?
+    public var cid: String?
     
     init(_ uploadURL: URL, _ connectionManager: ConnectionManager) {
         self._connectionManager = connectionManager
@@ -168,6 +169,10 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         Log.d("Hive Debug ==> response Code ->", response?.statusCode as Any)
         Log.d("Hive Debug ==> response body ->", response as Any)
         let code = response?.statusCode
+        let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: String]
+        if json != nil {
+            cid = json!!["cid"]
+        }
         
         guard 200...299 ~= code! else {
             
