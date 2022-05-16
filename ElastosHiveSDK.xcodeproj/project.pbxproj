@@ -49,6 +49,8 @@
 		11A4DF1E282A4A8C00C76F04 /* NodeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A4DF1C282A4A8C00C76F04 /* NodeInfo.swift */; };
 		11A4DF20282CA2B700C76F04 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A4DF1F282CA2B700C76F04 /* AppInfo.swift */; };
 		11A4DF22282CA2C500C76F04 /* AppStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A4DF21282CA2C500C76F04 /* AppStats.swift */; };
+		11A4DF2C282E283800C76F04 /* IpfsRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A4DF2B282E283800C76F04 /* IpfsRunner.swift */; };
+		11A4DF2D282E283800C76F04 /* IpfsRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A4DF2B282E283800C76F04 /* IpfsRunner.swift */; };
 		11D26F4022CA3B3300E4099A /* ElastosHiveSDK_macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 11D26F3E22CA3B3300E4099A /* ElastosHiveSDK_macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		11D26F4522CA3B4B00E4099A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FB22C4C33400F85419 /* String.swift */; };
 		11E573FF22C4C33400F85419 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FB22C4C33400F85419 /* String.swift */; };
@@ -271,6 +273,7 @@
 		11A4DF1C282A4A8C00C76F04 /* NodeInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeInfo.swift; sourceTree = "<group>"; };
 		11A4DF1F282CA2B700C76F04 /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 		11A4DF21282CA2C500C76F04 /* AppStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStats.swift; sourceTree = "<group>"; };
+		11A4DF2B282E283800C76F04 /* IpfsRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IpfsRunner.swift; sourceTree = "<group>"; };
 		11D26F3C22CA3B3300E4099A /* ElastosHiveSDK_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ElastosHiveSDK_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		11D26F3E22CA3B3300E4099A /* ElastosHiveSDK_macOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ElastosHiveSDK_macOS.h; sourceTree = "<group>"; };
 		11E573FB22C4C33400F85419 /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
@@ -858,6 +861,7 @@
 				3019D3CC261079D300A3C3C5 /* DataStorage.swift */,
 				30EC875C2627CA5E00F15FB2 /* FileStorage.swift */,
 				3065A5E3261551D800C20661 /* HIveResponse.swift */,
+				11A4DF2B282E283800C76F04 /* IpfsRunner.swift */,
 				30DB96562600E4C700ACF19F /* VaultSubscription.swift */,
 				3053BDF62684C8DF005828B0 /* Backup */,
 				30A996FD25FCF7450002B014 /* Connection */,
@@ -1147,6 +1151,7 @@
 				11D26F4522CA3B4B00E4099A /* String.swift in Sources */,
 				11A4DF1E282A4A8C00C76F04 /* NodeInfo.swift in Sources */,
 				1129C19524052CC500CD77F2 /* Alamofire+Synchronous.swift in Sources */,
+				11A4DF2D282E283800C76F04 /* IpfsRunner.swift in Sources */,
 				1103757A23FF96BF004216D0 /* Log.swift in Sources */,
 				1103757123FF96A0004216D0 /* LogLevel.swift in Sources */,
 			);
@@ -1225,6 +1230,7 @@
 				3053BEC22684CA5F005828B0 /* CreateCollectionResult.swift in Sources */,
 				3053BEDF2684CA5F005828B0 /* FileDownloadExecutable.swift in Sources */,
 				3053BECA2684CA5F005828B0 /* UpdateParams.swift in Sources */,
+				11A4DF2C282E283800C76F04 /* IpfsRunner.swift in Sources */,
 				3053BEE22684CA5F005828B0 /* InsertExecutable.swift in Sources */,
 				3053BED22684CA5F005828B0 /* DeleteOptions.swift in Sources */,
 				3053BECF2684CA5F005828B0 /* AscendingSortItem.swift in Sources */,
