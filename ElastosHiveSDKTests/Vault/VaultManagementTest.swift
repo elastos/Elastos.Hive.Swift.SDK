@@ -76,11 +76,14 @@ class VaultManagementTest: XCTestCase {
             
             XCTAssertNotNil(info)
             XCTAssertNotNil(info.name)
-            XCTAssertNotNil(info.developerDid)
-            XCTAssertNotNil(info.iconUrl)
-            XCTAssertNotNil(info.userDid)
-            XCTAssertNotNil(info.appDid)
-            XCTAssertTrue(info.usedStorageSize > 0)
+            XCTAssertNotNil(info.ownershipPresentation)
+            XCTAssertNotNil(info.description)
+            XCTAssertNotNil(info.email)
+            XCTAssertNotNil(info.ownerDid)
+            XCTAssertNotNil(info.lastCommitId)
+            XCTAssertNotNil(info.version)
+            XCTAssertNotNil(info.serviceDid)
+
         }())
     }
 }

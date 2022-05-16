@@ -42,9 +42,10 @@ public class FilesServiceRender: FilesService {
     
     public func getUploadWriter(_ path: String, _ scriptName: String) -> Promise<FileWriter> {
         
+        return getUploadWriter(path, true, scriptName)
     }
     
-    private func getUploadWriter(_ path: String, _ is_public: Bool _ scriptName: String)  -> Promise<FileWriter>  {
+    private func getUploadWriter(_ path: String, _ is_public: Bool, _ scriptName: String)  -> Promise<FileWriter>  {
         return DispatchQueue.global().async(.promise){ [self] in
             if path.isEmpty {
                 throw HiveError.IllegalArgumentException("Empty path parameter")
@@ -52,7 +53,7 @@ public class FilesServiceRender: FilesService {
             if is_public && scriptName != "" {
                 throw HiveError.IllegalArgumentException("Script name should be provided when public.")
             }
-            return _controller.getUploadWriter(path, is_public, scriptName)
+            return _controller!.getUploadWriter(path, is_public, scriptName)
         }
     }
     
