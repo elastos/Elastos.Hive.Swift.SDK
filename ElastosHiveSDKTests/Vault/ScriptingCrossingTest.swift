@@ -134,7 +134,7 @@ class ScriptingCrossingTest: XCTestCase {
             registerScript()
             let reader = try `await`(_scriptRunner!.downloadFileByHiveUrl(hiveUrl))
             
-            let targetUrl = createFizxlePathForDownload("test_ios_downloadurl_script.txt")
+            let targetUrl = createFilePathForDownload("test_ios_downloadurl_script.txt")
             let result = try `await`(reader.read(targetUrl))
             print("targetUrl == \(targetUrl)")
         }

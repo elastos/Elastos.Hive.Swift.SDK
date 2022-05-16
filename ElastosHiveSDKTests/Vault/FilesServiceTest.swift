@@ -271,8 +271,10 @@ class FilesServiceTest: XCTestCase {
 
     public func test10UploadPublicBin() {
         XCTAssertNoThrow(try { [self] in
-            let fileName = FILE_PUBLIC_NAME_BIN;
-            let scriptName = FILE_PUBLIC_NAME_BIN.split("\\.")[0]
+            let fileName = FILE_PUBLIC_NAME_BIN
+            let length = FILE_PUBLIC_NAME_BIN.count - 4
+            let scriptName = FILE_PUBLIC_NAME_BIN.prefix(length)
+            print("scriptName \(scriptName)")
             var cid = ""
             
             // Upload public file.

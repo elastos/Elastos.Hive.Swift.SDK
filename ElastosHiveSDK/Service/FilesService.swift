@@ -32,6 +32,15 @@ public protocol FilesService {
     /// - parameter path: the path for the remote file
     /// - returns: the new CompletionStage, the result is the FileWriter interface for upload the file content if success; null otherwise
     func getUploadWriter(_ path: String) -> Promise<FileWriter>
+    
+    /// Initiates an upload sequence by returning a Write or OutputStream object that can be
+    /// used to write small file chunks. After writing, flush()/close() must be called
+    /// to actually send the data remotely.
+    /// - Parameters:
+    ///   - path: the path for the remote file
+    ///   - scriptName: used to download file anonymously by the scripting service with uploading public file.
+    /// - Returns: the result FileWriter instance
+    func getUploadWriter(_ path: String, _ scriptName: String) -> Promise<FileWriter>
 
     /// Initiates a download sequence by returning a Reader or InputStream object that can be used to read the downloaded file in chunks.
     /// - parameter path: the path for the remote file

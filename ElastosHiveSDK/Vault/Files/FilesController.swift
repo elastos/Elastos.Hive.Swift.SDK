@@ -40,6 +40,17 @@ public class FilesController {
         return FileWriter(URL(string: uploadPath)!, _connectionManager)
     }
     
+    /// Get the upload writer for uploading the content of the file.
+    /// - Parameters:
+    ///   - path: The uploading file path.
+    /// - Returns: The writer.
+    public func getUploadWriter(_ path: String, _ is_public: Bool, _ scriptName: String) -> FileWriter {
+        let params = is_public ? "?public=true&script_name=" + scriptName : ""
+
+        let uploadPath = "\(self._connectionManager.baseURL)/api/v2/vault/files/\(path)\(params)"
+        return FileWriter(URL(string: uploadPath)!, _connectionManager)
+    }
+
     /// Get the FileReader for downloading the content of the file.
     /// - Parameter path: The download file path.
     /// - Returns: The FileReader.
