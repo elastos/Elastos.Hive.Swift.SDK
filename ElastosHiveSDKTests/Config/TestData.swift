@@ -20,7 +20,7 @@ public class TestData {
     private var _context: AppContext!
     private var _callerContext: AppContext!
     private var _storePath: String!
-    
+    private var _ipfsGatewayUrl = ""
     public static func shared() -> TestData {
         if (instance == nil) {
             instance = TestData()
@@ -52,6 +52,8 @@ public class TestData {
             let userConfig = clientConfig!.userConfig
             _userDid = try UserDID(userConfig.name, userConfig.mnemonic, userConfig.passPhrase, userConfig.storepass)
             _nodeConfig = clientConfig!.nodeConfig
+            
+            _ipfsGatewayUrl = clientConfig!.ipfsGateUrl
             
             _storePath = "\(NSHomeDirectory())/Library/Caches/data/store" + "/" + _nodeConfig.storePath
             _context = try AppContext.build(TestAppContextProvider(_storePath, _userDid, _appInstanceDid), _userDid.description)
@@ -98,6 +100,11 @@ public class TestData {
     public func newBackup() throws -> Backup {
         return try Backup(_context, _nodeConfig.targetHost)
     }
+    
+    public func getIpfsGatewayUrl() -> String {
+        return self._ipfsGatewayUrl
+    }
+
     
     public func backupService() throws -> BackupServiceRender {
         let backService = try newVault().backupService

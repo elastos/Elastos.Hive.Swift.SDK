@@ -31,7 +31,9 @@ class FilesServiceTest: XCTestCase {
     private let FILE_NAME_TXT: String = "test_ios.txt"
     private let FILE_NAME_IMG: String = "big_ios.png"
     private let FILE_NAME_NOT_EXISTS: String = "not_exists.txt"
-    
+    private let FILE_PUBLIC_NAME_TXT = "ipfs_public_file.txt"
+    private let FILE_PUBLIC_NAME_BIN = "ipfs_public_file.png"
+
     private var bundlePath: Bundle?
     private var localTxtFilePath: String?
     private var localImgFilePath: String?
@@ -267,5 +269,45 @@ class FilesServiceTest: XCTestCase {
     }
 
 
+    public func test10UploadPublicBin() {
+        XCTAssertNoThrow(try { [self] in
+            let fileName = FILE_PUBLIC_NAME_BIN;
+            let scriptName = FILE_PUBLIC_NAME_BIN.split("\\.")[0]
+            var cid = ""
+            
+            // Upload public file.
+            let fileWriter =  try `await`_filesService!.getUploadWriter(fileName, scriptName)
+            let result = try `await`(fileWriter.write(data: data))
+            let cid = result["cid"]
+            print("cid ======= \(cid)")
+            
+            // Download and verify normally.
+            let reader = try `await`(_filesService!.getDownloadReader(fileName))
+            let targetUrl = createFilePathForDownload(fileName)
+            let result = try `await`(reader.read(targetUrl))
+            XCTAssertTrue(result)
+            let isEqual = try self.isFileContentEqual(localImgFilePath, self.localCacheRootDir + FILE_NAME_IMG)
+            XCTAssertTrue(isEqual)
+            
+            // Download by cid.
+            let ipfsReader = try `await`(IpfsRunner(TestData.shared().getIpfsGatewayUrl()).getFileReader(cid))
+            
+            // Download by script.
+            
+        }())
+    }
+    /*
+     @Test @Order(10) void testUploadPublicBin() {
+         Assertions.assertDoesNotThrow(() -> {
+             // Download by script.
+             ScriptingServiceTest scriptingServiceTest = new ScriptingServiceTest();
+             ScriptingServiceTest.setUp();
+             scriptingServiceTest.downloadPublicBinFileAndVerify(scriptName, localCacheRootDir, FILE_NAME_IMG, localImgFilePath);
+             // clean file and script
+             scriptingServiceTest.unregisterScript(scriptName);
+             filesService.delete(fileName).get();
+         });
+     }
+     */
 }
 

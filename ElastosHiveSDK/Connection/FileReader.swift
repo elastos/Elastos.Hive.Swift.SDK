@@ -45,6 +45,37 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     private var connectionManager: ConnectionManager?
     private var _resolver: Resolver<Bool>?
     
+    /// this is for IpfsRunner
+    init(_ url: URL, _ method: HTTPMethod) throws {
+        var input: InputStream? = nil
+        var output: OutputStream? = nil
+        Stream.getBoundStreams(withBufferSize: BUFFER_SIZE,
+                               inputStream: &input,
+                               outputStream: &output)
+
+        downloadBoundStreams = BoundStreams(input: input!, output: output!)
+        super.init()
+
+        downloadBoundStreams.output.delegate = self
+        downloadBoundStreams.output.schedule(in: .current, forMode: .default)
+        downloadBoundStreams.output.open()
+
+        downloadBoundStreams.input.delegate = self
+        downloadBoundStreams.input.schedule(in: .current, forMode: .default)
+        downloadBoundStreams.input.open()
+
+        let config = URLSessionConfiguration.default
+        let operationQueue = OperationQueue()
+        let header = ["Content-Type": "application/json;charset=UTF-8"] as HTTPHeaders
+        let session = URLSession(configuration: config, delegate: self, delegateQueue: operationQueue)
+        let request = try! URLRequest(url: url, method: method, headers: header)
+        
+        task = session.dataTask(with: request)
+        Log.d("Hive Debug ==> request url ->", request.url as Any)
+        Log.d("Hive Debug ==> request headers ->", request.allHTTPHeaderFields as Any)
+
+        self.task?.resume()
+    }
     
     public init(_ url: URL,_ connectionManager: ConnectionManager,_ method: HTTPMethod) throws {
         var input: InputStream? = nil
