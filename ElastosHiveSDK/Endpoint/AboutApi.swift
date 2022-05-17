@@ -29,12 +29,12 @@ extension ConnectionManager {
     }
     
     public func commitId() throws -> DataRequest {
-        let url = self.baseURL + "api/v2/about/commit_id"
+        let url = self.baseURL + "/api/v2/about/commit_id"
         return try self.createDataRequest(url, .get, nil)
     }
     
     public func info() throws -> DataRequest {
-        let url = self.baseURL + "api/v2/about/info"
+        let url = self.baseURL + "/api/v2/node/info"
         return try self.createDataRequest(url, .get, nil)
     }
 }
