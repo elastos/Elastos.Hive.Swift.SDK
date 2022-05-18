@@ -82,7 +82,7 @@ public class ServiceEndpoint: NodeRPCConnection {
         var err: Error?
         _accessToken!.flush = { (value) in
             do {
-                let claims = try JwtParserBuilder().build().parseClaimsJwt(value).claims
+                let claims = try JwtParserBuilder().setAllwedClockSkewSeconds(300).build().parseClaimsJwt(value).claims
                 self.flushDids(claims.getAudience()!, claims.getIssuer()!)
             } catch {
                 err = error

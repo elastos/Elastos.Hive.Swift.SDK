@@ -3,7 +3,7 @@ def import_pods
   #pod 'Swifter', '1.5.0'
   pod 'Alamofire', '~> 5.0'
   pod 'PromiseKit'
-  pod 'ElastosDIDSDK', '~> 2.2.1'
+  pod 'ElastosDIDSDK', '~> 2.2.12'
 
   pod 'ReadWriteLock', '~> 1.0'
   pod 'ObjectMapper'
