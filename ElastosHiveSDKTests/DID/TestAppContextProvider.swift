@@ -34,7 +34,7 @@ public class TestAppContextProvider: AppContextProvider {
         var err: Error?
         DispatchQueue.global().async { [self] in
             do {
-                let claims = try JwtParserBuilder().build().parseClaimsJwt(jwtToken).claims
+                let claims = try JwtParserBuilder().setAllwedClockSkewSeconds(300).build().parseClaimsJwt(jwtToken).claims
                 let iss = claims.getIssuer()
                 let nonce = claims.get(key: "nonce") as? String
                 

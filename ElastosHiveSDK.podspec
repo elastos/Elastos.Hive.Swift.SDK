@@ -22,7 +22,7 @@ Pod::Spec.new do |s|
   s.source_files = 'ElastosHiveSDK/**/*.swift'
   s.dependency 'Alamofire','~> 5.0'
   s.dependency 'PromiseKit','~> 6.9'
-  s.dependency 'ElastosDIDSDK', '~> 2.2.1'
+  s.dependency 'ElastosDIDSDK', '~> 2.2.12'
   s.dependency 'ObjectMapper'
   s.dependency 'AwaitKit'
   s.dependency 'SwiftyJSON'

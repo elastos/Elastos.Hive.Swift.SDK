@@ -72,7 +72,7 @@ public class AuthController {
     }
 
     private func checkValid(_ jwtCode: String, _ expectationDid: String) throws -> Bool {
-        let jwtParserBuilder = try JwtParserBuilder().build()
+        let jwtParserBuilder = try JwtParserBuilder().setAllwedClockSkewSeconds(300).build()
         let claim = try jwtParserBuilder.parseClaimsJwt(jwtCode).claims
 
         return claim.getExpiration()! > Date() && claim.getAudience() == expectationDid
