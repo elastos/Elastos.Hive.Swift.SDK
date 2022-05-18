@@ -42,13 +42,13 @@ Then use the **Apple Xcode** to build ElastosHiveSDK target and generate **Elast
 Open the ElastosHiveSDK.xcworkspace and Select TestHost target to run unit tests. Then press **Command-6** to open the Test navigator.
 There are three ways to run the tests:
 
-1.**Product ▸ Test** or **Command-U**. Both of these run all test classes.
+1. **Product ▸ Test** or **Command-U**. Both of these run all test classes.
 
-2.Click the arrow button in the Test navigator.
+2. Click the arrow button in the Test navigator.
 
-3.Click the diamond button in the gutter.
+3. Click the diamond button in the gutter.
 
-You can alse run an individual test method by clicking its diamond, either in the Test navigator or in the gutter.
+You can also run an individual test method by clicking its diamond, either in the Test navigator or in the gutter.
 
 When all the tests succeed, the diamonds will turn green and show checkmarks.
 
@@ -61,7 +61,7 @@ The distribution would be published to the CocoaPods platform. So, the simple wa
 $ pod 'ElastosHiveSDK'
 ```
 
-Then run the command below to install it before open your Xcode workspace:
+Then run the command below to install it before opening your Xcode workspace:
 ```shell
 $ pod install
 ```
@@ -74,7 +74,7 @@ TODO
 
 ### 1. Swift APIs Docs
 
-Run following script command to generate swift APIs document with appledoc tool:
+Run the following script command to generate Swift APIs document with appledoc tool:
 
 ```shell
 $ ./docs.sh
