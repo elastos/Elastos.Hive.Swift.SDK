@@ -29,7 +29,7 @@ public class ScriptingController {
     
     /// Create by the ServiceEndpoint.
     /// - Parameter serviceEndpoint: The ServiceEndpoint.
-    public init(_ serviceEndpoint: ServiceEndpoint, anonymous: Bool) {
+    public init(_ serviceEndpoint: ServiceEndpoint, _ anonymous: Bool) {
         _connectionManager = serviceEndpoint.connectionManager!
         // anonymous
     }

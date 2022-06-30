@@ -34,18 +34,18 @@ public protocol PaymentService {
     ///
     /// - parameter planName: the name of the pricing plan
     /// - returns: return the new order detail when the request successfully was received by back-end node, otherwise return the specific exception.
-    func placeOrder(_ planName: String) -> Promise<Order>
+    func placeOrder(_ planName: String) -> Promise<Order?>
     
     /// Obtain the order detail according to the given order id.
     ///
     /// - parameter orderId order id
     /// - returns: return the order detail in case there is a order with order id existing. otherwise, return the specific exception.
-    func getOrder(_ orderId: Int) -> Promise<Order>
+    func getOrder(_ orderId: Int) -> Promise<Order?>
     
     /// Obtain all the list of order detail.
     ///
     /// - returns: return the list of order detail on success, otherwise, return the specific exception.
-    func getOrderList() -> Promise<Array<Order>>
+    func getOrderList() -> Promise<[Order]?>
     
     /// Pay for the order with a given id.
     ///
@@ -53,19 +53,19 @@ public protocol PaymentService {
     ///   - orderId: order id
     ///   - transactionId: the transaction id on the block-chain.
     /// - returns: return the receipt detail in case the payment was accepted by hive node, otherwise return the specific exception.
-    func settleOrder(_ orderId: Int) -> Promise<Receipt>
+    func settleOrder(_ orderId: Int) -> Promise<Receipt?>
     
     /// Obtain the receipt detail according to the receipt id.
     ///
     /// - parameter receiptId: receipt id.
     /// - returns: return the receipt detail in case there is a receipt existing, otherwise, return the specific exception.
-    func getReceipt(_ receiptId: Int) -> Promise<Receipt>
+    func getReceipt(_ receiptId: Int) -> Promise<Receipt?>
     
     /// Obtain the receipt of the vault.
     ///
     /// - returns: return the receipt detail in case there is a receipt existing,
     ///           otherwise, return the specific exception.
-    func getReceipts() -> Promise<[Receipt]>
+    func getReceipts() -> Promise<[Receipt]?>
     
     /// Obtain the version of the payment module.
     ///

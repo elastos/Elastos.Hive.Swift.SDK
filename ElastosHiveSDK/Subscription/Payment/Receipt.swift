@@ -79,18 +79,6 @@ public class Receipt: Mappable  {
             return _createTime
         }
     }
-
-    public var pricingName: String? {
-        get {
-            return _pricingName
-        }
-    }
-    
-    public var paidDid: String? {
-        get {
-            return _paidDid
-        }
-    }
     
     public var receivingAddress: String? {
         get {

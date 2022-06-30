@@ -47,7 +47,7 @@ public class PaymentController {
     /// - Throws: HiveError The error comes from the hive node.
     /// - Returns: The order which is the proof of the payment of the order for the user.
     public func settleOrder(_ orderId: Int) throws -> Receipt? {
-        return try _connectionManager.settleOrder(orderId!, PayOrderParams(transIds!)).execute(Receipt.self)
+        return try _connectionManager.settleOrder("\(orderId)").execute(Receipt.self)
     }
     
     /// Get the order information of the vault by the order id.
@@ -55,7 +55,7 @@ public class PaymentController {
     ///   - orderId: of payment contract
     /// - Throws: HiveError The error comes from the hive node.
     /// - Returns: The details of the order.
-    public func getVaultOrder(_ orderId: Int) throws -> Order {
+    public func getVaultOrder(_ orderId: Int) throws -> Order? {
         return try getOrdersInternal("vault", "\(orderId)")?.first
     }
 
@@ -63,8 +63,8 @@ public class PaymentController {
     /// - Parameter orderId: of payment contract
     /// - Throws: HiveError The error comes from the hive node.
     /// - Returns: The details of the order.
-    public func getBackupOrder(_ orderId: String) throws -> Order? {
-        return try getOrdersInternal("backup", nil)?.first
+    public func getBackupOrder(_ orderId: Int) throws -> Order? {
+        return try getOrdersInternal("backup", "\(orderId)")?.first
     }
     
     /// Get the orders by the subscription type.
@@ -84,18 +84,18 @@ public class PaymentController {
     /// - Throws: HiveError The error comes from the hive node.
     /// - Returns: The details of the receipt.
     public func getReceipt(_ orderId: Int) throws -> Receipt? {
-        return getReceiptsInternal("\(orderId)")?.first
+        return try getReceiptsInternal("\(orderId)")?.first
     }
     
     /// Get the receipts belongs to the current user.
     /// - Throws: HiveError The error comes from the hive node.
     /// - Returns: The details of the receipt.
     public func getReceipts() throws -> [Receipt]? {
-        return getReceiptsInternal(nil)
+        return try getReceiptsInternal(nil)
     }
     
     private func getReceiptsInternal(_ orderId: String?) throws -> [Receipt]? {
-        return try _connectionManager.getReceipts(orderId).execute(Receipt.self).getReceipts
+        return try _connectionManager.getReceipts(orderId).execute(ReceiptCollection.self).receipts
     }
     
     /// Get the version of the payment module.
