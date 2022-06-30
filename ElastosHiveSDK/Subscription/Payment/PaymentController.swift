@@ -84,7 +84,7 @@ public class PaymentController {
     /// - Throws: HiveError The error comes from the hive node.
     /// - Returns: The details of the receipt.
     public func getReceipt(_ orderId: Int) throws -> Receipt? {
-        return getReceiptsInternal(orderId)?.first
+        return getReceiptsInternal("\(orderId)")?.first
     }
     
     /// Get the receipts belongs to the current user.

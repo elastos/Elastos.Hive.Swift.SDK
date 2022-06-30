@@ -59,7 +59,7 @@ public protocol PaymentService {
     ///
     /// - parameter receiptId: receipt id.
     /// - returns: return the receipt detail in case there is a receipt existing, otherwise, return the specific exception.
-    func getReceipt(_ receiptId: String) -> Promise<Receipt>
+    func getReceipt(_ receiptId: Int) -> Promise<Receipt>
     
     /// Obtain the receipt of the vault.
     ///

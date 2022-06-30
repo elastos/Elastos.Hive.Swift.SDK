@@ -55,6 +55,14 @@ class VaultPaymentTest: XCTestCase {
     }
     
     // Disabled
+    func test03PlaceOrderBackup() {
+        XCTAssertNoThrow(try { [self] in
+            let order = try `await`(_paymentService!.placeOrder(_pricingPlanName))
+            XCTAssertNotNil(order)
+        }())
+    }
+    
+    // Disabled
     func test03PayOrder() {
         XCTAssertNoThrow(try { [self] in
             let receipt = try `await`(_paymentService!.settleOrder(_orderId))
