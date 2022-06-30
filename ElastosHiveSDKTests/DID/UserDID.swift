@@ -4,8 +4,8 @@ import ElastosDIDSDK
 public class UserDID: DIDEntity {
     var issuer: VerifiableCredentialIssuer?
 
-    public init(_ name: String, _ mnemonic: String, _ phrasepass: String, _ storepass: String) throws {
-        try super.init(name, mnemonic, phrasepass, storepass, true)
+    public init(_ name: String, _ mnemonic: String, _ phrasepass: String, _ storepass: String, _ network: String) throws {
+        try super.init(name, mnemonic, phrasepass, storepass, true, network)
         issuer = try VerifiableCredentialIssuer(getDocument())
     }
 

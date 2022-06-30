@@ -13,6 +13,7 @@ public enum EnvironmentType: Int {
 public class TestData {
     private static var instance: TestData?
     private let RESOLVE_CACHE = "data/didCache"
+    private var _network: String
     private var _userDid: UserDID!
     private var _callerDid: UserDID!
     private var _appInstanceDid: AppDID!
@@ -45,15 +46,17 @@ public class TestData {
             let json = try JSONSerialization.jsonObject(with: jsonData)
             
             let clientConfig = ClientConfig(JSON: json as! [String : Any])
-            
+            self._network = clientConfig.resolverUrl
             try AppContext.setupResover(clientConfig!.resolverUrl, "data/didCache")
+            _ipfsGatewayUrl = clientConfig!.ipfsGateUrl
+
             let applicationConfig = clientConfig!.applicationConfig
             _appInstanceDid = try AppDID(applicationConfig.name, applicationConfig.mnemonic, applicationConfig.passPhrase, applicationConfig.storepass)
+            
             let userConfig = clientConfig!.userConfig
             _userDid = try UserDID(userConfig.name, userConfig.mnemonic, userConfig.passPhrase, userConfig.storepass)
             _nodeConfig = clientConfig!.nodeConfig
             
-            _ipfsGatewayUrl = clientConfig!.ipfsGateUrl
             
             _storePath = "\(NSHomeDirectory())/Library/Caches/data/store" + "/" + _nodeConfig.storePath
             _context = try AppContext.build(TestAppContextProvider(_storePath, _userDid, _appInstanceDid), _userDid.description)
@@ -61,6 +64,10 @@ public class TestData {
              let userConfigCaller: UserConfig = clientConfig!.crossConfig.userConfig
             _callerDid = try UserDID(userConfigCaller.name, userConfigCaller.mnemonic, userConfigCaller.passPhrase, userConfigCaller.storepass)
                         
+            _nodeConfig = clientConfig.nodeConfig
+            
+            //初始化Application Context
+            
             _callerContext = try AppContext.build(TestAppContextProvider(_storePath, _userDid, _appInstanceDid), _userDid.description)
         }
         catch {
@@ -84,11 +91,24 @@ public class TestData {
             return _nodeConfig.provider
         }
     }
+    
+    public var backupProviderAddress: String {
+        set {
+            _nodeConfig.targetHost = newValue
+        }
+        get {
+            return _nodeConfig.targetHost
+        }
+    }
  
     public func newVault() throws -> Vault {
         return try Vault(_context, providerAddress)
     }
     
+    public func newVaultSubscription() throws -> VaultSubscription {
+        return try VaultSubscription(_context, providerAddress)
+    }
+
     public func newScriptRunner() throws -> ScriptRunner {
         return try ScriptRunner(_context, providerAddress)
     }
@@ -99,6 +119,10 @@ public class TestData {
     
     public func newBackup() throws -> Backup {
         return try Backup(_context, _nodeConfig.targetHost)
+    }
+    
+    public func newBackupSubscription() throws -> VaultSubscription {
+        return try BackupSubscription(_context, backupProviderAddress)
     }
     
     public func getIpfsGatewayUrl() -> String {
