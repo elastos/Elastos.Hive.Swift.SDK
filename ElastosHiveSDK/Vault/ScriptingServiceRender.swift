@@ -26,7 +26,7 @@ public class ScriptingServiceRender: ScriptingService {
     private var _controller: ScriptingController
 
     public init(_ serviceEndpoint: ServiceEndpoint) {
-        _controller = ScriptingController(serviceEndpoint)
+        _controller = ScriptingController(serviceEndpoint, false)
     }
     
     /// Lets the vault owner register a script on his vault for a given application.

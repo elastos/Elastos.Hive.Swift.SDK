@@ -25,7 +25,7 @@ import ObjectMapper
 
 /// Represents the executable of the script.
 public class Executable: Condition {
-    private var _output: Bool?
+    private var _output: Bool = true
     
     public init(_ name: String?, _ type: ExecutableType?, _ body: Any?) {
         super.init(name, type?.rawValue, body)

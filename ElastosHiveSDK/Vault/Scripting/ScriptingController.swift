@@ -29,8 +29,9 @@ public class ScriptingController {
     
     /// Create by the ServiceEndpoint.
     /// - Parameter serviceEndpoint: The ServiceEndpoint.
-    public init(_ serviceEndpoint: ServiceEndpoint) {
+    public init(_ serviceEndpoint: ServiceEndpoint, anonymous: Bool) {
         _connectionManager = serviceEndpoint.connectionManager!
+        // anonymous
     }
     
     /// Register a script on the hive node.
