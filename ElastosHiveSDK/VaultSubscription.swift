@@ -144,7 +144,7 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentSer
     ///
     /// - parameter receiptId: receipt id.
     /// - returns: return the receipt detail in case there is a receipt existing, otherwise, return the specific exception.
-    public func getReceipt(_ orderId: String) -> Promise<Receipt> {
+    public func getReceipt(_ orderId: Int) -> Promise<Receipt> {
         return DispatchQueue.global().async(.promise){ [self] in
             return try _paymentController!.getReceipt(orderId)!
         }
