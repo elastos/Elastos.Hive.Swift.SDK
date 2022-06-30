@@ -38,7 +38,7 @@ class PromotionServiceTest: XCTestCase {
     
     public func testPromote() {
         XCTAssertNoThrow({ [self] in
-            try await(_promotionService!.promote())
+            try `await`(_promotionService!.promote())
         })
     }
 }

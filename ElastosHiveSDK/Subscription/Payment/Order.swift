@@ -26,7 +26,7 @@ import ObjectMapper
 public class Order: Mappable  {
     private var _orderId: String? // order_id
     private var _subscription: String?
-    private var _pricingName: String? // pricing_plan
+    private var _pricingPlan: String? // pricing_plan
     private var _payingDid: String? // paying_did
     private var _paymentAmount: Double? // payment_amount
     private var _proof: String?
@@ -42,8 +42,8 @@ public class Order: Mappable  {
         return _subscription
     }
     
-    public var pricingName: String? {
-        return _pricingName
+    public var pricingPlan: String? {
+        return _pricingPlan
     }
     
     public var payingDid: String? {
@@ -67,7 +67,7 @@ public class Order: Mappable  {
     }
     
     public var receivingAddress: String? {
-        return receivingAddress
+        return _receivingAddress
     }
       
     required public init?(map: Map) {}
@@ -75,7 +75,7 @@ public class Order: Mappable  {
     public func mapping(map: Map) {
         _orderId <- map["order_id"]
         _subscription <- map["subscription"]
-        _pricingName <- map["pricing_name"]
+        _pricingPlan <- map["pricing_plan"]
         _payingDid <- map["paying_did"]
         _paymentAmount <- map["payment_amount"]
         _proof <- map["proof"]

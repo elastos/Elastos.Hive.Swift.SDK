@@ -181,9 +181,9 @@ public class ServiceEndpoint: NodeRPCConnection {
     /// Get the last commit ID of the hive node.
     ///
     /// - returns: The last commit ID.
-    public func getLatestCommitId() -> Promise<String> {
+    public func getLatestCommitId() -> Promise<String?> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try AboutController(self).getCommitId()!
+            return try AboutController(self).getCommitId()
         }
     }
     

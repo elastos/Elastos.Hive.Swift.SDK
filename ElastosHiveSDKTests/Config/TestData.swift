@@ -13,7 +13,7 @@ public enum EnvironmentType: Int {
 public class TestData {
     private static var instance: TestData?
     private let RESOLVE_CACHE = "data/didCache"
-    private var _network: String
+    private var _network: String!
     private var _userDid: UserDID!
     private var _callerDid: UserDID!
     private var _appInstanceDid: AppDID!
@@ -46,15 +46,15 @@ public class TestData {
             let json = try JSONSerialization.jsonObject(with: jsonData)
             
             let clientConfig = ClientConfig(JSON: json as! [String : Any])
-            self._network = clientConfig.resolverUrl
+            self._network = clientConfig!.resolverUrl
             try AppContext.setupResover(clientConfig!.resolverUrl, "data/didCache")
             _ipfsGatewayUrl = clientConfig!.ipfsGateUrl
 
             let applicationConfig = clientConfig!.applicationConfig
-            _appInstanceDid = try AppDID(applicationConfig.name, applicationConfig.mnemonic, applicationConfig.passPhrase, applicationConfig.storepass)
+            _appInstanceDid = try AppDID(applicationConfig.name, applicationConfig.mnemonic, applicationConfig.passPhrase, applicationConfig.storepass, _network)
             
             let userConfig = clientConfig!.userConfig
-            _userDid = try UserDID(userConfig.name, userConfig.mnemonic, userConfig.passPhrase, userConfig.storepass)
+            _userDid = try UserDID(userConfig.name, userConfig.mnemonic, userConfig.passPhrase, userConfig.storepass, _network)
             _nodeConfig = clientConfig!.nodeConfig
             
             
@@ -62,9 +62,9 @@ public class TestData {
             _context = try AppContext.build(TestAppContextProvider(_storePath, _userDid, _appInstanceDid), _userDid.description)
             
              let userConfigCaller: UserConfig = clientConfig!.crossConfig.userConfig
-            _callerDid = try UserDID(userConfigCaller.name, userConfigCaller.mnemonic, userConfigCaller.passPhrase, userConfigCaller.storepass)
+            _callerDid = try UserDID(userConfigCaller.name, userConfigCaller.mnemonic, userConfigCaller.passPhrase, userConfigCaller.storepass, _network)
                         
-            _nodeConfig = clientConfig.nodeConfig
+            _nodeConfig = clientConfig!.nodeConfig
             
             //初始化Application Context
             
@@ -118,15 +118,11 @@ public class TestData {
         return try ScriptRunner(_callerContext, providerAddress)
     }
     
-    public func newAnonymousScriptRunner() throws -> ScriptRunner {
-        return try ScriptRunner(providerAddress)
-    }
-        
     public func newBackup() throws -> Backup {
         return try Backup(_context, _nodeConfig.targetHost)
     }
     
-    public func newBackupSubscription() throws -> VaultSubscription {
+    public func newBackupSubscription() throws -> BackupSubscription {
         return try BackupSubscription(_context, backupProviderAddress)
     }
     

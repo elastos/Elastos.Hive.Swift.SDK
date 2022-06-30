@@ -24,9 +24,9 @@ import Foundation
 import ObjectMapper
 
 public class ReceiptCollection: Mappable  {
-    private var _receipts: [Order]?
+    private var _receipts: [Receipt]?
 
-    public var receipts: [Order]? {
+    public var receipts: [Receipt]? {
         return _receipts
     }
     

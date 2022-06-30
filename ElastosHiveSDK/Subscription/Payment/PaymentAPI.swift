@@ -35,7 +35,7 @@ extension ConnectionManager {
     
     public func settleOrder(_ orderId: String) throws -> DataRequest {
         let url = self.baseURL + "/api/v2/payment/order/\(orderId)"
-        return try self.createDataRequest(url, .post)
+        return try self.createDataRequest(url, .post, nil)
     }
     
     public func getOrders(_ subscription: String, _ orderId: String?) throws -> DataRequest {

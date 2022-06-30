@@ -39,8 +39,8 @@ class VaultPaymentTest: XCTestCase {
         XCTAssertNoThrow(try { [self] in
             let testData = TestData.shared()
 //            _paymentService = try VaultSubscription(testData.appContext, testData.providerAddress)
-            _vaultSubscription = TestData.shared().newVaultSubscription()
-            _backupSubscription = TestData.shared().newBackupSubscription()
+            _vaultSubscription = try TestData.shared().newVaultSubscription()
+            _backupSubscription = try TestData.shared().newBackupSubscription()
             _backupSubscription?.subscribe()
         }())
     }
@@ -60,13 +60,13 @@ class VaultPaymentTest: XCTestCase {
             let order = try `await`(_vaultSubscription!.placeOrder(PRICING_PLAN_NAME))
             XCTAssertNotNil(order)
             XCTAssertEqual(order!.subscription, "vault")
-            XCTAssertEqual(order.pricingPlan, PRICING_PLAN_NAME)
-            XCTAssertNotNil(order.payingDid)
-            XCTAssertTrue(order!.paymentAmount > 0)
-            XCTAssertTrue(order.createTime > 0)
-            XCTAssertTrue(order.expirationDate > 0)
-            XCTAssertNotNil(order.receivingAddress)
-            XCTAssertNotNil(order.receiptProof)
+            XCTAssertEqual(order!.pricingPlan, PRICING_PLAN_NAME)
+            XCTAssertNotNil(order!.payingDid)
+            XCTAssertTrue(order!.paymentAmount! > 0)
+            XCTAssertTrue(order!.createTime! > 0)
+            XCTAssertTrue(order!.expirationTime! > 0)
+            XCTAssertNotNil(order!.receivingAddress)
+            XCTAssertNotNil(order!.proof)
         }())
     }
     
@@ -75,15 +75,15 @@ class VaultPaymentTest: XCTestCase {
         XCTAssertNoThrow(try { [self] in
             let order = try `await`(_backupSubscription!.placeOrder(PRICING_PLAN_NAME))
             XCTAssertNotNil(order)
-            let subscription = order.subscription
-            XCTAssertTrue((subscription = "vault" || subscription = "backup"))
-            XCTAssertEqual(order.pricingPlan, PRICING_PLAN_NAME)
-            XCTAssertNotNil(order.payingDid)
-            XCTAssertTrue(order.paymentAmount > 0)
-            XCTAssertTrue(order.createTime > 0)
-            XCTAssertTrue(order.expirationTime > 0)
-            XCTAssertNotNil(order.receivingAddress)
-            XCTAssertNotNil(order.proof)
+            let subscription = order!.subscription
+            XCTAssertTrue((subscription == "vault" || subscription == "backup"))
+            XCTAssertEqual(order!.pricingPlan, PRICING_PLAN_NAME)
+            XCTAssertNotNil(order!.payingDid)
+            XCTAssertTrue(order!.paymentAmount! > 0)
+            XCTAssertTrue(order!.createTime! > 0)
+            XCTAssertTrue(order!.expirationTime! > 0)
+            XCTAssertNotNil(order!.receivingAddress)
+            XCTAssertNotNil(order!.proof)
 
         }())
     }
@@ -94,16 +94,16 @@ class VaultPaymentTest: XCTestCase {
             // TODO: to do pay, please use contract
             let receipt = try `await`(_backupSubscription!.settleOrder(2))
             XCTAssertNotNil(receipt)
-            XCTAssertNotNil(receipt.receiptId)
-            XCTAssertNotNil(receipt.orderId)
-            let subscription = receipt.subscription
-            XCTAssertTrue((subscription = "vault")
-            XCTAssertEqual(receipt.pricingPlan, PRICING_PLAN_NAME)
-            XCTAssertTrue(receipt.paymentAmount > 0)
-            XCTAssertNotNil(receipt.payingDid)
-            XCTAssertTrue(receipt.createTime > 0)
-            XCTAssertNotNil(receipt.receivingAddress)
-            XCTAssertNotNil(receipt.receiptProof)
+            XCTAssertNotNil(receipt!.receiptId)
+            XCTAssertNotNil(receipt!.orderId)
+            let subscription = receipt!.subscription
+            XCTAssertTrue((subscription == "vault"))
+            XCTAssertEqual(receipt!.pricingPlan, PRICING_PLAN_NAME)
+            XCTAssertTrue(receipt!.paymentAmount! > 0)
+            XCTAssertNotNil(receipt!.paidDid)
+            XCTAssertTrue(receipt!.createTime! > 0)
+            XCTAssertNotNil(receipt!.receivingAddress)
+            XCTAssertNotNil(receipt!.receiptProof)
         }())
     }
     
@@ -111,18 +111,18 @@ class VaultPaymentTest: XCTestCase {
     func test032SettleOrderBackup() {
         XCTAssertNoThrow(try { [self] in
             // TODO: to do pay, please use contract
-            let receipt = try `await`(_backupSubscription!.getOrder(3))
+            let receipt = try `await`(_backupSubscription!.settleOrder(3))
             XCTAssertNotNil(receipt)
-            XCTAssertNotNil(receipt.receiptId)
-            XCTAssertNotNil(receipt.orderId)
-            let subscription = receipt.subscription
-            XCTAssertTrue((subscription = "backup")
-            XCTAssertEqual(receipt.pricingPlan, PRICING_PLAN_NAME)
-            XCTAssertTrue(receipt.paymentAmount > 0)
-            XCTAssertNotNil(receipt.payingDid)
-            XCTAssertTrue(receipt.createTime > 0)
-            XCTAssertNotNil(receipt.receivingAddress)
-            XCTAssertNotNil(receipt.receiptProof)
+            XCTAssertNotNil(receipt!.receiptId)
+            XCTAssertNotNil(receipt!.orderId)
+            let subscription = receipt!.subscription
+            XCTAssertTrue((subscription == "backup"))
+            XCTAssertEqual(receipt!.pricingPlan, PRICING_PLAN_NAME)
+            XCTAssertTrue(receipt!.paymentAmount! > 0)
+            XCTAssertNotNil(receipt!.paidDid)
+            XCTAssertTrue(receipt!.createTime! > 0)
+            XCTAssertNotNil(receipt!.receivingAddress)
+            XCTAssertNotNil(receipt!.receiptProof)
         }())
     }
     
@@ -131,15 +131,15 @@ class VaultPaymentTest: XCTestCase {
         XCTAssertNoThrow(try { [self] in
             let order = try `await`(_vaultSubscription!.getOrder(2))
             XCTAssertNotNil(order)
-            let subscription = order.subscription
-            XCTAssertTrue((subscription = "vault")
-            XCTAssertEqual(order.pricingPlan, PRICING_PLAN_NAME)
-            XCTAssertTrue(order.paymentAmount > 0)
-            XCTAssertNotNil(order.payingDid)
-            XCTAssertTrue(order.createTime > 0)
-            XCTAssertTrue(order.expirationTime > 0)
-            XCTAssertNotNil(order.receivingAddress)
-            XCTAssertNotNil(order.proof)
+            let subscription = order!.subscription
+            XCTAssertTrue((subscription == "vault"))
+            XCTAssertEqual(order!.pricingPlan, PRICING_PLAN_NAME)
+            XCTAssertTrue(order!.paymentAmount! > 0)
+            XCTAssertNotNil(order!.payingDid)
+            XCTAssertTrue(order!.createTime! > 0)
+            XCTAssertTrue(order!.expirationTime! > 0)
+            XCTAssertNotNil(order!.receivingAddress)
+            XCTAssertNotNil(order!.proof)
         }())
     }
                          
@@ -148,15 +148,15 @@ class VaultPaymentTest: XCTestCase {
         XCTAssertNoThrow(try { [self] in
             let order = try `await`(_backupSubscription!.getOrder(3))
             XCTAssertNotNil(order)
-            let subscription = order.subscription
-            XCTAssertTrue((subscription = "backup")
-            XCTAssertEqual(order.pricingPlan, PRICING_PLAN_NAME)
-            XCTAssertTrue(order.paymentAmount > 0)
-            XCTAssertNotNil(order.payingDid)
-            XCTAssertTrue(order.createTime > 0)
-            XCTAssertTrue(order.expirationTime > 0)
-            XCTAssertNotNil(order.receivingAddress)
-            XCTAssertNotNil(order.proof)
+            let subscription = order!.subscription
+            XCTAssertTrue((subscription == "backup"))
+            XCTAssertEqual(order!.pricingPlan, PRICING_PLAN_NAME)
+            XCTAssertTrue(order!.paymentAmount! > 0)
+            XCTAssertNotNil(order!.payingDid)
+            XCTAssertTrue(order!.createTime! > 0)
+            XCTAssertTrue(order!.expirationTime! > 0)
+            XCTAssertNotNil(order!.receivingAddress)
+            XCTAssertNotNil(order!.proof)
     }())
  }
     // Disabled
@@ -164,17 +164,17 @@ class VaultPaymentTest: XCTestCase {
         XCTAssertNoThrow(try { [self] in
             let orders = try `await`(_vaultSubscription!.getOrderList())
             XCTAssertNotNil(orders)
-            XCTAssertTrue(!orders.isEmpty)
-            let order = orders.first
-            let subscription = order.subscription
-            XCTAssertTrue((subscription = "vault" || subscription = "backup")
-            XCTAssertEqual(order.pricingPlan, PRICING_PLAN_NAME)
-            XCTAssertNotNil(order.payingDid)
-            XCTAssertTrue(order.paymentAmount > 0)
-            XCTAssertTrue(order.createTime > 0)
-            XCTAssertTrue(order.expirationTime > 0)
-            XCTAssertNotNil(order.receivingAddress)
-            XCTAssertNotNil(order.proof)
+            XCTAssertTrue(!orders!.isEmpty)
+            let order = orders!.first
+            let subscription = order!.subscription
+            XCTAssertTrue((subscription == "vault" || subscription == "backup"))
+            XCTAssertEqual(order!.pricingPlan, PRICING_PLAN_NAME)
+            XCTAssertNotNil(order!.payingDid)
+            XCTAssertTrue(order!.paymentAmount! > 0)
+            XCTAssertTrue(order!.createTime! > 0)
+            XCTAssertTrue(order!.expirationTime! > 0)
+            XCTAssertNotNil(order!.receivingAddress)
+            XCTAssertNotNil(order!.proof)
         }())
     }
 
@@ -183,36 +183,36 @@ class VaultPaymentTest: XCTestCase {
         XCTAssertNoThrow(try { [self] in
             let receipt = try `await`(_vaultSubscription!.getReceipt(2))
             XCTAssertNotNil(receipt)
-            XCTAssertNotNil(receipt.receiptId)
-            XCTAssertNotNil(receipt.orderId)
-            let subscription = order.subscription
-            XCTAssertTrue((subscription = "vault" || subscription = "backup")
-            XCTAssertEqual(receipt.pricingPlan, PRICING_PLAN_NAME)
-            XCTAssertNotNil(receipt.payingDid)
-            XCTAssertTrue(receipt.paymentAmount > 0)
-            XCTAssertTrue(receipt.createTime > 0)
-            XCTAssertNotNil(receipt.receivingAddress)
-            XCTAssertNotNil(receipt.receiptProof)
+            XCTAssertNotNil(receipt!.receiptId)
+            XCTAssertNotNil(receipt!.orderId)
+            let subscription = receipt!.subscription
+            XCTAssertTrue((subscription == "vault" || subscription == "backup"))
+            XCTAssertEqual(receipt!.pricingPlan, PRICING_PLAN_NAME)
+            XCTAssertNotNil(receipt!.paidDid)
+            XCTAssertTrue(receipt!.paymentAmount! > 0)
+            XCTAssertTrue(receipt!.createTime! > 0)
+            XCTAssertNotNil(receipt!.receivingAddress)
+            XCTAssertNotNil(receipt!.receiptProof)
         }())
     }
 
     //Disabled
     func test07GetReceipts() {
         XCTAssertNoThrow(try { [self] in
-            var receipts = try `await`(_vaultSubscription!.getReceipts())
+            let receipts = try `await`(_vaultSubscription!.getReceipts())
             XCTAssertNotNil(receipts)
-            XCTAssertTrue)(receipts.count > 0)
-            let receipt = receipts.first
-            XCTAssertNotNil(receipt.receiptId)
-            XCTAssertNotNil(receipt.orderId)
-            let subscription = receipt.subscription
-            XCTAssertTrue((subscription = "vault" || subscription = "backup")
-            XCTAssertEqual(receipt.pricingPlan, PRICING_PLAN_NAME)
-            XCTAssertNotNil(receipt.payingDid)
-            XCTAssertTrue(receipt.paymentAmount > 0)
-            XCTAssertTrue(receipt.createTime > 0)
-            XCTAssertNotNil(receipt.receivingAddress)
-            XCTAssertNotNil(receipt.receiptProof)
+            XCTAssertTrue(receipts!.count > 0)
+            let receipt = receipts!.first
+            XCTAssertNotNil(receipt!.receiptId)
+            XCTAssertNotNil(receipt!.orderId)
+            let subscription = receipt!.subscription
+            XCTAssertTrue((subscription == "vault" || subscription == "backup"))
+            XCTAssertEqual(receipt!.pricingPlan, PRICING_PLAN_NAME)
+            XCTAssertNotNil(receipt!.paidDid)
+            XCTAssertTrue(receipt!.paymentAmount! > 0)
+            XCTAssertTrue(receipt!.createTime! > 0)
+            XCTAssertNotNil(receipt!.receivingAddress)
+            XCTAssertNotNil(receipt!.receiptProof)
         }())
     }
 }
