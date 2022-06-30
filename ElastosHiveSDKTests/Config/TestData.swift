@@ -110,13 +110,18 @@ public class TestData {
     }
 
     public func newScriptRunner() throws -> ScriptRunner {
-        return try ScriptRunner(_context, providerAddress)
+        return try ScriptRunner(_callerContext, providerAddress)
     }
+    
     
     public func newCallerScriptRunner() throws -> ScriptRunner {
         return try ScriptRunner(_callerContext, providerAddress)
     }
     
+    public func newAnonymousScriptRunner() throws -> ScriptRunner {
+        return try ScriptRunner(providerAddress)
+    }
+        
     public func newBackup() throws -> Backup {
         return try Backup(_context, _nodeConfig.targetHost)
     }

@@ -41,12 +41,12 @@ public class ScriptRunner: ServiceEndpoint, ScriptingInvocationService {
     
     public override init(_ context: AppContext) throws {
         try super.init(context)
-        _controller = ScriptingController(self)
+        _controller = ScriptingController(self, false)
     }
     
     public override init(_ context: AppContext, _ providerAddress: String) throws {
         try super.init(context, providerAddress)
-        _controller = ScriptingController(self)
+        _controller = ScriptingController(self, true)
     }
 
     /// Invoke the execution of a specified script registered previously by the vault owner, where the script is defined with certain preset routines. It's the general invocation method for external users to call.
