@@ -28,14 +28,14 @@ extension ConnectionManager {
         return try self.createDataRequest(url, .put, params.toJSON())
     }
     
-    public func createOrder(_ params: CreateOrderParams) throws -> DataRequest {
-        let url = self.baseURL + "/api/v2/payment/order"
-        return try self.createDataRequest(url, .put, params.toJSON())
-    }
+//    public func createOrder(_ params: CreateOrderParams) throws -> DataRequest {
+//        let url = self.baseURL + "/api/v2/payment/order"
+//        return try self.createDataRequest(url, .put, params.toJSON())
+//    }
     
-    public func payOrder(_ orderId: String, _ params: PayOrderParams) throws -> DataRequest {
+    public func settleOrder(_ orderId: String) throws -> DataRequest {
         let url = self.baseURL + "/api/v2/payment/order/\(orderId)"
-        return try self.createDataRequest(url, .post, params.toJSON())
+        return try self.createDataRequest(url, .post)
     }
     
     public func getOrders(_ subscription: String, _ orderId: String?) throws -> DataRequest {
@@ -43,8 +43,8 @@ extension ConnectionManager {
         return try self.createDataRequest(url, .get, nil)
     }
     
-    public func getReceipt(_ orderId: String) throws -> DataRequest {
-        let url = self.baseURL + "/api/v2/payment/receipt?order_id=\(orderId)"
+    public func getReceipts(_ orderId: String?) throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/payment/receipt?order_id=\(orderId ?? "")"
         return try self.createDataRequest(url, .get, nil)
     }
     
