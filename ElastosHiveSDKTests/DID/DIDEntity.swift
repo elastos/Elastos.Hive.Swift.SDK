@@ -10,16 +10,16 @@ public class DIDEntity: NSObject {
     var store: DIDStore?
     var did: DID?
     
-    init(_ name: String, _ mnemonic: String, _ phrasepass: String, _ storepass: String, _ needResolve: Bool) throws {
+    init(_ name: String, _ mnemonic: String, _ phrasepass: String, _ storepass: String, _ needResolve: Bool, _ network: String) throws {
         self.phrasepass = phrasepass
         self.storepass = storepass
         self.name = name
         super.init()
-        try initDid(mnemonic, needResolve)
+        try initDid(mnemonic, needResolve, network)
     }
     
-    func initDid(_ mnemonic: String, _ needResolve: Bool) throws {
-        let storePath = "\(NSHomeDirectory())/Library/Caches/data/didCache/" + name
+    func initDid(_ mnemonic: String, _ needResolve: Bool, _ network: String) throws {
+        let storePath = "\(NSHomeDirectory())/Library/Caches/data/\(network)/didCache/" + name
         store = try DIDStore.open(atPath: storePath)
         let rootIdentity = try getRootIdentity(mnemonic)
         try initDidByRootIdentity(rootIdentity, needResolve)

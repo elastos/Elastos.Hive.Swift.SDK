@@ -69,7 +69,6 @@
 		303CD5602607606B00865472 /* ScriptingApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303CD55F2607606B00865472 /* ScriptingApi.swift */; };
 		303CD5952607991400865472 /* Production.conf in Resources */ = {isa = PBXBuildFile; fileRef = 303CD5922607991300865472 /* Production.conf */; };
 		303CD5962607991400865472 /* Developing.conf in Resources */ = {isa = PBXBuildFile; fileRef = 303CD5932607991400865472 /* Developing.conf */; };
-		303CD5972607991400865472 /* Local.conf in Resources */ = {isa = PBXBuildFile; fileRef = 303CD5942607991400865472 /* Local.conf */; };
 		3045A73A260237FD0037527A /* DatabaseServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A739260237FC0037527A /* DatabaseServiceTest.swift */; };
 		3045A741260241FC0037527A /* BackupSubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A740260241FC0037527A /* BackupSubscription.swift */; };
 		3045A75926024C1E0037527A /* ScriptingServiceRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045A75826024C1E0037527A /* ScriptingServiceRender.swift */; };
@@ -294,7 +293,6 @@
 		303CD55F2607606B00865472 /* ScriptingApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptingApi.swift; sourceTree = "<group>"; };
 		303CD5922607991300865472 /* Production.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Production.conf; sourceTree = "<group>"; };
 		303CD5932607991400865472 /* Developing.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Developing.conf; sourceTree = "<group>"; };
-		303CD5942607991400865472 /* Local.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Local.conf; sourceTree = "<group>"; };
 		3045A739260237FC0037527A /* DatabaseServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseServiceTest.swift; sourceTree = "<group>"; };
 		3045A740260241FC0037527A /* BackupSubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupSubscription.swift; sourceTree = "<group>"; };
 		3045A75826024C1E0037527A /* ScriptingServiceRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptingServiceRender.swift; sourceTree = "<group>"; };
@@ -525,7 +523,6 @@
 				30E9482C260B0F4600452FF5 /* big_ios.png */,
 				30D3934E260A5527007A9E09 /* test_ios.txt */,
 				303CD5932607991400865472 /* Developing.conf */,
-				303CD5942607991400865472 /* Local.conf */,
 				303CD5922607991300865472 /* Production.conf */,
 			);
 			path = Resources;
@@ -1013,7 +1010,6 @@
 				30E9482D260B0F4600452FF5 /* big_ios.png in Resources */,
 				303CD5962607991400865472 /* Developing.conf in Resources */,
 				303CD5952607991400865472 /* Production.conf in Resources */,
-				303CD5972607991400865472 /* Local.conf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
