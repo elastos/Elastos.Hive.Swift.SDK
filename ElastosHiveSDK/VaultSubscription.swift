@@ -113,7 +113,7 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentSer
     ///
     /// - parameter orderId order id
     /// - returns: return the order detail in case there is a order with order id existing. otherwise, return the specific exception.
-    public func getOrder(_ orderId: String) -> Promise<Order> {
+    public func getOrder(_ orderId: Int) -> Promise<Order> {
         return DispatchQueue.global().async(.promise){ [self] in
             return try _paymentController!.getOrder(orderId)!;
         }
@@ -125,9 +125,9 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentSer
     ///   - orderId: order id
     ///   - transactionId: the transaction id on the block-chain.
     /// - returns: return the receipt detail in case the payment was accepted by hive node, otherwise return the specific exception.
-    public func payOrder(_ orderId: String, _ transactionId: String) -> Promise<Receipt> {
+    public func settleOrder(_ orderId: Int) -> Promise<Receipt> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _paymentController!.payOrder(orderId, transactionId)!;
+            return try _paymentController?.settleOrder(orderId)!
         }
     }
     
@@ -147,6 +147,16 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentSer
     public func getReceipt(_ orderId: String) -> Promise<Receipt> {
         return DispatchQueue.global().async(.promise){ [self] in
             return try _paymentController!.getReceipt(orderId)!
+        }
+    }
+    
+    /// Obtain the receipt of the vault.
+    ///
+    /// - returns: the receipt detail in case there is a receipt existing,
+    /// otherwise, return the specific exception.
+    public func getReceipts() -> Promise<[Receipt]> {
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _paymentController?.getReceipts()!
         }
     }
 

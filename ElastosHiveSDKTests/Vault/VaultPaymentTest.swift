@@ -57,7 +57,7 @@ class VaultPaymentTest: XCTestCase {
     // Disabled
     func test03PayOrder() {
         XCTAssertNoThrow(try { [self] in
-            let receipt = try `await`(_paymentService!.payOrder(_orderId, _transId))
+            let receipt = try `await`(_paymentService!.settleOrder(_orderId))
             XCTAssertNotNil(receipt.receiptId)
             XCTAssertNotNil(receipt.orderId)
         }())
@@ -100,7 +100,7 @@ class VaultPaymentTest: XCTestCase {
             order = try `await`(_paymentService!.getOrder(order.orderId!))
             XCTAssertNotNil(order)
             XCTAssertNotNil(order.orderId)
-            let receipt = try `await`(_paymentService!.payOrder(order.orderId!, _transId))
+            let receipt = try `await`(_paymentService!.settleOrder(order.orderId!))
             XCTAssertNotNil(receipt)
             XCTAssertNotNil(receipt.receiptId)
             XCTAssertNotNil(receipt.orderId)

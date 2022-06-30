@@ -23,11 +23,8 @@
 import Foundation
 import ObjectMapper
 
-/**
- * The backup subscription is for subscribe or unsubscribe the backup service.
- *
- * With the backup service, the vault data can be backup for security purpose.
- */
+/// The backup subscription is for subscribe or unsubscribe the backup service.
+/// With the backup service, the vault data can be backup for security purpose.
 public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentService {    
     private var _subscriptionController: SubscriptionController?
     private var _paymentController: PaymentController?
@@ -119,9 +116,9 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentSe
     ///
     /// - parameter orderId order id
     /// - returns: return the order detail in case there is a order with order id existing. otherwise, return the specific exception.
-    public func getOrder(_ orderId: String) -> Promise<Order> {
+    public func getOrder(_ orderId: Int) -> Promise<Order> {
         return DispatchQueue.global().async(.promise){ [self] in
-            throw HiveError.NotImplementedException("Payment will be supported later")
+            return _paymentController?.getBackupOrder(orderId)
         }
     }
     
@@ -131,9 +128,9 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentSe
     ///   - orderId: order id
     ///   - transactionId: the transaction id on the block-chain.
     /// - returns: return the receipt detail in case the payment was accepted by hive node, otherwise return the specific exception.
-    public func payOrder(_ orderId: String, _ transIds: String) -> Promise<Receipt> {
+    public func settleOrder(_ orderId: Int) -> Promise<Receipt> {
         return DispatchQueue.global().async(.promise){ [self] in
-            throw HiveError.NotImplementedException("Payment will be supported later")
+            return _paymentController?.settleOrder(orderId)
         }
     }
     
@@ -142,7 +139,7 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentSe
     /// - returns: return the list of order detail on success, otherwise, return the specific exception.
     public func getOrderList() -> Promise<Array<Order>> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _paymentController!.getOrders("backup")!
+            return try _paymentController?.getOrders("backup")!
         }
     }
     
@@ -150,9 +147,19 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentSe
     ///
     /// - parameter receiptId: receipt id.
     /// - returns: return the receipt detail in case there is a receipt existing, otherwise, return the specific exception.
-    public func getReceipt(_ orderId: String) -> Promise<Receipt> {
+    public func getReceipt(_ orderId: Int) -> Promise<Receipt> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _paymentController!.getReceipt(orderId)!
+            return try _paymentController?.getReceipt(orderId)!
+        }
+    }
+    
+    /// Obtain the receipt of the vault.
+    ///
+    /// - returns: the receipt detail in case there is a receipt existing,
+    /// otherwise, return the specific exception.
+    public func getReceipts() -> Promise<[Receipt]> {
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _paymentController?.getReceipts()!
         }
     }
     

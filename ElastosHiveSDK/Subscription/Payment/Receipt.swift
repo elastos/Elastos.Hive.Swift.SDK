@@ -24,13 +24,15 @@ import Foundation
 import ObjectMapper
 
 public class Receipt: Mappable  {
-    private var _receiptId: String?
-    private var _orderId: String?
-    private var _transactionId: String?
-    private var _pricingName: String?
-    private var _paidDid: String?
-    private var _elaAmount: Double?
-    private var _proof: String?
+    private var _receiptId: String? // receipt_id
+    private var _orderId: String? // order_id
+    private var _subscription: String? // subscription
+    private var _pricingPlan: String? // pricing_plan
+    private var _paymentAmount: Double? // payment_amount
+    private var _paidDid: String? // paid_did
+    private var _createTime: Int? // create_time
+    private var _receivingAddress: String? // receiving_address
+    private var _receiptProof: String? // receipt_proof
 
     public init() {
         
@@ -48,12 +50,36 @@ public class Receipt: Mappable  {
         }
     }
     
-    public var transactionId: String? {
+    public var subscription: String? {
         get {
-            return _transactionId
+            return _subscription
         }
     }
     
+    public var pricingPlan: String? {
+        get {
+            return _pricingPlan
+        }
+    }
+    
+    public var paymentAmount: Double? {
+        get {
+            return _paymentAmount
+        }
+    }
+    
+    public var paidDid: String? {
+        get {
+            return _paidDid
+        }
+    }
+    
+    public var createTime: Int? {
+        get {
+            return _createTime
+        }
+    }
+
     public var pricingName: String? {
         get {
             return _pricingName
@@ -66,15 +92,15 @@ public class Receipt: Mappable  {
         }
     }
     
-    public var elaAmount: Double? {
+    public var receivingAddress: String? {
         get {
-            return _elaAmount
+            return _receivingAddress
         }
     }
     
-    public var proof: String? {
+    public var receiptProof: String? {
         get {
-            return _proof
+            return _receiptProof
         }
     }
     
@@ -85,11 +111,12 @@ public class Receipt: Mappable  {
     public func mapping(map: Map) {
         _receiptId <- map["receipt_id"]
         _orderId <- map["order_id"]
-        _transactionId <- map["transaction_id"]
-        _pricingName <- map["pricing_name"]
+        _subscription <- map["subscription"]
+        _pricingPlan <- map["pricing_plan"]
+        _paymentAmount <- map["payment_amount"]
         _paidDid <- map["paid_did"]
-        _elaAmount <- map["ela_amount"]
-        _proof <- map["proof"]
+        _createTime <- map["create_time"]
+        _receivingAddress <- map["receiving_address"]
+        _receiptProof <- map["receipt_proof"]
     }
 }
-

@@ -34,37 +34,37 @@ public class PaymentController {
     /// This is for creating the payment order which upgrades the pricing plan of the vault or the backup.
     /// - Parameters:
     ///   - subscription: The value is "vault" or "backup".
-    ///   - pricingPlan: The pricing plan name.
+    ///   - pricingName: The pricing plan name.
     /// - Throws: HiveError The error comes from the hive node.
     /// - Returns: The details of the order.
-    public func placeOrder(_ subscription: String?, _ pricingPlan: String?) throws -> Order? {
-        return try _connectionManager.placeOrder(CreateOrderParams(subscription!, pricingPlan!)).execute(Order.self)
+    public func placeOrder(_ subscription: String?, _ pricingName: String?) throws -> Order? {
+        return try _connectionManager.placeOrder(CreateOrderParams(subscription!, pricingName!)).execute(Order.self)
     }
-    
-    public func createOrder(_ subscription: String?, _ pricingPlan: String?) throws -> Order? {
-        return try _connectionManager.createOrder(CreateOrderParams("", "")).execute(Order.self)
-    }
-    
+
     /// Pay the order by the order id and the transaction id.
     /// - Parameters:
-    ///   - orderId: The order id.
-    ///   - transIds: The transaction id.
+    ///   - orderId: The order id of payment contract
     /// - Throws: HiveError The error comes from the hive node.
-    /// - Returns: The receipt which is the proof of the payment of the order for the user.
-    public func payOrder(_ orderId: String?, _ transIds: String?) throws -> Receipt? {
-        return try _connectionManager.payOrder(orderId!, PayOrderParams(transIds!)).execute(Receipt.self)
+    /// - Returns: The order which is the proof of the payment of the order for the user.
+    public func settleOrder(_ orderId: Int) throws -> Receipt? {
+        return try _connectionManager.settleOrder(orderId!, PayOrderParams(transIds!)).execute(Receipt.self)
     }
     
-    public func getOrderInfo(_ orderId: String?) throws -> Order? {
-        throw HiveError.NotImplementedException(nil)
-    }
-    
-    /// Get the order information by the order id.
-    /// - Parameter orderId: The order id.
+    /// Get the order information of the vault by the order id.
+    /// - Parameters:
+    ///   - orderId: of payment contract
     /// - Throws: HiveError The error comes from the hive node.
     /// - Returns: The details of the order.
-    public func getOrder(_ orderId: String) throws -> Order? {
-        return try getOrdersInternal("vault", nil)?.first
+    public func getVaultOrder(_ orderId: Int) throws -> Order {
+        return try getOrdersInternal("vault", "\(orderId)")?.first
+    }
+
+    /// Get the order information of the backup by the order id.
+    /// - Parameter orderId: of payment contract
+    /// - Throws: HiveError The error comes from the hive node.
+    /// - Returns: The details of the order.
+    public func getBackupOrder(_ orderId: String) throws -> Order? {
+        return try getOrdersInternal("backup", nil)?.first
     }
     
     /// Get the orders by the subscription type.
@@ -83,8 +83,19 @@ public class PaymentController {
     /// - Parameter orderId: The order id.
     /// - Throws: HiveError The error comes from the hive node.
     /// - Returns: The details of the receipt.
-    public func getReceipt(_ orderId: String) throws -> Receipt? {
-        return try _connectionManager.getReceipt(orderId).execute(Receipt.self)
+    public func getReceipt(_ orderId: Int) throws -> Receipt? {
+        return getReceiptsInternal(orderId)?.first
+    }
+    
+    /// Get the receipts belongs to the current user.
+    /// - Throws: HiveError The error comes from the hive node.
+    /// - Returns: The details of the receipt.
+    public func getReceipts() throws -> [Receipt]? {
+        return getReceiptsInternal(nil)
+    }
+    
+    private func getReceiptsInternal(_ orderId: String?) throws -> [Receipt]? {
+        return try _connectionManager.getReceipts(orderId).execute(Receipt.self).getReceipts
     }
     
     /// Get the version of the payment module.

@@ -24,14 +24,16 @@ import Foundation
 import ObjectMapper
 
 public class Order: Mappable  {
-    private var _orderId: String?
+    private var _orderId: String? // order_id
     private var _subscription: String?
-    private var _pricingName: String?
-    private var _elaAmount: Double?
-    private var _elaAddress: String?
+    private var _pricingName: String? // pricing_plan
+    private var _payingDid: String? // paying_did
+    private var _paymentAmount: Double? // payment_amount
     private var _proof: String?
-    private var _createTime: Int64?
-    
+    private var _createTime: Int64? // create_time
+    private var _expirationTime: Int64? // expiration_time
+    private var _receivingAddress: String? // receiving_address
+
     public var orderId: String? {
         return _orderId
     }
@@ -44,14 +46,14 @@ public class Order: Mappable  {
         return _pricingName
     }
     
-    public var elaAmount: Double? {
-        return _elaAmount
-    }
-  
-    public var elaAddress: String? {
-        return _elaAddress
+    public var payingDid: String? {
+        return _payingDid
     }
     
+    public var paymentAmount: Double? {
+        return _paymentAmount
+    }
+
     public var proof: String? {
         return _proof
     }
@@ -60,15 +62,25 @@ public class Order: Mappable  {
         return _createTime
     }
     
+    public var expirationTime: Int64? {
+        return _expirationTime
+    }
+    
+    public var receivingAddress: String? {
+        return receivingAddress
+    }
+      
     required public init?(map: Map) {}
     
     public func mapping(map: Map) {
         _orderId <- map["order_id"]
         _subscription <- map["subscription"]
         _pricingName <- map["pricing_name"]
-        _elaAmount <- map["ela_amount"]
-        _elaAddress <- map["ela_address"]
+        _payingDid <- map["paying_did"]
+        _paymentAmount <- map["payment_amount"]
         _proof <- map["proof"]
         _createTime <- map["create_time"]
+        _expirationTime <- map["expiration_time"]
+        _receivingAddress <- map["receiving_address"]
     }
 }
