@@ -98,17 +98,10 @@ public class AccessToken: CodeFetcher {
         serviceDid = _endpoint.serviceInstanceDid
         address = _endpoint.providerAddress
         
+        jwtCode = try _storage?.loadAccessTokenByAddress(address!)
+
         if serviceDid != nil {
             jwtCode = try _storage?.loadAccessToken(serviceDid!)
-        }
-        
-        if jwtCode != nil && isExpired(jwtCode) {
-            try _storage?.clearAccessTokenByAddress(address!)
-            try _storage?.clearAccessToken(serviceDid!)
-        }
-        
-        if jwtCode == nil {
-            jwtCode = try _storage?.loadAccessTokenByAddress(address!)
         }
         
         if jwtCode != nil && isExpired(jwtCode) {
@@ -119,6 +112,17 @@ public class AccessToken: CodeFetcher {
     }
     
     private func isExpired(_ jwtCode: String?) -> Bool {
+        
+        do {
+            let claims = try JwtParserBuilder().setAllwedClockSkewSeconds(300).build().parseClaimsJwt(jwtCode!).claims
+            
+            let expirationTime = claims.getExpiration()
+            let currentTime = Date()
+            return currentTime > expirationTime!
+        } catch {
+            return true
+        }
+
         return false
     }
     
