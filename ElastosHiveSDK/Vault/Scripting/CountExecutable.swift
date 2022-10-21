@@ -21,16 +21,32 @@
  */
 
 import Foundation
+import ObjectMapper
 
-public enum ExecutableType: String {
-    case AGGREGATED = "aggregated"
-    case FIND = "find"
-    case INSERT = "insert"
-    case UPDATE = "update"
-    case DELETE = "delete"
-    case FILE_UPLOAD = "fileUpload"
-    case FILE_DOWNLOAD = "fileDownload"
-    case FILE_PROPERTIES = "fileProperties"
-    case FILE_HASH = "fileHash"
-    case COUNT = "count"
+/**
+ * Client side representation of a back-end execution that runs a mongo "count" query
+ * and returns the count of the result.
+ */
+public class CountExecutable: Executable {
+    
+    public init(_ name: String?, _ collectionName: String?, _ filter: Dictionary<String, Any>?, _ options: Dictionary<String, Any>?) {
+        super.init(name, ExecutableType.COUNT, nil)
+        super._body = CountBody(collectionName, filter, options)
+    }
+    
+    public init(_ name: String?, _ collectionName: String?, _ filter: Dictionary<String, Any>?) {
+        super.init(name, ExecutableType.COUNT, nil)
+        super._body = CountBody(collectionName, filter, nil)
+    }
+    
+    required public init?(map: Map) {
+        fatalError("init(map:) has not been implemented")
+    }
+    
+    public override func mapping(map: Map) {
+        _type <- map["type"]
+        _name <- map["name"]
+    }
+
 }
+
