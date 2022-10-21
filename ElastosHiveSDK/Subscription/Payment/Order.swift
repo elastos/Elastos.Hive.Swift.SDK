@@ -23,6 +23,13 @@
 import Foundation
 import ObjectMapper
 
+public enum State {
+    case NORMAL
+    case EXPIRED
+    case PAID
+    case ARCHIVE
+}
+
 public class Order: Mappable  {
     private var _orderId: String? // order_id
     private var _subscription: String?
@@ -33,6 +40,7 @@ public class Order: Mappable  {
     private var _createTime: Int64? // create_time
     private var _expirationTime: Int64? // expiration_time
     private var _receivingAddress: String? // receiving_address
+    private var _state: String?
 
     public var orderId: String? {
         return _orderId
@@ -69,7 +77,26 @@ public class Order: Mappable  {
     public var receivingAddress: String? {
         return _receivingAddress
     }
-      
+    
+    public func getState() throws -> State {
+        switch (_state) {
+            case "normal":
+                return State.NORMAL
+            case "expired":
+                return State.EXPIRED
+            case "paid":
+                return State.PAID
+            case "archive":
+                return State.ARCHIVE
+            default:
+            throw HiveError.RuntimeError("Unknown state : \(_state)")
+        }
+    }
+
+    public func setState(_ state: String) {
+        self._state = state
+    }
+
     required public init?(map: Map) {}
     
     public func mapping(map: Map) {
@@ -82,5 +109,6 @@ public class Order: Mappable  {
         _createTime <- map["create_time"]
         _expirationTime <- map["expiration_time"]
         _receivingAddress <- map["receiving_address"]
+        _state <- map["state"] // TODO:
     }
 }
