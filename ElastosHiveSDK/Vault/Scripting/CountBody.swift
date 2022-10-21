@@ -21,16 +21,23 @@
  */
 
 import Foundation
+import ObjectMapper
 
-public enum ExecutableType: String {
-    case AGGREGATED = "aggregated"
-    case FIND = "find"
-    case INSERT = "insert"
-    case UPDATE = "update"
-    case DELETE = "delete"
-    case FILE_UPLOAD = "fileUpload"
-    case FILE_DOWNLOAD = "fileDownload"
-    case FILE_PROPERTIES = "fileProperties"
-    case FILE_HASH = "fileHash"
-    case COUNT = "count"
+public class CountBody: DatabaseBody {
+    private var _filter: [String: Any]? // filter
+    private var _options: [String: Any]? // options
+
+    public init(_ collection: String?, _ filter: [String: Any]?, _ options: [String: Any]?) {
+        super.init(collection)
+        self._filter = filter
+        self._options = options
+    }
+    
+    public required init?(map: Map) {
+        fatalError("init(map:) has not been implemented")
+    }
+    
+    public override func mapping(map: Map) {
+        super.mapping(map: map)
+    }
 }

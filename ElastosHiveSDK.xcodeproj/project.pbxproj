@@ -51,6 +51,10 @@
 		11A4DF22282CA2C500C76F04 /* AppStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A4DF21282CA2C500C76F04 /* AppStats.swift */; };
 		11A4DF2C282E283800C76F04 /* IpfsRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A4DF2B282E283800C76F04 /* IpfsRunner.swift */; };
 		11A4DF2D282E283800C76F04 /* IpfsRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A4DF2B282E283800C76F04 /* IpfsRunner.swift */; };
+		11ACBB9029025B5C004EA4EF /* CountExecutable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ACBB8F29025B5C004EA4EF /* CountExecutable.swift */; };
+		11ACBB9129025B5C004EA4EF /* CountExecutable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ACBB8F29025B5C004EA4EF /* CountExecutable.swift */; };
+		11ACBB9329025D36004EA4EF /* CountBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ACBB9229025D36004EA4EF /* CountBody.swift */; };
+		11ACBB9429025D36004EA4EF /* CountBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ACBB9229025D36004EA4EF /* CountBody.swift */; };
 		11D26F4022CA3B3300E4099A /* ElastosHiveSDK_macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 11D26F3E22CA3B3300E4099A /* ElastosHiveSDK_macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		11D26F4522CA3B4B00E4099A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FB22C4C33400F85419 /* String.swift */; };
 		11E573FF22C4C33400F85419 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E573FB22C4C33400F85419 /* String.swift */; };
@@ -273,6 +277,8 @@
 		11A4DF1F282CA2B700C76F04 /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 		11A4DF21282CA2C500C76F04 /* AppStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStats.swift; sourceTree = "<group>"; };
 		11A4DF2B282E283800C76F04 /* IpfsRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IpfsRunner.swift; sourceTree = "<group>"; };
+		11ACBB8F29025B5C004EA4EF /* CountExecutable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountExecutable.swift; sourceTree = "<group>"; };
+		11ACBB9229025D36004EA4EF /* CountBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountBody.swift; sourceTree = "<group>"; };
 		11D26F3C22CA3B3300E4099A /* ElastosHiveSDK_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ElastosHiveSDK_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		11D26F3E22CA3B3300E4099A /* ElastosHiveSDK_macOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ElastosHiveSDK_macOS.h; sourceTree = "<group>"; };
 		11E573FB22C4C33400F85419 /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
@@ -682,6 +688,8 @@
 		3053BE8B2684CA5F005828B0 /* Scripting */ = {
 			isa = PBXGroup;
 			children = (
+				11ACBB8F29025B5C004EA4EF /* CountExecutable.swift */,
+				11ACBB9229025D36004EA4EF /* CountBody.swift */,
 				303CD55F2607606B00865472 /* ScriptingApi.swift */,
 				3053BEA12684CA5F005828B0 /* AggregatedCondition.swift */,
 				3053BE9C2684CA5F005828B0 /* AggregatedExecutable.swift */,
@@ -1145,10 +1153,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				11D26F4522CA3B4B00E4099A /* String.swift in Sources */,
+				11ACBB9429025D36004EA4EF /* CountBody.swift in Sources */,
 				11A4DF1E282A4A8C00C76F04 /* NodeInfo.swift in Sources */,
 				1129C19524052CC500CD77F2 /* Alamofire+Synchronous.swift in Sources */,
 				11A4DF2D282E283800C76F04 /* IpfsRunner.swift in Sources */,
 				1103757A23FF96BF004216D0 /* Log.swift in Sources */,
+				11ACBB9129025B5C004EA4EF /* CountExecutable.swift in Sources */,
 				1103757123FF96A0004216D0 /* LogLevel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1178,6 +1188,7 @@
 				3053BEC92684CA5F005828B0 /* QueryParams.swift in Sources */,
 				3053BEC32684CA5F005828B0 /* DescendingSortItem.swift in Sources */,
 				3053BEE02684CA5F005828B0 /* UpdateExecutable.swift in Sources */,
+				11ACBB9029025B5C004EA4EF /* CountExecutable.swift in Sources */,
 				3053BE4D2684C9AE005828B0 /* CommitHash.swift in Sources */,
 				3053BED82684CA5F005828B0 /* RegScriptResult.swift in Sources */,
 				3053BF122684CA96005828B0 /* PricingPlan.swift in Sources */,
@@ -1226,6 +1237,7 @@
 				3053BEC22684CA5F005828B0 /* CreateCollectionResult.swift in Sources */,
 				3053BEDF2684CA5F005828B0 /* FileDownloadExecutable.swift in Sources */,
 				3053BECA2684CA5F005828B0 /* UpdateParams.swift in Sources */,
+				11ACBB9329025D36004EA4EF /* CountBody.swift in Sources */,
 				11A4DF2C282E283800C76F04 /* IpfsRunner.swift in Sources */,
 				3053BEE22684CA5F005828B0 /* InsertExecutable.swift in Sources */,
 				3053BED22684CA5F005828B0 /* DeleteOptions.swift in Sources */,
