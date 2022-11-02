@@ -56,5 +56,13 @@ public protocol SubscriptionService {
     /// Get all application stats of the vault service
     /// - Returns: The application list.
     func getAppStats() -> Promise<[AppInfo]?>
+    
+    /// Activate the vault service.
+    /// - Returns:  None would be returned on success, otherwise, the specific exception would be returned.
+    func activate() throws -> Promise<Void>
+
+    /// Deactivate the vault service.
+    /// - Returns: None would be returned on success, otherwise, the specific exception would be returned.
+    func deactivate() throws -> Promise<Void>
 
 }

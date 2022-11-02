@@ -63,6 +63,20 @@ class VaultSubscriptionTest: XCTestCase {
         }())
     }
     
+    // TODO: TEST
+    public func testActivate() {
+        XCTAssertNoThrow(try { [self] in
+            XCTAssertNotNil(try `await`(_subscription!.activate()))
+        }())
+    }
+
+    // TODO: TEST
+    public func testDeactivate() {
+        XCTAssertNoThrow(try { [self] in
+            XCTAssertNotNil(try `await`(_subscription!.deactivate()))
+        }())
+    }
+    
     //Disabled
     public func test05_1GetAppStats() {
         XCTAssertNoThrow(try { [self] in
