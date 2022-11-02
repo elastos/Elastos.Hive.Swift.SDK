@@ -85,6 +85,18 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentSer
         }
     }
     
+    public func activate() throws -> Promise<Void> {
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _subscriptionController!.activateVault()
+        }
+    }
+    
+    public func deactivate() throws -> Promise<Void> {
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _subscriptionController!.deactivateVault()
+        }
+    }
+    
     /// Let the user to get the basic information of the subscription.
     ///
     /// - Returns: The basic information of the newly created or existing vault on success, otherwise, the specific exception would returned in the wrapper.

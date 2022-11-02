@@ -93,6 +93,15 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentSe
         }
     }
     
+    public func activate() throws -> Promise<Void> {
+        throw HiveError.NotImplementedException("activate")
+
+    }
+    
+    public func deactivate() throws -> Promise<Void> {
+        throw HiveError.NotImplementedException("deactivate")
+    }
+    
     /// Let the user to get the basic information of the subscription.
     ///
     /// - Returns: The basic information of the newly created or existing vault on success, otherwise, the specific exception would returned in the wrapper.

@@ -69,6 +69,30 @@ public class SubscriptionController {
         try _ = _connectionManager.unsubscribeVault().execute()
     }
     
+    /// Activate vault
+    /// @throws HiveException The error comes from the hive node.
+    public func activateVault() throws {
+        do {
+            try _connectionManager.activateVault().execute();
+        } catch {
+            // TODO: error
+            throw error
+        }
+    }
+
+    /// Deactivate vault
+    /// @throws HiveException The error comes from the hive node.
+    public func deactivateVault() throws {
+        do {
+            try _connectionManager.deactivateVault().execute();
+        } catch {
+            // TODO: error
+            throw error
+        }
+    }
+
+
+    
     /// Get the pricing plan list of the backup service which can be used for upgrading the service.
     /// - Throws: HiveError The error comes from the hive node.
     /// - Returns: The price plan list.
