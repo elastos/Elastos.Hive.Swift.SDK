@@ -32,10 +32,12 @@ public class AppContext {
     private static var resolverHasSetup: Bool = false
     private var _contextProvider: AppContextProvider
     private var _userDid: String
-    
+    private var forceResolve: Bool
+
     public init(_ provider: AppContextProvider, _ userDid: String) {
         _userDid = userDid
         _contextProvider = provider
+        self.forceResolve = false
     }
     
     /// Get the provider of the application context.
@@ -53,7 +55,16 @@ public class AppContext {
     /// Get the provider address from user DID document.
     /// - Returns: Provider Address
     public func getProviderAddress() -> Promise<String> {
-        return AppContext.getProviderAddress(self.userDid)
+        return self.getProviderAddress(self.userDid)
+
+    }
+    
+    /// Set the force resolve flag for app context which will cause always resolve did from chain.
+    /// - Param force force or not.
+    /// - Returns: app context
+    public func setUserDidForceResolveFlag(_ force: Bool) -> AppContext {
+        self.forceResolve = force
+        return self
     }
 
     /// Setup the resolver for the DID verification.
@@ -96,7 +107,7 @@ public class AppContext {
     /// - parameters:
     ///   - targetDid: The user DID.
     /// - returns: The URL address of the provider.
-    public static func getProviderAddress(_ targetDid: String) -> Promise<String> {
+    public func getProviderAddress(_ targetDid: String) -> Promise<String> {
         return getProviderAddress(targetDid, nil)
     }
     
@@ -106,14 +117,15 @@ public class AppContext {
     ///   - targetDid: The user DID.
     ///   - preferredProviderAddress: The preferred URL address of the provider.
     /// - returns: The URL address of the provider.    
-    private static func getProviderAddress(_ targetDid: String, _ preferredProviderAddress: String?) -> Promise<String> {
+    private func getProviderAddress(_ targetDid: String, _ preferredProviderAddress: String?) -> Promise<String> {
         return DispatchQueue.global().async(.promise){
             if preferredProviderAddress != nil {
                 return preferredProviderAddress!
             }
             
             let did = try DID(targetDid)
-            let doc = try did.resolve()
+            let doc = try did.resolve(self.forceResolve)
+
             guard doc != nil else {
                 throw HiveError.DIDNotPublishedException("The DID \(targetDid) has not published onto sideChain")
             }
