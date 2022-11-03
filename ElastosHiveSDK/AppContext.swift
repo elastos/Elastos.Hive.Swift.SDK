@@ -32,12 +32,12 @@ public class AppContext {
     private static var resolverHasSetup: Bool = false
     private var _contextProvider: AppContextProvider
     private var _userDid: String
-    private var forceResolve: Bool
+    private var _forceResolve: Bool
 
     public init(_ provider: AppContextProvider, _ userDid: String) {
         _userDid = userDid
         _contextProvider = provider
-        self.forceResolve = false
+        self._forceResolve = false
     }
     
     /// Get the provider of the application context.
@@ -63,7 +63,7 @@ public class AppContext {
     /// - Param force force or not.
     /// - Returns: app context
     public func setUserDidForceResolveFlag(_ force: Bool) -> AppContext {
-        self.forceResolve = force
+        self._forceResolve = force
         return self
     }
 
@@ -108,7 +108,8 @@ public class AppContext {
     ///   - targetDid: The user DID.
     /// - returns: The URL address of the provider.
     public func getProviderAddress(_ targetDid: String) -> Promise<String> {
-        return getProviderAddress(targetDid, nil)
+        return getProviderAddress(targetDid, nil, self._forceResolve)
+
     }
     
     /// Get the URL address of the provider by the user DID. The will access the property of the user DID.
@@ -117,14 +118,14 @@ public class AppContext {
     ///   - targetDid: The user DID.
     ///   - preferredProviderAddress: The preferred URL address of the provider.
     /// - returns: The URL address of the provider.    
-    private func getProviderAddress(_ targetDid: String, _ preferredProviderAddress: String?) -> Promise<String> {
+    private func getProviderAddress(_ targetDid: String, _ preferredProviderAddress: String?, _ isForce: Bool) -> Promise<String> {
         return DispatchQueue.global().async(.promise){
             if preferredProviderAddress != nil {
                 return preferredProviderAddress!
             }
             
             let did = try DID(targetDid)
-            let doc = try did.resolve(self.forceResolve)
+            let doc = try did.resolve(self._forceResolve)
 
             guard doc != nil else {
                 throw HiveError.DIDNotPublishedException("The DID \(targetDid) has not published onto sideChain")
