@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2020 Elastos Foundation
+* Copyright (c) 2019 Elastos Foundation
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -21,26 +21,8 @@
 */
 
 import Foundation
-import ObjectMapper
 
-public class LocalResolver: CodeFetcher {
 
-    private var _serviceEndpoint: ServiceEndpoint?
-    private var _nextResolver: CodeFetcher?
-    
-    public init(_ serviceEndpoint: ServiceEndpoint, _ next: CodeFetcher) {
-        _serviceEndpoint = serviceEndpoint
-        _nextResolver = next
-    }
-    
-    /// Fetch the code.
-    /// - Returns: The code.
-    public func fetch() throws -> String? {
-        return try self._nextResolver?.fetch()
-    }
-    
-    public func invalidate() throws {
-        throw HiveError.NotImplementedException("")
-    }
-}
+public typealias BackupServiceProgress = (BackupResult.State, BackupResult.Result, String?) throws -> Void
+
 

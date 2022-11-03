@@ -49,7 +49,7 @@ public class BackupController {
     /// Check the result of the backup process.
     /// - Throws: HiveError The error comes from the hive node.
     /// - Returns: The result of the backup process.
-    public func checkResult() throws -> BackupResultState {
-        try _connectionManager.getState().execute(BackupResult.self).getStatusResult()
+    public func checkResult() throws -> BackupResult {
+        try _connectionManager.getState().execute(BackupResult.self)
     }
 }

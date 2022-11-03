@@ -77,28 +77,28 @@ public class AccessToken: CodeFetcher {
         }
         
         if (self._endpoint.appDid == nil || self._endpoint.serviceInstanceDid == nil) {
-            _jwtCode = try self._remoteFetcher.fetch()
-            try saveToken(_jwtCode!)
+            _jwtCode = try self.fetchFromRemote()
             return _jwtCode
         }
 
 
         _jwtCode = try restoreToken()
-        if _jwtCode == nil {
-            _jwtCode = try _remoteFetcher.fetch()
-
-            if _jwtCode != nil {
-                if self.flush != nil {
-                    self.flush!(_jwtCode!)
-                }
-                try saveToken(_jwtCode!)
-            }
-        } else {
-            if self.flush != nil {
-                self.flush!(_jwtCode!)
-            }
+        if (_jwtCode != nil) {
+            self.flush?(_jwtCode!)
         }
+        _jwtCode = try self.fetchFromRemote()
+
         return _jwtCode
+    }
+    
+    private func fetchFromRemote() throws -> String? {
+        let token = try self._remoteFetcher.fetch()
+        if token != nil {
+            self.flush?(token!)
+            try saveToken(token!)
+        }
+
+        return token
     }
     
     /// Invalidate the code for getting the code from remote server.

@@ -22,14 +22,6 @@
 
 import Foundation
 
-
-public enum BackupResultState {
-    case stop
-    case backup
-    case restore
-    case unknown
-}
-
 /**
  * Backup service is for doing backup vault data from vault node server to backup server.
  * Backup server maybe another node server or third-party centered server like Google Driver.
@@ -48,7 +40,7 @@ public protocol BackupService {
     /// Backup process in node side is a continues process. Vault node server backup whole vault data to backup server and keep syncing with it. This is for user personal data security. This function is for starting a background scheduler to update data to backup server. It's an async process.
     ///
     /// - returns: void
-    func startBackup() -> Promise<Void>
+    func startBackup(_ callback: BackupServiceProgress?) -> Promise<Void>
 
     /// As startBackup() shows, this is just for stopping the async process in vault node side.
     ///
@@ -58,7 +50,7 @@ public protocol BackupService {
     /// This is for restore vault data from backup server only once. The action is processed async in node side.
     ///
     /// - returns: void
-    func restoreFrom() -> Promise<Void>
+    func restoreFrom(_ callback: BackupServiceProgress?) -> Promise<Void>
 
     /// Stop the running restore process in background.
     ///
