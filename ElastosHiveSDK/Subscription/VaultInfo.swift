@@ -30,7 +30,11 @@ public class VaultInfo: Mappable {
     public var _created: Int64?
     public var _updated: Int64?
     public var _pricingPlan: Int64?
-
+    public var _appCount: Int? // app_count
+    public var _accessCount: Int? // access_count
+    public var _accessAmount: Int? // access_amount
+    public var _accessLastTime: Int? // access_last_time
+    
     public var serviceDid: String? {
         return _serviceDid
     }
@@ -54,6 +58,19 @@ public class VaultInfo: Mappable {
     public var pricingPlan: Int64? {
         return _pricingPlan
     }
+    
+    public var appCount: Int? {
+        return _appCount
+    }
+    public var accessCount: Int? {
+        return _accessCount
+    }
+    public var accessAmount: Int? {
+        return _accessAmount
+    }
+    public var accessLastTime: Int? {
+        return _accessLastTime
+    }
 
     public required init?(map: Map) {}
 
@@ -64,5 +81,9 @@ public class VaultInfo: Mappable {
         _created <- map["created"]
         _updated <- map["updated"]
         _pricingPlan <- map["pricing_plan"]
+        _appCount <- map["app_count"]
+        _accessCount <- map["access_count"]
+        _accessAmount <- map["access_amount"]
+        _accessLastTime <- map["access_last_time"]
     }
 }
