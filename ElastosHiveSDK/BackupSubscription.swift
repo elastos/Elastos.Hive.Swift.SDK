@@ -99,7 +99,6 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentSe
         }
     }
     
-    
     public func activate() throws -> Promise<Void> {
         throw HiveError.NotImplementedException("activate")
 
