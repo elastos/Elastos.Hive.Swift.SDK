@@ -49,20 +49,12 @@ public class AccessToken: CodeFetcher {
         self._storageKey = ""
     }
     
-    /// Get the access token without exception.
-    ///
-    /// - returns: null if not exists.
-    public func getCanonicalizedAccessToken() throws -> String {
-        try _jwtCode = fetch()
-        return "token " + _jwtCode!
-    }
-    
     private func getStorageKey() -> String {
         if (self._storageKey == "") {
             let userDid = (self._endpoint.userDid != nil) ? self._endpoint.userDid! : ""
             let appDid = (self._endpoint.appDid != nil) ? self._endpoint.appDid! : ""
-            let nodeDid = (self._endpoint.serviceInstanceDid != nil) ? self._endpoint.serviceInstanceDid! : ""
-            let key = userDid + ";" + appDid + ";" + nodeDid
+            let hiveUrl = self._endpoint.providerAddress
+            let key = userDid + ";" + appDid + ";" + hiveUrl
             self._storageKey = key.sha256
         }
         return self._storageKey
@@ -76,18 +68,15 @@ public class AccessToken: CodeFetcher {
             return _jwtCode
         }
         
-        if (self._endpoint.appDid == nil || self._endpoint.serviceInstanceDid == nil) {
-            _jwtCode = try self.fetchFromRemote()
-            return _jwtCode
-        }
-
-
+        // TODO:
+        objc_sync_enter(self)
         _jwtCode = try restoreToken()
         if (_jwtCode != nil) {
             self.flush?(_jwtCode!)
         }
         _jwtCode = try self.fetchFromRemote()
-
+        objc_sync_exit(self)
+        
         return _jwtCode
     }
     
@@ -140,6 +129,13 @@ public class AccessToken: CodeFetcher {
     private func clearToken() throws {
         let key = self.getStorageKey()
         try _storage?.clearAccessToken(key)
+    }
+    
+    func synchronized<T>( _ action: () -> T) -> T {
+        objc_sync_enter(self)
+        let result = action()
+        objc_sync_exit(self)
+        return result
     }
 }
 
