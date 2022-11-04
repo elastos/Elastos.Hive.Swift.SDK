@@ -26,7 +26,6 @@ import ObjectMapper
 /// The vault subscription is used for the vault management.
 /// Subscribe the vault is the first step to use the service in the vault.
 public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentService {
-    
     private var _subscriptionController: SubscriptionController!
     private var _paymentController: PaymentController?
     
@@ -80,8 +79,25 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentSer
     ///
     /// - Returns: None would be returned on success, otherwise, the specific exception would be returned.
     public func unsubscribe() -> Promise<Void> {
+        return unsubscribe(false)
+    }
+    
+    public func unsubscribe(_ force: Bool) -> Promise<Void> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _subscriptionController!.unsubscribeVault()
+            return try _subscriptionController!.unsubscribeVault(force)
+        }
+    }
+    
+    
+    public func activate() throws -> Promise<Void> {
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _subscriptionController!.activateVault()
+        }
+    }
+    
+    public func deactivate() throws -> Promise<Void> {
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _subscriptionController!.deactivateVault()
         }
     }
     
