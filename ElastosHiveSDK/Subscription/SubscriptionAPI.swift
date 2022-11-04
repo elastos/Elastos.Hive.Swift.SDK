@@ -43,8 +43,8 @@ extension ConnectionManager {
         return try self.createDataRequest(url, .post, nil)
     }
     
-    func unsubscribeVault() throws -> DataRequest {
-        let url = self.baseURL + "/api/v2/subscription/vault"
+    func unsubscribeVault(_ force: Bool) throws -> DataRequest {
+        let url = self.baseURL + "/api/v2/subscription/vault?force=\(force)"
         return try self.createDataRequest(url, .delete, nil)
     }
 

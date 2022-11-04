@@ -65,8 +65,8 @@ public class SubscriptionController {
     
     /// Unsubscribe the vault.
     /// - Throws: HiveError The error comes from the hive node.
-    public func unsubscribeVault() throws {
-        try _ = _connectionManager.unsubscribeVault().execute()
+    public func unsubscribeVault(_ force: Bool) throws {
+        try _ = _connectionManager.unsubscribeVault(force).execute()
     }
     
     /// Activate vault
