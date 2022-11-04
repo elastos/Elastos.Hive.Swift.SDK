@@ -17,7 +17,10 @@ class AppContentText: XCTestCase {
     func testGetProviderAddress() {
         XCTAssertNoThrow(try { [self] in
             try DIDBackend.initialize(DefaultDIDAdapter("https://api.elastos.io/eid"))
-            let providerAddress = try `await`(AppContext.getProviderAddress("did:elastos:ikkFHgoUHrVDTU8HTYDAWH9Z8S377Qvt7n"))
+//            let providerAddress = try `await`(AppContext.getProviderAddress("did:elastos:ikkFHgoUHrVDTU8HTYDAWH9Z8S377Qvt7n"))
+            // TODO:
+            let providerAddress = `await`(try TestData.shared().appContext.getProviderAddress())
+
             print("Provider address: \(providerAddress)")
             XCTAssertNotNil(providerAddress)
         }())
