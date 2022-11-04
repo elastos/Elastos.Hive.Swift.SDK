@@ -23,6 +23,7 @@ import Foundation
 import var CommonCrypto.CC_MD5_DIGEST_LENGTH
 import func CommonCrypto.CC_MD5
 import typealias CommonCrypto.CC_LONG
+import CommonCrypto
 
 extension String {
     var md5: String {
@@ -35,3 +36,31 @@ extension String {
         return hash.map { String(format: "%02x", $0) }.joined()
     }
 }
+
+extension String {
+    var sha256: String {
+        let utf8 = cString(using: .utf8)
+        var digest = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
+        CC_SHA256(utf8, CC_LONG(utf8!.count - 1), &digest)
+        
+        return digest.reduce("") { $0 + String(format:"%02x", $1) }
+    }
+}
+
+extension String {
+    func getDictionaryFromJSONString() ->NSDictionary{
+        if self == "" {
+            return NSDictionary()
+        }
+        let jsonData: Data = self.data(using: .utf8)!
+
+        let dict = try? JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers)
+        if dict != nil {
+            return dict as! NSDictionary
+        }
+        return NSDictionary()
+    }
+}
+
+
+
