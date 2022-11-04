@@ -83,7 +83,10 @@ public class ServiceEndpoint: NodeRPCConnection {
         _accessToken!.flush = { (value) in
             do {
                 let claims = try JwtParserBuilder().setAllwedClockSkewSeconds(300).build().parseClaimsJwt(value).claims
-                self.flushDids(claims.getAudience()!, claims.getIssuer()!)
+                let props = try claims.getAsJson(key: "props")
+                let dic = props.getDictionaryFromJSONString()
+                let appDid = (dic["appDid"] != nil) ? dic["appDid"] as! String : ""
+                self.flushDids(claims.getAudience()!, appDid, claims.getIssuer()!)
             } catch {
                 err = error
                 print(error)
@@ -148,9 +151,10 @@ public class ServiceEndpoint: NodeRPCConnection {
     }
 
     
-    private func flushDids(_ appInstanceDId: String, _ serviceInstanceDid: String) {
+    private func flushDids(_ appInstanceDId: String, _ appDid: String, _ serviceInstanceDid: String) {
         _appInstanceDid = appInstanceDId
         _serviceInstanceDid = serviceInstanceDid
+        self._appDid = appDid
     }
     
     /// Get the instance of the data storage.
