@@ -88,7 +88,7 @@ public class BackupResult: Mappable {
         return self._message
     }
 
-    public func setMessage(_ message: String) -> String {
+    public func setMessage(_ message: String) {
         self._message = message
     }
 }

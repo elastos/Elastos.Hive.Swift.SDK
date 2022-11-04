@@ -108,7 +108,7 @@ public class AppContext {
     ///   - targetDid: The user DID.
     /// - returns: The URL address of the provider.
     public func getProviderAddress(_ targetDid: String) -> Promise<String> {
-        return getProviderAddress(targetDid, nil, self._forceResolve)
+        return AppContext.getProviderAddress(targetDid, nil, self._forceResolve)
 
     }
     
@@ -118,14 +118,14 @@ public class AppContext {
     ///   - targetDid: The user DID.
     ///   - preferredProviderAddress: The preferred URL address of the provider.
     /// - returns: The URL address of the provider.    
-    private func getProviderAddress(_ targetDid: String, _ preferredProviderAddress: String?, _ isForce: Bool) -> Promise<String> {
+    public static func getProviderAddress(_ targetDid: String, _ preferredProviderAddress: String?, _ isForce: Bool) -> Promise<String> {
         return DispatchQueue.global().async(.promise){
             if preferredProviderAddress != nil {
                 return preferredProviderAddress!
             }
             
             let did = try DID(targetDid)
-            let doc = try did.resolve(self._forceResolve)
+            let doc = try did.resolve(isForce)
 
             guard doc != nil else {
                 throw HiveError.DIDNotPublishedException("The DID \(targetDid) has not published onto sideChain")

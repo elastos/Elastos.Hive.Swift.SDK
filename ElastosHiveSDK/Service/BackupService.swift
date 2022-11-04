@@ -60,5 +60,5 @@ public protocol BackupService {
     /// Check the current status of the node side backup process.
     ///
     /// - returns: void
-    func checkResult() throws -> Promise<BackupResultState>
+    func checkResult() throws -> Promise<BackupResult>
 }
