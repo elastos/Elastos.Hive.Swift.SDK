@@ -35,7 +35,15 @@ public class NodeInfo: Mappable {
     private var _description: String?
     private var _version: String?
     private var _lastCommitId: String?
-
+    private var _userCount: Int? // user_count
+    private var _vaultCount: Int? // vault_count
+    private var _backupCount: Int? // backup_count
+    private var _latestAccessTime: Int? // latest_access_time
+    private var _memoryUsed: Int? // memory_used
+    private var _memoryTotal: Int? // memory_total
+    private var _storageUsed: Int? // storage_used
+    private var _storageTotal: Int? // storage_total
+    
     public var serviceDid: String? {
         return _serviceDid
     }
@@ -72,6 +80,39 @@ public class NodeInfo: Mappable {
         return _lastCommitId
     }
     
+    
+    public var userCount: Int? {
+        return _userCount
+    }
+    
+    public var vaultCount: Int? {
+        return _vaultCount
+    }
+    
+    public var backupCount: Int? {
+        return _backupCount
+    }
+    
+    public var latestAccessTime: Int? {
+        return _latestAccessTime
+    }
+    
+    public var memoryUsed: Int? {
+        return _memoryUsed
+    }
+    
+    public var memoryTotal: Int? {
+        return _memoryTotal
+    }
+    
+    public var storageUsed: Int? {
+        return _storageUsed
+    }
+    
+    public var storageTotal: Int? {
+        return _storageTotal
+    }
+    
     required public init?(map: Map) {}
     
     public func mapping(map: Map) {
@@ -83,5 +124,13 @@ public class NodeInfo: Mappable {
         _description <- map["description"]
         _version <- map["version"]
         _lastCommitId <- map["last_commit_id"]
+        _userCount <- map["user_count"]
+        _vaultCount <- map["vault_count"]
+        _backupCount <- map["backup_count"]
+        _latestAccessTime <- map["latest_access_time"]
+        _memoryUsed <- map["memory_used"]
+        _memoryTotal <- map["memory_total"]
+        _storageUsed <- map["storage_used"]
+        _storageTotal <- map["storage_total"]
     }
 }
