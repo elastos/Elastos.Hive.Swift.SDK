@@ -42,15 +42,40 @@ public class BackupServiceRender: BackupService {
         }
     }
     
+    private func waitBackupRestoreEnd(_ callback: BackupServiceProgress?) throws {
+        var result: BackupResult?
+        repeat {
+            result = try _controller.checkResult()
+                if (callback != nil) {
+                    try callback!(result!.getState(), result!.getResult(), result!.getMessage())
+                }
+            Thread.sleep(forTimeInterval: 1000);
+        } while (try result!.getResult() == BackupResult.Result.RESULT_PROCESS)
+    }
+
     /// Backup process in node side is a continues process. Vault node server backup whole vault data to
     /// backup server and keep syncing with it. This is for user personal data security.
     ///
     /// <p>This function is for starting a background scheduler to update data to backup server. It's an
     /// async process.</p>
-    /// - Returns: Void
-    public func startBackup() -> Promise<Void> {
+    /// - Returns: Void // TODO:
+    public func startBackup(_ callback: BackupServiceProgress?) -> Promise<Void> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _controller.startBackup(try _credentialCode!.getToken()!)
+            try _controller.startBackup(try _credentialCode!.getToken()!)
+            try self.waitBackupRestoreEnd(callback)
+            return Void()
+        }
+    }
+    
+
+    /// This is for restore vault data from backup server only once.
+    /// The action is processed async in node side.
+    /// - Returns: Void // TODO:
+    public func restoreFrom(_ callback: BackupServiceProgress?) -> Promise<Void> {
+        return DispatchQueue.global().async(.promise){ [self] in
+            try _controller.restoreFrom(try _credentialCode!.getToken()!)
+            try self.waitBackupRestoreEnd(callback)
+            return Void()
         }
     }
     
@@ -59,15 +84,6 @@ public class BackupServiceRender: BackupService {
     public func stopBackup() -> Promise<Void> {
         return DispatchQueue.global().async(.promise){ [self] in
             return Void()
-        }
-    }
-
-    /// This is for restore vault data from backup server only once.
-    /// The action is processed async in node side.
-    /// - Returns: Void
-    public func restoreFrom() -> Promise<Void> {
-        return DispatchQueue.global().async(.promise){ [self] in
-            return try _controller.restoreFrom(try _credentialCode!.getToken()!)
         }
     }
 
@@ -81,7 +97,7 @@ public class BackupServiceRender: BackupService {
 
     /// Check the current status of the node side backup process.
     /// - Returns: Void
-    public func checkResult() throws -> Promise<BackupResultState> {
+    public func checkResult() throws -> Promise<BackupResult> {
         return DispatchQueue.global().async(.promise){ [self] in
             return try _controller.checkResult()
         }

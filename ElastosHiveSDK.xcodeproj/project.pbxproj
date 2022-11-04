@@ -22,6 +22,8 @@
 
 /* Begin PBXBuildFile section */
 		0D94ED2D06BBCAE410D0273C /* Pods_ElastosHiveSDKTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DB068EABA0DB13AB595055A /* Pods_ElastosHiveSDKTests.framework */; };
+		11030A622914ED8800F9ACB3 /* BackupServiceProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11030A612914ED8800F9ACB3 /* BackupServiceProgress.swift */; };
+		11030A632914ED8800F9ACB3 /* BackupServiceProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11030A612914ED8800F9ACB3 /* BackupServiceProgress.swift */; };
 		110357E3256FA3CA003F639F /* FileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110357E2256FA3CA003F639F /* FileReader.swift */; };
 		110357E7256FA420003F639F /* FileWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110357E6256FA420003F639F /* FileWriter.swift */; };
 		1103757023FF96A0004216D0 /* LogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103756F23FF96A0004216D0 /* LogLevel.swift */; };
@@ -252,6 +254,7 @@
 
 /* Begin PBXFileReference section */
 		0DB068EABA0DB13AB595055A /* Pods_ElastosHiveSDKTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ElastosHiveSDKTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		11030A612914ED8800F9ACB3 /* BackupServiceProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackupServiceProgress.swift; sourceTree = "<group>"; };
 		110357E2256FA3CA003F639F /* FileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileReader.swift; sourceTree = "<group>"; };
 		110357E6256FA420003F639F /* FileWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileWriter.swift; sourceTree = "<group>"; };
 		1103756F23FF96A0004216D0 /* LogLevel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogLevel.swift; sourceTree = "<group>"; };
@@ -621,6 +624,7 @@
 		3053BE562684CA38005828B0 /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				11030A612914ED8800F9ACB3 /* BackupServiceProgress.swift */,
 				3053BE5F2684CA38005828B0 /* BackupContext.swift */,
 				3053BE5D2684CA38005828B0 /* BackupService.swift */,
 				3053BE5E2684CA38005828B0 /* CloudBackupContext.swift */,
@@ -1155,6 +1159,7 @@
 				11D26F4522CA3B4B00E4099A /* String.swift in Sources */,
 				11ACBB9429025D36004EA4EF /* CountBody.swift in Sources */,
 				11A4DF1E282A4A8C00C76F04 /* NodeInfo.swift in Sources */,
+				11030A632914ED8800F9ACB3 /* BackupServiceProgress.swift in Sources */,
 				1129C19524052CC500CD77F2 /* Alamofire+Synchronous.swift in Sources */,
 				11A4DF2D282E283800C76F04 /* IpfsRunner.swift in Sources */,
 				1103757A23FF96BF004216D0 /* Log.swift in Sources */,
@@ -1273,6 +1278,7 @@
 				3053BEFD2684CA5F005828B0 /* RequestParams.swift in Sources */,
 				3053BEEA2684CA5F005828B0 /* AggregatedCondition.swift in Sources */,
 				3053BF112684CA96005828B0 /* VaultInfo.swift in Sources */,
+				11030A622914ED8800F9ACB3 /* BackupServiceProgress.swift in Sources */,
 				11A4DF20282CA2B700C76F04 /* AppInfo.swift in Sources */,
 				3053BEE92684CA5F005828B0 /* AndCondition.swift in Sources */,
 				3001863E26AD8A5400584B74 /* HiveBackupContext.swift in Sources */,
