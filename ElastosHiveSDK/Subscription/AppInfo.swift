@@ -31,6 +31,9 @@ public class AppInfo: Mappable {
     public var _userDid: String?
     public var _appDid: String?
     public var _usedStorageSize: Int?
+    public var _accessCount: Int? // access_count
+    public var _accessAmount: Int? // access_amount
+    public var _accessLastTime: Int? // access_last_time
 
     required public init?(map: Map) {}
     
@@ -41,6 +44,9 @@ public class AppInfo: Mappable {
         _userDid <- map["user_did"]
         _appDid <- map["app_did"]
         _usedStorageSize <- map["used_storage_size"]
+        _accessCount <- map["access_count"]
+        _accessAmount <- map["access_amount"]
+        _accessLastTime <- map["access_last_time"]
     }
     
     public var name: String? {
@@ -65,5 +71,15 @@ public class AppInfo: Mappable {
 
     public var usedStorageSize: Int? {
         return _usedStorageSize
+    }
+    
+    public var accessCount: Int? {
+        return _accessCount
+    }
+    public var accessAmount: Int? {
+        return _accessAmount
+    }
+    public var accessLastTime: Int? {
+        return _accessLastTime
     }
 }

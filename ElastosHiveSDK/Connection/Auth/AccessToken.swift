@@ -29,10 +29,11 @@ import Foundation
  */
 public class AccessToken: CodeFetcher {
     private var _jwtCode: String?
-    private var _remoteFetcher: CodeFetcher?
+    private var _remoteFetcher: CodeFetcher
     private var _storage: DataStorage?
     private var _endpoint: ServiceEndpoint
-    
+    private var _storageKey: String
+
     // The bridge handle is used for caller to do sth when getting the access token.
     public var flush: ((String) -> Void)?
     
@@ -44,17 +45,21 @@ public class AccessToken: CodeFetcher {
     public init(_ endpoint: ServiceEndpoint, _ storage: DataStorage?) {
         _endpoint = endpoint
         _remoteFetcher = RemoteFetcher(endpoint)
-        _storage = storage        
+        _storage = storage
+        self._storageKey = ""
     }
     
-    /// Get the access token without exception.
-    ///
-    /// - returns: null if not exists.
-    public func getCanonicalizedAccessToken() throws -> String {
-        try _jwtCode = fetch()
-        return "token " + _jwtCode!
+    private func getStorageKey() -> String {
+        if (self._storageKey == "") {
+            let userDid = (self._endpoint.userDid != nil) ? self._endpoint.userDid! : ""
+            let appDid = (self._endpoint.appDid != nil) ? self._endpoint.appDid! : ""
+            let hiveUrl = self._endpoint.providerAddress
+            let key = userDid + ";" + appDid + ";" + hiveUrl
+            self._storageKey = key.sha256
+        }
+        return self._storageKey
     }
-    
+
     /// Fetch the code.
     /// - Throws: NodeRPCError The exception shows the error returned by hive node.
     /// - Returns: The code.
@@ -62,23 +67,27 @@ public class AccessToken: CodeFetcher {
         if _jwtCode != nil {
             return _jwtCode
         }
-
+        
+        // TODO:
+        objc_sync_enter(self)
         _jwtCode = try restoreToken()
-        if _jwtCode == nil {
-            _jwtCode = try _remoteFetcher?.fetch()
-
-            if _jwtCode != nil {
-                if self.flush != nil {
-                    self.flush!(_jwtCode!)
-                }
-                try saveToken(_jwtCode!)
-            }
-        } else {
-            if self.flush != nil {
-                self.flush!(_jwtCode!)
-            }
+        if (_jwtCode != nil) {
+            self.flush?(_jwtCode!)
         }
+        _jwtCode = try self.fetchFromRemote()
+        objc_sync_exit(self)
+        
         return _jwtCode
+    }
+    
+    private func fetchFromRemote() throws -> String? {
+        let token = try self._remoteFetcher.fetch()
+        if token != nil {
+            self.flush?(token!)
+            try saveToken(token!)
+        }
+
+        return token
     }
     
     /// Invalidate the code for getting the code from remote server.
@@ -87,28 +96,13 @@ public class AccessToken: CodeFetcher {
     }
     
     private func restoreToken() throws -> String? {
-        if _endpoint == nil {
-            return nil
-        }
-        
-        var jwtCode: String?
-        var serviceDid: String?
-        var address: String?
-        
-        serviceDid = _endpoint.serviceInstanceDid
-        address = _endpoint.providerAddress
-        
-        jwtCode = try _storage?.loadAccessTokenByAddress(address!)
+        let key = self.getStorageKey()
+        _jwtCode = try _storage?.loadAccessToken(key)
 
-        if serviceDid != nil {
-            jwtCode = try _storage?.loadAccessToken(serviceDid!)
+        if _jwtCode != nil && isExpired(_jwtCode) {
+            try _storage?.clearAccessToken(key)
         }
-        
-        if jwtCode != nil && isExpired(jwtCode) {
-            try _storage?.clearAccessTokenByAddress(address!)
-            try _storage?.clearAccessToken(serviceDid!)
-        }
-        return jwtCode
+        return _jwtCode
     }
     
     private func isExpired(_ jwtCode: String?) -> Bool {
@@ -127,13 +121,21 @@ public class AccessToken: CodeFetcher {
     }
     
     private func saveToken(_ jwtCode: String) throws {
-        try _storage?.storeAccessToken(_endpoint.serviceInstanceDid!, jwtCode);
-        try _storage?.storeAccessTokenByAddress(_endpoint.providerAddress, jwtCode);
+        let key = self.getStorageKey()
+        try _storage?.storeAccessToken(key, jwtCode)
+
     }
     
     private func clearToken() throws {
-        try _storage?.clearAccessToken(_endpoint.serviceInstanceDid!)
-        try _storage?.clearAccessTokenByAddress(_endpoint.providerAddress)
+        let key = self.getStorageKey()
+        try _storage?.clearAccessToken(key)
+    }
+    
+    func synchronized<T>( _ action: () -> T) -> T {
+        objc_sync_enter(self)
+        let result = action()
+        objc_sync_exit(self)
+        return result
     }
 }
 

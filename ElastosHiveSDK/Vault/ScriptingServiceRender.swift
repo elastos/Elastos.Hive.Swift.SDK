@@ -24,9 +24,11 @@ import Foundation
 
 public class ScriptingServiceRender: ScriptingService {
     private var _controller: ScriptingController
+    private var _endpoint: ServiceEndpoint
 
     public init(_ serviceEndpoint: ServiceEndpoint) {
         _controller = ScriptingController(serviceEndpoint, false)
+        _endpoint = serviceEndpoint
     }
     
     /// Lets the vault owner register a script on his vault for a given application.
@@ -148,7 +150,7 @@ public class ScriptingServiceRender: ScriptingService {
     
     public func downloadFileByHiveUrl(_ hiveUrl: String) -> Promise<FileReader> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _controller.downloadFileByHiveUrl(hiveUrl)
+            return try ScriptingController.downloadFileByHiveUrl(hiveUrl, _endpoint.appContext)
         }
     }
 }

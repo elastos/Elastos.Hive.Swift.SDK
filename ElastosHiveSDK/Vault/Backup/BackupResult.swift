@@ -24,26 +24,71 @@ import Foundation
 import ObjectMapper
 
 public class BackupResult: Mappable {
+    public enum State {
+        case STATE_STOP
+        case STATE_BACKUP
+        case STATE_RESTORE
+    }
+
+    public enum Result {
+        case RESULT_SUCCESS
+        case RESULT_FAILED
+        case RESULT_PROCESS
+    }
+    
     private var _state: String?
     private var _result: String?
+    private var _message: String?
+
     
     public required init?(map: Map) {}
 
     public func mapping(map: Map) {
         _state <- map["state"]
         _result <- map["result"]
+        _message <- map["message"]
     }
 
-    public func getStatusResult() throws -> BackupResultState {
+    public func getState() throws -> State {
         switch (_state) {
-        case "stop":
-            return BackupResultState.stop
-        case "backup":
-            return BackupResultState.backup
-        case "restore":
-            return BackupResultState.restore
-        default:
-            throw HiveError.DefaultException(_result ?? "result is null")
+            case "stop":
+                return State.STATE_STOP
+            case "backup":
+                return State.STATE_BACKUP
+            case "restore":
+                return State.STATE_RESTORE
+            default:
+                throw HiveError.DefaultException("Unknown state : \(_state)")
         }
+    }
+
+    public func setState(_ state: String) {
+        self._state = state
+    }
+
+    public func getResult() throws -> Result {
+        switch (_result) {
+            case "success":
+                return Result.RESULT_SUCCESS
+            case "failed":
+                return Result.RESULT_FAILED
+            case "process":
+                return Result.RESULT_PROCESS
+            default:
+                throw HiveError.DefaultException("Unknown result : \(_result)")
+
+        }
+    }
+
+    public func setResult(_ result: String) {
+        self._result = result
+    }
+
+    public func getMessage() -> String? {
+        return self._message
+    }
+
+    public func setMessage(_ message: String) {
+        self._message = message
     }
 }
