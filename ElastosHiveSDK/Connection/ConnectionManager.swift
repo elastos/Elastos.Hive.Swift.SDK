@@ -132,18 +132,22 @@ public class ConnectionManager {
     
     func headersStream() throws -> HTTPHeaders {
         self.lock.lock()
-        let token = try self.accessToken?.getCanonicalizedAccessToken()
+        let aToken = try (accessToken?.fetch() != nil) ? accessToken!.fetch()! : ""
+        let token = "token " + aToken
+
         self.lock.unlock()
-        return ["Content-Type": "application/octet-stream", "Authorization": "\(token!)", "Transfer-Encoding": "chunked", "Connection": "Keep-Alive"]
+        return ["Content-Type": "application/octet-stream", "Authorization": "\(token)", "Transfer-Encoding": "chunked", "Connection": "Keep-Alive"]
     }
     
     func headers() throws -> HTTPHeaders {
         self.lock.lock()
-        let token = try self.accessToken?.getCanonicalizedAccessToken()
+        let aToken = try (accessToken?.fetch() != nil) ? accessToken!.fetch()! : ""
+        let token = "token " + aToken
+
         self.lock.unlock()
         
         var header = self.defaultHeaders()
-                header.add(name: "Authorization", value: token!)
+                header.add(name: "Authorization", value: token)
         return header
     }
     
