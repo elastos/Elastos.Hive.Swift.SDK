@@ -91,7 +91,8 @@ public class ScriptRunner: ServiceEndpoint, ScriptingInvocationService {
     
     public func downloadFileByHiveUrl(_ hiveUrl: String) -> Promise<FileReader> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _controller.downloadFileByHiveUrl(hiveUrl)
+            return try ScriptingController.downloadFileByHiveUrl(hiveUrl, self.appContext)
+
         }
     }
 

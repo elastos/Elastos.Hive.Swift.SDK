@@ -22,6 +22,7 @@
 
 import Foundation
 import SwiftyJSON
+import AwaitKit
 
 /// The wrapper class to access the scripting APIs of the hive node.
 public class ScriptingController {
@@ -99,15 +100,28 @@ public class ScriptingController {
         return try FileReader(URL(string: url)!, _connectionManager!, .get)
     }
 
-    public func downloadFileByHiveUrl(_ hiveUrl: String) throws -> FileReader {
+    public static func downloadFileByHiveUrl(_ hiveUrl: String, _ context: AppContext) throws -> FileReader {
         let info = try HiveUrlInfo(hiveUrl)
-        let result = try callScript(info.scriptName, info.params,
-                                   info.targetDid, info.targetAppDid, JSON.self)
-        let tx = searchForEntity(result)
+        var targetUrl = ""
+
+        // Get the provider address for targetDid.
+        do {
+            targetUrl = try `await`(AppContext.getProviderAddress(info.targetAppDid, nil, true))
+        } catch {
+            throw HiveError.NetworkException("Failed to resolve targetDid on the hive url.")
+        }
+
+        // Prepare the new scripting service for targetDid with current user's appContext.
+        let runner = try ScriptRunner(context, targetUrl)
+        let controller = ScriptingController(runner, false)
+
+        let result = try controller.callScript(info.scriptName, info.params, info.targetDid, info.targetAppDid, JSON.self)
+        
+        let tx = controller.searchForEntity(result)
         guard tx != "" else {
             throw HiveError.InvalidParameterException("Transaction id is nil.")
         }
-        return try downloadFile(tx)
+        return try controller.downloadFile(tx)
     }
     
     func searchForEntity(_ p: JSON) -> String {
