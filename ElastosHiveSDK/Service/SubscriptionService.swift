@@ -46,6 +46,11 @@ public protocol SubscriptionService {
     /// Let user to unsubscribe to an existing but useless vault or backup service.
     ///
     /// - Returns: None would be returned on success, otherwise, the specific exception would be returned.
+    func unsubscribe(_ force: Bool) -> Promise<Void>
+    
+    /// Let user to unsubscribe to an existing but useless vault or backup service.
+    ///
+    /// - Returns: None would be returned on success, otherwise, the specific exception would be returned.
     func unsubscribe() -> Promise<Void>
     
     /// Let the user to get the basic information of the subscription.

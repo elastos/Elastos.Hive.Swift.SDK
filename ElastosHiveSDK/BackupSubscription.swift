@@ -93,6 +93,13 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentSe
         }
     }
     
+    public func unsubscribe(_ force: Bool) -> Promise<Void> {
+        return DispatchQueue.global().async(.promise){ [self] in
+            throw HiveError.NotImplementedException("")
+        }
+    }
+    
+    
     public func activate() throws -> Promise<Void> {
         throw HiveError.NotImplementedException("activate")
 
