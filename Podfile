@@ -3,12 +3,13 @@ def import_pods
   #pod 'Swifter', '1.5.0'
   pod 'Alamofire', '~> 5.0'
   pod 'PromiseKit'
-  pod 'ElastosDIDSDK', '~> 2.2.12'
+#  pod 'ElastosDIDSDK', '~> 2.2.12'
 
   pod 'ReadWriteLock', '~> 1.0'
   pod 'ObjectMapper'
   pod 'SwiftyJSON'
   pod 'AwaitKit', '~> 5.2.0'
+  pod 'DeveloperDID', '~> 1.0.2'
 
 end
 
@@ -19,7 +20,7 @@ xcodeproj 'Example/Examples-iOS/HiveExamples.xcodeproj'
 target :ElastosHiveSDK do
 xcodeproj 'ElastosHiveSDK' 
 use_frameworks!
-  platform :ios, '11.0'
+  platform :ios, '12.0'
   import_pods
   target 'ElastosHiveSDKTests' do
     inherit! :search_paths
@@ -36,7 +37,7 @@ end
 target :"HiveExamples" do
 xcodeproj 'Example/Examples-iOS/HiveExamples'
     #source 'https://github.com/CocoaPods/Specs.git'
-    platform :ios, '11.0'
+    platform :ios, '12.0'
     use_frameworks!
     import_pods
 

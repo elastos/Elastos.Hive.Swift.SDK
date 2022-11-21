@@ -34,8 +34,25 @@ public class DatabaseServiceRender: DatabaseService {
     /// - Parameter name: the collection name
     /// - Returns: fail(false) or success(true)
     public func createCollection(_ name: String) -> Promise<Void> {
+        return createCollectionInternal(name)
+    }
+    
+    /**
+     * Lets the vault owner create a collection on database.
+     *
+     * @param collectionName the collection name.
+     * @param isEncrypt whether the collection is encryption.
+     * @return void
+     */
+    func createCollectionInternal(_ collectionName: String, isEncrypt: Bool = false) -> Promise<Void>{
+
         DispatchQueue.global().async(.promise) { [self] in
-            return try _controller.createCollection(name)
+            var body: [String : Any] = [:]
+            if (isEncrypt) {
+                body["is_encrypt"] = true
+                body["encrypt_method"] = EncryptionValue.ENCRYPT_METHOD
+            }
+            return try _controller.createCollection(collectionName, body)
         }
     }
 
@@ -103,7 +120,7 @@ public class DatabaseServiceRender: DatabaseService {
             return try _controller.findOne(collection, query, options)!
         }
     }
-
+    
     /// Find many documents.
     /// - Parameters:
     ///   - collection: the collection name
@@ -180,8 +197,13 @@ public class DatabaseServiceRender: DatabaseService {
     ///   - filter: A query that matches the document to delete.
     /// - Returns: Void
     public func deleteMany(_ collection: String, _ filter: [String : Any]) -> Promise<Void> {
-        return DispatchQueue.global().async(.promise){ [self] in
-            _ = try _controller.deleteMany(collection, filter)
+        return Promise<Void> { resolver in
+            do {
+                _ = try _controller.deleteMany(collection, filter)
+                resolver.fulfill(Void())
+            } catch {
+                resolver.reject(error)
+            }
         }
     }
 }

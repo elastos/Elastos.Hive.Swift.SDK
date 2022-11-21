@@ -23,9 +23,9 @@
 import Foundation
 
 extension ConnectionManager {
-    public func createCollection(_ collection: String) throws -> DataRequest {
+    public func createCollection(_ collection: String, _ params: [String: Any]) throws -> DataRequest {
         let url = self.baseURL + "/api/v2/vault/db/collections/\(collection)"
-        return try self.createDataRequest(url, .put, nil)
+        return try self.createDataRequest(url, .put, params)
     }
     
     public func deleteCollection(_ collection: String) throws -> DataRequest {
