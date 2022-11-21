@@ -35,10 +35,10 @@ public class DatabaseController {
     /// Create the collection.
     /// - Parameter collectionName: The name of the collection.
     /// - Throws: HiveError The error comes from the hive node.
-    public func createCollection(_ collectionName: String) throws {
+    public func createCollection(_ collectionName: String, _ params: [String: Any]) throws {
         var result: CreateCollectionResult? = nil
 
-        result = try _connectionManager.createCollection(collectionName).execute(CreateCollectionResult.self)
+        result = try _connectionManager.createCollection(collectionName, params).execute(CreateCollectionResult.self)
         if collectionName != result?.name  {
             throw HiveError.ServerUnkownException("Different collection created, impossible to happen")
         }

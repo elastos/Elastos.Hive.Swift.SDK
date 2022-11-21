@@ -47,6 +47,16 @@
 		1155A3B3277E55F000094352 /* UserConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1155A3AC277E55EF00094352 /* UserConfig.swift */; };
 		116B2F3025B6C0F200635D97 /* Backup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116B2F2F25B6C0F200635D97 /* Backup.swift */; };
 		1170FB142502019C0049E81D /* Vault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1170FB132502019C0049E81D /* Vault.swift */; };
+		1173053D2929074C001E6764 /* EncryptionDatabaseRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1173053C2929074C001E6764 /* EncryptionDatabaseRender.swift */; };
+		1173053E2929074C001E6764 /* EncryptionDatabaseRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1173053C2929074C001E6764 /* EncryptionDatabaseRender.swift */; };
+		11730540292907B4001E6764 /* Databaseencryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1173053F292907B4001E6764 /* Databaseencryption.swift */; };
+		11730541292907B4001E6764 /* Databaseencryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1173053F292907B4001E6764 /* Databaseencryption.swift */; };
+		1173054329290DA4001E6764 /* Encryptionvalue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1173054229290DA4001E6764 /* Encryptionvalue.swift */; };
+		1173054429290DA4001E6764 /* Encryptionvalue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1173054229290DA4001E6764 /* Encryptionvalue.swift */; };
+		11730546292A513C001E6764 /* EncryptionFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11730545292A513C001E6764 /* EncryptionFile.swift */; };
+		11730547292A513C001E6764 /* EncryptionFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11730545292A513C001E6764 /* EncryptionFile.swift */; };
+		11730549292A53A0001E6764 /* EncryptionFilesRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11730548292A53A0001E6764 /* EncryptionFilesRender.swift */; };
+		1173054A292A53A0001E6764 /* EncryptionFilesRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11730548292A53A0001E6764 /* EncryptionFilesRender.swift */; };
 		11A4DF1D282A4A8C00C76F04 /* NodeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A4DF1C282A4A8C00C76F04 /* NodeInfo.swift */; };
 		11A4DF1E282A4A8C00C76F04 /* NodeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A4DF1C282A4A8C00C76F04 /* NodeInfo.swift */; };
 		11A4DF20282CA2B700C76F04 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A4DF1F282CA2B700C76F04 /* AppInfo.swift */; };
@@ -276,6 +286,11 @@
 		1155A3AC277E55EF00094352 /* UserConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserConfig.swift; sourceTree = "<group>"; };
 		116B2F2F25B6C0F200635D97 /* Backup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backup.swift; sourceTree = "<group>"; };
 		1170FB132502019C0049E81D /* Vault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vault.swift; sourceTree = "<group>"; };
+		1173053C2929074C001E6764 /* EncryptionDatabaseRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EncryptionDatabaseRender.swift; sourceTree = "<group>"; };
+		1173053F292907B4001E6764 /* Databaseencryption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Databaseencryption.swift; sourceTree = "<group>"; };
+		1173054229290DA4001E6764 /* Encryptionvalue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Encryptionvalue.swift; sourceTree = "<group>"; };
+		11730545292A513C001E6764 /* EncryptionFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EncryptionFile.swift; sourceTree = "<group>"; };
+		11730548292A53A0001E6764 /* EncryptionFilesRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EncryptionFilesRender.swift; sourceTree = "<group>"; };
 		11A4DF1C282A4A8C00C76F04 /* NodeInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeInfo.swift; sourceTree = "<group>"; };
 		11A4DF1F282CA2B700C76F04 /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 		11A4DF21282CA2C500C76F04 /* AppStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStats.swift; sourceTree = "<group>"; };
@@ -644,6 +659,8 @@
 		3053BE702684CA5F005828B0 /* Vault */ = {
 			isa = PBXGroup;
 			children = (
+				11730548292A53A0001E6764 /* EncryptionFilesRender.swift */,
+				1173053C2929074C001E6764 /* EncryptionDatabaseRender.swift */,
 				3053BEA22684CA5F005828B0 /* BackupServiceRender.swift */,
 				3053BEAF2684CA5F005828B0 /* DatabaseServiceRender.swift */,
 				3053BEA72684CA5F005828B0 /* FilesServiceRender.swift */,
@@ -660,6 +677,8 @@
 		3053BE712684CA5F005828B0 /* Database */ = {
 			isa = PBXGroup;
 			children = (
+				1173053F292907B4001E6764 /* Databaseencryption.swift */,
+				1173054229290DA4001E6764 /* Encryptionvalue.swift */,
 				3053BE852684CA5F005828B0 /* AscendingSortItem.swift */,
 				3053BE7A2684CA5F005828B0 /* Collation.swift */,
 				3053BE862684CA5F005828B0 /* CountOptions.swift */,
@@ -729,6 +748,7 @@
 		3053BEA82684CA5F005828B0 /* Files */ = {
 			isa = PBXGroup;
 			children = (
+				11730545292A513C001E6764 /* EncryptionFile.swift */,
 				3053BEAC2684CA5F005828B0 /* ChildrenInfo.swift */,
 				111D47EF24F7A18900B7462B /* FileInfo.swift */,
 				3053BEAA2684CA5F005828B0 /* FilesAPI.swift */,
@@ -1156,14 +1176,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1173054A292A53A0001E6764 /* EncryptionFilesRender.swift in Sources */,
 				11D26F4522CA3B4B00E4099A /* String.swift in Sources */,
 				11ACBB9429025D36004EA4EF /* CountBody.swift in Sources */,
 				11A4DF1E282A4A8C00C76F04 /* NodeInfo.swift in Sources */,
 				11030A632914ED8800F9ACB3 /* BackupServiceProgress.swift in Sources */,
+				11730541292907B4001E6764 /* Databaseencryption.swift in Sources */,
 				1129C19524052CC500CD77F2 /* Alamofire+Synchronous.swift in Sources */,
 				11A4DF2D282E283800C76F04 /* IpfsRunner.swift in Sources */,
+				1173053E2929074C001E6764 /* EncryptionDatabaseRender.swift in Sources */,
 				1103757A23FF96BF004216D0 /* Log.swift in Sources */,
+				1173054429290DA4001E6764 /* Encryptionvalue.swift in Sources */,
 				11ACBB9129025B5C004EA4EF /* CountExecutable.swift in Sources */,
+				11730547292A513C001E6764 /* EncryptionFile.swift in Sources */,
 				1103757123FF96A0004216D0 /* LogLevel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1174,6 +1199,7 @@
 			files = (
 				3096751F268B187B00FF8406 /* PayOrderParams.swift in Sources */,
 				3053BEF22684CA5F005828B0 /* FilesAPI.swift in Sources */,
+				11730546292A513C001E6764 /* EncryptionFile.swift in Sources */,
 				3053BEDC2684CA5F005828B0 /* FileHashExecutable.swift in Sources */,
 				111D47F024F7A18900B7462B /* FileInfo.swift in Sources */,
 				3053BE652684CA38005828B0 /* PromotionService.swift in Sources */,
@@ -1229,6 +1255,7 @@
 				11A4DF1D282A4A8C00C76F04 /* NodeInfo.swift in Sources */,
 				3045A75926024C1E0037527A /* ScriptingServiceRender.swift in Sources */,
 				303CD55D26075D2A00865472 /* ScriptRunner.swift in Sources */,
+				1173054329290DA4001E6764 /* Encryptionvalue.swift in Sources */,
 				3053BEC12684CA5F005828B0 /* DatabaseAPI.swift in Sources */,
 				11A4DF22282CA2C500C76F04 /* AppStats.swift in Sources */,
 				3053BE3A2684C974005828B0 /* ChallengeRequest.swift in Sources */,
@@ -1282,6 +1309,7 @@
 				11A4DF20282CA2B700C76F04 /* AppInfo.swift in Sources */,
 				3053BEE92684CA5F005828B0 /* AndCondition.swift in Sources */,
 				3001863E26AD8A5400584B74 /* HiveBackupContext.swift in Sources */,
+				11730549292A53A0001E6764 /* EncryptionFilesRender.swift in Sources */,
 				3053BEF92684CA5F005828B0 /* CredentialCode.swift in Sources */,
 				3053BE672684CA38005828B0 /* FilesService.swift in Sources */,
 				3053BDFB2684C8DF005828B0 /* PromotionAPI.swift in Sources */,
@@ -1291,6 +1319,7 @@
 				3053BED32684CA5F005828B0 /* SortItem.swift in Sources */,
 				3053BEE52684CA5F005828B0 /* AggregatedExecutable.swift in Sources */,
 				3053BEF42684CA5F005828B0 /* ChildrenInfo.swift in Sources */,
+				1173053D2929074C001E6764 /* EncryptionDatabaseRender.swift in Sources */,
 				3053BEBE2684CA5F005828B0 /* DeleteResult.swift in Sources */,
 				11ED682A22FF1078004C17D0 /* ElastosHiveSDK.swift in Sources */,
 				3053BEFC2684CA5F005828B0 /* BackupResult.swift in Sources */,
@@ -1300,6 +1329,7 @@
 				3053BEFB2684CA5F005828B0 /* BackupAPI.swift in Sources */,
 				3053BE6D2684CA38005828B0 /* ScriptingInvocationService.swift in Sources */,
 				3053BEF62684CA5F005828B0 /* GeneralResult.swift in Sources */,
+				11730540292907B4001E6764 /* Databaseencryption.swift in Sources */,
 				3053BE692684CA38005828B0 /* BackupService.swift in Sources */,
 				3053BEEB2684CA5F005828B0 /* BackupServiceRender.swift in Sources */,
 				3053BE6A2684CA38005828B0 /* CloudBackupContext.swift in Sources */,
@@ -1539,7 +1569,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1600,7 +1630,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				OTHER_CFLAGS = "-fembed-bitcode";
@@ -1638,7 +1668,8 @@
 				);
 				INFOPLIST_FILE = ElastosHiveSDK/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 13.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1681,7 +1712,8 @@
 				);
 				INFOPLIST_FILE = ElastosHiveSDK/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 13.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
