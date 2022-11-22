@@ -36,19 +36,31 @@ public class FilesController {
     /// - Parameter path: The uploading file path.
     /// - Returns: The FileWriter.
     public func getUploadWriter(_ path: String) -> FileWriter {
-        let uploadPath = "\(self._connectionManager.baseURL)/api/v2/vault/files/\(path)"
-        return FileWriter(URL(string: uploadPath)!, _connectionManager)
+        return getUploadWriter(path, false)
     }
     
+    func getEncryptionUploadWriter(_ path: String, _ cipher: DIDCipher) -> FileWriter {
+        return getEncryptionUploadWriter(path, false, cipher)
+    }
+
     /// Get the upload writer for uploading the content of the file.
     /// - Parameters:
     ///   - path: The uploading file path.
+    ///   - publicOnIPFS: public on ipfs
     /// - Returns: The writer.
-    public func getUploadWriter(_ path: String, _ is_public: Bool, _ scriptName: String) -> FileWriter {
-        let params = is_public ? "?public=true&script_name=" + scriptName : ""
+    public func getUploadWriter(_ path: String, _ publicOnIPFS: Bool ) -> FileWriter {
+        let params = "?public=\(publicOnIPFS)"
 
         let uploadPath = "\(self._connectionManager.baseURL)/api/v2/vault/files/\(path)\(params)"
         return FileWriter(URL(string: uploadPath)!, _connectionManager)
+    }
+    
+    func getEncryptionUploadWriter(_ path: String, _ publicOnIPFS: Bool , _ cipher: DIDCipher) -> FileWriter {
+        let encrypt_method = EncryptionValue.ENCRYPT_METHOD
+        let params = "?public=\(publicOnIPFS)&is_encrypt=true&encrypt_method=\(encrypt_method)"
+        
+        let uploadPath = "\(self._connectionManager.baseURL)/api/v2/vault/files/\(path)\(params)"
+        return FileWriter(URL(string: uploadPath)!, _connectionManager, cipher: cipher)
     }
 
     /// Get the FileReader for downloading the content of the file.
@@ -57,6 +69,11 @@ public class FilesController {
     public func getDownloadReader(_ path: String) throws -> FileReader {
         let downloadPath = "\(self._connectionManager.baseURL)/api/v2/vault/files/\(path)"
         return try FileReader(URL(string: downloadPath)!, _connectionManager, HTTPMethod.get)
+    }
+    
+    func getEncryptionDownloadReader(_ path: String, _ cipher: DIDCipher) throws -> FileReader {
+        let downloadPath = "\(self._connectionManager.baseURL)/api/v2/vault/files/\(path)"
+        return try FileReader(URL(string: downloadPath)!, _connectionManager, HTTPMethod.get, cipher: cipher)
     }
     
     /// List the files on the remote folder.

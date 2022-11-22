@@ -36,12 +36,14 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     var _resolver: Resolver<Bool>?
     private var hiveError: HiveError?
     public var cid: String?
-    
-    init(_ uploadURL: URL, _ connectionManager: ConnectionManager) {
+    private var cipher: DIDCipher?
+
+    init(_ uploadURL: URL, _ connectionManager: ConnectionManager, cipher: DIDCipher? = nil) {
         self._connectionManager = connectionManager
 
         var input: InputStream? = nil
         var output: OutputStream? = nil
+        self.cipher = cipher
 
         Stream.getBoundStreams(withBufferSize: BUFFER_SIZE,
                                inputStream: &input,
@@ -70,7 +72,15 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     
     public func write(data: Data) throws -> Promise<Bool> {
         return DispatchQueue.global().async(.promise){ [self] in
-            let dataSize = data.count
+            var edata = data
+            if self.cipher != nil {
+                let dataBytes = try EncryptionFile(self.cipher!, data).encrypt() as? [UInt8]
+                edata = Data(bytes: dataBytes!, count: dataBytes!.count)
+                let eed = [UInt8](edata)
+                print(eed)
+            }
+           
+            let dataSize = edata.count
             var totalBytesWritten = 0
             var availableRetries = 5
             while totalBytesWritten < dataSize {
@@ -78,9 +88,9 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
                 let remainingBytesToWrite = dataSize - totalBytesWritten
 
                 // Keep reading the input buffer at the position we haven't read yet (advanced by).
-                let bytesWritten = data.advanced(by: totalBytesWritten).withUnsafeBytes() { (buffer: UnsafePointer<UInt8>) -> Int in
+                let bytesWritten = edata.advanced(by: totalBytesWritten).withUnsafeBytes() { (buffer: UnsafePointer<UInt8>) -> Int in
 
-                    return self.uploadBoundStreams.output.write(buffer, maxLength: min(dataSize, remainingBytesToWrite))
+                    return self.uploadBoundStreams.output.write(buffer, maxLength: min(edata.count, remainingBytesToWrite))
                 }
 
                 if bytesWritten == -1 {
@@ -124,17 +134,22 @@ public class FileWriter: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     
     public func write(data: Data, _ error: @escaping (_ error: HiveError) -> Void) throws {
         self.writerBlock = error
-        let dataSize = data.count
+        var edata = data
+        if self.cipher != nil {
+            let dataBytes = try EncryptionFile(self.cipher!, data).encrypt() as? [UInt8]
+            edata = Data(bytes: dataBytes!, count: dataBytes!.count)
+        }
+        
+        let dataSize = edata.count
         var totalBytesWritten = 0
         var availableRetries = 5
         while totalBytesWritten < dataSize {
-            
             let remainingBytesToWrite = dataSize - totalBytesWritten
 
             // Keep reading the input buffer at the position we haven't read yet (advanced by).
-            let bytesWritten = data.advanced(by: totalBytesWritten).withUnsafeBytes() { (buffer: UnsafePointer<UInt8>) -> Int in
+            let bytesWritten = edata.advanced(by: totalBytesWritten).withUnsafeBytes() { (buffer: UnsafePointer<UInt8>) -> Int in
 
-                return self.uploadBoundStreams.output.write(buffer, maxLength: min(dataSize, remainingBytesToWrite))
+                return self.uploadBoundStreams.output.write(buffer, maxLength: min(edata.count, remainingBytesToWrite))
             }
 
             if bytesWritten == -1 {

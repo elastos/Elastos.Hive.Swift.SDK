@@ -22,17 +22,15 @@
 
 import XCTest
 @testable import ElastosHiveSDK
-import ElastosDIDSDK
 import AwaitKit
+import DeveloperDID
 
-public var _filesService: FilesService?
-class FilesServiceTest: XCTestCase {
+class FilesEncryptionTest: XCTestCase {
     
-    private let FILE_NAME_TXT: String = "test_ios.txt"
-    private let FILE_NAME_IMG: String = "big_ios.png"
-    private let FILE_NAME_NOT_EXISTS: String = "not_exists.txt"
-    private let FILE_PUBLIC_NAME_TXT = "ipfs_public_file.txt"
-    private let FILE_PUBLIC_NAME_BIN = "ipfs_public_file.png"
+    private let FILE_NAME_TXT: String = "test_encryption_ios.txt"
+    private let FILE_CONTENT_TXT = "This is a test file for encryption"
+    private let FILE_NAME_BIN = "test_encryption.dat"
+    private let FILE_CONTENT_BIN = "This is a binary test file for encryption"
 
     private var bundlePath: Bundle?
     private var localTxtFilePath: String?
@@ -47,12 +45,29 @@ class FilesServiceTest: XCTestCase {
     private var localCacheTxtPath: String?
 
     private var subscription: VaultSubscription?
-    
+    public var _filesService: FilesService?
+
+    var cipher: DIDCipher?
+
     override func setUpWithError() throws {
         Log.setLevel(.Debug)
-        let testData: TestData = TestData.shared();
+        let testData = TestData.shared()
 
-        _filesService = try testData.newVault().filesService
+        XCTAssertNoThrow(_filesService = try testData.getEncryptionFileService())
+        do {
+            cipher = try testData.getEncryptionCipher()
+            let vaultSubscription = try VaultSubscription(testData.appContext,testData.providerAddress)
+            try `await`(vaultSubscription.subscribe())
+        } catch  {
+            if let error = error as? HiveError {
+                switch error {
+                case .AlreadyExistsException:
+                    XCTAssertTrue(true)
+                default:
+                    XCTAssertTrue(false)
+                }
+            }
+        }
         
         self.bundlePath = Bundle(for: type(of: self))
         self.localTxtFilePath = self.bundlePath?.path(forResource: "test_ios", ofType: "txt")
@@ -60,16 +75,9 @@ class FilesServiceTest: XCTestCase {
         
         self.remoteRootDir = "hive"
         self.remoteTxtFilePath = self.remoteRootDir! + "/" + FILE_NAME_TXT
-        self.remoteImgFilePath = self.remoteRootDir! + "/" + FILE_NAME_IMG
-        self.remoteNotExistsFilePath = self.remoteRootDir! + "/" + FILE_NAME_NOT_EXISTS
-        self.remoteBackupTxtFilePath = self.remoteRootDir! + "/" + FILE_NAME_TXT + "2"
-        self.localCacheImgPath = "swift_download.png"
-        self.localCacheTxtPath = "test_ios_download.txt"
+        self.localCacheTxtPath = "test_download_encryption_ios.txt"
         
         self.remoteNotExistsDirPath = remoteNotExistsFilePath
-        
-        self.subscription = try VaultSubscription(testData.appContext, testData.providerAddress)
-        _filesService = try testData.newVault().filesService
     }
     
     public func test01UploadText() {
@@ -88,6 +96,47 @@ class FilesServiceTest: XCTestCase {
         }())
     }
     
+    func verifyRemoteFileExists(_ path: String) {
+        XCTAssertNoThrow(try { [self] in
+            XCTAssertNotNil(try `await`(_filesService!.stat(path)))
+        }())
+    }
+    
+    func test02DownloadText() {
+        XCTAssertNoThrow(try { [self] in
+            let reader = try `await`(_filesService!.getDownloadReader(self.remoteTxtFilePath!))
+            let targetUrl = createFilePathForDownload(self.localCacheTxtPath!)
+            let result = try `await`(reader.read(targetUrl))
+            XCTAssertTrue(result)
+            let isEqual = try self.isFileContentEqual(self.localTxtFilePath!, self.localCacheTxtPath!)
+            XCTAssertTrue(isEqual)
+        }())
+    }
+    
+    func createFilePathForDownload(_ downloadPath: String) -> URL {
+        let dir = FileManager.default.urls(for: FileManager.SearchPathDirectory.cachesDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).last
+        let fileurl = dir?.appendingPathComponent(downloadPath)
+        if !FileManager.default.fileExists(atPath: fileurl!.path) {
+            FileManager.default.createFile(atPath: fileurl!.path, contents: nil, attributes: nil)
+        } else {
+            try? FileManager.default.removeItem(atPath: fileurl!.path)
+            FileManager.default.createFile(atPath: fileurl!.path, contents: nil, attributes: nil)
+        }
+        print(fileurl)
+        return fileurl!
+    }
+    
+    public func isFileContentEqual(_ srcFile: String, _ dstFile: String) throws -> Bool {
+        let dir = FileManager.default.urls(for: FileManager.SearchPathDirectory.cachesDirectory,
+                                           in: FileManager.SearchPathDomainMask.userDomainMask).last!
+        let fileURL = dir.appendingPathComponent(dstFile)
+        let downloadData = try! Data(contentsOf: fileURL)
+        let originalData = try Data(contentsOf: URL(fileURLWithPath: srcFile))
+        
+        return downloadData == originalData
+    }
+    
+    /*
     public func test02UploadBin() {
         XCTAssertNoThrow(try { [self] in
             let data = try Data(contentsOf: URL(fileURLWithPath: self.localImgFilePath!))
@@ -136,8 +185,8 @@ class FilesServiceTest: XCTestCase {
                 }
             }
         }
-    }
-    
+    }*/
+    /*
     public func test05List() {
         XCTAssertNoThrow(try { [self] in
             let files = try `await`(_filesService!.list(self.remoteRootDir!))
@@ -279,7 +328,7 @@ class FilesServiceTest: XCTestCase {
             var cid = "Qmc4toiRA9NsCUEFgkdKDAeUkEj6UQzA4r9AXrtgaDX4CS"
             
             // Upload public file.
-            let fileWriter =  try `await`(_filesService!.getUploadWriter(fileName))
+            let fileWriter =  try `await`(_filesService!.getUploadWriter(fileName, String(scriptName)))
             var result = try `await`(fileWriter.write(data: FILE_PUBLIC_NAME_TXT.data(using: .utf8)!))
             cid = fileWriter.cid!
             print("result ======= \(result)")
@@ -296,19 +345,6 @@ class FilesServiceTest: XCTestCase {
             _ = try `await`(ipfsReader.read(ipfsTargetUrl))
             
         }())
-    }
-    /*
-     @Test @Order(10) void testUploadPublicBin() {
-         Assertions.assertDoesNotThrow(() -> {
-             // Download by script.
-             ScriptingServiceTest scriptingServiceTest = new ScriptingServiceTest();
-             ScriptingServiceTest.setUp();
-             scriptingServiceTest.downloadPublicBinFileAndVerify(scriptName, localCacheRootDir, FILE_NAME_IMG, localImgFilePath);
-             // clean file and script
-             scriptingServiceTest.unregisterScript(scriptName);
-             filesService.delete(fileName).get();
-         });
-     }
-     */
+    }*/
 }
 

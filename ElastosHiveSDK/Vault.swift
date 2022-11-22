@@ -43,6 +43,9 @@ public class Vault: ServiceEndpoint {
     private var _backupService: BackupService!
     private var _cipher: DIDCipher?
     private var _encryptedDBService: DatabaseService?
+    private var _encryptedFileServcie: FilesService?
+
+    
     private var _builder: ServiceBuilder!
 
     public override init(_ context: AppContext) throws {
@@ -100,6 +103,17 @@ public class Vault: ServiceEndpoint {
             self._encryptedDBService = _builder.createEncryptionDatabase(_cipher!, DATABASE_NONCE)
         }
         return encrypt ? _encryptedDBService! : self.databaseService
+    }
+    
+    public func getFilesService(encrypt: Bool = false) throws -> FilesService {
+        if (encrypt && self._cipher == nil) {
+            throw HiveError.InvalidParameterException("Encryption has not been enabled, call 'enableEncrytpion'")
+        }
+
+        if (encrypt && self._encryptedFileServcie == nil) {
+            self._encryptedFileServcie = _builder.createEncryptionFilesService(_cipher!)
+        }
+        return encrypt ? _encryptedFileServcie! : self.filesService
     }
     
     /// Get the scripting service of the vault.
