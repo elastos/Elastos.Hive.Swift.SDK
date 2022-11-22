@@ -22,7 +22,6 @@
 
 import Foundation
 import ObjectMapper
-import ElastosDIDSDK
 
 public class NodeInfo: Mappable {
     
