@@ -21,7 +21,6 @@
  */
 
 import Foundation
-import DeveloperDID
 
 public class EncryptionValue {
     private static let TRUNK_SIZE = 4096
@@ -116,7 +115,6 @@ public class EncryptionValue {
     func decrypt() throws -> Any {
         throw DIDError.UncheckedError.IllegalArgumentErrors.IllegalArgumentError("NotImplementedException")
     }
-    
 }
 
 /**
@@ -133,7 +131,7 @@ public class BasicEncryptionValue: EncryptionValue {
     private var nonce: [UInt8]
     
     
-    init<T>(_ cipher: DIDCipher, _ nonce: [UInt8], _ value: T, _ encryptedType: Int?) {
+    init(_ cipher: DIDCipher, _ nonce: [UInt8], _ value: Any, _ encryptedType: Int?) {
         self.encryptedType = encryptedType
         self.nonce = nonce
         super.init(cipher, value)
@@ -168,18 +166,17 @@ public class BasicEncryptionValue: EncryptionValue {
         throw HiveError.InvalidParameterException("Got an unexpected encrypted type value: \(self.value)")
     }
     
-    func encrypt() throws -> String {
+    override func encrypt() throws -> Any {
         
-        let strVal = (self.value as AnyObject).toString()
+        let strVal = toString(self.value)
         let message = Array(strVal.utf8)// String to Uint8 Array
         let encryptMessage = try self.encryptMessage(message, self.nonce)
         return encryptMessage.hexString// UInt8 Array to hex string
-        
     }
     
     override func decrypt() throws -> Any {
         
-        let hexString: String = self.value as! String// hex
+        let hexString: String = toString(self.value)// hex
         let cipherText = hexString.hexa// hex -> [UInt8]
         let clearText = try self.decryptMessage(cipherText, self.nonce).utf8String
         
@@ -193,6 +190,32 @@ public class BasicEncryptionValue: EncryptionValue {
 
         return ""
     }
+    
+    func toString(_ value:  Any) -> String {
+        switch value {
+            
+        case let string as String: // dictionary
+            return string
+            
+        case let boole as Bool:
+            return "\(boole)"
+        case let vaultInt as Int:
+            return "\(vaultInt)"
+        case let vaultFloat as Float:
+            return "\(vaultFloat)"
+        case let vaultDouble as Double:
+            return "\(vaultDouble)"
+        case let nsString as NSString:
+            return nsString as String
+        case let nsNumber as NSNumber:
+            return "\(nsNumber)"
+        default: break
+            // TODO: ERROR
+            print("vaule is: \(value)")
+            return ""
+        }
+        return ""
+    }
 }
 
 extension Array where Element == UInt8 { // [UInt8] convert to Base64String
@@ -202,7 +225,7 @@ extension Array where Element == UInt8 { // [UInt8] convert to Base64String
     }
 }
 
-extension StringProtocol { // String convert to [UInt8]
+extension StringProtocol { // base64String convert to [UInt8]
     var hexa: [UInt8] {
         var startIndex = self.startIndex
         return (0..<count/2).compactMap { _ in

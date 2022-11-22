@@ -1,7 +1,7 @@
 import Foundation
 @testable import ElastosHiveSDK
-import ElastosDIDSDK
 import PromiseKit
+import DeveloperDID
 
 public enum EnvironmentType: Int {
     case DEVELOPING
@@ -17,7 +17,9 @@ public class TestData {
     private var _userDid: UserDID!
     private var _callerDid: UserDID!
     private var _appInstanceDid: AppDID!
+    private var _appInstanceDidDoc: DIDDocument!
     private var _nodeConfig: NodeConfig!
+    private var _applicationConfig: ApplicationConfig!
     private var _context: AppContext!
     private var _callerContext: AppContext!
     private var _storePath: String!
@@ -50,8 +52,9 @@ public class TestData {
             try AppContext.setupResover(clientConfig!.resolverUrl, "data/didCache")
             _ipfsGatewayUrl = clientConfig!.ipfsGateUrl
 
-            let applicationConfig = clientConfig!.applicationConfig
-            _appInstanceDid = try AppDID(applicationConfig.name, applicationConfig.mnemonic, applicationConfig.passPhrase, applicationConfig.storepass, _network)
+            _applicationConfig = clientConfig!.applicationConfig
+            _appInstanceDid = try AppDID(_applicationConfig.name, _applicationConfig.mnemonic, _applicationConfig.passPhrase, _applicationConfig.storepass, _network)
+            _appInstanceDidDoc = try _appInstanceDid.getDocument()
             
             let userConfig = clientConfig!.userConfig
             _userDid = try UserDID(userConfig.name, userConfig.mnemonic, userConfig.passPhrase, userConfig.storepass, _network)
@@ -59,7 +62,7 @@ public class TestData {
             
             
             _storePath = "\(NSHomeDirectory())/Library/Caches/data/store" + "/" + _nodeConfig.storePath
-            _context = try AppContext.build(TestAppContextProvider(_storePath, _userDid, _appInstanceDid), _userDid.description)
+            _context = try AppContext.build(TestAppContextProvider(_storePath, _userDid, _appInstanceDid), _userDid.description, appId)
             
              let userConfigCaller: UserConfig = clientConfig!.crossConfig.userConfig
             _callerDid = try UserDID(userConfigCaller.name, userConfigCaller.mnemonic, userConfigCaller.passPhrase, userConfigCaller.storepass, _network)
@@ -68,7 +71,7 @@ public class TestData {
             
             //初始化Application Context
             
-            _callerContext = try AppContext.build(TestAppContextProvider(_storePath, _userDid, _appInstanceDid), _userDid.description)
+            _callerContext = try AppContext.build(TestAppContextProvider(_storePath, _userDid, _appInstanceDid), _userDid.description, appId)
         }
         catch {
             print(error)
@@ -99,6 +102,20 @@ public class TestData {
         get {
             return _nodeConfig.targetHost
         }
+    }
+    
+    public func getEncryptionCipher() throws -> DIDCipher {
+        return try self._appInstanceDidDoc.createCipher(self.appId, 6, self._applicationConfig.storepass)
+    }
+
+    public func getEncryptionDatabaseService() throws -> DatabaseService {
+        let vault = try self.newVault()
+        do {
+            try vault.enableEncryption(self._applicationConfig.storepass)
+        } catch {
+            print(error)
+        }
+        return try vault.getDatabaseService(encrypt: true)
     }
  
     public func newVault() throws -> Vault {

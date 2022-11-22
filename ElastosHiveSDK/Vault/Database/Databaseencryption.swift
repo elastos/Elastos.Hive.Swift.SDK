@@ -21,7 +21,6 @@
  */
 
 import Foundation
-import DeveloperDID
 
 public class EncryptionDocument: EncryptionValue {
     var nonce: [UInt8]
@@ -60,10 +59,13 @@ public class EncryptionDocument: EncryptionValue {
         }
         
         let val = BasicEncryptionValue(self.cipher, self.nonce, value, 0)
-        
+
+        let binaryVault = try val.encrypt()
+        let type = try val.getEncryptedType()
+
         return [
-            "__binary__": try val.encrypt(),
-            "__type__": try val.getEncryptedType(),
+            "__binary__": binaryVault,
+            "__type__": type,
         ] as [String: Any]
     }
     
@@ -82,13 +84,13 @@ public class EncryptionDocument: EncryptionValue {
             
             var retVal = [String: Any]()
             for (k, v) in dictionary {
-                retVal[k] = try encryptRecursive(v)
+                retVal[k] = try decryptRecursive(v)
             }
             return retVal
         case let array as [Any]:
             var retVal = [Any]()
             for v in array {
-                retVal.append(try encryptRecursive(v))
+                retVal.append(try decryptRecursive(v))
             }
             return retVal
         default: break
@@ -112,11 +114,13 @@ public class EncryptionFilter: EncryptionValue {
         var result = [String: Any]()
         
         for (k, v) in value as! [String: Any] {
+            var _result = [String: Any]()
             let enval = BasicEncryptionValue(self.cipher, self._nonce, v, 0)
             if enval.isBasicType() {
-                result["\(k).__binary__"] = try enval.encrypt()
-                result["\(k).__type__"] = try enval.getEncryptedType()
-
+                
+                _result["__binary__"] = try enval.encrypt()
+                _result["__type__"] = try enval.getEncryptedType()
+                result[k] = _result
             } else {
                 result[k] = v
             }
@@ -141,20 +145,18 @@ public class EncryptionUpdate:  EncryptionValue {
     }
     
     override func encrypt() throws -> Any {
-        let value = self.value
+        var value = self.value
 
         if value is [String : Any] {
             var dic = value as! [String : Any]
             if dic["$set"] != nil && dic["$set"] is [String : Any] {
                 dic["$set"] = try EncryptionDocument(self.cipher, self._nonce, dic["$set"]).encrypt()
             }
-        }
-        
-        if value is [String : Any] {
-            var dic = value as! [String : Any]
+            
             if dic["$setOnInsert"] != nil && dic["$setOnInsert"] is [String : Any] {
                 dic["$setOnInsert"] = try EncryptionDocument(self.cipher, self._nonce, dic["$setOnInsert"]).encrypt()
             }
+            value = dic
         }
         return value
     }
@@ -239,7 +241,7 @@ public class DatabaseEncryption {
             return [:]
         }
         
-        return try EncryptionFilter(self.cipher, self._nonce, update).encrypt()
+        return try EncryptionUpdate(self.cipher, self._nonce, update).encrypt()
     }
 }
 

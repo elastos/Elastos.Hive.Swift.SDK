@@ -21,7 +21,6 @@
 */
 
 import Foundation
-import ElastosDIDSDK
 
 /// The application context would contain the resources list below:
 /// - The reference of application context provider.
@@ -33,9 +32,11 @@ public class AppContext {
     private var _contextProvider: AppContextProvider
     private var _userDid: String
     private var _forceResolve: Bool
+    private var _appDid: String
 
-    public init(_ provider: AppContextProvider, _ userDid: String) {
+    public init(_ provider: AppContextProvider, _ userDid: String, _ appDid: String) {
         _userDid = userDid
+        _appDid = appDid
         _contextProvider = provider
         self._forceResolve = false
     }
@@ -50,6 +51,12 @@ public class AppContext {
     /// - returns: The user DID.
     public var userDid: String {
         return _userDid
+    }
+    
+    /// Get the user DID.
+    /// - returns: The user DID.
+    public var appDid: String {
+        return _appDid
     }
     
     /// Get the provider address from user DID document.
@@ -86,7 +93,7 @@ public class AppContext {
     ///   - provider: The provider of the application context.
     ///   - userDid: The user DID.
     /// - returns: The application context.
-    public static func build(_ provider: AppContextProvider, _ userDid: String) throws -> AppContext {
+    public static func build(_ provider: AppContextProvider, _ userDid: String, _ appDid: String) throws -> AppContext {
         guard provider.getLocalDataDir() != nil else {
             throw HiveError.BadContextProviderException("Missing method to acquire data location")
         }
@@ -99,7 +106,7 @@ public class AppContext {
             throw HiveError.DIDResolverNotSetupException(nil)
         }
 
-        return AppContext(provider, userDid)
+        return AppContext(provider, userDid, appDid)
     }
     
     /// Get the URL address of the provider throw the document of the user DID. The will access the property of the document of the user DID.

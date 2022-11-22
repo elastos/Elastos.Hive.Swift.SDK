@@ -31,6 +31,7 @@
 		1103757923FF96BF004216D0 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103757823FF96BF004216D0 /* Log.swift */; };
 		1103757A23FF96BF004216D0 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1103757823FF96BF004216D0 /* Log.swift */; };
 		1105544D27D9D828006395B7 /* AppContentText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1105544C27D9D828006395B7 /* AppContentText.swift */; };
+		110A34AD292B488800CDD947 /* DatabaseEncryptionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110A34AC292B488800CDD947 /* DatabaseEncryptionTest.swift */; };
 		111D47F024F7A18900B7462B /* FileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47EF24F7A18900B7462B /* FileInfo.swift */; };
 		111D47F424F7A30300B7462B /* Executable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47F324F7A30300B7462B /* Executable.swift */; };
 		111D47FA24F7A79800B7462B /* Condition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D47F924F7A79800B7462B /* Condition.swift */; };
@@ -270,6 +271,7 @@
 		1103756F23FF96A0004216D0 /* LogLevel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogLevel.swift; sourceTree = "<group>"; };
 		1103757823FF96BF004216D0 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		1105544C27D9D828006395B7 /* AppContentText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContentText.swift; sourceTree = "<group>"; };
+		110A34AC292B488800CDD947 /* DatabaseEncryptionTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseEncryptionTest.swift; sourceTree = "<group>"; };
 		111D47EF24F7A18900B7462B /* FileInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileInfo.swift; sourceTree = "<group>"; };
 		111D47F324F7A30300B7462B /* Executable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Executable.swift; sourceTree = "<group>"; };
 		111D47F924F7A79800B7462B /* Condition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Condition.swift; sourceTree = "<group>"; };
@@ -491,6 +493,7 @@
 		111D477B24EE4B0700B7462B /* Vault */ = {
 			isa = PBXGroup;
 			children = (
+				110A34AC292B488800CDD947 /* DatabaseEncryptionTest.swift */,
 				3019D3DD2610D8EF00A3C3C5 /* BackupServiceTest.swift */,
 				30E94820260AFF7500452FF5 /* BackupSubscriptionTest.swift */,
 				3045A739260237FC0037527A /* DatabaseServiceTest.swift */,
@@ -1156,6 +1159,7 @@
 				304F24392628066700DDB5C0 /* VaultManagementTest.swift in Sources */,
 				30037BB426A048730085AE4A /* TestAppContextProvider.swift in Sources */,
 				1155A3B0277E55F000094352 /* CrossConfig.swift in Sources */,
+				110A34AD292B488800CDD947 /* DatabaseEncryptionTest.swift in Sources */,
 				1155A3B1277E55F000094352 /* ClientConfig.swift in Sources */,
 				3019D3DE2610D8F000A3C3C5 /* BackupServiceTest.swift in Sources */,
 				30DB96542600E49300ACF19F /* VaultSubscriptionTest.swift in Sources */,

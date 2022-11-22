@@ -26,14 +26,26 @@ import ObjectMapper
 public class FindResult: Mappable {
     // TODO: change 'items' to 'docs' ?
     private var _documents: [Dictionary<String, Any>]?
-    
+    private var _encryptMethod: String?
+    private var _isEncrypt: Bool?
+
     public var documents: [Dictionary<String, Any>]? {
         return _documents
+    }
+    
+    public var encryptMethod: String? {
+        return _encryptMethod
+    }
+    
+    public var isEncrypt: Bool? {
+        return _isEncrypt
     }
     
     required public init?(map: Map) {}
     
     public func mapping(map: Map) {
         _documents <- map["items"]
+        _encryptMethod <- map["encrypt_method"]
+        _isEncrypt <- map["is_encrypt"]
     }
 }

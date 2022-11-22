@@ -49,6 +49,9 @@ public enum HiveError: Error {
     case InvalidParameterException(_ message: String?)
     case IllegalArgumentException(_ message: String?)
     case RuntimeError(_ message: String?)
+    case EncryptionError(_ message: String?)
+
+    
     
 }
 
@@ -105,7 +108,9 @@ extension HiveError {
         case .IllegalArgumentException(let message):
             return "IllegalArgumentException: \(message ?? "")"
         case .RuntimeError(let message):
-            return "IllegalArgumentException: \(message ?? "")"
+            return "RuntimeError: \(message ?? "")"
+        case .EncryptionError(let message):
+            return "EncryptionError: \(message ?? "")"
         }
         
     }
