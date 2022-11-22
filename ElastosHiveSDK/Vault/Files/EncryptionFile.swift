@@ -24,17 +24,18 @@ import Foundation
 import ObjectMapper
 
 public class EncryptionFile: EncryptionValue {
-    var _vaule: String
-    init(_ cipher: DIDCipher, _ value: String) {
+    var _vaule: Data
+
+    init(_ cipher: DIDCipher, _ value: Data) {
         _vaule = value
         super.init(cipher, value)
     }
     
-    func encrypt() throws -> [UInt8] {
-        return try self.encryptStream(Array(_vaule.utf8))
+    override func encrypt() throws -> Any{
+        return try self.encryptStream([UInt8](_vaule))
     }
 
-    func decrypt() throws -> [UInt8]? {
-        return try self.decryptStream(_vaule.hexa)
+    override func decrypt() throws -> Any {
+        return try self.decryptStream([UInt8](_vaule)) as Any
     }
 }

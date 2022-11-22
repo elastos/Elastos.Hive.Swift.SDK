@@ -44,11 +44,13 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     private var readerCompleteWithError: HandleBlock?
     private var connectionManager: ConnectionManager?
     private var _resolver: Resolver<Bool>?
-    
+    private var cipher: DIDCipher?
+
     /// this is for IpfsRunner
-    init(_ url: URL, _ method: HTTPMethod) throws {
+    init(_ url: URL, _ method: HTTPMethod, cipher: DIDCipher? = nil) throws {
         var input: InputStream? = nil
         var output: OutputStream? = nil
+        self.cipher = cipher
         Stream.getBoundStreams(withBufferSize: BUFFER_SIZE,
                                inputStream: &input,
                                outputStream: &output)
@@ -77,9 +79,10 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         self.task?.resume()
     }
     
-    public init(_ url: URL,_ connectionManager: ConnectionManager,_ method: HTTPMethod) throws {
+    public init(_ url: URL,_ connectionManager: ConnectionManager,_ method: HTTPMethod, cipher: DIDCipher? = nil) throws {
         var input: InputStream? = nil
         var output: OutputStream? = nil
+        self.cipher = cipher
         self.connectionManager = connectionManager;
         Stream.getBoundStreams(withBufferSize: BUFFER_SIZE,
                                inputStream: &input,
@@ -112,7 +115,7 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         return DispatchQueue.global().async(.promise){ [self] in
             var hiveError: HiveError? = nil
             while !self.didLoadFinish {
-                if let data = self.read({ [self] error in
+                if var data = self.read({ [self] error in
                     hiveError = error
                 }) {
                     if let fileHandle = try? FileHandle(forWritingTo: targetUrl) {
@@ -157,8 +160,21 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
                 self.readDidFinish = true
                 return nil
             }
-            let data = Data.init(bytes: buffer, count: readBytesCount)
+            var data = Data.init(bytes: buffer, count: readBytesCount)
             self.totalBytesReadCount = self.totalBytesReadCount + data.count
+            if cipher != nil {
+                do {
+                    let dataBytes = try EncryptionFile(self.cipher!, data).decrypt() as? [UInt8]
+                    if dataBytes != nil {
+                        data = Data(bytes: dataBytes!, count: dataBytes!.count)
+                    }
+                }
+                catch {
+                    let hiveError = HiveError.EncryptionError(error.localizedDescription)
+                    self.readerBlock?(hiveError)
+                }
+
+            }
             return data
         }
         return nil

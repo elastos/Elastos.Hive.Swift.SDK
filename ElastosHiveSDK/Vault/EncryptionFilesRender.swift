@@ -32,17 +32,19 @@ public class EncryptionFilesRender: FilesServiceRender {
         super.init(serviceEndpoint)
     }
     
-// TODO:
+    public override func getDownloadReader(_ path: String) -> Promise<FileReader> {
+        return DispatchQueue.global().async(.promise){ [self] in
+            return try _controller!.getEncryptionDownloadReader(path, cipher)
+        }
+    }
     
-//    public override func getDownloadReader(_ path: String) -> Promise<FileReader> {
-//        
-//    }
-//    
-//    public override func getUploadWriter(_ path: String, _ scriptName: String) -> Promise<FileWriter> {
-//        
-//    }
-//    
-//    public override func getUploadWriter(_ path: String) -> Promise<FileWriter> {
-//        
-//    }
+    public override func getUploadWriter(_ path: String, _ publicOnIPFS: Bool) -> Promise<FileWriter> {
+        return super.getEncryptionUploadWriter(path, publicOnIPFS, cipher)
+    }
+    
+    public override func getUploadWriter(_ path: String) -> Promise<FileWriter> {
+        return DispatchQueue.global().async(.promise){ [self] in
+            return _controller!.getEncryptionUploadWriter(path, false, cipher)
+        }
+    }
 }

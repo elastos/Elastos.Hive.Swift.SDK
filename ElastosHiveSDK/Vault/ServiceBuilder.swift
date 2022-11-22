@@ -51,6 +51,10 @@ public class ServiceBuilder {
         return EncryptionDatabaseRender(_serviceEndpoint, cipher,  Array(nonce.utf8))
     }
     
+    public func createEncryptionFilesService(_ cipher: DIDCipher) -> FilesService {
+        return EncryptionFilesRender(_serviceEndpoint, cipher)
+    }
+    
     /// Create the service of the scripting module.
     /// - Returns: The instance of scripting service.
     public func createScriptingService() -> ScriptingService{

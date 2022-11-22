@@ -117,6 +117,16 @@ public class TestData {
         }
         return try vault.getDatabaseService(encrypt: true)
     }
+    
+    public func getEncryptionFileService() throws -> FilesService {
+        let vault = try self.newVault()
+        do {
+            try vault.enableEncryption(self._applicationConfig.storepass)
+        } catch {
+            print(error)
+        }
+        return try vault.getFilesService(encrypt: true)
+    }
  
     public func newVault() throws -> Vault {
         return try Vault(_context, providerAddress)

@@ -40,7 +40,7 @@ public protocol FilesService {
     ///   - path: the path for the remote file
     ///   - scriptName: used to download file anonymously by the scripting service with uploading public file.
     /// - Returns: the result FileWriter instance
-    func getUploadWriter(_ path: String, _ scriptName: String) -> Promise<FileWriter>
+    func getUploadWriter(_ path: String, _ publicOnIPFS: Bool) -> Promise<FileWriter>
 
     /// Initiates a download sequence by returning a Reader or InputStream object that can be used to read the downloaded file in chunks.
     /// - parameter path: the path for the remote file

@@ -21,39 +21,48 @@
  */
 
 import Foundation
+import DeveloperDID
 
 /// Vault provides a storage for files saving.
 /// Files can be uploading, downloading and getting the status and information.
 public class FilesServiceRender: FilesService {
-    private var _controller: FilesController?
+    
+    var _controller: FilesController?
     
     public init(_ serviceEndpoint: ServiceEndpoint) {
         _controller = FilesController(serviceEndpoint)
     }
     
+    public func getUploadWriter(_ path: String) -> Promise<FileWriter> {
+        return uploadWriter(path, false)
+    }
+    
     /// Get the FileWriter for uploading the content of the file.
     /// - Parameter path: The uploading file path.
     /// - Returns: The FileWriter.
-    public func getUploadWriter(_ path: String) -> Promise<FileWriter> {
-        return DispatchQueue.global().async(.promise){ [self] in
-            return _controller!.getUploadWriter(path)
-        }
+    public func getUploadWriter(_ path: String, _ publicOnIPFS: Bool) -> Promise<FileWriter> {
+        return uploadWriter(path, publicOnIPFS)
     }
     
-    public func getUploadWriter(_ path: String, _ scriptName: String) -> Promise<FileWriter> {
-        
-        return getUploadWriter(path, true, scriptName)
-    }
-    
-    private func getUploadWriter(_ path: String, _ is_public: Bool, _ scriptName: String)  -> Promise<FileWriter>  {
+    private func uploadWriter(_ path: String, _ publicOnIPFS: Bool)  -> Promise<FileWriter>  {
         return DispatchQueue.global().async(.promise){ [self] in
             if path.isEmpty {
                 throw HiveError.IllegalArgumentException("Empty path parameter")
             }
-            if is_public && scriptName == "" {
-                throw HiveError.IllegalArgumentException("Script name should be provided when public.")
+            return _controller!.getUploadWriter(path, publicOnIPFS)
+        }
+    }
+    
+    func getEncryptionUploadWriter(_ path: String, _ publicOnIPFS: Bool, _ cipher: DIDCipher) -> Promise<FileWriter> {
+        return encryptionUploadWriter(path, publicOnIPFS, cipher)
+    }
+    
+    private func encryptionUploadWriter(_ path: String, _ publicOnIPFS: Bool, _ cipher: DIDCipher)  -> Promise<FileWriter>  {
+        return DispatchQueue.global().async(.promise){ [self] in
+            if path.isEmpty {
+                throw HiveError.IllegalArgumentException("Empty path parameter")
             }
-            return _controller!.getUploadWriter(path, is_public, scriptName)
+            return _controller!.getEncryptionUploadWriter(path, publicOnIPFS, cipher)
         }
     }
     

@@ -58,14 +58,14 @@ public class EncryptionValue {
         let length = data.count
         var start = 0
         let trunkSize = EncryptionValue.TRUNK_SIZE
-        let result_array = header
+        var result_array = header
         
         while (start < length - 1) {
             let isLastPart = start + trunkSize >= length - 1;
             let len = isLastPart ? length - start : trunkSize;
             let slice = Array(data[start..<start + len])
             let encrypt_data = try stream.pushAny(slice, isLastPart);
-            let result_array = result_array == nil ? encrypt_data : self.concatUint8Arrays(result_array, encrypt_data)
+            result_array = self.concatUint8Arrays(result_array, encrypt_data)
             start += len
         }
         
