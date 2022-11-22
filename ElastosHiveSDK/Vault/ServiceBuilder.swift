@@ -44,7 +44,13 @@ public class ServiceBuilder {
     public func createDatabase() -> DatabaseService {
         return DatabaseServiceRender(_serviceEndpoint);
     }
-
+    
+    /// Create the service for the database module.
+    /// - Returns: The instance of database service.
+    public func createEncryptionDatabase(_ cipher: DIDCipher, _ nonce: String) -> DatabaseService {
+        return EncryptionDatabaseRender(_serviceEndpoint, cipher,  Array(nonce.utf8))
+    }
+    
     /// Create the service of the scripting module.
     /// - Returns: The instance of scripting service.
     public func createScriptingService() -> ScriptingService{

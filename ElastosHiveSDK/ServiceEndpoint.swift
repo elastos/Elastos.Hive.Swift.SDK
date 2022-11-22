@@ -21,7 +21,6 @@
 */
 
 import Foundation
-import ElastosDIDSDK
 import AwaitKit
 
 /**
@@ -122,8 +121,8 @@ public class ServiceEndpoint: NodeRPCConnection {
     /// Get the application DID in the current calling context.
     ///
     /// - returns: application did
-    public var appDid: String? {
-        return _appDid
+    public var appDid: String {
+        return _context.appDid
     }
     
     /// Get the application instance DID in the current calling context;
@@ -190,13 +189,17 @@ public class ServiceEndpoint: NodeRPCConnection {
             return try AboutController(self).getCommitId()
         }
     }
-    
-    
+
     /// Get the information of the hive node.
     /// - Returns: The information.
     public func getNodeInfo() -> Promise<NodeInfo> {
         return DispatchQueue.global().async(.promise){ [self] in
             return try AboutController(self).getNodeInfo()
         }
+    }
+    
+    public func getEncryptionCipher(_ identifier: String, _ secureCode: Int, _ storepass: String) throws -> DIDCipher {
+        let doc = self.appContext.appContextProvider.getAppInstanceDocument()
+        return try doc!.createCipher(identifier, secureCode, storepass)
     }
 }

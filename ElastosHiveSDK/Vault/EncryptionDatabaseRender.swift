@@ -22,7 +22,6 @@
 
 import Foundation
 import ObjectMapper
-import DeveloperDID
 
 public class EncryptionDatabaseRender: DatabaseServiceRender {
 
@@ -72,14 +71,13 @@ public class EncryptionDatabaseRender: DatabaseServiceRender {
     public override func findMany(_ collection: String, _ query: [String : Any], _ options: FindOptions) -> Promise<[[String: Any]]> {
         return DispatchQueue.global().async(.promise){ [self] in
             let equery = try self._databaseEncrypt.encryptFilter(query) as! [String: Any]
-            let result = try self._controller.find(collection, equery, options)!
+            let result = try self._controller.encryptFind(collection, equery, options)
 
-            print("result ==== ", result)
-            // TODO: 判断是否 加密
-//            if (!result.isEncrypt()) {
-//                throw DIDError.UncheckedError.IllegalArgumentErrors.IllegalArgumentError("Cannot decrypt the documents from the encryption collection.")
-//            }
-            return try _databaseEncrypt.encryptDocs(result) as! [[String: Any]]
+            if (result.isEncrypt == nil || result.isEncrypt == false ) {
+                throw DIDError.UncheckedError.IllegalArgumentErrors.IllegalArgumentError("Cannot decrypt the documents from the encryption collection.")
+            }
+            let items = result.documents!
+            return try _databaseEncrypt.encryptDocs(items, isEncrypt: false) as! [[String: Any]]
         }
     }
 
@@ -97,7 +95,7 @@ public class EncryptionDatabaseRender: DatabaseServiceRender {
     public override func updateOne(_ collection: String, _ filter: [String : Any], _ update: [String : Any], _ options: UpdateOptions) -> Promise<UpdateResult> {
         return DispatchQueue.global().async(.promise){ [self] in
             let filter_ = try self._databaseEncrypt.encryptFilter(filter) as! [String : Any]
-            let update_ = try self._databaseEncrypt.encryptFilter(update) as! [String : Any]
+            let update_ = try self._databaseEncrypt.encryptUpdate(update) as! [String : Any]
             return try _controller.updateOne(collection, filter_, update_, options)!
         }
     }

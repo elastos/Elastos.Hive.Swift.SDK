@@ -22,7 +22,6 @@
 
 import Foundation
 import ObjectMapper
-import DeveloperDID
 
 public class EncryptionFile: EncryptionValue {
     var _vaule: String
@@ -32,7 +31,7 @@ public class EncryptionFile: EncryptionValue {
     }
     
     func encrypt() throws -> [UInt8] {
-        return try self.encryptStream(_vaule.hexa)
+        return try self.encryptStream(Array(_vaule.utf8))
     }
 
     func decrypt() throws -> [UInt8]? {

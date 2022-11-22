@@ -52,7 +52,7 @@ public class AccessToken: CodeFetcher {
     private func getStorageKey() -> String {
         if (self._storageKey == "") {
             let userDid = (self._endpoint.userDid != nil) ? self._endpoint.userDid! : ""
-            let appDid = (self._endpoint.appDid != nil) ? self._endpoint.appDid! : ""
+            let appDid = (self._endpoint.appDid != nil) ? self._endpoint.appDid : ""
             let hiveUrl = self._endpoint.providerAddress
             let key = userDid + ";" + appDid + ";" + hiveUrl
             self._storageKey = key.sha256

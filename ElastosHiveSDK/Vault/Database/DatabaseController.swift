@@ -157,6 +157,14 @@ public class DatabaseController {
         
         return try _connectionManager.find(collectionName, (DatabaseController.jsonNode2Str(filter)?.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!)!, skip, limit).execute(FindResult.self).documents
     }
+    
+    func encryptFind(_ collectionName: String, _ filter: Dictionary<String, Any>?, _ options: FindOptions?) throws -> FindResult {
+        let skip: String = (options != nil ? options!.getSkipStr() : "")
+        let limit: String = (options != nil ? options!.getLimitStr() : "")
+        
+        return try _connectionManager.find(collectionName, (DatabaseController.jsonNode2Str(filter)?.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!)!, skip, limit).execute(FindResult.self)
+    }
+
 
     /// Query the documents by filter and options.
     /// - Parameters:

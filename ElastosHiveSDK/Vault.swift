@@ -36,27 +36,45 @@ import Foundation
  *      FilesService filesService = vault.getFilesService();
  */
 public class Vault: ServiceEndpoint {
+    private let DATABASE_NONCE = "@ABCDEFGHIJKLMNOPQRSTUVW"
     private var _filesService: FilesService!
     private var _database: DatabaseService!
     private var _scripting: ScriptingService!
     private var _backupService: BackupService!
-    
+    private var _cipher: DIDCipher?
+    private var _encryptedDBService: DatabaseService?
+    private var _builder: ServiceBuilder!
+
     public override init(_ context: AppContext) throws {
         try super.init(context)
-        let builder = ServiceBuilder(self)
-        _filesService = builder.createFilesService()
-        _database = builder.createDatabase()
-        _scripting = builder.createScriptingService()
-        _backupService = builder.createBackupService()
+        _builder = ServiceBuilder(self)
+        _filesService = _builder.createFilesService()
+        _database = _builder.createDatabase()
+        _scripting = _builder.createScriptingService()
+        _backupService = _builder.createBackupService()
     }
     
     public override init(_ context: AppContext, _ providerAddress: String) throws {
         try super.init(context, providerAddress)
-        let builder = ServiceBuilder(self)
-        _filesService = builder.createFilesService()
-        _database = builder.createDatabase()
-        _scripting = builder.createScriptingService()
-        _backupService = builder.createBackupService()
+        _builder = ServiceBuilder(self)
+        _filesService = _builder.createFilesService()
+        _database = _builder.createDatabase()
+        _scripting = _builder.createScriptingService()
+        _backupService = _builder.createBackupService()
+    }
+    
+    public func enableEncryption(_ storepass: String) throws {
+        if (self._cipher != nil) {
+            throw HiveError.EncryptionError("Encryption ciper already being enabled.")
+        }
+        if (self.appDid == nil) {
+            throw HiveError.EncryptionError("enableEncryption: appDid is nil")
+        }
+        do {
+            self._cipher = try self.getEncryptionCipher(self.appDid, 0, storepass)
+        } catch {
+            throw HiveError.EncryptionError("Generating encryption cipher error: \(error)")
+        }
     }
     
     /// Get the files service of the vault.
@@ -71,6 +89,17 @@ public class Vault: ServiceEndpoint {
     /// - returns: The instance of the database service.
     public var databaseService: DatabaseService {
         return _database
+    }
+    
+    public func getDatabaseService(encrypt: Bool = false) throws -> DatabaseService {
+        if (encrypt && self._cipher == nil) {
+            throw HiveError.InvalidParameterException("Encryption has not been enabled, call 'enableEncrytpion'")
+        }
+
+        if (encrypt && self._encryptedDBService == nil) {
+            self._encryptedDBService = _builder.createEncryptionDatabase(_cipher!, DATABASE_NONCE)
+        }
+        return encrypt ? _encryptedDBService! : self.databaseService
     }
     
     /// Get the scripting service of the vault.
