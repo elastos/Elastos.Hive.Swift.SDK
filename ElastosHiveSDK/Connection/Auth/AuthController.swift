@@ -21,7 +21,6 @@
 */
 
 import Foundation
-import ElastosDIDSDK
 
 /// The authorization controller is the wrapper class for accessing hive node auth module.
 public class AuthController {

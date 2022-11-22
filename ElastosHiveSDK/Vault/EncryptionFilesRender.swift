@@ -22,7 +22,6 @@
 
 import Foundation
 import ObjectMapper
-import DeveloperDID
 
 public class EncryptionFilesRender: FilesServiceRender {
 
