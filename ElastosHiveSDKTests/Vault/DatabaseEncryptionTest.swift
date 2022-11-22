@@ -90,4 +90,30 @@ class DatabaseEncryptionTest: XCTestCase {
             print(docs)
         }())
     }
+    
+    public func test04FindOne() {
+        XCTAssertNoThrow(try { [self] in
+            let filter = ["author" : "john doe"]
+            let docs = try `await`(_databaseService!.findOne(COLLECTION_NAME, filter, FindOptions().setSkip(0).setLimit(0)))
+            print(docs)
+        }())
+    }
+    
+    public func test05CountDocuments() {
+        XCTAssertNoThrow(try { [self] in
+            let filter = ["author" : "john doe"]
+            let count = try `await`(_databaseService!.countDocuments(COLLECTION_NAME, filter, CountOptions().setLimit(1).setSkip(0).setMaxTimeMS(1000000000)))
+            print(count)
+        }())
+    }
+    
+    public func test06Query() {
+        XCTAssertNoThrow(try { [self] in
+            let filter = ["author" : "john doe"]
+            let options = QueryOptions().setSort(AscendingSortItem("_id").getJsonValue())
+            let result = try `await`(_databaseService!.query(COLLECTION_NAME, filter, options))
+            print(result)
+        }())
+    }
 }
+

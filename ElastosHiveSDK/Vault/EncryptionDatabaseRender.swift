@@ -64,7 +64,13 @@ public class EncryptionDatabaseRender: DatabaseServiceRender {
     public override func findOne(_ collection: String, _ query: [String : Any], _ options: FindOptions) -> Promise<Dictionary<String, Any>> {
         return DispatchQueue.global().async(.promise){ [self] in
             let equery = try self._databaseEncrypt.encryptFilter(query) as! [String: Any]
-            return try _controller.findOne(collection, equery, options)!
+            let result = try _controller.encryptFind(collection, equery, options)
+            if (result.isEncrypt == nil || result.isEncrypt == false ) {
+                throw DIDError.UncheckedError.IllegalArgumentErrors.IllegalArgumentError("Cannot decrypt the documents from the encryption collection.")
+            }
+            let items = result.documents!
+            let dencryptItems = try _databaseEncrypt.encryptDocs(items, isEncrypt: false) as! [[String: Any]]
+            return dencryptItems.count > 0 ? dencryptItems[0] : [: ]
         }
     }
     
@@ -83,12 +89,14 @@ public class EncryptionDatabaseRender: DatabaseServiceRender {
 
     public override func query(_ collection: String, _ query: Dictionary<String, Any>?, _ options: QueryOptions?) -> Promise<Array<Dictionary<String, Any>>> {
         return DispatchQueue.global().async(.promise){ [self] in
-            let result = try self._controller.query(collection, query, options)!
-            // TODO: 判断是否 加密
-            //            if (!result.isEncrypt()) {
-            //                throw DIDError.UncheckedError.IllegalArgumentErrors.IllegalArgumentError("Cannot decrypt the documents from the encryption collection.")
-            //            }
-            return try _databaseEncrypt.encryptDocs(result) as! [[String: Any]]
+            let query_ = query != nil ? query : [: ]
+            let equery = try self._databaseEncrypt.encryptFilter(query_!) as! [String: Any]
+            let result = try self._controller.encryptquery(collection, equery, options)
+            if (result.isEncrypt == nil || result.isEncrypt == false ) {
+                throw DIDError.UncheckedError.IllegalArgumentErrors.IllegalArgumentError("Cannot decrypt the documents from the encryption collection.")
+            }
+            let items = result.documents!
+            return try _databaseEncrypt.encryptDocs(items, isEncrypt: false) as! [[String: Any]]
         }
     }
 
@@ -104,7 +112,7 @@ public class EncryptionDatabaseRender: DatabaseServiceRender {
     public override func updateMany(_ collection: String, _ filter: [String : Any], _ update: [String : Any], _ options: UpdateOptions) -> Promise<UpdateResult> {
         return DispatchQueue.global().async(.promise){ [self] in
             let filter_ = try self._databaseEncrypt.encryptFilter(filter) as! [String : Any]
-            let update_ = try self._databaseEncrypt.encryptFilter(update) as! [String : Any]
+            let update_ = try self._databaseEncrypt.encryptUpdate(update) as! [String : Any]
             return try _controller.updateMany(collection, filter_, update_, options)!
         }
     }

@@ -141,7 +141,7 @@ public class DatabaseController {
     /// - Returns: The first matched document for the find operation.
     public func findOne(_ collectionName: String, _ filter: Dictionary<String, Any>?, _ options: FindOptions?) throws -> Dictionary<String, Any>? {
         let docs = try find(collectionName, filter, options)
-        return docs?.first
+        return docs != nil ? docs?.first : [: ]
     }
 
     /// Find all matched document by filter.
@@ -175,5 +175,9 @@ public class DatabaseController {
     /// - Returns: All matched documents for the query operation.
     public func query(_ collectionName: String, _ filter: Dictionary<String, Any>?, _ options: QueryOptions?) throws -> Array<Dictionary<String, Any>>? {
         return try _connectionManager.query(QueryParams(collectionName, filter, options)).execute(QueryResult.self).documents
+    }
+    
+    func encryptquery(_ collectionName: String, _ filter: Dictionary<String, Any>?, _ options: QueryOptions?) throws -> QueryResult {
+        return try _connectionManager.query(QueryParams(collectionName, filter, options)).execute(QueryResult.self)
     }
 }
