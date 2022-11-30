@@ -70,7 +70,7 @@ public class Vault: ServiceEndpoint {
         if (self._cipher != nil) {
             throw HiveError.EncryptionError("Encryption ciper already being enabled.")
         }
-        if (self.appDid == nil) {
+        if (self.appDid == "") {
             throw HiveError.EncryptionError("enableEncryption: appDid is nil")
         }
         do {

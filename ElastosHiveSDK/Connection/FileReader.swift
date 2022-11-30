@@ -300,8 +300,8 @@ public class FileReader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         }
         
         if let _ = error {
-            self.readerBlock?(HiveError.NetworkException("\(error)"))
-            self.readerCompleteWithError?(false, HiveError.NetworkException("\(error)"))
+            self.readerBlock?(HiveError.NetworkException("\(String(describing: error))"))
+            self.readerCompleteWithError?(false, HiveError.NetworkException("\(String(describing: error))"))
             return
         }
         
