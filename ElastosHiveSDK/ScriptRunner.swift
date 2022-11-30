@@ -60,7 +60,7 @@ public class ScriptRunner: ServiceEndpoint, ScriptingInvocationService {
     /// - returns:  String, Data, JSON, FileReader
     public func callScript<T>(_ name: String, _ params: [String : Any]?, _ targetDid: String, _ targetAppDid: String, _ resultType: T.Type) -> Promise<T> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _controller!.callScript(name, params, targetDid, targetAppDid, resultType)
+            return try _controller.callScript(name, params, targetDid, targetAppDid, resultType)
         }
     }
 
@@ -75,7 +75,7 @@ public class ScriptRunner: ServiceEndpoint, ScriptingInvocationService {
     /// - returns: Result for specific script type
     public func callScriptUrl<T>(_ name: String, _ params: String, _ targetDid: String, _ targetAppDid: String, _ resultType: T.Type) -> Promise<T> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _controller!.callScriptUrl(name, params, targetDid, targetAppDid, resultType)
+            return try _controller.callScriptUrl(name, params, targetDid, targetAppDid, resultType)
         }
     }
 
@@ -85,7 +85,7 @@ public class ScriptRunner: ServiceEndpoint, ScriptingInvocationService {
     /// - returns:FileWriter
     public func uploadFile(_ transactionId: String) -> Promise<FileWriter> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _controller!.uploadFile(transactionId)
+            return try _controller.uploadFile(transactionId)
         }
     }
     
@@ -102,7 +102,7 @@ public class ScriptRunner: ServiceEndpoint, ScriptingInvocationService {
     /// - returns: FileReader
     public func downloadFile(_ transactionId: String) -> Promise<FileReader> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _controller!.downloadFile(transactionId)
+            return try _controller.downloadFile(transactionId)
         }
     }
 }
