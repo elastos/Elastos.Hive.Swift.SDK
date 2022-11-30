@@ -26,8 +26,8 @@ import ObjectMapper
 /// The backup subscription is for subscribe or unsubscribe the backup service.
 /// With the backup service, the vault data can be backup for security purpose.
 public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentService {
-    private var _subscriptionController: SubscriptionController?
-    private var _paymentController: PaymentController?
+    private var _subscriptionController: SubscriptionController!
+    private var _paymentController: PaymentController!
 
     /// Create by the application context and the address of the provider which can save the vault data.
     ///
@@ -51,7 +51,7 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentSe
     /// - returns: Return a list of all pricing plan with specific type on success. Otherwise, the specific exception would be returned.
     public func getPricingPlanList() -> Promise<Array<PricingPlan>> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _subscriptionController!.getBackupPricingPlanList()
+            return try _subscriptionController.getBackupPricingPlanList()
         }
     }
     
@@ -80,7 +80,7 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentSe
             if credential != nil {
                 throw HiveError.NotImplementedException("Paid pricing plan will be supported later")
             }
-            return try _subscriptionController!.subscribeToBackup(nil)
+            return try _subscriptionController.subscribeToBackup(nil)
         }
     }
     
@@ -113,7 +113,7 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentSe
     /// - Returns: The basic information of the newly created or existing vault on success, otherwise, the specific exception would returned in the wrapper.
     public func checkSubscription() -> Promise<BackupInfo> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _subscriptionController!.getBackupInfo()
+            return try _subscriptionController.getBackupInfo()
         }
     }
     
@@ -123,7 +123,7 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentSe
     /// - returns: return the new order detail when the request successfully was received by back-end node, otherwise return the specific exception.
     public func placeOrder(_ planName: String) -> Promise<Order?> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _paymentController?.placeOrder("backup", planName)
+            return try _paymentController.placeOrder("backup", planName)
         }
     }
     
@@ -133,7 +133,7 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentSe
     /// - returns: return the order detail in case there is a order with order id existing. otherwise, return the specific exception.
     public func getOrder(_ orderId: Int) -> Promise<Order?> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _paymentController?.getBackupOrder(orderId)
+            return try _paymentController.getBackupOrder(orderId)
         }
     }
     
@@ -145,7 +145,7 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentSe
     /// - returns: return the receipt detail in case the payment was accepted by hive node, otherwise return the specific exception.
     public func settleOrder(_ orderId: Int) -> Promise<Receipt?> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _paymentController?.settleOrder(orderId)
+            return try _paymentController.settleOrder(orderId)
         }
     }
     
@@ -154,7 +154,7 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentSe
     /// - returns: return the list of order detail on success, otherwise, return the specific exception.
     public func getOrderList() -> Promise<[Order]?> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _paymentController?.getOrders("backup")
+            return try _paymentController.getOrders("backup")
         }
     }
     
@@ -164,7 +164,7 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentSe
     /// - returns: return the receipt detail in case there is a receipt existing, otherwise, return the specific exception.
     public func getReceipt(_ orderId: Int) -> Promise<Receipt?> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _paymentController?.getReceipt(orderId)
+            return try _paymentController.getReceipt(orderId)
         }
     }
     
@@ -174,7 +174,7 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentSe
     /// otherwise, return the specific exception.
     public func getReceipts() -> Promise<[Receipt]?> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _paymentController?.getReceipts()
+            return try _paymentController.getReceipts()
         }
     }
     
@@ -183,7 +183,7 @@ public class BackupSubscription: ServiceEndpoint, SubscriptionService, PaymentSe
     /// - returns: return the version, otherwise, return the specific exception.
     public func getVersion() -> Promise<String?> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _paymentController!.getVersion()!
+            return try _paymentController.getVersion()!
         }
     }
     
