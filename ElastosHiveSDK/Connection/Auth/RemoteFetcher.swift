@@ -36,9 +36,15 @@ public class RemoteFetcher: CodeFetcher {
     /// - Throws: HiveError The exception shows the error returned by hive node.
     /// - Returns: The code.
     public func fetch() throws -> String? {
-        let challenge: String = try _controller.signIn(_contextProvider.getAppInstanceDocument()!)!
-        let auth = try `await`(_contextProvider.getAuthorization(challenge)!)
-
+        if _contextProvider.getAppInstanceDocument() == nil {
+            throw HiveError.IllegalArgumentException("App instance document is nil.")
+        }
+        let challenge = try _controller.signIn(_contextProvider.getAppInstanceDocument()!)
+        if challenge == nil {
+            throw HiveError.IllegalArgumentException("Challenge is nil.")
+        }
+        
+        let auth = try `await`(_contextProvider.getAuthorization(challenge!)!)
         return try _controller.auth(auth)
     }
 
