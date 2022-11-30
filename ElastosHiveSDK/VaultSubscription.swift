@@ -27,7 +27,7 @@ import ObjectMapper
 /// Subscribe the vault is the first step to use the service in the vault.
 public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentService {
     private var _subscriptionController: SubscriptionController!
-    private var _paymentController: PaymentController?
+    private var _paymentController: PaymentController!
     
     public override init(_ context: AppContext) throws {
         try super.init(context)
@@ -52,7 +52,7 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentSer
     /// - returns: Return a list of all pricing plan with specific type on success. Otherwise, the specific exception would be returned.
     public func getPricingPlanList() -> Promise<Array<PricingPlan>> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _subscriptionController!.getBackupPricingPlanList()
+            return try _subscriptionController.getBackupPricingPlanList()
         }
     }
     
@@ -62,7 +62,7 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentSer
     /// - returns: Return a list of all pricing plan with specific type on success. Otherwise, the specific exception would be returned.
     public func getPricingPlan(_ planName: String) -> Promise<PricingPlan> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _subscriptionController!.getVaultPricingPlan(planName)
+            return try _subscriptionController.getVaultPricingPlan(planName)
         }
     }
     
@@ -71,7 +71,7 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentSer
     /// - returns: The basic information of the newly created or existing vault on success, otherwise, the specific exception would returned in the wrapper.
     public func subscribe() -> Promise<VaultInfo> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _subscriptionController!.subscribeToVault()
+            return try _subscriptionController.subscribeToVault()
         }
     }
     
@@ -84,20 +84,20 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentSer
     
     public func unsubscribe(_ force: Bool) -> Promise<Void> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _subscriptionController!.unsubscribeVault(force)
+            return try _subscriptionController.unsubscribeVault(force)
         }
     }
     
     
     public func activate() throws -> Promise<Void> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _subscriptionController!.activateVault()
+            return try _subscriptionController.activateVault()
         }
     }
     
     public func deactivate() throws -> Promise<Void> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _subscriptionController!.deactivateVault()
+            return try _subscriptionController.deactivateVault()
         }
     }
     
@@ -106,13 +106,13 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentSer
     /// - Returns: The basic information of the newly created or existing vault on success, otherwise, the specific exception would returned in the wrapper.
     public func checkSubscription() -> Promise<VaultInfo> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _subscriptionController!.getVaultInfo()
+            return try _subscriptionController.getVaultInfo()
         }
     }
     
     public func getAppStats() -> Promise<[AppInfo]?> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _subscriptionController!.getAppStats()
+            return try _subscriptionController.getAppStats()
         }
     }
     
@@ -122,7 +122,7 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentSer
     /// - returns: return the new order detail when the request successfully was received by back-end node, otherwise return the specific exception.
     public func placeOrder(_ planName: String) -> Promise<Order?> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _paymentController?.placeOrder("vault", planName)
+            return try _paymentController.placeOrder("vault", planName)
         }
     }
     
@@ -132,7 +132,7 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentSer
     /// - returns: return the order detail in case there is a order with order id existing. otherwise, return the specific exception.
     public func getOrder(_ orderId: Int) -> Promise<Order?> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _paymentController?.getVaultOrder(orderId)
+            return try _paymentController.getVaultOrder(orderId)
         }
     }
     
@@ -144,7 +144,7 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentSer
     /// - returns: return the receipt detail in case the payment was accepted by hive node, otherwise return the specific exception.
     public func settleOrder(_ orderId: Int) -> Promise<Receipt?> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _paymentController?.settleOrder(orderId)
+            return try _paymentController.settleOrder(orderId)
         }
     }
     
@@ -153,7 +153,7 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentSer
     /// - returns: return the list of order detail on success, otherwise, return the specific exception.
     public func getOrderList() -> Promise<[Order]?> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _paymentController?.getOrders("vault")
+            return try _paymentController.getOrders("vault")
         }
     }
     
@@ -163,7 +163,7 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentSer
     /// - returns: return the receipt detail in case there is a receipt existing, otherwise, return the specific exception.
     public func getReceipt(_ orderId: Int) -> Promise<Receipt?> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _paymentController?.getReceipt(orderId)
+            return try _paymentController.getReceipt(orderId)
         }
     }
     
@@ -173,7 +173,7 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentSer
     /// otherwise, return the specific exception.
     public func getReceipts() -> Promise<[Receipt]?> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _paymentController?.getReceipts()
+            return try _paymentController.getReceipts()
         }
     }
 
@@ -182,7 +182,7 @@ public class VaultSubscription: ServiceEndpoint, SubscriptionService, PaymentSer
     /// - returns: return the version, otherwise, return the specific exception.
     public func getVersion() -> Promise<String?> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _paymentController!.getVersion()
+            return try _paymentController.getVersion()
         }
     }
 }
