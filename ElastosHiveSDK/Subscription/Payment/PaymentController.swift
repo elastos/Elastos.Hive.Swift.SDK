@@ -28,7 +28,7 @@ public class PaymentController {
     private var _connectionManager: ConnectionManager
     
     public init(_ serviceEndpoint: ServiceEndpoint) {
-        _connectionManager = serviceEndpoint.connectionManager!
+        _connectionManager = serviceEndpoint.connectionManager
     }
     
     /// This is for creating the payment order which upgrades the pricing plan of the vault or the backup.
@@ -37,8 +37,8 @@ public class PaymentController {
     ///   - pricingName: The pricing plan name.
     /// - Throws: HiveError The error comes from the hive node.
     /// - Returns: The details of the order.
-    public func placeOrder(_ subscription: String?, _ pricingName: String?) throws -> Order? {
-        return try _connectionManager.placeOrder(CreateOrderParams(subscription!, pricingName!)).execute(Order.self)
+    public func placeOrder(_ subscription: String, _ pricingName: String) throws -> Order? {
+        return try _connectionManager.placeOrder(CreateOrderParams(subscription, pricingName)).execute(Order.self)
     }
 
     /// Pay the order by the order id and the transaction id.

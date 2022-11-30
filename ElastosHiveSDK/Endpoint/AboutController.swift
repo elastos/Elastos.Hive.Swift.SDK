@@ -30,7 +30,7 @@ public class AboutController {
     /// Create the about controller by the RPC connection.
     /// - Parameter serviceEndpoint: connection The connection instance.
     public init(_ serviceEndpoint: ServiceEndpoint) {
-        _connectionManager = serviceEndpoint.connectionManager!
+        _connectionManager = serviceEndpoint.connectionManager
     }
     
     /// Get the version of the hive node.
