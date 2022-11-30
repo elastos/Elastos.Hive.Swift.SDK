@@ -34,6 +34,9 @@ public class FileStorage: DataStorage {
     
     public init(_ rootPath: String, _ userDid: String) throws {
         var path = rootPath
+        if path == "" {
+            throw HiveError.IllegalArgumentException("path is empty.")
+        }
         if String(path.last!) != File.separator {
             path = path + File.separator
         }
