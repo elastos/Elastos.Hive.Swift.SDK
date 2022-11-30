@@ -41,7 +41,11 @@ class BackupServiceTest: XCTestCase {
     //Disabled
     func test01StartBackup() {
         XCTAssertNoThrow(try { [self] in
-            try `await`(_backupService!.startBackup())
+            try `await`(_backupService!.startBackup({ state, result, msg in
+                print("state === \(state)")
+                print("result === \(result)")
+                print("msg === \(String(describing: msg))")
+            }))
         }())
     }
 
@@ -59,7 +63,12 @@ class BackupServiceTest: XCTestCase {
     //Disabled
     func test04RestoreFrom() {
         XCTAssertNoThrow(try { [self] in
-            try `await`(_backupService!.restoreFrom())
+            try `await`(_backupService!.restoreFrom({ state, result, msg in
+                print("state === \(state)")
+                print("result === \(result)")
+                print("msg === \(String(describing: msg))")
+
+            }))
         }())
     }
     
