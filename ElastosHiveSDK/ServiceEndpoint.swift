@@ -35,7 +35,7 @@ import AwaitKit
  *         with the hive node APIs by its sub-class.
  */
 public class ServiceEndpoint: NodeRPCConnection {
-    public var connectionManager: ConnectionManager?
+    public var connectionManager: ConnectionManager!
     
     private var _context: AppContext
     private var _providerAddress: String
@@ -44,8 +44,8 @@ public class ServiceEndpoint: NodeRPCConnection {
     private var _appInstanceDid: String?
     private var _serviceInstanceDid: String?
 
-    private var _accessToken: AccessToken?
-    private var _dataStorage: DataStorage?
+    private var _accessToken: AccessToken!
+    private var _dataStorage: DataStorage!
     
     public init(_ context: AppContext) throws {
         _providerAddress = try `await`(context.getProviderAddress())
@@ -79,13 +79,25 @@ public class ServiceEndpoint: NodeRPCConnection {
         _dataStorage = try FileStorage(dataDir!, _context.userDid)
         _accessToken = AccessToken(self, _dataStorage)
         var err: Error?
-        _accessToken!.flush = { (value) in
+        _accessToken.flush = { (value) in
             do {
                 let claims = try JwtParserBuilder().setAllwedClockSkewSeconds(300).build().parseClaimsJwt(value).claims
                 let props = try claims.getAsJson(key: "props")
                 let dic = props.getDictionaryFromJSONString()
-                let appDid = (dic["appDid"] != nil) ? dic["appDid"] as! String : ""
-                self.flushDids(claims.getAudience()!, appDid, claims.getIssuer()!)
+                let appDid = dic["appDid"] as? String
+                if appDid == nil {
+                    err = HiveError.IllegalArgumentException("appDid is nil.")
+                    return
+                }
+                if claims.getAudience() == nil {
+                    err = HiveError.IllegalArgumentException("audience is nil.")
+                    return
+                }
+                if claims.getIssuer() == nil {
+                    err = HiveError.IllegalArgumentException("issuer is nil.")
+                    return
+                }
+                self.flushDids(claims.getAudience()!, appDid!, claims.getIssuer()!)
             } catch {
                 err = error
                 print(error)
@@ -94,7 +106,7 @@ public class ServiceEndpoint: NodeRPCConnection {
         guard err == nil else {
             throw err!
         }
-        self.connectionManager?.accessToken = _accessToken;
+        self.connectionManager.accessToken = _accessToken
     }
     
     /// Get the application context.
@@ -160,16 +172,16 @@ public class ServiceEndpoint: NodeRPCConnection {
     ///
     /// - returns: The instance of the data storage.
     public func getStorage() -> DataStorage {
-        return _dataStorage!
+        return _dataStorage
     }
     
     /// Refresh the access token. This will do remote refresh if not exist.
     public func refreshAccessToken() throws {
-        try _ = _accessToken?.fetch()
+        try _ = _accessToken.fetch()
     }
     
     public func getAccessToken() -> AccessToken {
-        return _accessToken!
+        return _accessToken
     }
     
     /// Get the version of the hive node.
