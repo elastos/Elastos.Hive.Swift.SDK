@@ -27,10 +27,10 @@ public class File {
 }
 
 public class FileStorage: DataStorage {
-    private var _basePath: String?
+    private var _basePath: String!
     
-    private static let BACKUP: String  = "credential-backup";
-    private static let TOKENS: String = "tokens";
+    private static let BACKUP: String  = "credential-backup"
+    private static let TOKENS: String = "tokens"
     
     public init(_ rootPath: String, _ userDid: String) throws {
         var path = rootPath
@@ -42,8 +42,8 @@ public class FileStorage: DataStorage {
         _basePath = path
         
         let fileManager = FileManager.default
-        if !fileManager.fileExists(atPath: _basePath!) {
-            try fileManager.createDirectory(atPath: _basePath!, withIntermediateDirectories: true, attributes: nil)
+        if !fileManager.fileExists(atPath: _basePath) {
+            try fileManager.createDirectory(atPath: _basePath, withIntermediateDirectories: true, attributes: nil)
         }
     }
     
@@ -52,23 +52,23 @@ public class FileStorage: DataStorage {
     }
     
     public func loadAccessToken(_ serviceDid: String) throws -> String? {
-        return try readContent(makeFullPath(FileStorage.TOKENS, compatDid(serviceDid)));
+        return try readContent(makeFullPath(FileStorage.TOKENS, compatDid(serviceDid)))
     }
     
     public func loadAccessTokenByAddress(_ providerAddress: String) throws -> String? {
-        return try readContent(makeFullPath(FileStorage.TOKENS, providerAddress.sha256));
+        return try readContent(makeFullPath(FileStorage.TOKENS, providerAddress.sha256))
     }
 
     public func storeBackupCredential(_ serviceDid: String, _ credential: String) throws {
-        try writeContent(makeFullPath(FileStorage.BACKUP, compatDid(serviceDid)), credential);
+        try writeContent(makeFullPath(FileStorage.BACKUP, compatDid(serviceDid)), credential)
     }
 
     public func storeAccessToken(_ serviceDid: String, _ accessToken: String) throws {
-        try writeContent(makeFullPath(FileStorage.TOKENS, compatDid(serviceDid)), accessToken);
+        try writeContent(makeFullPath(FileStorage.TOKENS, compatDid(serviceDid)), accessToken)
     }
 
     public func storeAccessTokenByAddress(_ providerAddress: String, _ accessToken: String) throws {
-        try writeContent(makeFullPath(FileStorage.TOKENS, providerAddress.sha256), accessToken);
+        try writeContent(makeFullPath(FileStorage.TOKENS, providerAddress.sha256), accessToken)
     }
 
     public func clearBackupCredential(_ serviceDid: String) throws {
@@ -115,7 +115,7 @@ public class FileStorage: DataStorage {
     }
     
     private func makeFullPath(_ segPath: String, _ fileName: String) -> String {
-        return _basePath! + File.separator + segPath + File.separator + fileName
+        return _basePath + File.separator + segPath + File.separator + fileName
     }
     
     private func compatDid(_ did: String) -> String {
