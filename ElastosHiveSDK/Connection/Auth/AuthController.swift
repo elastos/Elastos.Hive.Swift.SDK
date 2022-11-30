@@ -32,13 +32,13 @@ public class AuthController {
     ///   - serviceEndpoint: The service endpoint
     ///   - appInstanceDidDoc: The application instance did document.
     public init(_ serviceEndpoint: ServiceEndpoint, _ appInstanceDidDoc: DIDDocument) {
-        _connectionManager = serviceEndpoint.connectionManager!
+        _connectionManager = serviceEndpoint.connectionManager
         _expectationAudience = appInstanceDidDoc.subject.description
     }
     
     private func convertStringToDictionary(text: String) throws -> [String:AnyObject]? {
         if let data = text.data(using: .utf8) {
-            let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String:AnyObject]
+            let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: AnyObject]
             return json
         }
         return nil
@@ -73,7 +73,9 @@ public class AuthController {
     private func checkValid(_ jwtCode: String, _ expectationDid: String) throws -> Bool {
         let jwtParserBuilder = try JwtParserBuilder().setAllwedClockSkewSeconds(300).build()
         let claim = try jwtParserBuilder.parseClaimsJwt(jwtCode).claims
-
+        if claim.getExpiration() == nil {
+            throw HiveError.IllegalArgumentException("claim expiration date is nil.")
+        }
         return claim.getExpiration()! > Date() && claim.getAudience() == expectationDid
     }
 }
