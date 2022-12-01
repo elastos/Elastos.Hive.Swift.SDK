@@ -27,7 +27,7 @@ import DeveloperDID
 /// Files can be uploading, downloading and getting the status and information.
 public class FilesServiceRender: FilesService {
     
-    var _controller: FilesController?
+    var _controller: FilesController!
     
     public init(_ serviceEndpoint: ServiceEndpoint) {
         _controller = FilesController(serviceEndpoint)
@@ -49,7 +49,7 @@ public class FilesServiceRender: FilesService {
             if path.isEmpty {
                 throw HiveError.IllegalArgumentException("Empty path parameter")
             }
-            return _controller!.getUploadWriter(path, publicOnIPFS)
+            return _controller.getUploadWriter(path, publicOnIPFS)
         }
     }
     
@@ -62,7 +62,7 @@ public class FilesServiceRender: FilesService {
             if path.isEmpty {
                 throw HiveError.IllegalArgumentException("Empty path parameter")
             }
-            return _controller!.getEncryptionUploadWriter(path, publicOnIPFS, cipher)
+            return _controller.getEncryptionUploadWriter(path, publicOnIPFS, cipher)
         }
     }
     
@@ -71,7 +71,7 @@ public class FilesServiceRender: FilesService {
     /// - Returns: The FileReader.
     public func getDownloadReader(_ path: String) -> Promise<FileReader> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _controller!.getDownloadReader(path)
+            return try _controller.getDownloadReader(path)
         }
     }
     
@@ -80,7 +80,7 @@ public class FilesServiceRender: FilesService {
     /// - Returns: the result is List if success
     public func list(_ path: String) -> Promise<Array<FileInfo>> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _controller!.listChildren(path)
+            return try _controller.listChildren(path)
         }
     }
     
@@ -90,7 +90,7 @@ public class FilesServiceRender: FilesService {
     ///         if success
     public func stat(_ path: String) -> Promise<FileInfo> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _controller!.getProperty(path)
+            return try _controller.getProperty(path)
         }
     }
     
@@ -100,7 +100,7 @@ public class FilesServiceRender: FilesService {
     ///         if the hash successfully calculated
     public func hash(_ path: String) -> Promise<String> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _controller!.getHash(path)
+            return try _controller.getHash(path)
         }
     }
     
@@ -111,7 +111,7 @@ public class FilesServiceRender: FilesService {
     /// - Returns: Void
     public func move(_ source: String, _ target: String) -> Promise<Void> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _controller!.moveFile(source, target)
+            return try _controller.moveFile(source, target)
         }
     }
     
@@ -122,7 +122,7 @@ public class FilesServiceRender: FilesService {
     /// - Returns: Void
     public func copy(_ source: String, _ target: String) -> Promise<Void> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _controller!.copyFile(source, target)
+            return try _controller.copyFile(source, target)
         }
     }
     
@@ -132,7 +132,7 @@ public class FilesServiceRender: FilesService {
     /// - Returns: Void
     public func delete(_ path: String) -> Promise<Void> {
         return DispatchQueue.global().async(.promise){ [self] in
-            return try _controller!.delete(path)
+            return try _controller.delete(path)
         }
     }
 }
