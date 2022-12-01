@@ -34,10 +34,17 @@ public class CredentialCode {
     /// - Parameters:
     ///   - endpoint: The service end point.
     ///   - context: The backup context.
-    public init(_ endpoint: ServiceEndpoint, _ context: BackupContext) {
+    public init(_ endpoint: ServiceEndpoint, _ context: BackupContext) throws {
         self._endpoint = endpoint
-        _targetServiceDid = context.getParameter("targetDid")!
-        let remoteResolver: CodeFetcher = RemoteResolver(endpoint, context, _targetServiceDid, context.getParameter("targetHost")!)
+        _targetServiceDid = context.getParameter("targetDid")  ?? ""
+        let targetAddress = context.getParameter("targetHost") ?? ""
+        if _targetServiceDid.isEmpty {
+            throw HiveError.IllegalArgumentException("Empty targetServiceDid parameter in context.")
+        }
+        if targetAddress.isEmpty {
+            throw HiveError.IllegalArgumentException("Empty targetAddress parameter in context.")
+        }
+        let remoteResolver: CodeFetcher = RemoteResolver(endpoint, context, _targetServiceDid, targetAddress)
         _remoteResolver = LocalResolver(endpoint, remoteResolver)
         _storage = endpoint.getStorage()
         self._storageKay = ""
