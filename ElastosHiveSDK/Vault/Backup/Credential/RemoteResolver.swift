@@ -26,10 +26,10 @@ import AwaitKit
 
 /// RemoteResolver is for accessing the code by the network and can be invalidate.
 public class RemoteResolver: CodeFetcher {
-    private var _serviceEndpoint: ServiceEndpoint?
+    private var _serviceEndpoint: ServiceEndpoint
     private var _backupContext: BackupContext
-    private var _targetDid: String?
-    private var _targetHost: String?
+    private var _targetDid: String
+    private var _targetHost: String
     
     public init(_ serviceEndpoint: ServiceEndpoint, _ backupContext: BackupContext, _ targetServiceDid: String, _ targetAddress: String) {
         _serviceEndpoint = serviceEndpoint
@@ -41,11 +41,11 @@ public class RemoteResolver: CodeFetcher {
     /// Fetch the code.
     /// - Returns: The code.
     public func fetch() throws -> String? {
-        if _serviceEndpoint?.serviceInstanceDid == nil {
-            try _serviceEndpoint?.refreshAccessToken()
+        if _serviceEndpoint.serviceInstanceDid == nil {
+            try _serviceEndpoint.refreshAccessToken()
         }
         
-        let promise: Promise<String>? = _backupContext.getAuthorization(_serviceEndpoint?.serviceInstanceDid, _targetDid, _targetHost)
+        let promise: Promise<String>? = _backupContext.getAuthorization(_serviceEndpoint.serviceInstanceDid, _targetDid, _targetHost)
         return try `await`(promise!)
     }
     
