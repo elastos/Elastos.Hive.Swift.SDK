@@ -36,8 +36,8 @@ public class BackupServiceRender: BackupService {
     /// - Parameter backupContext: context for providing backup server details.
     /// - Returns: Void
     public func setupContext(_ backupContext: BackupContext) -> Promise<Void> {
-        _credentialCode = CredentialCode(_serviceEndpoint, backupContext)
         return DispatchQueue.global().async(.promise){ [self] in
+            _credentialCode = try CredentialCode(_serviceEndpoint, backupContext)
             return Void()
         }
     }
